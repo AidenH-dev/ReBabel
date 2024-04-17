@@ -2,42 +2,44 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowLeftLong, FaArrowRight, FaArrowRightLong } from "react-icons/fa6";
-import { CiPlay1 } from "react-icons/ci";
-import { useState } from "react"; // Import useState for state management
-
-
+import { CiPlay1 } from "react-icons/ci"; 
+import { TbDivide, TbLoader3 } from "react-icons/tb";
+import { useState } from "react";
 
 export default function Learn() {
-    const [responseMessage, setResponseMessage] = useState(null); // Initialize state for response
+  const [responseMessage, setResponseMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // State for button loading
 
-    const handleButtonClick = async () => {
-        try {
-            const response = await fetch('/api/gpt', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                // Include a body if your API expects any data, otherwise it can be omitted
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            console.log(data);
-            setResponseMessage(data.messages); // Update response state with received answer
-            // Update UI or display the answer using data.answer (assuming the API response has an 'answer' property)
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
+  const handleButtonClick = async () => {
+    setIsLoading(true); // Set loading state to true before fetch
+    try {
+      const response = await fetch("/api/gpt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // Include a body if your API expects any data, otherwise it can be omitted
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log(data);
+      setResponseMessage(data.messages); // Update response state with received answer
+      // Update UI or display the answer using data.answer (assuming the API response has an 'answer' property)
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false); // Set loading state to false after fetch (important for cleanup)
+    }
+  };
 
   return (
     <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative">
       {/* Floating back button at the top left */}
       <div className="absolute top-0 left-0 m-4">
         <Link href="/" className="text-left text-4xl font-semibold leading-tight">
-            <FaArrowLeftLong />
+          <FaArrowLeftLong />
         </Link>
       </div>
 
@@ -47,22 +49,30 @@ export default function Learn() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <main className="flex flex-col items-center justify-center mt-24">
-          <p className="text-center text-2xl leading-loose mb-8">
-            Get started by clicking on <code className="font-bold">Learn</code>
+        <main className="flex flex-col w-screen items-center justify-center mt-24">
+          <p className="text-center text-2xl leading-loose mb-8 flex items-center">
+            <div className="pr-2">Get started by clicking on </div>           
+            <div
+              className={`p-2 bg-blue-600 text-white rounded flex items-center justify-center`} 
+            >
+              <CiPlay1 />
+            </div>
           </p>
 
-          <div className="flex items-center justify-center flex-wrap max-w-screen-md mt-2 mx-auto">
-            <div className="m-4 flex-grow flex-shrink-0 basis-2/5 p-6 text-left no-underline border border-gray-200 rounded-lg transition-colors duration-150 ">
+          <div className="flex items-center justify-center flex-wrap w-screen max-w-screen-md mt-2 mx-auto">
+            <div className="m-4 max-w-screen-md flex-grow flex-shrink-0 basis-2/5 p-6 text-left no-underline border border-gray-200 rounded-lg transition-colors duration-150 ">
               <div className="flex items-center">
                 <h3 className="font-semibold text-2xl flex items-center">
-                    Generate A Sentance <span className="ml-2"></span>
-                </h3>                
-                <button 
-                    className="p-2 bg-blue-600 text-white rounded flex items-center justify-center"
-                    onClick={handleButtonClick} // Directly using the handler here
+                  Generate A Sentance <span className="ml-2"></span>
+                </h3>
+                <button
+                  className={`p-2 bg-blue-600 text-white rounded flex items-center justify-center  ${
+                    isLoading ? "disabled opacity-50 cursor-not-allowed" : ""
+                  }`} // Add dynamic button classes
+                  onClick={handleButtonClick}
+                  disabled={isLoading} // Disable button using isLoading state
                 >
-                    <CiPlay1 />
+                  {isLoading ? <TbLoader3 className="animate-spin" /> : <CiPlay1 />}
                 </button>
               </div>     
               <div className="flex items-center my-10">
