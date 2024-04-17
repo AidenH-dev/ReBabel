@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       //const { question } = req.body; // Assuming body parser middleware is configured
-//
+
       //if (!question) {
       //  return res.status(400).json({ error: 'No question provided' });
       //}
@@ -25,7 +25,8 @@ export default async function handler(req, res) {
           'OpenAI-Beta': 'assistants=v1'
         }
       });
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
       // New code to retrieve the assistant's message
       const threadId = response.data.thread_id;  // Get the thread ID from the response
