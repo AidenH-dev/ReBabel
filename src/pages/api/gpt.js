@@ -1,56 +1,129 @@
 import axios from 'axios';
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    try {
-      //const { question } = req.body; // Assuming body parser middleware is configured
-
-      //if (!question) {
-      //  return res.status(400).json({ error: 'No question provided' });
-      //}
-
-      const assistantId = 'asst_mc7zfIt9K7ja3RGsy66UZwjJ'; // Replace with your actual Assistant ID
-
-      const response = await axios.post('https://api.openai.com/v1/threads/runs', {
-        assistant_id: assistantId,
-        thread: {
-          messages: [
-            { role: "user", content: "generate me a sentence" }
-          ]
-        }
-      }, {
-        headers: {
-          'Authorization': `Bearer ${process.env.OPENAI_KEY}`,  // Ensure your environment variable is set
-          'Content-Type': 'application/json',
-          'OpenAI-Beta': 'assistants=v1'
-        }
-      });
-      
-      await new Promise(resolve => setTimeout(resolve, 3000));
-
-      // New code to retrieve the assistant's message
-      const threadId = response.data.thread_id;  // Get the thread ID from the response
-      const messageResponse = await axios.get(`https://api.openai.com/v1/threads/${threadId}/messages`, {
-        headers: {
-          'Authorization': `Bearer ${process.env.OPENAI_KEY}`,  // Ensure your environment variable is set
-          'Content-Type': 'application/json',
-          'OpenAI-Beta': 'assistants=v1'
-        }
-      });
-      
-      const messages = messageResponse.data.data[0].content[0].text.value;
-      // Combine original response with assistant's message
-      //const fullResponse = { ...response.data, message: messageResponse.data[1].content };  // Assuming assistant's message is the second element (index 1)
-      //const msgResponse = messageResponse.data[0].content[0]
-      console.log("\nMESSAGE RESPONSE", messages)
-      return res.status(200).json({messages});
-
-    } catch (error) {
-      console.error('Error calling OpenAI API:', error);
-      return res.status(500).json({ error: 'Failed to fetch response from OpenAI' });
-    }
-  } else {
+  if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+
+  const OPENAI_API_KEY = process.env.OPENAI_KEY;
+  const assistantId = 'asst_mc7zfIt9K7ja3RGsy66UZwjJ';
+  const userMessage = req.body.message || 'Generate a JSON object with a practice sentence to translate from English to Japanese';
+
+  try {
+    // Step 1: Create a Thread
+    const threadResponse = await axios.post(
+      'https://api.openai.com/v1/threads',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+          'OpenAI-Beta': 'assistants=v2',
+        },
+      }
+    );
+    const threadId = threadResponse.data.id;
+
+    // Step 2: Add Message to the Thread
+    await axios.post(
+      `https://api.openai.com/v1/threads/${threadId}/messages`,
+      {
+        role: 'user',
+        content: userMessage,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+          'OpenAI-Beta': 'assistants=v2',
+        },
+      }
+    );
+
+    // Step 3: Create a Run for Assistant's Response
+    const runResponse = await axios.post(
+      `https://api.openai.com/v1/threads/${threadId}/runs`,
+      { assistant_id: assistantId },
+      {
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+          'OpenAI-Beta': 'assistants=v2',
+        },
+      }
+    );
+    const runId = runResponse.data.id;
+
+    // Step 4: Poll for Run Completion Status
+    let attempts = 0;
+    const maxAttempts = 15;
+    const pollingInterval = 3000;
+    let runComplete = false;
+
+    while (attempts < maxAttempts && !runComplete) {
+      const runStatusResponse = await axios.get(
+        `https://api.openai.com/v1/threads/${threadId}/runs/${runId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json',
+            'OpenAI-Beta': 'assistants=v2',
+          },
+        }
+      );
+
+      const runStatus = runStatusResponse.data.status;
+      console.log(`Run status: ${runStatus}`);
+
+      if (runStatus === 'completed') {
+        runComplete = true;
+        break;
+      } else if (runStatus === 'requires_action') {
+        // Check for any actions required, such as function calls
+        const requiredAction = runStatusResponse.data.required_action;
+
+        // Log required action details for debugging
+        console.log('Assistant requires action:', JSON.stringify(requiredAction, null, 2));
+
+        // If the action is a function call, execute or mock the function here
+        // Example: If a function is required, you might call it or respond with needed parameters
+        // Here, we'll simulate by immediately re-running without modification, as we lack specifics
+        attempts += 1;
+        await new Promise((resolve) => setTimeout(resolve, pollingInterval));
+        continue;
+      }
+
+      attempts += 1;
+      await new Promise((resolve) => setTimeout(resolve, pollingInterval));
+    }
+
+    if (!runComplete) {
+      return res.status(408).json({ error: 'Assistant response timeout or action required not fulfilled' });
+    }
+
+    // Step 5: Retrieve the Assistant’s Message
+    const messageResponse = await axios.get(
+      `https://api.openai.com/v1/threads/${threadId}/messages`,
+      {
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+          'OpenAI-Beta': 'assistants=v2',
+        },
+      }
+    );
+
+    const messages = messageResponse.data.data;
+    const assistantMessage = messages.find((msg) => msg.role === 'assistant')?.content;
+
+    if (assistantMessage) {
+      return res.status(200).json({ message: assistantMessage });
+    } else {
+      return res.status(500).json({ error: 'Assistant response not found in thread messages' });
+    }
+  } catch (error) {
+    console.error('Error during the OpenAI API process:', error);
+    res.status(500).json({ error: 'Failed to retrieve response from OpenAI' });
   }
 }
