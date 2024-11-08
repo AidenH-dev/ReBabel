@@ -60,6 +60,7 @@ export default async function handler(req, res) {
     const maxAttempts = 15;
     const pollingInterval = 3000;
     let runComplete = false;
+    let extractedArguments = null;
 
     while (attempts < maxAttempts && !runComplete) {
       const runStatusResponse = await axios.get(
@@ -80,29 +81,30 @@ export default async function handler(req, res) {
         runComplete = true;
         break;
       } else if (runStatus === 'requires_action') {
-        // Check for any actions required, such as function calls
+        // Check for the action details
         const requiredAction = runStatusResponse.data.required_action;
-
-        // Log required action details for debugging
         console.log('Assistant requires action:', JSON.stringify(requiredAction, null, 2));
 
-        // If the action is a function call, execute or mock the function here
-        // Example: If a function is required, you might call it or respond with needed parameters
-        // Here, we'll simulate by immediately re-running without modification, as we lack specifics
-        attempts += 1;
-        await new Promise((resolve) => setTimeout(resolve, pollingInterval));
-        continue;
+        // Extract the arguments from requiredAction
+        extractedArguments = requiredAction.submit_tool_outputs.tool_calls[0].function.arguments;
+        
+        // Exit the loop early if we got the arguments
+        runComplete = true;
+        break;
       }
 
       attempts += 1;
       await new Promise((resolve) => setTimeout(resolve, pollingInterval));
     }
 
-    if (!runComplete) {
+    if (extractedArguments) {
+      // If we have extracted arguments, return them directly
+      return res.status(200).json({ message: extractedArguments });
+    } else if (!runComplete) {
       return res.status(408).json({ error: 'Assistant response timeout or action required not fulfilled' });
     }
 
-    // Step 5: Retrieve the Assistant’s Message
+    // Step 5: Retrieve the Assistant’s Message if needed
     const messageResponse = await axios.get(
       `https://api.openai.com/v1/threads/${threadId}/messages`,
       {
