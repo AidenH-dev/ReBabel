@@ -25,8 +25,8 @@ export default function Learn() {
       }
       const data = await response.json();
       console.log(data);
-      setResponseMessage(data.messages); // Update response state with received answer
-      // Update UI or display the answer using data.answer (assuming the API response has an 'answer' property)
+      const parsedData = JSON.parse(data.message); // Parse the message string into an object
+      setResponseMessage(parsedData.sentence); // Extract and set only the sentence
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
