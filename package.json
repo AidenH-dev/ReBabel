@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.6.8",
+    "chart.js": "^4.4.6",
     "fs": "^0.0.1-security",
     "next": "14.2.1",
     "openai": "^4.36.0",
