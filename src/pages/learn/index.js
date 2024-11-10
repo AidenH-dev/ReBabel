@@ -2,15 +2,17 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowLeftLong, FaArrowRight, FaArrowRightLong } from "react-icons/fa6";
-import { CiPlay1 } from "react-icons/ci"; 
+import { CiPlay1 } from "react-icons/ci";
 import { TbDivide, TbLoader3 } from "react-icons/tb";
 import { useState } from "react";
 import { useEffect } from "react";
 import Chart from 'chart.js/auto';
+import { useRef } from "react";
 
 export default function Learn() {
   const [responseMessage, setResponseMessage] = useState(null);
   const [responseMessageGrade, setResponseMessageGrade] = useState(null);
+  const chartRefs = useRef({});
 
   const [isLoading, setIsLoading] = useState(false); // State for button loading
 
@@ -74,7 +76,14 @@ export default function Learn() {
 
       Object.keys(chartsData).forEach(chartId => {
         const { value, max } = chartsData[chartId];
-        new Chart(document.getElementById(chartId), {
+
+        // Destroy existing chart if it exists
+        if (chartRefs.current[chartId]) {
+          chartRefs.current[chartId].destroy();
+        }
+
+        // Create new chart
+        chartRefs.current[chartId] = new Chart(document.getElementById(chartId), {
           type: 'doughnut',
           data: {
             datasets: [{
@@ -107,100 +116,110 @@ export default function Learn() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <main className="flex flex-col w-screen items-center justify-center mt-10">
+        <main className="flex flex-row mt-50">
 
-          <div className="flex items-center justify-center flex-wrap w-screen max-w-screen-md mt-2 mx-auto">
-            <div className="m-4 max-w-screen-md flex-grow flex-shrink-0 basis-2/5 p-6 text-left no-underline border border-gray-200 rounded-lg transition-colors duration-150 ">
-              <div className="flex items-center">
-                <h3 className="font-semibold text-2xl flex items-center">
-                  Generate A Sentance <span className="ml-2"></span>
+          <div className="flex flex-row items-center justify-center flex-wrap w-screen max-w-screen-md mt-2 mx-auto">
+            <div className="grid grid-flow-col m-4 max-w-screen-md basis-2/5 p-6 text-left no-underline border border-gray-200 rounded-lg transition-colors duration-150 ">
+              <div>
+                <div className="flex items-center">
+                  <h3 className="font-semibold text-2xl flex items-center">
+                    Generate A Sentance <span className="ml-2"></span>
+                  </h3>
+                  <button
+                    className={`p-2 bg-blue-600 text-white rounded flex items-center justify-center  ${isLoading ? "disabled opacity-50 cursor-not-allowed" : ""
+                      }`} // Add dynamic button classes
+                    onClick={handleButtonClick}
+                    disabled={isLoading} // Disable button using isLoading state
+                  >
+                    {isLoading ? <TbLoader3 className="animate-spin" /> : <CiPlay1 />}
+                  </button>
+                </div>
+                <div className="flex items-center my-10">
+                  {responseMessage && ( // Conditionally render response message
+                    <p className="font-semibold mx-2 text-green-500">{responseMessage}</p>
+                  )}
+                </div>
+                <h3 className="m-0 mb-4 font-semibold text-2xl flex items-center">
+                  Check <span className="ml-2"></span>
                 </h3>
-                <button
-                  className={`p-2 bg-blue-600 text-white rounded flex items-center justify-center  ${
-                    isLoading ? "disabled opacity-50 cursor-not-allowed" : ""
-                  }`} // Add dynamic button classes
-                  onClick={handleButtonClick}
-                  disabled={isLoading} // Disable button using isLoading state
-                >
-                  {isLoading ? <TbLoader3 className="animate-spin" /> : <CiPlay1 />}
-                </button>
-              </div>     
-              <div className="flex items-center my-10">
-              {responseMessage && ( // Conditionally render response message
-                  <p className="font-semibold mx-2 text-green-500">{responseMessage}</p>
-                )} 
-            </div>
-              <h3 className="m-0 mb-4 font-semibold text-2xl flex items-center">
-                Check <span className="ml-2"></span>
-              </h3>
-              <div className="flex items-center">
-                <input type="text" className="flex-grow p-2 border border-gray-300 mr-2 rounded" placeholder="Type your message..." />
-                <button 
+                <div className="flex items-center">
+                  <input type="text" className="flex-grow p-2 border border-gray-300 mr-2 rounded" placeholder="Type your message..." />
+                  <button
                     className="p-2 bg-blue-600 text-white rounded flex items-center justify-center"
                     onClick={handleButtonClickGrade}
                     disabled={isLoading} // Disable button using isLoading state
-                >
+                  >
                     Send <FaArrowRight className="ml-2" />
-                </button>
-              </div>    
-              {responseMessageGrade && (
-                <div className="max-w-full w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 mt-4 md:p-6">
-                  <h3 className="text-xl font-bold leading-none text-gray-900 dark:text-white mb-4">Evaluation Scores</h3>
-
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-gray-700 dark:text-gray-400">Grammar and Structure</span>
-                    <div className="relative w-12 h-12">
-                      <canvas id="grammarChart"></canvas>
-                      <span className="absolute inset-0 flex items-center justify-center text-sm font-medium text-gray-900 dark:text-white">
-                        {responseMessageGrade.grades.grammar_and_structure}/20
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-gray-700 dark:text-gray-400">Vocabulary and Expression</span>
-                    <div className="relative w-12 h-12">
-                      <canvas id="vocabularyChart"></canvas>
-                      <span className="absolute inset-0 flex items-center justify-center text-sm font-medium text-gray-900 dark:text-white">
-                        {responseMessageGrade.grades.vocabulary_and_expression}/20
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-gray-700 dark:text-gray-400">Spelling and Script Accuracy</span>
-                    <div className="relative w-12 h-12">
-                      <canvas id="spellingChart"></canvas>
-                      <span className="absolute inset-0 flex items-center justify-center text-sm font-medium text-gray-900 dark:text-white">
-                        {responseMessageGrade.grades.spelling_and_script_accuracy}/20
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-gray-700 dark:text-gray-400">Politeness and Cultural Appropriateness</span>
-                    <div className="relative w-12 h-12">
-                      <canvas id="politenessChart"></canvas>
-                      <span className="absolute inset-0 flex items-center justify-center text-sm font-medium text-gray-900 dark:text-white">
-                        {responseMessageGrade.grades.politeness_and_cultural_appropriateness}/20
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-gray-700 dark:text-gray-400">Fluency and Naturalness</span>
-                    <div className="relative w-12 h-12">
-                      <canvas id="fluencyChart"></canvas>
-                      <span className="absolute inset-0 flex items-center justify-center text-sm font-medium text-gray-900 dark:text-white">
-                        {responseMessageGrade.grades.fluency_and_naturalness}/20
-                      </span>
-                    </div>
-                  </div>
+                  </button>
                 </div>
-              )
-            }
-            </div>
+              </div>
+              <div className="mx-16">
+                {responseMessageGrade && (
+                  <div className="ml-8 max-w-full w-full bg-white rounded-lg shadow-lg p-6 mt-2">
 
+                    <div className="flex items-center mb-2">
+                      <div className="relative w-16 h-16">
+                        <canvas id="grammarChart"></canvas>
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                          {responseMessageGrade.grades.grammar_and_structure}/20
+                        </span>
+                      </div>
+                      <span className="ml-2 text-lg text-gray-700">Grammar and Structure</span>
+                    </div>
+
+                    <div className="flex items-center mb-2">
+                      <div className="relative w-16 h-16">
+                        <canvas id="vocabularyChart"></canvas>
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                          {responseMessageGrade.grades.vocabulary_and_expression}/20
+                        </span>
+                      </div>
+                      <span className="ml-2 text-lg text-gray-700">Vocabulary and Expression</span>
+                    </div>
+
+                    <div className="flex items-center mb-2">
+                      <div className="relative w-16 h-16">
+                        <canvas id="spellingChart"></canvas>
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                          {responseMessageGrade.grades.spelling_and_script_accuracy}/20
+                        </span>
+                      </div>
+                      <span className="ml-2 text-lg text-gray-700">Spelling and Script Accuracy</span>
+                    </div>
+
+                    <div className="flex items-center mb-2">
+                      <div className="relative w-16 h-16">
+                        <canvas id="politenessChart"></canvas>
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                          {responseMessageGrade.grades.politeness_and_cultural_appropriateness}/20
+                        </span>
+                      </div>
+                      <span className="ml-2 text-lg text-gray-700">Politeness and Cultural Appropriateness</span>
+                    </div>
+
+                    <div className="flex items-center mb-2">
+                      <div className="relative w-16 h-16">
+                        <canvas id="fluencyChart"></canvas>
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                          {responseMessageGrade.grades.fluency_and_naturalness}/20
+                        </span>
+                      </div>
+                      <span className="ml-2 text-lg text-gray-700">Fluency and Naturalness</span>
+                    </div>
+
+                    {/* Total Grade Section */}
+                    <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
+                      <span className="text-xl font-bold text-gray-900">Total Grade</span>
+                      <span className="text-xl font-bold text-gray-900">
+                        {Object.values(responseMessageGrade.grades).reduce((sum, grade) => sum + grade, 0)}/100
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>        
+
+            </div>
+                      
           </div>
         </main>
       </div>
