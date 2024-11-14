@@ -17,6 +17,8 @@ export default function Learn() {
   const [responseMessage, setResponseMessage] = useState(null);
   const [responseMessageGrade, setResponseMessageGrade] = useState(null);
   const chartRefs = useRef({});
+  const inputRef = useRef(null); // Reference for input field
+
 
   const [isLoading, setIsLoading] = useState(false); // State for button loading
 
@@ -44,15 +46,22 @@ export default function Learn() {
     }
   };
 
+
   const handleButtonClickGrade = async () => {
-    setIsLoading(true); // Set loading state to true before fetch
+    setIsLoading(true);
+    const japaneseSentence = inputRef.current.value;
+    const englishSentence = responseMessage;
+
+    console.log("Japanese Sentence:", japaneseSentence);
+    console.log("English Sentence:", englishSentence);
+
     try {
       const response = await fetch("/api/grader-gpt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        // Include a body if your API expects any data, otherwise it can be omitted
+        body: JSON.stringify({ japaneseSentence, englishSentence }),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -182,9 +191,11 @@ export default function Learn() {
                 <div className="flex items-center">
                   <input
                     type="text"
+                    ref={inputRef}
                     className="flex-grow p-2 border border-gray-300 mr-2 rounded"
-                    placeholder="Type your message..."
+                    placeholder="Type your Japanese translation..."
                   />
+
                   <button
                     className="p-2 bg-blue-600 text-white rounded flex items-center justify-center"
                     onClick={handleButtonClickGrade}

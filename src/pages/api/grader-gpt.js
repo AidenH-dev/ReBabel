@@ -6,9 +6,16 @@ export default async function handler(req, res) {
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
+  // Extracting the sentences from the request body
+  const { japaneseSentence, englishSentence } = req.body;
+
+  if (!japaneseSentence || !englishSentence) {
+    return res.status(400).json({ error: 'Japanese and English sentences are required' });
+  }
+
   const OPENAI_API_KEY = process.env.OPENAI_KEY;
   const assistantId = 'asst_srJBzryx0qcs1xcwkttm61Y0';
-  const userMessage = 'Generate a JSON object that is a grade the japanese translation of this English sentence: Yesterday, I went to the hospital. the Sentence to grade is: 今日はびょういんに行きました';
+  const userMessage = `Generate a JSON object that is a grade the Japanese translation of this English sentence: ${englishSentence} the Sentence to grade is: ${japaneseSentence}`;
 
   try {
     // Step 1: Create a Thread
@@ -81,14 +88,9 @@ export default async function handler(req, res) {
         runComplete = true;
         break;
       } else if (runStatus === 'requires_action') {
-        // Check for the action details
         const requiredAction = runStatusResponse.data.required_action;
         console.log('Assistant requires action:', JSON.stringify(requiredAction, null, 2));
-
-        // Extract the arguments from requiredAction
         extractedArguments = requiredAction.submit_tool_outputs.tool_calls[0].function.arguments;
-        
-        // Exit the loop early if we got the arguments
         runComplete = true;
         break;
       }
@@ -98,13 +100,11 @@ export default async function handler(req, res) {
     }
 
     if (extractedArguments) {
-      // If we have extracted arguments, return them directly
       return res.status(200).json({ message: extractedArguments });
     } else if (!runComplete) {
       return res.status(408).json({ error: 'Assistant response timeout or action required not fulfilled' });
     }
 
-    // Step 5: Retrieve the Assistant’s Message if needed
     const messageResponse = await axios.get(
       `https://api.openai.com/v1/threads/${threadId}/messages`,
       {
