@@ -40,9 +40,9 @@ export default function Home() {
 
                 <a href="https://github.com/vercel/next.js/tree/canary/examples" className="m-4 flex-grow-0 flex-shrink-0 basis-2/5 p-6 text-left no-underline border border-gray-200 rounded-lg transition-colors duration-150 hover:text-blue-600 hover:border-blue-600">
                     <h3 className="m-0 mb-4 font-semibold text-2xl flex items-center">
-                        Examples <span className="ml-2"><FaArrowRightLong /></span>
+                        Statistics <span className="ml-2"><FaArrowRightLong /></span>
                     </h3>
-                    <p className="m-0 text-md leading-loose">Walkthrough examples.</p>
+                    <p className="m-0 text-md leading-loose">Full dashboard of learning statistcs between the different mediums.</p>
                 </a>
 
                 <a href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app" className="m-4 flex-grow-0 flex-shrink-0 basis-2/5 p-6 text-left no-underline border border-gray-200 rounded-lg transition-colors duration-150 hover:text-blue-600 hover:border-blue-600">
