@@ -7,7 +7,7 @@ export default function Sidebar() {
   const isTranslateActive = router.pathname === "/learn/translate";
 
   return (
-    <div className="fixed top-0 left-0 z-40 w-64 h-screen p-4 bg-white dark:bg-gray-800">
+    <div className="fixed top-0 left-0 z-40 w-64 h-screen p-4 bg-white dark:bg-[#0b191f] border-r-2 border-gray-600">
       <div className="text-center mb-4">
         <Image
           src="/Learnt (1).png"

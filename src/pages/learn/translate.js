@@ -141,7 +141,7 @@ export default function Learn() {
   }, [responseMessageGrade]);
 
   return (
-    <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative">
+    <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative bg-white dark:bg-[#0b191f]">
       <Sidebar />
       {/* Floating back button at the top left */}
       <div className="absolute top-0 left-0 m-4">
@@ -161,7 +161,7 @@ export default function Learn() {
 
         <main className="flex flex-row mt-50">
           <div className="flex flex-row items-center justify-center flex-wrap w-screen max-w-screen-md mt-2 mx-auto">
-            <div className="grid grid-flow-col m-4 max-w-screen-md basis-2/5 p-6 text-left no-underline border border-gray-200 rounded-lg transition-colors duration-150 ">
+            <div className="grid grid-flow-col m-4 max-w-screen-md basis-2/5 p-6 text-left no-underline border border-gray-200 bg-white rounded-lg transition-colors duration-150 ">
               <div>
                 <div className="flex items-center">
                   <h3 className="font-semibold text-2xl flex items-center">
