@@ -141,7 +141,7 @@ export default function Learn() {
   }, [responseMessageGrade]);
 
   return (
-    <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative bg-white dark:bg-[#0b191f]">
+    <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative bg-white dark:bg-[#141f25]">
       <Sidebar />
       {/* Floating back button at the top left */}
       <div className="absolute top-0 left-0 m-4">
