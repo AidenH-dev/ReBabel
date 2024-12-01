@@ -14,13 +14,11 @@ import Chart from "chart.js/auto";
 import { useRef } from "react";
 import Sidebar from "../../components/Sidebar.js"; // Import the Sidebar component
 
-
 export default function Learn() {
   const [responseMessage, setResponseMessage] = useState(null);
   const [responseMessageGrade, setResponseMessageGrade] = useState(null);
   const chartRefs = useRef({});
   const inputRef = useRef(null); // Reference for input field
-
 
   const [isLoading, setIsLoading] = useState(false); // State for button loading
 
@@ -47,7 +45,6 @@ export default function Learn() {
       setIsLoading(false); // Set loading state to false after fetch (important for cleanup)
     }
   };
-
 
   const handleButtonClickGrade = async () => {
     setIsLoading(true);
@@ -144,14 +141,7 @@ export default function Learn() {
     <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative bg-white dark:bg-[#141f25]">
       <Sidebar />
       {/* Floating back button at the top left */}
-      <div className="absolute top-0 left-0 m-4">
-        <Link
-          href="/"
-          className="text-left text-4xl font-semibold leading-tight"
-        >
-          <FaArrowLeftLong />
-        </Link>
-      </div>
+
 
       <div className="flex flex-col items-center justify-center w-full">
         <Head>
@@ -159,13 +149,24 @@ export default function Learn() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <main className="flex flex-row mt-50">
+        <main className="gird grid-column mt-50">
+          <div className="w-full mb-">
+            <div className="rounded-full border border-blue-600 p-1">
+              <div
+                className="flex h-6 items-center justify-center rounded-full bg-[#da1c60] text-xs leading-none"
+                style={{ width: "85%", height: "85%" }}
+              >
+                <span className="p-1 text-white font-semibold">85%</span>
+              </div>
+            </div>
+          </div>
+
           <div className="flex flex-row items-center justify-center flex-wrap w-screen max-w-screen-md mt-2 mx-auto">
             <div className="grid grid-flow-col m-4 max-w-screen-md basis-2/5 p-6 text-left no-underline border border-gray-200 bg-white rounded-lg transition-colors duration-150 ">
               <div>
                 <div className="flex items-center">
                   <h3 className="font-semibold text-2xl flex items-center">
-                    Generate A Sentance <span className="ml-2"></span>
+                    Generate A Sentence <span className="ml-2"></span>
                   </h3>
                   <button
                     className={`p-2 bg-blue-600 text-white rounded flex items-center justify-center  ${
@@ -209,106 +210,103 @@ export default function Learn() {
                 </div>
               </div>
               <div className="mx-16">
-                {responseMessageGrade && (
-                  <div className="ml-8 max-w-full w-full bg-white rounded-lg shadow-lg p-6 mt-2">
-                    <div className="flex items-center mb-2">
-                      <div className="relative w-16 h-16">
-                        <canvas id="grammarChart"></canvas>
-                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
-                          {responseMessageGrade.grades.grammar_and_structure}/20
-                        </span>
-                      </div>
-                      <span className="flex items-center ml-2">
-                        <span className="px-4 py-2 text-blue-700 bg-blue-100 text-lg font-semibold rounded-lg">
-                          Grammar and Structure
-                        </span>
+                <div className="ml-8 max-w-full w-full bg-white rounded-lg shadow-lg p-6 mt-2">
+                  <div className="flex items-center mb-2">
+                    <div className="relative w-16 h-16">
+                      <canvas id="grammarChart"></canvas>
+                      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                        {responseMessageGrade?.grades.grammar_and_structure ??
+                          "--"}
+                        /20
                       </span>
                     </div>
-
-                    <div className="flex items-center mb-2">
-                      <div className="relative w-16 h-16">
-                        <canvas id="vocabularyChart"></canvas>
-                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
-                          {
-                            responseMessageGrade.grades
-                              .vocabulary_and_expression
-                          }
-                          /20
-                        </span>
-                      </div>
-                      <span className="flex items-center ml-2">
-                        <span className="px-4 py-2 text-green-700 bg-green-100 text-lg font-semibold rounded-lg">
-                          Vocabulary and Expression
-                        </span>
+                    <span className="flex items-center ml-2">
+                      <span className="px-4 py-2 text-blue-700 bg-blue-100 text-lg font-semibold rounded-lg">
+                        Grammar and Structure
                       </span>
-                    </div>
-
-                    <div className="flex items-center mb-2">
-                      <div className="relative w-16 h-16">
-                        <canvas id="spellingChart"></canvas>
-                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
-                          {
-                            responseMessageGrade.grades
-                              .spelling_and_script_accuracy
-                          }
-                          /20
-                        </span>
-                      </div>
-                      <span className="flex items-center ml-2">
-                        <span className="px-4 py-2 text-purple-700 bg-purple-100 text-lg font-semibold rounded-lg">
-                          Spelling and Script Accuracy
-                        </span>
-                      </span>
-                    </div>
-
-                    <div className="flex items-center mb-2">
-                      <div className="relative w-16 h-16">
-                        <canvas id="politenessChart"></canvas>
-                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
-                          {
-                            responseMessageGrade.grades
-                              .politeness_and_cultural_appropriateness
-                          }
-                          /20
-                        </span>
-                      </div>
-                      <span className="flex items-center ml-2">
-                        <span className="px-4 py-2 text-orange-700 bg-orange-100 text-lg font-semibold rounded-lg">
-                          Politeness and Cultural Accuracy
-                        </span>
-                      </span>
-                    </div>
-
-                    <div className="flex items-center mb-2">
-                      <div className="relative w-16 h-16">
-                        <canvas id="fluencyChart"></canvas>
-                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
-                          {responseMessageGrade.grades.fluency_and_naturalness}
-                          /20
-                        </span>
-                      </div>
-                      <span className="flex items-center ml-2">
-                        <span className="px-4 py-2 text-red-700 bg-red-100 text-lg font-semibold rounded-lg">
-                          Fluency and Naturalness
-                        </span>
-                      </span>
-                    </div>
-
-                    {/* Total Grade Section */}
-                    <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
-                      <span className="text-xl font-bold text-gray-900">
-                        Total Grade
-                      </span>
-                      <span className="text-xl font-bold text-gray-900">
-                        {Object.values(responseMessageGrade.grades).reduce(
-                          (sum, grade) => sum + grade,
-                          0
-                        )}
-                        /100
-                      </span>
-                    </div>
+                    </span>
                   </div>
-                )}
+
+                  <div className="flex items-center mb-2">
+                    <div className="relative w-16 h-16">
+                      <canvas id="vocabularyChart"></canvas>
+                      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                        {responseMessageGrade?.grades
+                          .vocabulary_and_expression ?? "--"}
+                        /20
+                      </span>
+                    </div>
+                    <span className="flex items-center ml-2">
+                      <span className="px-4 py-2 text-green-700 bg-green-100 text-lg font-semibold rounded-lg">
+                        Vocabulary and Expression
+                      </span>
+                    </span>
+                  </div>
+
+                  <div className="flex items-center mb-2">
+                    <div className="relative w-16 h-16">
+                      <canvas id="spellingChart"></canvas>
+                      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                        {responseMessageGrade?.grades
+                          .spelling_and_script_accuracy ?? "--"}
+                        /20
+                      </span>
+                    </div>
+                    <span className="flex items-center ml-2">
+                      <span className="px-4 py-2 text-purple-700 bg-purple-100 text-lg font-semibold rounded-lg">
+                        Spelling and Script Accuracy
+                      </span>
+                    </span>
+                  </div>
+
+                  <div className="flex items-center mb-2">
+                    <div className="relative w-16 h-16">
+                      <canvas id="politenessChart"></canvas>
+                      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                        {responseMessageGrade?.grades
+                          .politeness_and_cultural_appropriateness ?? "--"}
+                        /20
+                      </span>
+                    </div>
+                    <span className="flex items-center ml-2">
+                      <span className="px-4 py-2 text-orange-700 bg-orange-100 text-lg font-semibold rounded-lg">
+                        Politeness and Cultural Accuracy
+                      </span>
+                    </span>
+                  </div>
+
+                  <div className="flex items-center mb-2">
+                    <div className="relative w-16 h-16">
+                      <canvas id="fluencyChart"></canvas>
+                      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                        {responseMessageGrade?.grades.fluency_and_naturalness ??
+                          "--"}
+                        /20
+                      </span>
+                    </div>
+                    <span className="flex items-center ml-2">
+                      <span className="px-4 py-2 text-red-700 bg-red-100 text-lg font-semibold rounded-lg">
+                        Fluency and Naturalness
+                      </span>
+                    </span>
+                  </div>
+
+                  {/* Total Grade Section */}
+                  <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
+                    <span className="text-xl font-bold text-gray-900">
+                      Total Grade
+                    </span>
+                    <span className="text-xl font-bold text-gray-900">
+                      {responseMessageGrade
+                        ? Object.values(responseMessageGrade.grades).reduce(
+                            (sum, grade) => sum + (grade ?? 0),
+                            0
+                          )
+                        : "--"}
+                      /100
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

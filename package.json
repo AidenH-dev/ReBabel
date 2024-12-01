@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^3.5.0",
+    "@next/font": "^14.2.15",
     "axios": "^1.6.8",
     "chart.js": "^4.4.6",
     "fs": "^0.0.1-security",

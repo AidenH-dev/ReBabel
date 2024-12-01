@@ -8,9 +8,9 @@ export default function Sidebar() {
 
   return (
     <div className="fixed top-0 left-0 z-40 w-64 h-screen p-4 bg-white dark:bg-[#141f25] border-r-2 border-gray-600">
-      <div className="text-center mb-4">
+      <div className="text-center mb-10 mt-6">
         <Image
-          src="/Learnt (1).png"
+          src="/ReBabel.png"
           alt="Learnt Logo"
           layout="responsive"
           width={150}
