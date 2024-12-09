@@ -3,6 +3,8 @@ import Sidebar from "../../../components/Sidebar"; // Import your Sidebar compon
 import { useState, useEffect } from "react";
 import { FiSettings } from "react-icons/fi";
 import { IoFastFoodOutline } from "react-icons/io5";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+
 
 export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -300,7 +302,7 @@ export default function Dashboard() {
                   />
                 </div>
                 {/* Add a grid container for rectangular tags */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 overflow-y-auto px-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 overflow-y-auto py-4 px-4">
                   {vocabularyGroups
                     .filter((set) =>
                       set.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -337,3 +339,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+export const getServerSideProps = withPageAuthRequired();

@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Sidebar from "../../../components/Sidebar"; // Import your Sidebar component
 import { useState } from "react";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
 export default function Notecards() {
   const [cardsData, setCardsData] = useState([
@@ -82,3 +83,5 @@ export default function Notecards() {
     </main>
   );
 }
+
+export const getServerSideProps = withPageAuthRequired();

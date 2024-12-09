@@ -12,7 +12,7 @@ export default function Home() {
   const router = useRouter();
 
   const handleSignup = () => {
-    router.push("/api/auth/signup"); // Navigate to the Auth0 login route
+    router.push("/api/auth/login"); // Navigate to the Auth0 login route
   };
   return (
     <>

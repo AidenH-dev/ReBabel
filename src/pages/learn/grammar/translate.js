@@ -12,7 +12,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Chart from "chart.js/auto";
 import { useRef } from "react";
-import Sidebar from "../../components/Sidebar.js"; // Import the Sidebar component
+import Sidebar from "../../../components/Sidebar.js"; // Import the Sidebar component
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
 export default function Learn() {
   const [responseMessage, setResponseMessage] = useState(null);
@@ -315,3 +316,5 @@ export default function Learn() {
     </main>
   );
 }
+
+export const getServerSideProps = withPageAuthRequired();
