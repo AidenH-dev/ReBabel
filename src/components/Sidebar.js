@@ -25,7 +25,7 @@ function Sidebar() {
         <ul className="space-y-2 font-medium">
           <li>
             <a
-              href="/learn/translate"
+              href="/learn/grammar"
               className={`flex items-center p-2 rounded-lg group ${
                 isTranslateActive
                   ? "text-white bg-blue-700 dark:bg-blue-900"

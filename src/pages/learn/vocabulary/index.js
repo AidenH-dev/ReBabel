@@ -5,7 +5,6 @@ import { FiSettings } from "react-icons/fi";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
-
 export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const studyModes = [
@@ -149,8 +148,6 @@ export default function Dashboard() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-
-
         {/* Dashboard Content */}
         <div className="p-20 mt-4">
           {/* Metrics Section */}
@@ -158,32 +155,7 @@ export default function Dashboard() {
             {/* Git Commit-style Calendar */} {/* FIX THE AUTO STYLING */}
             <div className="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg p-4 shadow-md">
               <h2 className="text-lg font-semibold mb-4">Study Activity</h2>
-              <div className="grid grid-flow-col auto-cols-max gap-2">
-                {/* Columns for Dynamic Weeks */}
-                {Array.from({ length: 21 }).map((_, index) => (
-                  <div key={index} className="grid grid-rows-7 gap-1">
-                    {/* Rows for Days of the Week */}
-                    {Array.from({ length: 7 }).map((_, dayIndex) => {
-                      // Simulate activity level for styling
-                      const activityLevel = Math.floor(Math.random() * 5); // Random activity level
-                      const activityColors = [
-                        "bg-gray-300 dark:bg-gray-700", // No activity
-                        "bg-green-200 dark:bg-[#0e4429]", // Low activity
-                        "bg-green-400 dark:bg-[#046c32]", // Medium activity
-                        "bg-green-600 dark:bg-[#27a642]", // High activity
-                        "bg-green-800 dark:bg-[#3bd354]", // Very high activity
-                      ];
-
-                      return (
-                        <div
-                          key={dayIndex}
-                          className={`w-4 h-4 rounded-sm ${activityColors[activityLevel]}`}
-                        />
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
+              <p className="text-sm">Track your grammar practice here.</p>
             </div>
             {/* Existing Metrics */}
             <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -341,3 +313,30 @@ export default function Dashboard() {
 }
 
 export const getServerSideProps = withPageAuthRequired();
+
+//<div className="grid grid-flow-col auto-cols-max gap-2">
+//{/* Columns for Dynamic Weeks */}
+//{Array.from({ length: 21 }).map((_, index) => (
+//  <div key={index} className="grid grid-rows-7 gap-1">
+//    {/* Rows for Days of the Week */}
+//    {Array.from({ length: 7 }).map((_, dayIndex) => {
+//      // Simulate activity level for styling
+//      const activityLevel = Math.floor(Math.random() * 5); // Random activity level
+//      const activityColors = [
+//        "bg-gray-300 dark:bg-gray-700", // No activity
+//        "bg-green-200 dark:bg-[#0e4429]", // Low activity
+//        "bg-green-400 dark:bg-[#046c32]", // Medium activity
+//        "bg-green-600 dark:bg-[#27a642]", // High activity
+//        "bg-green-800 dark:bg-[#3bd354]", // Very high activity
+//      ];
+//
+//      return (
+//        <div
+//          key={dayIndex}
+//          className={`w-4 h-4 rounded-sm ${activityColors[activityLevel]}`}
+//        />
+//      );
+//    })}
+//  </div>
+//))}
+//</div>
