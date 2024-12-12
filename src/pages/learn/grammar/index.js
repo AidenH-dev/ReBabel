@@ -12,7 +12,6 @@ import { BsTextParagraph } from "react-icons/bs";
 import { TbSpace } from "react-icons/tb";
 import { IoImagesOutline } from "react-icons/io5";
 
-
 export default function GrammarDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -119,47 +118,59 @@ export default function GrammarDashboard() {
 
             {/* Learning Tools */}
             <section className="col-span-18 md:col-span-6 lg:col-span-5 grid grid-cols-2 gap-4">
-              <div className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
-                <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                  <RiSpeakLine className="h-8 w-8 mr-3" />
-                  Conversation
-                </h2>
-              </div>
+              <a href="/learn/grammar/translate" className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
+                <div >
+                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                    <RiSpeakLine className="h-8 w-8 mr-3" />
+                    Conversation
+                  </h2>
+                </div>
+              </a>
 
-              <div className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
-                <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                  <FaArrowRightArrowLeft className="h-8 w-8 mr-3" />
-                  Translation
-                </h2>
-              </div>
+              <a href="/learn/grammar/translate" className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
+                <div >
+                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                    <FaArrowRightArrowLeft className="h-8 w-8 mr-3" />
+                    Translation
+                  </h2>
+                </div>
+              </a>
 
-              <div className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
-                <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                  <BsTextParagraph className="h-8 w-8 mr-3" />
-                  Comprehension
-                </h2>
-              </div>
+              <a href="https://comprehension.yourdomain.com" className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
+                <div >
+                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                    <BsTextParagraph className="h-8 w-8 mr-3" />
+                    Comprehension
+                  </h2>
+                </div>
+              </a>
 
-              <div className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
-                <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                  <LuTimerReset className="h-8 w-8 mr-3" />
-                  Fluency
-                </h2>
-              </div>
+              <a href="https://fluency.yourdomain.com" className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
+                <div >
+                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                    <LuTimerReset className="h-8 w-8 mr-3" />
+                    Fluency
+                  </h2>
+                </div>
+              </a>
 
-              <div className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
-                <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                  <TbSpace className="h-8 w-8 mr-3" />
-                  Cloze Exercises
-                </h2>
-              </div>
+              <a href="https://cloze.yourdomain.com" className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
+                <div >
+                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                    <TbSpace className="h-8 w-8 mr-3" />
+                    Cloze Exercises
+                  </h2>
+                </div>
+              </a>
 
-              <div className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
-                <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                  <IoImagesOutline className="h-8 w-8 mr-3" />
-                  Image Matching
-                </h2>
-              </div>
+              <a href="https://imagematching.yourdomain.com" className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
+                <div >
+                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                    <IoImagesOutline className="h-8 w-8 mr-3" />
+                    Image Matching
+                  </h2>
+                </div>
+              </a>
             </section>
 
             {/* Practice Topics */}

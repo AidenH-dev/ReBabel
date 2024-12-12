@@ -14,6 +14,10 @@ import Chart from "chart.js/auto";
 import { useRef } from "react";
 import Sidebar from "../../../components/Sidebar.js"; // Import the Sidebar component
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import ProgressBarComponent from "@/components/progress-bar.js";
+import { TbX } from "react-icons/tb";
+import { MdOutlineQuiz } from "react-icons/md";
+
 
 export default function Learn() {
   const [responseMessage, setResponseMessage] = useState(null);
@@ -141,17 +145,26 @@ export default function Learn() {
   return (
     <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative bg-white dark:bg-[#141f25]">
       <Sidebar />
-      {/* Floating back button at the top left */}
+      <Head>
+        <title>Learn</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
+      <div className="flex flex-col items-center justify-center w-2/3">
+        <div className="w-2/3 h-16 flex items-center space-x-4">
+          <TbX className="w-8 h-8 text-gray-600" />
+          <ProgressBarComponent className="flex-1" />
 
-      <div className="flex flex-col items-center justify-center w-full">
-        <Head>
-          <title>Learn</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+          <div className="cursor-pointer brightness-110 rounded-lg outline outline-2 outline-gray-200 border-gray-300 bg-gradient-to-r from-blue-400 to-blue-800 bg-[length:200%] px-2 py-1 shadow-lg flex flex-col justify-center items-center">
+            <h2 className="text-md font-semibold  text-gray-250 flex items-center">
+              <MdOutlineQuiz className="h-5 w-5 mr-3" />
+              Exercise
+            </h2>
+          </div>
+        </div>
 
-        <main className="gird grid-column mt-50">
-          <div className="w-full mb-">
+        <main className="gird grid-column ">
+          {/*<div className="w-full mb-">
             <div className="rounded-full border border-blue-600 p-1">
               <div
                 className="flex h-6 items-center justify-center rounded-full bg-[#da1c60] text-xs leading-none"
@@ -160,7 +173,7 @@ export default function Learn() {
                 <span className="p-1 text-white font-semibold">85%</span>
               </div>
             </div>
-          </div>
+          </div>*/}
 
           <div className="flex flex-row items-center justify-center flex-wrap w-screen max-w-screen-md mt-2 mx-auto">
             <div className="grid grid-flow-col m-4 max-w-screen-md basis-2/5 p-6 text-left no-underline border border-gray-200 bg-white rounded-lg transition-colors duration-150 ">

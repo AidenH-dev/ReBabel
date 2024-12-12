@@ -5,7 +5,7 @@ import { LuBlocks } from "react-icons/lu";
 
 function Sidebar() {
   const router = useRouter();
-  const isGrammarActive = router.pathname === "/learn/grammar";
+  const isGrammarActive = router.pathname === "/learn/grammar" || router.pathname === "/learn/grammar/translate";
   const isVocabularyActive = router.pathname === "/learn/vocabulary";
   const isSettingsActive = router.pathname === "/learn/settings";
 
