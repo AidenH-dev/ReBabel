@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { TbLanguageHiragana, TbVocabulary, TbSettings } from "react-icons/tb";
 import { LuBlocks } from "react-icons/lu";
+import Link from "next/link";
 
 function Sidebar() {
   const router = useRouter();
@@ -24,7 +25,7 @@ function Sidebar() {
       <div className="py-4 overflow-y-auto">
         <ul className="space-y-2 font-medium">
           <li>
-            <a
+            <Link
               href="/learn/grammar"
               className={`flex items-center p-2 rounded-lg group ${
                 isGrammarActive
@@ -40,10 +41,10 @@ function Sidebar() {
                 }`}
               />
               <span className="ms-3">Grammar</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="/learn/vocabulary"
               className={`flex items-center p-2 rounded-lg group ${
                 isVocabularyActive
@@ -59,19 +60,19 @@ function Sidebar() {
                 }`}
               />
               <span className="flex-1 ms-3 whitespace-nowrap">Vocabulary</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="#"
               className="flex items-center p-2 text-white rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
             >
               <TbLanguageHiragana className="flex-shrink-0 w-7 h-7 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
               <span className="flex-1 ms-3 whitespace-nowrap">Kanji</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="/learn/settings"
               className={`flex items-center p-2 rounded-lg group ${
                 isSettingsActive
@@ -87,7 +88,7 @@ function Sidebar() {
                 }`}
               />
               <span className="flex-1 ms-3 whitespace-nowrap">Settings</span>
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

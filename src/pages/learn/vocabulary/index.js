@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { FiSettings } from "react-icons/fi";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import Link from "next/link";
 
 export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -247,7 +248,7 @@ export default function Dashboard() {
                       }).format(new Date(set.date));
 
                       return (
-                        <a
+                        <Link
                           key={index}
                           href={set.path}
                           className="block mx-4 px-4 py-2 bg-gray-100 dark:bg-[#404f7d] text-left rounded-sm text-sm transition-transform hover:bg-gray-200 dark:hover:bg-[#404f7d] dark:hover:border-l-4  dark:hover:border-[#6dbfb8] shadow-md"
@@ -256,7 +257,7 @@ export default function Dashboard() {
                           <p className="text-sm font-[300] text-[#6b6b6b] dark:text-[#b0b0b0] pt-1">
                             {set.terms} Terms | {formattedDate}
                           </p>
-                        </a>
+                        </Link>
                       );
                     })}
                 </div>
@@ -288,7 +289,7 @@ export default function Dashboard() {
                       }).format(new Date(set.date));
 
                       return (
-                        <a
+                        <Link
                           key={index}
                           href={set.path}
                           className="flex flex-col justify-between items-start p-3 bg-gray-100 dark:bg-[#404f7d] rounded-md text-xs md:text-sm transition-transform hover:scale-105 hover:bg-gray-200 dark:hover:bg-[#50597d] shadow"
@@ -299,7 +300,7 @@ export default function Dashboard() {
                           <span className="text-xs font-[300] text-[#6b6b6b] dark:text-[#b0b0b0] mt-1">
                             {set.terms} Terms
                           </span>
-                        </a>
+                        </Link>
                       );
                     })}
                 </div>

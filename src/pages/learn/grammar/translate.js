@@ -168,7 +168,7 @@ export default function Learn() {
             <div className="rounded-full border border-blue-600 p-1">
               <div
                 className="flex h-6 items-center justify-center rounded-full bg-[#da1c60] text-xs leading-none"
-                style={{ width: "85%", height: "85%" }}
+                style={{ width: "85%", height: "85%" }},mm, 
               >
                 <span className="p-1 text-white font-semibold">85%</span>
               </div>
