@@ -5,7 +5,7 @@ import { LuBlocks } from "react-icons/lu";
 
 function Sidebar() {
   const router = useRouter();
-  const isTranslateActive = router.pathname === "/learn/translate";
+  const isGrammarActive = router.pathname === "/learn/grammar";
   const isVocabularyActive = router.pathname === "/learn/vocabulary";
   const isSettingsActive = router.pathname === "/learn/settings";
 
@@ -27,14 +27,14 @@ function Sidebar() {
             <a
               href="/learn/grammar"
               className={`flex items-center p-2 rounded-lg group ${
-                isTranslateActive
+                isGrammarActive
                   ? "text-white bg-blue-700 dark:bg-blue-900"
                   : "text-white dark:text-gray-400 hover:bg-gray-100 hover:text-gray-900 dark:hover:text-white dark:hover:bg-gray-700"
               }`}
             >
               <LuBlocks
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
-                  isTranslateActive
+                  isGrammarActive
                     ? "text-white"
                     : "text-white dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                 }`}
