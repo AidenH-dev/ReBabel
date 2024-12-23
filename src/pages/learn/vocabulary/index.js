@@ -48,68 +48,83 @@ export default function Dashboard() {
     },
   ];
 
-  const vocabularyGroups = [
-    {
-      name: "Food",
-      path: "/learn/vocabulary/notecards",
-      terms: 30,
-      date: "12/23/2024",
-    },
-    {
-      name: "Colors",
-      path: "/learn/vocabulary/quizzing",
-      terms: 20,
-      date: "12/23/2024",
-    },
-    {
-      name: "Descriptors",
-      path: "/learn/vocabulary/writing",
-      terms: 25,
-      date: "12/23/2024",
-    },
-    {
-      name: "Animals",
-      path: "/learn/vocabulary/immersion",
-      terms: 40,
-      date: "12/23/2024",
-    },
-    {
-      name: "Clothing",
-      path: "/learn/vocabulary/games",
-      terms: 28,
-      date: "12/23/2024",
-    },
-    {
-      name: "Weather",
-      path: "/learn/vocabulary/notecards",
-      terms: 15,
-      date: "12/23/2024",
-    },
-    {
-      name: "Body Parts",
-      path: "/learn/vocabulary/quizzing",
-      terms: 35,
-      date: "12/23/2024",
-    },
-    {
-      name: "Family",
-      path: "/learn/vocabulary/writing",
-      terms: 22,
-      date: "12/23/2024",
-    },
-    {
-      name: "Hobbies",
-      path: "/learn/vocabulary/immersion",
-      terms: 18,
-      date: "12/23/2024",
-    },
-    {
-      name: "Emotions",
-      path: "/learn/vocabulary/games",
-      terms: 26,
-      date: "12/23/2024",
-    },
-  ];
+// Updated `vocabularyGroups` with URL variable for the path
+const vocabularyGroups = [
+  {
+    name: "Lesson 1 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=1",
+    terms: 30,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 2 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=2",
+    terms: 20,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 3 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=3",
+    terms: 25,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 4 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=4",
+    terms: 40,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 5 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=5",
+    terms: 28,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 6 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=6",
+    terms: 15,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 7 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=7",
+    terms: 35,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 8 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=8",
+    terms: 22,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 9 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=9",
+    terms: 18,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 10 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=10",
+    terms: 26,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 11 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=11",
+    terms: 26,
+    date: "12/23/2024",
+  },
+  {
+    name: "Lesson 12 Genki 1",
+    path: "/learn/vocabulary/notecards?lesson=12",
+    terms: 26,
+    date: "12/23/2024",
+  },
+];
+
+
 
   useEffect(() => {
     // Set the initial theme based on system preferences

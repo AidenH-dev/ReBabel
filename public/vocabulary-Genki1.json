@@ -1,0 +1,5555 @@
+[
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "だいがく",
+      "Japanese(Kanji)": "",
+      "English": "college"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "こうこう",
+      "Japanese(Kanji)": "",
+      "English": "high school"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "がくせい",
+      "Japanese(Kanji)": "",
+      "English": "student"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "だいがくせい",
+      "Japanese(Kanji)": "",
+      "English": "college student"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; International",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "りゅうがくせい",
+      "Japanese(Kanji)": "",
+      "English": "international student"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "せんせい",
+      "Japanese(Kanji)": "",
+      "English": "teacher"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "ねんせい",
+      "Japanese(Kanji)": "",
+      "English": "...year student"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "せんこう",
+      "Japanese(Kanji)": "",
+      "English": "major"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Social",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ともだち",
+      "Japanese(Kanji)": "",
+      "English": "friend"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Nationality",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "にほんじん",
+      "Japanese(Kanji)": "",
+      "English": "Japanese people"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Language",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "にほんご",
+      "Japanese(Kanji)": "",
+      "English": "Japanese language"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Technology",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "でんわ",
+      "Japanese(Kanji)": "",
+      "English": "telephone"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Numbers",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ばんごう",
+      "Japanese(Kanji)": "",
+      "English": "number"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Conversation",
+      "Lexical Category": "Interjection",
+      "Japanese(Hiragana/Katakana)": "あのう",
+      "Japanese(Kanji)": "",
+      "English": "um..."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Agreement",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "そうです",
+      "Japanese(Kanji)": "",
+      "English": "that's right"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; Area of Study",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "アジアけんきゅう",
+      "Japanese(Kanji)": "",
+      "English": "Asian studies"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; Area of Study",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "けいざい",
+      "Japanese(Kanji)": "",
+      "English": "economics"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; Area of Study",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "こうがく",
+      "Japanese(Kanji)": "",
+      "English": "engineering"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; Area of Study",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "こくさいかんけい",
+      "Japanese(Kanji)": "",
+      "English": "international relations"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Technology",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "コンピューター",
+      "Japanese(Kanji)": "",
+      "English": "computer"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; Area of Study",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "せいじ",
+      "Japanese(Kanji)": "",
+      "English": "politics"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; Area of Study",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "せいぶつがく",
+      "Japanese(Kanji)": "",
+      "English": "biology"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Business",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ビジネス",
+      "Japanese(Kanji)": "",
+      "English": "business"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; Area of Study",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ぶんがく",
+      "Japanese(Kanji)": "",
+      "English": "literature"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; Area of Study",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "れきし",
+      "Japanese(Kanji)": "",
+      "English": "history"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Occupations",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "いしゃ",
+      "Japanese(Kanji)": "",
+      "English": "doctor"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Occupations",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "かいしゃいん",
+      "Japanese(Kanji)": "",
+      "English": "office worker"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Occupations",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かんごし",
+      "Japanese(Kanji)": "",
+      "English": "nurse"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; Students",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "こうこうせい",
+      "Japanese(Kanji)": "",
+      "English": "high school student"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Occupations",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "しゅふ",
+      "Japanese(Kanji)": "",
+      "English": "housewife"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Education; Students",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "だいがくいんせい",
+      "Japanese(Kanji)": "",
+      "English": "graduate student"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Occupations",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "べんごし",
+      "Japanese(Kanji)": "",
+      "English": "lawyer"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Family",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "おとうと",
+      "Japanese(Kanji)": "",
+      "English": "younger brother"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おかあさん",
+      "Japanese(Kanji)": "",
+      "English": "mother"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おとうさん",
+      "Japanese(Kanji)": "",
+      "English": "father"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Family",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "おねえさん",
+      "Japanese(Kanji)": "",
+      "English": "older sister"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Family",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "おにいさん",
+      "Japanese(Kanji)": "",
+      "English": "older brother"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Family",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "いもうと",
+      "Japanese(Kanji)": "",
+      "English": "younger sister"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 1,
+      "Topics": "Family",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "おとうと",
+      "Japanese(Kanji)": "",
+      "English": "younger brother"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Demonstratives",
+      "Lexical Category": "Pronoun",
+      "Japanese(Hiragana/Katakana)": "これ",
+      "Japanese(Kanji)": "",
+      "English": "this one (thing here)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Demonstratives",
+      "Lexical Category": "Pronoun",
+      "Japanese(Hiragana/Katakana)": "それ",
+      "Japanese(Kanji)": "",
+      "English": "that one (thing near you)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Demonstratives",
+      "Lexical Category": "Pronoun",
+      "Japanese(Hiragana/Katakana)": "あれ",
+      "Japanese(Kanji)": "",
+      "English": "that one (over there)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Demonstratives",
+      "Lexical Category": "Pronoun",
+      "Japanese(Hiragana/Katakana)": "どれ",
+      "Japanese(Kanji)": "",
+      "English": "which one"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Demonstratives",
+      "Lexical Category": "Determiner",
+      "Japanese(Hiragana/Katakana)": "この",
+      "Japanese(Kanji)": "",
+      "English": "this ... (thing here)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Demonstratives",
+      "Lexical Category": "Determiner",
+      "Japanese(Hiragana/Katakana)": "その",
+      "Japanese(Kanji)": "",
+      "English": "that ... (thing near you)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Demonstratives",
+      "Lexical Category": "Determiner",
+      "Japanese(Hiragana/Katakana)": "あの",
+      "Japanese(Kanji)": "",
+      "English": "that ... (over there)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Demonstratives",
+      "Lexical Category": "Determiner",
+      "Japanese(Hiragana/Katakana)": "どの",
+      "Japanese(Kanji)": "",
+      "English": "which ..."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Places",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "ここ",
+      "Japanese(Kanji)": "",
+      "English": "here"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Places",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "そこ",
+      "Japanese(Kanji)": "",
+      "English": "there/that place near you"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Places",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "あそこ",
+      "Japanese(Kanji)": "",
+      "English": "over there/that place (far away from both speaker and listener)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Places",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "どこ",
+      "Japanese(Kanji)": "",
+      "English": "where,what place"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "People",
+      "Lexical Category": "Pronoun",
+      "Japanese(Hiragana/Katakana)": "だれ",
+      "Japanese(Kanji)": "",
+      "English": "who"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Food",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "おいしい",
+      "Japanese(Kanji)": "",
+      "English": "delicious/tasty"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "さかな",
+      "Japanese(Kanji)": "",
+      "English": "fish"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "とんかつ",
+      "Japanese(Kanji)": "",
+      "English": "pork cutlet"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "にく",
+      "Japanese(Kanji)": "",
+      "English": "meat"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "メニュー",
+      "Japanese(Kanji)": "",
+      "English": "menu"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "やさい",
+      "Japanese(Kanji)": "",
+      "English": "vegetable"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かさ",
+      "Japanese(Kanji)": "",
+      "English": "umbrella"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かばん",
+      "Japanese(Kanji)": "",
+      "English": "bag"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "くつ",
+      "Japanese(Kanji)": "",
+      "English": "shoes"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "さいふ",
+      "Japanese(Kanji)": "",
+      "English": "wallet"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ジーンズ",
+      "Japanese(Kanji)": "",
+      "English": "jeans"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Transportation",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "じてんしゃ",
+      "Japanese(Kanji)": "",
+      "English": "bicycle"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Media",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "しんぶん",
+      "Japanese(Kanji)": "",
+      "English": "newspaper"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Technology",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "スマホ",
+      "Japanese(Kanji)": "",
+      "English": "smartphone"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Clothing",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "Tシャツ",
+      "Japanese(Kanji)": "",
+      "English": "t-shirt"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "とけえ",
+      "Japanese(Kanji)": "",
+      "English": "watch"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ノート",
+      "Japanese(Kanji)": "",
+      "English": "notebook"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ぺん",
+      "Japanese(Kanji)": "",
+      "English": "pen"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Clothing",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ぼおし",
+      "Japanese(Kanji)": "",
+      "English": "hat"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ほん",
+      "Japanese(Kanji)": "",
+      "English": "book"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ぎんこお",
+      "Japanese(Kanji)": "",
+      "English": "bank"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "コンビニ",
+      "Japanese(Kanji)": "",
+      "English": "convenience store"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "トイレ",
+      "Japanese(Kanji)": "",
+      "English": "toilet"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "としょかん",
+      "Japanese(Kanji)": "",
+      "English": "library"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ゆうびんきょく",
+      "Japanese(Kanji)": "",
+      "English": "post office"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Countries",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "イギリス",
+      "Japanese(Kanji)": "",
+      "English": "Britain"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Countries",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かんこく",
+      "Japanese(Kanji)": "",
+      "English": "Korea"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Countries",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ちゅうごく",
+      "Japanese(Kanji)": "",
+      "English": "China"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Languages",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "えいご",
+      "Japanese(Kanji)": "",
+      "English": "English (language)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Education; Area of Study",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "けえざい",
+      "Japanese(Kanji)": "",
+      "English": "economics"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Technology",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "コンピューター",
+      "Japanese(Kanji)": "",
+      "English": "computer"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Business",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ビジネス",
+      "Japanese(Kanji)": "",
+      "English": "business"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Education; Area of Study",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "れきし",
+      "Japanese(Kanji)": "",
+      "English": "history"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おかあさん",
+      "Japanese(Kanji)": "",
+      "English": "mother"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おとうさん",
+      "Japanese(Kanji)": "",
+      "English": "father"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Prices",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "いくら",
+      "Japanese(Kanji)": "",
+      "English": "how much"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Prices",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "。。。えん",
+      "Japanese(Kanji)": "",
+      "English": "yen"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Prices",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "たかい",
+      "Japanese(Kanji)": "",
+      "English": "expensive; high"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Conversation",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "いらっしゃいませ",
+      "Japanese(Kanji)": "",
+      "English": "Welcome (to our store)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Conversation",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "おねがいします",
+      "Japanese(Kanji)": "",
+      "English": "please"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Conversation",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "ください",
+      "Japanese(Kanji)": "",
+      "English": "Please give me..."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Conversation",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "じゃあ",
+      "Japanese(Kanji)": "",
+      "English": "then...; if that is the case"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Conversation",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "どうぞ",
+      "Japanese(Kanji)": "",
+      "English": "Please.; Here it is."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 2,
+      "Topics": "Conversation",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "どおも",
+      "Japanese(Kanji)": "",
+      "English": "thank you"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Entertainment; Sports",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "えいが",
+      "Japanese(Kanji)": "映画",
+      "English": "movie"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Entertainment; Music",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おんがく",
+      "Japanese(Kanji)": "音楽",
+      "English": "music"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Entertainment; Media",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ざっし",
+      "Japanese(Kanji)": "雑誌",
+      "English": "magazine"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Entertainment; Sports",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "スポーツ",
+      "Japanese(Kanji)": "",
+      "English": "sports"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Entertainment; Romance",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "デート",
+      "Japanese(Kanji)": "",
+      "English": "date (romantic/not calendar)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Entertainment; Sports",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "テニス",
+      "Japanese(Kanji)": "",
+      "English": "tennis"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Entertainment; Media",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "テレビ",
+      "Japanese(Kanji)": "",
+      "English": "TV"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Foods; Desserts",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "アイスクリーム",
+      "Japanese(Kanji)": "",
+      "English": "ice cream"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Foods; Fast Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ハンバーガー",
+      "Japanese(Kanji)": "",
+      "English": "hamburger"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Foods; Drinks",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おさけ",
+      "Japanese(Kanji)": "お酒",
+      "English": "sake; alcoholic drink"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Foods; Drinks",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おちゃ",
+      "Japanese(Kanji)": "お茶",
+      "English": "green tea"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Foods; Drinks",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "コーヒー",
+      "Japanese(Kanji)": "",
+      "English": "coffee"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Foods; Drinks",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "みず",
+      "Japanese(Kanji)": "水",
+      "English": "water"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Foods; Meals",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "あさごはん",
+      "Japanese(Kanji)": "朝ご飯",
+      "English": "breakfast"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Foods; Meals",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ひるごはん",
+      "Japanese(Kanji)": "昼ご飯",
+      "English": "lunch"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Foods; Meals",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ばんごはん",
+      "Japanese(Kanji)": "晩ご飯",
+      "English": "dinner"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Places; Home",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "いえ",
+      "Japanese(Kanji)": "家",
+      "English": "home; house"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Places; Home",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "うち",
+      "Japanese(Kanji)": "",
+      "English": "home; house; my place"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Places; Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "がっこう",
+      "Japanese(Kanji)": "学校",
+      "English": "school"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Places; Social",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "カフェ",
+      "Japanese(Kanji)": "",
+      "English": "cafe"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Time; Future",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "あした",
+      "Japanese(Kanji)": "明日",
+      "English": "tomorrow"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Time; Present",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "きょう",
+      "Japanese(Kanji)": "今日",
+      "English": "today"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Time; Morning",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "あさ",
+      "Japanese(Kanji)": "朝",
+      "English": "morning"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Time; Evening",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "こんばん",
+      "Japanese(Kanji)": "今晩",
+      "English": "tonight"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Time; Routine",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "まいにち",
+      "Japanese(Kanji)": "毎日",
+      "English": "every day"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Time; Routine",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "まいばん",
+      "Japanese(Kanji)": "毎晩",
+      "English": "every night"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Time; Weekend",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "しゅうまつ",
+      "Japanese(Kanji)": "週末",
+      "English": "weekend"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Time; Days",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "どようび",
+      "Japanese(Kanji)": "土曜日",
+      "English": "Saturday"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Travel",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "いく",
+      "Japanese(Kanji)": "行く",
+      "English": "to go (destination に/へ)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Travel",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "かえる",
+      "Japanese(Kanji)": "帰る",
+      "English": "to go back; to return (destination に/へ)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Social",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "きく",
+      "Japanese(Kanji)": "聞く",
+      "English": "to listen; to hear (~を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Social",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "のむ",
+      "Japanese(Kanji)": "飲む",
+      "English": "to drink (~を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Social",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "はなす",
+      "Japanese(Kanji)": "話す",
+      "English": "to speak; to talk (language を/で)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Media",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "よむ",
+      "Japanese(Kanji)": "読む",
+      "English": "to read (~を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Daily Life",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "おきる",
+      "Japanese(Kanji)": "起きる",
+      "English": "to get up"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Daily Life",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "たべる",
+      "Japanese(Kanji)": "食べる",
+      "English": "to eat (~を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Daily Life",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "ねる",
+      "Japanese(Kanji)": "寝る",
+      "English": "to sleep; to go to sleep"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Media",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "みる",
+      "Japanese(Kanji)": "見る",
+      "English": "to see; to look at; to watch (~を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Travel",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "くる",
+      "Japanese(Kanji)": "来る",
+      "English": "to come (destination に/へ)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "General Action",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "する",
+      "Japanese(Kanji)": "",
+      "English": "to do (~を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Education",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "べんきょうする",
+      "Japanese(Kanji)": "勉強する",
+      "English": "to study (~を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Description",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "いい",
+      "Japanese(Kanji)": "",
+      "English": "good"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Description",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "はやい",
+      "Japanese(Kanji)": "早い",
+      "English": "early"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Description",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "あまり + negative",
+      "Japanese(Kanji)": "",
+      "English": "not much"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Description",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "ぜんぜん + negative",
+      "Japanese(Kanji)": "全然",
+      "English": "not at all"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Frequency",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "たいてい",
+      "Japanese(Kanji)": "",
+      "English": "usually"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Frequency",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "ちょっと",
+      "Japanese(Kanji)": "",
+      "English": "a little"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Frequency",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "ときどき",
+      "Japanese(Kanji)": "時々",
+      "English": "sometimes"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Frequency",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "よく",
+      "Japanese(Kanji)": "",
+      "English": "often; much"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Social",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "そうですね",
+      "Japanese(Kanji)": "",
+      "English": "That's right.; Let me see."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Conjunction",
+      "Lexical Category": "Conjunction",
+      "Japanese(Hiragana/Katakana)": "でも",
+      "Japanese(Kanji)": "",
+      "English": "but"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Social",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "どうですか",
+      "Japanese(Kanji)": "",
+      "English": "How about . . . ?; How is . . . ?"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 3,
+      "Topics": "Social",
+      "Lexical Category": "Exclamation",
+      "Japanese(Hiragana/Katakana)": "ええ",
+      "Japanese(Kanji)": "",
+      "English": "yes"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Games",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ゲーム",
+      "Japanese(Kanji)": "",
+      "English": "game"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Work",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "アルバイト",
+      "Japanese(Kanji)": "",
+      "English": "part-time job (more colloquially/バイト)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Shopping",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かいもの",
+      "Japanese(Kanji)": "買い物",
+      "English": "shopping"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "クラス",
+      "Japanese(Kanji)": "",
+      "English": "class"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Animals",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "いぬ",
+      "Japanese(Kanji)": "犬",
+      "English": "dog"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Animals",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ねこ",
+      "Japanese(Kanji)": "猫",
+      "English": "cat"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "People",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ひと",
+      "Japanese(Kanji)": "人",
+      "English": "person"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "People",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "こども",
+      "Japanese(Kanji)": "子供",
+      "English": "child"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Pronouns",
+      "Lexical Category": "Pronoun",
+      "Japanese(Hiragana/Katakana)": "あなた",
+      "Japanese(Kanji)": "",
+      "English": "you"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "いす",
+      "Japanese(Kanji)": "",
+      "English": "chair"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "つくえ",
+      "Japanese(Kanji)": "机",
+      "English": "desk"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Media",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "しゃしん",
+      "Japanese(Kanji)": "写真",
+      "English": "picture; photograph"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Nature",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "はな",
+      "Japanese(Kanji)": "花",
+      "English": "flower"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "レポート",
+      "Japanese(Kanji)": "",
+      "English": "(term) paper"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ごはん",
+      "Japanese(Kanji)": "ご飯",
+      "English": "rice; meal"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "パン",
+      "Japanese(Kanji)": "",
+      "English": "bread"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おてら",
+      "Japanese(Kanji)": "お寺",
+      "English": "temple"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "こうえん",
+      "Japanese(Kanji)": "公園",
+      "English": "park"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "スーパー",
+      "Japanese(Kanji)": "",
+      "English": "supermarket"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Transportation",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "バスてい",
+      "Japanese(Kanji)": "バス停",
+      "English": "bus stop"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Healthcare",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "びょういん",
+      "Japanese(Kanji)": "病院",
+      "English": "hospital"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Hospitality",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ホテル",
+      "Japanese(Kanji)": "",
+      "English": "hotel"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ほんや",
+      "Japanese(Kanji)": "本屋",
+      "English": "bookstore"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "まち",
+      "Japanese(Kanji)": "町",
+      "English": "town; city"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Hospitality",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "レストラン",
+      "Japanese(Kanji)": "",
+      "English": "restaurant"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Time",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "きのう",
+      "Japanese(Kanji)": "昨日",
+      "English": "yesterday"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "〜じかん",
+      "Japanese(Kanji)": "〜時間",
+      "English": "... hours"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "いちじかん",
+      "Japanese(Kanji)": "一時間",
+      "English": "one hour"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "せんしゅう",
+      "Japanese(Kanji)": "先週",
+      "English": "last week"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Time",
+      "Lexical Category": "Conjunction",
+      "Japanese(Hiragana/Katakana)": "とき",
+      "Japanese(Kanji)": "時",
+      "English": "when ...; at the time of ... (~ の)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Days",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "げつようび",
+      "Japanese(Kanji)": "月曜日",
+      "English": "Monday"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Days",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かようび",
+      "Japanese(Kanji)": "火曜日",
+      "English": "Tuesday"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Days",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "すいようび",
+      "Japanese(Kanji)": "水曜日",
+      "English": "Wednesday"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Days",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "もくようび",
+      "Japanese(Kanji)": "木曜日",
+      "English": "Thursday"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Days",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "きんようび",
+      "Japanese(Kanji)": "金曜日",
+      "English": "Friday"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "あう",
+      "Japanese(Kanji)": "会う",
+      "English": "to meet; to see (a person) (person に)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Existence",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "ある",
+      "Japanese(Kanji)": "",
+      "English": "there is . . . (place に thing が)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "かう",
+      "Japanese(Kanji)": "買う",
+      "English": "to buy (~ を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "かく",
+      "Japanese(Kanji)": "書く",
+      "English": "to write (person に thing を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "とる",
+      "Japanese(Kanji)": "撮る",
+      "English": "to take (a picture) (~ を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "まつ",
+      "Japanese(Kanji)": "待つ",
+      "English": "to wait (~ を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Understanding",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "わかる",
+      "Japanese(Kanji)": "",
+      "English": "to understand (~ が）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Existence",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "いる",
+      "Japanese(Kanji)": "",
+      "English": "(a person) is in...; stays at... (place に person が)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Measurements",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "〜ぐらい",
+      "Japanese(Kanji)": "",
+      "English": "about (approximate measurement)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Expressions",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "ごめんなさい",
+      "Japanese(Kanji)": "",
+      "English": "I'm sorry."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Actions",
+      "Lexical Category": "Conjunction",
+      "Japanese(Hiragana/Katakana)": "それから",
+      "Japanese(Kanji)": "",
+      "English": "and then"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Reasoning",
+      "Lexical Category": "Conjunction",
+      "Japanese(Hiragana/Katakana)": "だから",
+      "Japanese(Kanji)": "",
+      "English": "so; therefore"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Quantities",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "たくさん",
+      "Japanese(Kanji)": "",
+      "English": "many; a lot"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Connections",
+      "Lexical Category": "Conjunction",
+      "Japanese(Hiragana/Katakana)": "と",
+      "Japanese(Kanji)": "",
+      "English": "together with (a person); and"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Questions",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "どうして",
+      "Japanese(Kanji)": "",
+      "English": "why"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Solitude",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "ひとりで",
+      "Japanese(Kanji)": "一人で",
+      "English": "alone"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Technology",
+      "Lexical Category": "Interjection",
+      "Japanese(Hiragana/Katakana)": "もしもし",
+      "Japanese(Kanji)": "",
+      "English": "Hello? (used on the phone)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Directions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "みぎ",
+      "Japanese(Kanji)": "右",
+      "English": "right (~ の）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Directions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "ひだり",
+      "Japanese(Kanji)": "左",
+      "English": "left (~ の）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Directions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "まえ",
+      "Japanese(Kanji)": "前",
+      "English": "front (~ の）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Directions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "うしろ",
+      "Japanese(Kanji)": "後ろ",
+      "English": "back (~ の）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Directions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "なか",
+      "Japanese(Kanji)": "中",
+      "English": "inside (~ の）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Directions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "うえ",
+      "Japanese(Kanji)": "上",
+      "English": "on (~ の）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Directions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "した",
+      "Japanese(Kanji)": "下",
+      "English": "under (~ の）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Proximity",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "ちかく",
+      "Japanese(Kanji)": "近く",
+      "English": "near; nearby (~ の）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Proximity",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "となり",
+      "Japanese(Kanji)": "隣",
+      "English": "next (~ の）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 4,
+      "Topics": "Proximity",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "あいだ",
+      "Japanese(Kanji)": "間",
+      "English": "between (A と B の)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "たべもの",
+      "Japanese(Kanji)": "食べ物",
+      "English": "food"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Drink",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "のみもの",
+      "Japanese(Kanji)": "飲み物",
+      "English": "drink"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "くだもの",
+      "Japanese(Kanji)": "果物",
+      "English": "fruit"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Time",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "やすみ",
+      "Japanese(Kanji)": "休み",
+      "English": "holiday; day off; absence"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Travel",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "りょこう",
+      "Japanese(Kanji)": "旅行",
+      "English": "travel"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Nature",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "うみ",
+      "Japanese(Kanji)": "海",
+      "English": "sea"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Sports",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "サーフィン",
+      "Japanese(Kanji)": "",
+      "English": "surfing"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Gifts",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おみやげ",
+      "Japanese(Kanji)": "お土産",
+      "English": "souvenir"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Transportation",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "バス",
+      "Japanese(Kanji)": "",
+      "English": "bus"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Weather",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "てんき",
+      "Japanese(Kanji)": "天気",
+      "English": "weather"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "しゅくだい",
+      "Japanese(Kanji)": "宿題",
+      "English": "homework"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "テスト",
+      "Japanese(Kanji)": "",
+      "English": "test"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Time",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "たんじょうび",
+      "Japanese(Kanji)": "誕生日",
+      "English": "birthday"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "へや",
+      "Japanese(Kanji)": "部屋",
+      "English": "room"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Pronouns",
+      "Lexical Category": "Pronoun",
+      "Japanese(Hiragana/Katakana)": "ぼく",
+      "Japanese(Kanji)": "僕",
+      "English": "I (used by men)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Sizes",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "Lサイズ",
+      "Japanese(Kanji)": "エルサイズ",
+      "English": "size L"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "あたらしい",
+      "Japanese(Kanji)": "新しい",
+      "English": "new"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "ふるい",
+      "Japanese(Kanji)": "古い",
+      "English": "old (Things only)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Weather",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "あつい",
+      "Japanese(Kanji)": "暑い",
+      "English": "hot (weather)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Weather",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "さむい",
+      "Japanese(Kanji)": "寒い",
+      "English": "cold (weather)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "あつい",
+      "Japanese(Kanji)": "熱い",
+      "English": "hot (thing)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "いそがしい",
+      "Japanese(Kanji)": "忙しい",
+      "English": "busy (people/days)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "おおきい",
+      "Japanese(Kanji)": "大きい",
+      "English": "large"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "ちいさい",
+      "Japanese(Kanji)": "小さい",
+      "English": "small"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "おもしろい",
+      "Japanese(Kanji)": "面白い",
+      "English": "interesting; funny"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "つまらない",
+      "Japanese(Kanji)": "",
+      "English": "boring"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "やさしい",
+      "Japanese(Kanji)": "",
+      "English": "easy (problem); kind (person)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "むずかしい",
+      "Japanese(Kanji)": "難しい",
+      "English": "difficult"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "かっこいい",
+      "Japanese(Kanji)": "",
+      "English": "good-looking (conjugates like いい）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "こわい",
+      "Japanese(Kanji)": "怖い",
+      "English": "frightening"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "たのしい",
+      "Japanese(Kanji)": "楽しい",
+      "English": "fun"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "やすい",
+      "Japanese(Kanji)": "安い",
+      "English": "inexpensive; cheap (thing)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Preferences",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "すき（な）",
+      "Japanese(Kanji)": "好き",
+      "English": "fond of; to like （〜が）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Preferences",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "きらい（な）",
+      "Japanese(Kanji)": "嫌い",
+      "English": "disgusted with; to dislike （〜が）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Preferences",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "だいすき（な）",
+      "Japanese(Kanji)": "大好き",
+      "English": "very fond of; to love (〜が）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Preferences",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "だいきらい（な）",
+      "Japanese(Kanji)": "大嫌い",
+      "English": "to hate; (〜が）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "きれい（な）",
+      "Japanese(Kanji)": "綺麗",
+      "English": "beautiful; clean"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Health",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "げんき（な）",
+      "Japanese(Kanji)": "元気",
+      "English": "healthy; energetic"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "しずか（な）",
+      "Japanese(Kanji)": "静か",
+      "English": "quiet"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "にぎやか",
+      "Japanese(Kanji)": "",
+      "English": "lively"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Time",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "ひま（な）",
+      "Japanese(Kanji)": "暇",
+      "English": "not busy; free (time)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "およぐ",
+      "Japanese(Kanji)": "泳ぐ",
+      "English": "to swim"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "きく",
+      "Japanese(Kanji)": "聞く",
+      "English": "to ask (person に)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "のる",
+      "Japanese(Kanji)": "乗る",
+      "English": "to ride; to board (〜に）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "やる",
+      "Japanese(Kanji)": "",
+      "English": "to do; to perform (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "でかける",
+      "Japanese(Kanji)": "出かける",
+      "English": "to go out"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "いっしょに",
+      "Japanese(Kanji)": "一緒に",
+      "English": "together"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "すごく",
+      "Japanese(Kanji)": "",
+      "English": "extremely"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Expressions",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "だいじょうぶ",
+      "Japanese(Kanji)": "大丈夫",
+      "English": "It's ok; Not to worry; Everything is under control"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "とても",
+      "Japanese(Kanji)": "",
+      "English": "very"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Questions",
+      "Lexical Category": "Determiner",
+      "Japanese(Hiragana/Katakana)": "どんな",
+      "Japanese(Kanji)": "",
+      "English": "what kind of..."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 5,
+      "Topics": "Counters",
+      "Lexical Category": "Counter",
+      "Japanese(Hiragana/Katakana)": "〜まい",
+      "Japanese(Kanji)": "〜枚",
+      "English": "[counter for flat objects] [paper/stamps etc.]"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Language",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かんじ",
+      "Japanese(Kanji)": "漢字",
+      "English": "kanji; Chinese character"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "きょうかしょ",
+      "Japanese(Kanji)": "教科書",
+      "English": "textbook"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ページ",
+      "Japanese(Kanji)": "",
+      "English": "page"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Time",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "つぎ",
+      "Japanese(Kanji)": "次",
+      "English": "next"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Money",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おかね",
+      "Japanese(Kanji)": "お金",
+      "English": "money"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Travel",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "にもつ",
+      "Japanese(Kanji)": "荷物",
+      "English": "baggage"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Technology",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "パソコン",
+      "Japanese(Kanji)": "",
+      "English": "personal computer"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Daily Life",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "シャワー",
+      "Japanese(Kanji)": "",
+      "English": "shower"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Daily Life",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "エアコン",
+      "Japanese(Kanji)": "",
+      "English": "airconditioner"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Daily Life",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "でんき",
+      "Japanese(Kanji)": "電気",
+      "English": "electricity; light"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "まど",
+      "Japanese(Kanji)": "窓",
+      "English": "window"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Transportation",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "でんしゃ",
+      "Japanese(Kanji)": "電車",
+      "English": "train"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Places",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "くに",
+      "Japanese(Kanji)": "国",
+      "English": "country; place of origin"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "こんしゅう",
+      "Japanese(Kanji)": "今週",
+      "English": "this week"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "らいしゅう",
+      "Japanese(Kanji)": "来週",
+      "English": "next week"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "らいねん",
+      "Japanese(Kanji)": "来年",
+      "English": "next year"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Time",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "よる",
+      "Japanese(Kanji)": "",
+      "English": "night"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "たいへん（な）",
+      "Japanese(Kanji)": "大変",
+      "English": "tough (situation)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "あそぶ",
+      "Japanese(Kanji)": "遊ぶ",
+      "English": "to play; to spend time pleasantly"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "いそぐ",
+      "Japanese(Kanji)": "急ぐ",
+      "English": "to hurry"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "かえす",
+      "Japanese(Kanji)": "返す",
+      "English": "to return (a thing) (person に thing を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "けす",
+      "Japanese(Kanji)": "消す",
+      "English": "to turn off; to erase (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "しぬ",
+      "Japanese(Kanji)": "死ぬ",
+      "English": "to die"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "すわる",
+      "Japanese(Kanji)": "座る",
+      "English": "to sit down (seat に)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "たつ",
+      "Japanese(Kanji)": "立つ",
+      "English": "to stand up"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "たばこをすう",
+      "Japanese(Kanji)": "たばこを吸う",
+      "English": "to smoke"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "つかう",
+      "Japanese(Kanji)": "使う",
+      "English": "to use (〜を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "てつだう",
+      "Japanese(Kanji)": "手伝う",
+      "English": "to help (person/task を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "はいる",
+      "Japanese(Kanji)": "入る",
+      "English": "to enter (〜に)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "もつ",
+      "Japanese(Kanji)": "持つ",
+      "English": "to carry; to hold (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "やすむ",
+      "Japanese(Kanji)": "休む",
+      "English": "(1) to be absent (from ...) (〜を） (2) to rest"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "あける",
+      "Japanese(Kanji)": "開ける",
+      "English": "to open (something) (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "しめる",
+      "Japanese(Kanji)": "閉める",
+      "English": "to close (something) (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "おしえる",
+      "Japanese(Kanji)": "教える",
+      "English": "to teach; to instruct (person に thing を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "わすれる",
+      "Japanese(Kanji)": "忘れる",
+      "English": "to forget; to leave something behind (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "おりる",
+      "Japanese(Kanji)": "降りる",
+      "English": "to get off (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "かりる",
+      "Japanese(Kanji)": "借りる",
+      "English": "to borrow (person に thing を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb Phrase",
+      "Japanese(Hiragana/Katakana)": "シャワーをあびる",
+      "Japanese(Kanji)": "シャワーを浴びる",
+      "English": "to take a shower"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "つける",
+      "Japanese(Kanji)": "",
+      "English": "to turn on (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "でんわする",
+      "Japanese(Kanji)": "電話する",
+      "English": "to call (〜に）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "つれてくる",
+      "Japanese(Kanji)": "連れてくる",
+      "English": "to bring (a person) (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "もってくる",
+      "Japanese(Kanji)": "持ってくる",
+      "English": "to bring (a thing) (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "あとで",
+      "Japanese(Kanji)": "後で",
+      "English": "later on"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "すぐ",
+      "Japanese(Kanji)": "",
+      "English": "right away"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "ゆっくり",
+      "Japanese(Kanji)": "",
+      "English": "slowly; leisurely; unhurriedly"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Expressions",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "けっこうです",
+      "Japanese(Kanji)": "結構です",
+      "English": "That would be fine.; That wouldn't be necessary."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 6,
+      "Topics": "Expressions",
+      "Lexical Category": "Exclamation",
+      "Japanese(Hiragana/Katakana)": "ほんとうですか",
+      "Japanese(Kanji)": "本当ですか",
+      "English": "Really?"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かぞく",
+      "Japanese(Kanji)": "家族",
+      "English": "family"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おじいさん",
+      "Japanese(Kanji)": "",
+      "English": "grandfather; old man"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おばあさん",
+      "Japanese(Kanji)": "",
+      "English": "grandmother; old woman"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おにいさん",
+      "Japanese(Kanji)": "お兄さん",
+      "English": "older brother"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おねえさん",
+      "Japanese(Kanji)": "お姉さん",
+      "English": "older sister"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "ちち",
+      "Japanese(Kanji)": "父",
+      "English": "(my) father"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "はは",
+      "Japanese(Kanji)": "母",
+      "English": "(my) mother"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "あに",
+      "Japanese(Kanji)": "兄",
+      "English": "(my) older brother"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "あね",
+      "Japanese(Kanji)": "姉",
+      "English": "(my) older sister"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "いもうと",
+      "Japanese(Kanji)": "",
+      "English": "younger sister"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おとうと",
+      "Japanese(Kanji)": "",
+      "English": "younger brother"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Family",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "きょうだい",
+      "Japanese(Kanji)": "兄弟",
+      "English": "brothers and sisters"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "People",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おとこのひと",
+      "Japanese(Kanji)": "男の人",
+      "English": "man"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "People",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おんなのひと",
+      "Japanese(Kanji)": "女の人",
+      "English": "woman"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かいしゃ",
+      "Japanese(Kanji)": "会社",
+      "English": "company"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Places",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "しょくどう",
+      "Japanese(Kanji)": "食堂",
+      "English": "cafeteria; dining commons"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Places",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "デパート",
+      "Japanese(Kanji)": "",
+      "English": "department store"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Body",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かみ",
+      "Japanese(Kanji)": "髪",
+      "English": "hair"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Body",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "くち",
+      "Japanese(Kanji)": "口",
+      "English": "mouth"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Body",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "め",
+      "Japanese(Kanji)": "目",
+      "English": "eye"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "めがね",
+      "Japanese(Kanji)": "眼鏡",
+      "English": "glasses"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Music",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "うた",
+      "Japanese(Kanji)": "歌",
+      "English": "song"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Activities",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "サークル",
+      "Japanese(Kanji)": "",
+      "English": "club activity"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Transportation",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "くるま",
+      "Japanese(Kanji)": "車",
+      "English": "car"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "ながい",
+      "Japanese(Kanji)": "長い",
+      "English": "long"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "みじかい",
+      "Japanese(Kanji)": "短い",
+      "English": "short (length)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "はやい",
+      "Japanese(Kanji)": "速い",
+      "English": "fast"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "せがたかい",
+      "Japanese(Kanji)": "背が高い",
+      "English": "tall (stature)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "せがひくい",
+      "Japanese(Kanji)": "背が低い",
+      "English": "short (stature)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "あたまがいい",
+      "Japanese(Kanji)": "頭がいい",
+      "English": "bright; smart; clever"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "かわいい",
+      "Japanese(Kanji)": "",
+      "English": "cute"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "しんせつ（な）",
+      "Japanese(Kanji)": "親切",
+      "English": "kind"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "べんり（な）",
+      "Japanese(Kanji)": "便利",
+      "English": "convenient"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "うたう",
+      "Japanese(Kanji)": "歌う",
+      "English": "to sing (〜を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "かぶる",
+      "Japanese(Kanji)": "",
+      "English": "to put on (a hat) (〜を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "はく",
+      "Japanese(Kanji)": "",
+      "English": "to put on (items below your waist) (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "しる",
+      "Japanese(Kanji)": "知る",
+      "English": "to get to know （〜を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "しっています",
+      "Japanese(Kanji)": "知っています",
+      "English": "I know"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "しりません",
+      "Japanese(Kanji)": "知りません",
+      "English": "I do not know"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb Phrase",
+      "Japanese(Hiragana/Katakana)": "すむ",
+      "Japanese(Kanji)": "住む",
+      "English": "to live (〜にすんでいます)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "はたらく",
+      "Japanese(Kanji)": "働く",
+      "English": "to work"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "ふとる",
+      "Japanese(Kanji)": "太る",
+      "English": "to gain weight"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb Phrase",
+      "Japanese(Hiragana/Katakana)": "ふとっています",
+      "Japanese(Kanji)": "太っています",
+      "English": "to be on the heavy side; overweight"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "めがねをかける",
+      "Japanese(Kanji)": "",
+      "English": "to put on (glasses)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "きる",
+      "Japanese(Kanji)": "着る",
+      "English": "to put on (clothes above your waist) (〜を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "やせる",
+      "Japanese(Kanji)": "",
+      "English": "to lose weight"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb Phrase",
+      "Japanese(Hiragana/Katakana)": "やせています",
+      "Japanese(Kanji)": "",
+      "English": "to be thin"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Actions",
+      "Lexical Category": "Verb Phrase",
+      "Japanese(Hiragana/Katakana)": "けっこんする",
+      "Japanese(Kanji)": "結婚する",
+      "English": "to get married (〜と）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Expressions",
+      "Lexical Category": "Conjunction",
+      "Japanese(Hiragana/Katakana)": "〜が",
+      "Japanese(Kanji)": "",
+      "English": "...but"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Expressions",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "なにも＋negative",
+      "Japanese(Kanji)": "何も",
+      "English": "not ... anything"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Counters",
+      "Lexical Category": "Counter",
+      "Japanese(Hiragana/Katakana)": "〜にん",
+      "Japanese(Kanji)": "〜人",
+      "English": "[counter for people]"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Counters",
+      "Lexical Category": "Counter",
+      "Japanese(Hiragana/Katakana)": "ひとり",
+      "Japanese(Kanji)": "一人",
+      "English": "one person"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Counters",
+      "Lexical Category": "Counter",
+      "Japanese(Hiragana/Katakana)": "ふたり",
+      "Japanese(Kanji)": "二人",
+      "English": "two people"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Expressions",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "べつに＋negative",
+      "Japanese(Kanji)": "別に",
+      "English": "nothing in particular"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Expressions",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "もちろん",
+      "Japanese(Kanji)": "",
+      "English": "of course"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 7,
+      "Topics": "Expressions",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "よかったら",
+      "Japanese(Kanji)": "",
+      "English": "if you like"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Weather",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "はれ",
+      "Japanese(Kanji)": "晴れ",
+      "English": "sunny weather"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Weather",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "あめ",
+      "Japanese(Kanji)": "雨",
+      "English": "rain"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Weather",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "くもり",
+      "Japanese(Kanji)": "曇り",
+      "English": "cloudy weather"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Weather",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ゆき",
+      "Japanese(Kanji)": "雪",
+      "English": "snow"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Weather",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "てんきよほう",
+      "Japanese(Kanji)": "天気予報",
+      "English": "weather forecast"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Weather",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "きおん",
+      "Japanese(Kanji)": "気温",
+      "English": "temperature"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Seasons",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "なつ",
+      "Japanese(Kanji)": "夏",
+      "English": "summer"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Seasons",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ふゆ",
+      "Japanese(Kanji)": "冬",
+      "English": "winter"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "けさ",
+      "Japanese(Kanji)": "今朝",
+      "English": "this morning"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "あさって",
+      "Japanese(Kanji)": "",
+      "English": "the day after tomorrow"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Time",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "まいしゅう",
+      "Japanese(Kanji)": "毎週",
+      "English": "every week"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "こんげつ",
+      "Japanese(Kanji)": "今月",
+      "English": "this month"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "らいげつ",
+      "Japanese(Kanji)": "来月",
+      "English": "next month"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Occupations",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かいしゃいん",
+      "Japanese(Kanji)": "会社員",
+      "English": "office worker"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Occupations",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "しごと",
+      "Japanese(Kanji)": "仕事",
+      "English": "job; work; occupation"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "カメラ",
+      "Japanese(Kanji)": "",
+      "English": "camera"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Activities",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "カラオケ",
+      "Japanese(Kanji)": "",
+      "English": "karaoke"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ところ",
+      "Japanese(Kanji)": "所",
+      "English": "place"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "トマト",
+      "Japanese(Kanji)": "",
+      "English": "tomato"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "はし",
+      "Japanese(Kanji)": "",
+      "English": "chopsticks"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Activities",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "パーティー",
+      "Japanese(Kanji)": "",
+      "English": "party"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Activities",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "バーベキュー",
+      "Japanese(Kanji)": "",
+      "English": "barbecue"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Travel",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "ホームステイ",
+      "Japanese(Kanji)": "",
+      "English": "homestay; living with a local family"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Daily Life",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おふろ",
+      "Japanese(Kanji)": "お風呂",
+      "English": "bath"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "スペイン",
+      "Japanese(Kanji)": "",
+      "English": "Spain"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Expressions",
+      "Lexical Category": "Pronoun",
+      "Japanese(Hiragana/Katakana)": "なにか",
+      "Japanese(Kanji)": "何か",
+      "English": "something"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "じょうず（な）",
+      "Japanese(Kanji)": "上手",
+      "English": "skillful; good at...（〜が）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "へた（な）",
+      "Japanese(Kanji)": "下手",
+      "English": "clumsy; poor at...（〜が）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "ゆうめい（な）",
+      "Japanese(Kanji)": "有名",
+      "English": "famous"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "あらう",
+      "Japanese(Kanji)": "洗う",
+      "English": "to wash (〜を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "いう",
+      "Japanese(Kanji)": "言う",
+      "English": "to say"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "いる",
+      "Japanese(Kanji)": "",
+      "English": "to need (〜が）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb Phrase",
+      "Japanese(Hiragana/Katakana)": "おそくなる",
+      "Japanese(Kanji)": "遅くなる",
+      "English": "to be late"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb Phrase",
+      "Japanese(Hiragana/Katakana)": "おふろにはいる",
+      "Japanese(Kanji)": "お風呂に入る",
+      "English": "to take a bath"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "おもう",
+      "Japanese(Kanji)": "思う",
+      "English": "to think"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "きる",
+      "Japanese(Kanji)": "切る",
+      "English": "to cut (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "つくる",
+      "Japanese(Kanji)": "作る",
+      "English": "to make （〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb Phrase",
+      "Japanese(Hiragana/Katakana)": "ふる",
+      "Japanese(Kanji)": "降る",
+      "English": "(rain/snow) falls"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "もっていく",
+      "Japanese(Kanji)": "持っていく",
+      "English": "to take (a thing) (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "すてる",
+      "Japanese(Kanji)": "捨てる",
+      "English": "to throw away (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "はじめる",
+      "Japanese(Kanji)": "始める",
+      "English": "to begin (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "うんてんする",
+      "Japanese(Kanji)": "運転する",
+      "English": "to drive (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb Phrase",
+      "Japanese(Hiragana/Katakana)": "せんたくする",
+      "Japanese(Kanji)": "洗濯する",
+      "English": "to do laundry （〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "そうじする",
+      "Japanese(Kanji)": "掃除する",
+      "English": "to clean (〜を）"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "りょうりする",
+      "Japanese(Kanji)": "料理する",
+      "English": "to cook"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Expressions",
+      "Lexical Category": "Interjection",
+      "Japanese(Hiragana/Katakana)": "うん",
+      "Japanese(Kanji)": "",
+      "English": "uh-huh; yes"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Expressions",
+      "Lexical Category": "Interjection",
+      "Japanese(Hiragana/Katakana)": "ううん",
+      "Japanese(Kanji)": "",
+      "English": "uh-uh; no"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "いつも",
+      "Japanese(Kanji)": "",
+      "English": "always"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "おそく",
+      "Japanese(Kanji)": "遅く",
+      "English": "(do something) late"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Expressions",
+      "Lexical Category": "Interjection",
+      "Japanese(Hiragana/Katakana)": "かんぱい",
+      "Japanese(Kanji)": "乾杯",
+      "English": "Cheers! (a toast)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Expressions",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "みんなで",
+      "Japanese(Kanji)": "",
+      "English": "all (of the people) together"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Expressions",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "ざんねん（ですね）",
+      "Japanese(Kanji)": "残念（ですね）",
+      "English": "that's too bad"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Expressions",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "まだ + negative",
+      "Japanese(Kanji)": "",
+      "English": "not ... yet"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Expressions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "〜について",
+      "Japanese(Kanji)": "",
+      "English": "about...; concerning..."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Measurements",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "～ど",
+      "Japanese(Kanji)": "～度",
+      "English": "degrees (temperature)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 8,
+      "Topics": "Questions",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "どう",
+      "Japanese(Kanji)": "",
+      "English": "how"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Language",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "たんご",
+      "Japanese(Kanji)": "単語",
+      "English": "word; vocabulary"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "さくぶん",
+      "Japanese(Kanji)": "作文",
+      "English": "essay; composition"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "しけん",
+      "Japanese(Kanji)": "試験",
+      "English": "exam"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Communication",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "てがみ",
+      "Japanese(Kanji)": "手紙",
+      "English": "letter"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Communication",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "メール",
+      "Japanese(Kanji)": "",
+      "English": "e-mail"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Music",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ギター",
+      "Japanese(Kanji)": "",
+      "English": "guitar"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Music",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ピアノ",
+      "Japanese(Kanji)": "",
+      "English": "piano"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Entertainment",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "コンサート",
+      "Japanese(Kanji)": "",
+      "English": "concert"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Travel",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "チケット",
+      "Japanese(Kanji)": "",
+      "English": "ticket"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Culture",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "かぶき",
+      "Japanese(Kanji)": "歌舞伎",
+      "English": "Kabuki; traditional Japanese theatrical art"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Sports",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "スキー",
+      "Japanese(Kanji)": "",
+      "English": "ski"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Food",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "おべんとう",
+      "Japanese(Kanji)": "お弁当",
+      "English": "boxed lunch"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ピザ",
+      "Japanese(Kanji)": "",
+      "English": "pizza"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "びょうき",
+      "Japanese(Kanji)": "病気",
+      "English": "illness; sickness"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "People",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "いいこ",
+      "Japanese(Kanji)": "いい子",
+      "English": "good child"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Colors",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "いろ",
+      "Japanese(Kanji)": "色",
+      "English": "color"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "こんど",
+      "Japanese(Kanji)": "今度",
+      "English": "near future"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "せんげつ",
+      "Japanese(Kanji)": "先月",
+      "English": "last month"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "きょねん",
+      "Japanese(Kanji)": "去年",
+      "English": "last year"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Colors",
+      "Lexical Category": "Adjective/Noun",
+      "Japanese(Hiragana/Katakana)": "あおい",
+      "Japanese(Kanji)": "青い",
+      "English": "blue"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Colors",
+      "Lexical Category": "Adjective/Noun",
+      "Japanese(Hiragana/Katakana)": "あかい",
+      "Japanese(Kanji)": "赤い",
+      "English": "red"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Colors",
+      "Lexical Category": "Adjective/Noun",
+      "Japanese(Hiragana/Katakana)": "くろい",
+      "Japanese(Kanji)": "黒い",
+      "English": "black"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Colors",
+      "Lexical Category": "Adjective/Noun",
+      "Japanese(Hiragana/Katakana)": "しろい",
+      "Japanese(Kanji)": "白い",
+      "English": "white"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "さびしい",
+      "Japanese(Kanji)": "寂しい",
+      "English": "lonely"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "わかい",
+      "Japanese(Kanji)": "若い",
+      "English": "young"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "いじわる（な）",
+      "Japanese(Kanji)": "意地悪",
+      "English": "mean-spirited"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "おどる",
+      "Japanese(Kanji)": "踊る",
+      "English": "to dance"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "おわる",
+      "Japanese(Kanji)": "終わる",
+      "English": "(something) ends (~が)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "くすりをのむ",
+      "Japanese(Kanji)": "薬を飲む",
+      "English": "to take medicine"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Popularity",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "にんきがある",
+      "Japanese(Kanji)": "人気がある",
+      "English": "to be popular"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "はじまる",
+      "Japanese(Kanji)": "始まる",
+      "English": "(something) begins (~が)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "ひく",
+      "Japanese(Kanji)": "弾く",
+      "English": "to play (a string instrument or piano) (~を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "もらう",
+      "Japanese(Kanji)": "",
+      "English": "to get (from somebody) (person に thing を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "おぼえる",
+      "Japanese(Kanji)": "覚える",
+      "English": "to memorize (~を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "でる",
+      "Japanese(Kanji)": "出る",
+      "English": "to appear; to attend (~に); to exit (~を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "うんどうする",
+      "Japanese(Kanji)": "運動する",
+      "English": "to exercise"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "さんぽする",
+      "Japanese(Kanji)": "散歩する",
+      "English": "to take a walk"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Expressions",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "そう",
+      "Japanese(Kanji)": "",
+      "English": "(I think) so"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Expressions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "〜から",
+      "Japanese(Kanji)": "",
+      "English": "from..."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Expressions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "〜まで",
+      "Japanese(Kanji)": "",
+      "English": "to (a place/a time)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Expressions",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "ぜひ",
+      "Japanese(Kanji)": "是非",
+      "English": "by all means"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Expressions",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "ところで",
+      "Japanese(Kanji)": "",
+      "English": "by the way"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Expressions",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "みんな",
+      "Japanese(Kanji)": "",
+      "English": "all"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 9,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "もう",
+      "Japanese(Kanji)": "",
+      "English": "already"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Seasons",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "きせつ",
+      "Japanese(Kanji)": "",
+      "English": "season"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Seasons",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "はる",
+      "Japanese(Kanji)": "",
+      "English": "spring"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Seasons",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "あき",
+      "Japanese(Kanji)": "",
+      "English": "fall"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ぎゅうにゅう",
+      "Japanese(Kanji)": "",
+      "English": "milk"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ケーキ",
+      "Japanese(Kanji)": "",
+      "English": "cake"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "すし",
+      "Japanese(Kanji)": "",
+      "English": "sushi"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "てんぷら",
+      "Japanese(Kanji)": "",
+      "English": "tempura"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "りんご",
+      "Japanese(Kanji)": "",
+      "English": "apple"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "りょうり",
+      "Japanese(Kanji)": "",
+      "English": "cuisine"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Sports",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "サッカー",
+      "Japanese(Kanji)": "",
+      "English": "soccer"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Sports",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "やきゅう",
+      "Japanese(Kanji)": "",
+      "English": "baseball"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Occupations",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "いしゃ",
+      "Japanese(Kanji)": "",
+      "English": "doctor"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "People",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "おかねもち",
+      "Japanese(Kanji)": "",
+      "English": "rich person"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "People",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ゆうめいじん",
+      "Japanese(Kanji)": "",
+      "English": "celebrity"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Body",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かお",
+      "Japanese(Kanji)": "",
+      "English": "face"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "People",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "としうえ",
+      "Japanese(Kanji)": "",
+      "English": "someone older"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "えき",
+      "Japanese(Kanji)": "",
+      "English": "station"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Transportation",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "しんかんせん",
+      "Japanese(Kanji)": "",
+      "English": "shinkansen"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Transportation",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ちかてつ",
+      "Japanese(Kanji)": "",
+      "English": "subway"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Transportation",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "ふね",
+      "Japanese(Kanji)": "",
+      "English": "ship; boat"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Transportation",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ひこうき",
+      "Japanese(Kanji)": "",
+      "English": "airplane"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Travel",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "よやく",
+      "Japanese(Kanji)": "",
+      "English": "reservation"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Travel",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ツアー",
+      "Japanese(Kanji)": "",
+      "English": "tour"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "どうぶつえん",
+      "Japanese(Kanji)": "",
+      "English": "zoo"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Time",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "じかん",
+      "Japanese(Kanji)": "",
+      "English": "time"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "World",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "せかい",
+      "Japanese(Kanji)": "",
+      "English": "world"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Places",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "びよういん",
+      "Japanese(Kanji)": "",
+      "English": "beauty parlor"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "てぶくろ",
+      "Japanese(Kanji)": "",
+      "English": "gloves"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Life",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "せいかつ",
+      "Japanese(Kanji)": "",
+      "English": "life; living"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "ことし",
+      "Japanese(Kanji)": "",
+      "English": "this year"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Weather",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "あたたかい",
+      "Japanese(Kanji)": "",
+      "English": "warm"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Weather",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "すずしい",
+      "Japanese(Kanji)": "",
+      "English": "cool (weather)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "つめたい",
+      "Japanese(Kanji)": "",
+      "English": "cold (things/people)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "おそい",
+      "Japanese(Kanji)": "",
+      "English": "slow; late"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "ねむい",
+      "Japanese(Kanji)": "",
+      "English": "sleepy"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "かんたん（な)",
+      "Japanese(Kanji)": "",
+      "English": "easy; simple"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "かかる",
+      "Japanese(Kanji)": "",
+      "English": "to take (time/money)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "とまる",
+      "Japanese(Kanji)": "",
+      "English": "to stay (at a hotel/etc.)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "なる",
+      "Japanese(Kanji)": "",
+      "English": "to become"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "きめる",
+      "Japanese(Kanji)": "",
+      "English": "to decide"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Actions",
+      "Lexical Category": "Verb Phrase",
+      "Japanese(Hiragana/Katakana)": "ごろごろする",
+      "Japanese(Kanji)": "",
+      "English": "to chill out at home"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "りょこうする",
+      "Japanese(Kanji)": "",
+      "English": "to travel"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "れんしゅうする",
+      "Japanese(Kanji)": "",
+      "English": "to practice"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "いちばん",
+      "Japanese(Kanji)": "",
+      "English": "best"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Questions",
+      "Lexical Category": "Determiner",
+      "Japanese(Hiragana/Katakana)": "どっち／どちら",
+      "Japanese(Kanji)": "",
+      "English": "which"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "はやく",
+      "Japanese(Kanji)": "",
+      "English": "(do something) early; fast"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Transportation",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "あるいて",
+      "Japanese(Kanji)": "",
+      "English": "on foot"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Expressions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "～で",
+      "Japanese(Kanji)": "",
+      "English": "by (means of transportation); with (a tool)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Questions",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "どうやって",
+      "Japanese(Kanji)": "",
+      "English": "how; by what means"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Questions",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "どのぐらい",
+      "Japanese(Kanji)": "",
+      "English": "how much; how long"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Time",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "～しゅうかん",
+      "Japanese(Kanji)": "",
+      "English": "for... weeks"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Time",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "～かげつ",
+      "Japanese(Kanji)": "",
+      "English": "for... months"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Time",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "～ねん",
+      "Japanese(Kanji)": "",
+      "English": "... years"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Time",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "このごろ",
+      "Japanese(Kanji)": "",
+      "English": "these days"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Time",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "～ご",
+      "Japanese(Kanji)": "",
+      "English": "in... time; after..."
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 10,
+      "Topics": "Expressions",
+      "Lexical Category": "Conjunction",
+      "Japanese(Hiragana/Katakana)": "～か～",
+      "Japanese(Kanji)": "",
+      "English": "or"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "がいこく",
+      "Japanese(Kanji)": "",
+      "English": "foreign country"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "オーストラリア",
+      "Japanese(Kanji)": "",
+      "English": "Australia"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Nature",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かわ",
+      "Japanese(Kanji)": "",
+      "English": "river"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Travel",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "おんせん",
+      "Japanese(Kanji)": "",
+      "English": "spa; hot spring"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Sports",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "つり",
+      "Japanese(Kanji)": "",
+      "English": "fishing"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Nature",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "みずうみ",
+      "Japanese(Kanji)": "",
+      "English": "lake"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Nature",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "やま",
+      "Japanese(Kanji)": "",
+      "English": "mountain"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Recreation",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "キャンプ",
+      "Japanese(Kanji)": "",
+      "English": "camp"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Recreation",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ドライブ",
+      "Japanese(Kanji)": "",
+      "English": "drive"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Culture",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "じんじゃ",
+      "Japanese(Kanji)": "",
+      "English": "shrine"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Culture",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "びじゅつかん",
+      "Japanese(Kanji)": "",
+      "English": "art museum"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Occupations",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "かいしゃのしゃちょう",
+      "Japanese(Kanji)": "",
+      "English": "president of a company"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Occupations",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かしゅ",
+      "Japanese(Kanji)": "",
+      "English": "singer"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "People",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ルームメイト",
+      "Japanese(Kanji)": "",
+      "English": "roommate"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "People",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "ホストファミリー",
+      "Japanese(Kanji)": "",
+      "English": "host family"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Future",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "しょうらい",
+      "Japanese(Kanji)": "",
+      "English": "future"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Dreams",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ゆめ",
+      "Japanese(Kanji)": "",
+      "English": "dream"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Culture",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おまつり",
+      "Japanese(Kanji)": "",
+      "English": "festival"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Holidays",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "おしょうがつ",
+      "Japanese(Kanji)": "",
+      "English": "New Year's"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Food",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "おかし",
+      "Japanese(Kanji)": "",
+      "English": "snack; sweets"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Drinks",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ビール",
+      "Japanese(Kanji)": "",
+      "English": "beer"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おもちゃ",
+      "Japanese(Kanji)": "",
+      "English": "toy"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "こんがっき",
+      "Japanese(Kanji)": "",
+      "English": "this semester"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Time",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "らいがっき",
+      "Japanese(Kanji)": "",
+      "English": "next semester"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Education",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "じゅぎょう",
+      "Japanese(Kanji)": "",
+      "English": "class"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "People",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "こちら",
+      "Japanese(Kanji)": "",
+      "English": "this person (polite)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "うそをつく",
+      "Japanese(Kanji)": "",
+      "English": "to tell a lie"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "おなかがすく",
+      "Japanese(Kanji)": "",
+      "English": "to become hungry"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "かう",
+      "Japanese(Kanji)": "",
+      "English": "to own (a pet)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "サボる",
+      "Japanese(Kanji)": "",
+      "English": "to cut (classes)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "とる",
+      "Japanese(Kanji)": "",
+      "English": "to take (a class); to get (a grade)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "つかれる",
+      "Japanese(Kanji)": "",
+      "English": "to get tired"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "やめる",
+      "Japanese(Kanji)": "",
+      "English": "to quit"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "けんかする",
+      "Japanese(Kanji)": "",
+      "English": "to have a fight; to quarrel"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "しょうかいする",
+      "Japanese(Kanji)": "",
+      "English": "to introduce"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "ダイエットする",
+      "Japanese(Kanji)": "",
+      "English": "to go on a diet"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "おくれる",
+      "Japanese(Kanji)": "",
+      "English": "to be late (for an appointment)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "りゅうがくする",
+      "Japanese(Kanji)": "",
+      "English": "to study abroad"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Adjectives",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "じょうず",
+      "Japanese(Kanji)": "",
+      "English": "good at; skilled"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Expressions",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "ひさしぶり",
+      "Japanese(Kanji)": "",
+      "English": "it has been a long time"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Expressions",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "まあまあ",
+      "Japanese(Kanji)": "",
+      "English": "okay; so-so"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Adverbs",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "もっと",
+      "Japanese(Kanji)": "",
+      "English": "more"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Expressions",
+      "Lexical Category": "Preposition",
+      "Japanese(Hiragana/Katakana)": "あと",
+      "Japanese(Kanji)": "",
+      "English": "after (an event)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 11,
+      "Topics": "Expressions",
+      "Lexical Category": "Conjunction",
+      "Japanese(Hiragana/Katakana)": "そして",
+      "Japanese(Kanji)": "",
+      "English": "and then"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おなか",
+      "Japanese(Kanji)": "",
+      "English": "stomach"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "あし",
+      "Japanese(Kanji)": "足",
+      "English": "leg; foot"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "のど",
+      "Japanese(Kanji)": "",
+      "English": "throat"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "は",
+      "Japanese(Kanji)": "歯",
+      "English": "tooth"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "インフルエンザ",
+      "Japanese(Kanji)": "",
+      "English": "influenza"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かぜ",
+      "Japanese(Kanji)": "風邪",
+      "English": "cold"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "せき",
+      "Japanese(Kanji)": "",
+      "English": "cough"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ふつかよい",
+      "Japanese(Kanji)": "二日酔い",
+      "English": "hangover"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ホームシック",
+      "Japanese(Kanji)": "",
+      "English": "homesickness"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "アレルギー",
+      "Japanese(Kanji)": "",
+      "English": "allergy"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ジュース",
+      "Japanese(Kanji)": "",
+      "English": "juice"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Food",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "たまご",
+      "Japanese(Kanji)": "卵",
+      "English": "egg"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Fashion",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "ふく",
+      "Japanese(Kanji)": "服",
+      "English": "clothes"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Objects",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "もの",
+      "Japanese(Kanji)": "物",
+      "English": "thing (concrete object)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Social",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "プレゼント",
+      "Japanese(Kanji)": "",
+      "English": "present"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Transportation",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "きっぷ",
+      "Japanese(Kanji)": "切符",
+      "English": "train ticket"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Finance",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "～だい",
+      "Japanese(Kanji)": "～代",
+      "English": "charge; fee"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Business",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "ようじ",
+      "Japanese(Kanji)": "用事",
+      "English": "business to take care of"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Places",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "おてあらい",
+      "Japanese(Kanji)": "お手洗い",
+      "English": "restroom"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Entertainment",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "しあい",
+      "Japanese(Kanji)": "試合",
+      "English": "match; game"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Politics",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "せいじ",
+      "Japanese(Kanji)": "政治",
+      "English": "politics"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Education",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "せいせき",
+      "Japanese(Kanji)": "成績",
+      "English": "grade (on a test)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Relationships",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "かのじょ",
+      "Japanese(Kanji)": "彼女",
+      "English": "she; girlfriend"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Relationships",
+      "Lexical Category": "Noun Phrase",
+      "Japanese(Hiragana/Katakana)": "かれ",
+      "Japanese(Kanji)": "彼",
+      "English": "he; boyfriend"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Relationships",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "かれし",
+      "Japanese(Kanji)": "",
+      "English": "boyfriend"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Language",
+      "Lexical Category": "Noun",
+      "Japanese(Hiragana/Katakana)": "いみ",
+      "Japanese(Kanji)": "意味",
+      "English": "meaning"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Descriptions",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "せまい",
+      "Japanese(Kanji)": "狭い",
+      "English": "narrow; not spacious"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Descriptions",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "ひろい",
+      "Japanese(Kanji)": "広い",
+      "English": "wide; spacious"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Descriptions",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "わるい",
+      "Japanese(Kanji)": "悪い",
+      "English": "bad"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "いたい",
+      "Japanese(Kanji)": "痛い",
+      "English": "hurt; painful"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Descriptions",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "すてき",
+      "Japanese(Kanji)": "",
+      "English": "nice"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "あるく",
+      "Japanese(Kanji)": "歩く",
+      "English": "to walk"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "かぜをひく",
+      "Japanese(Kanji)": "風邪をひく",
+      "English": "to catch a cold"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "ねつがある",
+      "Japanese(Kanji)": "熱がある",
+      "English": "to have a fever"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "のどがかわく",
+      "Japanese(Kanji)": "のどが渇く",
+      "English": "to become thirsty"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Finance",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "はらう",
+      "Japanese(Kanji)": "",
+      "English": "to pay (～を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Actions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "なくす",
+      "Japanese(Kanji)": "",
+      "English": "to lose (～を)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Emotions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "きょうみがある",
+      "Japanese(Kanji)": "興味がある",
+      "English": "to be interested in (～に)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "せきがでる",
+      "Japanese(Kanji)": "せきが出る",
+      "English": "to cough"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Relationships",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "わかれる",
+      "Japanese(Kanji)": "別れる",
+      "English": "to break up; to separate (～と)"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Emotions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "きんちょうする",
+      "Japanese(Kanji)": "緊張する",
+      "English": "to get nervous"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Emotions",
+      "Lexical Category": "Verb",
+      "Japanese(Hiragana/Katakana)": "しんぱいする",
+      "Japanese(Kanji)": "心配する",
+      "English": "to worry"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "おだいじに",
+      "Japanese(Kanji)": "お大事に",
+      "English": "Get well soon"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Health",
+      "Lexical Category": "Phrase",
+      "Japanese(Hiragana/Katakana)": "げんきがない",
+      "Japanese(Kanji)": "元気がない",
+      "English": "don't look well"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Time",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "できるだけ",
+      "Japanese(Kanji)": "",
+      "English": "as much as possible"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Uncertainty",
+      "Lexical Category": "Adverb",
+      "Japanese(Hiragana/Katakana)": "たぶん",
+      "Japanese(Kanji)": "多分",
+      "English": "probably; maybe"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Time",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "もうすぐ",
+      "Japanese(Kanji)": "",
+      "English": "very soon; in a few moments/days"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Time",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "はじめて",
+      "Japanese(Kanji)": "初めて",
+      "English": "for the first time"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Time",
+      "Lexical Category": "Adverb Phrase",
+      "Japanese(Hiragana/Katakana)": "にさんにち",
+      "Japanese(Kanji)": "二三日",
+      "English": "for two to three days"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Connections",
+      "Lexical Category": "Conjunction",
+      "Japanese(Hiragana/Katakana)": "それに",
+      "Japanese(Kanji)": "",
+      "English": "moreover"
+    },
+    {
+      "Textbook": "genki-1",
+      "Lesson": 12,
+      "Topics": "Descriptions",
+      "Lexical Category": "Adjective",
+      "Japanese(Hiragana/Katakana)": "おなじ",
+      "Japanese(Kanji)": "同じ",
+      "English": "same"
+    }
+  ]
