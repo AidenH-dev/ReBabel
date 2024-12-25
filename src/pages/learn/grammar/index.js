@@ -12,8 +12,44 @@ import { BsTextParagraph } from "react-icons/bs";
 import { TbSpace } from "react-icons/tb";
 import { IoImagesOutline } from "react-icons/io5";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function GrammarDashboard() {
+  const [translateSettings, setTranslateSettings] = useState(false);
+  const [selectedBooks, setSelectedBooks] = useState({
+    genki1: false,
+    genki2: false,
+  });
+  const [selectedLessons, setSelectedLessons] = useState({});
+  const router = useRouter();
+
+  const toggleTranslateSettings = () => {
+    setTranslateSettings((prev) => !prev);
+  };
+
+  const handleBookSelection = (book) => {
+    setSelectedBooks((prev) => ({ ...prev, [book]: !prev[book] }));
+  };
+
+  const handleLessonSelection = (lesson) => {
+    setSelectedLessons((prev) => ({ ...prev, [lesson]: !prev[lesson] }));
+  };
+
+  const lessons = Array.from({ length: 23 }, (_, i) => `Lesson ${i + 1}`);
+
+  const handleBegin = () => {
+    const selectedLessonKeys = Object.keys(selectedLessons).filter(
+      (lesson) => selectedLessons[lesson]
+    );
+    if (selectedLessonKeys.length > 0) {
+      const lessonParam = selectedLessonKeys.join(",");
+      router.push(
+        `/learn/grammar/translate?lessons=${encodeURIComponent(lessonParam)}`
+      );
+    } else {
+      alert("Please select at least one lesson.");
+    }
+  };
 
   const grammarPracticeSets = [
     {
@@ -86,78 +122,159 @@ export default function GrammarDashboard() {
               </h2>
             </section>
 
-            {/* Learning Tools CAUSES WHITE SCREEN ERROR MUST FIX*/}
-            <section className="col-span-18 md:col-span-6 lg:col-span-5 grid grid-cols-2 gap-4">
-              <Link
-                href="/learn/grammar/translate"
-                className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+            {/* Translation Section with Animation */}
+            <section className="col-span-12 md:col-span-6 lg:col-span-5 relative">
+              {/* Translation Settings Section */}
+              <div
+                className={`absolute inset-0 transform transition-all duration-500 ${
+                  translateSettings
+                    ? "opacity-100 translate-y-0 pointer-events-auto z-10"
+                    : "opacity-0 -translate-y-5 pointer-events-none z-0"
+                }`}
               >
-                <div>
-                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                    <FaArrowRightArrowLeft className="h-8 w-8 mr-3" />
-                    Translation
-                  </h2>
+                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-md flex flex-col justify-between h-full">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">
+                      Select Book(s)
+                    </h2>
+                    <div className="grid grid-cols-1 gap-2 ml-2">
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedBooks.genki1}
+                          onChange={() => handleBookSelection("genki1")}
+                          className="mr-2"
+                        />
+                        Genki 1 Third Edition
+                      </label>
+                    </div>
+                    <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200 pt-5">
+                      Select Lessons
+                    </h2>
+                    <div className="grid grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] gap-1 ml-2">
+                      {Object.values(selectedBooks).some(
+                        (isSelected) => isSelected
+                      ) ? (
+                        lessons
+                          .filter((_, index) => {
+                            if (selectedBooks.genki1 && index < 12) return true;
+                            if (
+                              selectedBooks.genki2 &&
+                              index >= 12 &&
+                              index < 23
+                            )
+                              return true;
+                            return false;
+                          })
+                          .map((lesson, index) => (
+                            <label
+                              key={index}
+                              className="truncate flex items-center cursor-pointer w-min"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedLessons[lesson] || false}
+                                onChange={() => handleLessonSelection(lesson)}
+                                className="mr-2"
+                              />
+                              {lesson}
+                            </label>
+                          ))
+                      ) : (
+                        <p className="text-gray-500">
+                          Please select a book to see lessons.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex justify-between mt-4 mb-2 mx-4">
+                    <button
+                      className="relative bg-red-500 text-white py-2 px-4 rounded-lg transform transition-transform duration-200 active:translate-y-1"
+                      onClick={() => setTranslateSettings(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="relative bg-blue-500 text-white py-2 px-4 rounded-lg transform transition-transform duration-200 active:translate-y-1"
+                      onClick={handleBegin}
+                    >
+                      Begin
+                    </button>
+                  </div>
                 </div>
-              </Link>
-              <Link
-                href="/learn/grammar/translate"
-                className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
-              >
-                <div>
-                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                    <RiSpeakLine className="h-8 w-8 mr-3" />
-                    Conversation
-                  </h2>
-                </div>
-              </Link>
+              </div>
 
-              <Link
-                href="https://comprehension.yourdomain.com"
-                className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+              {/* Default Section */}
+              <div
+                className={`absolute inset-0 transform transition-all duration-500 ${
+                  !translateSettings
+                    ? "opacity-100 translate-y-0 pointer-events-auto z-10"
+                    : "opacity-0 -translate-y-5 pointer-events-none z-0"
+                }`}
               >
-                <div>
-                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                    <BsTextParagraph className="h-8 w-8 mr-3" />
-                    Comprehension
-                  </h2>
-                </div>
-              </Link>
+                <div className="grid grid-cols-2 gap-4 h-full">
+                  <div
+                    onClick={toggleTranslateSettings}
+                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                  >
+                    <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                      <FaArrowRightArrowLeft className="h-8 w-8 mr-3" />
+                      Translation
+                    </h2>
+                  </div>
+                  <Link
+                    href="/learn/grammar/conversation"
+                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                  >
+                    <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                      <RiSpeakLine className="h-8 w-8 mr-3" />
+                      Conversation
+                    </h2>
+                  </Link>
 
-              <Link
-                href="https://fluency.yourdomain.com"
-                className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
-              >
-                <div>
-                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                    <LuTimerReset className="h-8 w-8 mr-3" />
-                    Fluency
-                  </h2>
-                </div>
-              </Link>
+                  <Link
+                    href="/learn/grammar/comprehension"
+                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                  >
+                    <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                      <BsTextParagraph className="h-8 w-8 mr-3" />
+                      Comprehension
+                    </h2>
+                  </Link>
 
-              <Link
-                href="https://cloze.yourdomain.com"
-                className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
-              >
-                <div>
-                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                    <TbSpace className="h-8 w-8 mr-3" />
-                    Cloze Exercises
-                  </h2>
-                </div>
-              </Link>
+                  <Link
+                    href="https://fluency.yourdomain.com"
+                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                  >
+                    <div>
+                      <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                        <LuTimerReset className="h-8 w-8 mr-3" />
+                        Fluency
+                      </h2>
+                    </div>
+                  </Link>
 
-              <Link
-                href="https://imagematching.yourdomain.com"
-                className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
-              >
-                <div>
-                  <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
-                    <IoImagesOutline className="h-8 w-8 mr-3" />
-                    Image Matching
-                  </h2>
+                  <Link
+                    href="/learn/grammar/cloze"
+                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                  >
+                    <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                      <TbSpace className="h-8 w-8 mr-3" />
+                      Cloze Exercises
+                    </h2>
+                  </Link>
+
+                  <Link
+                    href="/learn/grammar/imagematching"
+                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                  >
+                    <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
+                      <IoImagesOutline className="h-8 w-8 mr-3" />
+                      Image Matching
+                    </h2>
+                  </Link>
                 </div>
-              </Link>
+              </div>
             </section>
 
             {/* Practice Topics */}
