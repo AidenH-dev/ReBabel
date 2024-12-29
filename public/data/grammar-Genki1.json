@@ -1,0 +1,541 @@
+[
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 1,
+      "Title": "X は Y です",
+      "Description": "A structure used to say \"X is Y.\" Common in Japanese sentences where subjects are omitted if they are clear from context.",
+      "Topic": "Basic sentence structure"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 1,
+      "Title": "Questions with か",
+      "Description": "Adding \"か\" at the end of a sentence to turn it into a yes/no question or to ask a question with words like \"what\" (なん), \"what time\" (なんじ), \"how old\" (なんさい), \"what year\" (なんねんせい), etc.",
+      "Topic": "Question formation"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 1,
+      "Title": "Noun₁ の Noun₂",
+      "Description": "A particle (の) that connects two nouns, where Noun₂ is the main idea, and Noun₁ provides context or restrictions. Commonly used for possessive relationships or specific qualifiers.",
+      "Topic": "Modifying nouns"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 2,
+      "Title": "これ/それ/あれ/どれ",
+      "Description": "Demonstratives for \"this,\" \"that,\" and \"which.\" これ refers to an object close to the speaker, それ to one close to the listener, あれ to one far from both, and どれ to ask \"which one.",
+      "Topic": "Demonstratives"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 2,
+      "Title": "この/その/あの/どの + Noun",
+      "Description": "Demonstratives for \"this,\" \"that,\" and \"which\" followed by a noun. Used to specify objects or people in relation to the speaker or listener.",
+      "Topic": "Demonstrative adjectives"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 2,
+      "Title": "ここ/そこ/あそこ/どこ",
+      "Description": "Spatial demonstratives for \"here,\" \"there,\" \"over there,\" and \"where.\" Used for locations.",
+      "Topic": "Spatial location"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 2,
+      "Title": "だれの Noun",
+      "Description": "Poses a question about possession, meaning \"whose.\" Combines the interrogative だれ (who) with の (possessive particle).",
+      "Topic": "Possessive questions"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 2,
+      "Title": "Noun も",
+      "Description": "The particle も means \"too\" or \"also\" and is used to indicate inclusion of an additional item with a similar property.",
+      "Topic": "Inclusion"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 2,
+      "Title": "Noun じゃないです",
+      "Description": "The negative form of \"X is Y,\" replacing です with じゃないです. Variants include the more formal ではありません and the polite じゃありません.",
+      "Topic": "Negation"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 2,
+      "Title": "～ね/～よ",
+      "Description": "Sentence-ending particles for interaction: ～ね seeks agreement (\"right?\"), and ～よ asserts information or adds emphasis (\"I tell you\").",
+      "Topic": "Sentence-ending particles"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 3,
+      "Title": "Verb Conjugation",
+      "Description": "Introduction to verb types (ru-verbs, u-verbs, and irregular verbs) and their dictionary forms, present affirmative forms (-ます), and present negative forms (-ません).",
+      "Topic": "Verb types and conjugation"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 3,
+      "Title": "Present Tense Conjugation",
+      "Description": "Rules for conjugating ru-verbs, u-verbs, and irregular verbs into present affirmative (-ます) and negative (-ません) forms, with examples for each type.",
+      "Topic": "Verb conjugation rules"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 3,
+      "Title": "Verb Types and \"Present Tense",
+      "Description": "Explanation of how the present tense is used to describe habitual actions or future actions, with example sentences demonstrating both uses.",
+      "Topic": "Present tense usage"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 3,
+      "Title": "Particles",
+      "Description": "Overview of four particles: を (direct object marker), で (place of action), に (goal of movement or time), and へ (goal of movement).",
+      "Topic": "Particle usage"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 3,
+      "Title": "Time References",
+      "Description": "Use of に to indicate specific times (e.g., days of the week, clock times), and cases where に is not used (e.g., \"today,\" \"tomorrow,\" \"every day\").",
+      "Topic": "Time expressions"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 3,
+      "Title": "～ませんか",
+      "Description": "Use of the present tense negative verb + question particle to extend an invitation, e.g., \"What do you say to having lunch with me?",
+      "Topic": "Invitations"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 3,
+      "Title": "Frequency Adverbs",
+      "Description": "Adverbs like 毎日 (every day), よく (often), and ときどき (sometimes) to describe frequency, and adverbs like 全然 (not at all) and あまり (not very much) with negative sentences.",
+      "Topic": "Describing frequency"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 3,
+      "Title": "Word Order",
+      "Description": "Explanation of flexible sentence structures in Japanese, showing common patterns like topic-time-place-object-verb and topic-frequency-time-goal-verb.",
+      "Topic": "Sentence structure"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 3,
+      "Title": "The Topic Particle は",
+      "Description": "Further explanation of the particle は to mark topics, including cases where time expressions or objects are made the topic of a sentence.",
+      "Topic": "Topic marking"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 4,
+      "Title": "X が あります/います",
+      "Description": "Describes existence or presence. あります is used for inanimate objects, and います is used for animate objects. Can also indicate possession or scheduled events.",
+      "Topic": "Existence and possession"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 4,
+      "Title": "Describing Where Things Are",
+      "Description": "Uses location words such as 右 (right), 前 (in front), and 間 (between) to describe the position of items relative to others.",
+      "Topic": "Spatial descriptions"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 4,
+      "Title": "Past Tense of です",
+      "Description": "Explains how to form past affirmative (~でした) and past negative (~じゃなかったです) for X は Y です sentences.",
+      "Topic": "Past tense of copula"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 4,
+      "Title": "Past Tense of Verbs",
+      "Description": "Explains how to conjugate verbs to past affirmative (~ました) and past negative (~ませんでした), applying ru-verb, u-verb, and irregular verb rules.",
+      "Topic": "Past tense verb conjugation"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 4,
+      "Title": "も",
+      "Description": "Demonstrates how the particle も (\"too\" or \"also\") replaces は, が, or を and follows other particles like に and で to indicate shared actions or attributes.",
+      "Topic": "Inclusion with も"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 4,
+      "Title": "一時間 (Duration of Time)",
+      "Description": "Explains expressing the duration of activities with bare nouns like 一時間 (one hour) and using approximate terms like ぐらい (about) and 半 (half).",
+      "Topic": "Expressing time duration"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 4,
+      "Title": "たくさん",
+      "Description": "Teaches how to express quantity with words like たくさん (\"many\") and their placement before the noun or after the particle を.",
+      "Topic": "Quantity expressions"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 4,
+      "Title": "と",
+      "Description": "Shows the use of the particle と for connecting two nouns (\"and\") or indicating \"together with\" someone to describe joint actions.",
+      "Topic": "Connecting nouns and people"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 5,
+      "Title": "Adjectives (Present Tense)",
+      "Description": "Explanation of how to conjugate い-adjectives and な-adjectives in present affirmative and negative forms. Includes irregular forms like いい (\"good\") and degree adverbs (e.g., とても, ちょっと).",
+      "Topic": "Adjective conjugation"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 5,
+      "Title": "Adjectives (Past Tense)",
+      "Description": "Conjugation of い-adjectives and な-adjectives into past affirmative and negative forms. Special attention to the irregular adjective いい (\"good\").",
+      "Topic": "Adjective conjugation"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 5,
+      "Title": "Adjectives (Noun Modification)",
+      "Description": "Using い-adjectives and な-adjectives to modify nouns. い-adjectives precede nouns, while な-adjectives require the particle な before the noun.",
+      "Topic": "Modifying nouns"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 5,
+      "Title": "好き (な) / きらい (な)",
+      "Description": "Describes the use of 好き (to like) and きらい (to dislike) as な-adjectives that take a subject (marked with が) and an object. Introduces intensified forms 大好き and 大きらい.",
+      "Topic": "Expressing preferences"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 5,
+      "Title": "～ましょう / ～ましょうか",
+      "Description": "Suggests a plan of action using the verb stem plus ましょう (\"let's\") or ましょうか (\"shall we\").",
+      "Topic": "Making suggestions"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 5,
+      "Title": "Counting",
+      "Description": "Overview of Japanese counters, which are used with specific words depending on the type of item. Explains the placement of counters after the item in sentences.",
+      "Topic": "Counting items"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 6,
+      "Title": "Te-form",
+      "Description": "Explains the te-form conjugation rules for ru-verbs, u-verbs, and irregular verbs. Te-forms are used for requests, combining actions, permissions, and prohibitions.",
+      "Topic": "Verb conjugation"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 6,
+      "Title": "～てください",
+      "Description": "Te-form combined with ください to make polite requests. Examples include “Please do X for me.”",
+      "Topic": "Making requests"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 6,
+      "Title": "Describing Two Activities",
+      "Description": "Using the te-form to describe sequences of actions or events (e.g., “I did X and then Y”) or to loosely connect a verb to a sentence.",
+      "Topic": "Action description"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 6,
+      "Title": "～てもいいです",
+      "Description": "Te-form plus もいいです to express permission (e.g., “You may do X”). The construction can also be turned into a question to ask for permission.",
+      "Topic": "Asking/giving permission"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 6,
+      "Title": "～てはいけません",
+      "Description": "Te-form plus はいけません to express prohibition (e.g., “You must not do X”). Often used in rules or formal prohibitions.",
+      "Topic": "Prohibition"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 6,
+      "Title": "～から (because)",
+      "Description": "Explains how to connect two clauses using から to indicate reason or cause (e.g., “I will do X because Y”).",
+      "Topic": "Causal explanation"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 6,
+      "Title": "～ましょうか (Offering Assistance)",
+      "Description": "Expands on ～ましょう by allowing the speaker to offer assistance (e.g., “Shall I do X for you?” or “Let me help you do X”).",
+      "Topic": "Offering help"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 7,
+      "Title": "～ている (Action in Progress)",
+      "Description": "Used with the te-form and いる to describe ongoing actions. Applicable to activity verbs, describing actions happening at the moment.",
+      "Topic": "Actions in Progress"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 7,
+      "Title": "～ている (Result of a Change)",
+      "Description": "Used with change verbs to indicate a resulting state from a past change, such as being married or seated.",
+      "Topic": "Result of a Change"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 7,
+      "Title": "Describing Characteristics",
+      "Description": "Expresses characteristics like length of hair or body attributes naturally using が.",
+      "Topic": "Describing Characteristics"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 7,
+      "Title": "Adjective/Noun Te-forms for Joining Sentences",
+      "Description": "Joins sentences using the te-form of adjectives or nouns, allowing multiple statements to flow together.",
+      "Topic": "Sentence Joining"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 7,
+      "Title": "Counting People",
+      "Description": "Uses 人 as a counter for people, with irregular forms for 1 (ひとり) and 2 (ふたり).",
+      "Topic": "Counters"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 8,
+      "Title": "Short Forms",
+      "Description": "Introduces the short forms for present affirmative and negative conjugations for verbs, adjectives, and nouns.",
+      "Topic": "Conjugation"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 8,
+      "Title": "Short Forms in Informal Speech",
+      "Description": "Usage of short forms in casual conversations between friends or family, and their appropriateness based on social context.",
+      "Topic": "Informal Speech"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 8,
+      "Title": "Short Forms in Quoted Speech: ～と思います",
+      "Description": "Describes how to use short forms to express thoughts using ～と思います (I think ...).",
+      "Topic": "Quoted Speech"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 8,
+      "Title": "Short Forms in Quoted Speech: ～と言っていました",
+      "Description": "Explains how to use short forms to quote what someone said using ～と言っていました (They said ...).",
+      "Topic": "Quoted Speech"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 8,
+      "Title": "～ないでください",
+      "Description": "Expresses requests to refrain from doing something using the negative short form + でください.",
+      "Topic": "Requests"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 8,
+      "Title": "Verb のが好きです / 上手です",
+      "Description": "Turns verbs into nouns using の and describes likes/dislikes or skills using ～が好きです / 上手です.",
+      "Topic": "Preferences and Skills"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 8,
+      "Title": "The Subject Particle が",
+      "Description": "Highlights the use of が for emphasizing the subject or introducing new information.",
+      "Topic": "Particles"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 8,
+      "Title": "何か and 何も",
+      "Description": "Explains the usage of 何か for 'something' and 何も for 'anything' in different sentence contexts.",
+      "Topic": "Indefinites"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 9,
+      "Title": "Past Tense Short Forms",
+      "Description": "Explains how to conjugate past tense short forms for verbs, adjectives, and nouns, in both affirmative and negative forms.",
+      "Topic": "Conjugation"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 9,
+      "Title": "Past Tense Short Forms in Informal Speech",
+      "Description": "Shows how to use past tense short forms in casual conversations, dropping question particles like か.",
+      "Topic": "Informal Speech"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 9,
+      "Title": "Past Tense Short Forms in Quoted Speech: ～と思います",
+      "Description": "Demonstrates how to use past tense short forms to express thoughts using ～と思います (I think ...).",
+      "Topic": "Quoted Speech"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 9,
+      "Title": "Past Tense Short Forms in Quoted Speech: ～と言っていました",
+      "Description": "Explains how to use past tense short forms to quote what someone said using ～と言っていました (They said ...).",
+      "Topic": "Quoted Speech"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 9,
+      "Title": "Qualifying Nouns with Verbs and Adjectives",
+      "Description": "Uses verbs and adjectives as modifiers to describe nouns, including actions or attributes.",
+      "Topic": "Modifiers"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 9,
+      "Title": "もう～ました and まだ～ていません",
+      "Description": "Uses もう to describe actions already completed and まだ to describe actions not yet completed.",
+      "Topic": "Temporal Expressions"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 9,
+      "Title": "Explanation から, Situation",
+      "Description": "Introduces から to give reasons or explanations for a statement.",
+      "Topic": "Explanations"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 10,
+      "Title": "Comparison between Two Items",
+      "Description": "Introduces how to compare two items using the structure AのほうがBより(property).",
+      "Topic": "Comparisons"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 10,
+      "Title": "Comparison among Three or More Items",
+      "Description": "Explains how to indicate the best among three or more items using いちばん (the most).",
+      "Topic": "Comparisons"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 10,
+      "Title": "Adjective/Noun + の",
+      "Description": "Uses の to replace a noun when the reference is clear, avoiding repetition in sentences.",
+      "Topic": "Noun Replacement"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 10,
+      "Title": "～つもりだ",
+      "Description": "Describes intentions using the present tense short form + つもりだ, meaning 'I intend to ...'.",
+      "Topic": "Intentions"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 10,
+      "Title": "Adjective + なる",
+      "Description": "Explains how to express a change of state using the verb なる with adjectives and nouns.",
+      "Topic": "State Changes"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 10,
+      "Title": "どこかに / どこにも",
+      "Description": "Explains how to use どこかに (somewhere) and どこにも (anywhere/nowhere) for indicating locations.",
+      "Topic": "Indefinites"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 10,
+      "Title": "で",
+      "Description": "Describes the usage of the particle で to indicate the means of transportation or instruments used.",
+      "Topic": "Particles"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 11,
+      "Title": "～たい",
+      "Description": "Expresses a desire to do something using a verb stem + たいです (I want to ...).",
+      "Topic": "Expressions of Desire"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 11,
+      "Title": "～たり～たりする",
+      "Description": "Lists examples of activities in no particular order using the structure ～たり～たりする.",
+      "Topic": "Activities and Examples"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 11,
+      "Title": "～ことがある",
+      "Description": "Indicates past experiences or occurrences using the past short form + ことがある.",
+      "Topic": "Past Experiences"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 11,
+      "Title": "Noun A や Noun B",
+      "Description": "Connects nouns with や to imply examples and that the list is not exhaustive.",
+      "Topic": "Non-Exhaustive Lists"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 12,
+      "Title": "～んです",
+      "Description": "Used to provide explanations or add emphasis to a statement using short form + んです.",
+      "Topic": "Explanations"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 12,
+      "Title": "～すぎる",
+      "Description": "Expresses 'too much' or 'to excess' using verb/adjective stem + すぎる.",
+      "Topic": "Excessive Actions"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 12,
+      "Title": "～ほうがいいです",
+      "Description": "Gives advice or suggestions using verb short form + ほうがいいです.",
+      "Topic": "Suggestions"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 12,
+      "Title": "～ので",
+      "Description": "Expresses reasons or causes using reason + ので + situation.",
+      "Topic": "Reasons and Causes"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 12,
+      "Title": "～なければいけません / ～なきゃいけません",
+      "Description": "Indicates necessity or obligation using the negative short form + なければいけません / なきゃいけません.",
+      "Topic": "Obligations"
+    },
+    {
+      "Textbook": "Genki 1",
+      "Lesson": 12,
+      "Title": "～でしょうか",
+      "Description": "Adds politeness and tentativeness to a question or a guess using short form + でしょうか.",
+      "Topic": "Tentative Questions"
+    }
+  ]

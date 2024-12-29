@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     // Load the vocabulary.json file
-    const filePath = path.join(process.cwd(), "public", "vocabulary-Genki1.json");
+    const filePath = path.join(process.cwd(), "public/data", "vocabulary-Genki1.json");
     const fileContents = await fs.readFile(filePath, "utf8");
     const data = JSON.parse(fileContents);
 

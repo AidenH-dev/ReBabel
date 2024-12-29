@@ -102,7 +102,7 @@ export default function GrammarDashboard() {
                 Recent Activity
               </h2>
               <p className="text-sm text-white">
-                Track your grammar practice here.
+                Track your vocabulary practice here.
               </p>
             </section>
 
@@ -188,18 +188,24 @@ export default function GrammarDashboard() {
                     </div>
                   </div>
                   <div className="flex justify-between mt-4 mb-2 mx-4">
-                    <button
-                      className="relative bg-red-500 text-white py-2 px-4 rounded-lg transform transition-transform duration-200 active:translate-y-1"
-                      onClick={() => setTranslateSettings(false)}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className="relative bg-blue-500 text-white py-2 px-4 rounded-lg transform transition-transform duration-200 active:translate-y-1"
-                      onClick={handleBegin}
-                    >
-                      Begin
-                    </button>
+                    <div className="relative inline-block">
+                      <div className="absolute inset-x-0 bottom-0 bg-red-700 rounded-lg translate-y-1 h-[90%] transition-transform duration-200"></div>
+                      <button
+                        className="relative bg-red-500 text-white py-2 px-4 rounded-lg transform transition-transform duration-200 active:translate-y-1"
+                        onClick={() => setTranslateSettings(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                    <div className="relative inline-block">
+                      <div className="absolute inset-x-0 bottom-0 bg-blue-700 rounded-lg translate-y-1 h-[90%] transition-transform duration-200"></div>
+                      <button
+                        className="relative bg-blue-500 text-white py-2 px-4 rounded-lg transform transition-transform duration-200 active:translate-y-1"
+                        onClick={handleBegin}
+                      >
+                        Begin
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

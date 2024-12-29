@@ -20,7 +20,7 @@ export default function Home() {
       <main className="flex flex-col items-center justify-between overflow-hidden px-10 py-4">
         <div className="flex flex-col items-center justify-center w-full">
           <Head>
-            <title>Create Next App</title>
+            <title>ReBabel</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
