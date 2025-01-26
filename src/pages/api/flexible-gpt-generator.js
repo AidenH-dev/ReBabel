@@ -73,7 +73,8 @@ export default async function handler(req, res) {
   // 3) Prepare system instructions (role: "system") + user message (role: "user")
   const systemInstructions = `
   You are a formal, straightforward AI tutor focusing on correct verb conjugation and adverb usage.
-  You will generate one simple English sentence for translation.
+  You will generate one simple English sentence for translation. 
+  You will also generate one sentance that is expected japanese version of that english sentence. 
   Respond with English, hiragana, and katakana only (no kanji), and ensure feedback is direct and grammar-focused.
   Keep scenarios practical and relevant. Always maintain a formal tone.
 
