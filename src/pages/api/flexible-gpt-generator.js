@@ -1,3 +1,5 @@
+//IMPORTANT NOTICE: The prompt may not be sufficiently strict enough to proivde the same JSON object sturucture/naming (MAKE SURE IT DOES)
+
 import axios from "axios";
 import path from "path";
 import { promises as fs } from "fs";

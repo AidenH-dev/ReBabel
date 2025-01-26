@@ -8,11 +8,9 @@ import {
 } from "react-icons/fa6";
 import { CiPlay1 } from "react-icons/ci";
 import { TbDivide, TbLoader3 } from "react-icons/tb";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
-import { useRef } from "react";
-import Sidebar from "../../../components/Sidebar.js"; // Import the Sidebar component
+import Sidebar from "../../../components/Sidebar.js";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import ProgressBarComponent from "@/components/progress-bar.js";
 import { TbX } from "react-icons/tb";
@@ -20,41 +18,61 @@ import { MdOutlineQuiz } from "react-icons/md";
 import { useRouter } from "next/router";
 
 export default function Learn() {
-  const [responseMessage, setResponseMessage] = useState(null);
   const [responseMessageGrade, setResponseMessageGrade] = useState(null);
   const chartRefs = useRef({});
   const inputRef = useRef(null); // Reference for input field
   const router = useRouter();
 
-
   const { lessons } = router.query; // Extract the lesson from the URL query
 
   const [isLoading, setIsLoading] = useState(false); // State for button loading
+  const [responseMessage, setResponseMessage] = useState(null); // Still used for "Check" grading if needed
 
-  const handleButtonClick = async () => {
-    setIsLoading(true); // Set loading state to true before fetch
+  const handleButtonClickTranslateAPI = async () => {
+    setIsLoading(true);
+
     try {
-      const response = await fetch("/api/gpt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // Include a body if your API expects any data, otherwise it can be omitted
-      });
+      const response = await fetch(
+        `/api/flexible-gpt-generator?lessons=${encodeURIComponent(lessons)}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            inputLesson: lessons,
+          }),
+        }
+      );
+
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        const errorData = await response.json();
+        console.error("API Error:", errorData.error || "Unknown error occurred");
+        return;
       }
+
+      // data.message is a STRING that looks like:
+      // "{\n  \"english_sentence\": \"...\",\n  \"japanese_sentence\": \"...\"\n}"
       const data = await response.json();
-      console.log(data);
-      const parsedData = JSON.parse(data.message); // Parse the message string into an object
-      setResponseMessage(parsedData.sentence); // Extract and set only the sentence
+      console.log("API Response:", data);
+
+      // Parse the JSON in data.message
+      const parsedMessage = JSON.parse(data.message);
+
+      // Now you can safely grab the english_sentence
+      setResponseMessage(parsedMessage.english_sentence);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error calling the API:", error);
     } finally {
-      setIsLoading(false); // Set loading state to false after fetch (important for cleanup)
+      setIsLoading(false);
     }
   };
 
+
+  // --------------------------------------
+  // Existing grading function
+  // (Uses responseMessage if needed)
+  // --------------------------------------
   const handleButtonClickGrade = async () => {
     setIsLoading(true);
     const japaneseSentence = inputRef.current.value;
@@ -76,15 +94,18 @@ export default function Learn() {
       }
       const data = await response.json();
       console.log(data);
-      const parsedData = JSON.parse(data.message); // Parse the message string into an object
-      setResponseMessageGrade(parsedData); // Extract and set only the sentence
+      const parsedData = JSON.parse(data.message);
+      setResponseMessageGrade(parsedData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setIsLoading(false); // Set loading state to false after fetch (important for cleanup)
+      setIsLoading(false);
     }
   };
 
+  // --------------------------------------
+  // Chart rendering effect
+  // --------------------------------------
   useEffect(() => {
     if (responseMessageGrade) {
       const chartsData = {
@@ -114,12 +135,10 @@ export default function Learn() {
       Object.keys(chartsData).forEach((chartId) => {
         const { value, max } = chartsData[chartId];
 
-        // Destroy existing chart if it exists
         if (chartRefs.current[chartId]) {
           chartRefs.current[chartId].destroy();
         }
 
-        // Create new chart
         chartRefs.current[chartId] = new Chart(
           document.getElementById(chartId),
           {
@@ -146,47 +165,6 @@ export default function Learn() {
     }
   }, [responseMessageGrade]);
 
-  //================================================================
-  async function callTranslateAPI(inputLesson) {
-    try {
-      const response = await fetch(
-        `/api/flexible-gpt-generator?lessons=${encodeURIComponent(inputLesson)}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            inputLesson, // Only the lesson is passed
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error(
-          "API Error:",
-          errorData.error || "An unknown error occurred."
-        );
-        return;
-      }
-
-      const data = await response.json();
-      console.log("API Response:", data.message);
-    } catch (error) {
-      console.error("Error calling the API:", error);
-    }
-  }
-
-  // Handler for the button click
-  function handleButtonClickTranslateAPI() {
-    if (!lessons) {
-      console.error("Lesson input is required.");
-      return;
-    }
-    callTranslateAPI(lessons);
-  }
-
   return (
     <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative bg-white dark:bg-[#141f25]">
       <Sidebar />
@@ -209,32 +187,27 @@ export default function Learn() {
         </div>
 
         <main className="gird grid-column ">
-          {/*<div className="w-full mb-">
-            <div className="rounded-full border border-blue-600 p-1">
-              <div
-                className="flex h-6 items-center justify-center rounded-full bg-[#da1c60] text-xs leading-none"
-                style={{ width: "85%", height: "85%" }},mm, 
-              >
-                <span className="p-1 text-white font-semibold">85%</span>
-              </div>
-            </div>
-          </div>*/}
-
           <div className="flex flex-row items-center justify-center flex-wrap w-screen max-w-screen-md mt-2 mx-auto">
-                              {/* Button to trigger API call */}
-                              <button onClick={handleButtonClickTranslateAPI}>Fetch Translation</button>
+            {/* Button to trigger API call (optional extra button) */}
+            <button onClick={handleButtonClickTranslateAPI}>
+              Fetch Translation
+            </button>
+
             <div className="grid grid-flow-col m-4 max-w-screen-md basis-2/5 p-6 text-left no-underline border border-gray-200 bg-white rounded-lg transition-colors duration-150 ">
               <div>
                 <div className="flex items-center">
                   <h3 className="font-semibold text-2xl flex items-center">
                     Generate A Sentence <span className="ml-2"></span>
                   </h3>
+                  {/* 
+                    2) Change onClick to handleButtonClickTranslateAPI 
+                       and use isLoading for the spinner/disabled state
+                  */}
                   <button
-                    className={`p-2 bg-blue-600 text-white rounded flex items-center justify-center  ${
-                      isLoading ? "disabled opacity-50 cursor-not-allowed" : ""
-                    }`} // Add dynamic button classes
-                    onClick={handleButtonClick}
-                    disabled={isLoading} // Disable button using isLoading state
+                    className={`p-2 bg-blue-600 text-white rounded flex items-center justify-center ${isLoading ? "disabled opacity-50 cursor-not-allowed" : ""
+                      }`}
+                    onClick={handleButtonClickTranslateAPI}
+                    disabled={isLoading}
                   >
                     {isLoading ? (
                       <TbLoader3 className="animate-spin" />
@@ -242,15 +215,23 @@ export default function Learn() {
                       <CiPlay1 />
                     )}
                   </button>
-
                 </div>
+
                 <div className="flex items-center my-10">
-                  {responseMessage && ( // Conditionally render response message
+                  {responseMessage && (
+                    <p className="font-semibold mx-2 text-green-500">{responseMessage}</p>
+                  )}
+                </div>
+
+                {/* This block is removed or commented out */}
+                {/* <div className="flex items-center my-10">
+                  {responseMessage && (
                     <p className="font-semibold mx-2 text-green-500">
                       {responseMessage}
                     </p>
                   )}
-                </div>
+                </div> */}
+
                 <h3 className="m-0 mb-4 font-semibold text-2xl flex items-center">
                   Check <span className="ml-2"></span>
                 </h3>
@@ -261,16 +242,16 @@ export default function Learn() {
                     className="flex-grow p-2 border border-gray-300 mr-2 rounded"
                     placeholder="Type your Japanese translation..."
                   />
-
                   <button
                     className="p-2 bg-blue-600 text-white rounded flex items-center justify-center"
                     onClick={handleButtonClickGrade}
-                    disabled={isLoading} // Disable button using isLoading state
+                    disabled={isLoading}
                   >
                     Send <FaArrowRight className="ml-2" />
                   </button>
                 </div>
               </div>
+
               <div className="mx-16">
                 <div className="ml-8 max-w-full w-full bg-white rounded-lg shadow-lg p-6 mt-2">
                   <div className="flex items-center mb-2">
@@ -361,9 +342,9 @@ export default function Learn() {
                     <span className="text-xl font-bold text-gray-900">
                       {responseMessageGrade
                         ? Object.values(responseMessageGrade.grades).reduce(
-                            (sum, grade) => sum + (grade ?? 0),
-                            0
-                          )
+                          (sum, grade) => sum + (grade ?? 0),
+                          0
+                        )
                         : "--"}
                       /100
                     </span>
