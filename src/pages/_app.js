@@ -1,10 +1,12 @@
 import "@/styles/globals.css"; // Your Tailwind CSS file
 import { Fredoka } from "@next/font/google";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import ReportIssueButton from '@/components/report-issue'; // Adjust the path as needed
+
 
 const fredoka = Fredoka({
   subsets: ["latin"], // Specify character subsets
-  weight: ["300","400", "500", "600", "700"], // Choose the weights you need
+  weight: ["300", "400", "500", "600", "700"], // Choose the weights you need
 });
 
 export default function MyApp({ Component, pageProps }) {
@@ -12,6 +14,8 @@ export default function MyApp({ Component, pageProps }) {
     <UserProvider>
       <div className={fredoka.className}>
         <Component {...pageProps} />
+        {/* Floating button (always visible) */}
+        <ReportIssueButton/>
       </div>
     </UserProvider>
   );
