@@ -21,7 +21,7 @@ function ReportIssueButton() {
         items-center 
         rounded-full 
         bg-red-600 
-        px-5 
+        px-4 
         py-3
         text-white 
         shadow-lg 
@@ -32,10 +32,11 @@ function ReportIssueButton() {
         active:ring-2 
         active:ring-red-600 
         active:ring-offset-2
+        text-1xl
       "
     >
       {/* Increased icon size to text-2xl */}
-      <TbMessageReport className="text-2xl" />
+      <TbMessageReport className="text-3xl" />
       <span
         className="
           ml-0
@@ -46,6 +47,7 @@ function ReportIssueButton() {
           duration-200
           group-hover:ml-2
           group-hover:max-w-xs
+          text-3xl
         "
       >
         Report Issue
