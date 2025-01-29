@@ -47,7 +47,7 @@ function ReportIssueButton() {
           duration-200
           group-hover:ml-2
           group-hover:max-w-xs
-          text-3xl
+          text-1xl
         "
       >
         Report Issue
