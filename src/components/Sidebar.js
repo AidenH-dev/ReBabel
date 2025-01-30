@@ -6,9 +6,12 @@ import Link from "next/link";
 
 function Sidebar() {
   const router = useRouter();
-  const isGrammarActive = router.pathname === "/learn/grammar" || router.pathname === "/learn/grammar/translate";
-  const isVocabularyActive = router.pathname === "/learn/vocabulary";
-  const isSettingsActive = router.pathname === "/learn/settings";
+  const path = router.pathname;
+
+  // Use regex to check if the path starts with allowed prefixes
+  const isGrammarActive = /^\/learn\/grammar/.test(path);
+  const isVocabularyActive = /^\/learn\/vocabulary/.test(path);
+  const isSettingsActive = /^\/learn\/settings/.test(path);
 
   return (
     <div className="fixed top-0 left-0 z-40 w-64 h-screen p-4 bg-[#404d68] dark:bg-[#141f25] border-r-2 border-gray-600">
