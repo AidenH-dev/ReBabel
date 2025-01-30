@@ -68,10 +68,14 @@ function Sidebar() {
           <li>
             <Link
               href="#"
-              className="flex items-center p-2 text-white rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              className="relative flex items-center p-2 text-white rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
             >
               <TbLanguageHiragana className="flex-shrink-0 w-7 h-7 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
               <span className="flex-1 ms-3 whitespace-nowrap">Kanji</span>
+              {/* Tooltip for the Kanji button */}
+              <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-white text-sm text-black px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                Coming soon!
+              </div>
             </Link>
           </li>
           <li>
