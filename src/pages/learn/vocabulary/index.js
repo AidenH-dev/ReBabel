@@ -163,8 +163,8 @@ export default function VocabularyDashboard() {
 
             {/* 4) Vocabulary Tracker (or New Vocab) */}
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
-              <p className="text-4xl font-[300] text-white">+99</p>
-              <h2 className="text-md font-[400] mt-3 mb-1 text-white">
+              <p className="text-4xl font-[300] text-white mt-2 mr-2">+99</p>
+              <h2 className="text-md font-[400] mt-1 mb-1 text-white">
                 Vocabulary Tracker Coming Soon!
               </h2>
             </section>
