@@ -1,33 +1,21 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default function ProgressBarComponent() {
-  const [width, setWidth] = useState(50);
-
-  useEffect(() => {
-    if (width > 100) {
-      setWidth(100);
-    } else if (width === 0) {
-      setWidth(10);
-    }
-  }, [width]);
-
+export default function ProgressBarComponent({ progress }) {
   return (
     <div className="my-6 w-full">
-      {/* Dark Mode */}
       <div>
-        {/* Regular with Text Version */}
         <div
           className="bg-gray-700 rounded h-6"
           role="progressbar"
-          aria-valuenow={width}
+          aria-valuenow={progress}
           aria-valuemin="0"
           aria-valuemax="100"
         >
           <div
             className="bg-[#da1c60] rounded h-6 text-center text-white text-sm"
-            style={{ width: `${width}%`, transition: "width 2s" }}
+            style={{ width: `${progress}%`, transition: "width 2s" }}
           >
-            {`${width}%`}
+            {`${progress}%`}
           </div>
         </div>
       </div>

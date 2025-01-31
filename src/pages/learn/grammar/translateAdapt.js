@@ -20,13 +20,15 @@ import { useRouter } from "next/router";
 export default function Learn() {
   const [responseMessageGrade, setResponseMessageGrade] = useState(null);
   const chartRefs = useRef({});
-  const inputRef = useRef(null); // Reference for input field
+  const inputRef = useRef(null);
   const router = useRouter();
+  const { lessons } = router.query;
 
-  const { lessons } = router.query; // Extract the lesson from the URL query
+  const [isLoading, setIsLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState(null);
 
-  const [isLoading, setIsLoading] = useState(false); // State for button loading
-  const [responseMessage, setResponseMessage] = useState(null); // Still used for "Check" grading if needed
+  // Progress Bar State
+  const [progress, setProgress] = useState(0); // Start at 0
 
   const handleButtonClickTranslateAPI = async () => {
     setIsLoading(true);
@@ -39,9 +41,7 @@ export default function Learn() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            inputLesson: lessons,
-          }),
+          body: JSON.stringify({ inputLesson: lessons }),
         }
       );
 
@@ -51,15 +51,9 @@ export default function Learn() {
         return;
       }
 
-      // data.message is a STRING that looks like:
-      // "{\n  \"english_sentence\": \"...\",\n  \"japanese_sentence\": \"...\"\n}"
       const data = await response.json();
       console.log("API Response:", data);
-
-      // Parse the JSON in data.message
       const parsedMessage = JSON.parse(data.message);
-
-      // Now you can safely grab the english_sentence
       setResponseMessage(parsedMessage.english_sentence);
     } catch (error) {
       console.error("Error calling the API:", error);
@@ -68,18 +62,10 @@ export default function Learn() {
     }
   };
 
-
-  // --------------------------------------
-  // Existing grading function
-  // (Uses responseMessage if needed)
-  // --------------------------------------
   const handleButtonClickGrade = async () => {
     setIsLoading(true);
     const japaneseSentence = inputRef.current.value;
     const englishSentence = responseMessage;
-
-    console.log("Japanese Sentence:", japaneseSentence);
-    console.log("English Sentence:", englishSentence);
 
     try {
       const response = await fetch("/api/grader-gpt", {
@@ -89,19 +75,26 @@ export default function Learn() {
         },
         body: JSON.stringify({ japaneseSentence, englishSentence }),
       });
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+
       const data = await response.json();
-      console.log(data);
-      const parsedData = JSON.parse(data.message);
+      console.log("API Response:", data);
+
+      const parsedData = typeof data.message === "string" ? JSON.parse(data.message) : data.message;
       setResponseMessageGrade(parsedData);
+
+      // Increase progress when grading is successful
+      setProgress((prev) => Math.min(prev + 10, 100));
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setIsLoading(false);
     }
   };
+
 
   // --------------------------------------
   // Chart rendering effect
@@ -165,6 +158,10 @@ export default function Learn() {
     }
   }, [responseMessageGrade]);
 
+  const handleExit = () => {
+    router.push("/learn/grammar");
+  };
+
   return (
     <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative bg-white dark:bg-[#141f25]">
       <Sidebar />
@@ -175,8 +172,12 @@ export default function Learn() {
 
       <div className="flex flex-col items-center justify-center w-2/3">
         <div className="w-2/3 h-16 flex items-center space-x-4">
-          <TbX className="w-8 h-8 text-gray-600" />
-          <ProgressBarComponent className="flex-1" />
+          <button
+            onClick={handleExit}
+          >
+            <TbX className="w-8 h-8 text-gray-600" />
+          </button>
+          <ProgressBarComponent progress={progress} />
 
           <div className="cursor-pointer brightness-110 rounded-lg outline outline-2 outline-gray-200 border-gray-300 bg-gradient-to-r from-blue-400 to-blue-800 bg-[length:200%] px-2 py-1 shadow-lg flex flex-col justify-center items-center">
             <h2 className="text-md font-semibold  text-gray-250 flex items-center">
@@ -187,44 +188,45 @@ export default function Learn() {
         </div>
 
         <main className="gird grid-column ">
-          <div className="flex flex-row items-center justify-center flex-wrap w-screen max-w-screen-md mt-2 mx-auto">
-            {/* Button to trigger API call (optional extra button) */}
+          <div className="flex flex-row items-center justify-center flex-wrap w-screen max-w-screen-md mt-8 mx-auto">
+            {/* Button to trigger API call (optional extra button) 
             <button onClick={handleButtonClickTranslateAPI}>
               Fetch Translation
-            </button>
+            </button>*/}
 
-            <div className="grid grid-flow-col m-4 max-w-screen-md basis-2/5 p-6 text-left no-underline border border-gray-200 bg-white rounded-lg transition-colors duration-150 ">
-              <div>
-                <div className="flex items-center">
-                  <h3 className="font-semibold text-2xl flex items-center">
-                    Generate A Sentence <span className="ml-2"></span>
-                  </h3>
-                  {/* 
+            <div className="grid grid-flow-col m-4 max-w-screen-md basis-2/5 p-6 text-left no-underline border border-[#63AAFF] bg-[#405189] rounded-lg transition-colors duration-150 ">
+              {progress !== 100 && (
+                <div>
+                  <div className="flex items-center">
+                    <h3 className="font-semibold text-2xl flex items-center text-white">
+                      Generate A Sentence <span className="ml-2"></span>
+                    </h3>
+                    {/* 
                     2) Change onClick to handleButtonClickTranslateAPI 
                        and use isLoading for the spinner/disabled state
                   */}
-                  <button
-                    className={`p-2 bg-blue-600 text-white rounded flex items-center justify-center ${isLoading ? "disabled opacity-50 cursor-not-allowed" : ""
-                      }`}
-                    onClick={handleButtonClickTranslateAPI}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <TbLoader3 className="animate-spin" />
-                    ) : (
-                      <CiPlay1 />
+                    <button
+                      className={`p-2 bg-blue-600 text-white rounded flex items-center justify-center ${isLoading ? "disabled opacity-50 cursor-not-allowed" : ""
+                        }`}
+                      onClick={handleButtonClickTranslateAPI}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <TbLoader3 className="animate-spin" />
+                      ) : (
+                        <CiPlay1 />
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="flex items-center my-10">
+                    {responseMessage && (
+                      <p className="font-semibold mx-2 text-green-500">{responseMessage}</p>
                     )}
-                  </button>
-                </div>
+                  </div>
 
-                <div className="flex items-center my-10">
-                  {responseMessage && (
-                    <p className="font-semibold mx-2 text-green-500">{responseMessage}</p>
-                  )}
-                </div>
-
-                {/* This block is removed or commented out */}
-                {/* <div className="flex items-center my-10">
+                  {/* This block is removed or commented out */}
+                  {/* <div className="flex items-center my-10">
                   {responseMessage && (
                     <p className="font-semibold mx-2 text-green-500">
                       {responseMessage}
@@ -232,125 +234,141 @@ export default function Learn() {
                   )}
                 </div> */}
 
-                <h3 className="m-0 mb-4 font-semibold text-2xl flex items-center">
-                  Check <span className="ml-2"></span>
-                </h3>
-                <div className="flex items-center">
-                  <input
-                    type="text"
-                    ref={inputRef}
-                    className="flex-grow p-2 border border-gray-300 mr-2 rounded"
-                    placeholder="Type your Japanese translation..."
-                  />
+                  <h3 className="m-0 mb-4 font-semibold text-2xl flex items-center text-white">
+                    Check <span className="ml-2"></span>
+                  </h3>
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      ref={inputRef}
+                      className="flex-grow p-2 border border-gray-300 mr-2 rounded"
+                      placeholder="Type your Japanese translation..."
+                    />
+                    <button
+                      className="p-2 bg-blue-600 text-white rounded flex items-center justify-center"
+                      onClick={handleButtonClickGrade}
+                      disabled={isLoading}
+                    >
+                      Send <FaArrowRight className="ml-2" />
+                    </button>
+                  </div>
+                </div>
+              )}
+              {progress == 100 && (
+                <div className="flex items-center w-max">
+                  <h3 className="font-semibold text-2xl flex items-center text-white mr-2 ">
+                    You've completed the set!
+                  </h3>
                   <button
-                    className="p-2 bg-blue-600 text-white rounded flex items-center justify-center"
-                    onClick={handleButtonClickGrade}
-                    disabled={isLoading}
+                    onClick={handleExit}
+                    className="px-4 py-2 bg-green-600 text-white rounded-md font-semibold hover:bg-green-500 transition-colors"
                   >
-                    Send <FaArrowRight className="ml-2" />
+                    Finish
                   </button>
                 </div>
-              </div>
+              )}
 
-              <div className="mx-16">
-                <div className="ml-8 max-w-full w-full bg-white rounded-lg shadow-lg p-6 mt-2">
-                  <div className="flex items-center mb-2">
-                    <div className="relative w-16 h-16">
-                      <canvas id="grammarChart"></canvas>
-                      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
-                        {responseMessageGrade?.grades.grammar_and_structure ??
-                          "--"}
-                        /20
+              {progress !== 100 && (
+                <div className="mx-16">
+                  <div className="ml-8 max-w-full w-full bg-white rounded-lg shadow-lg p-6 mt-2">
+                    <div className="flex items-center mb-2">
+                      <div className="relative w-16 h-16">
+                        <canvas id="grammarChart"></canvas>
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                          {responseMessageGrade?.grades.grammar_and_structure ??
+                            "--"}
+                          /20
+                        </span>
+                      </div>
+                      <span className="flex items-center ml-2">
+                        <span className="px-4 py-2 text-blue-700 bg-blue-100 text-lg font-semibold rounded-lg">
+                          Grammar and Structure
+                        </span>
                       </span>
                     </div>
-                    <span className="flex items-center ml-2">
-                      <span className="px-4 py-2 text-blue-700 bg-blue-100 text-lg font-semibold rounded-lg">
-                        Grammar and Structure
-                      </span>
-                    </span>
-                  </div>
 
-                  <div className="flex items-center mb-2">
-                    <div className="relative w-16 h-16">
-                      <canvas id="vocabularyChart"></canvas>
-                      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
-                        {responseMessageGrade?.grades
-                          .vocabulary_and_expression ?? "--"}
-                        /20
+                    <div className="flex items-center mb-2">
+                      <div className="relative w-16 h-16">
+                        <canvas id="vocabularyChart"></canvas>
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                          {responseMessageGrade?.grades
+                            .vocabulary_and_expression ?? "--"}
+                          /20
+                        </span>
+                      </div>
+                      <span className="flex items-center ml-2">
+                        <span className="px-4 py-2 text-green-700 bg-green-100 text-lg font-semibold rounded-lg">
+                          Vocabulary and Expression
+                        </span>
                       </span>
                     </div>
-                    <span className="flex items-center ml-2">
-                      <span className="px-4 py-2 text-green-700 bg-green-100 text-lg font-semibold rounded-lg">
-                        Vocabulary and Expression
-                      </span>
-                    </span>
-                  </div>
 
-                  <div className="flex items-center mb-2">
-                    <div className="relative w-16 h-16">
-                      <canvas id="spellingChart"></canvas>
-                      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
-                        {responseMessageGrade?.grades
-                          .spelling_and_script_accuracy ?? "--"}
-                        /20
+                    <div className="flex items-center mb-2">
+                      <div className="relative w-16 h-16">
+                        <canvas id="spellingChart"></canvas>
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                          {responseMessageGrade?.grades
+                            .spelling_and_script_accuracy ?? "--"}
+                          /20
+                        </span>
+                      </div>
+                      <span className="flex items-center ml-2">
+                        <span className="px-4 py-2 text-purple-700 bg-purple-100 text-lg font-semibold rounded-lg">
+                          Spelling and Script Accuracy
+                        </span>
                       </span>
                     </div>
-                    <span className="flex items-center ml-2">
-                      <span className="px-4 py-2 text-purple-700 bg-purple-100 text-lg font-semibold rounded-lg">
-                        Spelling and Script Accuracy
-                      </span>
-                    </span>
-                  </div>
 
-                  <div className="flex items-center mb-2">
-                    <div className="relative w-16 h-16">
-                      <canvas id="politenessChart"></canvas>
-                      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
-                        {responseMessageGrade?.grades
-                          .politeness_and_cultural_appropriateness ?? "--"}
-                        /20
+                    <div className="flex items-center mb-2">
+                      <div className="relative w-16 h-16">
+                        <canvas id="politenessChart"></canvas>
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                          {responseMessageGrade?.grades
+                            .politeness_and_cultural_appropriateness ?? "--"}
+                          /20
+                        </span>
+                      </div>
+                      <span className="flex items-center ml-2">
+                        <span className="px-4 py-2 text-orange-700 bg-orange-100 text-lg font-semibold rounded-lg">
+                          Politeness and Cultural Accuracy
+                        </span>
                       </span>
                     </div>
-                    <span className="flex items-center ml-2">
-                      <span className="px-4 py-2 text-orange-700 bg-orange-100 text-lg font-semibold rounded-lg">
-                        Politeness and Cultural Accuracy
-                      </span>
-                    </span>
-                  </div>
 
-                  <div className="flex items-center mb-2">
-                    <div className="relative w-16 h-16">
-                      <canvas id="fluencyChart"></canvas>
-                      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
-                        {responseMessageGrade?.grades.fluency_and_naturalness ??
-                          "--"}
-                        /20
+                    <div className="flex items-center mb-2">
+                      <div className="relative w-16 h-16">
+                        <canvas id="fluencyChart"></canvas>
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-900">
+                          {responseMessageGrade?.grades.fluency_and_naturalness ??
+                            "--"}
+                          /20
+                        </span>
+                      </div>
+                      <span className="flex items-center ml-2">
+                        <span className="px-4 py-2 text-red-700 bg-red-100 text-lg font-semibold rounded-lg">
+                          Fluency and Naturalness
+                        </span>
                       </span>
                     </div>
-                    <span className="flex items-center ml-2">
-                      <span className="px-4 py-2 text-red-700 bg-red-100 text-lg font-semibold rounded-lg">
-                        Fluency and Naturalness
-                      </span>
-                    </span>
-                  </div>
 
-                  {/* Total Grade Section */}
-                  <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
-                    <span className="text-xl font-bold text-gray-900">
-                      Total Grade
-                    </span>
-                    <span className="text-xl font-bold text-gray-900">
-                      {responseMessageGrade
-                        ? Object.values(responseMessageGrade.grades).reduce(
-                          (sum, grade) => sum + (grade ?? 0),
-                          0
-                        )
-                        : "--"}
-                      /100
-                    </span>
+                    {/* Total Grade Section */}
+                    <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
+                      <span className="text-xl font-bold text-gray-900">
+                        Total Grade
+                      </span>
+                      <span className="text-xl font-bold text-gray-900">
+                        {responseMessageGrade
+                          ? Object.values(responseMessageGrade.grades).reduce(
+                            (sum, grade) => sum + (grade ?? 0),
+                            0
+                          )
+                          : "--"}
+                        /100
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </main>

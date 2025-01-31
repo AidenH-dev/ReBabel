@@ -53,7 +53,7 @@ export default function GrammarDashboard() {
   const handleBegin = () => {
     if (selectedLesson) {
       router.push(
-        `/learn/grammar/translate?lessons=${encodeURIComponent(selectedLesson)}`
+        `/learn/grammar/translateAdapt?lessons=${encodeURIComponent(selectedLesson)}`
       );
     } else {
       alert("Please select a lesson.");
