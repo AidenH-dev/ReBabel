@@ -59,6 +59,15 @@ export default function Learn() {
       console.error("Error calling the API:", error);
     } finally {
       setIsLoading(false);
+      inputRef.current.value = "";
+      // Reset Charts
+      Object.keys(chartRefs.current).forEach((chartId) => {
+        if (chartRefs.current[chartId]) {
+          chartRefs.current[chartId].destroy();
+        }
+      });
+      // Reset state to remove chart values
+      setResponseMessageGrade(null);
     }
   };
 
