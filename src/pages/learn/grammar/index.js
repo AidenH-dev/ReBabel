@@ -135,8 +135,8 @@ export default function GrammarDashboard() {
               {/* Translation Settings Section */}
               <div
                 className={`absolute inset-0 transform transition-all duration-500 ${translateSettings
-                    ? "opacity-100 translate-y-0 pointer-events-auto z-10"
-                    : "opacity-0 -translate-y-5 pointer-events-none z-0"
+                  ? "opacity-100 translate-y-0 pointer-events-auto z-10"
+                  : "opacity-0 -translate-y-5 pointer-events-none z-0"
                   }`}
               >
                 <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-md flex flex-col justify-between h-full">
@@ -244,8 +244,8 @@ export default function GrammarDashboard() {
               {/* Default Section */}
               <div
                 className={`absolute inset-0 transform transition-all duration-500 ${!translateSettings
-                    ? "opacity-100 translate-y-0 pointer-events-auto z-10"
-                    : "opacity-0 -translate-y-5 pointer-events-none z-0"
+                  ? "opacity-100 translate-y-0 pointer-events-auto z-10"
+                  : "opacity-0 -translate-y-5 pointer-events-none z-0"
                   }`}
               >
                 <div className="grid grid-cols-2 gap-4 h-full">
@@ -256,31 +256,38 @@ export default function GrammarDashboard() {
                     <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
                       <FaArrowRightArrowLeft className="h-8 w-8 mr-3" />
                       Translation
+
                     </h2>
                   </div>
                   <Link
                     href="/learn/grammar/conversation"
-                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                    className="group relative cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
                   >
                     <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
                       <RiSpeakLine className="h-8 w-8 mr-3" />
                       Conversation
                     </h2>
+                    <div className="absolute bg-white text-sm text-black px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                      Coming soon!
+                    </div>
                   </Link>
 
                   <Link
                     href="/learn/grammar/comprehension"
-                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                    className="group relative cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-250 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
                   >
                     <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
                       <BsTextParagraph className="h-8 w-8 mr-3" />
                       Comprehension
                     </h2>
+                    <div className="absolute bg-white text-sm text-black px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                      Coming soon!
+                    </div>
                   </Link>
 
                   <Link
                     href="https://fluency.yourdomain.com"
-                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                    className="group relative cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
                   >
                     <div>
                       <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
@@ -288,26 +295,35 @@ export default function GrammarDashboard() {
                         Fluency
                       </h2>
                     </div>
+                    <div className="absolute bg-white text-sm text-black px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                      Coming soon!
+                    </div>
                   </Link>
 
                   <Link
                     href="/learn/grammar/cloze"
-                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                    className="group relative cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
                   >
                     <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
                       <TbSpace className="h-8 w-8 mr-3" />
                       Cloze Exercises
                     </h2>
+                    <div className="absolute bg-white text-sm text-black px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                      Coming soon!
+                    </div>
                   </Link>
 
                   <Link
                     href="/learn/grammar/imagematching"
-                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
+                    className="group relative cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-300 bg-gradient-to-r from-[#404f7d] to-blue-600 bg-[length:200%] hover:animate-gradient-ease rounded-lg p-4 shadow-lg flex flex-col justify-center items-center"
                   >
                     <h2 className="text-lg font-semibold mb-2 text-gray-250 flex items-center">
                       <IoImagesOutline className="h-8 w-8 mr-3" />
                       Image Matching
                     </h2>
+                    <div className="absolute bg-white text-sm text-black px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                      Coming soon!
+                    </div>
                   </Link>
                 </div>
               </div>
@@ -323,11 +339,16 @@ export default function GrammarDashboard() {
                   <Link
                     key={index}
                     href={set.path}
-                    className="block bg-gray-100 dark:bg-[#404f7d] text-left rounded-lg text-sm p-4 transition-transform hover:bg-gray-200 dark:hover:bg-[#50597d] shadow-md"
+                    className="group relative block bg-gray-100 dark:bg-[#404f7d] text-left rounded-lg text-sm p-4 transition-transform hover:bg-gray-200 dark:hover:bg-[#50597d] shadow-md"
                   >
+                    <div className="absolute bg-white text-sm text-black px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                      Coming soon!
+                    </div>
                     <h2 className="text-lg font-[300] text-gray-800 dark:text-gray-200">
                       {set.name}
+
                     </h2>
+
                     <p className="text-sm text-[#6b6b6b] dark:text-[#b0b0b0]">
                       {set.exercises} Exercises |{" "}
                       {new Intl.DateTimeFormat("en-US", {
@@ -336,6 +357,7 @@ export default function GrammarDashboard() {
                         year: "numeric",
                       }).format(new Date(set.date))}
                     </p>
+
                   </Link>
                 ))}
               </div>

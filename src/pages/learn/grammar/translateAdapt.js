@@ -266,7 +266,7 @@ export default function Learn() {
               {progress == 100 && (
                 <div className="flex items-center w-max">
                   <h3 className="font-semibold text-2xl flex items-center text-white mr-2 ">
-                    You've completed the set!
+                    You've completed this session!
                   </h3>
                   <button
                     onClick={handleExit}
