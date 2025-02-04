@@ -4,9 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { FiSettings } from "react-icons/fi";
+import { FaPlus } from "react-icons/fa6";
+import { useRouter } from "next/router";
+
 
 export default function VocabularyDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+
 
   // Example sets
   const vocabularySets = [
@@ -177,9 +182,6 @@ export default function VocabularyDashboard() {
               </div>
             </section>
 
-
-
-
             {/* === Bottom row: "Sets" and "Vocabulary Tags" === */}
             {/* Sets / Recents */}
             <section className="col-span-12 md:col-span-6 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg p-4">
@@ -199,6 +201,11 @@ export default function VocabularyDashboard() {
                 <button className="bg-gray-200 dark:bg-[#0d3c4b] text-[#4e4a4a] dark:text-white px-6 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300">
                   Edit My Sets
                 </button>
+                <button className="text-lg" onClick={() => router.push("/learn/vocabulary/create-set")}>
+                  <FaPlus />
+                </button>
+
+
               </div>
 
               <h2 className="text-xl font-[300] py-2 text-gray-800 dark:text-gray-200">
