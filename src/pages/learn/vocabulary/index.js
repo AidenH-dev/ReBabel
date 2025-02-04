@@ -212,7 +212,7 @@ export default function VocabularyDashboard() {
 
 
                 <button
-                  className="text-lg dark:bg-[#0d3c4b] text-[#4e4a4a] dark:text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300"
+                  className="text-lg relative group bg-gray-200 dark:bg-[#0d3c4b] text-[#4e4a4a] dark:text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300"
                   onClick={() => router.push("/learn/vocabulary/create-set")}
                 >
                   <FaPlus />
