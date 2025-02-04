@@ -1,5 +1,5 @@
 // pages/learn/vocabulary/create-new-set.js
-
+import Link from "next/link";
 import Head from "next/head";
 import Sidebar from "../../../components/Sidebar";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
@@ -303,7 +303,7 @@ export default function CreateNewSet() {
                     </section>
 
                     {/* ------------------------- Tab Buttons ------------------------- */}
-                    <div className="flex justify-center space-x-4 mb-4">
+                    <div className="flex justify-left space-x-4 mb-4">
                         <button
                             onClick={() => setActiveTab("import")}
                             className={`px-4 py-2 rounded-md font-semibold transition-colors 
@@ -629,12 +629,22 @@ export default function CreateNewSet() {
                                 {statusMessage}
                             </div>
                         )}
-                        <button
-                            onClick={handleSubmitAll}
-                            className="px-6 py-2 bg-green-600 text-white rounded-md font-semibold hover:bg-green-500 transition-colors"
-                        >
-                            Create Set
-                        </button>
+                        <div className="flex gap-4">
+                            {/* Exit Button */}
+                            <Link href="/learn/vocabulary">
+                                <button className="px-6 py-2 bg-red-600 text-white rounded-md font-semibold hover:bg-red-500 transition-colors">
+                                    Exit
+                                </button>
+                            </Link>
+
+                            {/* Create Set Button */}
+                            <button
+                                onClick={handleSubmitAll}
+                                className="px-6 py-2 bg-green-600 text-white rounded-md font-semibold hover:bg-green-500 transition-colors"
+                            >
+                                Create Set
+                            </button>
+                        </div>
                     </section>
                 </div>
             </div>
