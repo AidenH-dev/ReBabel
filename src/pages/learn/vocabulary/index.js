@@ -1,52 +1,64 @@
 import Head from "next/head";
 import Sidebar from "../../../components/Sidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { FiSettings } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/router";
 
-
 export default function VocabularyDashboard() {
-  const [searchTerm, setSearchTerm] = useState("");
+  // Separate states for each search input.
+  const [searchSets, setSearchSets] = useState("");
+  const [searchTags, setSearchTags] = useState("");
+  const [userProfile, setUserProfile] = useState(null);
+  const [recentsSets, setRecentsSets] = useState([]);
   const router = useRouter();
 
+  // Fetch the Auth0 user profile on mount.
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch("/api/auth/me"); // Endpoint to get the Auth0 profile
+        const profile = await response.json();
+        setUserProfile(profile);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
 
-  // Example sets
-  const vocabularySets = [
-    {
-      name: "Lesson 1",
-      path: "/learn/vocabulary/notecards",
-      terms: 40,
-      date: "12/23/2024",
-    },
-    {
-      name: "Food",
-      path: "/learn/vocabulary/quizzing",
-      terms: 15,
-      date: "12/23/2024",
-    },
-    {
-      name: "Lesson 2 & 3",
-      path: "/learn/vocabulary/writing",
-      terms: 23,
-      date: "12/23/2024",
-    },
-    {
-      name: "Immersion",
-      path: "/learn/vocabulary/immersion",
-      terms: 54,
-      date: "12/23/2024",
-    },
-    {
-      name: "Chunking",
-      path: "/learn/vocabulary/games",
-      terms: 36,
-      date: "12/23/2024",
-    },
-  ];
+    fetchUserProfile();
+  }, []);
 
+  // Once the user profile is loaded, fetch the user sets from Supabase.
+  useEffect(() => {
+    if (userProfile && userProfile.email) {
+      const fetchUserSets = async () => {
+        try {
+          // Pass the user email as a query parameter to the API endpoint.
+          const response = await fetch(
+            `/api/database/fetch-user-set?userEmail=${encodeURIComponent(
+              userProfile.email
+            )}`
+          );
+          const data = await response.json();
+          const formattedData = data.map((record) => ({
+            name: record.set_name,
+            terms: record.terms,
+            date: record.date,
+            path: `/learn/vocabulary/view-set?id=${record.id}`,
+          }));
+          setRecentsSets(formattedData);
+        } catch (error) {
+          console.error("Error fetching user sets:", error);
+        }
+      };
+
+      fetchUserSets();
+    }
+  }, [userProfile]);
+
+  // Vocabulary groups defined statically
   const vocabularyGroups = [
     {
       name: "Lesson 1 Genki 1",
@@ -134,22 +146,14 @@ export default function VocabularyDashboard() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        {/* 
-          Here we mirror the grammar page structure:
-          - a parent container with "h-screen" or "min-h-screen"
-          - a grid layout with grid-rows-[auto,1fr]
-          - an inner grid for the main content using grid-cols-12
-        */}
         <div className="h-screen grid grid-rows-[auto,1fr] bg-gray-50 dark:bg-[#141f25] p-4">
           <main className="row-span-1 grid grid-cols-12 gap-x-4 gap-y-8 p-4 mt-16 mx-12">
-            {/* === Top row of 4 metrics === */}
-            {/* 1) Study Activity */}
+            {/* === Top row of metrics === */}
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg p-4 shadow-md">
               <h2 className="text-lg font-semibold mb-4 text-white">Study Activity</h2>
               <p className="text-sm text-white">Coming Soon!</p>
             </section>
 
-            {/* 2) Total Word Bank */}
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg p-4 shadow-md flex flex-col justify-center">
               <div className="flex items-center justify-between w-full ml-2">
                 <div>
@@ -158,15 +162,15 @@ export default function VocabularyDashboard() {
                 </div>
                 <button
                   className="flex items-center justify-center text-white w-10 h-10 transition mr-4"
-                  onClick={() => (window.location.href = "/knowledgebase-dashboard")}
+                  onClick={() =>
+                    (window.location.href = "/knowledgebase-dashboard")
+                  }
                 >
                   <FiSettings className="w-full h-full" />
                 </button>
               </div>
             </section>
 
-
-            {/* 4) Vocabulary Tracker (or New Vocab) */}
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
               <p className="text-4xl font-[300] text-white mt-2 mr-2">+99</p>
               <h2 className="text-md font-[400] mt-1 mb-1 text-white">
@@ -174,11 +178,12 @@ export default function VocabularyDashboard() {
               </h2>
             </section>
 
-            {/* 3) Quizzes Completed */}
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-indigo-500 rounded-lg p-4 shadow-md flex flex-col justify-center">
               <div className="ml-2">
                 <p className="text-4xl font-[300] text-white">38</p>
-                <h2 className="text-md font-[400] text-white">Sets Completed Coming Soon!</h2>
+                <h2 className="text-md font-[400] text-white">
+                  Sets Completed Coming Soon!
+                </h2>
               </div>
             </section>
 
@@ -194,50 +199,64 @@ export default function VocabularyDashboard() {
                 <input
                   type="text"
                   placeholder="Search saved sets..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  value={searchSets}
+                  onChange={(e) => setSearchSets(e.target.value)}
                   className="bg-gray-200 dark:bg-[#0d3c4b] text-[#4e4a4a] dark:text-white px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300"
                 />
-                <button className="bg-gray-200 dark:bg-[#0d3c4b] text-[#4e4a4a] dark:text-white px-6 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300">
+                <button className="relative group bg-gray-200 dark:bg-[#0d3c4b] text-[#4e4a4a] dark:text-white px-6 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300">
                   Edit My Sets
+                  <div className="absolute left-1/2 -translate-x-1/2 bg-white text-sm text-black px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                    Coming soon!
+                  </div>
                 </button>
-                <button className="text-lg" onClick={() => router.push("/learn/vocabulary/create-set")}>
+
+
+                <button
+                  className="text-lg dark:bg-[#0d3c4b] text-[#4e4a4a] dark:text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300"
+                  onClick={() => router.push("/learn/vocabulary/create-set")}
+                >
                   <FaPlus />
                 </button>
-
-
               </div>
 
               <h2 className="text-xl font-[300] py-2 text-gray-800 dark:text-gray-200">
                 Recents
               </h2>
               <div className="grid grid-cols-1 gap-3">
-                {vocabularySets
-                  .filter((set) =>
-                    set.name.toLowerCase().includes(searchTerm.toLowerCase())
-                  )
-                  .map((set, index) => {
-                    const formattedDate = new Intl.DateTimeFormat("en-US", {
-                      month: "short",
-                      day: "2-digit",
-                      year: "numeric",
-                    }).format(new Date(set.date));
-
-                    return (
-                      <Link
-                        key={index}
-                        href={set.path}
-                        className="block mx-4 px-4 py-2 bg-gray-100 dark:bg-[#404f7d] text-left rounded-sm text-sm transition-transform hover:bg-gray-200 dark:hover:bg-[#50597d] dark:hover:border-l-4  dark:hover:border-[#6dbfb8] shadow-md"
-                      >
-                        <h2 className="text-lg font-[300] text-gray-800 dark:text-gray-200">
-                          {set.name}
-                        </h2>
-                        <p className="text-sm font-[300] text-[#6b6b6b] dark:text-[#b0b0b0] pt-1">
-                          {set.terms} Terms | {formattedDate}
-                        </p>
-                      </Link>
-                    );
-                  })}
+                {recentsSets.length > 0 ? (
+                  recentsSets
+                    .filter((set) =>
+                      set.name.toLowerCase().includes(searchSets.toLowerCase())
+                    )
+                    .map((set, index) => {
+                      const dateObj = new Date(set.date);
+                      const formattedDate = isNaN(dateObj)
+                        ? "Unknown date"
+                        : new Intl.DateTimeFormat("en-US", {
+                          month: "short",
+                          day: "2-digit",
+                          year: "numeric",
+                        }).format(dateObj);
+                      return (
+                        <Link
+                          key={index}
+                          href={set.path}
+                          className="block mx-4 px-4 py-2 bg-gray-100 dark:bg-[#404f7d] text-left rounded-sm text-sm transition-transform hover:bg-gray-200 dark:hover:bg-[#50597d] dark:hover:border-l-4 dark:hover:border-[#6dbfb8] shadow-md"
+                        >
+                          <h2 className="text-lg font-[300] text-gray-800 dark:text-gray-200">
+                            {set.name}
+                          </h2>
+                          <p className="text-sm font-[300] text-[#6b6b6b] dark:text-[#b0b0b0] pt-1">
+                            {set.terms} Terms | {formattedDate}
+                          </p>
+                        </Link>
+                      );
+                    })
+                ) : (
+                  <p className="mx-4 text-gray-600 dark:text-gray-300">
+                    {userProfile ? "No sets found." : "Loading sets..."}
+                  </p>
+                )}
               </div>
             </section>
 
@@ -251,8 +270,8 @@ export default function VocabularyDashboard() {
                 <input
                   type="text"
                   placeholder="Search tags..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  value={searchTags}
+                  onChange={(e) => setSearchTags(e.target.value)}
                   className="bg-gray-200 dark:bg-[#0d3c4b] text-[#4e4a4a] dark:text-white px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300"
                 />
               </div>
@@ -260,7 +279,7 @@ export default function VocabularyDashboard() {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 overflow-y-auto py-4 px-4">
                 {vocabularyGroups
                   .filter((group) =>
-                    group.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    group.name.toLowerCase().includes(searchTags.toLowerCase())
                   )
                   .map((group, index) => {
                     return (
