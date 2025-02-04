@@ -42,10 +42,11 @@ export default function VocabularyDashboard() {
             )}`
           );
           const data = await response.json();
+          // Use the created_at column for the date and map vocabulary array as terms.
           const formattedData = data.map((record) => ({
             name: record.set_name,
-            terms: record.terms,
-            date: record.date,
+            terms: record.vocabulary, // This is an array of terms
+            date: record.created_at, // Use created_at from your table
             path: `/learn/vocabulary/view-set?id=${record.id}`,
           }));
           setRecentsSets(formattedData);
@@ -57,6 +58,33 @@ export default function VocabularyDashboard() {
       fetchUserSets();
     }
   }, [userProfile]);
+
+  // Helper function to fix the date string.
+  // Example: "2025-02-04 21:48:51.848729+00" becomes "2025-02-04T21:48:51.848+00:00"
+  const fixDateString = (dateString) => {
+    if (!dateString) return dateString;
+    // Replace space with "T"
+    let fixed = dateString.replace(" ", "T");
+    // Trim fractional seconds to milliseconds (first 3 digits)
+    fixed = fixed.replace(/(\.\d{3})\d+/, "$1");
+    // Ensure the timezone offset is in the format +00:00 (if it ends with +00 or -00)
+    fixed = fixed.replace(/([+-]\d\d)$/, "$1:00");
+    return fixed;
+  };
+
+  // Helper function to format the date string to "Dec 23, 2024"
+  const formatDate = (dateString) => {
+    if (!dateString) return "Unknown date";
+    const fixedDateString = fixDateString(dateString);
+    const dateObj = new Date(fixedDateString);
+    return isNaN(dateObj)
+      ? "Unknown date"
+      : new Intl.DateTimeFormat("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+        }).format(dateObj);
+  };
 
   // Vocabulary groups defined statically
   const vocabularyGroups = [
@@ -158,7 +186,7 @@ export default function VocabularyDashboard() {
               <div className="flex items-center justify-between w-full ml-2">
                 <div>
                   <p className="text-4xl font-[300] text-white">1,245</p>
-                  <h2 className="text-md font-[400] text-white">Terms (Coming Soon!)</h2>{/*Total Word Bank */}
+                  <h2 className="text-md font-[400] text-white">Terms (Coming Soon!)</h2>
                 </div>
                 <button
                   className="flex items-center justify-center text-white w-10 h-10 transition mr-4"
@@ -210,7 +238,6 @@ export default function VocabularyDashboard() {
                   </div>
                 </button>
 
-
                 <button
                   className="text-lg relative group bg-gray-200 dark:bg-[#0d3c4b] text-[#4e4a4a] dark:text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300"
                   onClick={() => router.push("/learn/vocabulary/create-set")}
@@ -228,30 +255,20 @@ export default function VocabularyDashboard() {
                     .filter((set) =>
                       set.name.toLowerCase().includes(searchSets.toLowerCase())
                     )
-                    .map((set, index) => {
-                      const dateObj = new Date(set.date);
-                      const formattedDate = isNaN(dateObj)
-                        ? "Unknown date"
-                        : new Intl.DateTimeFormat("en-US", {
-                          month: "short",
-                          day: "2-digit",
-                          year: "numeric",
-                        }).format(dateObj);
-                      return (
-                        <Link
-                          key={index}
-                          href={set.path}
-                          className="block mx-4 px-4 py-2 bg-gray-100 dark:bg-[#404f7d] text-left rounded-sm text-sm transition-transform hover:bg-gray-200 dark:hover:bg-[#50597d] dark:hover:border-l-4 dark:hover:border-[#6dbfb8] shadow-md"
-                        >
-                          <h2 className="text-lg font-[300] text-gray-800 dark:text-gray-200">
-                            {set.name}
-                          </h2>
-                          <p className="text-sm font-[300] text-[#6b6b6b] dark:text-[#b0b0b0] pt-1">
-                            {set.terms} Terms | {formattedDate}
-                          </p>
-                        </Link>
-                      );
-                    })
+                    .map((set, index) => (
+                      <Link
+                        key={index}
+                        href={set.path}
+                        className="block mx-4 px-4 py-2 bg-gray-100 dark:bg-[#404f7d] text-left rounded-sm text-sm transition-transform hover:bg-gray-200 dark:hover:bg-[#50597d] hover:border-l-4 hover:border-[#63f4e7] dark:hover:border-l-4 dark:hover:border-[#6dbfb8] shadow-md"
+                      >
+                        <h2 className="text-lg font-[300] text-gray-800 dark:text-gray-200">
+                          {set.name}
+                        </h2>
+                        <p className="text-sm font-[300] text-[#6b6b6b] dark:text-[#b0b0b0] pt-1">
+                          {set.terms.length} Terms | {formatDate(set.date)}
+                        </p>
+                      </Link>
+                    ))
                 ) : (
                   <p className="mx-4 text-gray-600 dark:text-gray-300">
                     {userProfile ? "No sets found." : "Loading sets..."}
@@ -281,22 +298,20 @@ export default function VocabularyDashboard() {
                   .filter((group) =>
                     group.name.toLowerCase().includes(searchTags.toLowerCase())
                   )
-                  .map((group, index) => {
-                    return (
-                      <Link
-                        key={index}
-                        href={group.path}
-                        className="flex flex-col justify-between items-start p-3 bg-gray-100 dark:bg-[#404f7d] rounded-md text-xs md:text-sm transition-transform hover:scale-105 hover:bg-gray-200 dark:hover:bg-[#50597d] shadow"
-                      >
-                        <span className="text-sm font-[500] text-gray-800 dark:text-white">
-                          {group.name}
-                        </span>
-                        <span className="text-xs font-[300] text-[#6b6b6b] dark:text-[#b0b0b0] mt-1">
-                          {group.terms} Terms
-                        </span>
-                      </Link>
-                    );
-                  })}
+                  .map((group, index) => (
+                    <Link
+                      key={index}
+                      href={group.path}
+                      className="flex flex-col justify-between items-start p-3 bg-gray-100 dark:bg-[#404f7d] rounded-md text-xs md:text-sm transition-transform hover:scale-105 hover:bg-gray-200 dark:hover:bg-[#50597d] shadow"
+                    >
+                      <span className="text-sm font-[500] text-gray-800 dark:text-white">
+                        {group.name}
+                      </span>
+                      <span className="text-xs font-[300] text-[#6b6b6b] dark:text-[#b0b0b0] mt-1">
+                        {group.terms} Terms
+                      </span>
+                    </Link>
+                  ))}
               </div>
             </section>
           </main>
