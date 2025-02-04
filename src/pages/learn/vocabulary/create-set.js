@@ -1,9 +1,10 @@
+// pages/learn/vocabulary/create-new-set.js
+
 import Head from "next/head";
 import Sidebar from "../../../components/Sidebar";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
 
 export default function CreateNewSet() {
     const router = useRouter();
@@ -35,7 +36,7 @@ export default function CreateNewSet() {
 
     // Tabs
     const [activeTab, setActiveTab] = useState("import");
-    // Possible values: "import", "single", "bulk"
+    // Possible values: "import", "single", "bulk", "search"
 
     // Status / feedback
     const [statusMessage, setStatusMessage] = useState("");
@@ -53,6 +54,10 @@ export default function CreateNewSet() {
 
     // ------------------------- For Bulk Addition -------------------------
     const [bulkInput, setBulkInput] = useState("");
+
+    // ------------------------- For Search Vocabulary -------------------------
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
 
     // ------------------------- 1) Import from Genki (in-memory) -------------------------
     const handleImportChunk = async (lessonNumber) => {
@@ -178,8 +183,35 @@ export default function CreateNewSet() {
         setStatusMessage(`${itemsToAdd.length} bulk item(s) added in memory!`);
     };
 
-    // ------------------------- 4) Final Request to Create New Set & Items -------------------------
-    // This function now sends a POST request to the uploadSet.js endpoint.
+    // ------------------------- 4) Handle Search Vocabulary (in memory) -------------------------
+    const handleSearch = async () => {
+        if (!searchQuery.trim()) {
+            setStatusMessage("Please enter a search query.");
+            return;
+        }
+        try {
+            const res = await fetch(
+                `/api/search-vocabulary?query=${encodeURIComponent(searchQuery)}`
+            );
+            if (!res.ok) throw new Error("Failed to fetch search results.");
+            const data = await res.json();
+            setSearchResults(data);
+        } catch (error) {
+            console.error("Error searching vocabulary:", error);
+            setStatusMessage("Error searching vocabulary.");
+        }
+    };
+
+    const addSearchResultToProposed = (item) => {
+        const vocabularyItem = {
+            English: item.English,
+            Japanese: item["Japanese(Hiragana/Katakana)"] || item.Japanese || "",
+        };
+        setProposedVocabulary((prev) => [...prev, vocabularyItem]);
+        setStatusMessage(`Added "${item.English}" to proposed list.`);
+    };
+
+    // ------------------------- 5) Final Request to Create New Set & Items -------------------------
     const handleSubmitAll = async () => {
         if (!newSetName.trim()) {
             setStatusMessage("Please enter a name for your new set.");
@@ -220,16 +252,16 @@ export default function CreateNewSet() {
             setStatusMessage(
                 `Set "${newSetName}" created successfully with ${proposedVocabulary.length} items!`
             );
-            //// Optionally clear the state after successful upload.
-            //setNewSetName("");
-            //setProposedVocabulary([]);
+            // Optionally clear the state after successful upload.
+            // setNewSetName("");
+            // setProposedVocabulary([]);
             router.push("/learn/vocabulary");
         } catch (error) {
             setStatusMessage("Error uploading set: " + error.message);
         }
     };
 
-    // ------------------------- 5) Remove a Proposed Item (Optional) -------------------------
+    // ------------------------- 6) Remove a Proposed Item (Optional) -------------------------
     const handleRemoveProposedItem = (index) => {
         setProposedVocabulary((prev) => {
             const newList = [...prev];
@@ -296,16 +328,28 @@ export default function CreateNewSet() {
                         >
                             Add Bulk
                         </button>
+                        <button
+                            onClick={() => setActiveTab("search")}
+                            className={`px-4 py-2 rounded-md font-semibold transition-colors 
+                ${activeTab === "search" ? "bg-[#da1c60]" : "bg-gray-600"} 
+                hover:bg-[#c71854]`}
+                        >
+                            Search Vocabulary
+                        </button>
                     </div>
 
                     {/* ------------------------- Tab Container ------------------------- */}
-                    {/* Tab Container with fixed height and single scrollbar */}
                     <div className="bg-[#2d3c47] rounded-lg shadow-md p-4 mb-6 h-[500px] overflow-y-auto">
                         {activeTab === "import" && (
                             <div>
-                                <h2 className="text-lg font-semibold mb-3">Import Genki Vocabulary</h2>
+                                <h2 className="text-lg font-semibold mb-3">
+                                    Import Genki Vocabulary
+                                </h2>
                                 <div className="mb-3">
-                                    <label className="block mb-1 font-semibold" htmlFor="genkiLesson">
+                                    <label
+                                        className="block mb-1 font-semibold"
+                                        htmlFor="genkiLesson"
+                                    >
                                         Select Genki Lesson:
                                     </label>
                                     <select
@@ -336,7 +380,16 @@ export default function CreateNewSet() {
                                 {/* Show imported chunk if any */}
                                 {importChunk.length > 0 && (
                                     <div className="mb-4">
-                                        <h3 className="font-semibold mb-2">Imported Vocabulary:</h3>
+                                        {/* Button to finalize chunk into proposedVocabulary */}
+                                        <button
+                                            onClick={handleAddChunkToProposed}
+                                            className="px-2 py-1 my-2 bg-green-600 rounded hover:bg-green-500"
+                                        >
+                                            Add Imported
+                                        </button>
+                                        <h3 className="font-semibold mb-2">
+                                            Imported Vocabulary:
+                                        </h3>
                                         <table className="w-full text-sm mb-3 border-collapse">
                                             <thead>
                                                 <tr className="border-b border-gray-500">
@@ -348,7 +401,9 @@ export default function CreateNewSet() {
                                             <tbody>
                                                 {importChunk.map((item, index) => {
                                                     const japaneseVal =
-                                                        item["Japanese(Hiragana/Katakana)"] || item.Japanese || "";
+                                                        item["Japanese(Hiragana/Katakana)"] ||
+                                                        item.Japanese ||
+                                                        "";
                                                     return (
                                                         <tr
                                                             key={index}
@@ -370,7 +425,7 @@ export default function CreateNewSet() {
                                             </tbody>
                                         </table>
 
-                                        {/* Add single item to the chunk */}
+                                        {/* Add single item to the chunk
                                         <div className="flex flex-wrap gap-2 mb-3">
                                             <input
                                                 type="text"
@@ -392,15 +447,9 @@ export default function CreateNewSet() {
                                             >
                                                 + Add to Chunk
                                             </button>
-                                        </div>
+                                        </div> */}
 
-                                        {/* Button to finalize chunk into proposedVocabulary */}
-                                        <button
-                                            onClick={handleAddChunkToProposed}
-                                            className="px-4 py-2 bg-[#da1c60] text-white rounded-md font-semibold hover:bg-[#c71854] transition-colors"
-                                        >
-                                            Add All to Proposed List
-                                        </button>
+
                                     </div>
                                 )}
                             </div>
@@ -425,7 +474,10 @@ export default function CreateNewSet() {
                                     />
                                 </div>
                                 <div className="mb-3">
-                                    <label className="block mb-1 font-semibold" htmlFor="japanese">
+                                    <label
+                                        className="block mb-1 font-semibold"
+                                        htmlFor="japanese"
+                                    >
                                         Japanese
                                     </label>
                                     <input
@@ -439,9 +491,9 @@ export default function CreateNewSet() {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-[#da1c60] text-white rounded-md font-semibold hover:bg-[#c71854] transition-colors"
+                                    className="px-2 py-1 bg-green-600 rounded hover:bg-green-500"
                                 >
-                                    Add to Proposed List
+                                    Add
                                 </button>
                             </form>
                         )}
@@ -463,10 +515,73 @@ export default function CreateNewSet() {
                                 />
                                 <button
                                     onClick={handleAddBulkToProposed}
-                                    className="px-4 py-2 bg-[#da1c60] text-white rounded-md font-semibold hover:bg-[#c71854] transition-colors"
+                                    className="px-2 py-1 bg-green-600 rounded hover:bg-green-500"
                                 >
-                                    Add Bulk to Proposed List
+                                    Add
                                 </button>
+                            </div>
+                        )}
+
+                        {activeTab === "search" && (
+                            <div>
+                                <h2 className="text-lg font-semibold mb-3">
+                                    Search Vocabulary
+                                </h2>
+                                <div className="flex items-center mb-3">
+                                    <input
+                                        type="text"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder="Enter a word to search..."
+                                        className="w-full px-3 py-2 text-black rounded-md focus:outline-none"
+                                    />
+                                    <button
+                                        onClick={handleSearch}
+                                        className="ml-2 px-4 py-2 bg-blue-600 rounded hover:bg-blue-500"
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                                {searchResults && searchResults.length > 0 ? (
+                                    <table className="w-full text-sm mb-3 border-collapse">
+                                        <thead>
+                                            <tr className="border-b border-gray-500">
+                                                <th className="py-2 text-left">English</th>
+                                                <th className="py-2 text-left">Japanese</th>
+                                                <th className="py-2" />
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {searchResults.map((item, index) => {
+                                                const japaneseVal =
+                                                    item["Japanese(Hiragana/Katakana)"] ||
+                                                    item.Japanese ||
+                                                    "";
+                                                return (
+                                                    <tr
+                                                        key={index}
+                                                        className="border-b border-gray-500 hover:bg-gray-600"
+                                                    >
+                                                        <td className="px-2 py-2">{item.English}</td>
+                                                        <td className="px-2 py-2">{japaneseVal}</td>
+                                                        <td className="px-2 py-2 text-right">
+                                                            <button
+                                                                onClick={() => addSearchResultToProposed(item)}
+                                                                className="px-2 py-1 bg-green-600 rounded hover:bg-green-500"
+                                                            >
+                                                                Add
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <div className="text-center text-gray-300">
+                                        No search results to display.
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
@@ -474,9 +589,7 @@ export default function CreateNewSet() {
                     {/* ------------------------- Added Vocabulary Table (Preview) ------------------------- */}
                     {proposedVocabulary.length > 0 && (
                         <section className="mb-6">
-                            <h2 className="text-xl font-semibold mb-2">
-                                Added Vocabulary
-                            </h2>
+                            <h2 className="text-xl font-semibold mb-2">Added Vocabulary</h2>
                             <table className="table-auto w-full border-collapse text-sm">
                                 <thead>
                                     <tr className="bg-gray-700 border-b border-gray-500">
@@ -487,7 +600,10 @@ export default function CreateNewSet() {
                                 </thead>
                                 <tbody>
                                     {proposedVocabulary.map((item, idx) => (
-                                        <tr key={idx} className="border-b border-gray-500 hover:bg-gray-600">
+                                        <tr
+                                            key={idx}
+                                            className="border-b border-gray-500 hover:bg-gray-600"
+                                        >
                                             <td className="px-4 py-2">{item.English}</td>
                                             <td className="px-4 py-2">{item.Japanese}</td>
                                             <td className="px-4 py-2 text-right">
