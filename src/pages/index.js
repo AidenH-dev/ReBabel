@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="flex flex-col items-center justify-between overflow-hidden px-10 py-4">
+      <main className="flex flex-col items-center justify-between overflow-hidden px-10 py-4 bg-white">
         <div className="flex flex-col items-center justify-center w-full">
           <Head>
             <title>ReBabel</title>
@@ -51,9 +51,9 @@ export default function Home() {
                     Get Started
                   </button>
                 </div>
-                <Link href="/api/auth/logout">
+                {/*<Link href="/api/auth/logout">
                   <button>Log Out</button>
-                </Link>
+                </Link>*/}
               </div>
             </div>
             ;

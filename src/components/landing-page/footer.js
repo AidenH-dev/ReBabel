@@ -11,7 +11,7 @@ export default function Footer(options) {
             <div className="mb-6 md:mb-0">
                 <Link href="https://Dormplex.com/" className="flex items-center">
                     <img src="/ReBabel.png" className="h-8 mr-1" alt="FlowBite Logo" />
-                    <span className="self-center text-2xl font-semibold whitespace-nowrap text-gray-800">Language</span> 
+                    <span className="self-center text-2xl font-semibold whitespace-nowrap text-gray-800">A Keico Language Tutor</span> 
                 </Link>
             </div>
             <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">

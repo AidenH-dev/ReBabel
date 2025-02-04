@@ -110,7 +110,7 @@ export default function GrammarDashboard() {
                 Recent Activity
               </h2>
               <p className="text-sm text-white">
-                Track your vocabulary practice here.
+                You'll be able to track your vocabulary practice here.
               </p>
             </section>
 
@@ -118,7 +118,7 @@ export default function GrammarDashboard() {
             <section className="col-span-6 md:col-span-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
               <p className="text-4xl font-[300] text-white">120</p>
               <h2 className="text-md font-[400] mt-3 mb-1 text-white">
-                Grammar Rules Mastered
+                Grammar Rules Mastered (Coming Soon!)
               </h2>
             </section>
 
@@ -126,7 +126,7 @@ export default function GrammarDashboard() {
             <section className="col-span-6 md:col-span-4 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
               <p className="text-4xl font-[300] text-white">45</p>
               <h2 className="text-md font-[400] mt-3 mb-1 text-white">
-                Practice Sessions Completed
+                Practice Sessions Completed (Coming Soon!)
               </h2>
             </section>
 

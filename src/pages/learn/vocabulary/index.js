@@ -151,14 +151,14 @@ export default function VocabularyDashboard() {
             {/* === Top row of metrics === */}
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg p-4 shadow-md">
               <h2 className="text-lg font-semibold mb-4 text-white">Study Activity</h2>
-              <p className="text-sm text-white">Coming Soon!</p>
+              <p className="text-sm text-white">(Coming Soon!)</p>
             </section>
 
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg p-4 shadow-md flex flex-col justify-center">
               <div className="flex items-center justify-between w-full ml-2">
                 <div>
                   <p className="text-4xl font-[300] text-white">1,245</p>
-                  <h2 className="text-md font-[400] text-white">Total Word Bank</h2>
+                  <h2 className="text-md font-[400] text-white">Terms (Coming Soon!)</h2>{/*Total Word Bank */}
                 </div>
                 <button
                   className="flex items-center justify-center text-white w-10 h-10 transition mr-4"
@@ -174,7 +174,7 @@ export default function VocabularyDashboard() {
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
               <p className="text-4xl font-[300] text-white mt-2 mr-2">+99</p>
               <h2 className="text-md font-[400] mt-1 mb-1 text-white">
-                Vocabulary Tracker Coming Soon!
+                Vocabulary Tracker (Coming Soon!)
               </h2>
             </section>
 
@@ -182,7 +182,7 @@ export default function VocabularyDashboard() {
               <div className="ml-2">
                 <p className="text-4xl font-[300] text-white">38</p>
                 <h2 className="text-md font-[400] text-white">
-                  Sets Completed Coming Soon!
+                  Sets Completed (Coming Soon!)
                 </h2>
               </div>
             </section>
