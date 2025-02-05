@@ -79,6 +79,7 @@ export default async function handler(req, res) {
   You will also generate one sentance that is expected japanese version of that english sentence. 
   Respond with English, hiragana, and katakana only (no kanji), and ensure feedback is direct and grammar-focused.
   Keep scenarios practical and relevant. Always maintain a formal tone.
+  this is the naming scheme of the response object {english_sentence: "example response" expected_japanese_translation: "何か"}
 
   Vocabulary Pool:
   ${JSON.stringify(vocabularyPool)}
