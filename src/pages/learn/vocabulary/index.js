@@ -191,18 +191,18 @@ export default function VocabularyDashboard() {
           <main className="row-span-1 grid grid-cols-12 gap-x-4 gap-y-8 p-4 mt-16 mx-12">
             {/* === Top row of metrics === */}
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg p-4 shadow-md">
-              <h2 className="text-lg font-semibold mb-4 text-white">Study Activity</h2>
-              <p className="text-sm text-white">(Coming Soon!)</p>
+              <h2 className="text-lg font-semibold mb-5 text-white">Recent Activity</h2>
+              <p className="text-sm text-white ">(Coming Soon!)</p>
             </section>
 
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg p-4 shadow-md flex flex-col justify-center">
               <div className="flex items-center justify-between w-full ml-2">
                 <div>
-                  <p className="text-4xl font-[300] text-white">1,245</p>
-                  <h2 className="text-md font-[400] text-white">Terms (Coming Soon!)</h2>
+                  <p className="text-3xl font-[300] text-white mt-2">1,245</p>
+                  <h2 className="text-sm font-[400] text-white mt-1 mb-1">Terms (Coming Soon!)</h2>
                 </div>
                 <button
-                  className="flex items-center justify-center text-white w-10 h-10 transition mr-4"
+                  className="flex items-center justify-center text-white w-8 h-8 transition mr-4"
                   onClick={() =>
                     (window.location.href = "/knowledgebase-dashboard")
                   }
@@ -213,16 +213,16 @@ export default function VocabularyDashboard() {
             </section>
 
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
-              <p className="text-4xl font-[300] text-white mt-2 mr-2">+99</p>
-              <h2 className="text-md font-[400] mt-1 mb-1 text-white">
-                Vocabulary Tracker (Coming Soon!)
+              <p className="text-3xl font-[300] text-white mt-2 mr-2">+99</p>
+              <h2 className="text-sm font-[400] mt-1 mb-1 text-white">
+                New Vocabulary (Coming Soon!)
               </h2>
             </section>
 
             <section className="col-span-6 md:col-span-3 bg-gradient-to-r from-indigo-500 rounded-lg p-4 shadow-md flex flex-col justify-center">
               <div className="ml-2">
-                <p className="text-4xl font-[300] text-white">38</p>
-                <h2 className="text-md font-[400] text-white">
+                <p className="text-3xl font-[300] text-white">38</p>
+                <h2 className="text-sm font-[400] text-white mt-1">
                   Sets Completed (Coming Soon!)
                 </h2>
               </div>
@@ -312,7 +312,7 @@ export default function VocabularyDashboard() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 overflow-y-auto py-4 px-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 overflow-y-auto py-4 px-4">
                 {vocabularyGroups
                   .filter((group) =>
                     group.name.toLowerCase().includes(searchTags.toLowerCase())

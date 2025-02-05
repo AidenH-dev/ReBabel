@@ -109,22 +109,23 @@ export default function GrammarDashboard() {
               <h2 className="text-lg font-semibold mb-4 text-white">
                 Recent Activity
               </h2>
-              <p>You&apos;ll be able to track your vocabulary practice here.</p>
-
+              <p className="text-xs">You&apos;ll be able to track your vocabulary practice here.</p>
             </section>
 
             {/* Grammar Rules Mastered */}
             <section className="col-span-6 md:col-span-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
-              <p className="text-4xl font-[300] text-white">120</p>
-              <h2 className="text-md font-[400] mt-3 mb-1 text-white">
+              {/* Lowered from text-4xl to text-3xl */}
+              <p className="text-3xl font-[300] text-white">120</p>
+              <h2 className="text-md font-[400] mt-2 mb-1 text-white">
                 Grammar Rules Mastered (Coming Soon!)
               </h2>
             </section>
 
             {/* Practice Sessions Completed */}
             <section className="col-span-6 md:col-span-4 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
-              <p className="text-4xl font-[300] text-white">45</p>
-              <h2 className="text-md font-[400] mt-3 mb-1 text-white">
+              {/* Lowered from text-4xl to text-3xl */}
+              <p className="text-3xl font-[300] text-white">45</p>
+              <h2 className="text-sm font-[400] mt-2 mb-1 text-white">
                 Practice Sessions Completed (Coming Soon!)
               </h2>
             </section>
@@ -153,17 +154,7 @@ export default function GrammarDashboard() {
                         />
                         Genki 1 Third Edition
                       </label>
-                      {/* Add more books if necessary
-                      <label className="flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedBooks.genki2}
-                          onChange={() => handleBookSelection("genki2")}
-                          className="mr-2"
-                        />
-                        Genki 2 Third Edition
-                      </label>
-                      */}
+                      {/* Add more books if necessary */}
                     </div>
 
                     <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200 pt-5">
@@ -182,7 +173,6 @@ export default function GrammarDashboard() {
                         placeholder="Select a Lesson"
                         isClearable
                         isSearchable
-
                         /* Override default styles */
                         styles={{
                           control: (base) => ({
@@ -209,7 +199,6 @@ export default function GrammarDashboard() {
                           }),
                         }}
                       />
-
                     ) : (
                       <p className="text-gray-500">
                         Please select a book to see lessons.
@@ -255,7 +244,6 @@ export default function GrammarDashboard() {
                     <h2 className="text-lg font-semibold mb-2 text-white flex items-center">
                       <FaArrowRightArrowLeft className="h-8 w-8 mr-3" />
                       Translation
-
                     </h2>
                   </div>
                   <Link
@@ -318,7 +306,7 @@ export default function GrammarDashboard() {
                   >
                     <h2 className="text-lg font-semibold mb-2 text-white flex items-center">
                       <IoImagesOutline className="h-8 w-8 mr-3" />
-                      Image Matching
+                      Matching
                     </h2>
                     <div className="absolute bg-white text-sm text-black px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                       Coming soon!
@@ -330,7 +318,8 @@ export default function GrammarDashboard() {
 
             {/* Practice Topics */}
             <section className="col-span-6 md:col-span-6 lg:col-span-7 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg p-4">
-              <h2 className="text-2xl font-[400] mb-3 text-gray-800 dark:text-gray-200">
+              {/* Lowered from text-2xl to text-xl */}
+              <h2 className="text-xl font-[400] mb-3 text-gray-800 dark:text-gray-200">
                 Practice Topics
               </h2>
               <div className="grid grid-cols-1 gap-3">
@@ -345,9 +334,7 @@ export default function GrammarDashboard() {
                     </div>
                     <h2 className="text-lg font-[300] text-gray-800 dark:text-gray-200">
                       {set.name}
-
                     </h2>
-
                     <p className="text-sm text-[#6b6b6b] dark:text-[#b0b0b0]">
                       {set.exercises} Exercises |{" "}
                       {new Intl.DateTimeFormat("en-US", {
@@ -356,7 +343,6 @@ export default function GrammarDashboard() {
                         year: "numeric",
                       }).format(new Date(set.date))}
                     </p>
-
                   </Link>
                 ))}
               </div>
