@@ -230,7 +230,7 @@ export default function VocabularyDashboard() {
 
             {/* === Bottom row: "Sets" and "Vocabulary Tags" === */}
             {/* Sets / Recents */}
-            <section className="col-span-12 md:col-span-6 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg p-4">
+            <section className="col-span-12 md:col-span-6 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg p-4 pb-8">
               <h2 className="text-2xl font-[400] mb-3 text-gray-800 dark:text-gray-200">
                 Sets
               </h2>
