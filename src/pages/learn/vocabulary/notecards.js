@@ -6,7 +6,7 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
 export default function Notecards() {
   const router = useRouter();
-  const { lesson } = router.query;
+  const { lesson, terms } = router.query;
   const [cardsData, setCardsData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -22,44 +22,56 @@ export default function Notecards() {
 
   const transitionClasses = {
     idle: "transition-all duration-200 ease-in-out translate-x-0 opacity-100",
-
-    "slide-out-left":
-      "transition-all duration-200 ease-in-out -translate-x-full opacity-0",
-    "slide-in-right":
-      "transition-all duration-200 ease-in-out translate-x-full opacity-0",
-
-    "slide-out-right":
-      "transition-all duration-200 ease-in-out translate-x-full opacity-0",
-    "slide-in-left":
-      "transition-all duration-200 ease-in-out -translate-x-full opacity-0",
+    "slide-out-left": "transition-all duration-200 ease-in-out -translate-x-full opacity-0",
+    "slide-in-right": "transition-all duration-200 ease-in-out translate-x-full opacity-0",
+    "slide-out-right": "transition-all duration-200 ease-in-out translate-x-full opacity-0",
+    "slide-in-left": "transition-all duration-200 ease-in-out -translate-x-full opacity-0",
   };
 
   useEffect(() => {
-    if (!lesson) return;
+    if (!router.isReady) return;
 
-    fetch(`/api/fetch-vocabulary?lesson=${lesson}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch vocabulary data");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const formattedCards = data.map((item) => ({
+    // If "terms" exists in the query, parse it and format the cards.
+    if (terms) {
+      try {
+        const parsedTerms = JSON.parse(terms);
+        // Map each term to the card format. Use the fallback: if "Japanese(Hiragana/Katakana)" is missing, use "Japanese".
+        const formattedCards = parsedTerms.map((item) => ({
           front: item.English,
-          back: item["Japanese(Hiragana/Katakana)"],
+          back: item["Japanese(Hiragana/Katakana)"] || item.Japanese,
         }));
         setCardsData(formattedCards);
-      })
-      .catch((error) => console.error("Error fetching vocabulary data:", error));
-  }, [lesson]);
+      } catch (error) {
+        console.error("Error parsing terms from query parameter:", error);
+      }
+    } else if (lesson) {
+      // Otherwise, fetch the vocabulary data using the lesson parameter.
+      fetch(`/api/fetch-vocabulary?lesson=${lesson}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch vocabulary data");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const formattedCards = data.map((item) => ({
+            front: item.English,
+            back: item["Japanese(Hiragana/Katakana)"] || item.Japanese,
+          }));
+          setCardsData(formattedCards);
+        })
+        .catch((error) =>
+          console.error("Error fetching vocabulary data:", error)
+        );
+    }
+  }, [router.isReady, lesson, terms]);
 
   const handleFlip = () => {
     setShouldAnimate(true);
     setIsFront((prev) => !prev);
   };
 
-  // Helper to slide out, switch index, then slide in
+  // Helper to slide out, switch index, then slide in.
   const slideCard = (outState, inState, newIndex) => {
     setTransitionState(outState);
     setTimeout(() => {
@@ -93,7 +105,7 @@ export default function Notecards() {
   // --- 3D FLIP STYLES ---
   const container3DStyles = {
     perspective: "600px",
-    perspectiveOrigin: "center 30%", // can tweak to make the 3D flip more dramatic
+    perspectiveOrigin: "center 30%", // Adjust this for a more dramatic effect
     overflow: "visible",
   };
 
@@ -137,8 +149,7 @@ export default function Notecards() {
           {cardsData.length > 0 && (
             <div className="text-center mb-6">
               <p className="text-sm mt-2">
-                Currently studying card {currentIndex + 1} of{" "}
-                {cardsData.length}
+                Currently studying card {currentIndex + 1} of {cardsData.length}
               </p>
             </div>
           )}
@@ -153,7 +164,7 @@ export default function Notecards() {
                   className={`absolute w-full h-full flex items-center justify-center ${transitionClasses[transitionState]}`}
                   style={{ overflow: "visible" }}
                 >
-                  {/* Flip Card wrapper */}
+                  {/* Flip Card Wrapper */}
                   <div style={flipCardStyles} onClick={handleFlip}>
                     {/* Front Side */}
                     <div
@@ -185,7 +196,7 @@ export default function Notecards() {
 
               {/* Navigation Buttons */}
               <div className="flex justify-between items-center w-full mt-4">
-                {/* Left: Previous Button */}
+                {/* Previous Button */}
                 <button
                   onClick={handlePrevious}
                   disabled={currentIndex === 0}
@@ -198,7 +209,7 @@ export default function Notecards() {
                   Previous
                 </button>
 
-                {/* Middle: Exit Button */}
+                {/* Exit Button */}
                 <button
                   onClick={handleExit}
                   className="px-4 py-2 bg-gray-600 text-white rounded-md font-semibold hover:bg-gray-700 transition-colors"
@@ -206,7 +217,7 @@ export default function Notecards() {
                   Exit
                 </button>
 
-                {/* Right: Next or Finish Button */}
+                {/* Next or Finish Button */}
                 {!isLastCard ? (
                   <button
                     onClick={handleNext}

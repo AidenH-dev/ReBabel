@@ -80,10 +80,10 @@ export default function VocabularyDashboard() {
     return isNaN(dateObj)
       ? "Unknown date"
       : new Intl.DateTimeFormat("en-US", {
-          month: "short",
-          day: "2-digit",
-          year: "numeric",
-        }).format(dateObj);
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      }).format(dateObj);
   };
 
   // Vocabulary groups defined statically
@@ -258,7 +258,11 @@ export default function VocabularyDashboard() {
                     .map((set, index) => (
                       <Link
                         key={index}
-                        href={set.path}
+                        href={{
+                          pathname: "/learn/vocabulary/notecards",
+                          // Pass the vocabulary array as a JSON string via the "terms" query parameter
+                          query: { terms: JSON.stringify(set.terms) },
+                        }}
                         className="block mx-4 px-4 py-2 bg-gray-100 dark:bg-[#404f7d] text-left rounded-sm text-sm transition-transform hover:bg-gray-200 dark:hover:bg-[#50597d] hover:border-l-4 hover:border-[#63f4e7] dark:hover:border-l-4 dark:hover:border-[#6dbfb8] shadow-md"
                       >
                         <h2 className="text-lg font-[300] text-gray-800 dark:text-gray-200">
