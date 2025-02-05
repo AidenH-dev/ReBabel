@@ -265,9 +265,9 @@ export default function Learn() {
               )}
               {progress == 100 && (
                 <div className="flex items-center w-max">
-                  <h3 className="font-semibold text-2xl flex items-center text-white mr-2 ">
-                    You've completed this session!
-                  </h3>
+                  <p>You&apos;ve completed this session!</p>
+
+
                   <button
                     onClick={handleExit}
                     className="px-4 py-2 bg-green-600 text-white rounded-md font-semibold hover:bg-green-500 transition-colors"

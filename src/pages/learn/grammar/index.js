@@ -109,9 +109,8 @@ export default function GrammarDashboard() {
               <h2 className="text-lg font-semibold mb-4 text-white">
                 Recent Activity
               </h2>
-              <p className="text-sm text-white">
-                You'll be able to track your vocabulary practice here.
-              </p>
+              <p>You&apos;ll be able to track your vocabulary practice here.</p>
+
             </section>
 
             {/* Grammar Rules Mastered */}
