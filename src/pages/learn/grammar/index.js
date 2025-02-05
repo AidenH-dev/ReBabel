@@ -125,8 +125,8 @@ export default function GrammarDashboard() {
             <section className="col-span-6 md:col-span-4 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
               {/* Lowered from text-4xl to text-3xl */}
               <p className="text-3xl font-[300] text-white">45</p>
-              <h2 className="text-sm font-[400] mt-2 mb-1 text-white">
-                Practice Sessions Completed (Coming Soon!)
+              <h2 className="text-md font-[400] mt-2 mb-1 text-white">
+                Sessions Completed (Coming Soon!)
               </h2>
             </section>
 
