@@ -42,13 +42,16 @@ export default function VocabularyDashboard() {
             )}`
           );
           const data = await response.json();
-          // Use the created_at column for the date and map vocabulary array as terms.
+          // Map the data and sort by date descending so the latest sets are first.
           const formattedData = data.map((record) => ({
             name: record.set_name,
             terms: record.vocabulary, // This is an array of terms
             date: record.created_at, // Use created_at from your table
             path: `/learn/vocabulary/view-set?id=${record.id}`,
           }));
+          formattedData.sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+          );
           setRecentsSets(formattedData);
         } catch (error) {
           console.error("Error fetching user sets:", error);
@@ -80,10 +83,10 @@ export default function VocabularyDashboard() {
     return isNaN(dateObj)
       ? "Unknown date"
       : new Intl.DateTimeFormat("en-US", {
-        month: "short",
-        day: "2-digit",
-        year: "numeric",
-      }).format(dateObj);
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+        }).format(dateObj);
   };
 
   // Vocabulary groups defined statically
@@ -161,6 +164,16 @@ export default function VocabularyDashboard() {
       date: "12/23/2024",
     },
   ];
+
+  // Determine which sets to display.
+  // If there is a search query, show all matching sets.
+  // Otherwise, show only the latest three sets.
+  const displayedRecents =
+    searchSets.trim().length > 0
+      ? recentsSets.filter((set) =>
+          set.name.toLowerCase().includes(searchSets.toLowerCase())
+        )
+      : recentsSets.slice(0, 4);
 
   return (
     <div className="flex flex-row min-h-screen bg-white dark:bg-[#141f25] text-[#4e4a4a] dark:text-white">
@@ -251,11 +264,8 @@ export default function VocabularyDashboard() {
               </h2>
               <div className="grid grid-cols-1 gap-3">
                 {recentsSets.length > 0 ? (
-                  recentsSets
-                    .filter((set) =>
-                      set.name.toLowerCase().includes(searchSets.toLowerCase())
-                    )
-                    .map((set, index) => (
+                  displayedRecents.length > 0 ? (
+                    displayedRecents.map((set, index) => (
                       <Link
                         key={index}
                         href={{
@@ -273,6 +283,11 @@ export default function VocabularyDashboard() {
                         </p>
                       </Link>
                     ))
+                  ) : (
+                    <p className="mx-4 text-gray-600 dark:text-gray-300">
+                      No sets found.
+                    </p>
+                  )
                 ) : (
                   <p className="mx-4 text-gray-600 dark:text-gray-300">
                     {userProfile ? "No sets found." : "Loading sets..."}
