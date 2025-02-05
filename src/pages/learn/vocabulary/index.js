@@ -83,10 +83,10 @@ export default function VocabularyDashboard() {
     return isNaN(dateObj)
       ? "Unknown date"
       : new Intl.DateTimeFormat("en-US", {
-          month: "short",
-          day: "2-digit",
-          year: "numeric",
-        }).format(dateObj);
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      }).format(dateObj);
   };
 
   // Vocabulary groups defined statically
@@ -171,8 +171,8 @@ export default function VocabularyDashboard() {
   const displayedRecents =
     searchSets.trim().length > 0
       ? recentsSets.filter((set) =>
-          set.name.toLowerCase().includes(searchSets.toLowerCase())
-        )
+        set.name.toLowerCase().includes(searchSets.toLowerCase())
+      )
       : recentsSets.slice(0, 4);
 
   return (
@@ -298,11 +298,11 @@ export default function VocabularyDashboard() {
 
             {/* Vocabulary Tags */}
             <section className="col-span-12 md:col-span-6 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg p-4">
-              <h2 className="text-2xl font-[400] mb-4 text-gray-800 dark:text-gray-200">
+              <h2 className="text-2xl font-[400] mb-3 text-gray-800 dark:text-gray-200">
                 Vocabulary Tags
               </h2>
 
-              <div className="mx-4 flex gap-3 mb-4">
+              <div className="mx-4 flex gap-3 mb-6">
                 <input
                   type="text"
                   placeholder="Search tags..."
@@ -311,7 +311,9 @@ export default function VocabularyDashboard() {
                   className="bg-gray-200 dark:bg-[#0d3c4b] text-[#4e4a4a] dark:text-white px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300"
                 />
               </div>
-
+              <h2 className="text-xl font-[300] py-2 text-gray-800 dark:text-gray-200">
+                
+              </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 overflow-y-auto py-4 px-4">
                 {vocabularyGroups
                   .filter((group) =>

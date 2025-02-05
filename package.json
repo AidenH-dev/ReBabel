@@ -12,6 +12,7 @@
     "@auth0/nextjs-auth0": "^3.5.0",
     "@next/font": "^14.2.15",
     "@supabase/supabase-js": "^2.48.1",
+    "@vercel/analytics": "^1.4.1",
     "axios": "^1.6.8",
     "chart.js": "^4.4.6",
     "formik": "^2.4.6",
