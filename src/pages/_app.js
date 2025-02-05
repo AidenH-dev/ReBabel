@@ -3,6 +3,7 @@ import { Fredoka } from "@next/font/google";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import ReportIssueButton from '@/components/report-issue'; // Adjust the path as needed
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 
 const fredoka = Fredoka({
@@ -18,6 +19,7 @@ export default function MyApp({ Component, pageProps }) {
         {/* Floating button (always visible) */}
         <ReportIssueButton/>
         <Analytics/>
+        <SpeedInsights/>
       </div>
     </UserProvider>
   );
