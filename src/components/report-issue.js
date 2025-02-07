@@ -1,5 +1,7 @@
 import React from 'react';
 import { TbMessageReport } from 'react-icons/tb';
+import { FiAlertTriangle } from "react-icons/fi";
+
 
 function ReportIssueButton() {
   const handleReportClick = () => {
@@ -21,8 +23,8 @@ function ReportIssueButton() {
         items-center 
         rounded-full 
         bg-red-600 
-        px-4 
-        py-3
+        px-3
+        py-2
         text-white 
         shadow-lg 
         transition-colors
@@ -36,7 +38,7 @@ function ReportIssueButton() {
       "
     >
       {/* Increased icon size to text-2xl */}
-      <TbMessageReport className="text-3xl" />
+      <FiAlertTriangle className="text-3xl mb-1" />
       <span
         className="
           ml-0
