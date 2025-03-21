@@ -1,3 +1,4 @@
+import Script from "next/script";
 import Footer from "@/components/landing-page/footer";
 import Navbar from "@/components/landing-page/navbar";
 import Head from "next/head";
@@ -24,6 +25,20 @@ export default function Home() {
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
+          <Script
+            src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
+            strategy="afterInteractive"
+            onLoad={() => {
+              window.kofiWidgetOverlay.draw('rebabel', {
+                'type': 'floating-chat',
+                'floating-chat.position': 'bottom-left', // added config (if supported)
+                'floating-chat.donateButton.text': 'Support Us',
+                'floating-chat.donateButton.background-color': '#E30B5C',
+                'floating-chat.donateButton.text-color': '#fff'
+              });
+            }}
+          />
+ 
           <main className="flex flex-col items-center justify-center mt-24">
             <div className="flex flex-row">
               <div className="flex items-center justify-center flex-wrap max-w-screen-md mt-2 mx-auto">
@@ -202,8 +217,9 @@ export default function Home() {
             </div>
           </main>
         </div>
-      </main>
+      </main >
       <Footer />
+
     </>
   );
 }
