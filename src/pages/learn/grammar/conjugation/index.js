@@ -29,15 +29,15 @@ export default function ConjugationDashboard() {
     });
 
     const [adjectiveOptions, setAdjectiveOptions] = useState({
-        iPresentAffirmative: false,  // 基本形 (e.g., 面白い)
-        iPresentNegative: false,     // ない形 (e.g., 面白くない)
-        iPastAffirmative: false,     // かった形 (e.g., 面白かった)
-        iPastNegative: false,        // くなかった形 (e.g., 面白くなかった)
-        iTeForm: false,              // くて (e.g., 面白くて)
-        naPresentAffirmative: false, // だ形 (e.g., 静かだ)
-        naPresentNegative: false,    // じゃない形 (e.g., 静かじゃない)
-        naPastAffirmative: false,    // だった形 (e.g., 静かだった)
-        naPastNegative: false,       // じゃなかった形 (e.g., 静かじゃなかった)
+        PresentAffirmative: false,  // 基本形 (e.g., 面白い)
+        PresentNegative: false,     // ない形 (e.g., 面白くない)
+        PastAffirmative: false,     // かった形 (e.g., 面白かった)
+        PastNegative: false,        // くなかった形 (e.g., 面白くなかった)
+        TeForm: false,              // くて (e.g., 面白くて)
+        //naPresentAffirmative: false, // だ形 (e.g., 静かだ)
+        //naPresentNegative: false,    // じゃない形 (e.g., 静かじゃない)
+        //naPastAffirmative: false,    // だった形 (e.g., 静かだった)
+        //naPastNegative: false,       // じゃなかった形 (e.g., 静かじゃなかった)
     });
 
     // Extra conjugation controls
@@ -336,41 +336,41 @@ export default function ConjugationDashboard() {
                                 <div className="pl-4">
                                     {[
                                         {
-                                            key: "iPresentAffirmative",
-                                            label: "I-Adjective Present Affirmative (基本形)",
+                                            key: "PresentAffirmative",
+                                            label: "Present Affirmative (基本形)",
                                         },
                                         {
-                                            key: "iPresentNegative",
-                                            label: "I-Adjective Present Negative (ない形)",
+                                            key: "PresentNegative",
+                                            label: "Present Negative (ない形)",
                                         },
                                         {
-                                            key: "iPastAffirmative",
-                                            label: "I-Adjective Past Affirmative (かった形)",
+                                            key: "PastAffirmative",
+                                            label: "Past Affirmative (かった形)",
                                         },
                                         {
-                                            key: "iPastNegative",
-                                            label: "I-Adjective Past Negative (くなかった形)",
+                                            key: "PastNegative",
+                                            label: "Past Negative (くなかった形)",
                                         },
                                         {
-                                            key: "iTeForm",
-                                            label: "I-Adjective Te-form (くて)",
+                                            key: "TeForm",
+                                            label: "Te-form (くて)",
                                         },
-                                        {
-                                            key: "naPresentAffirmative",
-                                            label: "Na-Adjective Present Affirmative (だ形)",
-                                        },
-                                        {
-                                            key: "naPresentNegative",
-                                            label: "Na-Adjective Present Negative (じゃない形)",
-                                        },
-                                        {
-                                            key: "naPastAffirmative",
-                                            label: "Na-Adjective Past Affirmative (だった形)",
-                                        },
-                                        {
-                                            key: "naPastNegative",
-                                            label: "Na-Adjective Past Negative (じゃなかった形)",
-                                        },
+                                        //{
+                                        //    key: "naPresentAffirmative",
+                                        //    label: "Na-Adjective Present Affirmative (だ形)",
+                                        //},
+                                        //{
+                                        //    key: "naPresentNegative",
+                                        //    label: "Na-Adjective Present Negative (じゃない形)",
+                                        //},
+                                        //{
+                                        //    key: "naPastAffirmative",
+                                        //    label: "Na-Adjective Past Affirmative (だった形)",
+                                        //},
+                                        //{
+                                        //    key: "naPastNegative",
+                                        //    label: "Na-Adjective Past Negative (じゃなかった形)",
+                                        //},
                                     ].map(({ key, label }) => (
                                         <label key={key} className="block mb-1">
                                             <input

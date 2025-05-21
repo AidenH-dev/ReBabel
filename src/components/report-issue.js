@@ -16,7 +16,7 @@ function ReportIssueButton() {
       className="
         group
         fixed 
-        bottom-6 
+        bottom-4
         right-6 
         z-50 
         flex 

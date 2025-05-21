@@ -1,3 +1,4 @@
+//Legacy Page Review and decide whether or not to get rid of
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
