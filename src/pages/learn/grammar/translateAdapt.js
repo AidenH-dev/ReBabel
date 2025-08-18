@@ -3,20 +3,20 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Sidebar from "../../../components/Sidebar.js";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { 
-  FaArrowRight, 
-  FaCheckCircle, 
+import {
+  FaArrowRight,
+  FaCheckCircle,
   FaTimesCircle,
   FaTrophy,
   FaRedo
 } from "react-icons/fa";
-import { 
-  TbX, 
+import {
+  TbX,
   TbLoader3,
   TbRefresh,
   TbSend
 } from "react-icons/tb";
-import { 
+import {
   MdTranslate,
   MdAutorenew,
   MdCheck
@@ -69,10 +69,10 @@ export default function TranslationPractice() {
       const data = await response.json();
       const parsedMessage = JSON.parse(data.message);
       setResponseMessage(parsedMessage.english_sentence);
-      
+
       // Clear input and previous grades
       if (inputRef.current) inputRef.current.value = "";
-      
+
       // Destroy existing charts
       Object.keys(chartRefs.current).forEach((chartId) => {
         if (chartRefs.current[chartId]) {
@@ -89,7 +89,7 @@ export default function TranslationPractice() {
 
   const handleGradeTranslation = async () => {
     const japaneseSentence = userInput.trim();
-    
+
     if (!japaneseSentence) {
       // Add visual feedback for empty input
       inputRef.current?.focus();
@@ -113,7 +113,7 @@ export default function TranslationPractice() {
       const data = await response.json();
       const parsedData = typeof data.message === "string" ? JSON.parse(data.message) : data.message;
       setResponseMessageGrade(parsedData);
-      
+
       // Update session stats
       const totalScore = Object.values(parsedData.grades).reduce((sum, grade) => sum + (grade ?? 0), 0);
       setSessionStats(prev => ({
@@ -121,7 +121,7 @@ export default function TranslationPractice() {
         avgScore: Math.round((prev.avgScore * prev.attempts + totalScore) / (prev.attempts + 1)),
         bestScore: Math.max(prev.bestScore, totalScore)
       }));
-      
+
       // Trigger score animation
       setAnimateScore(true);
       setTimeout(() => setAnimateScore(false), 600);
@@ -176,7 +176,7 @@ export default function TranslationPractice() {
 
       Object.keys(chartsData).forEach((chartId) => {
         const { value, max, colors } = chartsData[chartId];
-        
+
         if (chartRefs.current[chartId]) {
           chartRefs.current[chartId].destroy();
         }
@@ -230,7 +230,7 @@ export default function TranslationPractice() {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
       <Sidebar />
-      
+
       <main className="ml-auto max-h-screen overflow-y-scroll flex-1 p-6">
         <Head>
           <title>Translation Practice • Lesson {lessons}</title>
@@ -248,7 +248,7 @@ export default function TranslationPractice() {
               >
                 <TbX className="w-6 h-6 text-gray-700 dark:text-white" />
               </button>
-              
+
               <div className="flex items-center gap-2">
                 <MdTranslate className="text-[#e30a5f] text-2xl" />
                 <div>
@@ -286,7 +286,7 @@ export default function TranslationPractice() {
               <span>{progress}% Complete</span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-[#e30a5f] to-[#f41567] transition-all duration-500 ease-out rounded-full"
                 style={{ width: `${progress}%` }}
               />
@@ -307,11 +307,10 @@ export default function TranslationPractice() {
                     <button
                       onClick={handleGenerateSentence}
                       disabled={isLoading}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-                        isLoading 
-                          ? "bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-gray-500 cursor-not-allowed" 
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${isLoading
+                          ? "bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                           : "bg-[#e30a5f] hover:bg-[#f41567] text-white active:scale-95"
-                      }`}
+                        }`}
                     >
                       {isLoading ? (
                         <>
@@ -326,7 +325,7 @@ export default function TranslationPractice() {
                       )}
                     </button>
                   </div>
-                  
+
                   {responseMessage ? (
                     <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                       <p className="text-lg text-gray-800 dark:text-white font-medium">
@@ -336,7 +335,7 @@ export default function TranslationPractice() {
                   ) : (
                     <div className="p-8 bg-gray-50 dark:bg-white/5 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center">
                       <p className="text-gray-500 dark:text-gray-400">
-                        Click "Generate New" to get a sentence to translate
+                        Click &quot;Generate New&quot; to get a sentence to translate
                       </p>
                     </div>
                   )}
@@ -349,7 +348,7 @@ export default function TranslationPractice() {
                       Your Translation
                     </h2>
                   </div>
-                  
+
                   <div className="relative">
                     <textarea
                       ref={inputRef}
@@ -370,11 +369,10 @@ export default function TranslationPractice() {
                 <button
                   onClick={handleGradeTranslation}
                   disabled={!responseMessage || isGrading || !userInput.trim()}
-                  className={`w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
-                    !responseMessage || isGrading || !userInput.trim()
+                  className={`w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${!responseMessage || isGrading || !userInput.trim()
                       ? "bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                       : "bg-gradient-to-r from-[#e30a5f] to-[#f41567] hover:from-[#f41567] hover:to-[#e30a5f] text-white active:scale-[0.98]"
-                  }`}
+                    }`}
                 >
                   {isGrading ? (
                     <>
@@ -395,7 +393,7 @@ export default function TranslationPractice() {
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                   Grading Results
                 </h2>
-                
+
                 {responseMessageGrade ? (
                   <div className={`space-y-4 ${animateScore ? 'animate-pulse' : ''}`}>
                     {/* Score Categories */}
@@ -413,26 +411,26 @@ export default function TranslationPractice() {
                             <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-900 dark:text-white">
                               {responseMessageGrade?.grades[
                                 item.id.replace("Chart", "") === "grammar" ? "grammar_and_structure" :
-                                item.id.replace("Chart", "") === "vocabulary" ? "vocabulary_and_expression" :
-                                item.id.replace("Chart", "") === "spelling" ? "spelling_and_script_accuracy" :
-                                item.id.replace("Chart", "") === "politeness" ? "politeness_and_cultural_appropriateness" :
-                                "fluency_and_naturalness"
+                                  item.id.replace("Chart", "") === "vocabulary" ? "vocabulary_and_expression" :
+                                    item.id.replace("Chart", "") === "spelling" ? "spelling_and_script_accuracy" :
+                                      item.id.replace("Chart", "") === "politeness" ? "politeness_and_cultural_appropriateness" :
+                                        "fluency_and_naturalness"
                               ] ?? "--"}
                             </span>
                           </div>
                           <div className="flex-1">
                             <p className="text-sm font-medium text-gray-900 dark:text-white">{item.label}</p>
                             <div className="w-full bg-gray-200 dark:bg-white/10 rounded-full h-2 mt-1">
-                              <div 
+                              <div
                                 className={`h-2 rounded-full bg-${item.color}-500 transition-all duration-500`}
-                                style={{ 
+                                style={{
                                   width: `${(responseMessageGrade?.grades[
                                     item.id.replace("Chart", "") === "grammar" ? "grammar_and_structure" :
-                                    item.id.replace("Chart", "") === "vocabulary" ? "vocabulary_and_expression" :
-                                    item.id.replace("Chart", "") === "spelling" ? "spelling_and_script_accuracy" :
-                                    item.id.replace("Chart", "") === "politeness" ? "politeness_and_cultural_appropriateness" :
-                                    "fluency_and_naturalness"
-                                  ] ?? 0) * 5}%` 
+                                      item.id.replace("Chart", "") === "vocabulary" ? "vocabulary_and_expression" :
+                                        item.id.replace("Chart", "") === "spelling" ? "spelling_and_script_accuracy" :
+                                          item.id.replace("Chart", "") === "politeness" ? "politeness_and_cultural_appropriateness" :
+                                            "fluency_and_naturalness"
+                                  ] ?? 0) * 5}%`
                                 }}
                               />
                             </div>
@@ -454,14 +452,14 @@ export default function TranslationPractice() {
                           <span className="text-lg text-gray-600 dark:text-gray-400">/100</span>
                         </div>
                       </div>
-                      
+
                       {/* Score Feedback */}
                       <div className="mt-3 p-3 bg-gray-50 dark:bg-white/5 rounded-lg">
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                           {getTotalScore() >= 90 ? "🎉 Excellent work! Nearly perfect!" :
-                           getTotalScore() >= 70 ? "👍 Good job! Keep practicing!" :
-                           getTotalScore() >= 50 ? "💪 Not bad! Room for improvement." :
-                           "📚 Keep studying! You'll get better with practice."}
+                            getTotalScore() >= 70 ? "👍 Good job! Keep practicing!" :
+                              getTotalScore() >= 50 ? "💪 Not bad! Room for improvement." :
+                                "📚 Keep studying! You'll get better with practice."}
                         </p>
                       </div>
                     </div>

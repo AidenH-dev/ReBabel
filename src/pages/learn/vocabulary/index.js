@@ -24,7 +24,7 @@ export default function VocabularyDashboard() {
   const [userProfile, setUserProfile] = useState(null);
   const [recentsSets, setRecentsSets] = useState([]);
   const [isLoadingSets, setIsLoadingSets] = useState(true);
-  
+
   // Interval review cards state (mock data - replace with real data from backend)
   const [intervalCards, setIntervalCards] = useState({
     due: 23,        // Cards due for review today
@@ -110,10 +110,10 @@ export default function VocabularyDashboard() {
     return isNaN(d)
       ? "Unknown date"
       : new Intl.DateTimeFormat("en-US", {
-          month: "short",
-          day: "2-digit",
-          year: "numeric",
-        }).format(d);
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      }).format(d);
   };
 
   // Static groups (unchanged)
@@ -174,13 +174,13 @@ export default function VocabularyDashboard() {
                 <div className="p-1.5 bg-white/20 rounded-lg">
                   <FaBrain className="text-lg" />
                 </div>
-                
+
                 <div className="flex-1">
                   <div className="flex items-center gap-1 mb-1">
                     <h2 className="text-sm font-bold">Smart Review {'(Coming Soon)'}</h2>
                     <span className="text-xs text-white/70 hidden sm:inline">• Spaced repetition {'(Reinforcing recall for cards youve studied)'}</span>
                   </div>
-                  
+
                   {/* Compact stats */}
                   <div className="flex items-center gap-4 text-xs">
                     <div className="flex items-center gap-1">
@@ -211,11 +211,10 @@ export default function VocabularyDashboard() {
                 <button
                   onClick={handleStartSmartReview}
                   disabled={intervalCards.due === 0 && intervalCards.overdue === 0}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    intervalCards.due > 0 || intervalCards.overdue > 0
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${intervalCards.due > 0 || intervalCards.overdue > 0
                       ? "bg-white text-[#667eea] hover:bg-white/90 active:scale-95"
                       : "bg-white/20 text-white/60 cursor-not-allowed"
-                  }`}
+                    }`}
                 >
                   <MdAutorenew className="text-lg" />
                   <span className="hidden sm:inline">Start Review</span>
@@ -226,7 +225,7 @@ export default function VocabularyDashboard() {
                     </span>
                   )}
                 </button>
-                
+
                 <button className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors" title="View Statistics">
                   <FaChartLine className="text-sm" />
                 </button>
@@ -236,10 +235,10 @@ export default function VocabularyDashboard() {
             {/* Slim progress bar */}
             <div className="mt-3">
               <div className="w-full bg-white/20 rounded-full h-1">
-                <div 
+                <div
                   className="bg-white h-1 rounded-full transition-all duration-500"
-                  style={{ 
-                    width: `${(intervalCards.todayCompleted / (intervalCards.todayCompleted + intervalCards.due + intervalCards.overdue)) * 100}%` 
+                  style={{
+                    width: `${(intervalCards.todayCompleted / (intervalCards.todayCompleted + intervalCards.due + intervalCards.overdue)) * 100}%`
                   }}
                 />
               </div>
@@ -290,18 +289,16 @@ export default function VocabularyDashboard() {
                   <div className="flex items-center gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
                     <button
                       onClick={() => setView("grid")}
-                      className={`px-2 py-1 rounded-md text-xs flex items-center gap-1 transition ${
-                        view === "grid" ? "bg-white dark:bg-[#0f1a1f] text-[#e30a5f]" : "text-black/70 dark:text-white/70"
-                      }`}
+                      className={`px-2 py-1 rounded-md text-xs flex items-center gap-1 transition ${view === "grid" ? "bg-white dark:bg-[#0f1a1f] text-[#e30a5f]" : "text-black/70 dark:text-white/70"
+                        }`}
                       aria-label="Grid view"
                     >
                       <FiGrid className="inline-block" /> Grid
                     </button>
                     <button
                       onClick={() => setView("list")}
-                      className={`px-2 py-1 rounded-md text-xs flex items-center gap-1 transition ${
-                        view === "list" ? "bg-white dark:bg-[#0f1a1f] text-[#e30a5f]" : "text-black/70 dark:text-white/70"
-                      }`}
+                      className={`px-2 py-1 rounded-md text-xs flex items-center gap-1 transition ${view === "list" ? "bg-white dark:bg-[#0f1a1f] text-[#e30a5f]" : "text-black/70 dark:text-white/70"
+                        }`}
                       aria-label="List view"
                     >
                       <FiList className="inline-block" /> List
@@ -357,7 +354,7 @@ export default function VocabularyDashboard() {
                   {/* Empty state */}
                   {!isLoadingSets && recentsSets.length === 0 && (
                     <div className="rounded-xl border border-dashed border-black/10 dark:border-white/10 p-8 text-center text-sm text-black/70 dark:text-white/70">
-                      <p className="mb-3">You don't have any sets yet.</p>
+                      <p className="mb-3">You don&apos;t have any sets yet.</p>
                       <button
                         onClick={() => router.push("/learn/vocabulary/create-set")}
                         className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
