@@ -144,7 +144,7 @@ export default function Learn() {
   }, [responseMessageGrade]);
 
   return (
-    <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative bg-white dark:bg-[#141f25]">
+    <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative bg-white dark:bg-[#172229]">
       <Sidebar />
       <Head>
         <title>Learn</title>
