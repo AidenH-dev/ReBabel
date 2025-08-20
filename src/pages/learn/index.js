@@ -7,7 +7,7 @@ export default function Learn() {
 
   useEffect(() => {
     // Redirect to /learn/translate when this page loads
-    router.replace("/learn/grammar");
+    router.replace("/learn/home");
   }, [router]);
 
   return null; // This page itself won't render anything
