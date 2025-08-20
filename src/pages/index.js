@@ -407,7 +407,7 @@ export default function Home() {
 
               <div className="min-h-[150px]">
                 <p className="text-lg md:text-xl text-gray-700 italic mb-6">
-                  "{testimonials[currentTestimonial].quote}"
+                  &ldquo;{testimonials[currentTestimonial].quote}&rdquo;
                 </p>
 
                 <div className="flex items-center justify-between">
