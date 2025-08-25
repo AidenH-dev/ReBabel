@@ -49,6 +49,7 @@ import {
     ArcElement,
 } from 'chart.js';
 
+
 // Register Chart.js components
 ChartJS.register(
     CategoryScale,
@@ -68,39 +69,7 @@ export default function Home() {
     const [isLoading, setIsLoading] = useState(true);
 
     // Academic Track State
-    const [academicCourses, setAcademicCourses] = useState([
-        {
-            id: 1,
-            title: "Japanese 102 - Spring 2025",
-            textbook: "Genki I (Lessons 6-12)",
-            institution: "University",
-            progress: 35,
-            lastAccessed: "2 hours ago",
-            sections: [
-                { id: 1, title: "Lesson 6: Te-form", status: "in-progress", completed: 3, total: 5 },
-                { id: 2, title: "Lesson 7: Permissions", status: "not-started", completed: 0, total: 4 },
-                { id: 3, title: "Lesson 8: Short Forms", status: "not-started", completed: 0, total: 6 }
-            ],
-            upcomingDeadlines: [
-                { title: "Chapter 6 Quiz", date: "Mar 15", type: "quiz" },
-                { title: "Vocabulary Test", date: "Mar 18", type: "test" }
-            ]
-        },
-        {
-            id: 2,
-            title: "Business Japanese",
-            textbook: "Custom Materials",
-            institution: "Self-Study",
-            progress: 60,
-            lastAccessed: "1 day ago",
-            sections: [
-                { id: 1, title: "Keigo Basics", status: "completed", completed: 4, total: 4 },
-                { id: 2, title: "Email Writing", status: "in-progress", completed: 2, total: 3 },
-                { id: 3, title: "Presentations", status: "not-started", completed: 0, total: 5 }
-            ],
-            upcomingDeadlines: []
-        }
-    ]);
+    const [academicLearning_materials, setAcademicLearning_materials] = useState([]);
 
     // Certificate Track State
     const [certificateTracks, setCertificateTracks] = useState([
@@ -173,14 +142,38 @@ export default function Home() {
         fetchUserProfile();
     }, []);
 
-    const handleUploadMaterials = (courseId) => {
+    useEffect(() => {
+        const fetchLearning_materials = async () => {
+            try {
+                const resp = await fetch('/api/database/v1/learning_materials/list');
+                if (!resp.ok) throw new Error('Failed to load learning_materials');
+                const { learning_materials } = await resp.json();
+                setAcademicLearning_materials(learning_materials || []);
+            } catch (err) {
+                console.error('Error fetching learning_materials:', err);
+                setAcademicLearning_materials([]); // keep UI stable
+            }
+        };
+
+        // only fetch when userProfile has been loaded (or if you don’t care, call unconditionally)
+        if (userProfile !== null) fetchLearning_materials();
+    }, [userProfile]);
+
+
+    const handleUploadMaterials = (learning_materialId) => {
         // Navigate to upload page or open modal
-        router.push(`/upload-materials?courseId=${courseId}`);
+        router.push(`/upload-materials?learning_materialId=${learning_materialId}`);
     };
 
-    const handleCreateNewCourse = () => {
-        // Navigate to course creation page
-        router.push('/create-course');
+    
+    const handleEditMaterials = (learning_materialId) => {
+        // Navigate to upload page or open modal
+        router.push(`/learn/learning_material/edit-learning_material/${learning_materialId}`);
+    };
+
+    const handleCreateNewLearning_material = () => {
+        // Navigate to learning_material creation page
+        router.push('/learn/learning_material/create-learning_material');
     };
 
     return (
@@ -210,7 +203,7 @@ export default function Home() {
                                     </p>
                                 </div>
                             </div>
-                            
+
                             {/* Quick Stats */}
                             <div className="flex items-center gap-6">
                                 <div className="flex items-center gap-2 bg-orange-50 dark:bg-orange-900/20 px-4 py-2 rounded-lg">
@@ -239,25 +232,23 @@ export default function Home() {
                         <div className="flex">
                             <button
                                 onClick={() => setActiveTab('academic')}
-                                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
-                                    activeTab === 'academic'
+                                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${activeTab === 'academic'
                                         ? 'bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white shadow-lg'
                                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                                }`}
+                                    }`}
                             >
                                 <FaUniversity className="text-lg" />
                                 <span>Academic Track</span>
                                 <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">
-                                    {academicCourses.length} Courses
+                                    {academicLearning_materials.length} Learning Materials
                                 </span>
                             </button>
                             <button
                                 onClick={() => setActiveTab('certificate')}
-                                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
-                                    activeTab === 'certificate'
+                                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${activeTab === 'certificate'
                                         ? 'bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white shadow-lg'
                                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                                }`}
+                                    }`}
                             >
                                 <TbCertificate className="text-lg" />
                                 <span>Certificate Track</span>
@@ -272,39 +263,42 @@ export default function Home() {
                 {/* Academic Track Content */}
                 {activeTab === 'academic' && (
                     <div className="space-y-6">
-                        {/* Add New Course Button */}
+                        {/* Add New Learning_material Button */}
                         <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Your Courses</h2>
+                            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Your Learning Materials</h2>
                             <button
-                                onClick={handleCreateNewCourse}
+                                onClick={handleCreateNewLearning_material}
                                 className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white rounded-lg hover:shadow-lg transition-all"
                             >
                                 <FaPlus />
-                                <span>Add New Course</span>
+                                <span>Add New Learning Material</span>
                             </button>
                         </div>
 
-                        {/* Course Cards */}
+                        {/* Learning_material Cards */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {academicCourses.map((course) => (
-                                <div key={course.id} className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm overflow-hidden">
-                                    {/* Course Header */}
+                            {academicLearning_materials.map((learning_material) => (
+                                <div key={learning_material.id} className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm overflow-hidden">
+                                    {/* Learning_material Header */}
                                     <div className="p-6 border-b border-gray-100 dark:border-gray-700">
                                         <div className="flex justify-between items-start mb-4">
                                             <div>
                                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                                                    {course.title}
+                                                    {learning_material.title}
                                                 </h3>
                                                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                                                    {course.textbook} • {course.institution}
+                                                    {learning_material.textbook} • {learning_material.institution}
                                                 </p>
                                             </div>
                                             <div className="flex gap-2">
-                                                <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                                <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                                    onClick={() => handleEditMaterials(learning_material.id)}
+                                                >
+                                                    
                                                     <FaEdit />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleUploadMaterials(course.id)}
+                                                    onClick={() => handleUploadMaterials(learning_material.id)}
                                                     className="p-2 text-[#e30a5f] hover:text-[#f41567]"
                                                 >
                                                     <FaCloudArrowUp />
@@ -316,12 +310,12 @@ export default function Home() {
                                         <div className="space-y-2">
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-gray-600 dark:text-gray-400">Overall Progress</span>
-                                                <span className="font-medium text-gray-900 dark:text-white">{course.progress}%</span>
+                                                <span className="font-medium text-gray-900 dark:text-white">{learning_material.progress}%</span>
                                             </div>
                                             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                                 <div
                                                     className="bg-gradient-to-r from-[#e30a5f] to-[#f41567] h-2 rounded-full transition-all"
-                                                    style={{ width: `${course.progress}%` }}
+                                                    style={{ width: `${learning_material.progress}%` }}
                                                 />
                                             </div>
                                         </div>
@@ -330,18 +324,17 @@ export default function Home() {
                                     {/* Sections */}
                                     <div className="p-6 space-y-3">
                                         <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Current Sections</h4>
-                                        {course.sections.map((section) => (
+                                        {learning_material.sections.map((section) => (
                                             <div
                                                 key={section.id}
                                                 className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-all"
                                                 onClick={() => router.push(`/learn/section/${section.id}`)}
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`w-2 h-2 rounded-full ${
-                                                        section.status === 'completed' ? 'bg-green-500' :
-                                                        section.status === 'in-progress' ? 'bg-yellow-500' :
-                                                        'bg-gray-400'
-                                                    }`} />
+                                                    <div className={`w-2 h-2 rounded-full ${section.status === 'completed' ? 'bg-green-500' :
+                                                            section.status === 'in-progress' ? 'bg-yellow-500' :
+                                                                'bg-gray-400'
+                                                        }`} />
                                                     <span className="text-sm font-medium text-gray-900 dark:text-white">
                                                         {section.title}
                                                     </span>
@@ -357,11 +350,11 @@ export default function Home() {
                                     </div>
 
                                     {/* Upcoming Deadlines */}
-                                    {course.upcomingDeadlines.length > 0 && (
+                                    {learning_material.upcomingDeadlines.length > 0 && (
                                         <div className="px-6 pb-6">
                                             <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Upcoming</h4>
                                             <div className="space-y-2">
-                                                {course.upcomingDeadlines.map((deadline, idx) => (
+                                                {learning_material.upcomingDeadlines.map((deadline, idx) => (
                                                     <div key={idx} className="flex items-center justify-between text-sm">
                                                         <div className="flex items-center gap-2">
                                                             <FaCalendarAlt className="text-gray-400 text-xs" />
@@ -386,14 +379,14 @@ export default function Home() {
                                 </div>
                             ))}
 
-                            {/* Add Course Card */}
+                            {/* Add Learning_material Card */}
                             <div
-                                onClick={handleCreateNewCourse}
+                                onClick={handleCreateNewLearning_material}
                                 className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6 border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[#e30a5f] dark:hover:border-[#e30a5f] cursor-pointer transition-all group"
                             >
                                 <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-gray-400 group-hover:text-[#e30a5f] transition-colors">
                                     <FaPlus className="text-4xl mb-3" />
-                                    <p className="text-lg font-medium">Add New Course</p>
+                                    <p className="text-lg font-medium">Add New Learning Material</p>
                                     <p className="text-sm mt-1">Upload your textbook or class materials</p>
                                 </div>
                             </div>
@@ -405,19 +398,18 @@ export default function Home() {
                 {activeTab === 'certificate' && (
                     <div className="space-y-6">
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">JLPT Certification Paths</h2>
-                        
+
                         {/* Certificate Cards */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             {certificateTracks.map((track) => (
                                 <div
                                     key={track.id}
-                                    className={`bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm overflow-hidden ${
-                                        track.locked ? 'opacity-60' : ''
-                                    }`}
+                                    className={`bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm overflow-hidden ${track.locked ? 'opacity-60' : ''
+                                        }`}
                                 >
                                     {/* Header with gradient */}
                                     <div className={`h-2 bg-gradient-to-r ${track.color}`} />
-                                    
+
                                     <div className="p-6">
                                         {/* Title and Level */}
                                         <div className="flex justify-between items-start mb-4">
@@ -428,9 +420,8 @@ export default function Home() {
                                                 </h3>
                                                 <p className="text-sm text-gray-600 dark:text-gray-400">{track.level}</p>
                                             </div>
-                                            <TbCertificate className={`text-2xl ${
-                                                track.locked ? 'text-gray-400' : 'text-[#e30a5f]'
-                                            }`} />
+                                            <TbCertificate className={`text-2xl ${track.locked ? 'text-gray-400' : 'text-[#e30a5f]'
+                                                }`} />
                                         </div>
 
                                         {/* Overall Progress */}
@@ -521,7 +512,7 @@ export default function Home() {
                                     </div>
                                     <FaArrowRight className="ml-auto text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </button>
-                                
+
                                 <button className="flex items-center gap-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group">
                                     <FaPencilAlt className="text-2xl text-[#e30a5f]" />
                                     <div className="text-left">
@@ -530,7 +521,7 @@ export default function Home() {
                                     </div>
                                     <FaArrowRight className="ml-auto text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </button>
-                                
+
                                 <button className="flex items-center gap-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group">
                                     <FaClipboardList className="text-2xl text-[#e30a5f]" />
                                     <div className="text-left">
