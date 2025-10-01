@@ -627,7 +627,7 @@ export default function CreateNewSet() {
                                                 <>
                                                     <div className="grid grid-cols-2 gap-3 mb-3">
                                                         <div>
-                                                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center justify-between">
+                                                            <label className=" text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center justify-between">
                                                                 <span>Title * (enter only in jp or eng) {grammarForm.title && (
                                                                     <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-1">
                                                                         ({grammarTitleInputType === "kana" ? "Kana" : "English"})

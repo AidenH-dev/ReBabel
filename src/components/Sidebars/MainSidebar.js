@@ -67,7 +67,7 @@ function MainSidebar() {
         <ul className="space-y-2 font-medium">
           <li>
             <Link
-              href="/learn/home"
+              href="/learn/dashboard"
               className={`${baseLink} ${
                 isDashboardActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
               }`}
