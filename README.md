@@ -53,8 +53,8 @@ AUTH0_ISSUER_BASE_URL='your-auth0-domain'
 AUTH0_CLIENT_ID='your-auth0-client-id'
 AUTH0_CLIENT_SECRET='your-auth0-client-secret'
 OPENAI_API_KEY='your-openai-api-key'
-NEXT_PUBLIC_SUPABASE_URL='your-supabase-url'
-NEXT_PUBLIC_SUPABASE_ANON_KEY='your-supabase-anon-key'
+NEXT_SUPABASE_URL='your-supabase-url'
+NEXT_SUPABASE_ANON_KEY='your-supabase-anon-key'
 ```
 
 ## Running the Application

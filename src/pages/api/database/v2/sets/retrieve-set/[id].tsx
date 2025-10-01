@@ -115,7 +115,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
 
     // Environment variables for configuration
     const SUPABASE_URL = process.env.SUPABASE_URL || 'https://lraaascxhlrjdnvmdyyt.supabase.co';
-    const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const SUPABASE_ANON_KEY = process.env.NEXT_SUPABASE_ANON_KEY;
 
     if (!SUPABASE_ANON_KEY) {
       console.error('Missing SUPABASE_ANON_KEY environment variable');
