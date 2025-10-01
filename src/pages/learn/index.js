@@ -7,7 +7,7 @@ export default function Learn() {
 
   useEffect(() => {
     // Redirect to /learn/translate when this page loads
-    router.replace("/learn/home");
+    router.replace("/learn/dashboard");
   }, [router]);
 
   return null; // This page itself won't render anything
