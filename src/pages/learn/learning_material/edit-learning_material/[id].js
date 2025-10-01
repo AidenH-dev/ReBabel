@@ -1,6 +1,6 @@
 // pages/learn/edit-learning_material/[id].js
 import Head from 'next/head';
-import Sidebar from '../../../../components/Sidebar';
+import MainSidebar from '../../../../components/Sidebars/MainSidebar';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -446,7 +446,7 @@ export default function EditLearning_materialPage() {
     if (loading) {
         return (
             <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
-                <Sidebar />
+                <MainSidebar />
                 <main className="ml-auto flex-1 px-8 py-6 flex items-center justify-center">
                     <div className="text-center">
                         <div className="w-12 h-12 border-4 border-[#e30a5f] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -459,7 +459,7 @@ export default function EditLearning_materialPage() {
 
     return (
         <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
-            <Sidebar />
+            <MainSidebar />
 
             <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6">
                 <Head>

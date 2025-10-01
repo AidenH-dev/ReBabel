@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import Sidebar from "../../../components/Sidebar.js";
+import MainSidebar from "../../../components/Sidebars/MainSidebar.js";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import {
   FaArrowRight,
@@ -229,7 +229,7 @@ export default function TranslationPractice() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
-      <Sidebar />
+      <MainSidebar />
 
       <main className="ml-auto max-h-screen overflow-y-scroll flex-1 p-6">
         <Head>

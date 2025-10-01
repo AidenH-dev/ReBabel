@@ -1,5 +1,6 @@
 import Script from "next/script";
 import Head from "next/head";
+import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
@@ -10,6 +11,10 @@ import {
   FaUsers,
   FaStar,
   FaQuoteLeft,
+  FaLightbulb,
+  FaGraduationCap,
+  FaClock,
+  FaShieldAlt,
 } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { MdTranslate } from "react-icons/md";
@@ -17,45 +22,21 @@ import { MdTranslate } from "react-icons/md";
 export default function Home() {
   const animationsRef = useRef(null);
   const router = useRouter();
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSignup = () => {
     router.push("/api/auth/login");
   };
 
-  // Testimonials data
-  const testimonials = [
-    {
-      quote:
-        "ReBabel's spaced repetition system helped me remember vocabulary 3x faster than traditional methods.",
-      author: "Sarah Chen",
-      role: "N3 Level Student",
-      rating: 5,
-    },
-    {
-      quote:
-        "The adaptive learning system knows exactly what I need to practice. It's like having a personal tutor!",
-      author: "Michael Torres",
-      role: "Business Professional",
-      rating: 5,
-    },
-    {
-      quote:
-        "I passed my JLPT N4 exam after just 6 months of using ReBabel. The progress tracking kept me motivated!",
-      author: "Emma Wilson",
-      role: "University Student",
-      rating: 5,
-    },
-  ];
-
-  // Auto-rotate testimonials
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleEarlyAccess = (e) => {
+    e.preventDefault();
+    if (email) {
+      setSubmitted(true);
+      // Handle email submission here
+      setTimeout(() => setSubmitted(false), 5000);
+    }
+  };
 
   return (
     <>
@@ -65,6 +46,9 @@ export default function Home() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <span className="text-2xl font-bold text-[#e30a5f]">ReBabel</span>
+              <span className="ml-2 text-xs bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-2 py-1 rounded-full">
+                BETA
+              </span>
             </div>
             <div className="flex items-center gap-4">
               <button
@@ -77,7 +61,7 @@ export default function Home() {
                 onClick={handleSignup}
                 className="px-4 py-2 text-sm bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium rounded-lg transition-colors"
               >
-                Get Started
+                Join Early Access
               </button>
             </div>
           </div>
@@ -89,7 +73,7 @@ export default function Home() {
           <title>ReBabel - Master Japanese with Science-Based Learning</title>
           <meta
             name="description"
-            content="Learn Japanese effectively with spaced repetition, adaptive learning, and comprehensive progress tracking. Join thousands mastering Japanese the smart way."
+            content="Be among the first to experience the future of Japanese learning. Join our early access program and help shape the most effective language learning platform."
           />
           <link rel="icon" href="/favicon.ico" />
         </Head>
@@ -111,15 +95,14 @@ export default function Home() {
         />
 
         {/* Hero Section */}
-        <section className="w-full px-4 sm:px-6 lg:px-8 pt-20 pb-16 md:pt-32 md:pb-24">
+        <section className="w-full px-4 sm:px-6 lg:px-8 pt-20 pb-16 md:pt-24 md:pb-24">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left Column - Text */}
               <div className="text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 bg-[#e30a5f]/10 text-[#e30a5f] px-4 py-2 rounded-full text-sm font-medium mb-6">
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#667eea]/10 to-[#764ba2]/10 text-[#667eea] px-4 py-2 rounded-full text-sm font-medium mb-10 border border-[#667eea]/20">
                   <FaRocket className="text-xs" />
-                  <span>科学的に証明された学習方法</span>
-                  <span className="text-xs">• Science-Based</span>
+                  <span>Now Accepting Beta Users</span>
                 </div>
 
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
@@ -130,10 +113,8 @@ export default function Home() {
                 </h1>
 
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
-                  From hiragana to advanced kanji, our adaptive system
-                  personalizes your journey. Join{" "}
-                  <span className="font-semibold text-gray-900">5,000+</span>{" "}
-                  learners achieving fluency faster.
+                  We&apos;re building the most effective Japanese learning platform using 
+                  spaced repetition and adaptive AI. Be part of our journey from day one.
                 </p>
 
                 {/* CTA Buttons */}
@@ -144,31 +125,27 @@ export default function Home() {
                       onClick={handleSignup}
                       className="relative px-8 py-3 text-lg text-white bg-[#E30B5C] hover:bg-[#f41567] font-semibold rounded-lg transform transition-all duration-200 active:translate-y-1 w-full sm:w-auto"
                     >
-                      Start Learning Free
+                      Join Beta - It&apos;s Free
                     </button>
                   </div>
 
-                  <button className="px-8 py-3 text-lg text-gray-700 bg-white border-2 border-gray-300 hover:border-gray-400 font-medium rounded-lg transition-colors">
+                  {/*<button className="px-8 py-3 text-lg text-gray-700 bg-white border-2 border-gray-300 hover:border-gray-400 font-medium rounded-lg transition-colors">
                     Watch Demo
-                  </button>
+        </button>*/}
                 </div>
 
                 {/* Trust Indicators */}
                 <div className="flex items-center gap-8 mt-8 justify-center lg:justify-start">
                   <div className="flex items-center gap-2">
-                    <FaUsers className="text-gray-400" />
+                    <FaShieldAlt className="text-[#e30a5f]" />
                     <span className="text-sm text-gray-600">
-                      <strong>5,000+</strong> Active Learners
+                      <strong>Free</strong> Access Forever
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} className="text-sm" />
-                      ))}
-                    </div>
+                    <FaClock className="text-[#e30a5f]" />
                     <span className="text-sm text-gray-600">
-                      <strong>4.9</strong> Rating
+                      <strong>Founder</strong> Pricing Available
                     </span>
                   </div>
                 </div>
@@ -177,11 +154,18 @@ export default function Home() {
               {/* Right Column - Visual */}
               <div className="relative">
                 <div className="relative z-10">
-                  <img
+                  <Image
                     src="/LPI.png"
                     alt="ReBabel Learning Platform"
+                    width={600}
+                    height={400}
                     className="w-full max-w-[600px] mx-auto rounded-2xl shadow-2xl"
+                    priority
                   />
+                  {/* Beta Badge on Image */}
+                  <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg transform rotate-12">
+                    Early Access
+                  </div>
                 </div>
                 {/* Decorative Elements */}
                 <div className="absolute -top-4 -right-4 w-72 h-72 bg-[#e30a5f]/10 rounded-full blur-3xl"></div>
@@ -191,34 +175,60 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Stats Section */}
+        {/* What We're Building Section (Replaces Stats) */}
         <section className="w-full bg-gray-900 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                What We&apos;re Building
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Join us in creating the most comprehensive Japanese learning platform
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-[#e30a5f] mb-2">
-                  2,300+
+                <div className="w-16 h-16 bg-[#e30a5f]/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <FaGraduationCap className="text-2xl text-[#e30a5f]" />
                 </div>
-                <div className="text-sm text-gray-400">Vocabulary Words</div>
+                <div className="text-sm font-semibold mb-1">Complete Curriculum</div>
+                <div className="text-xs text-gray-400">From Hiragana to N1</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-[#e30a5f] mb-2">
-                  180+
+                <div className="w-16 h-16 bg-[#e30a5f]/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <FaBrain className="text-2xl text-[#e30a5f]" />
                 </div>
-                <div className="text-sm text-gray-400">Grammar Points</div>
+                <div className="text-sm font-semibold mb-1">Smart SRS</div>
+                <div className="text-xs text-gray-400">Science-based retention</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-[#e30a5f] mb-2">
-                  317
+                <div className="w-16 h-16 bg-[#e30a5f]/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <MdTranslate className="text-2xl text-[#e30a5f]" />
                 </div>
-                <div className="text-sm text-gray-400">Essential Kanji</div>
+                <div className="text-sm font-semibold mb-1">All Skills</div>
+                <div className="text-xs text-gray-400">Reading, writing, speaking</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-[#e30a5f] mb-2">
-                  92%
+                <div className="w-16 h-16 bg-[#e30a5f]/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <FaChartLine className="text-2xl text-[#e30a5f]" />
                 </div>
-                <div className="text-sm text-gray-400">Pass Rate</div>
+                <div className="text-sm font-semibold mb-1">Track Progress</div>
+                <div className="text-xs text-gray-400">Detailed analytics</div>
               </div>
+            </div>
+
+            {/* Pricing Preview */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-w-2xl mx-auto border border-white/20">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <FaStar className="text-yellow-400" />
+                <span className="text-sm font-semibold text-yellow-400">Coming Soon: Premium Plans</span>
+                <FaStar className="text-yellow-400" />
+              </div>
+              <p className="text-sm text-gray-300 text-center">
+                Core features will always be free. Limited founder subscriptions with 
+                lifetime discounts will be available for beta members who want advanced features.
+              </p>
             </div>
           </div>
         </section>
@@ -228,10 +238,10 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Why ReBabel Works
+                Why ReBabel Will Work
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Our platform combines cognitive science with modern technology
+                We&apos;re combining proven cognitive science with modern technology
                 to create the most effective Japanese learning experience.
               </p>
             </div>
@@ -246,8 +256,8 @@ export default function Home() {
                   Spaced Repetition System
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Our intelligent algorithm shows you cards at optimal
-                  intervals, proven to increase retention by 200%.
+                  Our intelligent algorithm will show you cards at optimal
+                  intervals, using proven methods to maximize retention.
                 </p>
                 <ul className="space-y-2">
                   {[
@@ -335,8 +345,8 @@ export default function Home() {
                 Your Path to Fluency
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                From absolute beginner to advanced speaker, we guide you every
-                step of the way.
+                We&apos;re designing a comprehensive curriculum to guide you from
+                absolute beginner to advanced speaker.
               </p>
             </div>
 
@@ -345,25 +355,25 @@ export default function Home() {
                 {
                   level: "Beginner",
                   desc: "Hiragana & Katakana",
-                  lessons: "12 lessons",
+                  status: "Coming Q3 2025",
                   color: "from-green-400 to-green-600",
                 },
                 {
                   level: "Elementary",
                   desc: "Basic Grammar & Vocab",
-                  lessons: "24 lessons",
+                  status: "Available at Launch",
                   color: "from-blue-400 to-blue-600",
                 },
                 {
                   level: "Intermediate",
                   desc: "Complex Sentences",
-                  lessons: "36 lessons",
+                  status: "Coming Q3 2025",
                   color: "from-purple-400 to-purple-600",
                 },
                 {
                   level: "Advanced",
                   desc: "Native-like Fluency",
-                  lessons: "48+ lessons",
+                  status: "Coming Q3 2025",
                   color: "from-[#e30a5f] to-[#f41567]",
                 },
               ].map((stage, index) => (
@@ -383,8 +393,8 @@ export default function Home() {
                       {stage.level}
                     </h3>
                     <p className="text-gray-600 text-sm mb-2">{stage.desc}</p>
-                    <span className="text-xs text-gray-500">
-                      {stage.lessons}
+                    <span className="text-xs text-[#e30a5f] font-medium">
+                      {stage.status}
                     </span>
                   </div>
                 </div>
@@ -393,96 +403,131 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Testimonials Section */}
+        {/* Beta Benefits Section (Replaces Testimonials) */}
         <section className="w-full py-20 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Loved by Learners Worldwide
+                Be Part of Something Special
               </h2>
+              <p className="text-lg text-gray-600">
+                As an early member, you&apos;ll help shape the future of ReBabel
+              </p>
             </div>
 
-            <div className="relative bg-gray-50 rounded-2xl p-8 md:p-12">
-              <FaQuoteLeft className="text-4xl text-[#e30a5f]/20 mb-6" />
-
-              <div className="min-h-[150px]">
-                <p className="text-lg md:text-xl text-gray-700 italic mb-6">
-                  &ldquo;{testimonials[currentTestimonial].quote}&rdquo;
-                </p>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-gray-900">
-                      {testimonials[currentTestimonial].author}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {testimonials[currentTestimonial].role}
-                    </p>
-                  </div>
-                  <div className="flex text-yellow-400">
-                    {[
-                      ...Array(testimonials[currentTestimonial].rating),
-                    ].map((_, i) => (
-                      <FaStar key={i} />
-                    ))}
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-gradient-to-br from-[#667eea]/10 to-[#764ba2]/10 rounded-2xl p-8 border border-[#667eea]/20">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-lg flex items-center justify-center text-white mb-4">
+                  <FaLightbulb className="text-2xl" />
                 </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  Shape the Product
+                </h3>
+                <p className="text-gray-600">
+                  Your feedback will directly influence features and improvements.
+                  Be heard and see your ideas come to life.
+                </p>
               </div>
 
-              {/* Dots indicator */}
-              <div className="flex justify-center gap-2 mt-8">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentTestimonial(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      index === currentTestimonial
-                        ? "w-8 bg-[#e30a5f]"
-                        : "bg-gray-300"
-                    }`}
-                  />
-                ))}
+              <div className="bg-gradient-to-br from-[#e30a5f]/10 to-[#f41567]/10 rounded-2xl p-8 border border-[#e30a5f]/20">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#e30a5f] to-[#f41567] rounded-lg flex items-center justify-center text-white mb-4">
+                  <FaStar className="text-2xl" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  Founder Pricing
+                </h3>
+                <p className="text-gray-600">
+                  Lock in exclusive discounted rates on premium features. Beta users 
+                  get lifetime founder pricing when subscriptions launch.
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-2xl p-8 border border-green-500/20">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center text-white mb-4">
+                  <FaUsers className="text-2xl" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  Exclusive Community
+                </h3>
+                <p className="text-gray-600">
+                  Join our founding community of passionate learners and get
+                  direct access to the development team.
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 rounded-2xl p-8 border border-orange-500/20">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-lg flex items-center justify-center text-white mb-4">
+                  <FaRocket className="text-2xl" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  Early Access Features
+                </h3>
+                <p className="text-gray-600">
+                  Be the first to try new features and content as we build them.
+                  Get a head start on your learning journey.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA Section with Email Capture */}
         <section className="w-full py-20 bg-gradient-to-r from-[#e30a5f] to-[#f41567]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Start Your Japanese Journey?
+              Ready to Be Part of the Revolution?
             </h2>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-              Join thousands of successful learners. No credit card required.
+              Start learning Japanese for free today. Beta users get exclusive 
+              founder discounts when premium features launch.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={handleSignup}
-                className="px-8 py-3 bg-white text-[#e30a5f] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                Start Learning Free
-              </button>
-              <button className="px-8 py-3 bg-white/20 text-white font-medium rounded-lg hover:bg-white/30 transition-colors border-2 border-white/50">
-                View Curriculum
-              </button>
-            </div>
+            {!submitted ? (
+              <form onSubmit={handleEarlyAccess} className="max-w-md mx-auto mb-8">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="px-6 py-3 bg-white text-[#e30a5f] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    Join Beta
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 max-w-md mx-auto mb-8 border-2 border-white/30">
+                <p className="text-white font-semibold">
+                  🎉 Thank you! We&apos;ll be in touch soon with your beta access.
+                </p>
+              </div>
+            )}
 
-            <div className="flex items-center justify-center gap-8 mt-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-6">
               <div className="flex items-center gap-2 text-white/90">
                 <FaCheckCircle />
-                <span>Free to start</span>
+                <span>Always Free Tier</span>
+              </div>
+              <div className="flex items-center gap-2 text-white/90">
+                <FaCheckCircle />
+                <span>Founder Discounts</span>
               </div>
               <div className="flex items-center gap-2 text-white/90">
                 <FaCheckCircle />
                 <span>No credit card</span>
               </div>
-              <div className="flex items-center gap-2 text-white/90">
-                <FaCheckCircle />
-                <span>Cancel anytime</span>
-              </div>
             </div>
+            
+            <p className="text-sm text-white/70 max-w-lg mx-auto">
+              Limited founder subscriptions coming soon with exclusive lifetime discounts 
+              for beta members. Free access will always be available.
+            </p>
           </div>
         </section>
       </main>
@@ -494,8 +539,11 @@ export default function Home() {
             <div>
               <h3 className="text-xl font-bold text-[#e30a5f] mb-4">ReBabel</h3>
               <p className="text-sm text-gray-400">
-                Master Japanese with intelligent, adaptive learning.
+                Building the future of Japanese learning.
               </p>
+              <span className="inline-block mt-2 text-xs bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-2 py-1 rounded-full">
+                BETA
+              </span>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
@@ -507,7 +555,7 @@ export default function Home() {
                 </li>
                 <li>
                   <a href="#" className="hover:text-white">
-                    Pricing
+                    Roadmap
                   </a>
                 </li>
                 <li>
@@ -554,7 +602,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 ReBabel. All rights reserved.</p>
+            <p>&copy; 2024 ReBabel. All rights reserved. Currently in beta development.</p>
           </div>
         </div>
       </footer>

@@ -56,7 +56,7 @@ import { handleAuth, handleLogin } from '@auth0/nextjs-auth0';
 export default handleAuth({
   async login(req, res) {
     await handleLogin(req, res, {
-      returnTo: '/learn', // This specifies where to redirect after login
+      returnTo: '/learn/dashboard', // This specifies where to redirect after login
     });
   },
 });

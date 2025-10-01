@@ -25,6 +25,7 @@
     "react-dom": "^18",
     "react-icons": "^5.4.0",
     "react-select": "^5.10.0",
+    "wanakana": "^5.3.1",
     "yup": "^1.5.0"
   },
   "devDependencies": {

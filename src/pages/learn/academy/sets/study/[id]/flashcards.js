@@ -1,6 +1,7 @@
+// pages/learn/academy/sets/study/[id]/flashcards.js
 import Head from "next/head";
-import MainSidebar from "../../../components/Sidebars/MainSidebar";
-import { useState, useEffect } from "react";
+import MainSidebar from "../../../../../../components/Sidebars/AcademySidebar";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { 
@@ -17,11 +18,15 @@ import {
 import { TbCards, TbX } from "react-icons/tb";
 import { MdFlip } from "react-icons/md";
 
-export default function Notecards() {
+export default function SetFlashcards() {
   const router = useRouter();
-  const { lesson, terms } = router.query;
+  const { id } = router.query;
+  
   const [cardsData, setCardsData] = useState([]);
+  const [setInfo, setSetInfo] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   
   // Card states
   const [isFront, setIsFront] = useState(true);
@@ -34,7 +39,6 @@ export default function Notecards() {
     incorrect: 0,
     skipped: 0,
     totalTime: 0,
-    // New stats for interval mode
     again: 0,
     hard: 0,
     good: 0,
@@ -44,8 +48,8 @@ export default function Notecards() {
   // Card confidence levels
   const [cardConfidence, setCardConfidence] = useState({});
   
-  // Study mode - now includes 'interval'
-  const [studyMode, setStudyMode] = useState("study"); // study, quiz, interval
+  // Study mode
+  const [studyMode, setStudyMode] = useState("plain"); // plain, quiz, interval
   
   const SLIDE_DURATION = 300;
 
@@ -57,59 +61,108 @@ export default function Notecards() {
     "slide-in-left": "transition-all duration-300 ease-out -translate-x-full opacity-0",
   };
 
+  // ----- Fetch Data from API -----
   useEffect(() => {
-    if (!router.isReady) return;
+    if (!id) return;
 
-    if (terms) {
+    const fetchSetData = async () => {
+      setIsLoading(true);
+      setError(null);
+
       try {
-        const parsedTerms = JSON.parse(terms);
-        const formattedCards = parsedTerms.map((item) => ({
-          front: item.English,
-          back: item["Japanese(Hiragana/Katakana)"] || item.Japanese,
-          audio: item.audio || null,
-          // Initialize interval data for each card
-          interval: 1, // Starting interval in days
-          easeFactor: 2.5, // Starting ease factor
-          repetitions: 0,
-          lastReviewed: null
-        }));
-        setCardsData(formattedCards);
-      } catch (error) {
-        console.error("Error parsing terms from query parameter:", error);
-      }
-    } else if (lesson) {
-      fetch(`/api/fetch-vocabulary?lesson=${lesson}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch vocabulary data");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          const formattedCards = data.map((item) => ({
-            front: item.English,
-            back: item["Japanese(Hiragana/Katakana)"] || item.Japanese,
-            audio: item.audio || null,
-            // Initialize interval data for each card
-            interval: 1,
-            easeFactor: 2.5,
-            repetitions: 0,
-            lastReviewed: null
-          }));
-          setCardsData(formattedCards);
-        })
-        .catch((error) =>
-          console.error("Error fetching vocabulary data:", error)
-        );
-    }
-  }, [router.isReady, lesson, terms]);
+        const response = await fetch(`/api/database/v2/sets/retrieve-set/${id}`);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch set: ${response.statusText}`);
+        }
 
-  const handleFlip = () => {
+        const result = await response.json();
+
+        if (!result.success || !result.data) {
+          throw new Error(result.error || 'Failed to load set data');
+        }
+
+        const apiData = result.data;
+        const setInfoData = apiData.data?.set;
+        const setItemsAPI = apiData.data?.items || [];
+
+        if (!setInfoData) {
+          throw new Error('Invalid set data structure received from API');
+        }
+
+        setSetInfo({
+          title: setInfoData.title || "Untitled Set",
+          description: setInfoData.description?.toString() || "",
+        });
+
+        // Transform items to flashcard format
+        const transformedCards = Array.isArray(setItemsAPI) ? setItemsAPI.map((item, index) => {
+          if (item.type === 'vocab' || item.type === 'vocabulary') {
+            return {
+              id: index + 1,
+              type: 'vocabulary',
+              front: item.english || "",
+              back: `${item.kana || ""}${item.kanji ? ` (${item.kanji})` : ""}`,
+              kana: item.kana || "",
+              kanji: item.kanji || "",
+              english: item.english || "",
+              lexical_category: item.lexical_category || "",
+              example_sentences: Array.isArray(item.example_sentences) 
+                ? item.example_sentences 
+                : [item.example_sentences].filter(Boolean),
+              // Initialize interval data
+              interval: 1,
+              easeFactor: 2.5,
+              repetitions: 0,
+              lastReviewed: null
+            };
+          } else if (item.type === 'grammar') {
+            return {
+              id: index + 1,
+              type: 'grammar',
+              front: item.title || "",
+              back: item.description || "",
+              title: item.title || "",
+              description: item.description || "",
+              topic: item.topic || "",
+              example_sentences: Array.isArray(item.example_sentences)
+                ? item.example_sentences.map(ex => 
+                    typeof ex === 'string' ? ex : `${ex.japanese || ''} (${ex.english || ''})`
+                  )
+                : [],
+              // Initialize interval data
+              interval: 1,
+              easeFactor: 2.5,
+              repetitions: 0,
+              lastReviewed: null
+            };
+          }
+          return null;
+        }).filter(Boolean) : [];
+
+        if (transformedCards.length === 0) {
+          throw new Error('This set has no items to study');
+        }
+
+        setCardsData(transformedCards);
+
+      } catch (err) {
+        console.error('Error fetching set:', err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSetData();
+  }, [id]);
+
+  const handleFlip = useCallback(() => {
     setShouldAnimate(true);
     setIsFront((prev) => !prev);
-  };
+  }, []);
 
-  const slideCard = (outState, inState, newIndex) => {
+  const slideCard = useCallback((outState, inState, newIndex) => {
     setTransitionState(outState);
     setTimeout(() => {
       setShouldAnimate(false);
@@ -120,30 +173,29 @@ export default function Notecards() {
         setTransitionState("idle");
       }, SLIDE_DURATION);
     }, SLIDE_DURATION);
-  };
+  }, [SLIDE_DURATION]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentIndex < cardsData.length - 1) {
       slideCard("slide-out-left", "slide-in-right", currentIndex + 1);
     }
-  };
+  }, [currentIndex, cardsData.length, slideCard]);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     if (currentIndex > 0) {
       slideCard("slide-out-right", "slide-in-left", currentIndex - 1);
     }
-  };
+  }, [currentIndex, slideCard]);
 
-  const handleExit = () => {
-    router.push("/learn/vocabulary");
-  };
+  const handleExit = useCallback(() => {
+    router.push(`/learn/academy/sets/study/${id}`);
+  }, [router, id]);
 
-  // Mark card as known/unknown (for quiz mode)
-  const markCard = (confidence) => {
-    setCardConfidence({
-      ...cardConfidence,
+  const markCard = useCallback((confidence) => {
+    setCardConfidence(prev => ({
+      ...prev,
       [currentIndex]: confidence
-    });
+    }));
     
     if (confidence === 'known') {
       setSessionStats(prev => ({ ...prev, correct: prev.correct + 1 }));
@@ -151,66 +203,58 @@ export default function Notecards() {
       setSessionStats(prev => ({ ...prev, incorrect: prev.incorrect + 1 }));
     }
     
-    // Auto-advance after marking
     setTimeout(() => {
       if (currentIndex < cardsData.length - 1) {
         handleNext();
       }
     }, 500);
-  };
+  }, [currentIndex, cardsData.length, handleNext]);
 
-  // Handle interval-based learning response
-  const handleIntervalResponse = (difficulty) => {
-    // Update session stats
+  const handleIntervalResponse = useCallback((difficulty) => {
     setSessionStats(prev => ({ 
       ...prev, 
       [difficulty]: prev[difficulty] + 1 
     }));
 
-    // Mark the card with difficulty level for visual feedback
-    setCardConfidence({
-      ...cardConfidence,
+    setCardConfidence(prev => ({
+      ...prev,
       [currentIndex]: difficulty
+    }));
+
+    setCardsData(prevCards => {
+      const updatedCards = [...prevCards];
+      const currentCard = updatedCards[currentIndex];
+      
+      switch(difficulty) {
+        case 'again':
+          currentCard.interval = 1;
+          currentCard.repetitions = 0;
+          break;
+        case 'hard':
+          currentCard.interval = Math.max(1, currentCard.interval * 1.2);
+          break;
+        case 'good':
+          currentCard.interval = currentCard.interval * 2.5;
+          currentCard.repetitions += 1;
+          break;
+        case 'easy':
+          currentCard.interval = currentCard.interval * 3.5;
+          currentCard.repetitions += 1;
+          break;
+      }
+      
+      currentCard.lastReviewed = new Date();
+      return updatedCards;
     });
 
-    // Here you would normally update the card's interval data
-    // This will be implemented later with the scheduling algorithm
-    // For now, just track the response
-    
-    const updatedCards = [...cardsData];
-    const currentCard = updatedCards[currentIndex];
-    
-    // Simple interval adjustment (to be replaced with proper SM-2 algorithm)
-    switch(difficulty) {
-      case 'again':
-        currentCard.interval = 1;
-        currentCard.repetitions = 0;
-        break;
-      case 'hard':
-        currentCard.interval = Math.max(1, currentCard.interval * 1.2);
-        break;
-      case 'good':
-        currentCard.interval = currentCard.interval * 2.5;
-        currentCard.repetitions += 1;
-        break;
-      case 'easy':
-        currentCard.interval = currentCard.interval * 3.5;
-        currentCard.repetitions += 1;
-        break;
-    }
-    
-    currentCard.lastReviewed = new Date();
-    setCardsData(updatedCards);
-
-    // Auto-advance after marking
     setTimeout(() => {
       if (currentIndex < cardsData.length - 1) {
         handleNext();
       }
     }, 500);
-  };
+  }, [currentIndex, cardsData.length, handleNext]);
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = useCallback((e) => {
     if (e.key === ' ') {
       e.preventDefault();
       handleFlip();
@@ -219,24 +263,21 @@ export default function Notecards() {
     } else if (e.key === 'ArrowLeft') {
       handlePrevious();
     } else if (studyMode === 'interval' && !isFront) {
-      // Keyboard shortcuts for interval mode
       if (e.key === '1') handleIntervalResponse('again');
       if (e.key === '2') handleIntervalResponse('hard');
       if (e.key === '3') handleIntervalResponse('good');
       if (e.key === '4') handleIntervalResponse('easy');
     }
-  };
+  }, [handleFlip, handleNext, handlePrevious, handleIntervalResponse, studyMode, isFront]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [currentIndex, cardsData.length, isFront, studyMode]);
+  }, [handleKeyPress]);
 
-  // Calculate progress
   const progress = cardsData.length > 0 ? ((currentIndex + 1) / cardsData.length) * 100 : 0;
   const isLastCard = currentIndex === cardsData.length - 1;
 
-  // 3D Flip Styles
   const container3DStyles = {
     perspective: "1000px",
     perspectiveOrigin: "center center",
@@ -263,7 +304,6 @@ export default function Notecards() {
     borderRadius: "1rem",
   };
 
-  // Get confidence indicator color based on mode and response
   const getConfidenceColor = (confidence) => {
     if (studyMode === 'interval') {
       switch(confidence) {
@@ -274,20 +314,41 @@ export default function Notecards() {
         default: return null;
       }
     } else {
-      // Quiz mode colors
       return confidence === 'known' ? 'bg-green-400' : 
              confidence === 'unknown' ? 'bg-red-400' : 
              'bg-yellow-400';
     }
   };
 
+  // Show error state
+  if (error) {
+    return (
+      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
+        <MainSidebar />
+        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
+              Error Loading Flashcards
+            </div>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+            <button
+              onClick={() => router.push('/learn/academy/sets')}
+              className="px-4 py-2 bg-[#e30a5f] text-white rounded-lg hover:bg-[#c00950] transition-colors"
+            >
+              Back to Sets
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
-      <MainSidebar />
 
       <main className="ml-auto flex-1 flex flex-col p-6">
         <Head>
-          <title>Flashcards • {lesson ? `Lesson ${lesson}` : 'Custom Set'}</title>
+          <title>Flashcards • {setInfo?.title || 'Study Set'}</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
@@ -306,24 +367,24 @@ export default function Notecards() {
               <div className="flex items-center gap-2">
                 <TbCards className="text-[#e30a5f] text-xl" />
                 <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  {lesson ? `Lesson ${lesson} Vocabulary` : 'Vocabulary Practice'}
+                  {setInfo?.title || 'Flashcards'}
                 </h1>
               </div>
             </div>
 
             {/* Study Mode Selector */}
-            <div className="flex items-center gap-2 bg-gray-200 dark:bg-white/10 rounded-lg p-1">
+            <div className="flex items-center gap-2 bg-gray-200 dark:bg-white/10 rounded-lg p-1 px-1">
               <button
-                onClick={() => setStudyMode('study')}
+                onClick={() => setStudyMode('plain')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  studyMode === 'study' 
+                  studyMode === 'plain' 
                     ? 'bg-[#e30a5f] text-white' 
                     : 'text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
-                Study
+                Plain Cards
               </button>
-              <button
+              {/*<button
                 onClick={() => setStudyMode('quiz')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   studyMode === 'quiz' 
@@ -332,17 +393,17 @@ export default function Notecards() {
                 }`}
               >
                 Quiz
-              </button>
-              <button
+              </button>*/}
+              {/*<button
                 onClick={() => setStudyMode('interval')}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   studyMode === 'interval' 
                     ? 'bg-[#e30a5f] text-white' 
                     : 'text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
                 Interval
-              </button>
+              </button>*/}
             </div>
           </div>
 
@@ -362,7 +423,16 @@ export default function Notecards() {
         </div>
 
         {/* Main Card Area */}
-        {cardsData.length > 0 ? (
+        {isLoading ? (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-pulse mb-4">
+                <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
+              </div>
+              <p className="text-gray-600 dark:text-white/70">Loading flashcards...</p>
+            </div>
+          </div>
+        ) : cardsData.length > 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center">
             <div className="w-full max-w-3xl">
               {/* Stats Bar */}
@@ -399,7 +469,7 @@ export default function Notecards() {
                   </>
                 ) : (
                   <div className="text-gray-600 dark:text-white/70 text-sm">
-                    Free study mode - review at your own pace
+                    
                   </div>
                 )}
               </div>
@@ -426,7 +496,6 @@ export default function Notecards() {
                       }}
                       className="relative"
                     >
-                      {/* Card confidence indicator */}
                       {cardConfidence[currentIndex] && (
                         <div className={`absolute top-4 right-4 w-3 h-3 rounded-full ${
                           getConfidenceColor(cardConfidence[currentIndex])
@@ -436,6 +505,12 @@ export default function Notecards() {
                       <p className="text-4xl md:text-5xl font-medium px-8 text-center text-white">
                         {cardsData[currentIndex].front}
                       </p>
+                      
+                      {cardsData[currentIndex].type === 'vocabulary' && cardsData[currentIndex].lexical_category && (
+                        <span className="mt-4 px-3 py-1 text-sm rounded-full bg-white/20 text-white/90">
+                          {cardsData[currentIndex].lexical_category}
+                        </span>
+                      )}
                       
                       <div className="absolute bottom-6 text-white/50 text-sm">
                         Click or press Space to flip
@@ -450,19 +525,18 @@ export default function Notecards() {
                         transform: "rotateY(180deg)",
                         boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
                       }}
+                      className="relative p-8"
                     >
-                      <p className="text-4xl md:text-5xl font-medium px-8 text-center text-white mb-4">
+                      <p className="text-4xl md:text-5xl font-medium text-center text-white mb-4">
                         {cardsData[currentIndex].back}
                       </p>
                       
-                      {/* Audio button if available */}
-                      {cardsData[currentIndex].audio && (
-                        <button className="absolute top-4 right-4 p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
-                          <FaVolumeUp className="text-white" />
-                        </button>
+                      {cardsData[currentIndex].example_sentences?.length > 0 && (
+                        <div className="mt-6 text-white/80 text-sm max-w-lg text-center italic">
+                          {cardsData[currentIndex].example_sentences[0]}
+                        </div>
                       )}
 
-                      {/* Show interval info in interval mode */}
                       {studyMode === 'interval' && cardsData[currentIndex].interval && (
                         <div className="absolute bottom-6 text-white/50 text-xs">
                           Next review: {Math.round(cardsData[currentIndex].interval)} day(s)
@@ -475,7 +549,6 @@ export default function Notecards() {
 
               {/* Action Buttons */}
               <div className="flex items-center justify-between gap-4">
-                {/* Previous */}
                 <button
                   onClick={handlePrevious}
                   disabled={currentIndex === 0}
@@ -556,7 +629,6 @@ export default function Notecards() {
                   )}
                 </div>
 
-                {/* Next/Finish */}
                 {!isLastCard ? (
                   <button
                     onClick={handleNext}
@@ -581,21 +653,11 @@ export default function Notecards() {
                 </span>
                 <span>Space: Flip</span>
                 <span>←/→: Navigate</span>
-                {studyMode === 'interval' && <span>1-4: Rate difficulty (Interval mode)</span>}
-                {studyMode === 'quiz' && <span>1/2/3: Rate card (Quiz mode)</span>}
+                {studyMode === 'interval' && <span>1-4: Rate difficulty</span>}
               </div>
             </div>
           </div>
-        ) : (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <div className="animate-pulse mb-4">
-                <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
-              </div>
-              <p className="text-gray-600 dark:text-white/70">Loading flashcards...</p>
-            </div>
-          </div>
-        )}
+        ) : null}
       </main>
     </div>
   );

@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Chart from "chart.js/auto";
 import { useRef } from "react";
-import Sidebar from "../../../components/Sidebar.js"; // Import the Sidebar component
+import MainSidebar from "../../../components/Sidebars/MainSidebar.js"; // Import the MainSidebar component
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import ProgressBarComponent from "@/components/progress-bar.js";
 import { TbX } from "react-icons/tb";
@@ -145,7 +145,7 @@ export default function Learn() {
 
   return (
     <main className="flex flex-col items-center justify-between h-screen overflow-hidden px-10 py-4 relative bg-white dark:bg-[#172229]">
-      <Sidebar />
+      <MainSidebar />
       <Head>
         <title>Learn</title>
         <link rel="icon" href="/favicon.ico" />

@@ -1,6 +1,6 @@
 // pages/learn/vocabulary/create-new-set.js
 import Head from "next/head";
-import Sidebar from "../../../components/Sidebar";
+import MainSidebar from "../../../components/Sidebars/MainSidebar";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -181,7 +181,7 @@ export default function CreateNewSet() {
 
         const payload = {
             setName: newSetName.trim(),
-            userEmail: userProfile.email,
+            userAuth0Id: userProfile.sub,
             items: proposedVocabulary,
         };
 
@@ -224,8 +224,8 @@ export default function CreateNewSet() {
 
     return (
         <div className="flex min-h-screen bg-[#141f25] text-white">
-            {/* Sidebar */}
-            <Sidebar />
+            {/* MainSidebar */}
+            <MainSidebar />
 
             {/* Non-sidebar area with generous padding */}
             <main className="ml-auto flex-1 px-8 py-8 sm:px-10 sm:py-10 lg:px-12 lg:py-8">

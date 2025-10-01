@@ -1,16 +1,17 @@
 import Head from "next/head";
-import MainSidebar from "../../../components/Sidebars/MainSidebar";
+import AcademySidebar from "@/components/Sidebars/AcademySidebar";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
 import { FaPlus, FaBrain, FaFire, FaClock, FaChartLine } from "react-icons/fa";
 import { FiSearch, FiGrid, FiList, FiPlay, FiEdit2, FiExternalLink, FiClock, FiAlertCircle } from "react-icons/fi";
+import { TbChartInfographic } from "react-icons/tb";
 import { MdAutorenew } from "react-icons/md";
 
 export default function VocabularyDashboard() {
-  // Tabs: "srs" | "notecards" | "groups"
-  const [activeTab, setActiveTab] = useState("srs");
+  // Tabs: "srs" | "sets" | "groups"
+  const [activeTab, setActiveTab] = useState("sets");
 
   // Search inputs
   const [searchSets, setSearchSets] = useState("");
@@ -50,10 +51,9 @@ export default function VocabularyDashboard() {
     heatmapData: [] // Would contain daily review data for heatmap
   });
 
-  // Add this state variable near the other state declarations (around line 18)
-  const [srsView, setSrsView] = useState("dashboard"); // "dashboard" | "sets"
+  const [srsView, setSrsView] = useState("sets"); // "dashboard" | "sets"
 
-  // Add mock SRS sets data (add this after the srsStats state around line 44)
+  // Add mock SRS sets data
   const [srsSets, setSrsSets] = useState([
     {
       id: 1,
@@ -131,22 +131,32 @@ export default function VocabularyDashboard() {
       setIsLoadingSets(true);
       try {
         const response = await fetch(
-          `/api/database/fetch-user-set?userEmail=${encodeURIComponent(
-            userProfile.sub
-          )}`
+          `/api/database/v2/sets/retrieve-list/${encodeURIComponent(userProfile.sub)}`
         );
-        const data = await response.json();
-        const formattedData = data.map((record) => ({
-          id: record.id,
-          name: record.set_name,
-          terms: record.vocabulary || [],
-          date: record.created_at,
-          path: `/learn/vocabulary/view-set?id=${record.id}`,
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to fetch user sets');
+        }
+
+        const formattedData = result.data.sets.map((record) => ({
+          id: record.entity_id,
+          name: record.data.title || 'Untitled Set',
+          item_num: record.data.item_num,
+          date: record.data.date_created || record.data.updated_at,
+          path: `/learn/academy/set/study/${record.entity_id}`,
         }));
+
         formattedData.sort((a, b) => new Date(b.date) - new Date(a.date));
         setRecentsSets(formattedData);
       } catch (error) {
         console.error("Error fetching user sets:", error);
+        setRecentsSets([]);
       } finally {
         setIsLoadingSets(false);
       }
@@ -175,20 +185,20 @@ export default function VocabularyDashboard() {
       }).format(d);
   };
 
-  // Static groups (unchanged)
+  // Static groups
   const vocabularyGroups = [
-    { name: "Lesson 1 Genki 1", path: "/learn/vocabulary/notecards?lesson=1", terms: 30, date: "12/23/2024" },
-    { name: "Lesson 2 Genki 1", path: "/learn/vocabulary/notecards?lesson=2", terms: 20, date: "12/23/2024" },
-    { name: "Lesson 3 Genki 1", path: "/learn/vocabulary/notecards?lesson=3", terms: 25, date: "12/23/2024" },
-    { name: "Lesson 4 Genki 1", path: "/learn/vocabulary/notecards?lesson=4", terms: 40, date: "12/23/2024" },
-    { name: "Lesson 5 Genki 1", path: "/learn/vocabulary/notecards?lesson=5", terms: 28, date: "12/23/2024" },
-    { name: "Lesson 6 Genki 1", path: "/learn/vocabulary/notecards?lesson=6", terms: 15, date: "12/23/2024" },
-    { name: "Lesson 7 Genki 1", path: "/learn/vocabulary/notecards?lesson=7", terms: 35, date: "12/23/2024" },
-    { name: "Lesson 8 Genki 1", path: "/learn/vocabulary/notecards?lesson=8", terms: 22, date: "12/23/2024" },
-    { name: "Lesson 9 Genki 1", path: "/learn/vocabulary/notecards?lesson=9", terms: 18, date: "12/23/2024" },
-    { name: "Lesson 10 Genki 1", path: "/learn/vocabulary/notecards?lesson=10", terms: 26, date: "12/23/2024" },
-    { name: "Lesson 11 Genki 1", path: "/learn/vocabulary/notecards?lesson=11", terms: 26, date: "12/23/2024" },
-    { name: "Lesson 12 Genki 1", path: "/learn/vocabulary/notecards?lesson=12", terms: 26, date: "12/23/2024" },
+    { name: "Lesson 1 Genki 1", path: "/learn/vocabulary/sets?lesson=1", terms: 30, date: "12/23/2024" },
+    { name: "Lesson 2 Genki 1", path: "/learn/vocabulary/sets?lesson=2", terms: 20, date: "12/23/2024" },
+    { name: "Lesson 3 Genki 1", path: "/learn/vocabulary/sets?lesson=3", terms: 25, date: "12/23/2024" },
+    { name: "Lesson 4 Genki 1", path: "/learn/vocabulary/sets?lesson=4", terms: 40, date: "12/23/2024" },
+    { name: "Lesson 5 Genki 1", path: "/learn/vocabulary/sets?lesson=5", terms: 28, date: "12/23/2024" },
+    { name: "Lesson 6 Genki 1", path: "/learn/vocabulary/sets?lesson=6", terms: 15, date: "12/23/2024" },
+    { name: "Lesson 7 Genki 1", path: "/learn/vocabulary/sets?lesson=7", terms: 35, date: "12/23/2024" },
+    { name: "Lesson 8 Genki 1", path: "/learn/vocabulary/sets?lesson=8", terms: 22, date: "12/23/2024" },
+    { name: "Lesson 9 Genki 1", path: "/learn/vocabulary/sets?lesson=9", terms: 18, date: "12/23/2024" },
+    { name: "Lesson 10 Genki 1", path: "/learn/vocabulary/sets?lesson=10", terms: 26, date: "12/23/2024" },
+    { name: "Lesson 11 Genki 1", path: "/learn/vocabulary/sets?lesson=11", terms: 26, date: "12/23/2024" },
+    { name: "Lesson 12 Genki 1", path: "/learn/vocabulary/sets?lesson=12", terms: 26, date: "12/23/2024" },
   ];
 
   // Derived views
@@ -198,8 +208,7 @@ export default function VocabularyDashboard() {
 
   const sortedSets = [...filteredSets].sort((a, b) => {
     if (sortKey === "az") return a.name.localeCompare(b.name);
-    if (sortKey === "size") return b.terms.length - a.terms.length;
-    // recent
+    if (sortKey === "size") return (b.item_num || 0) - (a.item_num || 0);
     return new Date(b.date) - new Date(a.date);
   });
 
@@ -207,15 +216,13 @@ export default function VocabularyDashboard() {
 
   // Handler for starting interval review
   const handleStartSmartReview = () => {
-    // This would navigate to a special review mode that pulls all due cards
-    // from across all sets based on their interval data
     router.push("/learn/vocabulary/smart-review");
   };
 
   return (
     <div className="flex flex-row min-h-screen bg-white dark:bg-[#141f25] text-[#222] dark:text-white">
-      {/* MainSidebar */}
-      <MainSidebar />
+      {/* Sidebar */}
+      <AcademySidebar />
 
       {/* Main */}
       <main className="ml-auto flex-1 flex flex-col min-h-screen bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 py-8">
@@ -224,11 +231,14 @@ export default function VocabularyDashboard() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        {/* Smart Review Widget - Compact version */}
+        {/* Smart Review Widget - Coming Soon */}
         <div className="w-full max-w-6xl mx-auto mb-4">
-          <div className="bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-xl shadow-md p-4 text-white">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-              {/* Left side - Main info */}
+          <div className="relative bg-gradient-to-r from-[#667eea]/80 to-[#764ba2]/80 rounded-xl shadow-md p-4 text-white overflow-hidden">
+            <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold">
+              Coming Soon
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 opacity-60">
               <div className="flex items-center gap-4 flex-1">
                 <div className="p-1.5 bg-white/20 rounded-lg">
                   <FaBrain className="text-lg" />
@@ -236,70 +246,24 @@ export default function VocabularyDashboard() {
 
                 <div className="flex-1">
                   <div className="flex items-center gap-1 mb-1">
-                    <h2 className="text-sm font-bold">Smart Review {'(Coming Soon)'}</h2>
-                    <span className="text-xs text-white/70 hidden sm:inline">• Spaced repetition {'(Reinforcing recall for cards youve studied)'}</span>
+                    <h2 className="text-sm font-bold">Smart Review</h2>
+                    <span className="text-xs text-white/70 hidden sm:inline">• AI-powered spaced repetition</span>
                   </div>
 
-                  {/* Compact stats */}
-                  <div className="flex items-center gap-4 text-xs">
-                    <div className="flex items-center gap-1">
-                      <span className="text-white/70">Due:</span>
-                      <span className="font-bold text-sm">{intervalCards.due}</span>
-                      {intervalCards.overdue > 0 && (
-                        <span className="text-red-300 font-bold">+{intervalCards.overdue}</span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-white/70">Learning:</span>
-                      <span className="font-bold text-sm">{intervalCards.learning}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-white/70">Done:</span>
-                      <span className="font-bold text-sm text-green-300">{intervalCards.todayCompleted}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <FaFire className="text-orange-400 text-xs" />
-                      <span className="text-white/90">{intervalCards.streak}d</span>
-                    </div>
-                  </div>
+                  <p className="text-xs text-white/80">
+                    Review cards at optimal intervals for maximum retention
+                  </p>
                 </div>
               </div>
 
-              {/* Right side - Actions */}
               <div className="flex items-center gap-2">
                 <button
-                  onClick={handleStartSmartReview}
-                  disabled={intervalCards.due === 0 && intervalCards.overdue === 0}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${intervalCards.due > 0 || intervalCards.overdue > 0
-                    ? "bg-white text-[#667eea] hover:bg-white/90 active:scale-95"
-                    : "bg-white/20 text-white/60 cursor-not-allowed"
-                    }`}
+                  disabled
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white/20 text-white/60 cursor-not-allowed"
                 >
                   <MdAutorenew className="text-lg" />
-                  <span className="hidden sm:inline">Start Review</span>
-                  <span className="sm:hidden">Review</span>
-                  {(intervalCards.due > 0 || intervalCards.overdue > 0) && (
-                    <span className="px-1.5 py-0.5 bg-[#667eea] text-white rounded-full text-xs font-bold">
-                      {intervalCards.due + intervalCards.overdue}
-                    </span>
-                  )}
+                  <span>Coming Soon</span>
                 </button>
-
-                <button className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors" title="View Statistics">
-                  <FaChartLine className="text-sm" />
-                </button>
-              </div>
-            </div>
-
-            {/* Slim progress bar */}
-            <div className="mt-3">
-              <div className="w-full bg-white/20 rounded-full h-1">
-                <div
-                  className="bg-white h-1 rounded-full transition-all duration-500"
-                  style={{
-                    width: `${(intervalCards.todayCompleted / (intervalCards.todayCompleted + intervalCards.due + intervalCards.overdue)) * 100}%`
-                  }}
-                />
               </div>
             </div>
           </div>
@@ -310,31 +274,22 @@ export default function VocabularyDashboard() {
           <div className="border-b border-black/5 dark:border-white/10">
             <div className="flex items-end gap-6 -mb-px h-10">
               <button
-                onClick={() => setActiveTab("srs")}
+                onClick={() => setActiveTab("sets")}
                 className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
-                  ${activeTab === "srs"
+                  ${activeTab === "sets"
                     ? "text-[#e30a5f] border-[#e30a5f]"
                     : "text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-[#e30a5f]"}`}
+              >
+                My Sets
+              </button>
+              <button
+                disabled
+                className="pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 border-transparent text-black/40 dark:text-white/40 cursor-not-allowed flex items-center gap-2"
               >
                 SRS
-              </button>
-              <button
-                onClick={() => setActiveTab("notecards")}
-                className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
-                  ${activeTab === "notecards"
-                    ? "text-[#e30a5f] border-[#e30a5f]"
-                    : "text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-[#e30a5f]"}`}
-              >
-                My Notecards
-              </button>
-              <button
-                onClick={() => setActiveTab("groups")}
-                className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
-                  ${activeTab === "groups"
-                    ? "text-[#e30a5f] border-[#e30a5f]"
-                    : "text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-[#e30a5f]"}`}
-              >
-                Groups
+                <span className="text-xs px-2 py-0.5 rounded-full bg-[#667eea]/10 text-[#667eea] dark:bg-[#667eea]/20">
+                  Coming Soon
+                </span>
               </button>
             </div>
           </div>
@@ -356,15 +311,6 @@ export default function VocabularyDashboard() {
                   {/* View toggle for Dashboard/Sets */}
                   <div className="flex items-center gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
                     <button
-                      onClick={() => setSrsView("dashboard")}
-                      className={`px-3 py-1.5 rounded-md text-xs font-medium transition ${srsView === "dashboard"
-                        ? "bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm"
-                        : "text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white"
-                        }`}
-                    >
-                      Dashboard
-                    </button>
-                    <button
                       onClick={() => setSrsView("sets")}
                       className={`px-3 py-1.5 rounded-md text-xs font-medium transition ${srsView === "sets"
                         ? "bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm"
@@ -372,6 +318,15 @@ export default function VocabularyDashboard() {
                         }`}
                     >
                       Sets
+                    </button>
+                    <button
+                      onClick={() => setSrsView("dashboard")}
+                      className={`px-3 py-1.5 rounded-md text-md font-medium transition ${srsView === "dashboard"
+                        ? "bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm"
+                        : "text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white"
+                        }`}
+                    >
+                      <TbChartInfographic />
                     </button>
                   </div>
                 </div>
@@ -535,19 +490,6 @@ export default function VocabularyDashboard() {
                         </div>
                       </div>
                     </div>
-
-                    {/* Quick Actions */}
-                    <div className="flex flex-wrap gap-3">
-                      <button className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5">
-                        <FaChartLine /> View Detailed Stats
-                      </button>
-                      <button className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5">
-                        ⚙️ Customize Intervals
-                      </button>
-                      <button className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5">
-                        📊 Export Progress
-                      </button>
-                    </div>
                   </>
                 )}
 
@@ -561,7 +503,7 @@ export default function VocabularyDashboard() {
                         <input
                           type="text"
                           placeholder="Search SRS sets..."
-                          value={null}
+                          value={srsSearchQuery}
                           onChange={(e) => setSrsSearchQuery(e.target.value)}
                           className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-[#111] dark:text-white pl-9 pr-3 py-2 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
                         />
@@ -623,26 +565,6 @@ export default function VocabularyDashboard() {
                                     </span>
                                   )}
                                 </div>
-
-                                {/* Card Stats 
-                                <div className="grid grid-cols-4 gap-1 mb-3">
-                                  <div className="text-center">
-                                    <div className="text-base font-bold text-gray-900 dark:text-white">{set.totalCards}</div>
-                                    <div className="text-[10px] text-gray-600 dark:text-gray-400">Total</div>
-                                  </div>
-                                  <div className="text-center">
-                                    <div className="text-base font-bold text-blue-600 dark:text-blue-400">{set.newCards}</div>
-                                    <div className="text-[10px] text-gray-600 dark:text-gray-400">New</div>
-                                  </div>
-                                  <div className="text-center">
-                                    <div className="text-base font-bold text-orange-600 dark:text-orange-400">{set.learningCards}</div>
-                                    <div className="text-[10px] text-gray-600 dark:text-gray-400">Learn</div>
-                                  </div>
-                                  <div className="text-center">
-                                    <div className="text-base font-bold text-green-600 dark:text-green-400">{set.reviewCards}</div>
-                                    <div className="text-[10px] text-gray-600 dark:text-gray-400">Review</div>
-                                  </div> 
-                                </div>*/}
 
                                 {/* Progress Bar */}
                                 <div className="mb-3">
@@ -783,13 +705,13 @@ export default function VocabularyDashboard() {
             )}
 
             {/* Header row for Notecards (formerly Sets) */}
-            {activeTab === "notecards" && (
+            {activeTab === "sets" && (
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                   <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white flex-1">
-                    My Notecards{recentsSets.length ? (
+                    My Sets{recentsSets.length > 0 && (
                       <span className="ml-2 text-xs font-normal text-black/60 dark:text-white/60">{recentsSets.length}</span>
-                    ) : null}
+                    )}
                   </h2>
 
                   {/* View toggle */}
@@ -828,7 +750,7 @@ export default function VocabularyDashboard() {
 
                   {/* New set */}
                   <button
-                    onClick={() => router.push("/learn/vocabulary/create-set")}
+                    onClick={() => router.push("/learn/academy/sets/create")}
                     className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 active:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#e30a5f]/70 focus:ring-offset-white dark:focus:ring-offset-[#1c2b35]"
                   >
                     <FaPlus /> New Set
@@ -841,7 +763,7 @@ export default function VocabularyDashboard() {
                   <input
                     ref={searchRef}
                     type="text"
-                    placeholder="Search your notecards (press '/')"
+                    placeholder="Search your sets (press '/')"
                     value={searchSets}
                     onChange={(e) => setSearchSets(e.target.value)}
                     className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-[#111] dark:text-white pl-9 pr-20 py-2 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
@@ -861,9 +783,9 @@ export default function VocabularyDashboard() {
                   {/* Empty state */}
                   {!isLoadingSets && recentsSets.length === 0 && (
                     <div className="rounded-xl border border-dashed border-black/10 dark:border-white/10 p-8 text-center text-sm text-black/70 dark:text-white/70">
-                      <p className="mb-3">You don&apos;t have any notecards yet.</p>
+                      <p className="mb-3">You don&apos;t have any sets yet.</p>
                       <button
-                        onClick={() => router.push("/learn/vocabulary/create-set")}
+                        onClick={() => router.push("/learn/academy/sets/create")}
                         className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
                       >
                         <FaPlus /> Create your first set
@@ -912,7 +834,7 @@ export default function VocabularyDashboard() {
               </div>
             )}
 
-            {/* Groups (kept, with palette tweaks) */}
+            {/* Groups */}
             {activeTab === "groups" && (
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3">
@@ -947,9 +869,9 @@ export default function VocabularyDashboard() {
           </section>
 
           {/* Floating action button on mobile */}
-          {activeTab === "notecards" && (
+          {activeTab === "sets" && (
             <button
-              onClick={() => router.push("/learn/vocabulary/create-set")}
+              onClick={() => router.push("/learn/academy/sets/create")}
               className="sm:hidden fixed bottom-6 right-6 z-10 shadow-lg rounded-full p-4 bg-[#e30a5f] text-white focus:outline-none focus:ring-2 focus:ring-white/60"
               aria-label="Create new set"
             >
@@ -969,17 +891,17 @@ function SetCard({ set, formatDate }) {
         <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2">{set.name}</h4>
         <span className="text-[11px] whitespace-nowrap text-black/60 dark:text-white/60">{formatDate(set.date)}</span>
       </div>
-      <p className="text-xs text-black/60 dark:text-white/60 mt-1">{set.terms.length} Terms</p>
+      <p className="text-xs text-black/60 dark:text-white/60 mt-1">{set.item_num} Items</p>
 
       <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <Link
-          href={{ pathname: "/learn/vocabulary/notecards", query: { terms: JSON.stringify(set.terms) } }}
+          href={`/learn/academy/sets/study/${set.id}/quiz`}
           className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 hover:opacity-90"
         >
           <FiPlay /> Study
         </Link>
         <Link
-          href={set.path}
+          href={`/learn/academy/sets/study/${set.id}`}
           className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 hover:opacity-90"
         >
           <FiExternalLink /> Open
@@ -994,18 +916,18 @@ function SetRow({ set, formatDate }) {
     <div className="flex items-center justify-between gap-3 bg-white/70 dark:bg-white/[0.02] px-3 py-2">
       <div className="min-w-0 flex-1">
         <div className="text-sm font-medium text-gray-900 dark:text-white truncate">{set.name}</div>
-        <div className="text-xs text-black/60 dark:text-white/60">{set.terms.length} Terms</div>
+        <div className="text-xs text-black/60 dark:text-white/60">{set.item_num} Items</div>
       </div>
       <div className="hidden sm:block text-[11px] text-black/60 dark:text-white/60 whitespace-nowrap">{formatDate(set.date)}</div>
       <div className="flex items-center gap-2">
         <Link
-          href={{ pathname: "/learn/vocabulary/notecards", query: { terms: JSON.stringify(set.terms) } }}
+          href={`/learn/academy/sets/study/${set.id}/quiz`}
           className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 hover:opacity-90"
         >
           <FiPlay /> Study
         </Link>
         <Link
-          href={set.path}
+          href={`/learn/academy/sets/study/${set.id}`}
           className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 hover:opacity-90"
         >
           <FiExternalLink /> Open

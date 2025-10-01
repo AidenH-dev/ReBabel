@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Sidebar from "../../../../components/Sidebar";
+import MainSidebar from "../../../../components/Sidebars/MainSidebar";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -163,7 +163,7 @@ export default function ConjugationDashboard() {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
+      <MainSidebar />
 
       {/* More padding to the right of the sidebar + smaller global font */}
       <main className="ml-64 flex-1 pl-12 pr-8 py-10 flex flex-col items-center justify-center">

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/Sidebars/MainSidebar";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";

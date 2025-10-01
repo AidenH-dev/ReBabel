@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Sidebar from "../../components/Sidebar"; // Keep the Sidebar component
+import MainSidebar from "../../components/Sidebars/MainSidebar"; // Keep the MainSidebar component
 import { useEffect, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import Link from "next/link";
@@ -24,8 +24,8 @@ export default function Account() {
 
   return (
     <div className="flex flex-row min-h-screen bg-white dark:bg-[#172229] text-[#4e4a4a] dark:text-white">
-      {/* Sidebar */}
-      <Sidebar />
+      {/* MainSidebar */}
+      <MainSidebar />
 
       {/* Main Content */}
       <main className="ml-auto flex-1 flex flex-col min-h-screen bg-gray-100 dark:bg-[#172229] p-10">

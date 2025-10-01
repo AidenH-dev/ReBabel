@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Sidebar from "../../components/Sidebar";
+import MainSidebar from "../../components/Sidebars/MainSidebar";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -178,7 +178,7 @@ export default function Home() {
 
     return (
         <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
-            <Sidebar />
+            <MainSidebar />
 
             <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6">
                 <Head>

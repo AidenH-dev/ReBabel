@@ -1,11 +1,18 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { TbLanguageHiragana, TbVocabulary, TbSettings, TbHome, TbMenu2, TbX } from "react-icons/tb";
-import { LuBlocks } from "react-icons/lu";
+import { 
+  TbSettings, 
+  TbHome, 
+  TbMenu2, 
+  TbX, 
+  TbArrowLeft,
+  TbLayoutGrid,
+  TbStack2
+} from "react-icons/tb";
 import Link from "next/link";
 
-function Sidebar() {
+function AcademySidebar() {
   const router = useRouter();
   const path = router.pathname;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -27,99 +34,98 @@ function Sidebar() {
     };
   }, [isMobileMenuOpen]);
 
-  // Use regex to check if the path starts with allowed prefixes
-  const isHomeActive = /^\/learn\/home/.test(path);
-  const isGrammarActive = /^\/learn\/grammar/.test(path);
-  const isVocabularyActive = /^\/learn\/vocabulary/.test(path);
-  const isSettingsActive = /^\/learn\/settings/.test(path);
+  // Academy nav active states
+  const isAcademyHomeActive = /^\/learn\/academy$/.test(path);
+  const isModulesActive = /^\/learn\/modules/.test(path);
+  const isSetsActive = /^\/learn\/academy\/sets/.test(path);
+  const isAcademySettingsActive = /^\/learn\/academy\/settings/.test(path);
 
   const baseLink =
-    "flex items-center p-2 rounded-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 mx-1";
+    "flex items-center p-2 rounded-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-colors";
   const inactiveLinkLight = "text-gray-700 hover:bg-gray-200 hover:text-gray-900";
   const inactiveIconLight = "text-gray-600 group-hover:text-gray-900";
   const activeLink =
-    "text-[#e30a5f] bg-gray-100 dark:bg-[#172229] dark:ring-gray-600 ring-2 ring-gray-300";
+    "text-[#e30a5f] bg-gray-100 dark:bg-[#172229] shadow-[inset_0_0_0_2px_rgb(209,213,219)] dark:shadow-[inset_0_0_0_2px_rgb(75,85,99)]";
   const inactiveLinkDark = "dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700";
   const inactiveIconDark = "dark:text-gray-400 dark:group-hover:text-white";
 
   const NavigationContent = () => (
     <>
-      <div className="text-center mb-10 mt-6">
+      <div className="text-center mb-5 mt-6">
         <Image
           src="/ReBabel.png"
-          alt="Learnt Logo"
+          alt="ReBabel Logo"
           layout="responsive"
           width={150}
           height={50}
           className="mx-auto object-contain"
         />
       </div>
-      <div className="py-4 overflow-y-auto">
+      <div className="py-4 px-2 overflow-y-auto">
         <ul className="space-y-2 font-medium">
+          {/* Back Button */}
+          <li>
+            <button
+              onClick={() => {
+                router.push("/learn/dashboard");
+              }}
+              className={`w-full text-left ${baseLink} ${inactiveLinkLight} ${inactiveLinkDark}`}
+            >
+              <TbArrowLeft
+                className={`flex-shrink-0 w-6 h-6 transition duration-75 ${inactiveIconLight} ${inactiveIconDark}`}
+              />
+              <span className="ms-3 text-sm">Back</span>
+            </button>
+          </li>
+
           <li>
             <Link
-              href="/learn/home"
+              href="/learn/academy"
               className={`${baseLink} ${
-                isHomeActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
+                isAcademyHomeActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
               }`}
-              aria-current={isHomeActive ? "page" : undefined}
+              aria-current={isAcademyHomeActive ? "page" : undefined}
             >
               <TbHome
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
-                  isHomeActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                  isAcademyHomeActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
               <span className="ms-3">Home</span>
             </Link>
           </li>
 
-          <li>
+          {/*<li>
             <Link
-              href="/learn/grammar"
+              href="/learn/academy/modules"
               className={`${baseLink} ${
-                isGrammarActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
+                isModulesActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
               }`}
-              aria-current={isGrammarActive ? "page" : undefined}
+              aria-current={isModulesActive ? "page" : undefined}
             >
-              <LuBlocks
+              <TbLayoutGrid
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
-                  isGrammarActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                  isModulesActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
-              <span className="ms-3">Grammar</span>
+              <span className="ms-3">Modules</span>
             </Link>
-          </li>
+              </li>*/}
 
           <li>
             <Link
-              href="/learn/vocabulary"
+              href="/learn/academy/sets"
               className={`${baseLink} ${
-                isVocabularyActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
+                isSetsActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
               }`}
-              aria-current={isVocabularyActive ? "page" : undefined}
+              aria-current={isSetsActive ? "page" : undefined}
             >
-              <TbVocabulary
+              <TbStack2
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
-                  isVocabularyActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                  isSetsActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
-              <span className="flex-1 ms-3 whitespace-nowrap">Vocabulary</span>
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              href="#"
-              className={`${baseLink} ${inactiveLinkLight} ${inactiveLinkDark} relative`}
-            >
-              <TbLanguageHiragana
-                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${inactiveIconLight} ${inactiveIconDark}`}
-              />
-              <span className="flex-1 ms-3 whitespace-nowrap">Kanji</span>
-              {/* Tooltip for the Kanji button - hidden on mobile */}
-              <div className="hidden lg:block absolute left-full ml-2 bg-gray-800 dark:bg-gray-900 text-sm text-white px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                Coming soon!
-              </div>
+              <span className="ms-3">Sets</span>
             </Link>
           </li>
 
@@ -127,16 +133,16 @@ function Sidebar() {
             <Link
               href="/learn/settings"
               className={`${baseLink} ${
-                isSettingsActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
+                isAcademySettingsActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
               }`}
-              aria-current={isSettingsActive ? "page" : undefined}
+              aria-current={isAcademySettingsActive ? "page" : undefined}
             >
               <TbSettings
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
-                  isSettingsActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                  isAcademySettingsActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
-              <span className="flex-1 ms-3 whitespace-nowrap">Settings</span>
+              <span className="ms-3">Settings</span>
             </Link>
           </li>
         </ul>
@@ -191,4 +197,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default AcademySidebar;

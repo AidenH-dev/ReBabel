@@ -1,5 +1,5 @@
 import Head from "next/head";
-import MainSidebar from "../../../components/Sidebars/MainSidebar";
+import AcademySidebar from "../../../../components/Sidebars/AcademySidebar";
 import { useState } from "react";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
@@ -63,7 +63,7 @@ export default function GrammarDashboard() {
 
   return (
     <div className="flex flex-row min-h-screen bg-white dark:bg-[#141f25] text-[#4e4a4a] dark:text-white">
-      <MainSidebar />
+      <AcademySidebar />
 
       {/* Main area - responsive padding and margin */}
       <main className="ml-auto flex-1 min-h-screen bg-gray-100 dark:bg-[#141f25]">
@@ -80,11 +80,8 @@ export default function GrammarDashboard() {
             {/* ============================ */}
             <div className="mb-6">
               <h1 className="text-lg sm:text-xl font-[500] text-gray-800 dark:text-gray-100">
-                Grammar Practice
+                Modules Available
               </h1>
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
-                Focused tools: Translation & Verb Conjugations
-              </p>
             </div>
 
             {/* ============================ */}
@@ -230,7 +227,7 @@ export default function GrammarDashboard() {
 
               {/* ============================ */}
               {/* Verb Conjugations Section    */}
-              {/* ============================ */}
+              {/* ============================
               <section>
                 <div className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg p-5 sm:p-6 lg:p-8 h-[200px] flex flex-col justify-center">
                   <h2 className="text-base sm:text-lg font-[500] mb-1.5 text-gray-800 dark:text-gray-200">
@@ -249,7 +246,6 @@ export default function GrammarDashboard() {
                         Start A Practice Session
                       </Link>
                     ))}
-                    {/* Meta info - responsive */}
                     <span className="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 text-center sm:text-left">
                       {grammarPracticeSets[0].exercises} Exercises •{" "}
                       {new Intl.DateTimeFormat("en-US", {
@@ -260,7 +256,7 @@ export default function GrammarDashboard() {
                     </span>
                   </div>
                 </div>
-              </section>
+              </section> */}
             </div>
           </div>
         </div>
