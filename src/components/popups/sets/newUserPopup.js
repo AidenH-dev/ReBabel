@@ -366,7 +366,7 @@ export function BeginnerPackPopup({ isOpen, onClose, onImport, userProfile }) {
                   onClick={onClose}
                   className="w-full py-2.5 px-4 rounded-xl font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
                 >
-                  I'll create my own
+                  I&apos;ll create my own
                 </button>
               )}
             </div>
