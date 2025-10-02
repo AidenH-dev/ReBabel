@@ -8,6 +8,7 @@ import { FaPlus, FaBrain, FaFire, FaClock, FaChartLine } from "react-icons/fa";
 import { FiSearch, FiGrid, FiList, FiPlay, FiEdit2, FiExternalLink, FiClock, FiAlertCircle } from "react-icons/fi";
 import { TbChartInfographic } from "react-icons/tb";
 import { MdAutorenew } from "react-icons/md";
+import { BeginnerPackPopup } from "@/components/popups/sets/newUserPopup";
 
 export default function VocabularyDashboard() {
   // Tabs: "srs" | "sets" | "groups"
@@ -25,6 +26,8 @@ export default function VocabularyDashboard() {
   const [userProfile, setUserProfile] = useState(null);
   const [recentsSets, setRecentsSets] = useState([]);
   const [isLoadingSets, setIsLoadingSets] = useState(true);
+
+  const [showBeginnerPopup, setShowBeginnerPopup] = useState(false);
 
   // Interval review cards state (mock data - replace with real data from backend)
   const [intervalCards, setIntervalCards] = useState({
@@ -164,6 +167,12 @@ export default function VocabularyDashboard() {
     fetchUserSets();
   }, [userProfile]);
 
+  useEffect(() => {
+    if (!isLoadingSets && recentsSets.length === 0 && userProfile) {
+      setShowBeginnerPopup(true);
+    }
+  }, [isLoadingSets, recentsSets, userProfile]);
+
   // Helpers
   const fixDateString = (dateString) => {
     if (!dateString) return dateString;
@@ -226,8 +235,18 @@ export default function VocabularyDashboard() {
 
       {/* Main */}
       <main className="ml-auto flex-1 flex flex-col min-h-screen bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 py-8">
+        <BeginnerPackPopup
+          isOpen={showBeginnerPopup}
+          onClose={() => setShowBeginnerPopup(false)}
+          onImport={() => {
+            // After successful import, reload to show the new sets
+            window.location.reload();
+          }}
+          userProfile={userProfile}
+        />
+
         <Head>
-          <title>Vocabulary Dashboard</title>
+          <title>Sets</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
 

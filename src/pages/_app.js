@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -34,33 +34,45 @@ function PostHogAuthBridge() {
 }
 
 export default function MyApp({ Component, pageProps }) {
+  const [isPosthogEnabled, setIsPosthogEnabled] = useState(false);
 
   useEffect(() => {
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
-      person_profiles: 'identified_only',
-      defaults: '2025-05-24',
-      session_recording: {
-        maskAllInputs: false, // unmask inputs for language typing visibility
-      },
-      loaded: (ph) => {
-        if (process.env.NODE_ENV === 'development') ph.debug();
-      },
-    });
+    // Only initialize PostHog outside of development
+    if (process.env.NODE_ENV !== 'development') {
+      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
+        person_profiles: 'identified_only',
+        defaults: '2025-05-24',
+        session_recording: {
+          maskAllInputs: false, // unmask inputs for language typing visibility
+        },
+      });
+      setIsPosthogEnabled(true);
+    } else {
+      console.log("🔹 PostHog disabled in development");
+    }
   }, []);
 
   return (
-    <PostHogProvider client={posthog}>
-      <UserProvider>
-        {/* Identify Auth0 user with PostHog AFTER provider is mounted */}
-        <PostHogAuthBridge />
+    <UserProvider>
+      {isPosthogEnabled ? (
+        <PostHogProvider client={posthog}>
+          <PostHogAuthBridge />
+          <div className={fredoka.className}>
+            <Component {...pageProps} />
+            <ReportIssueButton />
+            <Analytics />
+            <SpeedInsights />
+          </div>
+        </PostHogProvider>
+      ) : (
         <div className={fredoka.className}>
           <Component {...pageProps} />
           <ReportIssueButton />
           <Analytics />
           <SpeedInsights />
         </div>
-      </UserProvider>
-    </PostHogProvider>
+      )}
+    </UserProvider>
   );
 }
