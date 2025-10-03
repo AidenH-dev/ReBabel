@@ -468,7 +468,7 @@ export default function SetQuiz() {
     return (
         <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
             {quizCompleted && <MainSidebar />}
-            <main className="ml-auto flex-1 flex flex-col p-6">
+            <main className={`flex-1 flex flex-col p-3 sm:p-6 ${quizCompleted ? 'ml-0 lg:ml-auto' : 'w-full'}`}>
                 <Head>
                     <title>Quiz • {setInfo?.title || "Study Set"}</title>
                     <link rel="icon" href="/favicon.ico" />
@@ -476,41 +476,41 @@ export default function SetQuiz() {
 
                 {/* Header */}
                 {!quizCompleted && (
-                    <div className="w-full max-w-5xl mx-auto mb-6">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
+                    <div className="w-full max-w-5xl mx-auto mb-4 sm:mb-6">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+                            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
                                 <button
                                     onClick={handleExit}
                                     className="p-2 rounded-lg bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 transition-colors"
                                     aria-label="Exit"
                                 >
-                                    <TbX className="w-6 h-6 text-gray-700 dark:text-white" />
+                                    <TbX className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 dark:text-white" />
                                 </button>
 
                                 <div className="flex items-center gap-2">
-                                    <MdQuiz className="text-[#e30a5f] text-xl" />
-                                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                    <MdQuiz className="text-[#e30a5f] text-lg sm:text-xl" />
+                                    <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white truncate">
                                         {setInfo?.title || "Quiz"}
                                     </h1>
                                 </div>
                             </div>
 
                             {/* Stats */}
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-2">
-                                    <FaCheckCircle className="text-green-500" />
-                                    <span className="text-gray-600 dark:text-white/70 text-sm">
-                                        Correct: {sessionStats.correct}
+                            <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm w-full sm:w-auto justify-between sm:justify-end">
+                                <div className="flex items-center gap-1.5 sm:gap-2">
+                                    <FaCheckCircle className="text-green-500 text-sm" />
+                                    <span className="text-gray-600 dark:text-white/70">
+                                        <span className="hidden sm:inline">Correct: </span>{sessionStats.correct}
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <FaTimesCircle className="text-red-500" />
-                                    <span className="text-gray-600 dark:text-white/70 text-sm">
-                                        Incorrect: {sessionStats.incorrect}
+                                <div className="flex items-center gap-1.5 sm:gap-2">
+                                    <FaTimesCircle className="text-red-500 text-sm" />
+                                    <span className="text-gray-600 dark:text-white/70">
+                                        <span className="hidden sm:inline">Incorrect: </span>{sessionStats.incorrect}
                                     </span>
                                 </div>
-                                <div className="text-gray-600 dark:text-white/70 text-sm">
-                                    Accuracy: {sessionStats.accuracy}%
+                                <div className="text-gray-600 dark:text-white/70">
+                                    {sessionStats.accuracy}%
                                 </div>
                             </div>
                         </div>
@@ -544,49 +544,49 @@ export default function SetQuiz() {
                         </div>
                     </div>
                 ) : quizCompleted ? (
-                    <div className="flex-1 flex gap-3 overflow-hidden mr-10">
+                    <div className="flex-1 flex flex-col lg:flex-row gap-3 overflow-hidden lg:mr-10">
                         {/* Left Side - Quiz Summary */}
-                        <div className="flex-1 flex items-center justify-end pr-3">
+                        <div className="flex-1 flex items-center justify-center lg:justify-end lg:pr-3">
                             <div className="w-full max-w-xl">
-                                <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-8" style={{ height: '500px' }}>
+                                <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 h-auto lg:h-[500px]">
                                     <div className="flex flex-col h-full">
-                                        <div className="text-center mb-4">
-                                            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full mb-3">
-                                                <FaCheckCircle className="text-white text-3xl" />
+                                        <div className="text-center mb-3 sm:mb-4">
+                                            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full mb-2 sm:mb-3">
+                                                <FaCheckCircle className="text-white text-2xl sm:text-3xl" />
                                             </div>
-                                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">
                                                 Quiz Complete!
                                             </h2>
-                                            <p className="text-sm text-gray-600 dark:text-white/60">
+                                            <p className="text-xs sm:text-sm text-gray-600 dark:text-white/60">
                                                 Great job! Here&apos;s how you did:
                                             </p>
                                         </div>
 
                                         {/* Stats Grid */}
-                                        <div className="grid grid-cols-3 gap-3 mb-4">
-                                            <div className="bg-gray-50 dark:bg-white/5 rounded-xl p-3 text-center">
-                                                <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                                        <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
+                                            <div className="bg-gray-50 dark:bg-white/5 rounded-xl p-2 sm:p-3 text-center">
+                                                <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-0.5 sm:mb-1">
                                                     {sessionStats.correct}
                                                 </div>
-                                                <div className="text-sm text-gray-600 dark:text-white/60 flex items-center justify-center gap-1">
+                                                <div className="text-xs sm:text-sm text-gray-600 dark:text-white/60 flex items-center justify-center gap-1">
                                                     <FaCheckCircle className="text-green-500" />
                                                     Correct
                                                 </div>
                                             </div>
-                                            <div className="bg-gray-50 dark:bg-white/5 rounded-xl p-3 text-center">
-                                                <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                                            <div className="bg-gray-50 dark:bg-white/5 rounded-xl p-2 sm:p-3 text-center">
+                                                <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-0.5 sm:mb-1">
                                                     {sessionStats.incorrect}
                                                 </div>
-                                                <div className="text-sm text-gray-600 dark:text-white/60 flex items-center justify-center gap-1">
+                                                <div className="text-xs sm:text-sm text-gray-600 dark:text-white/60 flex items-center justify-center gap-1">
                                                     <FaTimesCircle className="text-red-500" />
                                                     Incorrect
                                                 </div>
                                             </div>
-                                            <div className="bg-gray-50 dark:bg-white/5 rounded-xl p-3 text-center">
-                                                <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                                            <div className="bg-gray-50 dark:bg-white/5 rounded-xl p-2 sm:p-3 text-center">
+                                                <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-0.5 sm:mb-1">
                                                     {quizItems.length}
                                                 </div>
-                                                <div className="text-sm text-gray-600 dark:text-white/60">
+                                                <div className="text-xs sm:text-sm text-gray-600 dark:text-white/60">
                                                     Total Questions
                                                 </div>
                                             </div>
@@ -681,7 +681,7 @@ export default function SetQuiz() {
                                         </div>
 
                                         {/* Action Buttons */}
-                                        <div className="flex gap-3 mt-4">
+                                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-3 sm:mt-4">
                                             <button
                                                 onClick={() => {
                                                     setQuizCompleted(false);
@@ -705,14 +705,14 @@ export default function SetQuiz() {
                                                     setItemStats(stats);
                                                     setQuizItems(shuffleArray(quizItems));
                                                 }}
-                                                className="flex-1 px-4 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all active:scale-95"
+                                                className="flex-1 px-4 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base"
                                             >
                                                 <FaRedo className="inline mr-2" />
                                                 Retry Quiz
                                             </button>
                                             <button
                                                 onClick={handleExit}
-                                                className="flex-1 px-4 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-all active:scale-95"
+                                                className="flex-1 px-4 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base"
                                             >
                                                 Back to Study Set
                                             </button>
@@ -723,12 +723,12 @@ export default function SetQuiz() {
                         </div>
 
                         {/* Right Side - Question Breakdown (Scrollable) */}
-                        <div className="w-1/4 flex items-center">
-                            <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 flex flex-col w-full" style={{ height: '500px' }}>
-                                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                        <div className="w-full lg:w-1/4 flex items-center mt-4 lg:mt-0">
+                            <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-3 sm:p-4 flex flex-col w-full h-auto max-h-[300px] lg:h-[500px] lg:max-h-none">
+                                <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3">
                                     Question Breakdown
                                 </h3>
-                                <div className="flex-1 overflow-y-auto space-y-1.5 pr-2">
+                                <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 sm:pr-2">
                                     {answeredItems.map((item, index) => (
                                         <div
                                             key={index}
@@ -785,26 +785,26 @@ export default function SetQuiz() {
                         </div>
                     </div>
                 ) : currentItem ? (
-                    <div className="flex-1 flex flex-col items-center justify-center">
+                    <div className="flex-1 flex flex-col items-center justify-center px-2 sm:px-0">
                         <div className="w-full max-w-3xl">
                             {/* Question Card */}
-                            <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-8 mb-6">
-                                <div className="mb-2 text-sm text-gray-500 dark:text-white/50">
+                            <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
+                                <div className="mb-2 text-xs sm:text-sm text-gray-500 dark:text-white/50">
                                     {currentItem.questionType} → {currentItem.answerType}
                                 </div>
 
-                                <div className="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-8 text-gray-900 dark:text-white break-words">
                                     {currentItem.question}
                                 </div>
 
                                 {showHint && currentItem.hint && (
-                                    <div className="text-center text-gray-600 dark:text-white/60 mb-4">
+                                    <div className="text-center text-sm sm:text-base text-gray-600 dark:text-white/60 mb-3 sm:mb-4">
                                         Hint: {currentItem.hint}
                                     </div>
                                 )}
 
                                 {/* Answer Input */}
-                                <div className="relative mb-8">
+                                <div className="relative mb-6 sm:mb-8">
                                     <input
                                         ref={inputRef}
                                         type="text"
@@ -819,7 +819,7 @@ export default function SetQuiz() {
                                         }
                                         inputMode="text"
                                         autoComplete="off"
-                                        className={`w-full px-4 py-4 text-lg rounded-lg border-2 transition-all
+                                        className={`w-full px-3 sm:px-4 py-3 sm:py-4 text-base sm:text-lg rounded-lg border-2 transition-all
                       ${showResult
                                                 ? isCorrect
                                                     ? "border-green-500 bg-green-50 dark:bg-green-900/20"
@@ -838,19 +838,19 @@ export default function SetQuiz() {
                                                 }`}
                                         >
                                             {isCorrect ? (
-                                                <FaCheckCircle size={24} />
+                                                <FaCheckCircle size={20} className="sm:w-6 sm:h-6" />
                                             ) : (
-                                                <FaTimesCircle size={24} />
+                                                <FaTimesCircle size={20} className="sm:w-6 sm:h-6" />
                                             )}
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Result Feedback */}
-                                <div className="h-24">
+                                <div className="min-h-[80px] sm:min-h-[96px]">
                                     {showResult && (
                                         <div
-                                            className={`p-4 rounded-lg ${isCorrect
+                                            className={`p-3 sm:p-4 rounded-lg text-sm sm:text-base ${isCorrect
                                                 ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
                                                 : "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
                                                 }`}
@@ -866,7 +866,7 @@ export default function SetQuiz() {
                                                         <FaTimes />
                                                         <span className="font-semibold">Incorrect</span>
                                                     </div>
-                                                    <div className="text-sm">
+                                                    <div className="text-xs sm:text-sm">
                                                         The correct answer is:{" "}
                                                         <span className="font-bold">
                                                             {currentItem.answer}
@@ -880,14 +880,12 @@ export default function SetQuiz() {
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="flex items-center justify-right gap-4">
-                                <div className="flex-1"></div>
-
+                            <div className="flex flex-col sm:flex-row items-center justify-end gap-3 sm:gap-4">
                                 {!showResult ? (
                                     <button
                                         onClick={checkAnswer}
                                         disabled={!userAnswer.trim()}
-                                        className={`px-6 py-3 rounded-lg font-medium transition-all ${userAnswer.trim()
+                                        className={`w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${userAnswer.trim()
                                             ? "bg-[#e30a5f] hover:bg-[#f41567] text-white active:scale-95"
                                             : "bg-gray-200 dark:bg-white/10 text-gray-400 dark:text-white/30 cursor-not-allowed"
                                             }`}
@@ -895,11 +893,11 @@ export default function SetQuiz() {
                                         Check Answer
                                     </button>
                                 ) : (
-                                    <>
+                                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
                                         {!isCorrect && (
                                             <button
                                                 onClick={handleRetry}
-                                                className="text-sm px-4 py-2 rounded-lg font-medium transition-colors active:scale-95
+                                                className="w-full sm:w-auto text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors active:scale-95
                                                 border-2 border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900
                                                 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700/60 dark:hover:text-white
                                                 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2
@@ -913,11 +911,9 @@ export default function SetQuiz() {
                                         {!isLastQuestion ? (
                                             <button
                                                 onClick={handleNext}
-                                                className={`
-                                                        px-6 py-3 rounded-lg font-medium transition-all active:scale-95 
-                                                        flex items-center justify-center
-                                                      bg-[#e30a5f] hover:bg-[#f41567] text-white focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900
-                                                `}
+                                                className="w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all active:scale-95 
+                                                        flex items-center justify-center text-sm sm:text-base
+                                                      bg-[#e30a5f] hover:bg-[#f41567] text-white focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900"
                                             >
                                                 Next Question
                                                 <FaArrowRight className="inline ml-2" />
@@ -926,7 +922,7 @@ export default function SetQuiz() {
                                         ) : (
                                             <button
                                                 onClick={handleNext}
-                                                className={`px-6 py-3 rounded-lg font-medium transition-all active:scale-95 ${isCorrect
+                                                className={`w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base ${isCorrect
                                                     ? "bg-[#e30a5f] hover:bg-[#f41567] text-white"
                                                     : "bg-gray-600 hover:bg-gray-700 text-white"
                                                     }`}
@@ -934,14 +930,14 @@ export default function SetQuiz() {
                                                 View Results <FaArrowRight className="inline ml-2" />
                                             </button>
                                         )}
-                                    </>
+                                    </div>
                                 )}
                             </div>
 
                             {/* Keyboard Shortcuts */}
-                            <div className="mt-8 flex items-center justify-center gap-6 text-xs text-gray-500 dark:text-white/40">
+                            <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-gray-500 dark:text-white/40">
                                 <span className="flex items-center gap-2">
-                                    <FaKeyboard /> Keyboard shortcuts:
+                                    <FaKeyboard /> <span className="hidden sm:inline">Keyboard shortcuts:</span>
                                 </span>
                                 <span>Enter: Submit/Continue</span>
                             </div>

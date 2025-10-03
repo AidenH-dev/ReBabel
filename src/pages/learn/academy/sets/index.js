@@ -529,7 +529,7 @@ export default function VocabularyDashboard() {
                       </div>
 
                       {/* View toggle */}
-                      <div className="flex items-center gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
+                      <div className="flex items-center w-min gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
                         <button
                           onClick={() => setSrsSetView("grid")}
                           className={`px-2 py-1 rounded-md text-xs flex items-center gap-1 transition ${srsSetView === "grid" ? "bg-white dark:bg-[#0f1a1f] text-[#e30a5f]" : "text-black/70 dark:text-white/70"
@@ -734,7 +734,7 @@ export default function VocabularyDashboard() {
                   </h2>
 
                   {/* View toggle */}
-                  <div className="flex items-center gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
+                  <div className="flex items-center w-min gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
                     <button
                       onClick={() => setView("grid")}
                       className={`px-2 py-1 rounded-md text-xs flex items-center gap-1 transition ${view === "grid" ? "bg-white dark:bg-[#0f1a1f] text-[#e30a5f]" : "text-black/70 dark:text-white/70"
@@ -912,7 +912,7 @@ function SetCard({ set, formatDate }) {
       </div>
       <p className="text-xs text-black/60 dark:text-white/60 mt-1">{set.item_num} Items</p>
 
-      <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="mt-3 flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
         <Link
           href={`/learn/academy/sets/study/${set.id}/quiz`}
           className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 hover:opacity-90"

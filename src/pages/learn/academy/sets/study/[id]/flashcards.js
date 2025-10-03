@@ -275,7 +275,7 @@ export default function SetFlashcards() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [handleKeyPress]);
 
-  const progress = cardsData.length > 0 ? ((currentIndex + 1) / cardsData.length) * 100 : 0;
+  const progress = cardsData.length > 0 ? ((currentIndex) / cardsData.length) * 100 : 0;
   const isLastCard = currentIndex === cardsData.length - 1;
 
   const container3DStyles = {
@@ -344,9 +344,9 @@ export default function SetFlashcards() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
+    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] overflow-x-hidden">
 
-      <main className="ml-auto flex-1 flex flex-col p-6">
+      <main className="ml-auto flex-1 flex flex-col p-6 overflow-x-hidden">
         <Head>
           <title>Flashcards • {setInfo?.title || 'Study Set'}</title>
           <link rel="icon" href="/favicon.ico" />
@@ -373,7 +373,7 @@ export default function SetFlashcards() {
             </div>
 
             {/* Study Mode Selector */}
-            <div className="flex items-center gap-2 bg-gray-200 dark:bg-white/10 rounded-lg p-1 px-1">
+            <div className="hidden md:flex items-center gap-2 bg-gray-200 dark:bg-white/10 rounded-lg p-1 px-1">
               <button
                 onClick={() => setStudyMode('plain')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
@@ -433,8 +433,8 @@ export default function SetFlashcards() {
             </div>
           </div>
         ) : cardsData.length > 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="w-full max-w-3xl">
+          <div className="flex-1 flex flex-col items-center justify-center overflow-x-hidden">
+            <div className="w-full max-w-3xl overflow-x-hidden">
               {/* Stats Bar */}
               <div className="flex items-center justify-center gap-6 mb-6">
                 {studyMode === 'quiz' ? (
@@ -476,7 +476,7 @@ export default function SetFlashcards() {
 
               {/* Card Container */}
               <div
-                className="relative w-full h-96 mb-8"
+                className="relative w-full h-96 mb-8 overflow-hidden"
                 style={container3DStyles}
               >
                 <div
@@ -502,7 +502,7 @@ export default function SetFlashcards() {
                         }`} />
                       )}
                       
-                      <p className="text-4xl md:text-5xl font-medium px-8 text-center text-white">
+                      <p className="text-3xl md:text-4xl lg:text-5xl font-medium px-8 text-center text-white">
                         {cardsData[currentIndex].front}
                       </p>
                       
@@ -527,12 +527,12 @@ export default function SetFlashcards() {
                       }}
                       className="relative p-8"
                     >
-                      <p className="text-4xl md:text-5xl font-medium text-center text-white mb-4">
+                      <p className="text-3xl md:text-4xl lg:text-5xl font-medium text-center text-white mb-4">
                         {cardsData[currentIndex].back}
                       </p>
                       
                       {cardsData[currentIndex].example_sentences?.length > 0 && (
-                        <div className="mt-6 text-white/80 text-sm max-w-lg text-center italic">
+                        <div className="mt-6 text-white/80 text-xs md:text-sm max-w-lg text-center italic">
                           {cardsData[currentIndex].example_sentences[0]}
                         </div>
                       )}
@@ -647,7 +647,7 @@ export default function SetFlashcards() {
               </div>
 
               {/* Keyboard Shortcuts */}
-              <div className="mt-8 flex items-center justify-center gap-6 text-xs text-gray-500 dark:text-white/40">
+              <div className="mt-8 hidden md:flex items-center justify-center gap-6 text-xs text-gray-500 dark:text-white/40">
                 <span className="flex items-center gap-2">
                   <FaKeyboard /> Keyboard shortcuts:
                 </span>
