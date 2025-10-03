@@ -116,6 +116,10 @@ export default function ViewSet() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
 
+  const [showDeleteSetConfirm, setShowDeleteSetConfirm] = useState(false);
+  const [isDeletingSet, setIsDeletingSet] = useState(false);
+  const [deleteSetError, setDeleteSetError] = useState(null);
+
   const [setData, setSetData] = useState({
     id: id,
     title: "",
@@ -442,6 +446,52 @@ export default function ViewSet() {
       setIsSaving(false);
     }
   };
+
+  const handleShowDeleteSetConfirm = () => {
+    setShowDeleteSetConfirm(true);
+    setDeleteSetError(null);
+  };
+
+  const handleCancelDeleteSet = () => {
+    setShowDeleteSetConfirm(false);
+    setDeleteSetError(null);
+  };
+
+  const handleDeleteSet = async () => {
+    if (!setData.id) return;
+
+    setIsDeletingSet(true);
+    setDeleteSetError(null);
+
+    try {
+      const response = await fetch('/api/database/v2/sets/delete-set', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          set_id: setData.id,
+          also_delete_items: false, // Keep items in library by default
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to delete set');
+      }
+
+      // Redirect to sets list after successful deletion
+      router.push('/learn/academy/sets');
+
+    } catch (err) {
+      console.error('Error deleting set:', err);
+      setDeleteSetError(err.message);
+    } finally {
+      setIsDeletingSet(false);
+    }
+  };
+
 
   const handleCancelEdit = () => {
     setEditingItem(null);
@@ -960,29 +1010,121 @@ export default function ViewSet() {
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3 flex-shrink-0">
+              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                {/* Delete Set button on the left */}
                 <button
-                  onClick={handleCancelSetEdit}
-                  disabled={isSavingSet}
+                  onClick={handleShowDeleteSetConfirm}
+                  disabled={isSavingSet || isDeletingSet}
+                  className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Delete Set
+                </button>
+
+                {/* Save/Cancel buttons on the right */}
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={handleCancelSetEdit}
+                    disabled={isSavingSet || isDeletingSet}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSaveSetDetails}
+                    disabled={isSavingSet || isDeletingSet}
+                    className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {isSavingSet ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Saving...
+                      </>
+                    ) : (
+                      'Save Changes'
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Set Confirmation Modal */}
+        {showDeleteSetConfirm && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  Confirm Set Deletion
+                </h3>
+              </div>
+
+              <div className="px-6 py-4">
+                <p className="text-gray-700 dark:text-gray-300 mb-2 font-semibold">
+                  Are you sure you want to permanently delete this set?
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                  This will remove the set and all item associations. The items themselves will remain in your library and can be added to other sets.
+                </p>
+
+                {setData && (
+                  <div className="p-3 bg-gray-50 dark:bg-[#0f1a1f] rounded-lg border border-gray-200 dark:border-gray-700">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {setData.title}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      {setData.itemCount} {setData.itemCount === 1 ? 'item' : 'items'}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-mono">
+                      ID: {setData.id}
+                    </p>
+                  </div>
+                )}
+
+                {deleteSetError && (
+                  <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
+                    <strong>Error:</strong> {deleteSetError}
+                  </div>
+                )}
+              </div>
+
+              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3">
+                <button
+                  onClick={handleCancelDeleteSet}
+                  disabled={isDeletingSet}
                   className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={handleSaveSetDetails}
-                  disabled={isSavingSet}
-                  className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  onClick={handleDeleteSet}
+                  disabled={isDeletingSet}
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  {isSavingSet ? (
+                  {isDeletingSet ? (
                     <>
                       <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Saving...
+                      Deleting Set...
                     </>
                   ) : (
-                    'Save Changes'
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Yes, Delete Set
+                    </>
                   )}
                 </button>
               </div>
