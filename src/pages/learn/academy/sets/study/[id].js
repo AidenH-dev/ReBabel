@@ -96,7 +96,7 @@ export default function ViewSet() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Edit item modal state
   const [editingItem, setEditingItem] = useState(null);
   const [editFormData, setEditFormData] = useState({});
@@ -110,6 +110,11 @@ export default function ViewSet() {
   const [isSavingSet, setIsSavingSet] = useState(false);
   const [saveSetError, setSaveSetError] = useState(null);
   const [saveSetSuccess, setSaveSetSuccess] = useState(false);
+
+  // Delete confirmation state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
 
   const [setData, setSetData] = useState({
     id: id,
@@ -150,6 +155,8 @@ export default function ViewSet() {
         if (!result.success || !result.data) {
           throw new Error(result.error || 'Failed to load set data');
         }
+
+        console.log("Set Result: ", result)
 
         const apiData = result.data;
         const setInfo = apiData.data?.set;
@@ -260,14 +267,6 @@ export default function ViewSet() {
     router.push(`/learn/academy/sets/study/${id}/flashcards`);
   };
 
-  const handleEditSet = () => {
-    router.push(`/learn/academy/sets/edit-set?id=${id}`);
-  };
-
-  const handleDeleteItem = (itemId) => {
-    setItems(prev => prev.filter(item => item.id !== itemId));
-  };
-
   const handleEditItem = (itemId, itemType) => {
     const item = items.find(i => i.id === itemId);
     if (item) {
@@ -278,7 +277,6 @@ export default function ViewSet() {
     }
   };
 
-  // NEW: Handle edit set details
   const handleEditSetDetails = () => {
     setEditingSet(true);
     setSetFormData({
@@ -291,7 +289,6 @@ export default function ViewSet() {
     setShowOptions(false);
   };
 
-  // NEW: Handle save set details
   const handleSaveSetDetails = async () => {
     if (!setData.id) return;
 
@@ -301,7 +298,7 @@ export default function ViewSet() {
 
     try {
       const updates = {};
-      
+
       if (setFormData.title !== undefined) {
         updates.title = setFormData.title;
       }
@@ -330,7 +327,6 @@ export default function ViewSet() {
         throw new Error(result.error || 'Failed to update set');
       }
 
-      // Update local state
       setSetData(prev => ({
         ...prev,
         title: setFormData.title,
@@ -339,7 +335,7 @@ export default function ViewSet() {
       }));
 
       setSaveSetSuccess(true);
-      
+
       setTimeout(() => {
         setEditingSet(false);
         setSetFormData({});
@@ -354,7 +350,6 @@ export default function ViewSet() {
     }
   };
 
-  // NEW: Handle cancel edit set
   const handleCancelSetEdit = () => {
     setEditingSet(false);
     setSetFormData({});
@@ -362,7 +357,6 @@ export default function ViewSet() {
     setSaveSetSuccess(false);
   };
 
-  // NEW: Handle set field change
   const handleSetFieldChange = (field, value) => {
     setSetFormData(prev => ({
       ...prev,
@@ -379,7 +373,7 @@ export default function ViewSet() {
 
     try {
       const updates = {};
-      
+
       if (editFormData.status !== undefined) {
         updates.known_status = editFormData.status;
       }
@@ -434,7 +428,7 @@ export default function ViewSet() {
       );
 
       setSaveSuccess(true);
-      
+
       setTimeout(() => {
         setEditingItem(null);
         setEditFormData({});
@@ -461,6 +455,62 @@ export default function ViewSet() {
       ...prev,
       [field]: value
     }));
+  };
+
+  const handleShowDeleteConfirm = () => {
+    setShowDeleteConfirm(true);
+    setDeleteError(null);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setDeleteError(null);
+  };
+
+  const handleDeleteItem = async () => {
+    if (!editingItem || !setData.id) return;
+
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      const response = await fetch('/api/database/v2/sets/remove-item-from-set', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          set_id: setData.id,
+          item_id: editingItem.id,
+          also_delete_item: true
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to remove item from set');
+      }
+
+      setItems(prevItems => prevItems.filter(item => item.id !== editingItem.id));
+
+      setSetData(prev => ({
+        ...prev,
+        itemCount: Math.max(0, prev.itemCount - 1)
+      }));
+
+      setEditingItem(null);
+      setEditFormData({});
+      setShowDeleteConfirm(false);
+      setSaveSuccess(false);
+      setSaveError(null);
+
+    } catch (err) {
+      console.error('Error deleting item:', err);
+      setDeleteError(err.message);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const getStatusColor = (status) => {
@@ -588,7 +638,6 @@ export default function ViewSet() {
                   </button>
                   {showOptions && (
                     <div className="absolute right-0 dark:text-white mt-1 w-56 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
-                      
                       <button
                         onClick={handleExportCSV}
                         className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
@@ -676,8 +725,8 @@ export default function ViewSet() {
                     <button
                       onClick={() => setViewMode("list")}
                       className={`p-1.5 rounded transition-colors ${viewMode === "list"
-                          ? "bg-white dark:bg-[#1d2a32] text-[#e30a5f]"
-                          : "text-gray-600 dark:text-gray-400"
+                        ? "bg-white dark:bg-[#1d2a32] text-[#e30a5f]"
+                        : "text-gray-600 dark:text-gray-400"
                         }`}
                     >
                       <FiList className="w-4 h-4" />
@@ -685,8 +734,8 @@ export default function ViewSet() {
                     <button
                       onClick={() => setViewMode("grid")}
                       className={`p-1.5 rounded transition-colors ${viewMode === "grid"
-                          ? "bg-white dark:bg-[#1d2a32] text-[#e30a5f]"
-                          : "text-gray-600 dark:text-gray-400"
+                        ? "bg-white dark:bg-[#1d2a32] text-[#e30a5f]"
+                        : "text-gray-600 dark:text-gray-400"
                         }`}
                     >
                       <FiGrid className="w-4 h-4" />
@@ -767,7 +816,7 @@ export default function ViewSet() {
                           </div>
 
                           <div className="flex items-center gap-0.5 transition-opacity flex-shrink-0">
-                            <button 
+                            <button
                               onClick={() => handleEditItem(item.id, item.type)}
                               className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400"
                               title={`Edit (ID: ${item.id})`}
@@ -826,7 +875,7 @@ export default function ViewSet() {
                             </span>
                           )}
                           <div className="flex gap-0.5 transition-opacity ml-auto flex-shrink-0">
-                            <button 
+                            <button
                               onClick={() => handleEditItem(item.id, item.type)}
                               className="p-0.5 rounded hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
                               title={`Edit (ID: ${item.id})`}
@@ -908,33 +957,6 @@ export default function ViewSet() {
                       placeholder="Enter set title"
                     />
                   </div>
-
-                  {/*<div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Description
-                    </label>
-                    <textarea
-                      value={setFormData.description || ''}
-                      onChange={(e) => handleSetFieldChange('description', e.target.value)}
-                      rows={4}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f] resize-none"
-                      placeholder="Enter set description"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Tags
-                      <span className="text-xs text-gray-500 ml-2">(comma-separated)</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={Array.isArray(setFormData.tags) ? setFormData.tags.join(', ') : ''}
-                      onChange={(e) => handleSetFieldChange('tags', e.target.value.split(',').map(t => t.trim()).filter(Boolean))}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
-                      placeholder="tag1, tag2, tag3"
-                    />
-                  </div>*/}
                 </div>
               </div>
 
@@ -983,7 +1005,7 @@ export default function ViewSet() {
                 </div>
                 <button
                   onClick={handleCancelEdit}
-                  disabled={isSaving}
+                  disabled={isSaving || isDeleting}
                   className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -992,7 +1014,7 @@ export default function ViewSet() {
                 </button>
               </div>
 
-              {(saveSuccess || saveError) && (
+              {(saveSuccess || saveError || deleteError) && (
                 <div className="px-6 pt-4 flex-shrink-0">
                   {saveSuccess && (
                     <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200 text-sm flex items-center gap-2">
@@ -1005,6 +1027,11 @@ export default function ViewSet() {
                   {saveError && (
                     <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
                       <strong>Error:</strong> {saveError}
+                    </div>
+                  )}
+                  {deleteError && (
+                    <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
+                      <strong>Delete Error:</strong> {deleteError}
                     </div>
                   )}
                 </div>
@@ -1125,8 +1152,8 @@ export default function ViewSet() {
                       <span className="text-xs text-gray-500 ml-2">(one per line)</span>
                     </label>
                     <textarea
-                      value={Array.isArray(editFormData.example_sentences) 
-                        ? editFormData.example_sentences.join('\n') 
+                      value={Array.isArray(editFormData.example_sentences)
+                        ? editFormData.example_sentences.join('\n')
                         : ''}
                       onChange={(e) => handleFieldChange('example_sentences', e.target.value.split('\n').filter(s => s.trim()))}
                       rows={4}
@@ -1151,29 +1178,109 @@ export default function ViewSet() {
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3 flex-shrink-0">
+              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
                 <button
-                  onClick={handleCancelEdit}
-                  disabled={isSaving}
+                  onClick={handleShowDeleteConfirm}
+                  disabled={isSaving || isDeleting}
+                  className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Remove from Set
+                </button>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={handleCancelEdit}
+                    disabled={isSaving || isDeleting}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSaveEdit}
+                    disabled={isSaving || isDeleting}
+                    className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {isSaving ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Saving...
+                      </>
+                    ) : (
+                      'Save Changes'
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  Confirm Deletion
+                </h3>
+              </div>
+
+              <div className="px-6 py-4">
+                <p className="text-gray-700 dark:text-gray-300 mb-2">
+                  Are you sure you want to remove this item from the set?
+                </p>
+                {/*<p className="text-sm text-gray-500 dark:text-gray-400">
+                  This will only remove it from this set. The item will still exist in your vocabulary/grammar library.
+        </p>*/}
+                {editingItem && (
+                  <div className="mt-3 p-3 bg-gray-50 dark:bg-[#0f1a1f] rounded-lg">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {editingItem.type === 'vocabulary' ? editingItem.english : editingItem.title}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-mono">
+                      ID: {editingItem.id}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3">
+                <button
+                  onClick={handleCancelDelete}
+                  disabled={isDeleting}
                   className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={handleSaveEdit}
-                  disabled={isSaving}
-                  className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  onClick={handleDeleteItem}
+                  disabled={isDeleting}
+                  className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  {isSaving ? (
+                  {isDeleting ? (
                     <>
                       <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Saving...
+                      Removing...
                     </>
                   ) : (
-                    'Save Changes'
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Yes, Remove Item
+                    </>
                   )}
                 </button>
               </div>
