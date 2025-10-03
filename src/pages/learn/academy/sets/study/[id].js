@@ -9,11 +9,12 @@ import {
   FaPlay
 } from "react-icons/fa";
 import {
-  FiGrid, FiList, FiEdit2, FiSearch, FiMoreVertical
+  FiGrid, FiList, FiEdit2, FiSearch, FiMoreVertical, FiPlus
 } from "react-icons/fi";
 import { MdQuiz } from "react-icons/md";
 import { TbCards } from "react-icons/tb";
 import { HiOutlineDownload } from "react-icons/hi";
+import { toKana } from "wanakana";
 
 // ---------- CSV utils ----------
 function escapeCSVCell(value) {
@@ -119,6 +120,19 @@ export default function ViewSet() {
   const [showDeleteSetConfirm, setShowDeleteSetConfirm] = useState(false);
   const [isDeletingSet, setIsDeletingSet] = useState(false);
   const [deleteSetError, setDeleteSetError] = useState(null);
+
+  // User profile for owner field
+  const [userProfile, setUserProfile] = useState(null);
+
+  // Add item modal state
+  const [showAddItemModal, setShowAddItemModal] = useState(false);
+  const [addItemType, setAddItemType] = useState("vocabulary");
+  const [grammarTitleInputType, setGrammarTitleInputType] = useState("english");
+  const [isAddingItem, setIsAddingItem] = useState(false);
+  const [addItemError, setAddItemError] = useState(null);
+  const [addItemSuccess, setAddItemSuccess] = useState(false);
+
+
 
   const [setData, setSetData] = useState({
     id: id,
@@ -576,6 +590,187 @@ export default function ViewSet() {
     }
   };
 
+  // Add item form state
+  const [vocabForm, setVocabForm] = useState({
+    english: "",
+    kana: "",
+    kanji: "",
+    lexical_category: "",
+    example_sentences: "",
+    tags: ""
+  });
+
+  const [grammarForm, setGrammarForm] = useState({
+    title: "",
+    description: "",
+    topic: "",
+    notes: "",
+    example_sentences: "",
+    tags: ""
+  });
+
+  // Add this useEffect to fetch user profile:
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch("/api/auth/me");
+        const profile = await response.json();
+        setUserProfile(profile);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+    fetchUserProfile();
+  }, []);
+
+  // Add these handler functions:
+
+  const handleOpenAddItemModal = () => {
+    setShowAddItemModal(true);
+    setAddItemError(null);
+    setAddItemSuccess(false);
+  };
+
+  const handleCloseAddItemModal = () => {
+    setShowAddItemModal(false);
+    setVocabForm({
+      english: "",
+      kana: "",
+      kanji: "",
+      lexical_category: "",
+      example_sentences: "",
+      tags: ""
+    });
+    setGrammarForm({
+      title: "",
+      description: "",
+      topic: "",
+      notes: "",
+      example_sentences: "",
+      tags: ""
+    });
+    setAddItemError(null);
+    setAddItemSuccess(false);
+  };
+
+  const handleVocabFormChange = (field, value) => {
+    if (field === "kana" || field === "kanji") {
+      setVocabForm(prev => ({ ...prev, [field]: toKana(value, { IMEMode: true }) }));
+    } else {
+      setVocabForm(prev => ({ ...prev, [field]: value }));
+    }
+  };
+
+  const handleGrammarFormChange = (field, value) => {
+    if (field === "title" && grammarTitleInputType === "kana") {
+      setGrammarForm(prev => ({ ...prev, [field]: toKana(value, { IMEMode: true }) }));
+    } else {
+      setGrammarForm(prev => ({ ...prev, [field]: value }));
+    }
+  };
+
+  const handleGrammarTitleTypeSwitch = (type) => {
+    setGrammarTitleInputType(type);
+    setGrammarForm(prev => ({ ...prev, title: "" }));
+  };
+
+  const handleAddItemSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!userProfile) {
+      setAddItemError("User profile not loaded");
+      return;
+    }
+
+    setIsAddingItem(true);
+    setAddItemError(null);
+    setAddItemSuccess(false);
+
+    try {
+      let item_data;
+      let item_type;
+
+      if (addItemType === "vocabulary") {
+        if (!vocabForm.english.trim() && !vocabForm.kana.trim()) {
+          setAddItemError("Please provide at least English or Kana");
+          setIsAddingItem(false);
+          return;
+        }
+
+        item_type = "vocab";
+        item_data = {
+          owner: userProfile.sub,
+          english: vocabForm.english.trim(),
+          kana: vocabForm.kana.trim(),
+          kanji: vocabForm.kanji.trim(),
+          lexical_category: vocabForm.lexical_category.trim(),
+          example_sentences: vocabForm.example_sentences.trim(),
+          tags: vocabForm.tags.trim() ? vocabForm.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+          known_status: 'unknown',
+          srs_level: 0,
+          audio: ""
+        };
+      } else {
+        if (!grammarForm.title.trim()) {
+          setAddItemError("Please provide a title for the grammar item");
+          setIsAddingItem(false);
+          return;
+        }
+
+        item_type = "grammar";
+        const exampleSentences = grammarForm.example_sentences.trim()
+          ? grammarForm.example_sentences.split('\n').filter(s => s.trim()).map(s => ({
+            japanese: s.trim(),
+            english: ""
+          }))
+          : [];
+
+        item_data = {
+          owner: userProfile.sub,
+          title: grammarForm.title.trim(),
+          description: grammarForm.description.trim(),
+          topic: grammarForm.topic.trim(),
+          notes: grammarForm.notes.trim(),
+          example_sentences: exampleSentences,
+          tags: grammarForm.tags.trim() ? grammarForm.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+          known_status: 'unknown',
+          srs_level: 0
+        };
+      }
+
+      const response = await fetch('/api/database/v2/sets/add-item-to-set', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          set_id: setData.id,
+          item_type: item_type,
+          item_data: item_data
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to add item to set');
+      }
+
+      setAddItemSuccess(true);
+
+      // Refresh the page data
+      setTimeout(() => {
+        router.reload();
+      }, 1000);
+
+    } catch (err) {
+      console.error('Error adding item:', err);
+      setAddItemError(err.message);
+    } finally {
+      setIsAddingItem(false);
+    }
+  };
+
   const handleExportCSV = () => {
     try {
       if (!items.length) {
@@ -771,6 +966,10 @@ export default function ViewSet() {
                     <option value="status">By Status</option>
                   </select>
 
+
+                </div>
+
+                <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1 rounded-lg bg-gray-100 dark:bg-[#0f1a1f] p-1">
                     <button
                       onClick={() => setViewMode("list")}
@@ -791,6 +990,13 @@ export default function ViewSet() {
                       <FiGrid className="w-4 h-4" />
                     </button>
                   </div>
+                  <button
+                    onClick={handleOpenAddItemModal}
+                    className="p-2 rounded-lg bg-[#e30a5f] text-white hover:bg-[#c00950] transition-colors"
+                    title="Add new item"
+                  >
+                    <FiPlus className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -951,6 +1157,288 @@ export default function ViewSet() {
           </div>
         </div>
 
+        {/* Add Item Modal */}
+        {showAddItemModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                    Add New Item
+                  </h2>
+                  <div className="flex bg-gray-100 dark:bg-[#0f1a1f] rounded-md p-0.5">
+                    <button
+                      onClick={() => setAddItemType("vocabulary")}
+                      className={`px-2 py-1 text-xs font-medium rounded transition-colors ${addItemType === "vocabulary"
+                        ? "bg-[#e30a5f] text-white"
+                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                    >
+                      Vocabulary
+                    </button>
+                    <button
+                      onClick={() => setAddItemType("grammar")}
+                      className={`px-2 py-1 text-xs font-medium rounded transition-colors ${addItemType === "grammar"
+                        ? "bg-[#e30a5f] text-white"
+                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                    >
+                      Grammar
+                    </button>
+                  </div>
+                </div>
+                <button
+                  onClick={handleCloseAddItemModal}
+                  disabled={isAddingItem}
+                  className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {(addItemSuccess || addItemError) && (
+                <div className="px-6 pt-4 flex-shrink-0">
+                  {addItemSuccess && (
+                    <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200 text-sm flex items-center gap-2">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Item added successfully! Refreshing...
+                    </div>
+                  )}
+                  {addItemError && (
+                    <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
+                      <strong>Error:</strong> {addItemError}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <form onSubmit={handleAddItemSubmit} className="flex-1 overflow-y-auto px-6 py-4">
+                <div className="space-y-4">
+                  {addItemType === "vocabulary" ? (
+                    <>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            English
+                          </label>
+                          <input
+                            type="text"
+                            value={vocabForm.english}
+                            onChange={(e) => handleVocabFormChange("english", e.target.value)}
+                            placeholder="English term"
+                            className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Kana <span className="text-gray-500 dark:text-gray-400">(type in romaji)</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={vocabForm.kana}
+                            onChange={(e) => handleVocabFormChange("kana", e.target.value)}
+                            placeholder="ka → か, shi → し"
+                            className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] font-japanese"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Kanji <span className="text-gray-500 dark:text-gray-400">(paste)</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={vocabForm.kanji}
+                            onChange={(e) => handleVocabFormChange("kanji", e.target.value)}
+                            placeholder="漢字"
+                            className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] font-japanese"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Category
+                          </label>
+                          <select
+                            value={vocabForm.lexical_category}
+                            onChange={(e) => handleVocabFormChange("lexical_category", e.target.value)}
+                            className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                          >
+                            <option value="">Select category</option>
+                            <option value="noun">Noun</option>
+                            <option value="verb">Verb</option>
+                            <option value="adjective">Adjective</option>
+                            <option value="adverb">Adverb</option>
+                            <option value="particle">Particle</option>
+                            <option value="expression">Expression</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Example Sentences <span className="text-gray-500">(one per line)</span>
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={vocabForm.example_sentences}
+                          onChange={(e) => handleVocabFormChange("example_sentences", e.target.value)}
+                          placeholder="Example sentences"
+                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Tags <span className="text-gray-500">(comma-separated)</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={vocabForm.tags}
+                          onChange={(e) => handleVocabFormChange("tags", e.target.value)}
+                          placeholder="tag1, tag2, tag3"
+                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center justify-between">
+                            <span>Title *</span>
+                            <div className="flex gap-0.5">
+                              <button
+                                type="button"
+                                onClick={() => handleGrammarTitleTypeSwitch("english")}
+                                className={`px-1 py-0.5 text-[10px] rounded transition-colors ${grammarTitleInputType === "english"
+                                    ? "bg-[#e30a5f] text-white"
+                                    : "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
+                                  }`}
+                              >
+                                En
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleGrammarTitleTypeSwitch("kana")}
+                                className={`px-1 py-0.5 text-[10px] rounded transition-colors ${grammarTitleInputType === "kana"
+                                    ? "bg-[#e30a5f] text-white"
+                                    : "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
+                                  }`}
+                              >
+                                あ
+                              </button>
+                            </div>
+                          </label>
+                          <input
+                            type="text"
+                            value={grammarForm.title}
+                            onChange={(e) => handleGrammarFormChange("title", e.target.value)}
+                            placeholder={grammarTitleInputType === "kana"
+                              ? "Type in romaji"
+                              : "Grammar pattern name"}
+                            className={`w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] ${grammarTitleInputType === "kana" ? "font-japanese" : ""
+                              }`}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Topic
+                          </label>
+                          <input
+                            type="text"
+                            value={grammarForm.topic}
+                            onChange={(e) => handleGrammarFormChange("topic", e.target.value)}
+                            placeholder="e.g., N5, JLPT"
+                            className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Description
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={grammarForm.description}
+                          onChange={(e) => handleGrammarFormChange("description", e.target.value)}
+                          placeholder="Brief explanation"
+                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Notes
+                        </label>
+                        <input
+                          type="text"
+                          value={grammarForm.notes}
+                          onChange={(e) => handleGrammarFormChange("notes", e.target.value)}
+                          placeholder="Additional notes"
+                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Example Sentences <span className="text-gray-500">(one per line)</span>
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={grammarForm.example_sentences}
+                          onChange={(e) => handleGrammarFormChange("example_sentences", e.target.value)}
+                          placeholder="Example sentences"
+                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Tags <span className="text-gray-500">(comma-separated)</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={grammarForm.tags}
+                          onChange={(e) => handleGrammarFormChange("tags", e.target.value)}
+                          placeholder="tag1, tag2, tag3"
+                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={handleCloseAddItemModal}
+                    disabled={isAddingItem}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isAddingItem}
+                    className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {isAddingItem ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Adding...
+                      </>
+                    ) : (
+                      <>
+                        <FiPlus className="w-4 h-4" /> Add to Set
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
         {/* Edit Set Details Modal */}
         {editingSet && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
