@@ -229,12 +229,12 @@ export default function VocabularyDashboard() {
   };
 
   return (
-    <div className="flex flex-row min-h-screen bg-white dark:bg-[#141f25] text-[#222] dark:text-white">
+    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#141f25] text-[#222] dark:text-white">
       {/* Sidebar */}
       <AcademySidebar />
 
       {/* Main */}
-      <main className="ml-auto flex-1 flex flex-col min-h-screen bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 py-8">
+      <main className="ml-auto flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 py-8">
         <BeginnerPackPopup
           isOpen={showBeginnerPopup}
           onClose={() => setShowBeginnerPopup(false)}
@@ -770,7 +770,7 @@ export default function VocabularyDashboard() {
                   {/* New set */}
                   <button
                     onClick={() => router.push("/learn/academy/sets/create")}
-                    className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 active:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#e30a5f]/70 focus:ring-offset-white dark:focus:ring-offset-[#1c2b35]"
+                    className="inline-flex items-center gap-2 w-fit rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 active:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#e30a5f]/70 focus:ring-offset-white dark:focus:ring-offset-[#1c2b35]"
                   >
                     <FaPlus /> New Set
                   </button>
