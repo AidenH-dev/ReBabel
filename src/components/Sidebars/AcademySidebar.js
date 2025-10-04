@@ -128,23 +128,6 @@ function AcademySidebar() {
               <span className="ms-3">Sets</span>
             </Link>
           </li>
-
-          <li>
-            <Link
-              href="/learn/settings"
-              className={`${baseLink} ${
-                isAcademySettingsActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
-              }`}
-              aria-current={isAcademySettingsActive ? "page" : undefined}
-            >
-              <TbSettings
-                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
-                  isAcademySettingsActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
-                }`}
-              />
-              <span className="ms-3">Settings</span>
-            </Link>
-          </li>
         </ul>
       </div>
     </>
