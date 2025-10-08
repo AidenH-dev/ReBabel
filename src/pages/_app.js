@@ -38,7 +38,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     // Only initialize PostHog outside of development
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.NEXT_PUBLIC_NODE_ENV !== 'development') {
       posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
         api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
         person_profiles: 'identified_only',
