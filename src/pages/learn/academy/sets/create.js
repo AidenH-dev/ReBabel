@@ -31,7 +31,7 @@ export default function CreateNewSet() {
     // ----- State -----
     const [newSetName, setNewSetName] = useState("");
     const [proposedItems, setProposedItems] = useState([]);
-    const [grammarTitleInputType, setGrammarTitleInputType] = useState("english"); // "english" | "kana"
+    const [grammarTitleInputType, setGrammarTitleInputType] = useState("kana"); // "english" | "kana"
     const [activeTab, setActiveTab] = useState("single");
     const [statusMessage, setStatusMessage] = useState("");
     const [statusType, setStatusType] = useState(""); // "success" | "error" | "info"
@@ -634,7 +634,7 @@ export default function CreateNewSet() {
                                                                         ({grammarTitleInputType === "kana" ? "Kana" : "English"})
                                                                     </span>
                                                                 )}</span>
-                                                                <div className="flex gap-0.5">
+                                                                {/**<div className="flex gap-0.5">
                                                                     <button
                                                                         type="button"
                                                                         onClick={() => handleGrammarTitleTypeSwitch("english")}
@@ -655,7 +655,7 @@ export default function CreateNewSet() {
                                                                     >
                                                                         あ
                                                                     </button>
-                                                                </div>
+                                                                </div> */}
                                                             </label>
                                                             <input
                                                                 type="text"
