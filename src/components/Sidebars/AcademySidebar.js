@@ -8,7 +8,8 @@ import {
   TbX, 
   TbArrowLeft,
   TbLayoutGrid,
-  TbStack2
+  TbStack2,
+  TbPlus
 } from "react-icons/tb";
 import Link from "next/link";
 
@@ -51,7 +52,7 @@ function AcademySidebar() {
 
   const NavigationContent = () => (
     <>
-      <div className="text-center mb-5 mt-6">
+      <div className="text-center mb-4 mt-6">
         <Image
           src="/ReBabel.png"
           alt="ReBabel Logo"
@@ -63,19 +64,28 @@ function AcademySidebar() {
       </div>
       <div className="py-4 px-2 overflow-y-auto">
         <ul className="space-y-2 font-medium">
-          {/* Back Button */}
+          {/* Back and Create Buttons */}
           <li>
-            <button
-              onClick={() => {
-                router.push("/learn/dashboard");
-              }}
-              className={`w-full text-left ${baseLink} ${inactiveLinkLight} ${inactiveLinkDark}`}
-            >
-              <TbArrowLeft
-                className={`flex-shrink-0 w-6 h-6 transition duration-75 ${inactiveIconLight} ${inactiveIconDark}`}
-              />
-              <span className="ms-3 text-sm">Back</span>
-            </button>
+            <div className="flex gap-2 mb-3">
+              <button
+                onClick={() => {
+                  router.push("/learn/dashboard");
+                }}
+                className="flex-1 flex items-center justify-center p-2.5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-800/30 hover:bg-gray-100/70 dark:hover:bg-gray-700/50 hover:border-gray-400 dark:hover:border-gray-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                aria-label="Back to dashboard"
+              >
+                <TbArrowLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+              </button>
+              <button
+                onClick={() => {
+                  router.push("/learn/academy/sets/create");
+                }}
+                className="flex-1 flex items-center justify-center p-2.5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-800/30 hover:bg-gray-100/70 dark:hover:bg-gray-700/50 hover:border-gray-400 dark:hover:border-gray-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                aria-label="Create new set"
+              >
+                <TbPlus className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+              </button>
+            </div>
           </li>
 
           <li>
