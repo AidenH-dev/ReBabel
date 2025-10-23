@@ -53,7 +53,7 @@ export default function LearnNew() {
                   Coming Soon
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  This feature is currently under development. You'll be able to learn new cards here soon.
+                  This feature is currently under development. You&apos;ll be able to learn new cards here soon.
                 </p>
                 <div className="inline-block px-6 py-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
                   <p className="text-sm text-blue-900 dark:text-blue-300">

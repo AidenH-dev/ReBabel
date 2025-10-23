@@ -53,7 +53,7 @@ export default function DueNow() {
                   Coming Soon
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  This feature is currently under development. You'll be able to review your due cards here soon.
+                  This feature is currently under development. You&apos;ll be able to review your due cards here soon.
                 </p>
                 <div className="inline-block px-6 py-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
                   <p className="text-sm text-purple-900 dark:text-purple-300">
