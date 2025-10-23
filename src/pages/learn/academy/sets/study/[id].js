@@ -30,6 +30,7 @@ import { useRouter } from "next/router";
 import MasterItemsManagement from "@/components/pages/academy/sets/ViewSet/ItemsManagement/MasterItemsManagement";
 import PracticeOptions from "@/components/pages/academy/sets/ViewSet/PracticeOptions/MasterPracticeOptions";
 import MasterSetHeader from "@/components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader";
+import MasterSrsSetModule from"@/components/pages/academy/sets/ViewSet/srsSetModule/MasterSrsSetModule";
 
 // ============================================================================
 // MAIN COMPONENT
@@ -259,7 +260,7 @@ export default function ViewSet() {
       <MainSidebar />
 
       {/* Main content area */}
-      <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex flex-col min-h-0 overflow-hidden">
+      <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex flex-col min-h-0 sm:overflow-hidden">
         {/* Page metadata */}
         <Head>
           <title>{setData.title} - View Set</title>
@@ -276,7 +277,6 @@ export default function ViewSet() {
             onSetDataUpdate={handleSetDataUpdate}
             onDeleteSet={handleDeleteSet}
           />
-
           {/* Section 2: Practice Options - Quiz and flashcard buttons */}
           <PracticeOptions setId={id} />
 

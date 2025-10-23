@@ -3,16 +3,19 @@ import Link from "next/link";
 import { useState } from "react";
 import { FiEdit2, FiMoreVertical } from "react-icons/fi";
 import { HiOutlineDownload } from "react-icons/hi";
+import { TbRepeat, TbRepeatOff } from "react-icons/tb";
 import { buildCSV, toSlug, downloadCSV } from "@/components/pages/academy/sets/ViewSet/utils/csvUtils.js";
 
-export default function MasterSetHeader({ 
-  setData, 
+export default function MasterSetHeader({
+  setData,
   items,
   onSetDataUpdate,
-  onDeleteSet
+  onDeleteSet,
+  srsEnabled = true,
+  showSRS = false
 }) {
   const [showOptions, setShowOptions] = useState(false);
-  
+
   // Edit set modal state
   const [editingSet, setEditingSet] = useState(false);
   const [setFormData, setSetFormData] = useState({});
@@ -176,9 +179,9 @@ export default function MasterSetHeader({
 
   return (
     <>
-      <div className="mb-4 flex-shrink-0">
-        {/* Breadcrumbs */}
-        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
+      <div className=" sm:mb-3 flex-shrink-0 pt-11 sm:pt-0">
+        {/* Breadcrumbs - Hidden on mobile */}
+        <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
           <Link href="/learn/academy/sets" className="hover:text-[#e30a5f] transition-colors">
             Sets
           </Link>
@@ -188,12 +191,56 @@ export default function MasterSetHeader({
           </span>
         </div>
 
-        {/* Set Title and Actions */}
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-              {setData.title}
-            </h1>
+        {/* Set Title and Actions - Always horizontal on all screen sizes */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                {setData.title}
+              </h1>
+
+              {/* SRS Status Badge */}
+              {showSRS && 
+              <div
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border-2 relative overflow-hidden ${srsEnabled
+                    ? 'bg-green-300/20 border-green-400 dark:border-green-400 shadow-lg '
+                    : 'bg-gray-100/60 dark:bg-gray-800/60 border-gray-300 dark:border-gray-600'
+                  }`}
+              >
+
+                <div className="relative flex items-center gap-1.5">
+                  {srsEnabled ? (
+                    <>
+                      <TbRepeat className="w-4 h-4 text-purple-600 dark:text-purple-300" />
+                      <span className="text-xs font-semibold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-300 bg-clip-text text-transparent">
+                        <span className="md:hidden">SRS</span>
+                        <span className="hidden md:inline">SRS Enabled</span>
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <TbRepeatOff className="w-4 h-4 text-gray-500 dark:text-gray-500" />
+                      <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+                        <span className="md:hidden">SRS</span>
+                        <span className="hidden md:inline">SRS Disabled</span>
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>}
+
+              <style jsx>{`
+                @keyframes shimmer {
+                  0%, 100% {
+                    transform: translateX(-100%);
+                  }
+                  50% {
+                    transform: translateX(100%);
+                  }
+                }
+              `}</style>
+            </div>
+
             {setData.description && (
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 {setData.description}
@@ -215,7 +262,7 @@ export default function MasterSetHeader({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-0.5">
+          <div className="flex items-center gap-0.5 flex-shrink-0">
             <button
               onClick={handleEditSetDetails}
               className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

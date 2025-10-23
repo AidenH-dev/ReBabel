@@ -417,7 +417,8 @@ export default function MasterItemsManagement({
               />
             </div>
 
-            <div className="flex items-center gap-2">
+            {/* Combined row for filters and buttons - stays horizontal on mobile */}
+            <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
@@ -437,10 +438,9 @@ export default function MasterItemsManagement({
                 <option value="alpha">Alphabetical</option>
                 <option value="status">By Status</option>
               </select>
-            </div>
 
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 rounded-lg bg-gray-100 dark:bg-[#0f1a1f] p-1">
+              {/* Hide grid/list toggle on mobile */}
+              <div className="hidden sm:flex items-center gap-1 rounded-lg bg-gray-100 dark:bg-[#0f1a1f] p-1">
                 <button
                   onClick={() => setViewMode("list")}
                   className={`p-1.5 rounded transition-colors ${viewMode === "list"
@@ -460,6 +460,7 @@ export default function MasterItemsManagement({
                   <FiGrid className="w-4 h-4" />
                 </button>
               </div>
+              
               <button
                 onClick={handleOpenAddItemModal}
                 className="p-2 rounded-lg bg-[#e30a5f] text-white hover:bg-[#c00950] transition-colors"

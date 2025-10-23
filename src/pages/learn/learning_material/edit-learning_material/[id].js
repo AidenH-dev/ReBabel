@@ -79,6 +79,7 @@ export default function EditLearning_materialPage() {
     useEffect(() => {
         if (!router.isReady) return;
         loadLearning_material();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router.isReady, id]);
 
     const loadLearning_material = async () => {
