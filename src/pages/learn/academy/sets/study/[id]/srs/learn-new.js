@@ -29,7 +29,7 @@ export default function LearnNew() {
               className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors"
             >
               <FaArrowLeft />
-              <span>Back to Study</span>
+              <span>Back to Study TEST FOR VERCEL</span>
             </Link>
 
             {/* Header */}
