@@ -24,6 +24,32 @@ export default function SRSQuestionCard({
   onNext,
   onRetry
 }) {
+  // Auto-focus input when component loads or question changes
+  useEffect(() => {
+    if (currentItem && !showResult && inputRef?.current) {
+      inputRef.current.focus();
+    }
+  }, [currentItem, showResult, inputRef]);
+
+  // Global Enter key handler: submits first, then advances
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      if (e.key !== "Enter" || e.shiftKey) return;
+      e.preventDefault();
+
+      if (!showResult) {
+        if (userAnswer.trim()) {
+          onCheckAnswer();
+        }
+      } else {
+        onNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, [showResult, userAnswer, onCheckAnswer, onNext]);
+
   if (!currentItem) return null;
 
   // Helper: does this question expect Kana?
@@ -48,32 +74,6 @@ export default function SRSQuestionCard({
       onInputChange(e);
     }
   };
-
-  // Auto-focus input when component loads or question changes
-  useEffect(() => {
-    if (!showResult && inputRef?.current) {
-      inputRef.current.focus();
-    }
-  }, [currentItem, showResult, inputRef]);
-
-  // Global Enter key handler: submits first, then advances
-  useEffect(() => {
-    const handleGlobalKeyDown = (e) => {
-      if (e.key !== "Enter" || e.shiftKey) return;
-      e.preventDefault();
-
-      if (!showResult) {
-        if (userAnswer.trim()) {
-          onCheckAnswer();
-        }
-      } else {
-        onNext();
-      }
-    };
-
-    window.addEventListener("keydown", handleGlobalKeyDown);
-    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
-  }, [showResult, userAnswer, onCheckAnswer, onNext]);
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-2 sm:px-0">
