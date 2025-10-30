@@ -21,6 +21,9 @@ export default function SRSQuizHeader({
   currentPhaseConfig,
   CurrentPhaseIcon,
   progressInPhase,
+  completedCount,
+  totalUniqueItems,
+  displayMode,
   onExit
 }) {
   // Get phase status helper
@@ -123,7 +126,10 @@ export default function SRSQuizHeader({
                 </>
               )}
               <span>
-                Question {currentIndex + 1} of {totalQuestions}
+                {displayMode === 'completion-count' && currentPhase !== 'review'
+                  ? `${completedCount} completed out of ${totalUniqueItems} total`
+                  : `Question ${currentIndex + 1} of ${totalQuestions}`
+                }
               </span>
             </span>
           </div>

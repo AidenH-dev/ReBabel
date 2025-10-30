@@ -23,7 +23,7 @@ export default function SRSQuizSummary({
                   <FaCheckCircle className="text-white text-2xl sm:text-3xl" />
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                  Quiz Complete!
+                  Lesson Complete!
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-white/60">
                   Great job! Here&apos;s how you did:
@@ -151,15 +151,8 @@ export default function SRSQuizSummary({
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-3 sm:mt-4">
                 <button
-                  onClick={onRetry}
-                  className="flex-1 px-4 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base"
-                >
-                  <FaRedo className="inline mr-2" />
-                  Retry Quiz
-                </button>
-                <button
                   onClick={onExit}
-                  className="flex-1 px-4 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base"
+                  className="w-full px-4 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base"
                 >
                   Back to Study Set
                 </button>

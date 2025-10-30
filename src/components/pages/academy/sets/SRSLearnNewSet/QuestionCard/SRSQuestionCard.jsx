@@ -1,4 +1,5 @@
 // /components/pages/academy/sets/SRSLearnNewSet/QuestionCard/SRSQuestionCard.jsx
+import { useEffect } from "react";
 import {
   FaArrowRight,
   FaTimes,
@@ -8,6 +9,7 @@ import {
   FaRedo,
   FaCheck
 } from "react-icons/fa";
+import { toKana } from "wanakana";
 
 export default function SRSQuestionCard({
   currentItem,
@@ -26,6 +28,52 @@ export default function SRSQuestionCard({
 
   // Helper: does this question expect Kana?
   const expectsKana = (item) => item?.answerType === "Kana";
+
+  // Input change handler with conditional kana conversion
+  const handleInputChange = (e) => {
+    const raw = e.target.value;
+    if (expectsKana(currentItem)) {
+      // Convert romaji to kana in IME mode
+      const convertedValue = toKana(raw, { IMEMode: true });
+      // Create a synthetic event with converted value
+      const syntheticEvent = {
+        ...e,
+        target: {
+          ...e.target,
+          value: convertedValue
+        }
+      };
+      onInputChange(syntheticEvent);
+    } else {
+      onInputChange(e);
+    }
+  };
+
+  // Auto-focus input when component loads or question changes
+  useEffect(() => {
+    if (!showResult && inputRef?.current) {
+      inputRef.current.focus();
+    }
+  }, [currentItem, showResult, inputRef]);
+
+  // Global Enter key handler: submits first, then advances
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      if (e.key !== "Enter" || e.shiftKey) return;
+      e.preventDefault();
+
+      if (!showResult) {
+        if (userAnswer.trim()) {
+          onCheckAnswer();
+        }
+      } else {
+        onNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, [showResult, userAnswer, onCheckAnswer, onNext]);
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-2 sm:px-0">
@@ -52,7 +100,7 @@ export default function SRSQuestionCard({
               ref={inputRef}
               type="text"
               value={userAnswer}
-              onChange={onInputChange}
+              onChange={handleInputChange}
               disabled={showResult}
               placeholder={
                 expectsKana(currentItem)

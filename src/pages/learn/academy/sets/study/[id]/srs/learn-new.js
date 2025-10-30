@@ -1,9 +1,13 @@
 // pages/learn/academy/sets/study/[id]/srs/learn-new.js
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/router";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import AcademySidebar from "@/components/Sidebars/AcademySidebar";
+
+// Import icons for phase indicators
+import { FaBook, FaDumbbell } from "react-icons/fa";
+import { IoSparkles } from "react-icons/io5";
 
 // Import SRS Learn New Components
 import SRSQuizHeader from "@/components/pages/academy/sets/SRSLearnNewSet/QuizHeader/SRSQuizHeader";
@@ -27,8 +31,49 @@ export default function LearnNew() {
   const [multipleChoiceArray, setMultipleChoiceArray] = useState([]);
   const [translationArray, setTranslationArray] = useState([]);
 
-  // TODO: Add your state management here
-  // Example: currentIndex, quizItems, sessionStats, etc.
+  // ============ PHASE MANAGEMENT ============
+  const [currentPhase, setCurrentPhase] = useState('review');
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // ============ ACTIVE ARRAYS (MUTABLE) ============
+  const [activeReviewArray, setActiveReviewArray] = useState([]);
+  const [activeMCArray, setActiveMCArray] = useState([]);
+  const [activeTranslationArray, setActiveTranslationArray] = useState([]);
+
+  // ============ QUESTION STATE (MC & Translation) ============
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [userAnswer, setUserAnswer] = useState('');
+  const [currentShuffledOptions, setCurrentShuffledOptions] = useState([]);
+
+  // ============ SUMMARY STATE ============
+  const [animateAccuracy, setAnimateAccuracy] = useState(false);
+
+  // ============ SESSION TRACKING ============
+  const [sessionStats, setSessionStats] = useState({
+    correct: 0,
+    incorrect: 0,
+    totalAttempts: 0,
+    accuracy: 0
+  });
+  const [answeredItems, setAnsweredItems] = useState([]);
+
+  // ============ PHASE PROGRESS TRACKING ============
+  const [phaseProgress, setPhaseProgress] = useState({
+    'multiple-choice': {
+      completedItems: new Set(),
+      totalUniqueItems: 0
+    },
+    'translation': {
+      completedItems: new Set(),
+      totalUniqueItems: 0
+    }
+  });
+  const [completedPhases, setCompletedPhases] = useState([]);
+
+  // ============ REFS ============
+  const translationInputRef = useRef(null);
 
   // Fetch set data from API
   useEffect(() => {
@@ -106,6 +151,18 @@ export default function LearnNew() {
         }
 
         setItemData(transformedItemData);
+
+        // ============================================
+        // HELPER: Shuffle Array Function
+        // ============================================
+        const shuffleArray = (array) => {
+          const shuffled = [...array];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          return shuffled;
+        };
 
         // ============================================
         // STEP 1: Review Array (flat data)
@@ -270,7 +327,9 @@ export default function LearnNew() {
           }
         });
 
-        setMultipleChoiceArray(multipleChoice);
+        // Shuffle the multiple choice array so questions appear in random order
+        const shuffledMultipleChoice = shuffleArray(multipleChoice);
+        setMultipleChoiceArray(shuffledMultipleChoice);
 
         // ============================================
         // STEP 3: Translation Array (all variations)
@@ -303,21 +362,11 @@ export default function LearnNew() {
               hint: item.lexical_category
             });
 
-            // If kanji exists, add kanji variations
+            // If kanji exists, add kanji question variations
+            // NOTE: We only add variations where user types Kana or English
+            // Users cannot type Kanji, so answerType: "Kanji" variations are excluded
             if (item.kanji) {
-              // English → Kanji
-              translation.push({
-                id: `${item.id}-tr-en-kanji`,
-                originalId: item.id,
-                type: "vocabulary",
-                questionType: "English",
-                answerType: "Kanji",
-                question: item.english,
-                answer: item.kanji,
-                hint: `${item.lexical_category} (${item.kana})`
-              });
-
-              // Kanji → English
+              // Kanji → English (user types English)
               translation.push({
                 id: `${item.id}-tr-kanji-en`,
                 originalId: item.id,
@@ -329,19 +378,7 @@ export default function LearnNew() {
                 hint: `${item.lexical_category} (${item.kana})`
               });
 
-              // Kana → Kanji
-              translation.push({
-                id: `${item.id}-tr-kana-kanji`,
-                originalId: item.id,
-                type: "vocabulary",
-                questionType: "Kana",
-                answerType: "Kanji",
-                question: item.kana,
-                answer: item.kanji,
-                hint: item.english
-              });
-
-              // Kanji → Kana
+              // Kanji → Kana (user types Kana)
               translation.push({
                 id: `${item.id}-tr-kanji-kana`,
                 originalId: item.id,
@@ -380,7 +417,9 @@ export default function LearnNew() {
           }
         });
 
-        setTranslationArray(translation);
+        // Shuffle the translation array so questions appear in random order
+        const shuffledTranslation = shuffleArray(translation);
+        setTranslationArray(shuffledTranslation);
 
         // Console log all arrays for development
         console.log("=== SET DATA LOADED ===");
@@ -407,17 +446,318 @@ export default function LearnNew() {
     fetchSetData();
   }, [id]);
 
-  // TODO: Implement your quiz logic here
-  // Example functions you might need:
-  // - handleAnswerSubmitted
-  // - handleNext
-  // - handlePrevious
-  // - handleExit
-  // - etc.
+  // Initialize active arrays when data is loaded
+  useEffect(() => {
+    if (itemData.length > 0) {
+      setActiveReviewArray([...reviewArray]);
+      setActiveMCArray([...multipleChoiceArray]);
+      setActiveTranslationArray([...translationArray]);
+
+      // Calculate total questions per phase (each variation counts separately)
+      setPhaseProgress({
+        'multiple-choice': {
+          completedItems: new Set(),
+          totalUniqueItems: multipleChoiceArray.length
+        },
+        'translation': {
+          completedItems: new Set(),
+          totalUniqueItems: translationArray.length
+        }
+      });
+    }
+  }, [itemData, reviewArray, multipleChoiceArray, translationArray]);
+
+  // ============ HELPER FUNCTIONS ============
+
+  // Get current array based on phase
+  const getCurrentArray = () => {
+    switch (currentPhase) {
+      case 'review':
+        return activeReviewArray;
+      case 'multiple-choice':
+        return activeMCArray;
+      case 'translation':
+        return activeTranslationArray;
+      default:
+        return [];
+    }
+  };
+
+  // ============ CORE LOGIC HANDLERS ============
+
+  // Handle answer submission for MC and Translation phases
+  const handleAnswerSubmitted = (answerData) => {
+    // Record the answer
+    setAnsweredItems(prev => [...prev, {
+      ...answerData,
+      phase: currentPhase,
+      timestamp: Date.now()
+    }]);
+
+    // Update session stats
+    setSessionStats(prev => {
+      const newCorrect = prev.correct + (answerData.isCorrect ? 1 : 0);
+      const newIncorrect = prev.incorrect + (answerData.isCorrect ? 0 : 1);
+      const newTotal = prev.totalAttempts + 1;
+
+      return {
+        correct: newCorrect,
+        incorrect: newIncorrect,
+        totalAttempts: newTotal,
+        accuracy: Math.round((newCorrect / newTotal) * 100)
+      };
+    });
+
+    // Track unique items completed for MC and Translation phases
+    // Each variation (e.g., "English → Kana") counts as a separate completion
+    if (answerData.isCorrect && (currentPhase === 'multiple-choice' || currentPhase === 'translation')) {
+      const currentItem = getCurrentArray()[currentIndex];
+      setPhaseProgress(prev => {
+        const newCompletedItems = new Set(prev[currentPhase].completedItems);
+        newCompletedItems.add(currentItem.id); // Use item.id (e.g., "vocab-1-mc-en-kana")
+        return {
+          ...prev,
+          [currentPhase]: {
+            ...prev[currentPhase],
+            completedItems: newCompletedItems
+          }
+        };
+      });
+    }
+
+    // If incorrect, add current item to end of array
+    if (!answerData.isCorrect) {
+      const currentItem = getCurrentArray()[currentIndex];
+
+      if (currentPhase === 'multiple-choice') {
+        setActiveMCArray(prev => [...prev, currentItem]);
+      } else if (currentPhase === 'translation') {
+        setActiveTranslationArray(prev => [...prev, currentItem]);
+      }
+    }
+
+    // Store correctness for UI feedback
+    setIsCorrect(answerData.isCorrect);
+    setShowResult(true);
+  };
+
+  // Handle next navigation for MC and Translation
+  const handleNext = () => {
+    const currentArray = getCurrentArray();
+
+    // Reset question state for next item
+    setSelectedOption(null);
+    setShowResult(false);
+    setIsCorrect(false);
+    setUserAnswer('');
+
+    // Check if there are more items in current phase
+    if (currentIndex < currentArray.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      handlePhaseComplete();
+    }
+  };
+
+  // Handle phase completion and transition
+  const handlePhaseComplete = () => {
+    // Reset index for next phase
+    setCurrentIndex(0);
+
+    // Transition to next phase
+    if (currentPhase === 'review') {
+      setCurrentPhase('multiple-choice');
+    } else if (currentPhase === 'multiple-choice') {
+      setCurrentPhase('translation');
+    } else if (currentPhase === 'translation') {
+      setCurrentPhase('complete');
+      // Trigger accuracy bar animation after a short delay
+      setTimeout(() => setAnimateAccuracy(true), 100);
+    }
+  };
+
+  // ============ REVIEW PHASE HANDLERS ============
+
+  const handleReviewNext = () => {
+    if (currentIndex < activeReviewArray.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      handlePhaseComplete();
+    }
+  };
+
+  const handleReviewPrevious = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+    }
+  };
+
+  // ============ MULTIPLE CHOICE HANDLERS ============
+
+  const handleMCOptionSelect = (option) => {
+    setSelectedOption(option);
+
+    const currentItem = activeMCArray[currentIndex];
+    const isCorrect = option === currentItem.answer;
+
+    handleAnswerSubmitted({
+      isCorrect,
+      userAnswer: option,
+      correctAnswer: currentItem.answer,
+      questionId: currentItem.id,
+      questionType: currentItem.questionType,
+      answerType: currentItem.answerType,
+      question: currentItem.question
+    });
+  };
+
+  // ============ TRANSLATION HANDLERS ============
+
+  const handleTranslationCheck = () => {
+    const currentItem = activeTranslationArray[currentIndex];
+
+    // Normalize answers for comparison
+    const normalizedUserAnswer = userAnswer.trim().toLowerCase();
+    const normalizedCorrectAnswer = currentItem.answer.trim().toLowerCase();
+
+    const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
+
+    handleAnswerSubmitted({
+      isCorrect,
+      userAnswer,
+      correctAnswer: currentItem.answer,
+      questionId: currentItem.id,
+      questionType: currentItem.questionType,
+      answerType: currentItem.answerType,
+      question: currentItem.question
+    });
+  };
+
+  const handleTranslationRetry = () => {
+    // User clicked "I was correct" button
+    // Need to rollback everything:
+    // 1. Remove the last answered item (the incorrect one we just added)
+    // 2. Reverse the stats changes
+    // 3. Remove the item from the end of the array (that was added due to incorrect answer)
+    // 4. Mark the item as completed in phaseProgress (user says they were correct)
+    // 5. Reset the UI state to allow retyping
+
+    const currentItem = activeTranslationArray[currentIndex];
+
+    // Remove last answered item
+    setAnsweredItems(prev => prev.slice(0, -1));
+
+    // Reverse stats changes (remove 1 incorrect, remove 1 total attempt)
+    // Then add 1 correct (user claims they were correct)
+    setSessionStats(prev => {
+      const newIncorrect = Math.max(0, prev.incorrect - 1);
+      const newCorrect = prev.correct + 1;
+      const newTotal = prev.totalAttempts; // Same total, just switching incorrect to correct
+      const newAccuracy = newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0;
+
+      return {
+        ...prev,
+        correct: newCorrect,
+        incorrect: newIncorrect,
+        accuracy: newAccuracy
+      };
+    });
+
+    // Mark item as completed (user claims correct)
+    setPhaseProgress(prev => {
+      const newCompletedItems = new Set(prev[currentPhase].completedItems);
+      newCompletedItems.add(currentItem.id); // Use item.id for individual variation
+      return {
+        ...prev,
+        [currentPhase]: {
+          ...prev[currentPhase],
+          completedItems: newCompletedItems
+        }
+      };
+    });
+
+    // Remove the duplicate item from the end of the translation array
+    // (it was added because the answer was marked incorrect)
+    setActiveTranslationArray(prev => prev.slice(0, -1));
+
+    // Reset UI state to allow retyping
+    setShowResult(false);
+    setIsCorrect(false);
+    setUserAnswer('');
+
+    // Focus the input field
+    if (translationInputRef?.current) {
+      translationInputRef.current.focus();
+    }
+  };
+
+  // ============ GENERAL HANDLERS ============
 
   const handleExit = () => {
     router.push(`/learn/academy/sets/study/${id}`);
   };
+
+  // ============ COMPUTED VALUES ============
+
+  // Phase configuration for header
+  const phases = useMemo(() => [
+    { id: 'review', name: 'Review', icon: FaBook, color: 'bg-blue-500', borderColor: 'border-blue-500' },
+    { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' },
+    { id: 'translation', name: 'Translation', icon: FaDumbbell, color: 'bg-[#e30a5f]', borderColor: 'border-[#e30a5f]' }
+  ], []);
+
+  const currentPhaseIndex = phases.findIndex(p => p.id === currentPhase);
+  const currentPhaseConfig = phases[currentPhaseIndex];
+  const CurrentPhaseIcon = currentPhaseConfig?.icon;
+
+  // Helper to get completed count for current phase
+  const getCompletedCount = () => {
+    if (currentPhase === 'review') {
+      return currentIndex;
+    }
+    return phaseProgress[currentPhase]?.completedItems.size || 0;
+  };
+
+  // Helper to get total unique items for current phase
+  const getTotalUniqueItems = () => {
+    if (currentPhase === 'review') {
+      return activeReviewArray.length;
+    }
+    return phaseProgress[currentPhase]?.totalUniqueItems || 0;
+  };
+
+  // Calculate progress percentage based on unique items completed
+  const calculateProgressPercentage = () => {
+    if (currentPhase === 'review') {
+      // Review phase: use current index
+      return activeReviewArray.length > 0
+        ? ((currentIndex + 1) / activeReviewArray.length) * 100
+        : 0;
+    }
+
+    // MC and Translation: use unique items completed
+    const completed = getCompletedCount();
+    const total = getTotalUniqueItems();
+    return total > 0 ? (completed / total) * 100 : 0;
+  };
+
+  // Shuffle multiple choice options when question changes
+  // Store shuffled options to preserve their positions when showing results
+  useEffect(() => {
+    if (currentPhase === 'multiple-choice' && activeMCArray[currentIndex] && !showResult) {
+      const currentItem = activeMCArray[currentIndex];
+      const options = [currentItem.answer, ...currentItem.distractors];
+
+      // Fisher-Yates shuffle algorithm
+      const shuffled = [...options];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+
+      setCurrentShuffledOptions(shuffled);
+    }
+  }, [currentPhase, activeMCArray, currentIndex, showResult]);
 
   // Show error state
   if (error) {
@@ -452,7 +792,8 @@ export default function LearnNew() {
       </Head>
 
       <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
-        <AcademySidebar />
+        {/* Only show sidebar during complete phase (summary) */}
+        {currentPhase === 'complete' && <AcademySidebar />}
 
         <main className="flex-1 flex flex-col p-3 sm:p-6">
           {/* Loading State */}
@@ -467,99 +808,81 @@ export default function LearnNew() {
             </div>
           ) : (
             <>
-              {/* TODO: Render your SRS components here based on current state */}
+              {/* Show completion summary */}
+              {currentPhase === 'complete' && (
+                <SRSQuizSummary
+                  sessionStats={sessionStats}
+                  answeredItems={answeredItems}
+                  animateAccuracy={animateAccuracy}
+                  onExit={handleExit}
+                />
+              )}
 
-              {/* Example: Header Component */}
-              {/* <SRSQuizHeader
-                setTitle={setInfo?.title}
-                sessionStats={sessionStats}
-                currentIndex={currentIndex}
-                totalQuestions={totalQuestions}
-                currentPhase={currentPhase}
-                quizMode={quizMode}
-                completedPhases={completedPhases}
-                phases={phases}
-                currentPhaseIndex={currentPhaseIndex}
-                currentPhaseConfig={currentPhaseConfig}
-                CurrentPhaseIcon={CurrentPhaseIcon}
-                progressInPhase={progressInPhase}
-                onExit={handleExit}
-              /> */}
+              {/* Show active phase components */}
+              {currentPhase !== 'complete' && (
+                <>
+                  {/* Quiz Header */}
+                  <SRSQuizHeader
+                    setTitle={setInfo?.title}
+                    sessionStats={sessionStats}
+                    currentIndex={currentIndex}
+                    totalQuestions={getCurrentArray().length}
+                    currentPhase={currentPhase}
+                    completedPhases={completedPhases}
+                    phases={phases}
+                    currentPhaseIndex={currentPhaseIndex}
+                    currentPhaseConfig={currentPhaseConfig}
+                    CurrentPhaseIcon={CurrentPhaseIcon}
+                    progressInPhase={calculateProgressPercentage()}
+                    completedCount={getCompletedCount()}
+                    totalUniqueItems={getTotalUniqueItems()}
+                    displayMode={currentPhase === 'review' ? 'question-count' : 'completion-count'}
+                    onExit={handleExit}
+                  />
 
-              {/* Example: Review Cards Component */}
-              {/* <SRSReviewCards
-                currentCard={itemData[currentIndex]}
-                isLastCard={currentIndex === itemData.length - 1}
-                isFirstCard={currentIndex === 0}
-                onNext={handleNext}
-                onPrevious={handlePrevious}
-              /> */}
+                  {/* Review Phase */}
+                  {currentPhase === 'review' && activeReviewArray.length > 0 && (
+                    <SRSReviewCards
+                      currentCard={activeReviewArray[currentIndex]}
+                      isLastCard={currentIndex === activeReviewArray.length - 1}
+                      isFirstCard={currentIndex === 0}
+                      onNext={handleReviewNext}
+                      onPrevious={handleReviewPrevious}
+                    />
+                  )}
 
-              {/* Example: Multiple Choice Component */}
-              {/* <SRSMultipleChoice
-                currentItem={currentItem}
-                uniqueOptions={uniqueOptions}
-                selectedOption={selectedOption}
-                showResult={showResult}
-                isCorrect={isCorrect}
-                isTransitioning={isTransitioning}
-                isLastQuestion={isLastQuestion}
-                onOptionSelect={handleOptionSelect}
-                onNext={handleNext}
-              /> */}
+                  {/* Multiple Choice Phase */}
+                  {currentPhase === 'multiple-choice' && activeMCArray.length > 0 && (
+                    <SRSMultipleChoice
+                      currentItem={activeMCArray[currentIndex]}
+                      uniqueOptions={currentShuffledOptions}
+                      selectedOption={selectedOption}
+                      showResult={showResult}
+                      isCorrect={isCorrect}
+                      isTransitioning={false}
+                      isLastQuestion={currentIndex === activeMCArray.length - 1}
+                      onOptionSelect={handleMCOptionSelect}
+                      onNext={handleNext}
+                    />
+                  )}
 
-              {/* Example: Question Card Component */}
-              {/* <SRSQuestionCard
-                currentItem={currentItem}
-                userAnswer={userAnswer}
-                showResult={showResult}
-                isCorrect={isCorrect}
-                showHint={showHint}
-                isLastQuestion={isLastQuestion}
-                inputRef={inputRef}
-                onInputChange={handleInputChange}
-                onCheckAnswer={handleCheckAnswer}
-                onNext={handleNext}
-                onRetry={handleRetry}
-              /> */}
-
-              {/* Example: Quiz Summary Component */}
-              {/* <SRSQuizSummary
-                sessionStats={sessionStats}
-                answeredItems={answeredItems}
-                animateAccuracy={animateAccuracy}
-                onRetry={handleRetry}
-                onExit={handleExit}
-              /> */}
-
-              {/* Placeholder UI */}
-              <div className="flex-1 flex items-center justify-center">
-                <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-8 max-w-2xl">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                    SRS Learn New - Ready for Implementation
-                  </h2>
-                  <p className="text-gray-600 dark:text-white/70 mb-4">
-                    All components are imported and the set data is loaded.
-                  </p>
-                  <div className="bg-gray-50 dark:bg-white/5 rounded-lg p-4 mb-4">
-                    <p className="text-sm text-gray-700 dark:text-white/80 mb-2">
-                      <strong>Set:</strong> {setInfo?.title}
-                    </p>
-                    <p className="text-sm text-gray-700 dark:text-white/80">
-                      <strong>Total Items:</strong> {itemData.length}
-                    </p>
-                  </div>
-                  <p className="text-sm text-gray-500 dark:text-white/50">
-                    Check the console for the full set data array.
-                  </p>
-                  <button
-                    onClick={handleExit}
-                    className="mt-6 w-full px-4 py-2 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-colors"
-                  >
-                    Back to Study Set
-                  </button>
-                </div>
-              </div>
+                  {/* Translation Phase */}
+                  {currentPhase === 'translation' && activeTranslationArray.length > 0 && (
+                    <SRSQuestionCard
+                      currentItem={activeTranslationArray[currentIndex]}
+                      userAnswer={userAnswer}
+                      showResult={showResult}
+                      isCorrect={isCorrect}
+                      isLastQuestion={currentIndex === activeTranslationArray.length - 1}
+                      inputRef={translationInputRef}
+                      onInputChange={(e) => setUserAnswer(e.target.value)}
+                      onCheckAnswer={handleTranslationCheck}
+                      onNext={handleNext}
+                      onRetry={handleTranslationRetry}
+                    />
+                  )}
+                </>
+              )}
             </>
           )}
         </main>
