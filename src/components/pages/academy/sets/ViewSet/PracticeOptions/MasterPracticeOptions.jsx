@@ -5,7 +5,7 @@ import { MdQuiz } from "react-icons/md";
 import { TbCards } from "react-icons/tb";
 import MasterSrsSetModule from "@/components/pages/academy/sets/ViewSet/srsSetModule/MasterSrsSetModule";
 
-export default function PracticeOptions({ setId, enableSrsModule = false }) {
+export default function PracticeOptions({ setId, enableSrsModule = true }) {
     const router = useRouter();
 
     const handleStartQuiz = () => {
