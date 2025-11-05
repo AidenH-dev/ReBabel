@@ -26,6 +26,10 @@ export default function LearnNew() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // SRS saving states
+  const [isSavingSRS, setIsSavingSRS] = useState(false);
+  const [srsError, setSrsError] = useState(null);
+
   // SRS Array states
   const [reviewArray, setReviewArray] = useState([]);
   const [multipleChoiceArray, setMultipleChoiceArray] = useState([]);
@@ -84,7 +88,11 @@ export default function LearnNew() {
       setError(null);
 
       try {
-        const response = await fetch(`/api/database/v2/sets/retrieve-set/${id}`);
+        // Get limit from URL query params, default to 10 if not provided
+        const limitParam = router.query.limit ? parseInt(router.query.limit, 10) : 10;
+        const validLimit = isNaN(limitParam) || limitParam <= 0 ? 10 : limitParam;
+
+        const response = await fetch(`/api/database/v2/srs/set/learn/${id}?limit=${validLimit}`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch set: ${response.statusText}`);
@@ -96,9 +104,8 @@ export default function LearnNew() {
           throw new Error(result.error || "Failed to load set data");
         }
 
-        const apiData = result.data;
-        const setInfoData = apiData.data?.set;
-        const setItemsAPI = apiData.data?.items || [];
+        const setInfoData = result.data.set;
+        const setItemsAPI = result.data.items || [];
 
         if (!setInfoData) {
           throw new Error("Invalid set data structure received from API");
@@ -116,6 +123,7 @@ export default function LearnNew() {
                 if (item.type === "vocab" || item.type === "vocabulary") {
                   return {
                     id: `vocab-${index}`,
+                    uuid: item.id, // Preserve actual UUID from API
                     type: "vocabulary",
                     kana: item.kana || "",
                     kanji: item.kanji || null,
@@ -128,6 +136,7 @@ export default function LearnNew() {
                 } else if (item.type === "grammar") {
                   return {
                     id: `grammar-${index}`,
+                    uuid: item.id, // Preserve actual UUID from API
                     type: "grammar",
                     title: item.title || "",
                     description: item.description || "",
@@ -222,6 +231,7 @@ export default function LearnNew() {
             multipleChoice.push({
               id: `${item.id}-mc-en-kana`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "vocabulary",
               questionType: "English",
               answerType: "Kana",
@@ -235,6 +245,7 @@ export default function LearnNew() {
             multipleChoice.push({
               id: `${item.id}-mc-kana-en`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "vocabulary",
               questionType: "Kana",
               answerType: "English",
@@ -250,6 +261,7 @@ export default function LearnNew() {
               multipleChoice.push({
                 id: `${item.id}-mc-en-kanji`,
                 originalId: item.id,
+                uuid: item.uuid,
                 type: "vocabulary",
                 questionType: "English",
                 answerType: "Kanji",
@@ -263,6 +275,7 @@ export default function LearnNew() {
               multipleChoice.push({
                 id: `${item.id}-mc-kanji-en`,
                 originalId: item.id,
+                uuid: item.uuid,
                 type: "vocabulary",
                 questionType: "Kanji",
                 answerType: "English",
@@ -276,6 +289,7 @@ export default function LearnNew() {
               multipleChoice.push({
                 id: `${item.id}-mc-kana-kanji`,
                 originalId: item.id,
+                uuid: item.uuid,
                 type: "vocabulary",
                 questionType: "Kana",
                 answerType: "Kanji",
@@ -289,6 +303,7 @@ export default function LearnNew() {
               multipleChoice.push({
                 id: `${item.id}-mc-kanji-kana`,
                 originalId: item.id,
+                uuid: item.uuid,
                 type: "vocabulary",
                 questionType: "Kanji",
                 answerType: "Kana",
@@ -303,6 +318,7 @@ export default function LearnNew() {
             multipleChoice.push({
               id: `${item.id}-mc-title-desc`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "grammar",
               questionType: "Grammar Pattern",
               answerType: "Description",
@@ -316,6 +332,7 @@ export default function LearnNew() {
             multipleChoice.push({
               id: `${item.id}-mc-desc-title`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "grammar",
               questionType: "Description",
               answerType: "Grammar Pattern",
@@ -342,6 +359,7 @@ export default function LearnNew() {
             translation.push({
               id: `${item.id}-tr-en-kana`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "vocabulary",
               questionType: "English",
               answerType: "Kana",
@@ -354,6 +372,7 @@ export default function LearnNew() {
             translation.push({
               id: `${item.id}-tr-kana-en`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "vocabulary",
               questionType: "Kana",
               answerType: "English",
@@ -370,6 +389,7 @@ export default function LearnNew() {
               translation.push({
                 id: `${item.id}-tr-kanji-en`,
                 originalId: item.id,
+                uuid: item.uuid,
                 type: "vocabulary",
                 questionType: "Kanji",
                 answerType: "English",
@@ -382,6 +402,7 @@ export default function LearnNew() {
               translation.push({
                 id: `${item.id}-tr-kanji-kana`,
                 originalId: item.id,
+                uuid: item.uuid,
                 type: "vocabulary",
                 questionType: "Kanji",
                 answerType: "Kana",
@@ -395,6 +416,7 @@ export default function LearnNew() {
             translation.push({
               id: `${item.id}-tr-title-desc`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "grammar",
               questionType: "Grammar Pattern",
               answerType: "Description",
@@ -407,6 +429,7 @@ export default function LearnNew() {
             translation.push({
               id: `${item.id}-tr-desc-title`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "grammar",
               questionType: "Description",
               answerType: "Grammar Pattern",
@@ -560,7 +583,7 @@ export default function LearnNew() {
   };
 
   // Handle phase completion and transition
-  const handlePhaseComplete = () => {
+  const handlePhaseComplete = async () => {
     // Reset index for next phase
     setCurrentIndex(0);
 
@@ -570,9 +593,15 @@ export default function LearnNew() {
     } else if (currentPhase === 'multiple-choice') {
       setCurrentPhase('translation');
     } else if (currentPhase === 'translation') {
-      setCurrentPhase('complete');
-      // Trigger accuracy bar animation after a short delay
-      setTimeout(() => setAnimateAccuracy(true), 100);
+      // Save all items to SRS before showing summary
+      const success = await saveAllItemsToSRS();
+
+      if (success) {
+        setCurrentPhase('complete');
+        // Trigger accuracy bar animation after a short delay
+        setTimeout(() => setAnimateAccuracy(true), 100);
+      }
+      // If save fails, stay on translation phase and show error popup
     }
   };
 
@@ -695,6 +724,50 @@ export default function LearnNew() {
 
   const handleExit = () => {
     router.push(`/learn/academy/sets/study/${id}`);
+  };
+
+  // ============ SRS SAVE FUNCTION ============
+
+  const saveAllItemsToSRS = async () => {
+    setIsSavingSRS(true);
+    setSrsError(null);
+
+    const errors = [];
+
+    // Get unique UUIDs from reviewArray (one entry per item)
+    for (const item of reviewArray) {
+      if (!item.uuid) {
+        console.warn(`Item ${item.id} has no UUID, skipping SRS save`);
+        continue;
+      }
+
+      try {
+        const response = await fetch(`/api/database/v2/srs/item/create-entry/${item.uuid}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            srs_level: 1,
+            scope: 'set_srs_flow_learn_new'
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          errors.push(`Item ${item.uuid}: ${errorData.error || 'Failed to save'}`);
+        }
+      } catch (error) {
+        errors.push(`Item ${item.uuid}: ${error.message}`);
+      }
+    }
+
+    setIsSavingSRS(false);
+
+    if (errors.length > 0) {
+      setSrsError(`Failed to save ${errors.length} item(s) to SRS. Please try again.`);
+      return false;
+    }
+
+    return true;
   };
 
   // ============ COMPUTED VALUES ============
@@ -867,7 +940,7 @@ export default function LearnNew() {
                   )}
 
                   {/* Translation Phase */}
-                  {currentPhase === 'translation' && activeTranslationArray.length > 0 && (
+                  {currentPhase === 'translation' && activeTranslationArray.length > 0 && !isSavingSRS && (
                     <SRSQuestionCard
                       currentItem={activeTranslationArray[currentIndex]}
                       userAnswer={userAnswer}
@@ -881,7 +954,68 @@ export default function LearnNew() {
                       onRetry={handleTranslationRetry}
                     />
                   )}
+
+                  {/* SRS Saving Loading Screen */}
+                  {isSavingSRS && (
+                    <div className="flex-1 flex items-center justify-center">
+                      <div className="text-center space-y-4">
+                        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-500 mx-auto"></div>
+                        <p className="text-xl font-semibold text-gray-700 dark:text-white">
+                          Saving your progress to SRS...
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-white/70">
+                          Please wait while we save your items
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </>
+              )}
+
+              {/* SRS Error Popup */}
+              {srsError && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-2xl max-w-md w-full p-6 space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                        <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                          Failed to Save Progress
+                        </h3>
+                      </div>
+                    </div>
+
+                    <p className="text-gray-600 dark:text-white/70">
+                      {srsError}
+                    </p>
+
+                    <div className="flex space-x-3 pt-2">
+                      <button
+                        onClick={async () => {
+                          setSrsError(null);
+                          const success = await saveAllItemsToSRS();
+                          if (success) {
+                            setCurrentPhase('complete');
+                            setTimeout(() => setAnimateAccuracy(true), 100);
+                          }
+                        }}
+                        className="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                      >
+                        Retry
+                      </button>
+                      <button
+                        onClick={() => setSrsError(null)}
+                        className="flex-1 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-700 dark:text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
               )}
             </>
           )}

@@ -1,4 +1,11 @@
+import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.NEXT_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 // Type definitions for the response structure
 interface ExampleSentence {
@@ -47,6 +54,7 @@ interface SetData {
   date_created: string;
   updated_at: string;
   last_studied: string;
+  srs_enabled: string; // 'true' or 'false' as string from database
   tags: string[] | string; // Can be array or JSON string
 }
 
@@ -65,24 +73,6 @@ interface GetSetSuccessResponse {
     items: SetItem[];
   };
   metadata: SetMetadata;
-}
-
-interface GetSetErrorResponse {
-  success: false;
-  error: string;
-  details?: string;
-  set_id?: string;
-}
-
-type GetSetResponse = GetSetSuccessResponse | GetSetErrorResponse;
-
-// Type guard functions
-function isErrorResponse(response: GetSetResponse): response is GetSetErrorResponse {
-  return !response.success;
-}
-
-function isSuccessResponse(response: GetSetResponse): response is GetSetSuccessResponse {
-  return response.success;
 }
 
 interface ApiResponse {
@@ -113,118 +103,97 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
       });
     }
 
-    // Environment variables for configuration
-    const SUPABASE_URL = process.env.SUPABASE_URL || 'https://lraaascxhlrjdnvmdyyt.supabase.co';
-    const SUPABASE_ANON_KEY = process.env.NEXT_SUPABASE_ANON_KEY;
+    // Validate UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(setId.trim())) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid set ID format',
+        message: 'ID must be a valid UUID'
+      });
+    }
 
-    if (!SUPABASE_ANON_KEY) {
-      console.error('Missing SUPABASE_ANON_KEY environment variable');
+    // Call the PostgreSQL function via RPC
+    const { data, error } = await supabase
+      .schema('v1_kvs_rebabel')
+      .rpc('get_set_with_items_v2', {
+        set_entity_id: setId.trim()
+      });
+
+    if (error) {
+      console.error('Supabase RPC error:', error);
       return res.status(500).json({
         success: false,
-        error: 'Server configuration error'
+        error: `Database error: ${error.message}`,
+        message: error.hint || error.details || 'Failed to retrieve set'
       });
     }
 
-    // Construct the URL with query parameter
-    const supabaseUrl = `${SUPABASE_URL}/functions/v1/get-set?id=${encodeURIComponent(setId.trim())}`;
+    // Check if set was found
+    if (data === null || data === undefined) {
+      return res.status(404).json({
+        success: false,
+        error: 'Set not found',
+        message: `Set ID: ${setId}`
+      });
+    }
 
-    // Make the request to Supabase function
-    const supabaseResponse = await fetch(supabaseUrl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    // Handle Supabase response
-    if (!supabaseResponse.ok) {
-      const errorText = await supabaseResponse.text();
-      console.error('Supabase function error:', errorText);
-
-      // Handle specific error cases
-      if (supabaseResponse.status === 404) {
-        return res.status(404).json({
+    // Parse the data if it's returned as a string
+    let responseData = data;
+    if (typeof data === 'string') {
+      try {
+        responseData = JSON.parse(data);
+      } catch (parseError) {
+        console.error('Failed to parse response data:', parseError);
+        return res.status(500).json({
           success: false,
-          error: 'Set not found',
-          message: `Set ID: ${setId}`
+          error: 'Failed to parse database response'
         });
       }
-
-      if (supabaseResponse.status === 400) {
-        return res.status(400).json({
-          success: false,
-          error: 'Invalid request to Supabase function',
-          message: errorText
-        });
-      }
-
-      return res.status(supabaseResponse.status).json({
-        success: false,
-        error: `Supabase function failed: ${supabaseResponse.statusText}`,
-        message: errorText
-      });
     }
 
-    // Parse response
-    const responseData: GetSetResponse = await supabaseResponse.json();
-
-    // Check if it's an error response
-    if (isErrorResponse(responseData)) {
-      return res.status(500).json({
-        success: false,
-        error: 'Supabase function returned unsuccessful response',
-        message: responseData.error || 'Unknown error from Supabase'
-      });
-    }
-
-    // TypeScript now knows this is GetSetSuccessResponse
     // Transform tags from string to array if needed (for consistency)
     const transformedSet = {
-      ...responseData.data.set,
-      tags: typeof responseData.data.set.tags === 'string'
+      ...responseData.set,
+      tags: typeof responseData.set.tags === 'string'
         ? (() => {
             try {
-              return JSON.parse(responseData.data.set.tags);
+              return JSON.parse(responseData.set.tags);
             } catch {
-              return responseData.data.set.tags; // Return as-is if parsing fails
+              return responseData.set.tags; // Return as-is if parsing fails
             }
           })()
-        : responseData.data.set.tags
+        : responseData.set.tags
     };
 
-    const transformedResponse = {
-      ...responseData,
+    // Calculate metadata
+    const items = responseData.items || [];
+    const metadata = {
+      total_items: items.length,
+      vocab_count: items.filter((item: any) => item.type === 'vocab').length,
+      grammar_count: items.filter((item: any) => item.type === 'grammar').length,
+      retrieved_at: new Date().toISOString()
+    };
+
+    // Build response in the same format as before
+    const enrichedResponse: GetSetSuccessResponse = {
+      success: true,
+      set_id: setId,
       data: {
-        ...responseData.data,
-        set: transformedSet
-      }
+        set: transformedSet,
+        items: items
+      },
+      metadata: metadata
     };
 
     return res.status(200).json({
       success: true,
-      data: transformedResponse,
-      message: `Retrieved set ${setId} with ${responseData.metadata.total_items} items`
+      data: enrichedResponse,
+      message: `Retrieved set ${setId} with ${metadata.total_items} items`
     });
 
   } catch (error) {
     console.error('API Error:', error);
-
-    // Handle JSON parsing errors
-    if (error instanceof SyntaxError) {
-      return res.status(502).json({
-        success: false,
-        error: 'Invalid JSON response from Supabase function'
-      });
-    }
-
-    // Handle fetch errors
-    if (error instanceof TypeError && error.message.includes('fetch')) {
-      return res.status(503).json({
-        success: false,
-        error: 'Failed to connect to Supabase function'
-      });
-    }
 
     // Generic error handler
     return res.status(500).json({

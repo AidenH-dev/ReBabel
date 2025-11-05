@@ -32,6 +32,9 @@ export default function MasterSetHeader({
   const [showSRSModal, setShowSRSModal] = useState(false);
   const [isSrsEnabled, setIsSrsEnabled] = useState(srsEnabled);
   const [showDisableSRSConfirm, setShowDisableSRSConfirm] = useState(false);
+  const [isSavingSRS, setIsSavingSRS] = useState(false);
+  const [saveSRSError, setSaveSRSError] = useState(null);
+  const [saveSRSSuccess, setSaveSRSSuccess] = useState(false);
 
   const handleEditSetDetails = () => {
     setEditingSet(true);
@@ -185,6 +188,8 @@ export default function MasterSetHeader({
   const handleOpenSRSModal = () => {
     setShowSRSModal(true);
     setIsSrsEnabled(srsEnabled);
+    setSaveSRSError(null);
+    setSaveSRSSuccess(false);
   };
 
   const handleCloseSRSModal = () => {
@@ -211,9 +216,58 @@ export default function MasterSetHeader({
     setIsSrsEnabled(srsEnabled);
   };
 
-  const handleSaveSRSSettings = () => {
-    // TODO: Call API to save SRS enabled/disabled status
-    handleCloseSRSModal();
+  const handleSaveSRSSettings = async () => {
+    if (!setData.id) return;
+
+    // If SRS status hasn't changed, just close the modal
+    if (isSrsEnabled === srsEnabled) {
+      handleCloseSRSModal();
+      return;
+    }
+
+    setIsSavingSRS(true);
+    setSaveSRSError(null);
+    setSaveSRSSuccess(false);
+
+    try {
+      const response = await fetch('/api/database/v2/sets/toggle-srs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          setId: setData.id,
+          srsEnabled: isSrsEnabled
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to update SRS settings');
+      }
+
+      // Update parent component if needed (trigger re-fetch or update state)
+      if (onSetDataUpdate) {
+        onSetDataUpdate({
+          srsEnabled: isSrsEnabled
+        });
+      }
+
+      setSaveSRSSuccess(true);
+
+      // Close modal after short delay to show success message
+      setTimeout(() => {
+        handleCloseSRSModal();
+        setSaveSRSSuccess(false);
+      }, 1000);
+
+    } catch (err) {
+      console.error('Error saving SRS settings:', err);
+      setSaveSRSError(err.message);
+    } finally {
+      setIsSavingSRS(false);
+    }
   };
 
   return (
@@ -539,6 +593,25 @@ export default function MasterSetHeader({
               </button>
             </div>
 
+            {/* Success/Error Messages */}
+            {(saveSRSSuccess || saveSRSError) && (
+              <div className="px-6 pt-4 flex-shrink-0">
+                {saveSRSSuccess && (
+                  <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200 text-sm flex items-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    SRS settings saved successfully!
+                  </div>
+                )}
+                {saveSRSError && (
+                  <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
+                    <strong>Error:</strong> {saveSRSError}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Content */}
             <div className="flex-1 overflow-y-auto px-6 py-6">
               <div className="space-y-6">
@@ -647,16 +720,32 @@ export default function MasterSetHeader({
             {/* Footer */}
             <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Changes will be saved automatically
+                {isSrsEnabled !== srsEnabled
+                  ? 'Click Save to confirm'
+                  : 'No changes to save'
+                }
               </p>
               <button
                 onClick={handleSaveSRSSettings}
-                className="px-6 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors flex items-center gap-2"
+                disabled={isSavingSRS}
+                className="px-6 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                Done
+                {isSavingSRS ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    Save
+                  </>
+                )}
               </button>
             </div>
           </div>

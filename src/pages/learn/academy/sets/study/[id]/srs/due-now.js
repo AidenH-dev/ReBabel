@@ -79,7 +79,7 @@ export default function DueNow() {
       setError(null);
 
       try {
-        const response = await fetch(`/api/database/v2/sets/retrieve-set/${id}`);
+        const response = await fetch(`/api/database/v2/srs/set/due/${id}`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch set: ${response.statusText}`);
@@ -92,8 +92,8 @@ export default function DueNow() {
         }
 
         const apiData = result.data;
-        const setInfoData = apiData.data?.set;
-        const setItemsAPI = apiData.data?.items || [];
+        const setInfoData = apiData.set;
+        const setItemsAPI = apiData.items || [];
 
         if (!setInfoData) {
           throw new Error("Invalid set data structure received from API");
@@ -111,6 +111,7 @@ export default function DueNow() {
                 if (item.type === "vocab" || item.type === "vocabulary") {
                   return {
                     id: `vocab-${index}`,
+                    uuid: item.id, // Preserve actual UUID from API
                     type: "vocabulary",
                     kana: item.kana || "",
                     kanji: item.kanji || null,
@@ -119,11 +120,12 @@ export default function DueNow() {
                     example_sentences: Array.isArray(item.example_sentences)
                       ? item.example_sentences
                       : [item.example_sentences].filter(Boolean),
-                    srs_level: item.srs_level || 1 // Get SRS level from API
+                    srs_level: item.srs?.srs_level || 1 // Get SRS level from new API structure
                   };
                 } else if (item.type === "grammar") {
                   return {
                     id: `grammar-${index}`,
+                    uuid: item.id, // Preserve actual UUID from API
                     type: "grammar",
                     title: item.title || "",
                     description: item.description || "",
@@ -135,7 +137,7 @@ export default function DueNow() {
                             : `${ex.japanese || ""} (${ex.english || ""})`
                         )
                       : [],
-                    srs_level: item.srs_level || 1 // Get SRS level from API
+                    srs_level: item.srs?.srs_level || 1 // Get SRS level from new API structure
                   };
                 }
                 return null;
@@ -184,6 +186,7 @@ export default function DueNow() {
             translation.push({
               id: `${item.id}-tr-en-kana`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "vocabulary",
               questionType: "English",
               answerType: "Kana",
@@ -196,6 +199,7 @@ export default function DueNow() {
             translation.push({
               id: `${item.id}-tr-kana-en`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "vocabulary",
               questionType: "Kana",
               answerType: "English",
@@ -212,6 +216,7 @@ export default function DueNow() {
               translation.push({
                 id: `${item.id}-tr-kanji-en`,
                 originalId: item.id,
+                uuid: item.uuid,
                 type: "vocabulary",
                 questionType: "Kanji",
                 answerType: "English",
@@ -224,6 +229,7 @@ export default function DueNow() {
               translation.push({
                 id: `${item.id}-tr-kanji-kana`,
                 originalId: item.id,
+                uuid: item.uuid,
                 type: "vocabulary",
                 questionType: "Kanji",
                 answerType: "Kana",
@@ -237,6 +243,7 @@ export default function DueNow() {
             translation.push({
               id: `${item.id}-tr-title-desc`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "grammar",
               questionType: "Grammar Pattern",
               answerType: "Description",
@@ -249,6 +256,7 @@ export default function DueNow() {
             translation.push({
               id: `${item.id}-tr-desc-title`,
               originalId: item.id,
+              uuid: item.uuid,
               type: "grammar",
               questionType: "Description",
               answerType: "Grammar Pattern",
@@ -437,8 +445,8 @@ export default function DueNow() {
       });
       setShowLevelChange(true);
 
-      // Save the new SRS level to the database
-      saveSRSLevel(originalId, originalItem.type, newLevel);
+      // Save the new SRS level to the database (pass UUID, not generated ID)
+      saveSRSLevel(originalItem.uuid, newLevel);
 
       console.log(`SRS Level Update: ${originalId} - ${oldLevel} → ${newLevel} (mistakes: ${mistakes})`);
 
@@ -449,21 +457,16 @@ export default function DueNow() {
   };
 
   // Save SRS level to database
-  const saveSRSLevel = async (itemId, itemType, newLevel) => {
+  const saveSRSLevel = async (uuid, newLevel) => {
     try {
-      const response = await fetch(`/api/database/v2/sets/update-srs-level/${id}`, {
+      const response = await fetch(`/api/database/v2/srs/item/create-entry/${uuid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          updates: [
-            {
-              itemId,
-              itemType,
-              newLevel
-            }
-          ]
+          srs_level: newLevel,
+          scope: 'due_now_review'
         })
       });
 
@@ -472,7 +475,7 @@ export default function DueNow() {
       if (!result.success) {
         console.error('Failed to save SRS level:', result.error);
       } else {
-        console.log(`Successfully saved SRS level for ${itemId}: ${newLevel}`);
+        console.log(`Successfully saved SRS level for ${uuid}: ${newLevel}`);
       }
     } catch (error) {
       console.error('Error saving SRS level:', error);
