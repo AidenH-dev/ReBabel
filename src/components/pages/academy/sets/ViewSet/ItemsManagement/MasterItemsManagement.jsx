@@ -478,7 +478,7 @@ export default function MasterItemsManagement({
             viewMode === "list" ? (
               <div className="space-y-1.5">
                 {sortedItems.map((item, idx) => (
-                  <div key={item.id} className="group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-2 hover:shadow-sm transition-all">
+                  <div key={item.id} className="group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-2 shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start gap-2">
                       <div className="flex-shrink-0 w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-[10px] font-medium text-gray-600 dark:text-gray-400">
                         {idx + 1}
