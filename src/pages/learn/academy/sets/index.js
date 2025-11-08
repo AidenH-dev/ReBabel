@@ -153,6 +153,7 @@ export default function VocabularyDashboard() {
           item_num: record.data.item_num,
           date: record.data.date_created || record.data.updated_at,
           path: `/learn/academy/set/study/${record.entity_id}`,
+          set_type: record.data.set_type || null,
         }));
 
         formattedData.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -904,13 +905,32 @@ export default function VocabularyDashboard() {
 }
 
 function SetCard({ set, formatDate }) {
+  const getTypeIndicator = () => {
+    if (set.set_type === 'vocab') {
+      return {label: 'Vocab', colorClass: 'bg-blue-100 dark:bg-blue-900/30' };
+    } else if (set.set_type === 'grammar') {
+      return {label: 'Grammar', colorClass: 'bg-green-100 dark:bg-green-900/30 ' };
+    } else {
+      return {label: 'V & G', colorClass: 'bg-purple-100 dark:bg-purple-900/30' };
+    }
+  };
+
+  const typeIndicator = getTypeIndicator();
+
   return (
     <div className="group rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] p-3 transition-all hover:shadow-sm hover:-translate-y-px focus-within:ring-2 focus-within:ring-[#e30a5f]">
       <div className="flex items-start justify-between gap-3">
-        <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2">{set.name}</h4>
+        <div className="min-w-0 flex-1">
+          <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2">{set.name}</h4>
+        </div>
         <span className="text-[11px] whitespace-nowrap text-black/60 dark:text-white/60">{formatDate(set.date)}</span>
       </div>
-      <p className="text-xs text-black/60 dark:text-white/60 mt-1">{set.item_num} Items</p>
+      <div className="mt-1 flex items-center justify-between">
+        <p className="text-xs text-black/60 dark:text-white/60">{set.item_num} Items</p>
+        <div className={`text-xs px-2 py-1 rounded-full font-medium ${typeIndicator.colorClass}`}>
+          {typeIndicator.label}
+        </div>
+      </div>
 
       <div className="mt-3 flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
         <Link
@@ -931,11 +951,28 @@ function SetCard({ set, formatDate }) {
 }
 
 function SetRow({ set, formatDate }) {
+  const getTypeIndicator = () => {
+    if (set.set_type === 'vocab') {
+      return {label: 'Vocab', colorClass: 'bg-blue-100 dark:bg-blue-900/30' };
+    } else if (set.set_type === 'grammar') {
+      return {label: 'Grammar', colorClass: 'bg-green-100 dark:bg-green-900/30 ' };
+    } else {
+      return {label: 'V & G', colorClass: 'bg-purple-100 dark:bg-purple-900/30' };
+    }
+  };
+
+  const typeIndicator = getTypeIndicator();
+
   return (
     <div className="flex items-center justify-between gap-3 bg-white/70 dark:bg-white/[0.02] px-3 py-2">
       <div className="min-w-0 flex-1">
         <div className="text-sm font-medium text-gray-900 dark:text-white truncate">{set.name}</div>
-        <div className="text-xs text-black/60 dark:text-white/60">{set.item_num} Items</div>
+        <div className="flex items-center gap-2 mt-0.5">
+          <span className="text-xs text-black/60 dark:text-white/60">{set.item_num} Items</span>
+          <span className={`text-xs px-2 py-0.5 rounded-full ${typeIndicator.colorClass}`}>
+            {typeIndicator.label}
+          </span>
+        </div>
       </div>
       <div className="hidden sm:block text-[11px] text-black/60 dark:text-white/60 whitespace-nowrap">{formatDate(set.date)}</div>
       <div className="flex items-center gap-2">

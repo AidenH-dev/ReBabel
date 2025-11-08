@@ -59,6 +59,7 @@ export default function ViewSet() {
     dateCreated: "",
     lastStudied: "",
     srsEnabled: false, // SRS status from database
+    set_type: null, // 'vocab', 'grammar', or null for legacy sets
     tags: [],
     itemCount: 0,
     studyStats: {
@@ -113,6 +114,9 @@ export default function ViewSet() {
           throw new Error('Invalid set data structure received from API');
         }
 
+        console.log("Set Info from API:", setInfo);
+        console.log("Set Type from API:", setInfo.set_type);
+
         // Populate set metadata
         setSetData({
           id: apiData.set_id,
@@ -122,6 +126,7 @@ export default function ViewSet() {
           dateCreated: setInfo.date_created || "",
           lastStudied: setInfo.last_studied || "",
           srsEnabled: setInfo.srs_enabled === 'true', // Convert string to boolean
+          set_type: setInfo.set_type || null, // 'vocab', 'grammar', or null for legacy sets
           tags: Array.isArray(setInfo.tags) ? setInfo.tags : [],
           itemCount: metadata?.total_items || 0,
           studyStats: {
@@ -131,6 +136,8 @@ export default function ViewSet() {
             lastScore: 0
           }
         });
+
+        console.log("SetData.set_type set to:", setInfo.set_type || null);
 
         // Transform API items into consistent format for UI
         const transformedItems = Array.isArray(setItemsAPI) ? setItemsAPI.map((item, index) => {
@@ -289,10 +296,11 @@ export default function ViewSet() {
           <PracticeOptions setId={id} enableSrsModule={setData.srsEnabled} />
 
           {/* Section 3: Items Management - Item list/grid, add/edit/delete */}
-          <MasterItemsManagement 
+          <MasterItemsManagement
             items={items}
             setItems={setItems}
             setData={setData}
+            set_type={setData.set_type}
             userProfile={userProfile}
           />
         </div>

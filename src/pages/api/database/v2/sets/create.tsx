@@ -48,6 +48,7 @@ interface SetData {
   last_studied: string;
   tags: string[];
   item_num?: number;
+  set_type?: 'vocab' | 'grammar';
 }
 
 interface CreateSetRequest {
@@ -88,10 +89,15 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
       }
     }
 
-    // Add item count to the set object
+    // Determine set_type based on items
+    const firstItemType = items.length > 0 ? items[0].type : undefined;
+    const setType = (firstItemType === 'vocab' || firstItemType === 'grammar') ? firstItemType : undefined;
+
+    // Add item count and set_type to the set object
     const updatedSet = {
       ...set,
-      item_num: items.length
+      item_num: items.length,
+      set_type: setType
     };
 
     // Environment variables for configuration

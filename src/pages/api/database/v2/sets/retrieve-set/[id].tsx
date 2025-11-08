@@ -56,6 +56,7 @@ interface SetData {
   last_studied: string;
   srs_enabled: string; // 'true' or 'false' as string from database
   tags: string[] | string; // Can be array or JSON string
+  set_type?: 'vocab' | 'grammar'; // 'vocab', 'grammar', or undefined for legacy sets
 }
 
 interface SetMetadata {

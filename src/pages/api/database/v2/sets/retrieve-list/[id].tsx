@@ -18,6 +18,7 @@ interface SetData {
   updated_at: string;
   last_studied: string;
   tags: string; // JSON string of array
+  set_type?: 'vocab' | 'grammar'; // 'vocab', 'grammar', or undefined for legacy sets
 }
 
 interface UserSet {
