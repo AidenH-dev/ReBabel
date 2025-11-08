@@ -466,7 +466,7 @@ export default function DueNow() {
         },
         body: JSON.stringify({
           srs_level: newLevel,
-          scope: 'due_now_review'
+          scope: 'set_srs_flow_due_now_review'
         })
       });
 
