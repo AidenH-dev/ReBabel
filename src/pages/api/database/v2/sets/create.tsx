@@ -41,7 +41,7 @@ type StudyItem = VocabItem | GrammarItem;
 interface SetData {
   owner: string;
   title: string;
-  description: number | string;
+  description: string;
   date_created: string;
   updated_at: string;
   last_studied: string;
