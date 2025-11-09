@@ -155,7 +155,7 @@ export default function Home() {
         />
 
         {/* Hero Section */}
-        <section className="w-full px-4 sm:px-6 lg:px-8 pt-10 pb-8 md:pt-16 md:pb-16">
+        <section className="w-full px-4 sm:px-6 lg:px-8 pt-16 pb-8 md:pt-16 md:pb-16">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left Column - Text */}
@@ -341,7 +341,7 @@ export default function Home() {
                     Integrated Study System
                   </h3>
                   <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-                    Stop juggling multiple apps. Study vocabulary and grammar with SRS, test yourself with quizzes, or review with flashcards - all in one place.
+                    Stop juggling multiple paid apps. Study vocabulary and grammar with SRS, test yourself with quizzes, or review with flashcards - all in one place.
                   </p>
                 </div>
               </div>
