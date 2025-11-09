@@ -108,7 +108,9 @@ export default function SRSDashboard({ setId }) {
     }, [setId]);
 
     const handleDueNowClick = () => {
-        router.push(`/learn/academy/sets/study/${setId}/srs/due-now`);
+        if (stats.dueNow > 0) {
+            router.push(`/learn/academy/sets/study/${setId}/srs/due-now`);
+        }
     };
 
     const handleLearnNewClick = () => {
