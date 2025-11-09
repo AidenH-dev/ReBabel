@@ -7,10 +7,12 @@ import AcademySidebar from "@/components/Sidebars/AcademySidebar";
 
 // Import icons for phase indicators
 import { FaDumbbell } from "react-icons/fa";
+import { IoSparkles } from "react-icons/io5";
 
 // Import SRS Learn New Components
 import SRSQuizHeader from "@/components/pages/academy/sets/SRSLearnNewSet/QuizHeader/SRSQuizHeader";
 import SRSQuestionCard from "@/components/pages/academy/sets/SRSLearnNewSet/QuestionCard/SRSQuestionCard";
+import SRSMultipleChoice from "@/components/pages/academy/sets/SRSLearnNewSet/MultipleChoice/SRSMultipleChoice";
 import SRSQuizSummary from "@/components/pages/academy/sets/SRSLearnNewSet/QuizSummary/SRSQuizSummary";
 import SRSLevelChange from "@/components/pages/academy/sets/SRSLearnNewSet/LevelChange/SRSLevelChange";
 
@@ -21,23 +23,30 @@ export default function DueNow() {
   // Data states
   const [itemData, setItemData] = useState([]);
   const [setInfo, setSetInfo] = useState(null);
+  const [setType, setSetType] = useState(null); // 'vocab' | 'grammar'
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // SRS Array states - only translation
+  // SRS Array states - translation and multiple choice
   const [translationArray, setTranslationArray] = useState([]);
+  const [multipleChoiceArray, setMultipleChoiceArray] = useState([]);
 
   // ============ PHASE MANAGEMENT ============
-  const [currentPhase, setCurrentPhase] = useState('translation');
+  const [currentPhase, setCurrentPhase] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // ============ ACTIVE ARRAYS (MUTABLE) ============
   const [activeTranslationArray, setActiveTranslationArray] = useState([]);
+  const [activeMCArray, setActiveMCArray] = useState([]);
 
   // ============ QUESTION STATE (Translation) ============
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [userAnswer, setUserAnswer] = useState('');
+
+  // ============ QUESTION STATE (Multiple Choice) ============
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [currentShuffledOptions, setCurrentShuffledOptions] = useState([]);
 
   // ============ SUMMARY STATE ============
   const [animateAccuracy, setAnimateAccuracy] = useState(false);
@@ -103,6 +112,9 @@ export default function DueNow() {
           title: setInfoData.title || "Untitled Set",
           description: setInfoData.description?.toString() || ""
         });
+
+        // Extract and store set type
+        setSetType(setInfoData.set_type || 'vocab');
 
         // Transform items to item data format
         const transformedItemData = Array.isArray(setItemsAPI)
@@ -176,9 +188,47 @@ export default function DueNow() {
         };
 
         // ============================================
-        // TRANSLATION ARRAY ONLY (all variations)
+        // HELPER: Get Distractors for Multiple Choice
+        // ============================================
+        const getDistractors = (correctAnswer, answerType, itemType) => {
+          const allOptions = [];
+
+          transformedItemData.forEach((dataItem) => {
+            if (dataItem.type === itemType) {
+              let value = null;
+
+              if (itemType === "grammar") {
+                if (answerType === "Description") {
+                  value = dataItem.description;
+                } else if (answerType === "Grammar Pattern") {
+                  value = dataItem.title;
+                }
+              } else if (itemType === "vocabulary") {
+                if (answerType === "Kana") {
+                  value = dataItem.kana;
+                } else if (answerType === "English") {
+                  value = dataItem.english;
+                }
+              }
+
+              if (value && value !== correctAnswer) {
+                allOptions.push(value);
+              }
+            }
+          });
+
+          // Remove duplicates
+          const uniqueOptions = [...new Set(allOptions)];
+          // Shuffle and take up to 3
+          const shuffled = uniqueOptions.sort(() => Math.random() - 0.5);
+          return shuffled.slice(0, 3);
+        };
+
+        // ============================================
+        // QUESTION ARRAYS: Separate by Type
         // ============================================
         const translation = [];
+        const multipleChoice = [];
 
         transformedItemData.forEach((item) => {
           if (item.type === "vocabulary") {
@@ -239,9 +289,9 @@ export default function DueNow() {
               });
             }
           } else if (item.type === "grammar") {
-            // Title → Description
-            translation.push({
-              id: `${item.id}-tr-title-desc`,
+            // Grammar: Title → Description (Multiple Choice)
+            multipleChoice.push({
+              id: `${item.id}-mc-title-desc`,
               originalId: item.id,
               uuid: item.uuid,
               type: "grammar",
@@ -249,12 +299,13 @@ export default function DueNow() {
               answerType: "Description",
               question: item.title,
               answer: item.description,
-              hint: item.topic
+              hint: item.topic,
+              distractors: getDistractors(item.description, "Description", "grammar")
             });
 
-            // Description → Title
-            translation.push({
-              id: `${item.id}-tr-desc-title`,
+            // Grammar: Description → Title (Multiple Choice)
+            multipleChoice.push({
+              id: `${item.id}-mc-desc-title`,
               originalId: item.id,
               uuid: item.uuid,
               type: "grammar",
@@ -262,20 +313,36 @@ export default function DueNow() {
               answerType: "Grammar Pattern",
               question: item.description,
               answer: item.title,
-              hint: item.topic
+              hint: item.topic,
+              distractors: getDistractors(item.title, "Grammar Pattern", "grammar")
             });
           }
         });
 
-        // Shuffle the translation array so questions appear in random order
+        // Shuffle the arrays so questions appear in random order
         const shuffledTranslation = shuffleArray(translation);
+        const shuffledMultipleChoice = shuffleArray(multipleChoice);
         setTranslationArray(shuffledTranslation);
+        setMultipleChoiceArray(shuffledMultipleChoice);
+
+        // Determine initial phase based on which arrays have content
+        let initialPhase = null;
+        if (shuffledMultipleChoice.length > 0) {
+          initialPhase = 'multiple-choice';
+        } else if (shuffledTranslation.length > 0) {
+          initialPhase = 'translation';
+        }
+        setCurrentPhase(initialPhase);
 
         // Console log all arrays for development
         console.log("=== SET DATA LOADED ===");
         console.log("Set Info:", setInfoData);
+        console.log("Set Type:", setInfoData.set_type);
         console.log("Transformed Item Data:", transformedItemData);
         console.log("Total Items:", transformedItemData.length);
+        console.log("\n=== MULTIPLE CHOICE ARRAY ===");
+        console.log("MC Questions:", multipleChoice);
+        console.log("Total MC Questions:", multipleChoice.length);
         console.log("\n=== TRANSLATION ARRAY ===");
         console.log("Translation Questions:", translation);
         console.log("Total Translation Questions:", translation.length);
@@ -294,25 +361,77 @@ export default function DueNow() {
   useEffect(() => {
     if (itemData.length > 0) {
       setActiveTranslationArray([...translationArray]);
+      setActiveMCArray([...multipleChoiceArray]);
 
       // Calculate total questions per phase (each variation counts separately)
-      setPhaseProgress({
-        'translation': {
+      const phaseProgressObj = {};
+      if (multipleChoiceArray.length > 0) {
+        phaseProgressObj['multiple-choice'] = {
+          completedItems: new Set(),
+          totalUniqueItems: multipleChoiceArray.length
+        };
+      }
+      if (translationArray.length > 0) {
+        phaseProgressObj['translation'] = {
           completedItems: new Set(),
           totalUniqueItems: translationArray.length
-        }
-      });
+        };
+      }
+      setPhaseProgress(phaseProgressObj);
     }
-  }, [itemData, translationArray]);
+  }, [itemData, translationArray, multipleChoiceArray]);
+
+  // Shuffle MC options whenever the current item or phase changes
+  useEffect(() => {
+    if (currentPhase === 'multiple-choice' && activeMCArray.length > 0) {
+      const currentItem = activeMCArray[currentIndex];
+      if (currentItem) {
+        const options = [currentItem.answer, ...currentItem.distractors];
+        // Fisher-Yates shuffle
+        const shuffled = [...options];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        setCurrentShuffledOptions(shuffled);
+        setSelectedOption(null); // Reset selection
+      }
+    }
+  }, [currentPhase, activeMCArray, currentIndex]);
 
   // ============ HELPER FUNCTIONS ============
 
   // Get current array based on phase
   const getCurrentArray = () => {
+    if (currentPhase === 'multiple-choice') {
+      return activeMCArray;
+    }
     return activeTranslationArray;
   };
 
   // ============ CORE LOGIC HANDLERS ============
+
+  // Handle Multiple Choice option selection
+  const handleMCOptionSelect = (selectedAnswer) => {
+    const currentItem = activeMCArray[currentIndex];
+    const isCorrect = selectedAnswer === currentItem.answer;
+
+    // Call handleAnswerSubmitted with MC answer data
+    handleAnswerSubmitted({
+      isCorrect,
+      userAnswer: selectedAnswer,
+      correctAnswer: currentItem.answer,
+      questionId: currentItem.id,
+      questionType: currentItem.questionType,
+      answerType: currentItem.answerType,
+      question: currentItem.question
+    });
+
+    // Show result
+    setSelectedOption(selectedAnswer);
+    setShowResult(true);
+    setIsCorrect(isCorrect);
+  };
 
   // Handle answer submission for Translation phase
   const handleAnswerSubmitted = (answerData) => {
@@ -484,10 +603,24 @@ export default function DueNow() {
 
   // Handle phase completion and transition
   const handlePhaseComplete = () => {
-    // Translation phase completed, go to summary
-    setCurrentPhase('complete');
-    // Trigger accuracy bar animation after a short delay
-    setTimeout(() => setAnimateAccuracy(true), 100);
+    // Determine next phase
+    if (currentPhase === 'multiple-choice') {
+      // MC completed, move to translation if it exists
+      if (translationArray.length > 0) {
+        setCurrentPhase('translation');
+        setCurrentIndex(0);
+        setShowResult(false);
+        setUserAnswer('');
+      } else {
+        // No translation, go to summary
+        setCurrentPhase('complete');
+        setTimeout(() => setAnimateAccuracy(true), 100);
+      }
+    } else if (currentPhase === 'translation') {
+      // Translation completed, go to summary
+      setCurrentPhase('complete');
+      setTimeout(() => setAnimateAccuracy(true), 100);
+    }
   };
 
   // ============ TRANSLATION HANDLERS ============
@@ -598,10 +731,32 @@ export default function DueNow() {
 
   // ============ COMPUTED VALUES ============
 
-  // Phase configuration for header - only translation phase
-  const phases = useMemo(() => [
-    { id: 'translation', name: 'Translation', icon: FaDumbbell, color: 'bg-[#e30a5f]', borderColor: 'border-[#e30a5f]' }
-  ], []);
+  // Phase configuration for header - dynamic based on content
+  const phases = useMemo(() => {
+    const phaseArray = [];
+
+    if (multipleChoiceArray.length > 0) {
+      phaseArray.push({
+        id: 'multiple-choice',
+        name: 'Multiple Choice',
+        icon: IoSparkles,
+        color: 'bg-purple-500',
+        borderColor: 'border-purple-500'
+      });
+    }
+
+    if (translationArray.length > 0) {
+      phaseArray.push({
+        id: 'translation',
+        name: 'Translation',
+        icon: FaDumbbell,
+        color: 'bg-[#e30a5f]',
+        borderColor: 'border-[#e30a5f]'
+      });
+    }
+
+    return phaseArray;
+  }, [multipleChoiceArray, translationArray]);
 
   const currentPhaseIndex = phases.findIndex(p => p.id === currentPhase);
   const currentPhaseConfig = phases[currentPhaseIndex];
@@ -715,6 +870,20 @@ export default function DueNow() {
                     displayMode={'completion-count'}
                     onExit={handleExit}
                   />
+
+                  {/* Multiple Choice Phase */}
+                  {currentPhase === 'multiple-choice' && activeMCArray.length > 0 && (
+                    <SRSMultipleChoice
+                      currentItem={activeMCArray[currentIndex]}
+                      uniqueOptions={currentShuffledOptions}
+                      selectedOption={selectedOption}
+                      showResult={showResult}
+                      isCorrect={isCorrect}
+                      isLastQuestion={currentIndex === activeMCArray.length - 1}
+                      onOptionSelect={handleMCOptionSelect}
+                      onNext={handleNext}
+                    />
+                  )}
 
                   {/* Translation Phase */}
                   {currentPhase === 'translation' && activeTranslationArray.length > 0 && (

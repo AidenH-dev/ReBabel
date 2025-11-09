@@ -23,6 +23,7 @@ export default function LearnNew() {
   // Data states
   const [itemData, setItemData] = useState([]);
   const [setInfo, setSetInfo] = useState(null);
+  const [setType, setSetType] = useState(null); // 'vocab' | 'grammar'
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -115,6 +116,9 @@ export default function LearnNew() {
           title: setInfoData.title || "Untitled Set",
           description: setInfoData.description?.toString() || ""
         });
+
+        // Extract and store set type
+        setSetType(setInfoData.set_type || 'vocab');
 
         // Transform items to item data format
         const transformedItemData = Array.isArray(setItemsAPI)
@@ -350,95 +354,99 @@ export default function LearnNew() {
 
         // ============================================
         // STEP 3: Translation Array (all variations)
+        // SKIP FOR GRAMMAR SETS
         // ============================================
         const translation = [];
 
-        transformedItemData.forEach((item) => {
-          if (item.type === "vocabulary") {
-            // English → Kana
-            translation.push({
-              id: `${item.id}-tr-en-kana`,
-              originalId: item.id,
-              uuid: item.uuid,
-              type: "vocabulary",
-              questionType: "English",
-              answerType: "Kana",
-              question: item.english,
-              answer: item.kana,
-              hint: item.lexical_category
-            });
-
-            // Kana → English
-            translation.push({
-              id: `${item.id}-tr-kana-en`,
-              originalId: item.id,
-              uuid: item.uuid,
-              type: "vocabulary",
-              questionType: "Kana",
-              answerType: "English",
-              question: item.kana,
-              answer: item.english,
-              hint: item.lexical_category
-            });
-
-            // If kanji exists, add kanji question variations
-            // NOTE: We only add variations where user types Kana or English
-            // Users cannot type Kanji, so answerType: "Kanji" variations are excluded
-            if (item.kanji) {
-              // Kanji → English (user types English)
+        // Only generate translation questions for vocabulary sets
+        if (setInfoData.set_type !== 'grammar') {
+          transformedItemData.forEach((item) => {
+            if (item.type === "vocabulary") {
+              // English → Kana
               translation.push({
-                id: `${item.id}-tr-kanji-en`,
+                id: `${item.id}-tr-en-kana`,
                 originalId: item.id,
                 uuid: item.uuid,
                 type: "vocabulary",
-                questionType: "Kanji",
-                answerType: "English",
-                question: item.kanji,
-                answer: item.english,
-                hint: `${item.lexical_category} (${item.kana})`
+                questionType: "English",
+                answerType: "Kana",
+                question: item.english,
+                answer: item.kana,
+                hint: item.lexical_category
               });
 
-              // Kanji → Kana (user types Kana)
+              // Kana → English
               translation.push({
-                id: `${item.id}-tr-kanji-kana`,
+                id: `${item.id}-tr-kana-en`,
                 originalId: item.id,
                 uuid: item.uuid,
                 type: "vocabulary",
-                questionType: "Kanji",
-                answerType: "Kana",
-                question: item.kanji,
-                answer: item.kana,
-                hint: item.english
+                questionType: "Kana",
+                answerType: "English",
+                question: item.kana,
+                answer: item.english,
+                hint: item.lexical_category
+              });
+
+              // If kanji exists, add kanji question variations
+              // NOTE: We only add variations where user types Kana or English
+              // Users cannot type Kanji, so answerType: "Kanji" variations are excluded
+              if (item.kanji) {
+                // Kanji → English (user types English)
+                translation.push({
+                  id: `${item.id}-tr-kanji-en`,
+                  originalId: item.id,
+                  uuid: item.uuid,
+                  type: "vocabulary",
+                  questionType: "Kanji",
+                  answerType: "English",
+                  question: item.kanji,
+                  answer: item.english,
+                  hint: `${item.lexical_category} (${item.kana})`
+                });
+
+                // Kanji → Kana (user types Kana)
+                translation.push({
+                  id: `${item.id}-tr-kanji-kana`,
+                  originalId: item.id,
+                  uuid: item.uuid,
+                  type: "vocabulary",
+                  questionType: "Kanji",
+                  answerType: "Kana",
+                  question: item.kanji,
+                  answer: item.kana,
+                  hint: item.english
+                });
+              }
+            } else if (item.type === "grammar") {
+              // Title → Description
+              translation.push({
+                id: `${item.id}-tr-title-desc`,
+                originalId: item.id,
+                uuid: item.uuid,
+                type: "grammar",
+                questionType: "Grammar Pattern",
+                answerType: "Description",
+                question: item.title,
+                answer: item.description,
+                hint: item.topic
+              });
+
+              // Description → Title
+              translation.push({
+                id: `${item.id}-tr-desc-title`,
+                originalId: item.id,
+                uuid: item.uuid,
+                type: "grammar",
+                questionType: "Description",
+                answerType: "Grammar Pattern",
+                question: item.description,
+                answer: item.title,
+                hint: item.topic
               });
             }
-          } else if (item.type === "grammar") {
-            // Title → Description
-            translation.push({
-              id: `${item.id}-tr-title-desc`,
-              originalId: item.id,
-              uuid: item.uuid,
-              type: "grammar",
-              questionType: "Grammar Pattern",
-              answerType: "Description",
-              question: item.title,
-              answer: item.description,
-              hint: item.topic
-            });
-
-            // Description → Title
-            translation.push({
-              id: `${item.id}-tr-desc-title`,
-              originalId: item.id,
-              uuid: item.uuid,
-              type: "grammar",
-              questionType: "Description",
-              answerType: "Grammar Pattern",
-              question: item.description,
-              answer: item.title,
-              hint: item.topic
-            });
-          }
-        });
+          });
+        }
 
         // Shuffle the translation array so questions appear in random order
         const shuffledTranslation = shuffleArray(translation);
@@ -477,18 +485,24 @@ export default function LearnNew() {
       setActiveTranslationArray([...translationArray]);
 
       // Calculate total questions per phase (each variation counts separately)
-      setPhaseProgress({
+      const progressConfig = {
         'multiple-choice': {
           completedItems: new Set(),
           totalUniqueItems: multipleChoiceArray.length
-        },
-        'translation': {
+        }
+      };
+
+      // Only track translation phase for non-grammar sets
+      if (setType !== 'grammar') {
+        progressConfig['translation'] = {
           completedItems: new Set(),
           totalUniqueItems: translationArray.length
-        }
-      });
+        };
+      }
+
+      setPhaseProgress(progressConfig);
     }
-  }, [itemData, reviewArray, multipleChoiceArray, translationArray]);
+  }, [itemData, reviewArray, multipleChoiceArray, translationArray, setType]);
 
   // ============ HELPER FUNCTIONS ============
 
@@ -591,7 +605,21 @@ export default function LearnNew() {
     if (currentPhase === 'review') {
       setCurrentPhase('multiple-choice');
     } else if (currentPhase === 'multiple-choice') {
-      setCurrentPhase('translation');
+      // For grammar sets, skip translation and go directly to complete
+      if (setType === 'grammar') {
+        // Save all items to SRS before showing summary
+        const success = await saveAllItemsToSRS();
+
+        if (success) {
+          setCurrentPhase('complete');
+          // Trigger accuracy bar animation after a short delay
+          setTimeout(() => setAnimateAccuracy(true), 100);
+        }
+        // If save fails, stay on multiple-choice phase and show error popup
+      } else {
+        // For vocab sets, transition to translation
+        setCurrentPhase('translation');
+      }
     } else if (currentPhase === 'translation') {
       // Save all items to SRS before showing summary
       const success = await saveAllItemsToSRS();
@@ -773,11 +801,19 @@ export default function LearnNew() {
   // ============ COMPUTED VALUES ============
 
   // Phase configuration for header
-  const phases = useMemo(() => [
-    { id: 'review', name: 'Review', icon: FaBook, color: 'bg-blue-500', borderColor: 'border-blue-500' },
-    { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' },
-    { id: 'translation', name: 'Translation', icon: FaDumbbell, color: 'bg-[#e30a5f]', borderColor: 'border-[#e30a5f]' }
-  ], []);
+  const phases = useMemo(() => {
+    const basePhases = [
+      { id: 'review', name: 'Review', icon: FaBook, color: 'bg-blue-500', borderColor: 'border-blue-500' },
+      { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' }
+    ];
+
+    // Only add translation phase for non-grammar sets
+    if (setType !== 'grammar') {
+      basePhases.push({ id: 'translation', name: 'Translation', icon: FaDumbbell, color: 'bg-[#e30a5f]', borderColor: 'border-[#e30a5f]' });
+    }
+
+    return basePhases;
+  }, [setType]);
 
   const currentPhaseIndex = phases.findIndex(p => p.id === currentPhase);
   const currentPhaseConfig = phases[currentPhaseIndex];
@@ -939,8 +975,8 @@ export default function LearnNew() {
                     />
                   )}
 
-                  {/* Translation Phase */}
-                  {currentPhase === 'translation' && activeTranslationArray.length > 0 && !isSavingSRS && (
+                  {/* Translation Phase - Only for vocabulary sets */}
+                  {currentPhase === 'translation' && setType !== 'grammar' && activeTranslationArray.length > 0 && !isSavingSRS && (
                     <SRSQuestionCard
                       currentItem={activeTranslationArray[currentIndex]}
                       userAnswer={userAnswer}
