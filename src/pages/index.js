@@ -68,12 +68,74 @@ export default function Home() {
 
       <main className="flex flex-col items-center justify-between overflow-hidden bg-gradient-to-b from-white to-gray-50 pt-5">
         <Head>
+          {/* Primary Meta Tags */}
           <title>ReBabel - Master Japanese with Science-Based Learning</title>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
           <meta
             name="description"
-            content="Be among the first to experience the future of Japanese learning. Join our early access program and help shape the most effective language learning platform."
+            content="Learn Japanese with ReBabel - a science-based language platform using spaced repetition, grammar SRS, and interactive practice. Join our free beta today."
           />
+          <meta name="keywords" content="japanese learning, language learning, spaced repetition, jlpt, japanese practice, grammar, vocabulary" />
+          <meta name="author" content="ReBabel" />
+          <meta name="theme-color" content="#e30a5f" />
+
+          {/* Canonical URL */}
+          <link rel="canonical" href="https://rebabel.org/" />
+
+          {/* Open Graph / Facebook */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://rebabel.org/" />
+          <meta property="og:title" content="ReBabel - Master Japanese with Science-Based Learning" />
+          <meta
+            property="og:description"
+            content="Learn Japanese with ReBabel - a science-based language platform using spaced repetition, grammar SRS, and interactive practice. Join our free beta today."
+          />
+          <meta property="og:image" content="https://rebabel.org/og-image.png" />
+          <meta property="og:image:alt" content="ReBabel - Japanese Learning Platform" />
+          <meta property="og:site_name" content="ReBabel" />
+          <meta property="og:locale" content="en_US" />
+
+          {/* Twitter */}
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:url" content="https://rebabel.org/" />
+          <meta property="twitter:title" content="ReBabel - Master Japanese with Science-Based Learning" />
+          <meta
+            property="twitter:description"
+            content="Learn Japanese with ReBabel - a science-based language platform using spaced repetition, grammar SRS, and interactive practice. Join our free beta today."
+          />
+          <meta property="twitter:image" content="https://rebabel.org/og-image.png" />
+          <meta property="twitter:creator" content="@rebabel" />
+
+          {/* Favicons */}
           <link rel="icon" href="/favicon.ico" />
+          <link rel="apple-touch-icon" href="/favicon.ico" />
+
+          {/* JSON-LD Structured Data */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "ReBabel",
+                "description": "Science-based Japanese language learning platform",
+                "url": "https://rebabel.org",
+                "image": "https://rebabel.org/og-image.png",
+                "potentialAction": {
+                  "@type": "JoinAction",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://rebabel.org/api/auth/login"
+                  }
+                }
+              })
+            }}
+          />
+
+          {/* Additional SEO */}
+          <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+          <link rel="sitemap" href="https://rebabel.org/sitemap.xml" />
         </Head>
 
         <Script
@@ -93,7 +155,7 @@ export default function Home() {
         />
 
         {/* Hero Section */}
-        <section className="w-full px-4 sm:px-6 lg:px-8 pt-20 pb-8 md:pt-24 md:pb-16">
+        <section className="w-full px-4 sm:px-6 lg:px-8 pt-10 pb-8 md:pt-16 md:pb-16">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left Column - Text */}

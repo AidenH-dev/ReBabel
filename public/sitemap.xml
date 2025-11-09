@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage - Primary page, highest priority -->
+  <url>
+    <loc>https://rebabel.org/</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Note: Auth-protected routes under /learn/* are intentionally excluded from sitemap
+       as they require authentication and cannot be crawled by search engines.
+       These routes are properly protected with Auth0 withPageAuthRequired() -->
+</urlset>
