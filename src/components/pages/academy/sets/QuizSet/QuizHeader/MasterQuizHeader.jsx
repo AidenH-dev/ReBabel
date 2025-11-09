@@ -9,16 +9,18 @@ import { FaDumbbell } from "react-icons/fa";
 
 export default function MasterQuizHeader({
   setTitle,
+  setType,
   sessionStats,
   currentIndex,
   totalQuestions,
   currentPhase,
   quizMode,
+  quizType,
   completedPhases,
   onExit
 }) {
-  // Define phase configurations
-  const phaseConfigs = {
+  // Define phase configurations for vocab sets
+  const vocabPhaseConfigs = {
     'completely-new': [
       { id: 'review', name: 'Review', icon: FaBook, color: 'bg-blue-500', borderColor: 'border-blue-500' },
       { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' },
@@ -33,7 +35,21 @@ export default function MasterQuizHeader({
     ]
   };
 
-  const phases = phaseConfigs[quizMode] || [];
+  // Define phase configurations for grammar sets
+  const grammarPhaseConfigs = {
+    'with-review': [
+      { id: 'review', name: 'Review', icon: FaBook, color: 'bg-blue-500', borderColor: 'border-blue-500' },
+      { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' }
+    ],
+    'mc-only': [
+      { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' }
+    ]
+  };
+
+  // Select appropriate phase configs based on set type
+  const phaseConfigs = setType === 'grammar' ? grammarPhaseConfigs : vocabPhaseConfigs;
+  const currentModeKey = setType === 'grammar' ? quizType : quizMode;
+  const phases = phaseConfigs[currentModeKey] || [];
   const currentPhaseIndex = phases.findIndex(p => p.id === currentPhase);
   const currentPhaseConfig = phases[currentPhaseIndex];
   const CurrentPhaseIcon = currentPhaseConfig?.icon;
