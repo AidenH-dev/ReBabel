@@ -173,7 +173,7 @@ export default function Home() {
                 </h1>
 
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
-                  We're striving to make practicing Japanese a more accessible and less complicated experience.
+                  We&apos;re striving to make practicing Japanese a more accessible and less complicated experience.
                   Be part of our journey from day one.
                 </p>
 
