@@ -156,7 +156,7 @@ export default function Home() {
         />
 
         {/* Hero Section */}
-        <section className="w-full px-4 sm:px-6 lg:px-8 pt-16 pb-8 md:pt-16 md:pb-16">
+        <section className="w-full px-4 sm:px-6 lg:px-8 pt-16 pb-12 md:pt-16 md:pb-18">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left Column - Text */}
