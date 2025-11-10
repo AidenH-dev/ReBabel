@@ -18,7 +18,7 @@ export default function Help() {
       answer: (
         <div>
           <p className="mb-4">
-            Use the "Report Issue" button located in the bottom-right corner of the app, or email us at{" "}
+            Use the &quot;Report Issue&quot; button located in the bottom-right corner of the app, or email us at{" "}
             <span className="font-semibold">rebabel.development@gmail.com</span>
           </p>
           <div className="flex items-center justify-center p-6 bg-gray-100 rounded-lg">
@@ -253,7 +253,7 @@ export default function Help() {
               Still have questions?
             </h2>
             <p className="text-white/90 mb-6 max-w-xl mx-auto">
-              Use the "Report Issue" button in the app or reach out to us at{" "}
+              Use the &quot;Report Issue&quot; button in the app or reach out to us at{" "}
               <span className="font-semibold">rebabel.development@gmail.com</span>
             </p>
             <Link href="/">

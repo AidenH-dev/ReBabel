@@ -798,9 +798,9 @@ export default function Home() {
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li>
-                  <a href="#" className="hover:text-white">
-                    About
-                  </a>
+                  <Link href="/help" className="hover:text-white">
+                    Help & FAQ
+                  </Link>
                 </li>
                 <li>
                   <Link href="/blog" className="hover:text-white">
