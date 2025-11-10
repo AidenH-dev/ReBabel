@@ -14,7 +14,7 @@ Any commercial use, including but not limited to:
 
 ## How to Proceed with Commercial Use
 
-You MUST contact rebabel.development.org BEFORE using ReBabel commercially.
+You MUST contact [rebabel.development@gmail.com](mailto:rebabel.development@gmail.com) BEFORE using ReBabel commercially.
 
 We offer these options:
 
