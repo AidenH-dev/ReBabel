@@ -90,6 +90,17 @@ src/
 
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
+## Commercial Use
+
+ReBabel is free for personal, non-commercial use under MIT.
+
+**Want to use ReBabel commercially?**
+
+- Use [rebabel.org](https://rebabel.org) hosted service, OR
+- Contact us for a commercial licensing agreement
+
+[rebabel.development@gmail.com](mailto:rebabel.development@gmail.com)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
