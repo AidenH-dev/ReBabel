@@ -475,7 +475,7 @@ export default function LearnNew() {
     };
 
     fetchSetData();
-  }, [id]);
+  }, [id, router.query.limit]);
 
   // Initialize active arrays when data is loaded
   useEffect(() => {

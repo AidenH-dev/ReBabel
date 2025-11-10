@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { getAllPosts, getPostBySlug, getRelatedPosts } from '@/lib/blog/markdown';
 import BlogMarkdown from '@/components/blog/BlogMarkdown';
@@ -122,9 +123,10 @@ export default function BlogPost({ post, relatedPosts }) {
         {/* Hero/Header Section */}
         {image && (
           <div className="relative h-96 dark:bg-gray-900 bg-gray-200 overflow-hidden">
-            <img
+            <Image
               src={image}
               alt={title}
+              fill
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 dark:bg-gradient-to-t dark:from-[#141f25] dark:to-transparent bg-gradient-to-t from-white to-transparent" />

@@ -1,6 +1,7 @@
 import Script from "next/script";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
@@ -802,9 +803,9 @@ export default function Home() {
                   </a>
                 </li>
                 <li>
-                  <a href="/blog" className="hover:text-white">
+                  <Link href="/blog" className="hover:text-white">
                     Blog
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a href="#" className="hover:text-white">

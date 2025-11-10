@@ -1,4 +1,5 @@
 import ReactMarkdown from 'react-markdown';
+import Image from 'next/image';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
@@ -53,10 +54,13 @@ export default function BlogMarkdown({ content }) {
           pre: ({ node, ...props }) => (
             <pre className="dark:bg-gray-900 bg-gray-100 p-4 rounded-lg mb-4 overflow-x-auto" {...props} />
           ),
-          img: ({ node, alt, ...props }) => (
-            <img
-              className="max-w-full h-auto rounded-lg my-4 shadow-lg"
+          img: ({ node, alt, src, ...props }) => (
+            <Image
+              src={src}
               alt={alt || 'Blog image'}
+              width={800}
+              height={600}
+              className="max-w-full h-auto rounded-lg my-4 shadow-lg"
               {...props}
             />
           ),

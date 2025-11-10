@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { formatDate } from '@/lib/blog/date';
 
 export default function BlogCard({ slug, frontmatter }) {
@@ -9,9 +10,10 @@ export default function BlogCard({ slug, frontmatter }) {
       <article className="dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 bg-gradient-to-br from-white to-gray-50 rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 dark:border dark:border-gray-700 dark:hover:border-[#e30a5f] border border-gray-200 hover:border-[#e30a5f] group cursor-pointer h-full flex flex-col">
         {image && (
           <div className="relative h-48 dark:bg-gray-900 bg-gray-100 overflow-hidden">
-            <img
+            <Image
               src={image}
               alt={title}
+              fill
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
           </div>
