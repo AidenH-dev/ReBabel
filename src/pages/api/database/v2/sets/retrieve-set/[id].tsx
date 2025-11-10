@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -206,13 +207,23 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
 }
 
 // Default export function required by Pages Router
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+// Protected with Auth0 - requires valid session
+export default withApiAuthRequired(async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+  // Verify authentication
+  const session = await getSession(req, res);
+  if (!session?.user?.sub) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized - authentication required'
+    });
+  }
+
   const { method } = req;
 
   switch (method) {
     case 'GET':
       return handleGET(req, res);
-    
+
     case 'POST':
     case 'PUT':
     case 'DELETE':
@@ -220,11 +231,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         success: false,
         error: 'Method not allowed. Use GET to retrieve set details.'
       });
-    
+
     default:
       return res.status(405).json({
         success: false,
         error: `Method ${method} not allowed`
       });
   }
-}
+})

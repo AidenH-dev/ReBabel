@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
 // Type definitions based on the cURL data structure
 interface ExampleSentence {
@@ -293,13 +294,23 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
 }
 
 // Default export function required by Pages Router
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+// Protected with Auth0 - requires valid session
+export default withApiAuthRequired(async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+  // Verify authentication
+  const session = await getSession(req, res);
+  if (!session?.user?.sub) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized - authentication required'
+    });
+  }
+
   const { method } = req;
 
   switch (method) {
     case 'POST':
       return handlePOST(req, res);
-    
+
     case 'GET':
     case 'PUT':
     case 'DELETE':
@@ -307,11 +318,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         success: false,
         error: 'Method not allowed. Use POST to create a set.'
       });
-    
+
     default:
       return res.status(405).json({
         success: false,
         error: `Method ${method} not allowed`
       });
   }
-}
+})

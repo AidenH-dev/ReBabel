@@ -1,6 +1,7 @@
 // pages/api/database/v2/srs/item/create-entry/[itemId].ts
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -95,10 +96,19 @@ async function handlePOST(
   }
 }
 
-export default async function handler(
+export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse<CreateSrsEntryResponse>
 ) {
+  // Verify authentication
+  const session = await getSession(req, res);
+  if (!session?.user?.sub) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized - authentication required'
+    });
+  }
+
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({
@@ -108,7 +118,7 @@ export default async function handler(
   }
 
   return handlePOST(req, res);
-}
+})
 
 // Validation helper
 function validateRequest(body: any): { isValid: boolean; error?: string } {

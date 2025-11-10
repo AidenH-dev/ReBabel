@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -28,10 +29,19 @@ interface ApiResponse {
   message?: string;
 }
 
-export default async function handler(
+export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
+  // Verify authentication
+  const session = await getSession(req, res);
+  if (!session?.user?.sub) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized - authentication required'
+    });
+  }
+
   // Only allow POST method
   if (req.method !== 'POST') {
     return res.status(405).json({
@@ -103,4 +113,4 @@ export default async function handler(
       message: error instanceof Error ? error.message : 'An unexpected error occurred'
     });
   }
-}
+})

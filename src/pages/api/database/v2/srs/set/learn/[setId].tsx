@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
@@ -132,7 +133,16 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
   }
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+export default withApiAuthRequired(async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+  // Verify authentication
+  const session = await getSession(req, res);
+  if (!session?.user?.sub) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized - authentication required'
+    });
+  }
+
   if (req.method !== 'GET') {
     return res.status(405).json({
       success: false,
@@ -141,4 +151,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   return handleGET(req, res);
-}
+})
