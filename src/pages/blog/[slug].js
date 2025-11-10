@@ -168,7 +168,7 @@ export default function BlogPost({ post, relatedPosts }) {
 
             <div className="flex flex-wrap gap-2 mb-6">
               {tags?.map((tag) => (
-                <Link key={tag} href={`/blog?tag=${tag}`} className="px-3 py-1 bg-[#e30a5f] bg-opacity-20 text-[#ff6b9d] text-sm rounded-full hover:bg-opacity-30 transition-colors font-fredoka">
+                <Link key={tag} href={`/blog?tag=${tag}`} className="px-3 py-1 bg-[#e30a5f] bg-opacity-20 text-white text-sm rounded-full hover:bg-opacity-30 transition-colors font-fredoka">
                   {tag}
                 </Link>
               ))}
