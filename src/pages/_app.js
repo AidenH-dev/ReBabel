@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 import { useEffect, useState } from 'react';
+import Script from 'next/script';
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -55,6 +56,15 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <UserProvider>
+      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-VRBTF7S087" />
+      <Script id="google-analytics">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-VRBTF7S087');
+        `}
+      </Script>
       {isPosthogEnabled ? (
         <PostHogProvider client={posthog}>
           <PostHogAuthBridge />
