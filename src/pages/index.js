@@ -831,7 +831,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 ReBabel. All rights reserved. Currently in beta development.</p>
+            <p>&copy; 2025 ReBabel. All rights reserved. Currently in beta development.</p>
           </div>
         </div>
       </footer>
