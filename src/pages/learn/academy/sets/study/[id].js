@@ -30,13 +30,13 @@ import { useRouter } from "next/router";
 import MasterItemsManagement from "@/components/pages/academy/sets/ViewSet/ItemsManagement/MasterItemsManagement";
 import PracticeOptions from "@/components/pages/academy/sets/ViewSet/PracticeOptions/MasterPracticeOptions";
 import MasterSetHeader from "@/components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader";
-import MasterSrsSetModule from"@/components/pages/academy/sets/ViewSet/srsSetModule/MasterSrsSetModule";
+import MasterSrsSetModule from "@/components/pages/academy/sets/ViewSet/srsSetModule/MasterSrsSetModule";
 
 // ============================================================================
 // MAIN COMPONENT
 // ============================================================================
 
-export default function ViewSet() {
+function ViewSetPage() {
   const router = useRouter();
   const { id } = router.query; // Set ID from URL params
 
@@ -100,8 +100,6 @@ export default function ViewSet() {
         if (!result.success || !result.data) {
           throw new Error(result.error || 'Failed to load set data');
         }
-
-        console.log("Set Result: ", result);
 
         // Extract data from API response
         const apiData = result.data;
@@ -193,6 +191,7 @@ export default function ViewSet() {
     const fetchUserProfile = async () => {
       try {
         const response = await fetch("/api/auth/me");
+        if (!response.ok) throw new Error("Failed to fetch user profile");
         const profile = await response.json();
         setUserProfile(profile);
       } catch (error) {
@@ -206,96 +205,80 @@ export default function ViewSet() {
   // EVENT HANDLERS
   // ============================================================================
 
-  /**
-   * Updates set metadata when child components make changes
-   * @param {Object} updates - Partial setData object with updated fields
-   */
   const handleSetDataUpdate = (updates) => {
-    setSetData(prev => ({
-      ...prev,
-      ...updates
-    }));
+    setSetData(prev => ({ ...prev, ...updates }));
   };
 
-  /**
-   * Handles successful set deletion by redirecting to sets list
-   */
   const handleDeleteSet = () => {
     router.push('/learn/academy/sets');
   };
 
   // ============================================================================
-  // ERROR STATE RENDERING
+  // RENDER LOGIC
   // ============================================================================
 
-  if (error) {
+  const renderContent = () => {
+    if (isLoading) {
+      return <div className="flex items-center justify-center h-full"><p>Loading set...</p></div>;
+    }
+    if (error) {
+      return <div className="p-8 text-red-500"><strong>Error:</strong> {error}</div>;
+    }
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
-        <MainSidebar />
-        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
-              Error Loading Set
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
-            <button
-              onClick={() => router.push('/learn/academy/sets')}
-              className="px-4 py-2 bg-[#e30a5f] text-white rounded-lg hover:bg-[#c00950] transition-colors"
-            >
-              Back to Sets
-            </button>
+      <>
+        <MasterSetHeader 
+          setData={setData} 
+          onUpdate={handleSetDataUpdate} 
+          onDelete={handleDeleteSet}
+          userProfile={userProfile}
+        />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 my-6">
+          <div className="lg:col-span-2">
+            <PracticeOptions setId={id} />
           </div>
+          <div>
+            <MasterSrsSetModule stats={setData.studyStats} />
+          </div>
+        </div>
+        <MasterItemsManagement 
+          items={items} 
+          setItems={setItems} 
+          setId={id} 
+        />
+      </>
+    );
+  };
+  
+  return (
+    <>
+      <Head>
+        <title>{setData.title ? `${setData.title} - Study Set` : "Study Set"}</title>
+        <meta name="description" content={`Study the set: ${setData.title}`} />
+      </Head>
+      
+      {/* 
+        Main Page Container: Implements responsive layout.
+        - On mobile (default): `flex-col` stacks the sidebar on top of the content.
+        - On large screens (lg): `flex-row` places the sidebar next to the content.
+      */}
+      <div className="flex flex-col lg:flex-row h-screen min-h-0 bg-gray-50 dark:bg-[#141f25] text-gray-800 dark:text-gray-200">
+        <MainSidebar />
+        
+        {/* 
+          Main Content Area:
+          - `flex-grow`: Allows this area to fill the remaining space.
+          - `overflow-y-auto`: Adds a scrollbar only to this area if content overflows, preventing the whole page from scrolling.
+          - `p-4 md:p-6 lg:p-8`: Provides responsive padding.
+        */}
+        <main className="flex-grow w-full overflow-y-auto p-4 md:p-6 lg:p-8">
+          {renderContent()}
         </main>
       </div>
-    );
-  }
-
-  // ============================================================================
-  // MAIN RENDER
-  // ============================================================================
-
-  return (
-    <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
-      {/* Left sidebar navigation */}
-      <MainSidebar />
-
-      {/* Main content area */}
-      <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex flex-col min-h-0 sm:overflow-hidden">
-        {/* Page metadata */}
-        <Head>
-          <title>{setData.title} - View Set</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        {/* Content container with max width */}
-        <div className="w-full max-w-6xl mx-auto flex-1 min-h-0 flex flex-col">
-          
-          {/* Section 1: Set Header - Breadcrumbs, title, edit, export */}
-          <MasterSetHeader 
-            setData={setData}
-            items={items}
-            onSetDataUpdate={handleSetDataUpdate}
-            onDeleteSet={handleDeleteSet}
-          />
-          {/* Section 2: Practice Options - Quiz and flashcard buttons */}
-          <PracticeOptions setId={id} />
-
-          {/* Section 3: Items Management - Item list/grid, add/edit/delete */}
-          <MasterItemsManagement 
-            items={items}
-            setItems={setItems}
-            setData={setData}
-            userProfile={userProfile}
-          />
-        </div>
-      </main>
-    </div>
+    </>
   );
 }
 
-// ============================================================================
-// SERVER-SIDE AUTHENTICATION
-// ============================================================================
-
-// Protect this page - requires authentication via Auth0
+// Applying page-level authentication guard via getServerSideProps
 export const getServerSideProps = withPageAuthRequired();
+
+export default ViewSetPage;
