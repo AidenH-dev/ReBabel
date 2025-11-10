@@ -4,6 +4,12 @@
 
 Welcome to the ReBabel contributor community! This project combines modern web technologies with AI to create an adaptive Japanese language learning platform, and we're excited to collaborate with developers who share our vision. Every contribution, from bug fixes to new features, helps make Japanese language learning more accessible and engaging.
 
+# Contributing to ReBabel
+
+By submitting a pull request, you agree to our [Contributor License Agreement](./CONTRIBUTOR_LICENSE_AGREEMENT.md).
+
+This allows us to maintain dual licensing.
+
 ## Getting Started
 
 See READ.ME for detailed installation setup
@@ -73,8 +79,6 @@ docs: update environment setup instructions
 - Test with actual API calls to ensure integration works
 - Verify responsive design across different screen sizes
 - Check authentication flow in development environment
-
-## Making Changes
 
 ## Making Changes
 
