@@ -802,7 +802,7 @@ export default function Home() {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="/blog" className="hover:text-white">
                     Blog
                   </a>
                 </li>

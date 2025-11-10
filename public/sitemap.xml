@@ -8,7 +8,27 @@
     <priority>1.0</priority>
   </url>
 
+  <!-- Blog Index - High priority content for SEO -->
+  <url>
+    <loc>https://rebabel.org/blog</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Blog Posts - Important for content discovery -->
+  <url>
+    <loc>https://rebabel.org/blog/getting-started-with-spaced-repetition</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Note: Auth-protected routes under /learn/* are intentionally excluded from sitemap
        as they require authentication and cannot be crawled by search engines.
-       These routes are properly protected with Auth0 withPageAuthRequired() -->
+       These routes are properly protected with Auth0 withPageAuthRequired().
+
+       TODO: Consider creating a dynamic sitemap.xml API endpoint (src/pages/sitemap.xml.js)
+       to automatically include all blog posts as they are added.
+  -->
 </urlset>

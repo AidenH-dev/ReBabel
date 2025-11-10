@@ -21,7 +21,8 @@ Disallow: /private/
 # Crawl delay (in seconds) - be respectful to server resources
 Crawl-delay: 1
 
-# Sitemap location
+# Sitemap locations
+Sitemap: https://rebabel.org/sitemap.xml.js
 Sitemap: https://rebabel.org/sitemap.xml
 
 # ============================================================
