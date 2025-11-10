@@ -200,7 +200,7 @@ export default function Home() {
                   <div className="flex items-center gap-2">
                     <FaShieldAlt className="text-[#e30a5f]" />
                     <span className="text-sm text-gray-600">
-                      <strong>Free</strong> Access Forever
+                      <strong>Free Tier</strong> Access Forever
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
