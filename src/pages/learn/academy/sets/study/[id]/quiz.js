@@ -17,12 +17,14 @@ export default function SetQuiz() {
 
     const [cardsData, setCardsData] = useState([]);
     const [setInfo, setSetInfo] = useState(null);
+    const [setType, setSetType] = useState(null); // 'vocab' | 'grammar'
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
     // Quiz mode states
     const [quizMode, setQuizMode] = useState(null); // null | 'completely-new' | 'new' | 'practice'
+    const [quizType, setQuizType] = useState(null); // For grammar sets: 'with-review' | 'mc-only'
     const [modeSelectionComplete, setModeSelectionComplete] = useState(false);
 
     // Quiz phase tracking
@@ -80,6 +82,9 @@ export default function SetQuiz() {
                     description: setInfoData.description?.toString() || ""
                 });
 
+                // Extract and store set type
+                setSetType(setInfoData.set_type || 'vocab');
+
                 // Transform items to flashcard format
                 const transformedCards = Array.isArray(setItemsAPI)
                     ? setItemsAPI
@@ -124,7 +129,7 @@ export default function SetQuiz() {
                 setCardsData(transformedCards);
 
                 // Generate quiz items from cards
-                const generatedQuizItems = generateQuizItems(transformedCards);
+                const generatedQuizItems = generateQuizItems(transformedCards, setInfoData.set_type || 'vocab');
                 setQuizItems(shuffleArray(generatedQuizItems));
 
                 // Initialize item statistics
@@ -156,7 +161,7 @@ export default function SetQuiz() {
     }, [quizCompleted]);
 
     // Generate quiz items based on card type
-    const generateQuizItems = (cards) => {
+    const generateQuizItems = (cards, setType = 'vocab') => {
         const items = [];
 
         cards.forEach((card) => {
@@ -290,56 +295,93 @@ export default function SetQuiz() {
     // Handle mode selection
     const handleModeSelect = (mode) => {
         console.log("Selected quiz mode:", mode);
-        setQuizMode(mode);
 
-        // Initialize quiz based on mode
-        if (mode === 'practice') {
-            // Practice mode - go straight to translation
-            setCurrentPhase('translation');
-            setModeSelectionComplete(true);
-        } else if (mode === 'new') {
-            // New mode - start with multiple choice
-            setCurrentPhase('multiple-choice');
-            initializeMultipleChoice();
-            setModeSelectionComplete(true);
-        } else if (mode === 'completely-new') {
-            // Completely new mode - start with review
-            setCurrentPhase('review');
-            setReviewItems(cardsData);
-            setModeSelectionComplete(true);
+        // For grammar sets, mode is the quizType
+        if (setType === 'grammar') {
+            setQuizType(mode);
+
+            if (mode === 'with-review') {
+                // Grammar: Review → Multiple Choice → Summary
+                setCurrentPhase('review');
+                setReviewItems(cardsData);
+            } else if (mode === 'mc-only') {
+                // Grammar: Multiple Choice → Summary
+                setCurrentPhase('multiple-choice');
+                initializeMultipleChoice();
+            }
+        } else {
+            // For vocab sets, use existing quizMode logic
+            setQuizMode(mode);
+
+            if (mode === 'practice') {
+                // Practice mode - go straight to translation
+                setCurrentPhase('translation');
+            } else if (mode === 'new') {
+                // New mode - start with multiple choice
+                setCurrentPhase('multiple-choice');
+                initializeMultipleChoice();
+            } else if (mode === 'completely-new') {
+                // Completely new mode - start with review
+                setCurrentPhase('review');
+                setReviewItems(cardsData);
+            }
         }
+
+        setModeSelectionComplete(true);
     };
 
     // Handle phase completion and transition
     const handlePhaseComplete = () => {
         setCompletedPhases(prev => [...prev, currentPhase]);
 
-        if (quizMode === 'completely-new') {
-            if (currentPhase === 'review') {
-                // Move to multiple choice
-                setCurrentPhase('multiple-choice');
-                initializeMultipleChoice();
-                setCurrentIndex(0);
-            } else if (currentPhase === 'multiple-choice') {
-                // Move to translation
-                setCurrentPhase('translation');
-                setCurrentIndex(0);
-            } else {
-                // All phases complete
-                setQuizCompleted(true);
-            }
-        } else if (quizMode === 'new') {
-            if (currentPhase === 'multiple-choice') {
-                // Move to translation
-                setCurrentPhase('translation');
-                setCurrentIndex(0);
-            } else {
-                // All phases complete
-                setQuizCompleted(true);
+        if (setType === 'grammar') {
+            // Grammar sets: no translation phase
+            if (quizType === 'with-review') {
+                if (currentPhase === 'review') {
+                    // Move to multiple choice
+                    setCurrentPhase('multiple-choice');
+                    initializeMultipleChoice();
+                    setCurrentIndex(0);
+                } else if (currentPhase === 'multiple-choice') {
+                    // All phases complete (no translation for grammar)
+                    setQuizCompleted(true);
+                }
+            } else if (quizType === 'mc-only') {
+                // Multiple choice only
+                if (currentPhase === 'multiple-choice') {
+                    // All phases complete
+                    setQuizCompleted(true);
+                }
             }
         } else {
-            // Practice mode - only translation phase
-            setQuizCompleted(true);
+            // Vocab sets: existing logic
+            if (quizMode === 'completely-new') {
+                if (currentPhase === 'review') {
+                    // Move to multiple choice
+                    setCurrentPhase('multiple-choice');
+                    initializeMultipleChoice();
+                    setCurrentIndex(0);
+                } else if (currentPhase === 'multiple-choice') {
+                    // Move to translation
+                    setCurrentPhase('translation');
+                    setCurrentIndex(0);
+                } else {
+                    // All phases complete
+                    setQuizCompleted(true);
+                }
+            } else if (quizMode === 'new') {
+                if (currentPhase === 'multiple-choice') {
+                    // Move to translation
+                    setCurrentPhase('translation');
+                    setCurrentIndex(0);
+                } else {
+                    // All phases complete
+                    setQuizCompleted(true);
+                }
+            } else {
+                // Practice mode - only translation phase
+                setQuizCompleted(true);
+            }
         }
     };
 
@@ -413,14 +455,24 @@ export default function SetQuiz() {
         setQuizItems(shuffleArray(quizItems));
 
         // Restart from first phase of selected mode
-        if (quizMode === 'practice') {
-            setCurrentPhase('translation');
-        } else if (quizMode === 'new') {
-            setCurrentPhase('multiple-choice');
-            initializeMultipleChoice();
-        } else if (quizMode === 'completely-new') {
-            setCurrentPhase('review');
-            setReviewItems(cardsData);
+        if (setType === 'grammar') {
+            if (quizType === 'with-review') {
+                setCurrentPhase('review');
+                setReviewItems(cardsData);
+            } else if (quizType === 'mc-only') {
+                setCurrentPhase('multiple-choice');
+                initializeMultipleChoice();
+            }
+        } else {
+            if (quizMode === 'practice') {
+                setCurrentPhase('translation');
+            } else if (quizMode === 'new') {
+                setCurrentPhase('multiple-choice');
+                initializeMultipleChoice();
+            } else if (quizMode === 'completely-new') {
+                setCurrentPhase('review');
+                setReviewItems(cardsData);
+            }
         }
     };
 
@@ -487,6 +539,7 @@ export default function SetQuiz() {
                     /* Mode Selection Screen */
                     <MasterQuizModeSelect
                         setTitle={setInfo?.title}
+                        setType={setType}
                         onSelectMode={handleModeSelect}
                         onExit={handleExit}
                     />
@@ -496,11 +549,13 @@ export default function SetQuiz() {
                         {!quizCompleted && (
                             <MasterQuizHeader
                                 setTitle={setInfo?.title}
+                                setType={setType}
                                 sessionStats={sessionStats}
                                 currentIndex={currentIndex}
                                 totalQuestions={getCurrentItems().length}
                                 currentPhase={currentPhase}
                                 quizMode={quizMode}
+                                quizType={quizType}
                                 completedPhases={completedPhases}
                                 onExit={handleExit}
                             />

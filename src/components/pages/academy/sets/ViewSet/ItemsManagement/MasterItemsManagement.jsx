@@ -6,11 +6,12 @@ import {
 } from "react-icons/fi";
 import { toKana } from "wanakana";
 
-export default function MasterItemsManagement({ 
-  items, 
-  setItems, 
+export default function MasterItemsManagement({
+  items,
+  setItems,
   setData,
-  userProfile 
+  set_type,
+  userProfile
 }) {
   const router = useRouter();
 
@@ -240,6 +241,15 @@ export default function MasterItemsManagement({
   };
 
   const handleOpenAddItemModal = () => {
+    // Pre-set item type based on set_type
+    if (set_type === 'vocab') {
+      setAddItemType("vocabulary");
+    } else if (set_type === 'grammar') {
+      setAddItemType("grammar");
+    } else {
+      // Legacy set (null) - default to vocabulary
+      setAddItemType("vocabulary");
+    }
     setShowAddItemModal(true);
     setAddItemError(null);
     setAddItemSuccess(false);
@@ -293,6 +303,16 @@ export default function MasterItemsManagement({
 
     if (!userProfile) {
       setAddItemError("User profile not loaded");
+      return;
+    }
+
+    // Validate that item type matches set type
+    if (set_type === 'vocab' && addItemType !== 'vocabulary') {
+      setAddItemError("Cannot add grammar items to a vocabulary-only set");
+      return;
+    }
+    if (set_type === 'grammar' && addItemType !== 'grammar') {
+      setAddItemError("Cannot add vocabulary items to a grammar-only set");
       return;
     }
 
@@ -478,7 +498,7 @@ export default function MasterItemsManagement({
             viewMode === "list" ? (
               <div className="space-y-1.5">
                 {sortedItems.map((item, idx) => (
-                  <div key={item.id} className="group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-2 hover:shadow-sm transition-all">
+                  <div key={item.id} className="group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-2 shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start gap-2">
                       <div className="flex-shrink-0 w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-[10px] font-medium text-gray-600 dark:text-gray-400">
                         {idx + 1}
@@ -631,25 +651,35 @@ export default function MasterItemsManagement({
                   Add New Item
                 </h2>
                 <div className="flex bg-gray-100 dark:bg-[#0f1a1f] rounded-md p-0.5">
-                  <button
-                    onClick={() => setAddItemType("vocabulary")}
-                    className={`px-2 py-1 text-xs font-medium rounded transition-colors ${addItemType === "vocabulary"
-                      ? "bg-[#e30a5f] text-white"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                      }`}
-                  >
-                    Vocabulary
-                  </button>
-                  <button
-                    onClick={() => setAddItemType("grammar")}
-                    className={`px-2 py-1 text-xs font-medium rounded transition-colors ${addItemType === "grammar"
-                      ? "bg-[#e30a5f] text-white"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                      }`}
-                  >
-                    Grammar
-                  </button>
+                  {(!set_type || set_type === 'vocab') && (
+                    <button
+                      onClick={() => setAddItemType("vocabulary")}
+                      className={`px-2 py-1 text-xs font-medium rounded transition-colors ${addItemType === "vocabulary"
+                        ? "bg-[#e30a5f] text-white"
+                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                    >
+                      Vocabulary
+                    </button>
+                  )}
+                  {(!set_type || set_type === 'grammar') && (
+                    <button
+                      onClick={() => setAddItemType("grammar")}
+                      className={`px-2 py-1 text-xs font-medium rounded transition-colors ${addItemType === "grammar"
+                        ? "bg-[#e30a5f] text-white"
+                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                    >
+                      Grammar
+                    </button>
+                  )}
                 </div>
+                {set_type && (
+                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                    {set_type === 'vocab' && "This set contains only vocabulary items"}
+                    {set_type === 'grammar' && "This set contains only grammar items"}
+                  </div>
+                )}
               </div>
               <button
                 onClick={handleCloseAddItemModal}

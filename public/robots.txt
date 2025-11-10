@@ -1,0 +1,63 @@
+# robots.txt for ReBabel (https://rebabel.org/)
+# This file controls search engine crawler access
+
+# Default rules for all bots
+User-agent: *
+
+# Allow crawling of public pages
+Allow: /
+
+# Block API routes - should never be indexed
+Disallow: /api/
+
+# Block auth-protected routes - Auth0 prevents access anyway
+# These pages will return 302 redirects to login, but we explicitly block them here
+Disallow: /learn/
+
+# Block specific internal Next.js routes
+Disallow: /_next/
+Disallow: /private/
+
+# Crawl delay (in seconds) - be respectful to server resources
+Crawl-delay: 1
+
+# Sitemap locations
+Sitemap: https://rebabel.org/sitemap.xml.js
+Sitemap: https://rebabel.org/sitemap.xml
+
+# ============================================================
+# Specific rules for major search engines
+# ============================================================
+
+# Google-specific rules
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /learn/
+Disallow: /_next/
+
+# Bing-specific rules
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /learn/
+Disallow: /_next/
+
+# ============================================================
+# Block bad bots and scrapers
+# ============================================================
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /

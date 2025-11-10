@@ -1,6 +1,7 @@
 // pages/api/database/v2/sets/delete-set.ts
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -30,10 +31,19 @@ interface DeleteSetResponse {
   message?: string;
 }
 
-export default async function handler(
+export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse<DeleteSetResponse>
 ) {
+  // Verify authentication
+  const session = await getSession(req, res);
+  if (!session?.user?.sub) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized - authentication required'
+    });
+  }
+
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({
@@ -96,7 +106,7 @@ export default async function handler(
       error: error instanceof Error ? error.message : 'Unknown error occurred',
     });
   }
-}
+})
 
 // Validation helper
 function validateRequest(body: any): { isValid: boolean; error?: string } {

@@ -7,40 +7,65 @@ import {
     TbArrowLeft
   } from "react-icons/tb";
 
-export default function MasterQuizModeSelect({ setTitle, onSelectMode, onExit }) {
-  const modes = [
+export default function MasterQuizModeSelect({ setTitle, setType, onSelectMode, onExit }) {
+  // Grammar sets have different modes
+  const grammarModes = [
+    {
+      id: "with-review",
+      title: "Review Cards + Multiple Choice",
+      icon: BsFillQuestionSquareFill,
+      description: "Study with all the info first",
+      color: "from-blue-500 to-blue-600",
+      borderColor: "border-blue-500/20 hover:border-blue-500",
+      bgHover: "hover:bg-blue-50 dark:hover:bg-blue-900/10"
+    },
+    {
+      id: "mc-only",
+      title: "Multiple Choice Only",
+      icon: IoSparkles,
+      description: "Just practice multiple choice",
+      color: "from-purple-500 to-purple-600",
+      borderColor: "border-purple-500/20 hover:border-purple-500",
+      bgHover: "hover:bg-purple-50 dark:hover:bg-purple-900/10"
+    }
+  ];
+
+  // Vocab sets use existing modes
+  const vocabModes = [
     {
       id: "completely-new",
-      title: "Completely New",
+      title: "Review Cards",
       icon: BsFillQuestionSquareFill,
-      description: "Full Introduction",
+      description: "Review new info first",
       color: "from-blue-500 to-blue-600",
       borderColor: "border-blue-500/20 hover:border-blue-500",
       bgHover: "hover:bg-blue-50 dark:hover:bg-blue-900/10"
     },
     {
       id: "new",
-      title: "New",
+      title: "Multiple Choice",
       icon: IoSparkles,
-      description: "Multiple choice",
+      description: "Practice patially known vocab",
       color: "from-purple-500 to-purple-600",
       borderColor: "border-purple-500/20 hover:border-purple-500",
       bgHover: "hover:bg-purple-50 dark:hover:bg-purple-900/10"
     },
     {
       id: "practice",
-      title: "Practice",
+      title: "Translate",
       icon: FaDumbbell,
-      description: "Translation only",
+      description: "Basic practice for known vocab",
       color: "from-[#e30a5f] to-[#f41567]",
       borderColor: "border-[#e30a5f]/20 hover:border-[#e30a5f]",
       bgHover: "hover:bg-pink-50 dark:hover:bg-pink-900/10"
     }
   ];
 
+  const modes = setType === 'grammar' ? grammarModes : vocabModes;
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-2 sm:px-4">
-      <div className="w-full max-w-4xl mx-auto">
+      <div className="w-full max-w-6xl mx-auto">
         {/* Mode Options */}
         <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 mb-6">
           {modes.map((mode) => {

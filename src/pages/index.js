@@ -1,6 +1,7 @@
 import Script from "next/script";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
@@ -11,13 +12,11 @@ import {
   FaUsers,
   FaStar,
   FaQuoteLeft,
-  FaLightbulb,
   FaGraduationCap,
   FaClock,
   FaShieldAlt,
 } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { MdTranslate } from "react-icons/md";
 
 export default function Home() {
   const animationsRef = useRef(null);
@@ -70,12 +69,74 @@ export default function Home() {
 
       <main className="flex flex-col items-center justify-between overflow-hidden bg-gradient-to-b from-white to-gray-50 pt-5">
         <Head>
+          {/* Primary Meta Tags */}
           <title>ReBabel - Master Japanese with Science-Based Learning</title>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
           <meta
             name="description"
-            content="Be among the first to experience the future of Japanese learning. Join our early access program and help shape the most effective language learning platform."
+            content="Learn Japanese with ReBabel - a science-based language platform using spaced repetition, grammar SRS, and interactive practice. Join our free beta today."
           />
+          <meta name="keywords" content="japanese learning, language learning, spaced repetition, jlpt, japanese practice, grammar, vocabulary" />
+          <meta name="author" content="ReBabel" />
+          <meta name="theme-color" content="#e30a5f" />
+
+          {/* Canonical URL */}
+          <link rel="canonical" href="https://rebabel.org/" />
+
+          {/* Open Graph / Facebook */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://rebabel.org/" />
+          <meta property="og:title" content="ReBabel - Master Japanese with Science-Based Learning" />
+          <meta
+            property="og:description"
+            content="Learn Japanese with ReBabel - a science-based language platform using spaced repetition, grammar SRS, and interactive practice. Join our free beta today."
+          />
+          <meta property="og:image" content="https://rebabel.org/og-image.png" />
+          <meta property="og:image:alt" content="ReBabel - Japanese Learning Platform" />
+          <meta property="og:site_name" content="ReBabel" />
+          <meta property="og:locale" content="en_US" />
+
+          {/* Twitter */}
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:url" content="https://rebabel.org/" />
+          <meta property="twitter:title" content="ReBabel - Master Japanese with Science-Based Learning" />
+          <meta
+            property="twitter:description"
+            content="Learn Japanese with ReBabel - a science-based language platform using spaced repetition, grammar SRS, and interactive practice. Join our free beta today."
+          />
+          <meta property="twitter:image" content="https://rebabel.org/og-image.png" />
+          <meta property="twitter:creator" content="@rebabel" />
+
+          {/* Favicons */}
           <link rel="icon" href="/favicon.ico" />
+          <link rel="apple-touch-icon" href="/favicon.ico" />
+
+          {/* JSON-LD Structured Data */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "ReBabel",
+                "description": "Science-based Japanese language learning platform",
+                "url": "https://rebabel.org",
+                "image": "https://rebabel.org/og-image.png",
+                "potentialAction": {
+                  "@type": "JoinAction",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://rebabel.org/api/auth/login"
+                  }
+                }
+              })
+            }}
+          />
+
+          {/* Additional SEO */}
+          <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+          <link rel="sitemap" href="https://rebabel.org/sitemap.xml" />
         </Head>
 
         <Script
@@ -95,7 +156,7 @@ export default function Home() {
         />
 
         {/* Hero Section */}
-        <section className="w-full px-4 sm:px-6 lg:px-8 pt-20 pb-16 md:pt-24 md:pb-24">
+        <section className="w-full px-4 sm:px-6 lg:px-8 pt-16 pb-12 md:pt-16 md:pb-18">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left Column - Text */}
@@ -113,8 +174,8 @@ export default function Home() {
                 </h1>
 
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
-                  We&apos;re building the most effective Japanese learning platform using
-                  spaced repetition and adaptive AI. Be part of our journey from day one.
+                  We&apos;re striving to make practicing Japanese a more accessible and less complicated experience.
+                  Be part of our journey from day one.
                 </p>
 
                 {/* CTA Buttons */}
@@ -139,7 +200,7 @@ export default function Home() {
                   <div className="flex items-center gap-2">
                     <FaShieldAlt className="text-[#e30a5f]" />
                     <span className="text-sm text-gray-600">
-                      <strong>Free</strong> Access Forever
+                      <strong>Free Tier</strong> Access Forever
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -175,50 +236,71 @@ export default function Home() {
           </div>
         </section>
 
-        {/* What We're Building Section (Replaces Stats) */}
+        {/* What We're Building Section
         <section className="w-full bg-gray-900 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                What We&apos;re Building
+                What Do You Get?
               </h2>
               <p className="text-gray-400 max-w-2xl mx-auto">
-                Join us in creating the most comprehensive Japanese learning platform
-              </p>
+                All of these features are free and will stay that way!              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+
+              <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#e30a5f] to-[#f41567] rounded-lg flex items-center justify-center text-white mb-4">
+                  <MdTranslate className="text-2xl" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  Integrated Study System
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Stop juggling multiple apps. Study vocabulary and grammar with SRS, test yourself with quizzes, or review with flashcards - all in one place.
+                </p>
+              </div>
+
+
+              <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#10b981] to-[#34d399] rounded-lg flex items-center justify-center text-white mb-4">
+                  <LuRepeat className="text-2xl" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  Grammar + Vocab SRS
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Practice grammar patterns with spaced repetition, not just vocabulary. Most tools ignore grammar in SRS - we don&apos;t.
+                </p>
+              </div>
+
+
+              <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-lg flex items-center justify-center text-white mb-4">
+                  <FaLightbulb className="text-2xl" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  Custom Study Sets
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Create sets for exactly what you&apos;re learning right now. Your textbook chapter, your weak points, or upcoming test material.
+                </p>
+              </div>
+
+
+              <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#f59e0b] to-[#f97316] rounded-lg flex items-center justify-center text-white mb-4">
+                  <FaRocket className="text-2xl" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  Fast Vocabulary Practice
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Type answers automatically in romaji or katakana without switching keyboards. Practice vocabulary translations quickly with a fluid typing interface.
+                </p>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#e30a5f]/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <FaGraduationCap className="text-2xl text-[#e30a5f]" />
-                </div>
-                <div className="text-sm font-semibold mb-1">Complete Curriculum</div>
-                <div className="text-xs text-gray-400">From Hiragana to N1</div>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#e30a5f]/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <FaBrain className="text-2xl text-[#e30a5f]" />
-                </div>
-                <div className="text-sm font-semibold mb-1">Smart SRS</div>
-                <div className="text-xs text-gray-400">Science-based retention</div>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#e30a5f]/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <MdTranslate className="text-2xl text-[#e30a5f]" />
-                </div>
-                <div className="text-sm font-semibold mb-1">All Skills</div>
-                <div className="text-xs text-gray-400">Reading, writing, speaking</div>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#e30a5f]/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <FaChartLine className="text-2xl text-[#e30a5f]" />
-                </div>
-                <div className="text-sm font-semibold mb-1">Track Progress</div>
-                <div className="text-xs text-gray-400">Detailed analytics</div>
-              </div>
-            </div>
 
-            {/* Pricing Preview */}
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-w-2xl mx-auto border border-white/20">
               <div className="flex items-center justify-center gap-2 mb-3">
                 <FaStar className="text-yellow-400" />
@@ -231,9 +313,158 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </section>
+        </section>*/}
+        {/* Deep Dive Features Section */}
+        <section className="w-full pb-12 md:pb-16 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Section Header */}
+            <div className="text-center mb-16 md:mb-24">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                What Do You Get?
+              </h2>
+              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto italic">
+                All of these features are free and will stay that way! We are working on even better paid features if you want to support us in the future.
+              </p>
+            </div>
 
-        {/* Features Section */}
+            {/* Feature #1 - Integrated Study System */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center mb-16 md:mb-24">
+              <div
+                ref={animationsRef}
+                className="animate-fade-right animate-once order-2 md:order-1"
+                data-animation="fade-right"
+              >
+                <div className="text-center md:text-left">
+                  <span className="inline-block text-sm font-bold text-[#e30a5f] mb-3">
+                    Feature 01
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Integrated Study System
+                  </h3>
+                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                    Stop juggling multiple paid apps. Study vocabulary and grammar with SRS, test yourself with quizzes, or review with flashcards - all in one place.
+                  </p>
+                </div>
+              </div>
+              <div
+                className="order-1 md:order-2 flex items-center justify-center"
+              >
+                <Image
+                  src="/Feature1.png"
+                  alt="Integrated Study System"
+                  width={800}
+                  height={640}
+                  className="w-full max-w-lg rounded-2xl shadow-lg object-cover"
+                  quality={100}
+                  priority
+                />
+              </div>
+            </div>
+
+            {/* Feature #2 - Grammar + Vocab SRS */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center mb-16 md:mb-24">
+              <div
+                className="flex items-center justify-center"
+              >
+                <Image
+                  src="/Feature2.png"
+                  alt="Grammar + Vocab SRS"
+                  width={800}
+                  height={640}
+                  className="w-full max-w-lg rounded-2xl shadow-lg object-cover"
+                  quality={100}
+                  priority
+                />
+              </div>
+              <div
+                ref={animationsRef}
+                className="animate-fade-left animate-once"
+                data-animation="fade-left"
+              >
+                <div className="text-center md:text-left">
+                  <span className="inline-block text-sm font-bold text-[#e30a5f] mb-3">
+                    Feature 02
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Grammar + Vocab SRS
+                  </h3>
+                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                    Practice grammar patterns with spaced repetition, not just vocabulary. Most tools ignore grammar in SRS - we don&apos;t.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Feature #3 - Custom Study Sets */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center mb-16 md:mb-24">
+              <div
+                ref={animationsRef}
+                className="animate-fade-right animate-once order-2 md:order-1"
+                data-animation="fade-right"
+              >
+                <div className="text-center md:text-left">
+                  <span className="inline-block text-sm font-bold text-[#e30a5f] mb-3">
+                    Feature 03
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Custom Study Sets
+                  </h3>
+                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                    Create sets for exactly what you&apos;re learning right now. Your textbook chapter, your weak points, or upcoming test material.
+                  </p>
+                </div>
+              </div>
+              <div
+                className="order-1 md:order-2 flex items-center justify-center"
+              >
+                <Image
+                  src="/Feature3.png"
+                  alt="Custom Study Sets"
+                  width={800}
+                  height={640}
+                  className="w-full max-w-lg rounded-2xl shadow-lg object-cover"
+                  quality={100}
+                  priority
+                />
+              </div>
+            </div>
+
+            {/* Feature #4 - Fast Vocabulary Practice */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+              <div
+                className="flex items-center justify-center"
+              >
+                <Image
+                  src="/Feature4.png"
+                  alt="Fast Vocabulary Practice"
+                  width={800}
+                  height={640}
+                  className="w-full max-w-lg rounded-2xl shadow-lg object-cover"
+                  quality={100}
+                  priority
+                />
+              </div>
+              <div
+                ref={animationsRef}
+                className="animate-fade-left animate-once"
+                data-animation="fade-left"
+              >
+                <div className="text-center md:text-left">
+                  <span className="inline-block text-sm font-bold text-[#e30a5f] mb-3">
+                    Feature 04
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Fast Vocabulary Practice
+                  </h3>
+                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                    Type answers automatically in romaji or katakana without switching keyboards. Practice vocabulary translations quickly with a fluid typing interface.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* Features Section
         <section className="w-full py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
@@ -247,7 +478,7 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Feature 1 */}
+
               <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-lg flex items-center justify-center text-white mb-4">
                   <FaBrain className="text-2xl" />
@@ -276,7 +507,6 @@ export default function Home() {
                 </ul>
               </div>
 
-              {/* Feature 2 */}
               <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#e30a5f] to-[#f41567] rounded-lg flex items-center justify-center text-white mb-4">
                   <MdTranslate className="text-2xl" />
@@ -305,7 +535,6 @@ export default function Home() {
                 </ul>
               </div>
 
-              {/* Feature 3 */}
               <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#10b981] to-[#34d399] rounded-lg flex items-center justify-center text-white mb-4">
                   <FaChartLine className="text-2xl" />
@@ -335,9 +564,9 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
-        {/* Learning Path Section */}
+        {/* Learning Path Section 
         <section className="w-full py-20 bg-gradient-to-r from-[#667eea]/10 to-[#764ba2]/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -401,9 +630,9 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </section>
+        </section>*/}
 
-        {/* Beta Benefits Section (Replaces Testimonials) */}
+        {/* Beta Benefits Section (Replaces Testimonials) 
         <section className="w-full py-20 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
@@ -469,7 +698,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section>*/}
 
         {/* CTA Section with Discord Invite */}
         <section className="w-full py-20 bg-gradient-to-r from-[#e30a5f] to-[#f41567]">
@@ -569,14 +798,14 @@ export default function Home() {
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li>
-                  <a href="#" className="hover:text-white">
-                    About
-                  </a>
+                  <Link href="/help" className="hover:text-white">
+                    Help & FAQ
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <Link href="/blog" className="hover:text-white">
                     Blog
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a href="#" className="hover:text-white">
@@ -602,7 +831,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 ReBabel. All rights reserved. Currently in beta development.</p>
+            <p>&copy; 2025 ReBabel. All rights reserved. Currently in beta development.</p>
           </div>
         </div>
       </footer>

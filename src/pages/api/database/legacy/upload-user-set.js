@@ -1,13 +1,22 @@
 // pages/api/uploadSet.js
 import { createClient } from '@supabase/supabase-js';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
 // Initialize Supabase client using your environment variables.
 const supabaseUrl = process.env.NEXT_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_SUPABASE_ANON_KEY;
-//process.env.SUPABASE_SERVICE_ROLE_KEY || 
+//process.env.SUPABASE_SERVICE_ROLE_KEY ||
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
+  // Verify authentication
+  const session = await getSession(req, res);
+  if (!session?.user?.sub) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized - authentication required'
+    });
+  }
   // Only allow POST requests.
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
@@ -45,4 +54,4 @@ export default async function handler(req, res) {
 
   // Return a success response along with the inserted data.
   return res.status(200).json({ message: 'Set uploaded successfully', data });
-}
+})

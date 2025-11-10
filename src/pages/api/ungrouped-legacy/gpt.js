@@ -1,6 +1,16 @@
 import axios from 'axios';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
+  // Verify authentication
+  const session = await getSession(req, res);
+  if (!session?.user?.sub) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized - authentication required'
+    });
+  }
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
     return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -128,4 +138,4 @@ export default async function handler(req, res) {
     console.error('Error during the OpenAI API process:', error);
     res.status(500).json({ error: 'Failed to retrieve response from OpenAI' });
   }
-}
+})

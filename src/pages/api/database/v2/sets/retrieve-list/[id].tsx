@@ -1,4 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { createClient } from '@supabase/supabase-js';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
 // Type definitions for the response structure
 interface SetMetadata {
@@ -17,6 +19,7 @@ interface SetData {
   updated_at: string;
   last_studied: string;
   tags: string; // JSON string of array
+  set_type?: 'vocab' | 'grammar'; // 'vocab', 'grammar', or undefined for legacy sets
 }
 
 interface UserSet {
@@ -31,29 +34,12 @@ interface GetUserSetsSuccessResponse {
   metadata: SetMetadata;
 }
 
-interface GetUserSetsErrorResponse {
-  success: false;
-  error: string;
-  details?: string;
-  user_id?: string;
-}
-
-type GetUserSetsResponse = GetUserSetsSuccessResponse | GetUserSetsErrorResponse;
-
-// Type guard functions
-function isErrorResponse(response: GetUserSetsResponse): response is GetUserSetsErrorResponse {
-  return !response.success;
-}
-
-function isSuccessResponse(response: GetUserSetsResponse): response is GetUserSetsSuccessResponse {
-  return response.success;
-}
-
 interface ApiResponse {
   success: boolean;
   data?: GetUserSetsSuccessResponse;
   error?: string;
   message?: string;
+  details?: string;
 }
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
@@ -78,36 +64,33 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
     }
 
     // Environment variables for configuration
-    const SUPABASE_URL = process.env.SUPABASE_URL || 'https://lraaascxhlrjdnvmdyyt.supabase.co';
-    const SUPABASE_ANON_KEY = process.env.NEXT_SUPABASE_ANON_KEY;
+    const SUPABASE_URL = process.env.NEXT_SUPABASE_URL;
+    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    if (!SUPABASE_ANON_KEY) {
-      console.error('Missing SUPABASE_ANON_KEY environment variable');
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('Missing Supabase environment variables');
       return res.status(500).json({
         success: false,
         error: 'Server configuration error'
       });
     }
 
-    // Construct the URL with query parameter
-    const supabaseUrl = `${SUPABASE_URL}/functions/v1/get-user-sets?user_id=${encodeURIComponent(userId.trim())}`;
+    // Initialize Supabase client with service role key
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-    // Make the request to Supabase function
-    const supabaseResponse = await fetch(supabaseUrl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    // Call the get_user_sets RPC function directly
+    const { data, error } = await supabase
+      .schema('v1_kvs_rebabel')
+      .rpc('get_user_sets', {
+        user_id: userId.trim()
+      });
 
-    // Handle Supabase response
-    if (!supabaseResponse.ok) {
-      const errorText = await supabaseResponse.text();
-      console.error('Supabase function error:', errorText);
+    // Handle database errors
+    if (error) {
+      console.error('Supabase RPC error:', error);
 
-      // Handle specific error cases
-      if (supabaseResponse.status === 404) {
+      // Return 404 if no data found
+      if (data === null || data === undefined) {
         return res.status(404).json({
           success: false,
           error: 'No sets found for the specified user',
@@ -115,40 +98,56 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
         });
       }
 
-      if (supabaseResponse.status === 400) {
-        return res.status(400).json({
-          success: false,
-          error: 'Invalid request to Supabase function',
-          message: errorText
-        });
-      }
-
-      return res.status(supabaseResponse.status).json({
-        success: false,
-        error: `Supabase function failed: ${supabaseResponse.statusText}`,
-        message: errorText
-      });
-    }
-
-    // Parse response
-    const responseData: GetUserSetsResponse = await supabaseResponse.json();
-
-    // Check if it's an error response
-    if (isErrorResponse(responseData)) {
       return res.status(500).json({
         success: false,
-        error: 'Supabase function returned unsuccessful response',
-        message: responseData.error || 'Unknown error from Supabase'
+        error: `Database error: ${error.message}`,
+        details: error.details
       });
     }
 
-    // TypeScript now knows this is GetUserSetsSuccessResponse
+    // Check if data was found
+    if (data === null || data === undefined) {
+      return res.status(404).json({
+        success: false,
+        error: 'No sets found for the specified user',
+        message: `User ID: ${userId}`
+      });
+    }
+
+    // Parse the data if it's returned as a string
+    let setsArray: UserSet[] = [];
+    if (typeof data === 'string') {
+      try {
+        setsArray = JSON.parse(data);
+      } catch (parseError) {
+        console.error('Failed to parse response data:', parseError);
+        setsArray = Array.isArray(data) ? data : [];
+      }
+    } else if (Array.isArray(data)) {
+      setsArray = data;
+    }
+
+    // Calculate metadata for the sets
+    const metadata: SetMetadata = {
+      total_sets: setsArray.length,
+      sets_with_title: setsArray.filter((set) => set.data && set.data.title && set.data.title.trim().length > 0).length,
+      sets_with_description: setsArray.filter((set) => set.data && set.data.description && String(set.data.description).trim().length > 0).length,
+      recently_updated: setsArray.filter((set) => {
+        if (!set.data || !set.data.updated_at) return false;
+        const updatedAt = new Date(set.data.updated_at);
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        return updatedAt > thirtyDaysAgo;
+      }).length,
+      retrieved_at: new Date().toISOString()
+    };
+
     // Transform tags from string to array if needed (for consistency)
-    const transformedSets = responseData.sets.map(set => ({
+    const transformedSets = setsArray.map(set => ({
       ...set,
       data: {
         ...set.data,
-        tags: typeof set.data.tags === 'string' 
+        tags: typeof set.data.tags === 'string'
           ? (() => {
               try {
                 return JSON.parse(set.data.tags);
@@ -160,35 +159,21 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
       }
     }));
 
-    const transformedResponse = {
-      ...responseData,
-      sets: transformedSets
+    const response: GetUserSetsSuccessResponse = {
+      success: true,
+      user_id: userId,
+      sets: transformedSets,
+      metadata: metadata
     };
 
     return res.status(200).json({
       success: true,
-      data: transformedResponse,
-      message: `Retrieved ${responseData.metadata.total_sets} sets for user ${userId}`
+      data: response,
+      message: `Retrieved ${metadata.total_sets} sets for user ${userId}`
     });
 
   } catch (error) {
     console.error('API Error:', error);
-
-    // Handle JSON parsing errors
-    if (error instanceof SyntaxError) {
-      return res.status(502).json({
-        success: false,
-        error: 'Invalid JSON response from Supabase function'
-      });
-    }
-
-    // Handle fetch errors
-    if (error instanceof TypeError && error.message.includes('fetch')) {
-      return res.status(503).json({
-        success: false,
-        error: 'Failed to connect to Supabase function'
-      });
-    }
 
     // Generic error handler
     return res.status(500).json({
@@ -200,13 +185,23 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
 }
 
 // Default export function required by Pages Router
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+// Protected with Auth0 - requires valid session
+export default withApiAuthRequired(async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+  // Verify authentication
+  const session = await getSession(req, res);
+  if (!session?.user?.sub) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized - authentication required'
+    });
+  }
+
   const { method } = req;
 
   switch (method) {
     case 'GET':
       return handleGET(req, res);
-    
+
     case 'POST':
     case 'PUT':
     case 'DELETE':
@@ -214,11 +209,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         success: false,
         error: 'Method not allowed. Use GET to retrieve user sets.'
       });
-    
+
     default:
       return res.status(405).json({
         success: false,
         error: `Method ${method} not allowed`
       });
   }
-}
+})

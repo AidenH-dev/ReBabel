@@ -30,7 +30,6 @@ import { useRouter } from "next/router";
 import MasterItemsManagement from "@/components/pages/academy/sets/ViewSet/ItemsManagement/MasterItemsManagement";
 import PracticeOptions from "@/components/pages/academy/sets/ViewSet/PracticeOptions/MasterPracticeOptions";
 import MasterSetHeader from "@/components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader";
-import MasterSrsSetModule from"@/components/pages/academy/sets/ViewSet/srsSetModule/MasterSrsSetModule";
 
 // ============================================================================
 // MAIN COMPONENT
@@ -59,6 +58,8 @@ export default function ViewSet() {
     owner: "",
     dateCreated: "",
     lastStudied: "",
+    srsEnabled: false, // SRS status from database
+    set_type: null, // 'vocab', 'grammar', or null for legacy sets
     tags: [],
     itemCount: 0,
     studyStats: {
@@ -113,6 +114,9 @@ export default function ViewSet() {
           throw new Error('Invalid set data structure received from API');
         }
 
+        console.log("Set Info from API:", setInfo);
+        console.log("Set Type from API:", setInfo.set_type);
+
         // Populate set metadata
         setSetData({
           id: apiData.set_id,
@@ -121,6 +125,8 @@ export default function ViewSet() {
           owner: setInfo.owner || "",
           dateCreated: setInfo.date_created || "",
           lastStudied: setInfo.last_studied || "",
+          srsEnabled: setInfo.srs_enabled === 'true', // Convert string to boolean
+          set_type: setInfo.set_type || null, // 'vocab', 'grammar', or null for legacy sets
           tags: Array.isArray(setInfo.tags) ? setInfo.tags : [],
           itemCount: metadata?.total_items || 0,
           studyStats: {
@@ -130,6 +136,8 @@ export default function ViewSet() {
             lastScore: 0
           }
         });
+
+        console.log("SetData.set_type set to:", setInfo.set_type || null);
 
         // Transform API items into consistent format for UI
         const transformedItems = Array.isArray(setItemsAPI) ? setItemsAPI.map((item, index) => {
@@ -211,10 +219,16 @@ export default function ViewSet() {
    * @param {Object} updates - Partial setData object with updated fields
    */
   const handleSetDataUpdate = (updates) => {
-    setSetData(prev => ({
-      ...prev,
-      ...updates
-    }));
+    setSetData(prev => {
+      const newState = { ...prev, ...updates };
+
+      // Handle srsEnabled property if it's being updated
+      if ('srsEnabled' in updates && typeof updates.srsEnabled === 'boolean') {
+        newState.srsEnabled = updates.srsEnabled;
+      }
+
+      return newState;
+    });
   };
 
   /**
@@ -271,20 +285,22 @@ export default function ViewSet() {
         <div className="w-full max-w-6xl mx-auto flex-1 min-h-0 flex flex-col">
           
           {/* Section 1: Set Header - Breadcrumbs, title, edit, export */}
-          <MasterSetHeader 
+          <MasterSetHeader
             setData={setData}
             items={items}
             onSetDataUpdate={handleSetDataUpdate}
             onDeleteSet={handleDeleteSet}
+            srsEnabled={setData.srsEnabled}
           />
           {/* Section 2: Practice Options - Quiz and flashcard buttons */}
-          <PracticeOptions setId={id} />
+          <PracticeOptions setId={id} enableSrsModule={setData.srsEnabled} />
 
           {/* Section 3: Items Management - Item list/grid, add/edit/delete */}
-          <MasterItemsManagement 
+          <MasterItemsManagement
             items={items}
             setItems={setItems}
             setData={setData}
+            set_type={setData.set_type}
             userProfile={userProfile}
           />
         </div>

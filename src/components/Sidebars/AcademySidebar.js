@@ -52,13 +52,12 @@ function AcademySidebar() {
 
   const NavigationContent = () => (
     <>
-      <div className="text-center mb-4 mt-6">
+      <div className="text-center mb-4 mt-6 relative w-full h-12">
         <Image
           src="/ReBabel.png"
           alt="ReBabel Logo"
-          layout="responsive"
-          width={150}
-          height={50}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="mx-auto object-contain"
         />
       </div>

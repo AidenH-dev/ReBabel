@@ -1,17 +1,26 @@
 // pages/api/database/fetch-user-set.js
 import { createClient } from '@supabase/supabase-js';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
 // Ensure your environment variables are correctly set.
 const supabaseUrl = process.env.NEXT_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_SUPABASE_ANON_KEY;
-//process.env.SUPABASE_SERVICE_ROLE_KEY || 
+//process.env.SUPABASE_SERVICE_ROLE_KEY ||
 if (!supabaseUrl || !supabaseKey) {
   throw new Error('Missing Supabase URL or Service Role Key environment variables.');
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
+  // Verify authentication
+  const session = await getSession(req, res);
+  if (!session?.user?.sub) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized - authentication required'
+    });
+  }
   try {
     // This endpoint only supports GET requests.
     if (req.method !== 'GET') {
@@ -44,4 +53,4 @@ export default async function handler(req, res) {
     console.error("Unexpected error in fetch-user-set API:", err);
     return res.status(500).json({ error: err.message });
   }
-}
+})

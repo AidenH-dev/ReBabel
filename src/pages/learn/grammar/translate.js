@@ -156,7 +156,7 @@ export default function Learn() {
           <TbX className="w-8 h-8 text-gray-600" />
           <ProgressBarComponent className="flex-1" />
 
-          <div className="cursor-pointer brightness-110 rounded-lg outline outline-2 outline-gray-200 border-gray-300 bg-gradient-to-r from-blue-400 to-blue-800 bg-[length:200%] px-2 py-1 shadow-lg flex flex-col justify-center items-center">
+          <div className="cursor-pointer brightness-110 rounded-lg outline-2 outline-gray-200 border-gray-300 bg-gradient-to-r from-blue-400 to-blue-800 bg-[length:200%] px-2 py-1 shadow-lg flex flex-col justify-center items-center">
             <h2 className="text-md font-semibold  text-gray-250 flex items-center">
               <MdOutlineQuiz className="h-5 w-5 mr-3" />
               Exercise
