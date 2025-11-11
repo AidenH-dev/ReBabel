@@ -439,15 +439,6 @@ export default function MasterItemsManagement({
 
             {/* Combined row for filters and buttons - stays horizontal on mobile */}
             <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-              <select
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-                className="px-3 py-2 bg-gray-50 dark:text-white dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
-              >
-                <option value="all">All Types</option>
-                <option value="vocabulary">Vocabulary</option>
-                <option value="grammar">Grammar</option>
-              </select>
 
               <select
                 value={sortBy}
@@ -456,7 +447,6 @@ export default function MasterItemsManagement({
               >
                 <option value="default">Default Order</option>
                 <option value="alpha">Alphabetical</option>
-                <option value="status">By Status</option>
               </select>
 
               {/* Hide grid/list toggle on mobile */}

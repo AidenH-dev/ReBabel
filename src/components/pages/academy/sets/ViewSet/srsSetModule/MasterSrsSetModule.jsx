@@ -125,11 +125,11 @@ export default function SRSDashboard({ setId }) {
 
     return (
         <div
-            className="mb-3 w-full h-full group relative p-3  bg-white dark:bg-[#1c2b35] rounded-lg border border-black/5 dark:border-white/10 transition-all cursor-pointer shadow-sm flex flex-col"
+            className="sm:mb-3 w-full h-fit sm:h-full group relative p-3 bg-white dark:bg-[#1c2b35] rounded-lg border border-black/5 dark:border-white/10 transition-all cursor-pointer shadow-sm flex flex-col"
         >
-            <div className="flex items-center gap-2 text-xl text-gray-900 dark:text-white font-semibold mb-4">
+            <div className="flex items-center gap-2 text-xl text-gray-900 dark:text-white font-semibold mb-1 sm:mb-4">
                 <PiClockClockwiseBold />
-                <span>Spaced Repition</span>
+                <span className="text-lg sm:text-xl">Spaced Repition</span>
             </div>
             <div className="flex gap-3 flex-1">
                 {/* Action Buttons */}
@@ -143,7 +143,7 @@ export default function SRSDashboard({ setId }) {
                         className="flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#c1084d] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5 will-change-transform disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={loading || error}
                     >
-                        <div className="font-medium text-sm">Due Now</div>
+                        <div className="hidden sm:inline font-medium text-sm">Due Now</div>
                         <div className="text-2xl font-bold flex items-center">
                             {loading ? '-' : error ? '0' : stats.dueNow}
                             <LuRepeat className="ml-1.5 text-2xl opacity-70 transform-none" />
@@ -154,7 +154,7 @@ export default function SRSDashboard({ setId }) {
                     {/* Learn New */}
                     {stats.learnNew === 0 && !loadingNewItems ? (
                         <div className="flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg border-2 border-green-500 text-green-500">
-                            <div className="font-medium text-sm">Learn New</div>
+                            <div className="hidden sm:flex font-medium text-sm">Learn New</div>
                             <div className="text-2xl font-bold flex items-center">{loadingNewItems ? '-' : stats.learnNew}<FaPlus className="ml-1.5 text-xl opacity-70 transform-none" /></div>
 
                         </div>
@@ -166,7 +166,7 @@ export default function SRSDashboard({ setId }) {
                             }}
                             className="flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5 will-change-transform"
                         >
-                            <div className="font-medium text-sm">Learn New</div>
+                            <div className="hidden sm:flex font-medium text-sm">Learn New</div>
                             <div className="text-2xl font-bold flex items-center">{loadingNewItems ? '-' : stats.learnNew}<FaPlus className="ml-1.5 text-xl opacity-70 transform-none" /></div>
                         </button>
                     )}

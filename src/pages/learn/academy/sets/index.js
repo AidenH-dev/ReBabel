@@ -235,7 +235,7 @@ export default function VocabularyDashboard() {
       <AcademySidebar />
 
       {/* Main */}
-      <main className="ml-auto flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 py-8">
+      <main className="ml-auto flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 mt-10 sm:mt-0 py-8">
         <BeginnerPackPopup
           isOpen={showBeginnerPopup}
           onClose={() => setShowBeginnerPopup(false)}
@@ -727,7 +727,7 @@ export default function VocabularyDashboard() {
             {/* Header row for Notecards (formerly Sets) */}
             {activeTab === "sets" && (
               <div className="flex flex-col gap-4">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <div className="flex flex-row sm:items-center gap-3">
                   <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white flex-1">
                     My Sets{recentsSets.length > 0 && (
                       <span className="ml-2 text-xs font-normal text-black/60 dark:text-white/60">{recentsSets.length}</span>
@@ -735,7 +735,7 @@ export default function VocabularyDashboard() {
                   </h2>
 
                   {/* View toggle */}
-                  <div className="flex items-center w-min gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
+                  <div className="flex items-center w-min gap-1 h-min rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
                     <button
                       onClick={() => setView("grid")}
                       className={`px-2 py-1 rounded-md text-xs flex items-center gap-1 transition ${view === "grid" ? "bg-white dark:bg-[#0f1a1f] text-[#e30a5f]" : "text-black/70 dark:text-white/70"
@@ -756,7 +756,7 @@ export default function VocabularyDashboard() {
 
                   {/* Sort */}
                   <label className="text-xs text-black/60 dark:text-white/60 flex items-center gap-2">
-                    Sort
+                    <span className="hidden sm:inline">Sort</span>
                     <select
                       value={sortKey}
                       onChange={(e) => setSortKey(e.target.value)}
@@ -771,7 +771,7 @@ export default function VocabularyDashboard() {
                   {/* New set */}
                   <button
                     onClick={() => router.push("/learn/academy/sets/create")}
-                    className="inline-flex items-center gap-2 w-fit rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 active:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#e30a5f]/70 focus:ring-offset-white dark:focus:ring-offset-[#1c2b35]"
+                    className="hidden sm:flex items-center gap-2 w-fit rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 active:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#e30a5f]/70 focus:ring-offset-white dark:focus:ring-offset-[#1c2b35]"
                   >
                     <FaPlus /> New Set
                   </button>
@@ -892,7 +892,7 @@ export default function VocabularyDashboard() {
           {activeTab === "sets" && (
             <button
               onClick={() => router.push("/learn/academy/sets/create")}
-              className="sm:hidden fixed bottom-6 right-6 z-10 shadow-lg rounded-full p-4 bg-[#e30a5f] text-white focus:outline-none focus:ring-2 focus:ring-white/60"
+              className="sm:hidden fixed bottom-6 left-6 z-10 shadow-lg rounded-full p-4 bg-[#e30a5f] text-white focus:outline-none focus:ring-2 focus:ring-white/60"
               aria-label="Create new set"
             >
               <FaPlus />
