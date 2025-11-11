@@ -15,6 +15,12 @@ function generateSiteMap(posts) {
        <changefreq>weekly</changefreq>
        <priority>0.9</priority>
      </url>
+     <url>
+       <loc>https://rebabel.org/help</loc>
+       <lastmod>2025-01-15</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.8</priority>
+     </url>
      ${posts
        .map(({ slug, frontmatter }) => {
          return `
