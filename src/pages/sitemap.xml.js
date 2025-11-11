@@ -5,19 +5,19 @@ function generateSiteMap(posts) {
    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
      <url>
        <loc>https://rebabel.org</loc>
-       <lastmod>2025-01-15</lastmod>
+       <lastmod>2025-11-11</lastmod>
        <changefreq>weekly</changefreq>
        <priority>1.0</priority>
      </url>
      <url>
        <loc>https://rebabel.org/blog</loc>
-       <lastmod>2025-01-15</lastmod>
+       <lastmod>2025-11-11</lastmod>
        <changefreq>weekly</changefreq>
        <priority>0.9</priority>
      </url>
      <url>
        <loc>https://rebabel.org/help</loc>
-       <lastmod>2025-01-15</lastmod>
+       <lastmod>2025-11-11</lastmod>
        <changefreq>monthly</changefreq>
        <priority>0.8</priority>
      </url>
