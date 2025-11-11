@@ -22,7 +22,6 @@ Disallow: /private/
 Crawl-delay: 1
 
 # Sitemap locations
-Sitemap: https://rebabel.org/sitemap.xml.js
 Sitemap: https://rebabel.org/sitemap.xml
 
 # ============================================================
@@ -42,22 +41,3 @@ Allow: /
 Disallow: /api/
 Disallow: /learn/
 Disallow: /_next/
-
-# ============================================================
-# Block bad bots and scrapers
-# ============================================================
-
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: MJ12bot
-Disallow: /
-
-User-agent: ChatGPT-User
-Disallow: /
-
-User-agent: GPTBot
-Disallow: /
