@@ -1,15 +1,13 @@
-# Japanese Tutor - AI-Powered Language Learning Platform
+# ReBabel - Japanese Study Aid
 
 A modern web application that helps users learn Japanese through interactive AI-powered tutoring sessions. Built with Next.js and leveraging OpenAI's capabilities, this platform provides personalized language learning experiences.
 
 ## Features
 
-- AI-powered Japanese language tutoring
-- Progress tracking and analytics
-- Secure authentication with Auth0
-- Responsive design for all devices
-- Interactive learning sessions
-- Performance monitoring with Vercel Analytics
+- SRS
+- Vocabulary & Grammar Sets
+- Flashcards
+- Quiz
 
 ## Tech Stack
 
@@ -102,8 +100,10 @@ ReBabel is free for personal, non-commercial use under MIT.
 [rebabel.development@gmail.com](mailto:rebabel.development@gmail.com)
 
 ## License
+This software is licensed under TWO licenses:
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+1. MIT License see the [LICENSE](./LICENSE)  - for non-commercial use
+2. Commercial License - for commercial use
 
 ## Acknowledgments
 
