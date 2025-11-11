@@ -89,8 +89,10 @@ src/
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
+This software is licensed under TWO licenses:
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+1. MIT License see the [LICENSE](./LICENSE)  - for non-commercial use
+2. Commercial License - for commercial use
 
 ## Acknowledgments
 
