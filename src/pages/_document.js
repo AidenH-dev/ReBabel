@@ -23,6 +23,10 @@ export default function Document() {
         {/* Preconnect to critical origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* LLM Access Guide */}
+        <link rel="alternate" type="text/plain" href="https://rebabel.org/llms.txt" title="LLM Access Guide" />
+        <meta name="llms-txt" content="https://rebabel.org/llms.txt" />
       </Head>
       <body>
         <Main />

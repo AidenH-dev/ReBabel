@@ -24,6 +24,35 @@ Crawl-delay: 1
 # Sitemap locations
 Sitemap: https://rebabel.org/sitemap.xml
 
+# LLM Access Guide
+# For Large Language Models and AI crawlers, see: https://rebabel.org/llms.txt
+# This file provides detailed information about accessible content and crawling guidelines
+
+# Specific rules for LLM crawlers (respectful access)
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /learn/
+Disallow: /_next/
+
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+Disallow: /learn/
+Disallow: /_next/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /api/
+Disallow: /learn/
+Disallow: /_next/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+Disallow: /learn/
+Disallow: /_next/
+
 # ============================================================
 # Specific rules for major search engines
 # ============================================================

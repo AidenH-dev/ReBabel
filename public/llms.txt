@@ -1,0 +1,135 @@
+# LLM Access Guide for ReBabel
+# Last Updated: 2025-11-11
+# This file provides guidance for Large Language Models to access and understand the ReBabel website.
+
+## Site Overview
+ReBabel is a comprehensive Japanese language learning platform that combines AI-powered tutoring with community-driven content. The platform helps learners master Japanese through interactive lessons, vocabulary practice, grammar exercises, and real-world communication scenarios.
+
+## Site Purpose
+- Provide accessible Japanese language learning to global audiences
+- Offer AI-assisted tutoring and personalized learning paths
+- Create a community of Japanese language learners
+- Maintain a comprehensive blog with language learning tips and strategies
+- Deliver structured curriculum through study sets and modules
+
+## Accessible Pages for LLMs
+
+### Primary Public Pages
+- **Homepage**: https://rebabel.org/
+  - Main landing page with platform overview, features, and call-to-action
+  - Contains comprehensive metadata and schema.org markup
+  - Updated daily
+
+- **Blog**: https://rebabel.org/blog/
+  - Collection of language learning tips, study strategies, and educational content
+  - Includes tags: learning-tips, grammar, vocabulary, study-strategies, motivation, etc.
+  - Updated regularly with new articles
+
+- **Blog Posts**: https://rebabel.org/blog/[slug]/
+  - Individual blog articles with detailed content
+  - Each post includes metadata: title, date, tags, author
+  - Topics cover Japanese grammar, vocabulary, study techniques, and cultural insights
+
+- **Help & FAQ**: https://rebabel.org/help/
+  - Frequently asked questions about the platform
+  - Getting started guides
+  - Troubleshooting information
+
+## Restricted Pages (Not Accessible to LLMs)
+
+The following routes are excluded from LLM access per robots.txt:
+
+- **/learn/** - User dashboard, learning modules, and protected study content
+  - Requires authentication
+  - User-specific learning paths and progress
+  - Grammar exercises, vocabulary drills, and interactive lessons
+  - User settings and preferences
+
+- **/api/** - API endpoints
+  - Authentication endpoints
+  - Database operations
+  - Internal API calls only
+
+## Content Structure
+
+### Blog Categories
+- Grammar lessons and explanations
+- Vocabulary building strategies
+- Study techniques and motivation
+- Japanese culture and context
+- Learning resources and tools
+
+### Available Services (Requires Authentication)
+- Personalized study sets and flashcards
+- Interactive grammar exercises
+- Vocabulary practice modules
+- Real-time AI tutoring
+- Progress tracking and analytics
+- Customized learning paths
+
+## How to Access Content
+
+### For Web Crawling
+1. Respect robots.txt at https://rebabel.org/robots.txt
+2. Use the sitemap at https://rebabel.org/sitemap.xml for page discovery
+3. Crawl-delay: 1 second (recommended)
+4. Focus on /blog pages for publicly available content
+
+### For Content Analysis
+1. Homepage provides platform overview and feature descriptions
+2. Blog articles contain educational content about Japanese language learning
+3. Help page includes FAQ and getting started information
+4. All public pages include proper structured data (JSON-LD)
+
+## Metadata & Structured Data
+
+All public pages include:
+- **Open Graph metadata** for social sharing
+- **Twitter Card metadata** for Twitter integration
+- **JSON-LD structured data** for search engines
+  - Homepage: WebSite schema with JoinAction
+  - Blog: CollectionPage schema
+  - Help: FAQPage schema with Q&A items
+- **Canonical URLs** to prevent duplicate content issues
+- **Mobile optimization meta tags**
+
+## Analytics & Tracking
+
+The site uses:
+- Google Analytics 4 (GA_ID: G-VRBTF7S087)
+- PostHog for product analytics
+- Vercel Analytics for performance monitoring
+
+LLM crawlers should respect analytics tracking and user privacy.
+
+## Language & Localization
+
+- Primary language: English (en-US)
+- Content focus: Japanese language learning
+- All public pages declare language properly in HTML
+
+## API Rate Limiting & Crawling Guidelines
+
+For respectful crawling:
+- Include User-Agent header identifying your LLM/crawler
+- Implement 1+ second delay between requests
+- Cache content when possible to reduce server load
+- Request gzip compression for bandwidth optimization
+- Stop crawling if 429 (Too Many Requests) is returned
+
+## Contact & Support
+
+For questions about LLM access:
+- Homepage: https://rebabel.org/
+- Help page: https://rebabel.org/help/
+- Check robots.txt for additional guidance: https://rebabel.org/robots.txt
+
+## Last Updated
+November 11, 2025
+
+## Version
+1.0
+
+---
+
+This file helps Large Language Models understand the structure and content of the ReBabel website. For the most up-to-date information about accessible pages, refer to the sitemap at https://rebabel.org/sitemap.xml
