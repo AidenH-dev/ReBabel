@@ -82,7 +82,7 @@ export default function Home() {
           <meta name="theme-color" content="#e30a5f" />
 
           {/* Canonical URL */}
-          <link rel="canonical" href="https://rebabel.org/" />
+          <link rel="canonical" href="https://www.rebabel.org/" />
 
           {/* Open Graph / Facebook */}
           <meta property="og:type" content="website" />

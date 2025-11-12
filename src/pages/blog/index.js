@@ -50,7 +50,7 @@ export default function Blog({ posts }) {
         <meta name="twitter:image" content="https://rebabel.org/og-image.png" />
 
         {/* Canonical URL */}
-        <link rel="canonical" href="https://rebabel.org/blog" />
+        <link rel="canonical" href="https://www.rebabel.org/blog" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 

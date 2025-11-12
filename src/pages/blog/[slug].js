@@ -91,7 +91,7 @@ export default function BlogPost({ post, relatedPosts }) {
         {image && <meta name="twitter:image" content={image} />}
 
         {/* Canonical URL */}
-        <link rel="canonical" href={`https://rebabel.org/blog/${slug}`} />
+        <link rel="canonical" href={`https://www.rebabel.org/blog/${slug}`} />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
