@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { FaPlus, FaTimes, FaCheck, FaTrash, FaSearch, FaFileImport, FaKeyboard, FaListUl } from "react-icons/fa";
 import { FiSearch, FiUpload, FiPlus, FiX, FiCheck } from "react-icons/fi";
 import { toKana } from "wanakana";
+import CSVUpload from "../../../../components/pages/academy/sets/CreateSet/CSVUpload/CSVUpload";
 
 export default function CreateNewSet() {
     const router = useRouter();
@@ -38,6 +39,7 @@ export default function CreateNewSet() {
     const [statusType, setStatusType] = useState(""); // "success" | "error" | "info"
     const [itemType, setItemType] = useState("vocabulary"); // "vocabulary" | "grammar"
     const [showBorderHighlight, setShowBorderHighlight] = useState(false);
+    const [csvContent, setCsvContent] = useState(null);
 
     // ----- Helpers -----
     const showStatus = useCallback((message, type = "info") => {
@@ -304,6 +306,101 @@ export default function CreateNewSet() {
         showStatus(`Added "${item.English}" to set!`, "success");
     };
 
+    // ----- CSV Column Mapping -----
+    const handleCSVColumnsMapped = (columnMappings) => {
+        if (!csvContent) {
+            showStatus("No CSV data available.", "error");
+            return;
+        }
+
+        try {
+            // Parse CSV data
+            const lines = csvContent.trim().split('\n');
+            const headers = lines[0].split(',').map(h => h.trim());
+
+            // Create a map of header names to indices
+            const headerIndexMap = {};
+            headers.forEach((header, index) => {
+                headerIndexMap[header] = index;
+            });
+
+            // Process each row
+            const items = [];
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+
+                // Parse CSV line with proper quote handling
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim());
+
+                // Map values using column mappings
+                const mappedItem = {};
+                Object.keys(columnMappings).forEach(fieldKey => {
+                    const csvColumn = columnMappings[fieldKey];
+                    if (csvColumn && headerIndexMap[csvColumn] !== undefined) {
+                        const value = values[headerIndexMap[csvColumn]] || '';
+                        mappedItem[fieldKey] = value;
+                    }
+                });
+
+                // Create item based on type
+                if (itemType === "vocabulary") {
+                    items.push({
+                        type: "vocabulary",
+                        english: mappedItem.english || "",
+                        kana: mappedItem.kana || "",
+                        kanji: mappedItem.kanji || "",
+                        lexical_category: mappedItem.lexical_category || "",
+                        example_sentences: mappedItem.example_sentences || "",
+                        tags: mappedItem.tags || "",
+                        audio: mappedItem.audio || ""
+                    });
+                } else {
+                    items.push({
+                        type: "grammar",
+                        title: mappedItem.title || "",
+                        description: mappedItem.description || "",
+                        topic: mappedItem.topic || "",
+                        notes: mappedItem.notes || "",
+                        example_sentences: mappedItem.example_sentences || "",
+                        tags: mappedItem.tags || ""
+                    });
+                }
+            }
+
+            // Filter out empty items
+            const validItems = items.filter(item => {
+                if (itemType === "vocabulary") {
+                    return item.english.trim() || item.kana.trim();
+                } else {
+                    return item.title.trim() && item.description.trim();
+                }
+            });
+
+            // Add to proposed items
+            setProposedItems((prev) => [...prev, ...validItems]);
+            showStatus(`Added ${validItems.length} items from CSV!`, "success");
+        } catch (error) {
+            console.error("Error processing CSV:", error);
+            showStatus("Error processing CSV data.", "error");
+        }
+    };
+
     // ----- Helper function to transform data for new API -----
     const transformDataForNewAPI = () => {
         const currentDate = new Date().toISOString();
@@ -542,6 +639,7 @@ export default function CreateNewSet() {
                                         <div className="flex gap-4 -mb-px h-10">
                                             {[
                                                 { key: "single", label: "Add Single", icon: <FiPlus className="w-3 h-3" /> },
+                                                { key: "csv", label: "CSV Upload", icon: <FiUpload className="w-3 h-3" /> },
                                                 //{ key: "bulk", label: "Bulk", icon: <FaListUl className="w-3 h-3" /> },
                                                 //{ key: "search", label: "Search", icon: <FiSearch className="w-3 h-3" /> },
                                             ].map(({ key, label, icon }) => (
@@ -789,6 +887,18 @@ export default function CreateNewSet() {
                                         </form>
                                     )}
 
+                                    {/* CSV Upload Tab */}
+                                    {activeTab === "csv" && (
+                                        <CSVUpload
+                                            onUpload={(content) => {
+                                                console.log("CSV uploaded:", content);
+                                                setCsvContent(content);
+                                            }}
+                                            itemType={itemType}
+                                            onColumnsMapped={handleCSVColumnsMapped}
+                                        />
+                                    )}
+
                                     {/* Search Tab */}
                                     {activeTab === "search" && (
                                         <div>
@@ -846,12 +956,12 @@ export default function CreateNewSet() {
                         </div>
 
                         {/* Right Column - Preview */}
-                        <div className="lg:col-span-1">
+                        <div className="lg:col-span-1 flex">
                             <div
-                                className={`bg-white dark:bg-[#1c2b35] rounded-lg shadow-sm p-4 transition-all duration-300 ${showBorderHighlight ? "border border-red-500" : "border border-black/5 dark:border-white/10"}`}
+                                className={`bg-white dark:bg-[#1c2b35] rounded-lg shadow-sm p-4 transition-all duration-300 flex flex-col w-full h-fit sticky top-4 max-h-[calc(60vh-2rem)] ${showBorderHighlight ? "border border-red-500" : "border border-black/5 dark:border-white/10"}`}
                                 onClick={() => setShowBorderHighlight(false)}
                             >
-                                <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center justify-between mb-3 flex-shrink-0">
                                     <div className="flex items-center gap-3">
                                         <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
                                             Preview ({proposedItems.length})
@@ -876,7 +986,7 @@ export default function CreateNewSet() {
                                 </div>
 
                                 {proposedItems.length > 0 ? (
-                                    <div className="space-y-2 max-h-96 overflow-y-auto">
+                                    <div className="space-y-2 flex-1 overflow-y-auto min-h-0">
                                         {proposedItems.map((item, idx) => (
                                             <div key={idx} className="bg-gray-50 dark:bg-[#1d2a32] rounded p-2 text-xs">
                                                 <div className="flex items-start justify-between">
@@ -939,35 +1049,36 @@ export default function CreateNewSet() {
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">
+                                    <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400 text-sm">
                                         No items added yet
                                     </div>
                                 )}
-                            </div>
-                            {/* Action Buttons */}
-                            <div className="mt-4 flex items-center justify-left">
-                                <Link
-                                    href="/learn/academy/sets"
-                                    className="inline-flex items-center mr-4 gap-2 px-3 py-2 rounded text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1d2a32] transition-colors"
-                                >
-                                    Cancel
-                                </Link>
-                                <button
-                                    onClick={handleSubmitAll}
-                                    disabled={!newSetName.trim() || proposedItems.length === 0 || isSubmitting}
-                                    className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {isSubmitting ? (
-                                        <>
-                                            <span className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-white"></span>
-                                            Creating...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <FiCheck className="w-4 h-4" /> Create Set
-                                        </>
-                                    )}
-                                </button>
+
+                                {/* Action Buttons */}
+                                <div className="mt-4 pt-4 border-t border-black/5 dark:border-white/10 flex items-center justify-left flex-shrink-0">
+                                    <Link
+                                        href="/learn/academy/sets"
+                                        className="inline-flex items-center mr-4 gap-2 px-3 py-2 rounded text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1d2a32] transition-colors"
+                                    >
+                                        Cancel
+                                    </Link>
+                                    <button
+                                        onClick={handleSubmitAll}
+                                        disabled={!newSetName.trim() || proposedItems.length === 0 || isSubmitting}
+                                        className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {isSubmitting ? (
+                                            <>
+                                                <span className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-white"></span>
+                                                Creating...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <FiCheck className="w-4 h-4" /> Create Set
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
