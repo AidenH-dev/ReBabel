@@ -4,19 +4,19 @@ function generateSiteMap(posts) {
   return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
      <url>
-       <loc>https://rebabel.org</loc>
+       <loc>https://www.rebabel.org</loc>
        <lastmod>2025-11-11</lastmod>
        <changefreq>weekly</changefreq>
        <priority>1.0</priority>
      </url>
      <url>
-       <loc>https://rebabel.org/blog</loc>
+       <loc>https://www.rebabel.org/blog</loc>
        <lastmod>2025-11-11</lastmod>
        <changefreq>weekly</changefreq>
        <priority>0.9</priority>
      </url>
      <url>
-       <loc>https://rebabel.org/help</loc>
+       <loc>https://www.rebabel.org/help</loc>
        <lastmod>2025-11-11</lastmod>
        <changefreq>monthly</changefreq>
        <priority>0.8</priority>
@@ -25,7 +25,7 @@ function generateSiteMap(posts) {
        .map(({ slug, frontmatter }) => {
          return `
      <url>
-       <loc>${`https://rebabel.org/blog/${slug}`}</loc>
+       <loc>${`https://www.rebabel.org/blog/${slug}`}</loc>
        <lastmod>${frontmatter.date}</lastmod>
        <changefreq>monthly</changefreq>
        <priority>0.8</priority>
