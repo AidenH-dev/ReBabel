@@ -1,16 +1,16 @@
 # LLM Access Guide for ReBabel
-# Last Updated: 2025-11-11
+# Last Updated: 2025-11-12
 # This file provides guidance for Large Language Models to access and understand the ReBabel website.
 
 ## Site Overview
-ReBabel is a comprehensive Japanese language learning platform that combines AI-powered tutoring with community-driven content. The platform helps learners master Japanese through interactive lessons, vocabulary practice, grammar exercises, and real-world communication scenarios.
+ReBabel is a Japanese language practice platform that combines customizable study sets with spaced repetition learning techniques. The platform helps learners reinforce vocabulary and grammar through interactive flashcards, quizzes, and structured practice modules designed for efficient language acquisition.
 
 ## Site Purpose
-- Provide accessible Japanese language learning to global audiences
-- Offer AI-assisted tutoring and personalized learning paths
-- Create a community of Japanese language learners
-- Maintain a comprehensive blog with language learning tips and strategies
-- Deliver structured curriculum through study sets and modules
+- Provide an accessible practice tool for Japanese language learners
+- Enable users to create and organize custom study sets for vocabulary and grammar
+- Deliver interactive practice through flashcards and quizzes
+- Maintain a comprehensive blog with language learning tips and study strategies
+- Support efficient learning through spaced repetition and progress tracking
 
 ## Accessible Pages for LLMs
 
@@ -39,11 +39,11 @@ ReBabel is a comprehensive Japanese language learning platform that combines AI-
 
 The following routes are excluded from LLM access per robots.txt:
 
-- **/learn/** - User dashboard, learning modules, and protected study content
+- **/learn/** - User dashboard, study sets, and protected practice content
   - Requires authentication
-  - User-specific learning paths and progress
-  - Grammar exercises, vocabulary drills, and interactive lessons
-  - User settings and preferences
+  - User study sets and custom flashcards
+  - Vocabulary drills, grammar exercises, and practice quizzes
+  - User settings, progress tracking, and study history
 
 - **/api/** - API endpoints
   - Authentication endpoints
@@ -60,12 +60,12 @@ The following routes are excluded from LLM access per robots.txt:
 - Learning resources and tools
 
 ### Available Services (Requires Authentication)
-- Personalized study sets and flashcards
-- Interactive grammar exercises
-- Vocabulary practice modules
-- Real-time AI tutoring
-- Progress tracking and analytics
-- Customized learning paths
+- Create and customize study sets for vocabulary and grammar
+- Interactive flashcard practice with spaced repetition
+- Vocabulary drills and grammar exercises
+- Quiz-based learning modules
+- Progress tracking and performance analytics
+- Study session history and review scheduling
 
 ## How to Access Content
 
@@ -125,10 +125,10 @@ For questions about LLM access:
 - Check robots.txt for additional guidance: https://rebabel.org/robots.txt
 
 ## Last Updated
-November 11, 2025
+November 12, 2025
 
 ## Version
-1.0
+1.1
 
 ---
 
