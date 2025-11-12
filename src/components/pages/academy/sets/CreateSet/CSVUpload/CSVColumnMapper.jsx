@@ -97,7 +97,7 @@ export default function CSVColumnMapper({ isOpen, onClose, csvHeaders, itemType,
 
         setColumnMappings(autoMappings);
         setValidationErrors([]);
-    }, [isOpen, csvHeaders, itemType]);
+    }, [isOpen, csvHeaders, itemType, fields]);
 
     if (!isOpen) return null;
 

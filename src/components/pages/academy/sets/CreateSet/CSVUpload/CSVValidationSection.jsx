@@ -1,42 +1,52 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiCheckCircle, FiAlertCircle, FiFile, FiArrowRight } from "react-icons/fi";
 import { TbX } from "react-icons/tb";
 import CSVColumnMapper from "./CSVColumnMapper";
 
 export default function CSVValidationSection({ csvData, selectedFile, onClear, itemType, onColumnsMapped }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editedData, setEditedData] = useState([]);
+
+    // Update edited data when CSV data changes
+    useEffect(() => {
+        if (!csvData) {
+            setEditedData([]);
+            return;
+        }
+
+        // Parse CSV data
+        const lines = csvData.trim().split('\n');
+        const rows = lines.slice(1).map(line => {
+            // Handle CSV parsing with proper quote handling
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    values.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            values.push(current.trim());
+
+            return values;
+        });
+
+        const validRows = rows.filter(row => row.some(cell => cell.length > 0));
+        setEditedData(validRows);
+    }, [csvData]);
 
     if (!csvData) return null;
 
-    // Parse CSV data
+    // Parse CSV data for headers
     const lines = csvData.trim().split('\n');
     const headers = lines[0].split(',').map(h => h.trim());
-    const rows = lines.slice(1).map(line => {
-        // Handle CSV parsing with proper quote handling
-        const values = [];
-        let current = '';
-        let inQuotes = false;
-
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-                inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-                values.push(current.trim());
-                current = '';
-            } else {
-                current += char;
-            }
-        }
-        values.push(current.trim());
-
-        return values;
-    });
-
-    const validRows = rows.filter(row => row.some(cell => cell.length > 0));
-
-    // State to track edited data
-    const [editedData, setEditedData] = useState(validRows);
 
     // Handle cell edits
     const handleCellChange = (rowIdx, cellIdx, value) => {
