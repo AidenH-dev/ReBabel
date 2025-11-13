@@ -79,7 +79,10 @@ export default function Blog({ posts }) {
         {/* Header Section */}
         <div className="dark:bg-gradient-to-b dark:from-gray-900 dark:to-[#141f25] bg-gradient-to-b from-gray-50 to-white py-8 px-4 dark:border-b dark:border-gray-800 border-b border-gray-200">
           <div className="max-w-6xl mx-auto">
-            <h1 className="text-lg font-bold text-black dark:text-white font-inter"><Link href='/' className="text-4xl font-bold text-[#e30a5f] font-inter">ReBabel</Link> Blog</h1>
+            <h1 className="flex items-center gap-3">
+              <Link href='/' className="text-4xl font-bold text-[#e30a5f] font-inter hover:opacity-80 transition-opacity">ReBabel</Link>
+              <span className="text-lg dark:text-gray-300 text-gray-700 font-inter">Blog</span>
+            </h1>
           </div>
         </div>
 
