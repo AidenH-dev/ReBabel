@@ -44,6 +44,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
+              <Image
+                src="/ReBabel_Icon.png"
+                alt="ReBabel"
+                width={80}
+                height={80}
+                className="w-10 h-10 object-contain"
+                priority
+              />
               <span className="text-2xl font-bold text-[#e30a5f]">ReBabel</span>
               <span className="ml-2 text-xs bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-2 py-1 rounded-full">
                 BETA
