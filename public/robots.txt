@@ -15,7 +15,6 @@ Disallow: /api/
 Disallow: /learn/
 
 # Block specific internal Next.js routes
-Disallow: /_next/
 Disallow: /private/
 
 # Crawl delay (in seconds) - be respectful to server resources
@@ -33,25 +32,25 @@ User-agent: GPTBot
 Allow: /
 Disallow: /api/
 Disallow: /learn/
-Disallow: /_next/
+
 
 User-agent: CCBot
 Allow: /
 Disallow: /api/
 Disallow: /learn/
-Disallow: /_next/
+
 
 User-agent: anthropic-ai
 Allow: /
 Disallow: /api/
 Disallow: /learn/
-Disallow: /_next/
+
 
 User-agent: Claude-Web
 Allow: /
 Disallow: /api/
 Disallow: /learn/
-Disallow: /_next/
+
 
 # ============================================================
 # Specific rules for major search engines
@@ -62,11 +61,11 @@ User-agent: Googlebot
 Allow: /
 Disallow: /api/
 Disallow: /learn/
-Disallow: /_next/
+
 
 # Bing-specific rules
 User-agent: Bingbot
 Allow: /
 Disallow: /api/
 Disallow: /learn/
-Disallow: /_next/
+
