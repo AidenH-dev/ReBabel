@@ -7,6 +7,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        fredoka: ["var(--font-fredoka)"],
+        "ibm-plex-serif": ["var(--font-ibm-plex-serif)", "Times New Roman", "Times", "serif"],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

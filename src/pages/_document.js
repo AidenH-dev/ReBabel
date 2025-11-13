@@ -24,6 +24,9 @@ export default function Document() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
+        {/* Google Fonts */}
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+
         {/* LLM Access Guide */}
         <link rel="alternate" type="text/plain" href="https://rebabel.org/llms.txt" title="LLM Access Guide" />
         <meta name="llms-txt" content="https://rebabel.org/llms.txt" />

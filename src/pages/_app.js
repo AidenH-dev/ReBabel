@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import { Fredoka } from "@next/font/google";
+import { Fredoka, IBM_Plex_Serif } from "next/font/google";
 import { UserProvider, useUser } from "@auth0/nextjs-auth0/client";
 import ReportIssueButton from '@/components/report-issue';
 import { Analytics } from "@vercel/analytics/react";
@@ -12,6 +12,14 @@ import Script from 'next/script';
 const fredoka = Fredoka({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-fredoka",
+});
+
+const ibmPlexSerif = IBM_Plex_Serif({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-ibm-plex-serif",
 });
 
 // 🔹 Bridge component that runs inside <UserProvider>
@@ -68,7 +76,7 @@ export default function MyApp({ Component, pageProps }) {
       {isPosthogEnabled ? (
         <PostHogProvider client={posthog}>
           <PostHogAuthBridge />
-          <div className={fredoka.className}>
+          <div className={`${fredoka.className} ${fredoka.variable} ${ibmPlexSerif.variable}`}>
             <Component {...pageProps} />
             <ReportIssueButton />
             <Analytics />
@@ -76,7 +84,7 @@ export default function MyApp({ Component, pageProps }) {
           </div>
         </PostHogProvider>
       ) : (
-        <div className={fredoka.className}>
+        <div className={`${fredoka.className} ${fredoka.variable} ${ibmPlexSerif.variable}`}>
           <Component {...pageProps} />
           <ReportIssueButton />
           <Analytics />
