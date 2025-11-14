@@ -119,7 +119,7 @@ export default function Research({ research }) {
                 <span className="text-2xl font-bold text-[#e30a5f] font-fredoka leading-none">ReBabel</span>
               </Link>
               <span className="text-lg dark:text-gray-300 text-gray-600" style={{ fontFamily: 'IBM Plex Serif, serif', fontWeight: 700 }}>
-                Research
+                Research & Development
               </span>
             </h1>
           </div>
