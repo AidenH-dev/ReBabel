@@ -13,10 +13,12 @@ export default function SRSDashboard({ setId }) {
         dueNow: 0,
         learnNew: 0,
         totalSRItems: 0,
-        totalSetItems: 3
+        totalSetItems: 3,
+        completedItems: 0
     });
     const [loading, setLoading] = useState(true);
     const [loadingNewItems, setLoadingNewItems] = useState(true);
+    const [loadingSetCompletion, setLoadingSetCompletion] = useState(true);
     const [error, setError] = useState(null);
     const [newItemsError, setNewItemsError] = useState(null);
     const [nextDueTime, setNextDueTime] = useState(null);
@@ -101,7 +103,7 @@ export default function SRSDashboard({ setId }) {
                         setStats(prevStats => ({
                             ...prevStats,
                             learnNew: countData.data.items.length,
-                            totalSetItems: countData.data.total || prevStats.totalSetItems
+                            totalSetItems: countData.data.total
                         }));
                     }
                 } else {
@@ -180,6 +182,45 @@ export default function SRSDashboard({ setId }) {
         };
 
         calculateNextDueTime();
+    }, [setId]);
+
+    // Fetch full set data to calculate accurate completion progress
+    useEffect(() => {
+        const fetchSetCompletion = async () => {
+            if (!setId) {
+                setLoadingSetCompletion(false);
+                return;
+            }
+
+            try {
+                setLoadingSetCompletion(true);
+                const response = await fetch(`/api/database/v2/srs/set/${setId}`);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch set data: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success && data.data?.items && Array.isArray(data.data.items)) {
+                    const totalItems = data.data.items.length;
+                    // Count items that have an srs property (completed/started items)
+                    const completedItems = data.data.items.filter(item => item.srs).length;
+
+                    setStats(prevStats => ({
+                        ...prevStats,
+                        totalSetItems: totalItems,
+                        completedItems: completedItems
+                    }));
+                }
+            } catch (err) {
+                console.error('Error fetching set completion data:', err);
+            } finally {
+                setLoadingSetCompletion(false);
+            }
+        };
+
+        fetchSetCompletion();
     }, [setId]);
 
     // Update countdown every second
@@ -323,10 +364,10 @@ export default function SRSDashboard({ setId }) {
                         {/* Completion Text */}
                         <div className="flex-shrink-0">
                             <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                                {stats.totalSetItems > 0 ? `${stats.totalSetItems - stats.learnNew}/${stats.totalSetItems}` : '0/0'}
+                                {stats.totalSetItems > 0 ? `${stats.completedItems}/${stats.totalSetItems}` : '0/0'}
                             </span>
                             <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
-                                ({stats.totalSetItems > 0 ? Math.round((stats.totalSetItems - stats.learnNew) / stats.totalSetItems * 100) : 0}%)
+                                ({stats.totalSetItems > 0 ? Math.round((stats.completedItems / stats.totalSetItems) * 100) : 0}%)
                             </span>
                         </div>
 
@@ -335,7 +376,7 @@ export default function SRSDashboard({ setId }) {
                             <div
                                 className="bg-gradient-to-r from-[#e30a5f] to-[#c1084d] h-full rounded-full transition-all duration-300"
                                 style={{
-                                    width: `${stats.totalSetItems > 0 ? ((stats.totalSetItems - stats.learnNew) / stats.totalSetItems * 100) : 0}%`
+                                    width: `${stats.totalSetItems > 0 ? ((stats.completedItems / stats.totalSetItems) * 100) : 0}%`
                                 }}
                             ></div>
                         </div>
