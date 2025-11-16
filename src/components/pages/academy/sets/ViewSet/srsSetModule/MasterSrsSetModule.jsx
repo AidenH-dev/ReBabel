@@ -239,10 +239,10 @@ export default function SRSDashboard({ setId }) {
             <div className="flex gap-2 mb-2">
                 <button
                     onClick={(e) => {
-                        e.stopPropagation();
-                        handleDashboardClick();
+                        //e.stopPropagation();
+                        ///handleDashboardClick();
                     }}
-                    className="flex-1 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border-2 border-gray-300 dark:border-gray-500 hover:border-gray-400 dark:hover:border-gray-400 hover:shadow-md" // transition-all hover:-translate-y-0.5 will-change-transform
+                    className="flex-1 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border-2 border-gray-300 dark:border-gray-500 " // hover:border-gray-400 dark:hover:border-gray-400 hover:shadow-md transition-all hover:-translate-y-0.5 will-change-transform
                 >
                     <PiClockClockwiseBold className="text-gray-700 dark:text-gray-200 flex-shrink-0 text-lg" />
                     <div className="flex-1 text-left flex items-center gap-1">
