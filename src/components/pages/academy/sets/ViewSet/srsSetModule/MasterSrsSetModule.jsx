@@ -1,21 +1,39 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { FaArrowRight, FaPlus, FaCheck } from 'react-icons/fa';
+import { FaPlus, FaCheck } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa6';
 import { LuRepeat } from "react-icons/lu";
-import { MdDashboard } from 'react-icons/md';
 import { PiClockClockwiseBold } from 'react-icons/pi';
+import { IoSettingsSharp } from 'react-icons/io5';
+import { TbSettings } from 'react-icons/tb';
 
 export default function SRSDashboard({ setId }) {
     const router = useRouter();
     const [stats, setStats] = useState({
         dueNow: 0,
         learnNew: 0,
-        totalSRItems: 0
+        totalSRItems: 0,
+        totalSetItems: 3
     });
     const [loading, setLoading] = useState(true);
     const [loadingNewItems, setLoadingNewItems] = useState(true);
     const [error, setError] = useState(null);
     const [newItemsError, setNewItemsError] = useState(null);
+    const [nextDueTime, setNextDueTime] = useState(null);
+    const [countdown, setCountdown] = useState('');
+
+    // SRS time intervals for each level (matching API backend)
+    const SRS_TIME_FACTORS = {
+        1: 10 * 60 * 1000,        // 10 minutes
+        2: 1 * 24 * 60 * 60 * 1000,   // 1 day
+        3: 3 * 24 * 60 * 60 * 1000,   // 3 days
+        4: 7 * 24 * 60 * 60 * 1000,   // 7 days
+        5: 14 * 24 * 60 * 60 * 1000,  // 14 days
+        6: 30 * 24 * 60 * 60 * 1000,  // 30 days
+        7: 60 * 24 * 60 * 60 * 1000,  // 60 days
+        8: 120 * 24 * 60 * 60 * 1000, // 120 days
+        9: 180 * 24 * 60 * 60 * 1000, // 180 days (6 months)
+    };
 
     // Fetch due now items
     useEffect(() => {
@@ -54,7 +72,7 @@ export default function SRSDashboard({ setId }) {
         fetchDueCount();
     }, [setId]);
 
-    // Fetch new items count
+    // Fetch new items count and total items
     useEffect(() => {
         const fetchNewItemsCount = async () => {
             if (!setId) {
@@ -82,7 +100,8 @@ export default function SRSDashboard({ setId }) {
                     if (countData.success && countData.data?.items) {
                         setStats(prevStats => ({
                             ...prevStats,
-                            learnNew: countData.data.items.length
+                            learnNew: countData.data.items.length,
+                            totalSetItems: countData.data.total || prevStats.totalSetItems
                         }));
                     }
                 } else {
@@ -107,6 +126,90 @@ export default function SRSDashboard({ setId }) {
         fetchNewItemsCount();
     }, [setId]);
 
+    // Calculate next due time from all items in the set
+    useEffect(() => {
+        const calculateNextDueTime = async () => {
+            if (!setId) {
+                return;
+            }
+
+            try {
+                // Fetch all items in the set to calculate next due time
+                const response = await fetch(`/api/database/v2/srs/set/${setId}`);
+
+                if (!response.ok) {
+                    setNextDueTime(null);
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (!data.success || !data.data?.items || !Array.isArray(data.data.items)) {
+                    setNextDueTime(null);
+                    return;
+                }
+
+                let earliestDueTime = null;
+
+                // Calculate when each item will be due and find the earliest
+                for (const item of data.data.items) {
+                    if (!item.srs || !item.srs.time_created || !item.srs.srs_level) {
+                        continue;
+                    }
+
+                    const srsLevel = parseInt(item.srs.srs_level, 10);
+                    const timeFactor = SRS_TIME_FACTORS[srsLevel];
+
+                    if (!timeFactor) {
+                        continue;
+                    }
+
+                    const timeCreated = new Date(item.srs.time_created);
+                    const dueTime = new Date(timeCreated.getTime() + timeFactor);
+
+                    if (!earliestDueTime || dueTime < earliestDueTime) {
+                        earliestDueTime = dueTime;
+                    }
+                }
+
+                setNextDueTime(earliestDueTime);
+            } catch (err) {
+                console.error('Error calculating next due time:', err);
+                setNextDueTime(null);
+            }
+        };
+
+        calculateNextDueTime();
+    }, [setId]);
+
+    // Update countdown every second
+    useEffect(() => {
+        if (!nextDueTime) {
+            setCountdown('--:--');
+            return;
+        }
+
+        const updateCountdown = () => {
+            const now = new Date();
+            const diff = nextDueTime - now;
+
+            if (diff <= 0) {
+                setCountdown('0h 0m');
+                return;
+            }
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            setCountdown(`${hours}h ${minutes}m`);
+        };
+
+        updateCountdown();
+        const interval = setInterval(updateCountdown, 1000);
+
+        return () => clearInterval(interval);
+    }, [nextDueTime]);
+
     const handleDueNowClick = () => {
         if (stats.dueNow > 0) {
             router.push(`/learn/academy/sets/study/${setId}/srs/due-now`);
@@ -123,14 +226,51 @@ export default function SRSDashboard({ setId }) {
         window.open('/srs/dashboard', '_blank');
     };
 
+    const handleSettingsClick = () => {
+        console.log('Opening SRS Settings...');
+        // TODO: Navigate to settings page
+    };
+
     return (
         <div
-            className="sm:mb-3 w-full h-fit sm:h-full group relative p-3 bg-white dark:bg-[#1c2b35] rounded-lg border border-black/5 dark:border-white/10 transition-all cursor-pointer shadow-sm flex flex-col"
+            className="sm:mb-3 w-full h-fit sm:h-40 group relative p-3 bg-white dark:bg-[#1c2b35] rounded-lg border border-black/5 dark:border-white/10 transition-all shadow-sm flex flex-col"
         >
-            <div className="flex items-center gap-2 text-xl text-gray-900 dark:text-white font-semibold mb-1 sm:mb-4">
-                <PiClockClockwiseBold />
-                <span className="text-lg sm:text-xl">Spaced Repition</span>
+            {/* SRS Dashboard Button - replaces "Spaced Repetition" heading */}
+            <div className="flex gap-2 mb-2">
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleDashboardClick();
+                    }}
+                    className="flex-1 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border-2 border-gray-300 dark:border-gray-500 hover:border-gray-400 dark:hover:border-gray-400 hover:shadow-md" // transition-all hover:-translate-y-0.5 will-change-transform
+                >
+                    <PiClockClockwiseBold className="text-gray-700 dark:text-gray-200 flex-shrink-0 text-lg" />
+                    <div className="flex-1 text-left flex items-center gap-1">
+                        <span className="text-md sm:text-lg text-gray-900 dark:text-white font-semibold">
+                            SRS Dashboard
+                        </span>
+                        {countdown && (
+                            <span className="sm:pl-1 text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium">
+                                Next due in: <span className='text-green-500'>{countdown}</span>
+                            </span>
+                        )}
+                    </div>
+                    {/*<FaArrowRight className="w-5 h-5 text-gray-500 dark:text-gray-300 flex-shrink-0" />*/}
+                </button>
+
+                {/* Settings Button 
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleSettingsClick();
+                    }}
+                    className="flex-shrink-0 flex items-center justify-center p-2 sm:p-2.5 bg-gray-100 shadow-sm dark:bg-gray-700 rounded-lg transition-all hover:-translate-y-0.5 will-change-transform"
+                    title="SRS Settings"
+                >
+                    <TbSettings className="h-6 w-6 sm:w-full sm:h-full text-gray-700 dark:text-gray-200" />
+                </button>*/}
             </div>
+
             <div className="flex gap-3 flex-1">
                 {/* Action Buttons */}
                 <div className="grid grid-cols-2 gap-3 sm:w-1/2">
@@ -140,7 +280,7 @@ export default function SRSDashboard({ setId }) {
                             e.stopPropagation();
                             handleDueNowClick();
                         }}
-                        className="flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#c1084d] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5 will-change-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#c1084d] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5 will-change-transform disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={loading || error}
                     >
                         <div className="hidden sm:inline font-medium text-sm">Due Now</div>
@@ -153,7 +293,7 @@ export default function SRSDashboard({ setId }) {
 
                     {/* Learn New */}
                     {stats.learnNew === 0 && !loadingNewItems ? (
-                        <div className="flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg border-2 border-green-500 text-green-500">
+                        <div className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg border-2 border-green-500 text-green-500">
                             <div className="hidden sm:flex font-medium text-sm">Learn New</div>
                             <div className="text-2xl font-bold flex items-center">{loadingNewItems ? '-' : stats.learnNew}<FaPlus className="ml-1.5 text-xl opacity-70 transform-none" /></div>
 
@@ -164,7 +304,7 @@ export default function SRSDashboard({ setId }) {
                                 e.stopPropagation();
                                 handleLearnNewClick();
                             }}
-                            className="flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5 will-change-transform"
+                            className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5 will-change-transform"
                         >
                             <div className="hidden sm:flex font-medium text-sm">Learn New</div>
                             <div className="text-2xl font-bold flex items-center">{loadingNewItems ? '-' : stats.learnNew}<FaPlus className="ml-1.5 text-xl opacity-70 transform-none" /></div>
@@ -172,23 +312,35 @@ export default function SRSDashboard({ setId }) {
                     )}
                 </div>
 
-                {/* Open Dashboard Button */}
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleDashboardClick();
-                    }}
-                    className="flex-1 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border-2 border-gray-300 dark:border-gray-500 hover:border-gray-400 dark:hover:border-gray-400 hover:shadow-md transition-all hover:-translate-y-0.5 min-w-0 will-change-transform"
-                >
-                    <MdDashboard className="w-8 h-8 text-gray-700 dark:text-gray-200 flex-shrink-0" />
-                    <div className="flex-1 text-left min-w-0">
-                        <div className="text-md hidden sm:block text-gray-900 dark:text-white font-semibold">
-                            Open Dashboard
+                {/* Set Completion Progress */}
+                <div className="flex-1 bg-gray-50 dark:bg-[#1d2a32] rounded-lg border border-black/5 dark:border-white/10 p-3 flex flex-col justify-between">
+                    <div className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">
+                        Set Completion
+                    </div>
+
+                    {/* Progress Bar and Count - Inline */}
+                    <div className="flex-1 flex items-center gap-3">
+                        {/* Completion Text */}
+                        <div className="flex-shrink-0">
+                            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                                {stats.totalSetItems > 0 ? `${stats.totalSetItems - stats.learnNew}/${stats.totalSetItems}` : '0/0'}
+                            </span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+                                ({stats.totalSetItems > 0 ? Math.round((stats.totalSetItems - stats.learnNew) / stats.totalSetItems * 100) : 0}%)
+                            </span>
                         </div>
 
+                        {/* Progress Bar */}
+                        <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                            <div
+                                className="bg-gradient-to-r from-[#e30a5f] to-[#c1084d] h-full rounded-full transition-all duration-300"
+                                style={{
+                                    width: `${stats.totalSetItems > 0 ? ((stats.totalSetItems - stats.learnNew) / stats.totalSetItems * 100) : 0}%`
+                                }}
+                            ></div>
+                        </div>
                     </div>
-                    <FaArrowRight className="w-5 h-5 text-gray-500 dark:text-gray-300 flex-shrink-0" />
-                </button>
+                </div>
             </div>
         </div>
     );
