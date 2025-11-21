@@ -59,6 +59,7 @@ function AcademySidebar() {
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
           className="mx-auto object-contain"
+          priority
         />
       </div>
       <div className="py-4 px-2 overflow-y-auto">
