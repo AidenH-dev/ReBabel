@@ -13,7 +13,7 @@ export default function SRSDashboard({ setId }) {
         dueNow: 0,
         learnNew: 0,
         totalSRItems: 0,
-        totalSetItems: 3,
+        totalSetItems: 0,
         completedItems: 0
     });
     const [loading, setLoading] = useState(true);
@@ -102,8 +102,7 @@ export default function SRSDashboard({ setId }) {
                     if (countData.success && countData.data?.items) {
                         setStats(prevStats => ({
                             ...prevStats,
-                            learnNew: countData.data.items.length,
-                            totalSetItems: countData.data.total
+                            learnNew: countData.data.items.length
                         }));
                     }
                 } else {
@@ -206,7 +205,7 @@ export default function SRSDashboard({ setId }) {
                     const totalItems = data.data.items.length;
                     // Count items that have an srs property (completed/started items)
                     const completedItems = data.data.items.filter(item => item.srs).length;
-
+                    console.log('Set Completion:', completedItems, '/', totalItems);
                     setStats(prevStats => ({
                         ...prevStats,
                         totalSetItems: totalItems,
@@ -356,7 +355,7 @@ export default function SRSDashboard({ setId }) {
                 {/* Set Completion Progress */}
                 <div className="flex-1 bg-gray-50 dark:bg-[#1d2a32] rounded-lg border border-black/5 dark:border-white/10 p-3 flex flex-col justify-between">
                     <div className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">
-                        Set Completion
+                        Learn New Completed
                     </div>
 
                     {/* Progress Bar and Count - Inline */}
