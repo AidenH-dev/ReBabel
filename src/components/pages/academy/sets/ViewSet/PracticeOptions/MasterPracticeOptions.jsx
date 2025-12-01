@@ -5,7 +5,7 @@ import { MdQuiz } from "react-icons/md";
 import { TbCards } from "react-icons/tb";
 import MasterSrsSetModule from "@/components/pages/academy/sets/ViewSet/srsSetModule/MasterSrsSetModule";
 
-export default function PracticeOptions({ setId, enableSrsModule = true }) {
+export default function PracticeOptions({ setId, setData, enableSrsModule = true }) {
     const router = useRouter();
 
     const handleStartQuiz = () => {
@@ -18,7 +18,7 @@ export default function PracticeOptions({ setId, enableSrsModule = true }) {
 
     return (
         <div className={`sm:h-40 grid gap-3 mb-3 pt-2 sm:pt-0 ${enableSrsModule ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
-            {enableSrsModule && <MasterSrsSetModule setId={setId} />}
+            {enableSrsModule && <MasterSrsSetModule setId={setId} setData={setData} />}
             
             {/* Quiz and Flashcards - side by side on mobile */}
             <div className={`sm:h-40 grid gap-2 w-full ${enableSrsModule ? 'grid-cols-2 sm:grid-cols-1' : 'grid-cols-2 sm:grid-cols-2'}`}>

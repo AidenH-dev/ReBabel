@@ -7,7 +7,7 @@ import { PiClockClockwiseBold } from 'react-icons/pi';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { TbSettings } from 'react-icons/tb';
 
-export default function SRSDashboard({ setId }) {
+export default function SRSDashboard({ setId, setData}) {
     const router = useRouter();
     const [stats, setStats] = useState({
         dueNow: 0,
@@ -23,6 +23,7 @@ export default function SRSDashboard({ setId }) {
     const [newItemsError, setNewItemsError] = useState(null);
     const [nextDueTime, setNextDueTime] = useState(null);
     const [countdown, setCountdown] = useState('');
+    const [learnNewLeftLimit, setLearnNewLeftLimit] = useState(0);
 
     // SRS time intervals for each level (matching API backend)
     const SRS_TIME_FACTORS = {
@@ -85,32 +86,64 @@ export default function SRSDashboard({ setId }) {
             try {
                 setLoadingNewItems(true);
                 setNewItemsError(null);
-                // Use a limit of 1 to check if there are ANY new items available
-                const response = await fetch(`/api/database/v2/srs/set/learn/${setId}?limit=1`);
 
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch new items: ${response.statusText}`);
+                console.log('SET TYPE RESPONSE:',  setData.set_type);
+
+                // First, check the daily learning limit
+                const dayLimitResponse = await fetch(
+                    `/api/database/v2/srs/set/learn/day-limit/${setId}?limit=5&vocab_or_grammar=${setData.set_type}`
+                );
+
+                if (!dayLimitResponse.ok) {
+                    throw new Error(`Failed to fetch daily limit: ${dayLimitResponse.statusText}`);
                 }
 
-                const data = await response.json();
+                const dayLimitData = await dayLimitResponse.json();
 
-                if (data.success && data.data?.items) {
-                    // Fetch with limit of 5 (capped display)
-                    const countResponse = await fetch(`/api/database/v2/srs/set/learn/${setId}?limit=5`);
-                    const countData = await countResponse.json();
+                if (!dayLimitData.success) {
+                    throw new Error(dayLimitData.error || 'Failed to check daily limit');
+                }
 
-                    if (countData.success && countData.data?.items) {
-                        setStats(prevStats => ({
-                            ...prevStats,
-                            learnNew: countData.data.items.length
-                        }));
-                    }
-                } else {
-                    // No new items available
+                // Check if daily limit has been reached
+                const learnNewLeft = dayLimitData.data?.learn_new_left || 0;
+                setLearnNewLeftLimit(learnNewLeft);
+
+                if (learnNewLeft <= 0) {
+                    // Daily limit reached, show 0 items available
                     setStats(prevStats => ({
                         ...prevStats,
                         learnNew: 0
                     }));
+                    setNewItemsError('Daily learning limit reached. Come back tomorrow!');
+                } else {
+                    // Use a limit of 1 to check if there are ANY new items available
+                    const response = await fetch(`/api/database/v2/srs/set/learn/${setId}?limit=1`);
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch new items: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success && data.data?.items) {
+                        // Fetch with limit of 5 (capped display) but respecting daily limit
+                        const fetchLimit = Math.min(5, learnNewLeft);
+                        const countResponse = await fetch(`/api/database/v2/srs/set/learn/${setId}?limit=${fetchLimit}`);
+                        const countData = await countResponse.json();
+
+                        if (countData.success && countData.data?.items) {
+                            setStats(prevStats => ({
+                                ...prevStats,
+                                learnNew: countData.data.items.length
+                            }));
+                        }
+                    } else {
+                        // No new items available
+                        setStats(prevStats => ({
+                            ...prevStats,
+                            learnNew: 0
+                        }));
+                    }
                 }
             } catch (err) {
                 console.error('Error fetching new items count:', err);
@@ -257,7 +290,10 @@ export default function SRSDashboard({ setId }) {
     };
 
     const handleLearnNewClick = () => {
-        router.push(`/learn/academy/sets/study/${setId}/srs/learn-new?limit=5`);
+        if (learnNewLeftLimit > 0) {
+            const limitToUse = Math.min(5, learnNewLeftLimit);
+            router.push(`/learn/academy/sets/study/${setId}/srs/learn-new?limit=${limitToUse}`);
+        }
     };
 
     const handleDashboardClick = () => {
@@ -332,7 +368,7 @@ export default function SRSDashboard({ setId }) {
                     </button>
 
                     {/* Learn New */}
-                    {stats.learnNew === 0 && !loadingNewItems ? (
+                    {(stats.learnNew === 0 || learnNewLeftLimit === 0) && !loadingNewItems ? (
                         <div className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg border-2 border-green-500 text-green-500">
                             <div className="hidden sm:flex font-medium text-sm">Learn New</div>
                             <div className="text-2xl font-bold flex items-center">{loadingNewItems ? '-' : stats.learnNew}<FaPlus className="ml-1.5 text-xl opacity-70 transform-none" /></div>
@@ -344,7 +380,8 @@ export default function SRSDashboard({ setId }) {
                                 e.stopPropagation();
                                 handleLearnNewClick();
                             }}
-                            className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5 will-change-transform"
+                            className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5 will-change-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={learnNewLeftLimit === 0}
                         >
                             <div className="hidden sm:flex font-medium text-sm">Learn New</div>
                             <div className="text-2xl font-bold flex items-center">{loadingNewItems ? '-' : stats.learnNew}<FaPlus className="ml-1.5 text-xl opacity-70 transform-none" /></div>

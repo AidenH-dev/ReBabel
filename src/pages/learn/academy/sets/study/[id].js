@@ -114,8 +114,8 @@ export default function ViewSet() {
           throw new Error('Invalid set data structure received from API');
         }
 
-        console.log("Set Info from API:", setInfo);
-        console.log("Set Type from API:", setInfo.set_type);
+        //console.log("Set Info from API:", setInfo);
+        //console.log("Set Type from API:", setInfo.set_type);
 
         // Populate set metadata
         setSetData({
@@ -293,7 +293,7 @@ export default function ViewSet() {
             srsEnabled={setData.srsEnabled}
           />
           {/* Section 2: Practice Options - Quiz and flashcard buttons */}
-          <PracticeOptions setId={id} enableSrsModule={setData.srsEnabled} />
+          <PracticeOptions setId={id} setData={setData} enableSrsModule={setData.srsEnabled} />
 
           {/* Section 3: Items Management - Item list/grid, add/edit/delete */}
           <MasterItemsManagement
