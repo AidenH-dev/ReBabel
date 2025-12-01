@@ -704,7 +704,7 @@ export default function Home() {
         <section className="w-full py-20 bg-gradient-to-r from-[#e30a5f] to-[#f41567]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Be Part of the Revolution?
+              Join the Community!
             </h2>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
               Start learning Japanese for free today. Beta users get exclusive
