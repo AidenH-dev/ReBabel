@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import posthog from "posthog-js";
-import { FiAlertTriangle, FiX, FiUpload } from "react-icons/fi";
+import React, { useState } from "react";
+import { FiAlertTriangle, FiX } from "react-icons/fi";
 
 function ReportIssueButton() {
   const [open, setOpen] = useState(false);
@@ -9,23 +8,8 @@ function ReportIssueButton() {
     feature: "",
     description: "",
   });
-  const [screenshot, setScreenshot] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
 
-  // Fetch Auth0 user profile
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await fetch("/api/auth/me");
-        const profile = await response.json();
-        setUserProfile(profile);
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      }
-    };
-    fetchUserProfile();
-  }, []);
 
   const handleOpen = () => setOpen(true);
   
@@ -36,7 +20,6 @@ function ReportIssueButton() {
       feature: "",
       description: "",
     });
-    setScreenshot(null);
   };
 
   const handleInputChange = (e) => {
@@ -44,61 +27,50 @@ function ReportIssueButton() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file && file.size <= 10 * 1024 * 1024) { // 10MB limit
-      setScreenshot(file);
-    } else if (file) {
-      alert("File size must be less than 10MB");
-    }
-  };
-
   const handleSubmit = async () => {
     // Validation
-    if (!formData.location || !formData.feature ) {
-      alert("Please fill in all required fields and upload a screenshot");
-      return;
-    }
-
-    if (!userProfile?.email) {
-      alert("Unable to retrieve user information. Please try again.");
+    if (!formData.location || !formData.feature) {
+      alert("Please fill in all required fields");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // Convert screenshot to base64 if present
-      let screenshotData = null;
-      if (screenshot) {
-        const reader = new FileReader();
-        screenshotData = await new Promise((resolve) => {
-          reader.onload = (e) => resolve(e.target.result);
-          reader.readAsDataURL(screenshot);
-        });
-      }
+      // Prepare the request payload matching the API endpoint requirements
+      const now = new Date();
+      const timestamp = now.toISOString().replace('T', ' ').replace('Z', '+00');
 
-      posthog.capture("bug_report", {
-        name: userProfile.name || userProfile.email || "Unknown User",
-        email: userProfile.email,
-        location: formData.location,
-        feature: formData.feature,
-        description: formData.description || "(no additional description)",
-        has_screenshot: !!screenshot,
-        screenshot_name: screenshot?.name,
-        url: typeof window !== "undefined" ? window.location.href : "",
-        session_id: posthog.get_session_id?.(),
-        viewport: typeof window !== "undefined"
-          ? { w: window.innerWidth, h: window.innerHeight }
-          : null,
-        tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      const payload = {
+        time_submitted: timestamp,
+        browser_type: navigator.userAgent || null,
+        form_json: {
+          bug_location: formData.location,
+          bugged_feature: formData.feature,
+          user_details: formData.description || ""
+        }
+      };
+
+      // Submit to the API endpoint
+      const response = await fetch("/api/database/v2/report/submit-bug-report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit bug report");
+      }
 
       handleClose();
       alert("Thank you! Your issue report has been submitted.");
     } catch (err) {
-      console.error("Failed to send bug_report", err);
-      alert("Couldn't send your report right now. Please try again.");
+      console.error("Failed to submit bug report:", err);
+      alert(err instanceof Error ? err.message : "Couldn't send your report right now. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -159,14 +131,14 @@ function ReportIssueButton() {
 
             {/* Form Content */}
             <div className="px-6 py-5 space-y-2">
-              {/* User Info Display (if available) */}
+              {/* User Info Display (if available)
               {userProfile && (
                 <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2 border border-blue-200 dark:border-blue-800">
                   <p className="text-xs text-blue-800 dark:text-blue-300">
                     <strong>Reporting as:</strong> {userProfile.name || userProfile.email}
                   </p>
                 </div>
-              )}
+              )} */}
 
               {/* Location */}
               <div>
