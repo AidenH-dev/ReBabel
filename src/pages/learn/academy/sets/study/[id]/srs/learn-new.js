@@ -13,7 +13,7 @@ import { IoSparkles } from "react-icons/io5";
 import SRSQuizHeader from "@/components/pages/academy/sets/SRSLearnNewSet/QuizHeader/SRSQuizHeader";
 import SRSQuestionCard from "@/components/pages/academy/sets/SRSLearnNewSet/QuestionCard/SRSQuestionCard";
 import SRSMultipleChoice from "@/components/pages/academy/sets/SRSLearnNewSet/MultipleChoice/SRSMultipleChoice";
-import SRSReviewCards from "@/components/pages/academy/sets/SRSLearnNewSet/ReviewCards/SRSReviewCards";
+import ReviewFieldCard from "@/components/Set/Features/Field-Cards/shared/views/ReviewFieldCard.js";
 import SRSQuizSummary from "@/components/pages/academy/sets/SRSLearnNewSet/QuizSummary/SRSQuizSummary";
 
 export default function LearnNew() {
@@ -951,7 +951,7 @@ export default function LearnNew() {
 
                   {/* Review Phase */}
                   {currentPhase === 'review' && activeReviewArray.length > 0 && (
-                    <SRSReviewCards
+                    <ReviewFieldCard
                       currentCard={activeReviewArray[currentIndex]}
                       isLastCard={currentIndex === activeReviewArray.length - 1}
                       isFirstCard={currentIndex === 0}

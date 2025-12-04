@@ -1,8 +1,7 @@
-// components/pages/academy/sets/SRSLearnNewSet/ReviewCards/SRSReviewCards.jsx
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
 
-export default function SRSReviewCards({
+export default function ReviewFieldCard({
   currentCard,
   isLastCard,
   isFirstCard,
