@@ -175,7 +175,8 @@ export default function SetQuiz() {
                     answer: card.kana,
                     hint: card.lexical_category,
                     questionType: "English",
-                    answerType: "Kana"
+                    answerType: "Kana",
+                    tooltip: "Kana"
                 });
 
                 if (card.kanji) {
@@ -200,7 +201,8 @@ export default function SetQuiz() {
                         answer: card.kana,
                         hint: card.english,
                         questionType: "Kanji",
-                        answerType: "Kana"
+                        answerType: "Kana",
+                        tooltip: "Kana"
                     });
                 } else {
                     // Kana to English (when no kanji)
