@@ -183,26 +183,41 @@ export default function Information() {
     );
 
     // NHK window WITHOUT traffic‑light dots (tall/portrait)
-    const NHKPreviewWindow = () => (
-        <section className="bg-white dark:bg-[#1c2b35] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden h-full">
-            <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-                <div className="flex items-center gap-2">
+    const NHKPreviewWindow = () => { // Fixed syntax error by using a block body {}
+        // Path to image in public folder, corrected for Next.js source path
+        const IMAGE_SRC = "/nhk_preview_standin.jpg"; 
+        const HEIGHT = 720;
 
-                    <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">NHK Easy Live Preview</span>
+        return (
+            <section className="bg-white dark:bg-[#1c2b35] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden h-full">
+                <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+                    <div className="flex items-center gap-2">
+
+                        <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">NHK Easy Live Preview</span>
+                    </div>
+                    <a
+                        href="https://news.web.nhk.or.jp/news/easy/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-sm text-[#e30a5f] hover:underline"
+                    >
+                        Open <TbExternalLink />
+                    </a>
                 </div>
-                <a
-                    href="https://www3.nhk.or.jp/news/easy/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-[#e30a5f] hover:underline"
-                >
-                    Open <TbExternalLink />
-                </a>
-            </div>
-            {/* Scaled frame to avoid zoomed-in look; exact height tuned for portrait */}
-            <ScaledFrame src="https://www3.nhk.or.jp/news/easy/" zoom={0.8} height={720} />
-        </section>
-    );
+                {/* Image Stand-in replaces the ScaledFrame/iframe call */}
+                <div className="relative w-full overflow-hidden" style={{ height: HEIGHT }}>
+                    <Image
+                        src={IMAGE_SRC}
+                        alt="NHK Easy News Stand-in Preview"
+                        width={800} // Approximate width for image optimization
+                        height={HEIGHT}
+                        className="object-cover w-full h-full"
+                        priority={true} 
+                    />
+                </div>
+            </section>
+        );
+    };
 
     // Landscape/shorter tiles for right side
     const ExternalTile = ({ name, logoSrc, href, previewSrc, accent, zoom = 0.75, height = 360 }) => (
