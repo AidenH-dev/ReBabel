@@ -1,21 +1,46 @@
-// components/pages/academy/sets/SRSLearnNewSet/QuizHeader/SRSQuizHeader.jsx
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { TbX } from "react-icons/tb";
 import { MdQuiz } from "react-icons/md";
-import { FaBook } from "react-icons/fa";
 import { BsCheckCircleFill } from "react-icons/bs";
-import { IoSparkles } from "react-icons/io5";
-import { FaDumbbell } from "react-icons/fa";
 
-export default function SRSQuizHeader({
+/**
+ * SessionStatHeaderView - Shared presentational component for quiz/session headers
+ *
+ * Used across Quiz mode, SRS Learn-New, and SRS Due-Now flows.
+ * Displays session title, statistics (correct/incorrect/accuracy), phase indicators,
+ * progress tracking, and navigation controls.
+ *
+ * @param {string} setTitle - Title of the quiz/study set
+ * @param {Object} sessionStats - Session statistics
+ * @param {number} sessionStats.correct - Number of correct answers
+ * @param {number} sessionStats.incorrect - Number of incorrect answers
+ * @param {number} sessionStats.accuracy - Accuracy percentage (0-100)
+ * @param {number} currentIndex - Current question index (0-based)
+ * @param {number} totalQuestions - Total number of questions in current phase
+ * @param {string} currentPhase - ID of the current phase (e.g., 'review', 'multiple-choice')
+ * @param {string[]} completedPhases - Array of completed phase IDs
+ * @param {Array} phases - Array of phase configuration objects
+ * @param {string} phases[].id - Phase identifier
+ * @param {string} phases[].name - Display name for the phase
+ * @param {Component} phases[].icon - Icon component for the phase
+ * @param {string} phases[].color - Tailwind color class for the phase (e.g., 'bg-blue-500')
+ * @param {string} phases[].borderColor - Tailwind border color class (e.g., 'border-blue-500')
+ * @param {number} currentPhaseIndex - Index of current phase in phases array
+ * @param {Object} currentPhaseConfig - Configuration object for current phase
+ * @param {Component} CurrentPhaseIcon - Icon component for current phase
+ * @param {number} progressInPhase - Progress percentage in current phase (0-100)
+ * @param {number} [completedCount] - Number of unique items completed (for completion-count mode)
+ * @param {number} [totalUniqueItems] - Total number of unique items (for completion-count mode)
+ * @param {string} [displayMode='question-count'] - Display mode: 'question-count' or 'completion-count'
+ * @param {function(): void} onExit - Callback when exit button is clicked
+ */
+export default function SessionStatHeaderView({
   setTitle,
   sessionStats,
   currentIndex,
   totalQuestions,
   currentPhase,
-  quizMode,
   completedPhases,
-  phaseConfigs,
   phases,
   currentPhaseIndex,
   currentPhaseConfig,
@@ -23,7 +48,7 @@ export default function SRSQuizHeader({
   progressInPhase,
   completedCount,
   totalUniqueItems,
-  displayMode,
+  displayMode = 'question-count',
   onExit
 }) {
   // Get phase status helper

@@ -10,7 +10,7 @@ import { FaDumbbell } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
 
 // Import SRS Learn New Components
-import SRSQuizHeader from "@/components/pages/academy/sets/SRSLearnNewSet/QuizHeader/SRSQuizHeader";
+import SessionStatHeaderView from "@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView.jsx";
 import TypedResponseView from "@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx";
 import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx";
 import SRSQuizSummary from "@/components/pages/academy/sets/SRSLearnNewSet/QuizSummary/SRSQuizSummary";
@@ -853,7 +853,7 @@ export default function DueNow() {
               {currentPhase !== 'complete' && (
                 <>
                   {/* Quiz Header */}
-                  <SRSQuizHeader
+                  <SessionStatHeaderView
                     setTitle={setInfo?.title}
                     sessionStats={sessionStats}
                     currentIndex={currentIndex}
