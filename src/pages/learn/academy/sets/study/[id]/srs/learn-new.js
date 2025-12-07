@@ -11,9 +11,9 @@ import { IoSparkles } from "react-icons/io5";
 
 // Import SRS Learn New Components
 import SRSQuizHeader from "@/components/pages/academy/sets/SRSLearnNewSet/QuizHeader/SRSQuizHeader";
-import SRSQuestionCard from "@/components/pages/academy/sets/SRSLearnNewSet/QuestionCard/SRSQuestionCard";
-import SRSMultipleChoice from "@/components/pages/academy/sets/SRSLearnNewSet/MultipleChoice/SRSMultipleChoice";
-import ReviewFieldCard from "@/components/Set/Features/Field-Cards/shared/views/ReviewFieldCard.js";
+import TypedResponseView from "@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx";
+import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx";
+import ReviewView from "@/components/Set/Features/Field-Card-Session/shared/views/ReviewView.jsx";
 import SRSQuizSummary from "@/components/pages/academy/sets/SRSLearnNewSet/QuizSummary/SRSQuizSummary";
 
 export default function LearnNew() {
@@ -951,7 +951,7 @@ export default function LearnNew() {
 
                   {/* Review Phase */}
                   {currentPhase === 'review' && activeReviewArray.length > 0 && (
-                    <ReviewFieldCard
+                    <ReviewView
                       currentCard={activeReviewArray[currentIndex]}
                       isLastCard={currentIndex === activeReviewArray.length - 1}
                       isFirstCard={currentIndex === 0}
@@ -962,7 +962,7 @@ export default function LearnNew() {
 
                   {/* Multiple Choice Phase */}
                   {currentPhase === 'multiple-choice' && activeMCArray.length > 0 && (
-                    <SRSMultipleChoice
+                    <MultipleChoiceView
                       currentItem={activeMCArray[currentIndex]}
                       uniqueOptions={currentShuffledOptions}
                       selectedOption={selectedOption}
@@ -977,11 +977,12 @@ export default function LearnNew() {
 
                   {/* Translation Phase - Only for vocabulary sets */}
                   {currentPhase === 'translation' && setType !== 'grammar' && activeTranslationArray.length > 0 && !isSavingSRS && (
-                    <SRSQuestionCard
+                    <TypedResponseView
                       currentItem={activeTranslationArray[currentIndex]}
                       userAnswer={userAnswer}
                       showResult={showResult}
                       isCorrect={isCorrect}
+                      showHint={false}
                       isLastQuestion={currentIndex === activeTranslationArray.length - 1}
                       inputRef={translationInputRef}
                       onInputChange={(e) => setUserAnswer(e.target.value)}

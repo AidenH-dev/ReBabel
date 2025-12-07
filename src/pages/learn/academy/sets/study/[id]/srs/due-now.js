@@ -11,8 +11,8 @@ import { IoSparkles } from "react-icons/io5";
 
 // Import SRS Learn New Components
 import SRSQuizHeader from "@/components/pages/academy/sets/SRSLearnNewSet/QuizHeader/SRSQuizHeader";
-import SRSQuestionCard from "@/components/pages/academy/sets/SRSLearnNewSet/QuestionCard/SRSQuestionCard";
-import SRSMultipleChoice from "@/components/pages/academy/sets/SRSLearnNewSet/MultipleChoice/SRSMultipleChoice";
+import TypedResponseView from "@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx";
+import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx";
 import SRSQuizSummary from "@/components/pages/academy/sets/SRSLearnNewSet/QuizSummary/SRSQuizSummary";
 import SRSLevelChange from "@/components/pages/academy/sets/SRSLearnNewSet/LevelChange/SRSLevelChange";
 
@@ -873,12 +873,13 @@ export default function DueNow() {
 
                   {/* Multiple Choice Phase */}
                   {currentPhase === 'multiple-choice' && activeMCArray.length > 0 && (
-                    <SRSMultipleChoice
+                    <MultipleChoiceView
                       currentItem={activeMCArray[currentIndex]}
                       uniqueOptions={currentShuffledOptions}
                       selectedOption={selectedOption}
                       showResult={showResult}
                       isCorrect={isCorrect}
+                      isTransitioning={false}
                       isLastQuestion={currentIndex === activeMCArray.length - 1}
                       onOptionSelect={handleMCOptionSelect}
                       onNext={handleNext}
@@ -887,11 +888,12 @@ export default function DueNow() {
 
                   {/* Translation Phase */}
                   {currentPhase === 'translation' && activeTranslationArray.length > 0 && (
-                    <SRSQuestionCard
+                    <TypedResponseView
                       currentItem={activeTranslationArray[currentIndex]}
                       userAnswer={userAnswer}
                       showResult={showResult}
                       isCorrect={isCorrect}
+                      showHint={false}
                       isLastQuestion={currentIndex === activeTranslationArray.length - 1}
                       inputRef={translationInputRef}
                       onInputChange={(e) => setUserAnswer(e.target.value)}

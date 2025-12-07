@@ -1,7 +1,7 @@
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
 
-export default function ReviewFieldCard({
+export default function ReviewView({
   currentCard,
   isLastCard,
   isFirstCard,

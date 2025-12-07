@@ -5,7 +5,7 @@ import MasterQuizModeSelect from "@/components/pages/academy/sets/QuizSet/ModeSe
 import MasterQuizHeader from "@/components/pages/academy/sets/QuizSet/QuizHeader/MasterQuizHeader.jsx";
 import MasterQuestionCard from "@/components/pages/academy/sets/QuizSet/QuestionCard/MasterQuestionCard.jsx";
 import MasterQuizSummary from "@/components/pages/academy/sets/QuizSet/QuizSummary/MasterQuizSummary.jsx";
-import ReviewFieldCard from "@/components/Set/Features/Field-Cards/shared/views/ReviewFieldCard.js";
+import ReviewView from "@/components/Set/Features/Field-Card-Session/shared/views/ReviewView.jsx";
 import MasterMultipleChoice from "@/components/pages/academy/sets/QuizSet/MultipleChoice/MasterMultipleChoice.jsx";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
@@ -572,7 +572,7 @@ export default function SetQuiz() {
                                 onExit={handleExit}
                             />
                         ) : currentPhase === 'review' ? (
-                            <ReviewFieldCard
+                            <ReviewView
                                 currentCard={reviewItems[currentIndex]}
                                 isLastCard={currentIndex === reviewItems.length - 1}
                                 isFirstCard={currentIndex === 0}

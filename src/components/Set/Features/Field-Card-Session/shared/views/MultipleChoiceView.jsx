@@ -1,8 +1,28 @@
-// components/pages/academy/sets/SRSLearnNewSet/MultipleChoice/SRSMultipleChoice.jsx
 import { FaArrowRight, FaTimesCircle } from "react-icons/fa";
 import { BsCheckCircleFill } from "react-icons/bs";
 
-export default function SRSMultipleChoice({
+/**
+ * MultipleChoiceView - Shared presentational component for multiple choice questions
+ *
+ * Used across Quiz mode, SRS Learn-New, and SRS Due-Now flows.
+ * Displays question, answer options in a 2x2 grid, and provides visual feedback for correct/incorrect answers.
+ *
+ * @param {Object} currentItem - The current question item
+ * @param {string} currentItem.question - Question text to display
+ * @param {string} currentItem.answer - Correct answer
+ * @param {string} currentItem.questionType - Type of question (e.g., "English", "Kana")
+ * @param {string} currentItem.answerType - Type of answer (e.g., "Kana", "English")
+ * @param {string[]} uniqueOptions - Array of answer options (correct answer + distractors)
+ * @param {string|null} selectedOption - Currently selected option
+ * @param {boolean} showResult - Whether to show correct/incorrect feedback
+ * @param {boolean} isCorrect - Whether the selected answer is correct
+ * @param {boolean} [isTransitioning] - Whether component is transitioning to next question
+ * @param {boolean} isLastQuestion - Whether this is the final question
+ * @param {function(string): void} onOptionSelect - Callback when option is selected
+ * @param {function(): void} onNext - Callback to proceed to next question
+ */
+
+export default function MultipleChoiceView({
   currentItem,
   uniqueOptions,
   selectedOption,

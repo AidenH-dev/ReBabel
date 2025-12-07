@@ -1,4 +1,3 @@
-// /components/pages/academy/sets/SRSLearnNewSet/QuestionCard/SRSQuestionCard.jsx
 import { useEffect } from "react";
 import {
   FaArrowRight,
@@ -11,7 +10,31 @@ import {
 } from "react-icons/fa";
 import { toKana } from "wanakana";
 
-export default function SRSQuestionCard({
+/**
+ * TypedResponseView - Shared presentational component for typed response questions
+ *
+ * Used across Quiz mode, SRS Learn-New, and SRS Due-Now flows for translation/typing questions.
+ * Displays question, text input with automatic kana conversion (for Japanese), and provides
+ * visual feedback for correct/incorrect answers with an "I was correct" retry option.
+ *
+ * @param {Object} currentItem - The current question item
+ * @param {string} currentItem.question - Question text to display
+ * @param {string} currentItem.answer - Correct answer
+ * @param {string} currentItem.questionType - Type of question (e.g., "English", "Kana")
+ * @param {string} currentItem.answerType - Type of answer (e.g., "Kana", "English")
+ * @param {string} [currentItem.hint] - Optional hint text to display
+ * @param {string} userAnswer - Current user input value
+ * @param {boolean} showResult - Whether to show correct/incorrect feedback
+ * @param {boolean} isCorrect - Whether the submitted answer is correct
+ * @param {boolean} [showHint] - Whether to display the hint
+ * @param {boolean} isLastQuestion - Whether this is the final question
+ * @param {Object} inputRef - React ref for the input element (for auto-focus)
+ * @param {function(Event): void} onInputChange - Callback when input value changes
+ * @param {function(): void} onCheckAnswer - Callback to check/submit the answer
+ * @param {function(): void} onNext - Callback to proceed to next question
+ * @param {function(): void} onRetry - Callback for "I was correct" button (retracts incorrect answer)
+ */
+export default function TypedResponseView({
   currentItem,
   userAnswer,
   showResult,
