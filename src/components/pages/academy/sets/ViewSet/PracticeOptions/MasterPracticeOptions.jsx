@@ -17,11 +17,11 @@ export default function PracticeOptions({ setId, setData, enableSrsModule = true
     };
 
     return (
-        <div className={`sm:h-40 grid gap-3 mb-3 pt-2 sm:pt-0 ${enableSrsModule ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
+        <div className={`grid gap-3 mb-3 pt-2 sm:pt-0 ${enableSrsModule ? 'grid-cols-1 sm:grid-cols-2 sm:h-40' : 'grid-cols-1'}`}>
             {enableSrsModule && <MasterSrsSetModule setId={setId} setData={setData} />}
             
             {/* Quiz and Flashcards - side by side on mobile */}
-            <div className={`sm:h-40 grid gap-2 w-full ${enableSrsModule ? 'grid-cols-2 sm:grid-cols-1' : 'grid-cols-2 sm:grid-cols-2'}`}>
+            <div className={`grid gap-2 w-full ${enableSrsModule ? 'grid-cols-2 sm:grid-cols-1 sm:h-40' : 'grid-cols-2 sm:grid-cols-2'}`}>
                 <button
                     onClick={handleStartQuiz}
                     className="group relative flex items-center gap-2 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5"
