@@ -15,6 +15,7 @@ import TypedResponseView from "@/components/Set/Features/Field-Card-Session/shar
 import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx";
 import ReviewView from "@/components/Set/Features/Field-Card-Session/shared/views/ReviewView.jsx";
 import SRSQuizSummary from "@/components/pages/academy/sets/SRSLearnNewSet/QuizSummary/SRSQuizSummary";
+import { validateTypedAnswer, validateMultipleChoice } from "@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation";
 
 export default function LearnNew() {
   const router = useRouter();
@@ -655,7 +656,8 @@ export default function LearnNew() {
     setSelectedOption(option);
 
     const currentItem = activeMCArray[currentIndex];
-    const isCorrect = option === currentItem.answer;
+    // Use shared validation utility
+    const isCorrect = validateMultipleChoice(option, currentItem.answer);
 
     handleAnswerSubmitted({
       isCorrect,
@@ -673,11 +675,12 @@ export default function LearnNew() {
   const handleTranslationCheck = () => {
     const currentItem = activeTranslationArray[currentIndex];
 
-    // Normalize answers for comparison
-    const normalizedUserAnswer = userAnswer.trim().toLowerCase();
-    const normalizedCorrectAnswer = currentItem.answer.trim().toLowerCase();
-
-    const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
+    // Use shared validation utility
+    const isCorrect = validateTypedAnswer(
+      userAnswer,
+      currentItem.answer,
+      currentItem.answerType
+    );
 
     handleAnswerSubmitted({
       isCorrect,

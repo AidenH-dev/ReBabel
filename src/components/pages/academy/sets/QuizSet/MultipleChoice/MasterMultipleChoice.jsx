@@ -1,6 +1,7 @@
 // components/pages/academy/sets/QuizSet/MultipleChoice/MasterMultipleChoice.jsx
 import { useState, useEffect, useMemo } from "react";
 import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx";
+import { validateMultipleChoice } from "@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation";
 
 export default function MasterMultipleChoice({
     quizItems,
@@ -83,11 +84,11 @@ export default function MasterMultipleChoice({
     // Handle option selection and immediately check answer
     const handleOptionSelect = (option) => {
         if (showResult) return; // Prevent selection after answer is submitted
-        
+
         setSelectedOption(option);
-        
-        // Immediately check if answer is correct (compare trimmed values)
-        const correct = option.trim() === currentItem.answer.trim();
+
+        // Use shared validation utility
+        const correct = validateMultipleChoice(option, currentItem.answer);
         setIsCorrect(correct);
         setShowResult(true);
 

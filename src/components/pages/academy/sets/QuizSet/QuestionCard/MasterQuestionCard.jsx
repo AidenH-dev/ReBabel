@@ -1,6 +1,7 @@
 // /components/pages/academy/sets/QuizSet/QuestionCard/MasterQuestionCard.jsx
 import { useState, useRef, useEffect, useCallback } from "react";
 import TypedResponseView from "@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx";
+import { validateTypedAnswer } from "@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation";
 
 export default function MasterQuestionCard({
   quizItems,
@@ -43,18 +44,12 @@ export default function MasterQuestionCard({
 
     const processedAnswer = userAnswer.trim();
 
-    // Normalize for comparison (remove spaces, lowercase for English)
-    const normalizedUserAnswer =
-      currentItem.answerType === "English"
-        ? processedAnswer.toLowerCase().replace(/\s+/g, "")
-        : processedAnswer.replace(/\s+/g, "");
-
-    const normalizedCorrectAnswer =
-      currentItem.answerType === "English"
-        ? currentItem.answer.toLowerCase().replace(/\s+/g, "")
-        : currentItem.answer.replace(/\s+/g, "");
-
-    const correct = normalizedUserAnswer === normalizedCorrectAnswer;
+    // Use shared validation utility
+    const correct = validateTypedAnswer(
+      processedAnswer,
+      currentItem.answer,
+      currentItem.answerType
+    );
 
     setIsCorrect(correct);
     setShowResult(true);
