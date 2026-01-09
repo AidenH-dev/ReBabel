@@ -2,6 +2,7 @@
 import { useState, useEffect, useMemo } from "react";
 import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx";
 import { validateMultipleChoice } from "@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation";
+import { generateOptionsFromQuizItems } from "@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration";
 
 export default function MasterMultipleChoice({
     quizItems,
@@ -20,51 +21,13 @@ export default function MasterMultipleChoice({
     const currentItem = quizItems && quizItems.length > 0 ? quizItems[currentIndex] : null;
     const isLastQuestion = quizItems ? currentIndex === quizItems.length - 1 : false;
 
-    // Generate unique options from quiz items with matching question/answer types
+    // Generate unique options from quiz items using centralized utility
     const uniqueOptions = useMemo(() => {
-        if (!quizItems || quizItems.length === 0 || !currentItem || !currentItem.answer) {
+        if (!quizItems || quizItems.length === 0 || !currentItem) {
             return [];
         }
 
-        // Get the correct answer (trimmed)
-        const correctAnswer = currentItem.answer.trim();
-
-        // Filter quiz items to only those with matching questionType and answerType
-        const matchingItems = quizItems.filter(item =>
-            item.questionType === currentItem.questionType &&
-            item.answerType === currentItem.answerType &&
-            item.answer &&
-            item.answer.trim() !== correctAnswer // Exclude the current item's answer
-        );
-
-        // Collect all possible answers from matching items (as distractors)
-        const allAnswers = matchingItems
-            .map(item => item.answer.trim())
-            .filter(answer => answer); // Remove any empty strings
-
-        // Remove duplicates from distractors
-        const uniqueDistractors = [...new Set(allAnswers)];
-
-        // Shuffle the distractors
-        const shuffled = uniqueDistractors.sort(() => Math.random() - 0.5);
-
-        // Determine how many distractors we need (target 4 total options, or minimum 2)
-        const targetTotal = 4;
-        const neededDistractors = Math.min(shuffled.length, targetTotal - 1);
-
-        // If we don't have enough unique distractors for at least 2 options total
-        if (neededDistractors < 1) {
-            return [correctAnswer];
-        }
-
-        // Take the needed number of distractors
-        const selectedDistractors = shuffled.slice(0, neededDistractors);
-
-        // Combine correct answer with distractors
-        const allOptions = [correctAnswer, ...selectedDistractors];
-
-        // Shuffle all options so correct answer isn't always first
-        return allOptions.sort(() => Math.random() - 0.5);
+        return generateOptionsFromQuizItems(currentItem, quizItems);
     }, [currentItem, quizItems]);
 
     // Reset state when question changes

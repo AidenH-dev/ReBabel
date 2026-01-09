@@ -16,6 +16,7 @@ import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/sha
 import SRSQuizSummary from "@/components/pages/academy/sets/SRSLearnNewSet/QuizSummary/SRSQuizSummary";
 import SRSLevelChange from "@/components/pages/academy/sets/SRSLearnNewSet/LevelChange/SRSLevelChange";
 import { validateTypedAnswer, validateMultipleChoice } from "@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation";
+import { pregenerateMultipleChoiceItems, shuffleArray, shuffleOptionsWithDistractors } from "@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration";
 
 export default function DueNow() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function DueNow() {
 
   // Data states
   const [itemData, setItemData] = useState([]);
+  const [fullSetItems, setFullSetItems] = useState([]); // Full set for MC distractor pool
   const [setInfo, setSetInfo] = useState(null);
   const [setType, setSetType] = useState(null); // 'vocab' | 'grammar'
   const [isLoading, setIsLoading] = useState(true);
@@ -80,6 +82,49 @@ export default function DueNow() {
   // ============ REFS ============
   const translationInputRef = useRef(null);
 
+  // Helper function to transform API items to internal format
+  const transformItems = (apiItems) => {
+    return Array.isArray(apiItems)
+      ? apiItems
+          .map((item, index) => {
+            if (item.type === "vocab" || item.type === "vocabulary") {
+              return {
+                id: `vocab-${index}`,
+                uuid: item.id,
+                type: "vocabulary",
+                kana: item.kana || "",
+                kanji: item.kanji || null,
+                english: item.english || "",
+                lexical_category: item.lexical_category || "",
+                example_sentences: Array.isArray(item.example_sentences)
+                  ? item.example_sentences
+                  : [item.example_sentences].filter(Boolean),
+                srs_level: item.srs?.srs_level || 1
+              };
+            } else if (item.type === "grammar") {
+              return {
+                id: `grammar-${index}`,
+                uuid: item.id,
+                type: "grammar",
+                title: item.title || "",
+                description: item.description || "",
+                topic: item.topic || "",
+                example_sentences: Array.isArray(item.example_sentences)
+                  ? item.example_sentences.map((ex) =>
+                      typeof ex === "string"
+                        ? ex
+                        : `${ex.japanese || ""} (${ex.english || ""})`
+                    )
+                  : [],
+                srs_level: item.srs?.srs_level || 1
+              };
+            }
+            return null;
+          })
+          .filter(Boolean)
+      : [];
+  };
+
   // Fetch set data from API
   useEffect(() => {
     if (!id) return;
@@ -118,51 +163,41 @@ export default function DueNow() {
         setSetType(setInfoData.set_type || 'vocab');
 
         // Transform items to item data format
-        const transformedItemData = Array.isArray(setItemsAPI)
-          ? setItemsAPI
-              .map((item, index) => {
-                if (item.type === "vocab" || item.type === "vocabulary") {
-                  return {
-                    id: `vocab-${index}`,
-                    uuid: item.id, // Preserve actual UUID from API
-                    type: "vocabulary",
-                    kana: item.kana || "",
-                    kanji: item.kanji || null,
-                    english: item.english || "",
-                    lexical_category: item.lexical_category || "",
-                    example_sentences: Array.isArray(item.example_sentences)
-                      ? item.example_sentences
-                      : [item.example_sentences].filter(Boolean),
-                    srs_level: item.srs?.srs_level || 1 // Get SRS level from new API structure
-                  };
-                } else if (item.type === "grammar") {
-                  return {
-                    id: `grammar-${index}`,
-                    uuid: item.id, // Preserve actual UUID from API
-                    type: "grammar",
-                    title: item.title || "",
-                    description: item.description || "",
-                    topic: item.topic || "",
-                    example_sentences: Array.isArray(item.example_sentences)
-                      ? item.example_sentences.map((ex) =>
-                          typeof ex === "string"
-                            ? ex
-                            : `${ex.japanese || ""} (${ex.english || ""})`
-                        )
-                      : [],
-                    srs_level: item.srs?.srs_level || 1 // Get SRS level from new API structure
-                  };
-                }
-                return null;
-              })
-              .filter(Boolean)
-          : [];
+        const transformedItemData = transformItems(setItemsAPI);
 
         if (transformedItemData.length === 0) {
           throw new Error("This set has no items to study");
         }
 
         setItemData(transformedItemData);
+
+        // ============================================
+        // Conditionally fetch full set for distractors
+        // ============================================
+        let distractorPool = transformedItemData; // Default to session items
+
+        // Filter to grammar items to check if we need full set
+        const grammarSessionItems = transformedItemData.filter(item => item.type === "grammar");
+
+        if (grammarSessionItems.length > 0 && grammarSessionItems.length < 4) {
+          try {
+            const fullSetResponse = await fetch(`/api/database/v2/sets/retrieve-set/${id}`);
+
+            if (fullSetResponse.ok) {
+              const fullSetResult = await fullSetResponse.json();
+
+              if (fullSetResult.success && fullSetResult.data?.data?.items) {
+                const fullSetItemsAPI = fullSetResult.data.data.items;
+                const transformedFullSet = transformItems(fullSetItemsAPI);
+
+                setFullSetItems(transformedFullSet);
+                distractorPool = transformedFullSet;
+              }
+            }
+          } catch (error) {
+            console.warn('Failed to fetch full set for distractors, using session items:', error);
+          }
+        }
 
         // ============================================
         // Initialize SRS levels for each item
@@ -177,60 +212,11 @@ export default function DueNow() {
         setMistakesPerItem(mistakesMap);
 
         // ============================================
-        // HELPER: Shuffle Array Function
-        // ============================================
-        const shuffleArray = (array) => {
-          const shuffled = [...array];
-          for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-          }
-          return shuffled;
-        };
-
-        // ============================================
-        // HELPER: Get Distractors for Multiple Choice
-        // ============================================
-        const getDistractors = (correctAnswer, answerType, itemType) => {
-          const allOptions = [];
-
-          transformedItemData.forEach((dataItem) => {
-            if (dataItem.type === itemType) {
-              let value = null;
-
-              if (itemType === "grammar") {
-                if (answerType === "Description") {
-                  value = dataItem.description;
-                } else if (answerType === "Grammar Pattern") {
-                  value = dataItem.title;
-                }
-              } else if (itemType === "vocabulary") {
-                if (answerType === "Kana") {
-                  value = dataItem.kana;
-                } else if (answerType === "English") {
-                  value = dataItem.english;
-                }
-              }
-
-              if (value && value !== correctAnswer) {
-                allOptions.push(value);
-              }
-            }
-          });
-
-          // Remove duplicates
-          const uniqueOptions = [...new Set(allOptions)];
-          // Shuffle and take up to 3
-          const shuffled = uniqueOptions.sort(() => Math.random() - 0.5);
-          return shuffled.slice(0, 3);
-        };
-
-        // ============================================
         // QUESTION ARRAYS: Separate by Type
         // ============================================
         const translation = [];
-        const multipleChoice = [];
 
+        // Generate translation questions for vocabulary items only
         transformedItemData.forEach((item) => {
           if (item.type === "vocabulary") {
             // English → Kana
@@ -289,36 +275,21 @@ export default function DueNow() {
                 hint: item.english
               });
             }
-          } else if (item.type === "grammar") {
-            // Grammar: Title → Description (Multiple Choice)
-            multipleChoice.push({
-              id: `${item.id}-mc-title-desc`,
-              originalId: item.id,
-              uuid: item.uuid,
-              type: "grammar",
-              questionType: "Grammar Pattern",
-              answerType: "Description",
-              question: item.title,
-              answer: item.description,
-              hint: item.topic,
-              distractors: getDistractors(item.description, "Description", "grammar")
-            });
-
-            // Grammar: Description → Title (Multiple Choice)
-            multipleChoice.push({
-              id: `${item.id}-mc-desc-title`,
-              originalId: item.id,
-              uuid: item.uuid,
-              type: "grammar",
-              questionType: "Description",
-              answerType: "Grammar Pattern",
-              question: item.description,
-              answer: item.title,
-              hint: item.topic,
-              distractors: getDistractors(item.title, "Grammar Pattern", "grammar")
-            });
           }
         });
+
+        // Generate multiple choice questions for grammar items only using centralized utility
+        // Filter to grammar items only, then use pregenerateMultipleChoiceItems
+        const grammarItems = transformedItemData.filter(item => item.type === "grammar");
+
+        // Filter distractor pool to grammar items as well
+        const grammarDistractorPool = distractorPool.filter(item => item.type === "grammar");
+
+        const multipleChoice = pregenerateMultipleChoiceItems(
+          grammarItems,           // Grammar items to create questions for
+          grammarDistractorPool,  // Grammar items to pull distractors from
+          3
+        );
 
         // Shuffle the arrays so questions appear in random order
         const shuffledTranslation = shuffleArray(translation);
@@ -387,13 +358,8 @@ export default function DueNow() {
     if (currentPhase === 'multiple-choice' && activeMCArray.length > 0) {
       const currentItem = activeMCArray[currentIndex];
       if (currentItem) {
-        const options = [currentItem.answer, ...currentItem.distractors];
-        // Fisher-Yates shuffle
-        const shuffled = [...options];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
+        // Use centralized utility to shuffle options with distractors
+        const shuffled = shuffleOptionsWithDistractors(currentItem);
         setCurrentShuffledOptions(shuffled);
         setSelectedOption(null); // Reset selection
       }
