@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FaArrowRight, FaTimesCircle } from "react-icons/fa";
 import { BsCheckCircleFill } from "react-icons/bs";
 
@@ -33,6 +34,33 @@ export default function MultipleChoiceView({
   onOptionSelect,
   onNext
 }) {
+  // Keyboard shortcuts: 1-4 for options, Enter for next
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Prevent keyboard shortcuts if transitioning
+      if (isTransitioning) return;
+
+      // Number keys 1-4 to select options (only when result not shown)
+      if (!showResult && uniqueOptions && uniqueOptions.length > 0) {
+        const key = e.key;
+        if (['1', '2', '3', '4'].includes(key)) {
+          const index = parseInt(key, 10) - 1;
+          if (index < uniqueOptions.length) {
+            onOptionSelect(uniqueOptions[index]);
+          }
+        }
+      }
+
+      // Enter key to proceed to next question (only when result is shown)
+      if (showResult && e.key === 'Enter') {
+        onNext();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showResult, isTransitioning, uniqueOptions, onOptionSelect, onNext]);
+
   // Get option button style
   const getOptionStyle = (option) => {
     const baseStyle = "w-full text-left p-4 sm:p-5 rounded-xl border-2 transition-all duration-200 font-medium text-sm sm:text-base";
@@ -154,7 +182,7 @@ export default function MultipleChoiceView({
 
         {/* Helper Text */}
         <div className="mt-6 text-center text-xs sm:text-sm text-gray-500 dark:text-white/40">
-          {!showResult ? "Select an answer to continue" : "Continue"}
+          {!showResult ? "Press 1-4 to select an answer" : "Press Enter to continue"}
         </div>
       </div>
     </div>
