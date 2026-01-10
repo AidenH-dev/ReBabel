@@ -1,12 +1,12 @@
 // pages/learn/academy/sets/study/[id]/quiz.js
 import Head from "next/head";
 import MainSidebar from "@/components/Sidebars/AcademySidebar";
-import MasterQuizModeSelect from "@/components/pages/academy/sets/QuizSet/ModeSelect/MasterQuizModeSelect.jsx";
-import MasterQuizHeader from "@/components/pages/academy/sets/QuizSet/QuizHeader/MasterQuizHeader.jsx";
-import MasterQuestionCard from "@/components/pages/academy/sets/QuizSet/QuestionCard/MasterQuestionCard.jsx";
-import MasterQuizSummary from "@/components/pages/academy/sets/QuizSet/QuizSummary/MasterQuizSummary.jsx";
+import MasterQuizModeSelect from "@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterQuizModeSelect";
+import MasterQuizHeader from "@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterQuizHeader";
+import MasterQuestionCard from "@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterQuestionCard";
+import SummaryView from "@/components/Set/Features/Field-Card-Session/shared/views/SummaryView";
 import ReviewView from "@/components/Set/Features/Field-Card-Session/shared/views/ReviewView.jsx";
-import MasterMultipleChoice from "@/components/pages/academy/sets/QuizSet/MultipleChoice/MasterMultipleChoice.jsx";
+import MasterMultipleChoice from "@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterMultipleChoice";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
@@ -527,13 +527,13 @@ export default function SetQuiz() {
 
                         {/* Main Quiz Area */}
                         {quizCompleted ? (
-                            <MasterQuizSummary
+                            <SummaryView
                                 sessionStats={sessionStats}
-                                quizItems={quizItems}
                                 answeredItems={answeredItems}
                                 animateAccuracy={animateAccuracy}
                                 onRetry={handleRetry}
-                                onExit={handleExit}
+                                onBackToSet={handleExit}
+                                completionTitle="Quiz Complete!"
                             />
                         ) : currentPhase === 'review' ? (
                             <ReviewView

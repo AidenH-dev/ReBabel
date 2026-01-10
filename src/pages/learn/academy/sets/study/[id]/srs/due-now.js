@@ -13,8 +13,8 @@ import { IoSparkles } from "react-icons/io5";
 import SessionStatHeaderView from "@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView.jsx";
 import TypedResponseView from "@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx";
 import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx";
-import SRSQuizSummary from "@/components/pages/academy/sets/SRSLearnNewSet/QuizSummary/SRSQuizSummary";
-import SRSLevelChange from "@/components/pages/academy/sets/SRSLearnNewSet/LevelChange/SRSLevelChange";
+import SummaryView from "@/components/Set/Features/Field-Card-Session/shared/views/SummaryView";
+import LevelChangeView from "@/components/Set/Features/Field-Card-Session/SRS/views/LevelChangeView";
 import { validateTypedAnswer, validateMultipleChoice } from "@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation";
 import { pregenerateMultipleChoiceItems, shuffleArray, shuffleOptionsWithDistractors } from "@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration";
 
@@ -787,7 +787,7 @@ export default function DueNow() {
 
         {/* SRS Level Change Animation Overlay */}
         {showLevelChange && currentLevelChange && (
-          <SRSLevelChange
+          <LevelChangeView
             item={currentLevelChange.item}
             oldLevel={currentLevelChange.oldLevel}
             newLevel={currentLevelChange.newLevel}
@@ -810,11 +810,12 @@ export default function DueNow() {
             <>
               {/* Show completion summary */}
               {currentPhase === 'complete' && (
-                <SRSQuizSummary
+                <SummaryView
                   sessionStats={sessionStats}
                   answeredItems={answeredItems}
                   animateAccuracy={animateAccuracy}
-                  onExit={handleExit}
+                  onBackToSet={handleExit}
+                  completionTitle="Lesson Complete!"
                 />
               )}
 

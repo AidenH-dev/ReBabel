@@ -14,7 +14,7 @@ import SessionStatHeaderView from "@/components/Set/Features/Field-Card-Session/
 import TypedResponseView from "@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx";
 import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx";
 import ReviewView from "@/components/Set/Features/Field-Card-Session/shared/views/ReviewView.jsx";
-import SRSQuizSummary from "@/components/pages/academy/sets/SRSLearnNewSet/QuizSummary/SRSQuizSummary";
+import SummaryView from "@/components/Set/Features/Field-Card-Session/shared/views/SummaryView";
 import { validateTypedAnswer, validateMultipleChoice } from "@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation";
 import { pregenerateMultipleChoiceItems, shuffleArray, shuffleOptionsWithDistractors } from "@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration";
 
@@ -780,11 +780,12 @@ export default function LearnNew() {
             <>
               {/* Show completion summary */}
               {currentPhase === 'complete' && (
-                <SRSQuizSummary
+                <SummaryView
                   sessionStats={sessionStats}
                   answeredItems={answeredItems}
                   animateAccuracy={animateAccuracy}
-                  onExit={handleExit}
+                  onBackToSet={handleExit}
+                  completionTitle="Lesson Complete!"
                 />
               )}
 
