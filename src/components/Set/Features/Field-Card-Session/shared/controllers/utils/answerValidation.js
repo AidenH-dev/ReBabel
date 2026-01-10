@@ -52,10 +52,49 @@ export function normalizeAnswer(answer, answerType) {
 }
 
 /**
+ * Parses a string that may contain multiple definitions separated by semicolons.
+ * Returns an array of normalized definitions.
+ *
+ * @param {string} answerString - The answer string (may contain semicolons)
+ * @param {string} answerType - Type of answer (determines normalization strategy)
+ * @returns {string[]} Array of normalized definition strings (empty strings filtered out)
+ *
+ * @example
+ * parseMultipleDefinitions("to go back; to return", "English")
+ * // Returns: ["togoback", "toreturn"]
+ *
+ * @example
+ * parseMultipleDefinitions("to eat", "English")
+ * // Returns: ["toeat"] (single definition)
+ *
+ * @example
+ * parseMultipleDefinitions("to run; ; to jog", "English")
+ * // Returns: ["torun", "tojog"] (empty definition filtered)
+ */
+export function parseMultipleDefinitions(answerString, answerType) {
+  if (!answerString || typeof answerString !== 'string') {
+    return [];
+  }
+
+  // Split by semicolon separator
+  const definitions = answerString.split(';');
+
+  // Normalize each definition and filter out empty strings
+  const normalizedDefinitions = definitions
+    .map(def => normalizeAnswer(def, answerType))
+    .filter(def => def.length > 0);
+
+  return normalizedDefinitions;
+}
+
+/**
  * Validates a typed/translation response answer.
  *
+ * Supports multi-definition answers separated by semicolons for English-like answer types.
+ * User answer is considered correct if it matches ANY of the definitions (with fuzzy matching).
+ *
  * @param {string} userAnswer - The user's submitted answer
- * @param {string} correctAnswer - The correct answer
+ * @param {string} correctAnswer - The correct answer (may contain multiple definitions separated by ';')
  * @param {string} answerType - Type of answer (e.g., "English", "Kana", "Kanji")
  * @returns {boolean} True if the answer is correct, false otherwise
  *
@@ -63,12 +102,32 @@ export function normalizeAnswer(answer, answerType) {
  * validateTypedAnswer("to eat", "to eat", "English") // true
  * validateTypedAnswer("toeat", "to eat", "English") // true (whitespace removed)
  * validateTypedAnswer("To Eat", "to eat", "English") // true (case insensitive)
+ * validateTypedAnswer("to go back", "to go back; to return", "English") // true
+ * validateTypedAnswer("to return", "to go back; to return", "English") // true
+ * validateTypedAnswer("to retrun", "to go back; to return", "English") // true (fuzzy match)
  * validateTypedAnswer("たべる", "食べる", "Kanji") // false (different characters)
  */
 export function validateTypedAnswer(userAnswer, correctAnswer, answerType) {
   const normalizedUserAnswer = normalizeAnswer(userAnswer, answerType);
+
+  // For English-like answer types, check if correctAnswer contains multiple definitions
+  const isEnglishLike =
+    answerType === "English" ||
+    answerType === "Description" ||
+    answerType === "Grammar Pattern";
+
+  if (isEnglishLike && correctAnswer.includes(';')) {
+    // Multi-definition answer: parse into array of definitions
+    const definitions = parseMultipleDefinitions(correctAnswer, answerType);
+
+    // User answer is correct if it matches ANY definition (with fuzzy matching)
+    return definitions.some(definition =>
+      fuzzyLevenshteinMatch(definition, normalizedUserAnswer)
+    );
+  }
+
+  // Single-definition answer: use existing logic
   const normalizedCorrectAnswer = normalizeAnswer(correctAnswer, answerType);
-  
 
   // Implement fuzzyLevenshteinMatch for English answers to allow minor typos
   if (answerType === "English") {
