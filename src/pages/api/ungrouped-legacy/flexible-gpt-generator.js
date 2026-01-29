@@ -51,7 +51,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     }));
 
   console.log("Filtering for Lesson:", lessonNumber);
-  console.log("Filtered Vocabulary Pool:", vocabularyPool);
+  console.log("Filtered Total Vocabulary Items", vocabularyPool);
 
   if (vocabularyPool.length === 0) {
     return res.status(404).json({ error: `No vocabulary found for Lesson ${lessonNumber}.` });
@@ -76,7 +76,7 @@ export default withApiAuthRequired(async function handler(req, res) {
       description,
     }));
 
-  console.log("Filtered Grammar Pool:", grammarPool);
+  console.log("Filtered Total Grammar Items:", grammarPool);
 
   if (grammarPool.length === 0) {
     return res.status(404).json({ error: `No grammar found for Lesson ${lessonNumber}.` });
@@ -91,10 +91,10 @@ export default withApiAuthRequired(async function handler(req, res) {
   Keep scenarios practical and relevant. Always maintain a formal tone.
   this is the naming scheme of the response object {english_sentence: "example response" expected_japanese_translation: "何か"}
 
-  Vocabulary Pool:
+  Total Vocabulary Items
   ${JSON.stringify(vocabularyPool)}
 
-  Grammar Pool:
+  Total Grammar Items:
   ${JSON.stringify(grammarPool)}
 
   Instructions:

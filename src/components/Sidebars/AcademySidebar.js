@@ -1,16 +1,23 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { 
-  TbSettings, 
-  TbHome, 
-  TbMenu2, 
-  TbX, 
+import {
+  TbSettings,
+  TbHome,
+  TbMenu2,
+  TbX,
   TbArrowLeft,
   TbLayoutGrid,
   TbStack2,
-  TbPlus
+  TbPlus,
+  TbBooks
 } from "react-icons/tb";
+import { LuTextCursorInput } from "react-icons/lu";
+import { HiOutlinePencilSquare } from "react-icons/hi2";
+import { HiOutlinePencilAlt } from "react-icons/hi";
+import { LuSquarePen } from "react-icons/lu";
+
+
 import Link from "next/link";
 
 function AcademySidebar() {
@@ -40,6 +47,8 @@ function AcademySidebar() {
   const isModulesActive = /^\/learn\/modules/.test(path);
   const isSetsActive = /^\/learn\/academy\/sets/.test(path);
   const isAcademySettingsActive = /^\/learn\/academy\/settings/.test(path);
+  const isPracticeActive = /^\/learn\/academy\/practice/.test(path);
+
 
   const baseLink =
     "flex items-center p-2 rounded-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-colors";
@@ -91,17 +100,31 @@ function AcademySidebar() {
           <li>
             <Link
               href="/learn/academy"
-              className={`${baseLink} ${
-                isAcademyHomeActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
-              }`}
+              className={`${baseLink} ${isAcademyHomeActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
+                }`}
               aria-current={isAcademyHomeActive ? "page" : undefined}
             >
               <TbHome
-                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
-                  isAcademyHomeActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
-                }`}
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isAcademyHomeActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                  }`}
               />
               <span className="ms-3">Home</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/learn/academy/practice"
+              className={`${baseLink} ${isPracticeActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
+                }`}
+              aria-current={isPracticeActive ? "page" : undefined}
+            >
+              <HiOutlinePencilAlt
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isPracticeActive
+                    ? "text-[#e30a5f]"
+                    : `${inactiveIconLight} ${inactiveIconDark}`
+                  }`}
+              />
+              <span className="ms-3">Practice</span>
             </Link>
           </li>
 
@@ -125,15 +148,13 @@ function AcademySidebar() {
           <li>
             <Link
               href="/learn/academy/sets"
-              className={`${baseLink} ${
-                isSetsActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
-              }`}
+              className={`${baseLink} ${isSetsActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
+                }`}
               aria-current={isSetsActive ? "page" : undefined}
             >
               <TbStack2
-                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
-                  isSetsActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
-                }`}
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isSetsActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                  }`}
               />
               <span className="ms-3">Sets</span>
             </Link>
@@ -173,9 +194,8 @@ function AcademySidebar() {
       {/* Mobile Sidebar */}
       <div
         id="mobile-sidebar"
-        className={`lg:hidden fixed top-0 left-0 z-50 w-64 h-screen p-4 bg-white dark:bg-[#172229] border-r-2 border-gray-300 dark:border-gray-600 transform transition-transform duration-300 ease-in-out ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`lg:hidden fixed top-0 left-0 z-50 w-64 h-screen p-4 bg-white dark:bg-[#172229] border-r-2 border-gray-300 dark:border-gray-600 transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         role="dialog"
         aria-modal="true"
       >
