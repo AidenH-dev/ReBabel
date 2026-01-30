@@ -16,8 +16,6 @@ export default function Subscription() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
       setMessage({ type: "success", text: "Subscription activated successfully!" });
-      // Sync subscription from Stripe (fallback when webhooks aren't available)
-      syncSubscription();
       // Clean URL
       window.history.replaceState({}, "", "/learn/subscription");
     } else if (params.get("canceled") === "true") {
@@ -27,16 +25,6 @@ export default function Subscription() {
 
     fetchSubscription();
   }, []);
-
-  const syncSubscription = async () => {
-    try {
-      await fetch("/api/subscriptions/stripe/sync", { method: "POST" });
-      // Refresh subscription status after sync
-      fetchSubscription();
-    } catch (error) {
-      console.error("Failed to sync subscription:", error);
-    }
-  };
 
   const fetchSubscription = async () => {
     try {

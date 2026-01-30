@@ -122,6 +122,17 @@ export default function ConfigPanelView({
               isClearable
               isSearchable
               maxMenuHeight={400}
+              className="block dark:hidden w-full"
+              styles={customSelectStyles}
+              value={null}
+            />
+            <Select
+              options={vocabSetOptions}
+              onChange={(option) => option && onSelectSet(option.value, 'vocabulary')}
+              placeholder="Select a set to add..."
+              isClearable
+              isSearchable
+              maxMenuHeight={400}
               className="hidden dark:block w-full"
               styles={customSelectStylesDark}
               value={null}
@@ -168,6 +179,17 @@ export default function ConfigPanelView({
 
           </div>
           <div className="flex gap-2">
+            <Select
+              options={grammarSetOptions}
+              onChange={(option) => option && onSelectSet(option.value, 'grammar')}
+              placeholder="Select a set to add..."
+              isClearable
+              isSearchable
+              maxMenuHeight={400}
+              className="block dark:hidden w-full"
+              styles={customSelectStyles}
+              value={null}
+            />
             <Select
               options={grammarSetOptions}
               onChange={(option) => option && onSelectSet(option.value, 'grammar')}

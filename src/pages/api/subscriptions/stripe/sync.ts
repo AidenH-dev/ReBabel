@@ -68,13 +68,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       || subscription.current_period_end
       || Math.floor(Date.now() / 1000);
 
-    // Current time in UTC
-    const currentPeriodStart = new Date();
-
-    // One month from start (UTC-safe)
-    const currentPeriodEnd = new Date(currentPeriodStart);
-    currentPeriodEnd.setUTCMonth(currentPeriodEnd.getUTCMonth() + 1);
-
     const subscriptionData = {
       TYPE: 'subscription',
       owner: userId,
@@ -82,8 +75,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       stripe_subscription_id: subscription.id,
       status: subscription.status,
       price_id: subscription.items.data[0]?.price.id || '',
-      current_period_start: currentPeriodStart.toISOString(),
-      current_period_end: currentPeriodEnd.toISOString(),
+      current_period_start: new Date(periodStart * 1000).toISOString(),
+      current_period_end: new Date(periodEnd * 1000).toISOString(),
       cancel_at_period_end: (subscription.cancel_at_period_end ?? false).toString(),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

@@ -24,7 +24,7 @@ export function PremiumProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [sessionsUsedToday, setSessionsUsedToday] = useState(0);
 
-  const isPremium = subscription?.isPremium || subscription?.isGracePeriod || false;
+  const isPremium = subscription?.isPremium || false;
   const dailyLimit = isPremium ? PREMIUM_DAILY_LIMIT : FREE_DAILY_LIMIT;
   const sessionsRemaining = Math.max(0, dailyLimit - sessionsUsedToday);
   const canStartSession = sessionsRemaining > 0;

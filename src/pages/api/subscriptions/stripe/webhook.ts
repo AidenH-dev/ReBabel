@@ -42,17 +42,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     switch (event.type) {
-      case 'checkout.session.completed': {
-        const session = event.data.object as Stripe.Checkout.Session;
-        if (session.subscription) {
-          const subscription = await stripe.subscriptions.retrieve(
-            session.subscription as string
-          );
-          await handleSubscriptionUpdate(supabase, subscription, event.id);
-        }
-        break;
-      }
-
       case 'customer.subscription.created':
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription;
@@ -91,10 +80,10 @@ async function handleSubscriptionUpdate(supabase: SupabaseClientAny, subscriptio
   // Access subscription properties (cast to any for API version compatibility)
   const sub = subscription as any;
 
-  // Get period dates from subscription items (where Stripe stores them in newer API)
+  // Get period dates - check nested object format (newer API) and flat format (older API)
   const itemData = sub.items?.data?.[0] || {};
-  const periodStart = itemData.current_period_start || sub.current_period_start || Math.floor(Date.now() / 1000);
-  const periodEnd = itemData.current_period_end || sub.current_period_end || Math.floor(Date.now() / 1000);
+  const periodStart = sub.current_period?.start || itemData.current_period_start || sub.current_period_start || Math.floor(Date.now() / 1000);
+  const periodEnd = sub.current_period?.end || itemData.current_period_end || sub.current_period_end || Math.floor(Date.now() / 1000);
 
   const subscriptionData = {
     TYPE: 'subscription',
@@ -125,13 +114,16 @@ async function handleSubscriptionCanceled(supabase: SupabaseClientAny, subscript
   const sub = subscription as any;
   const ownerId = subscription.metadata.auth0_user_id;
 
+  const periodEnd = sub.current_period?.end || sub.current_period_end || 0;
+
   const subscriptionData = {
     TYPE: 'subscription',
     owner: ownerId,
     stripe_subscription_id: subscription.id,
     stripe_event_id: eventId,
     status: 'canceled',
-    current_period_end: new Date((sub.current_period_end || 0) * 1000).toISOString(),
+    current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : new Date().toISOString(),
+    cancel_at_period_end: 'false',
     updated_at: new Date().toISOString(),
   };
 

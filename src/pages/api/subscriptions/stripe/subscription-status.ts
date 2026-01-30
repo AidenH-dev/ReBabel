@@ -17,10 +17,10 @@ interface ApiResponse {
   success: boolean;
   subscription: SubscriptionData | null;
 
-  // Now defined strictly off DB status === 'active'
+  // True when DB status === 'active' (includes grace period since Stripe keeps status active until period ends)
   isPremium: boolean;
 
-  // Keep in response if you want UI messaging, but it does NOT grant access anymore
+  // True when subscription is active but won't renew (cancel_at_period_end is true)
   isGracePeriod: boolean;
 
   accessLevel: 'premium' | 'free';
@@ -65,20 +65,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
 
     const subscription = (data as SubscriptionData | null) ?? null;
 
-    // ✅ Source of truth: DB only
     const isPremium = !!subscription && subscription.status === 'active';
 
-    // Optional: still compute grace period for messaging ONLY
-    const now = new Date();
-    const endsAt =
-      subscription?.current_period_end ? new Date(subscription.current_period_end) : null;
-
+    // Grace period: subscription is still active but won't renew
     const isGracePeriod =
       !!subscription &&
-      subscription.status !== 'active' &&
-      subscription.cancel_at_period_end === 'true' &&
-      !!endsAt &&
-      endsAt > now;
+      subscription.status === 'active' &&
+      subscription.cancel_at_period_end === 'true';
 
     return res.status(200).json({
       success: true,

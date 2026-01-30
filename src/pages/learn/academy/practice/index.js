@@ -15,7 +15,7 @@ import { usePremium } from "@/contexts/PremiumContext";
 
 export default function VocabularyDashboard() {
     // Premium context for session gating
-    const { canStartSession, sessionsRemaining, dailyLimit, isPremium, incrementSessionCount } = usePremium();
+    const { canStartSession, sessionsRemaining, dailyLimit, isPremium, isLoading: isPremiumLoading, incrementSessionCount } = usePremium();
 
     // Tabs: "srs" | "translate" | "groups"
     const [activeTab, setActiveTab] = useState("translate");
@@ -496,9 +496,20 @@ export default function VocabularyDashboard() {
                                             <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white flex-1">
                                                 Practice Scope
                                             </h2>
-                                            <div className={`text-xs px-3 py-1.5 rounded-full ${sessionsRemaining > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'}`}>
-                                                {sessionsRemaining}/{dailyLimit} sessions left today
-                                            </div>
+                                            {!isPremiumLoading && (
+                                                isPremium ? (
+                                                    <div className={`text-xs px-3 py-1.5 rounded-full ${sessionsRemaining > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'}`}>
+                                                        {sessionsRemaining}/{dailyLimit} sessions left today
+                                                    </div>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => router.push('/learn/subscription')}
+                                                        className={`text-xs px-3 py-1.5 rounded-full cursor-pointer hover:opacity-80 transition-opacity ${sessionsRemaining > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'}`}
+                                                    >
+                                                        {sessionsRemaining}/{dailyLimit} sessions left today · <span className="font-medium underline">Free Tier</span>
+                                                    </button>
+                                                )
+                                            )}
                                         </div>
                                         {/* Configuration Panel */}
                                         <ConfigPanelView
