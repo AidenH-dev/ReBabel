@@ -1,17 +1,21 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { 
-  TbSettings, 
-  TbMenu2, 
-  TbX, 
+import {
+  TbSettings,
+  TbMenu2,
+  TbX,
   TbSchool,
   TbCertificate,
   TbBooks,
-  TbLayoutDashboard
+  TbLayoutDashboard,
+  TbCrown
 } from "react-icons/tb";
 import Link from "next/link";
 import { TbInfoSquareRounded } from "react-icons/tb";
+import { HiOutlineStar } from "react-icons/hi2";
+import { BsBookmarkStar } from "react-icons/bs";
+
 
 function MainSidebar() {
   const router = useRouter();
@@ -40,7 +44,8 @@ function MainSidebar() {
   const isAcademyActive = /^\/learn\/(academy|modules|sets|learning_material|material|section)/.test(path);
   const isCertificateActive = /^\/certificate/.test(path);
   const isResourcesActive = /^\/learn\/resources/.test(path);
-  const isMainSettingsActive = /^\/settings/.test(path);
+  const isSubscriptionActive = /^\/learn\/subscription/.test(path);
+  const isMainSettingsActive = /^\/learn\/settings/.test(path);
 
   const baseLink =
     "flex items-center p-2 rounded-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-colors";
@@ -129,6 +134,23 @@ function MainSidebar() {
                 }`}
               />
               <span className="ms-3">Information</span>
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href="/learn/subscription"
+              className={`${baseLink} ${
+                isSubscriptionActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
+              }`}
+              aria-current={isSubscriptionActive ? "page" : undefined}
+            >
+              <BsBookmarkStar
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
+                  isSubscriptionActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                }`}
+              />
+              <span className="ms-3">Subscription</span>
             </Link>
           </li>
 

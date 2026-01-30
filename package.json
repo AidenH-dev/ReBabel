@@ -20,6 +20,7 @@
     "formik": "^2.4.6",
     "fs": "^0.0.1-security",
     "gray-matter": "^4.0.3",
+    "micro": "^10.0.1",
     "next": "14.2.1",
     "openai": "^4.36.0",
     "posthog-js": "^1.268.9",
@@ -33,6 +34,7 @@
     "rehype-highlight": "^7.0.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
+    "stripe": "^20.2.0",
     "wanakana": "^5.3.1",
     "yup": "^1.5.0"
   },

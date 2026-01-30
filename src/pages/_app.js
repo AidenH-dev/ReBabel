@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import { Fredoka } from "@next/font/google";
 import { UserProvider, useUser } from "@auth0/nextjs-auth0/client";
+import { PremiumProvider } from '@/contexts/PremiumContext';
 import ReportIssueButton from '@/components/report-issue';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -56,33 +57,35 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <UserProvider>
-      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-VRBTF7S087" />
-      <Script id="google-analytics">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-VRBTF7S087');
-        `}
-      </Script>
-      {isPosthogEnabled ? (
-        <PostHogProvider client={posthog}>
-          <PostHogAuthBridge />
+      <PremiumProvider>
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-VRBTF7S087" />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-VRBTF7S087');
+          `}
+        </Script>
+        {isPosthogEnabled ? (
+          <PostHogProvider client={posthog}>
+            <PostHogAuthBridge />
+            <div className={fredoka.className}>
+              <Component {...pageProps} />
+              <ReportIssueButton />
+              <Analytics />
+              <SpeedInsights />
+            </div>
+          </PostHogProvider>
+        ) : (
           <div className={fredoka.className}>
             <Component {...pageProps} />
             <ReportIssueButton />
             <Analytics />
             <SpeedInsights />
           </div>
-        </PostHogProvider>
-      ) : (
-        <div className={fredoka.className}>
-          <Component {...pageProps} />
-          <ReportIssueButton />
-          <Analytics />
-          <SpeedInsights />
-        </div>
-      )}
+        )}
+      </PremiumProvider>
     </UserProvider>
   );
 }
