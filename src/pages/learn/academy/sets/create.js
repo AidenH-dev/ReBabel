@@ -413,7 +413,8 @@ export default function CreateNewSet() {
             date_created: currentDate,
             updated_at: currentDate,
             last_studied: currentDate,
-            tags: [] // Could extract from items or add a separate field
+            tags: [], // Could extract from items or add a separate field
+            srs_enabled: 'true'
         };
 
         // Transform items

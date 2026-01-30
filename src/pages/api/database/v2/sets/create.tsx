@@ -48,6 +48,7 @@ interface SetData {
   updated_at: string;
   last_studied: string;
   tags: string[];
+  srs_enabled?: string;
   item_num?: number;
   set_type?: 'vocab' | 'grammar';
 }
