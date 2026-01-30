@@ -1,8 +1,28 @@
-// components/pages/academy/sets/SRSLearnNewSet/ReviewCards/SRSReviewCards.jsx
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
 
-export default function SRSReviewCards({
+/**
+ * ReviewView - Shared presentational component for review phase card display
+ *
+ * Used across Quiz mode and SRS learning flows to display vocabulary or grammar cards
+ * during the review phase. Shows full card details with navigation controls.
+ *
+ * @param {Object} currentCard - The card object to display
+ * @param {string} currentCard.type - Card type: "vocabulary" or "grammar"
+ * @param {string} [currentCard.kanji] - Kanji characters (vocabulary only, optional)
+ * @param {string} [currentCard.kana] - Kana reading (vocabulary only)
+ * @param {string} [currentCard.english] - English meaning (vocabulary only)
+ * @param {string} [currentCard.lexical_category] - Part of speech (vocabulary only, optional)
+ * @param {string} [currentCard.title] - Grammar pattern (grammar only)
+ * @param {string} [currentCard.description] - Grammar explanation (grammar only)
+ * @param {string} [currentCard.topic] - Grammar topic (grammar only, optional)
+ * @param {string[]} [currentCard.example_sentences] - Example sentences (both types, optional)
+ * @param {boolean} isLastCard - True if this is the last card in the review sequence
+ * @param {boolean} isFirstCard - True if this is the first card in the review sequence
+ * @param {function(): void} onNext - Callback when Next/Start Quiz button is clicked
+ * @param {function(): void} onPrevious - Callback when Previous button is clicked
+ */
+export default function ReviewView({
   currentCard,
   isLastCard,
   isFirstCard,

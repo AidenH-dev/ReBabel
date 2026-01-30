@@ -1,19 +1,42 @@
-// components/MasterQuizSummary.jsx
 import { FaCheckCircle, FaTimesCircle, FaRedo } from "react-icons/fa";
 
-export default function MasterQuizSummary({
+/**
+ * SummaryView - Shared presentational component for session completion summary
+ *
+ * Used across Quiz mode, SRS Learn-New, and SRS Due-Now flows.
+ * Displays session statistics, accuracy visualization, and question breakdown with optional retry functionality.
+ *
+ * @param {Object} sessionStats - Session statistics
+ * @param {number} sessionStats.correct - Number of correct answers
+ * @param {number} sessionStats.incorrect - Number of incorrect answers
+ * @param {number} sessionStats.accuracy - Overall accuracy percentage
+ * @param {Array} answeredItems - Array of answered question objects
+ * @param {boolean} answeredItems[].isCorrect - Whether the answer was correct
+ * @param {string} answeredItems[].questionType - Type of question
+ * @param {string} answeredItems[].answerType - Type of answer expected
+ * @param {string} answeredItems[].question - The question text
+ * @param {string} answeredItems[].userAnswer - User's answer (if incorrect)
+ * @param {string} answeredItems[].correctAnswer - The correct answer
+ * @param {boolean} [animateAccuracy=false] - Whether to animate the accuracy bar
+ * @param {function} [onRetry] - Optional callback for retry button (if provided, shows retry button)
+ * @param {function} onBackToSet - Callback for back to set button
+ * @param {string} completionTitle - Title to display ("Quiz Complete!" or "Lesson Complete!")
+ */
+
+export default function SummaryView({
   sessionStats,
-  quizItems, // Legacy - not used for count anymore
   answeredItems,
-  animateAccuracy,
+  animateAccuracy = false,
   onRetry,
-  onExit
+  onBackToSet,
+  completionTitle
 }) {
   // Calculate total questions from all answered items (includes all phases)
   const totalQuestions = answeredItems.length;
+
   return (
     <div className="flex-1 flex flex-col lg:flex-row gap-3 overflow-hidden lg:mr-10">
-      {/* Left Side - Quiz Summary */}
+      {/* Left Side - Session Summary */}
       <div className="flex-1 flex items-center justify-center lg:justify-end lg:pr-3">
         <div className="w-full max-w-xl">
           <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 h-auto lg:h-[500px]">
@@ -23,7 +46,7 @@ export default function MasterQuizSummary({
                   <FaCheckCircle className="text-white text-2xl sm:text-3xl" />
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                  Quiz Complete!
+                  {completionTitle}
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-white/60">
                   Great job! Here&apos;s how you did:
@@ -150,16 +173,20 @@ export default function MasterQuizSummary({
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-3 sm:mt-4">
+                {onRetry && (
+                  <button
+                    onClick={onRetry}
+                    className="flex-1 px-4 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base"
+                  >
+                    <FaRedo className="inline mr-2" />
+                    Retry Quiz
+                  </button>
+                )}
                 <button
-                  onClick={onRetry}
-                  className="flex-1 px-4 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base"
-                >
-                  <FaRedo className="inline mr-2" />
-                  Retry Quiz
-                </button>
-                <button
-                  onClick={onExit}
-                  className="flex-1 px-4 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base"
+                  onClick={onBackToSet}
+                  className={`${
+                    onRetry ? 'flex-1' : 'w-full'
+                  } px-4 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base`}
                 >
                   Back to Study Set
                 </button>

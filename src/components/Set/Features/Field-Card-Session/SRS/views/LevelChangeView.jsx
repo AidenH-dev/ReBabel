@@ -1,5 +1,5 @@
 // components/pages/academy/sets/SRSLearnNewSet/LevelChange/SRSLevelChange.jsx
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
 export default function SRSLevelChange({
@@ -10,37 +10,58 @@ export default function SRSLevelChange({
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const timersRef = useRef({});
 
   const levelIncreased = newLevel > oldLevel;
   const levelDecreased = newLevel < oldLevel;
 
+  // Function to immediately dismiss and continue
+  const handleDismiss = () => {
+    // Clear all timers
+    Object.values(timersRef.current).forEach(timer => clearTimeout(timer));
+    timersRef.current = {};
+
+    // Immediately hide and complete
+    setIsVisible(false);
+    if (onComplete) onComplete();
+  };
+
   useEffect(() => {
     // Trigger entrance animation
-    const showTimer = setTimeout(() => {
+    timersRef.current.showTimer = setTimeout(() => {
       setIsVisible(true);
     }, 100);
 
     // Start number animation
-    const animateTimer = setTimeout(() => {
+    timersRef.current.animateTimer = setTimeout(() => {
       setIsAnimating(true);
     }, 800);
 
     // Auto-dismiss after showing
-    const hideTimer = setTimeout(() => {
+    timersRef.current.hideTimer = setTimeout(() => {
       setIsVisible(false);
     }, 3800);
 
     // Call onComplete to continue to next item
-    const completeTimer = setTimeout(() => {
+    timersRef.current.completeTimer = setTimeout(() => {
       if (onComplete) onComplete();
     }, 4300);
 
     return () => {
-      clearTimeout(showTimer);
-      clearTimeout(animateTimer);
-      clearTimeout(hideTimer);
-      clearTimeout(completeTimer);
+      Object.values(timersRef.current).forEach(timer => clearTimeout(timer));
     };
+  }, [onComplete]);
+
+  // Keyboard shortcut: Enter to dismiss
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        handleDismiss();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onComplete]);
 
   // Get display text for item
@@ -179,6 +200,9 @@ export default function SRSLevelChange({
               {levelIncreased && `Next review scheduled further out`}
               {levelDecreased && `You'll see this item sooner`}
               {!levelIncreased && !levelDecreased && `Review schedule unchanged`}
+            </div>
+            <div className="text-xs text-gray-400 dark:text-gray-500 text-center mt-2">
+              Press Enter to continue
             </div>
           </div>
         </div>

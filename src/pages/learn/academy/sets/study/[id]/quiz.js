@@ -1,15 +1,16 @@
 // pages/learn/academy/sets/study/[id]/quiz.js
 import Head from "next/head";
 import MainSidebar from "@/components/Sidebars/AcademySidebar";
-import MasterQuizModeSelect from "@/components/pages/academy/sets/QuizSet/ModeSelect/MasterQuizModeSelect.jsx";
-import MasterQuizHeader from "@/components/pages/academy/sets/QuizSet/QuizHeader/MasterQuizHeader.jsx";
-import MasterQuestionCard from "@/components/pages/academy/sets/QuizSet/QuestionCard/MasterQuestionCard.jsx";
-import MasterQuizSummary from "@/components/pages/academy/sets/QuizSet/QuizSummary/MasterQuizSummary.jsx";
-import MasterReviewCards from "@/components/pages/academy/sets/QuizSet/ReviewCards/MasterReviewCards.jsx";
-import MasterMultipleChoice from "@/components/pages/academy/sets/QuizSet/MultipleChoice/MasterMultipleChoice.jsx";
+import MasterQuizModeSelect from "@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterQuizModeSelect";
+import MasterQuizHeader from "@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterQuizHeader";
+import MasterQuestionCard from "@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterQuestionCard";
+import SummaryView from "@/components/Set/Features/Field-Card-Session/shared/views/SummaryView";
+import ReviewView from "@/components/Set/Features/Field-Card-Session/shared/views/ReviewView.jsx";
+import MasterMultipleChoice from "@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterMultipleChoice";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { generateOptionsFromQuizItems, shuffleArray } from "@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration";
 
 export default function SetQuiz() {
     const router = useRouter();
@@ -245,49 +246,12 @@ export default function SetQuiz() {
         return items;
     };
 
-    // Shuffle array
-    const shuffleArray = (array) => {
-        const shuffled = [...array];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    };
-
-    // Generate 4 options for multiple choice (1 correct + 3 wrong)
-    const generateOptions = (correctItem, allItems) => {
-        const options = [correctItem.answer];
-
-        // Get wrong answers from other items with same answer type
-        const wrongAnswers = allItems
-            .filter(item =>
-                item.id !== correctItem.id &&
-                item.answerType === correctItem.answerType &&
-                item.answer !== correctItem.answer
-            )
-            .map(item => item.answer);
-
-        // Shuffle and take 3 random wrong answers
-        const shuffledWrong = shuffleArray(wrongAnswers);
-        for (let i = 0; i < 3 && i < shuffledWrong.length; i++) {
-            options.push(shuffledWrong[i]);
-        }
-
-        // If we don't have enough unique wrong answers, add some placeholders
-        while (options.length < 4) {
-            options.push(`Option ${options.length}`);
-        }
-
-        return shuffleArray(options);
-    };
-
     // Function to initialize multiple choice questions
     const initializeMultipleChoice = () => {
-        // Generate multiple choice questions from quiz items
+        // Generate multiple choice questions from quiz items using centralized utility
         const mcQuestions = quizItems.map(item => ({
             ...item,
-            options: generateOptions(item, quizItems)
+            options: generateOptionsFromQuizItems(item, quizItems)
         }));
         setMultipleChoiceItems(shuffleArray(mcQuestions));
     };
@@ -563,18 +527,19 @@ export default function SetQuiz() {
 
                         {/* Main Quiz Area */}
                         {quizCompleted ? (
-                            <MasterQuizSummary
+                            <SummaryView
                                 sessionStats={sessionStats}
-                                quizItems={quizItems}
                                 answeredItems={answeredItems}
                                 animateAccuracy={animateAccuracy}
                                 onRetry={handleRetry}
-                                onExit={handleExit}
+                                onBackToSet={handleExit}
+                                completionTitle="Quiz Complete!"
                             />
                         ) : currentPhase === 'review' ? (
-                            <MasterReviewCards
-                                cards={reviewItems}
-                                currentIndex={currentIndex}
+                            <ReviewView
+                                currentCard={reviewItems[currentIndex]}
+                                isLastCard={currentIndex === reviewItems.length - 1}
+                                isFirstCard={currentIndex === 0}
                                 onNext={() => {
                                     if (currentIndex < reviewItems.length - 1) {
                                         setCurrentIndex(prev => prev + 1);
