@@ -85,7 +85,7 @@ export default function GradeResultView({ gradeResult }) {
   );
 
   return (
-    <div className="max-h-[calc(100vh-20rem)] overflow-y-auto pr-2">
+    <div className="max-h-none lg:max-h-[calc(100vh-20rem)] overflow-y-auto pr-2">
       <div className="space-y-4">
         {/* Score Circles */}
         <div className="flex justify-center gap-8">

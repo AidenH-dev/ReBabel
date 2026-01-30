@@ -10,6 +10,8 @@ import { useRouter } from "next/router";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { TbX } from "react-icons/tb";
 import { FaDumbbell } from "react-icons/fa";
+import { BiBook } from "react-icons/bi";
+import { TbLanguage } from "react-icons/tb";
 
 export default function TranslatePracticeSession() {
   const router = useRouter();
@@ -100,7 +102,7 @@ export default function TranslatePracticeSession() {
     return (
       <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#141f25]">
         <AcademySidebar />
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 p-3 sm:p-6 overflow-y-auto">
           <TranslateSummaryView
             sessionStats={sessionStats}
             questionResults={questionResults}
@@ -123,31 +125,43 @@ export default function TranslatePracticeSession() {
 
       <AcademySidebar />
 
-      <main className="flex-1 flex flex-col p-6 overflow-y-auto">
+      <main className="flex-1 flex flex-col p-3 sm:p-6 overflow-y-auto">
         {/* Header - Quiz Mode Style */}
         <div className="w-full max-w-5xl mx-auto mb-4 sm:mb-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4">
-            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+          <div className="flex items-center justify-between mb-4 mt-2 sm:mt-0 ">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0 ml-13 sm:ml-0 ">
               <button
                 onClick={() => router.push('/learn/academy/practice')}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 transition-colors"
+                className="shrink-0 p-2 rounded-lg bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 transition-colors"
                 aria-label="Exit"
               >
                 <TbX className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 dark:text-white" />
               </button>
 
-              <div className="flex items-center gap-2">
-                <FaDumbbell className="text-[#e30a5f] text-lg sm:text-xl" />
-                <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white truncate">
+              <div className="flex items-center gap-2 min-w-0">
+                <FaDumbbell className="shrink-0 text-[#e30a5f] text-lg sm:text-xl" />
+                <h1 className="text-base sm:text-xl font-semibold text-gray-900 dark:text-white truncate">
                   Translate Practice
                 </h1>
               </div>
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm w-full sm:w-auto justify-between sm:justify-end">
+            <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm shrink-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <TbLanguage className="text-green-500 text-sm" />
+                <span className="text-gray-600 dark:text-white/70">
+                  <span className="hidden sm:inline">Grammar: </span>{sessionStats.avgGrammar}%
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <BiBook className="text-blue-500 text-sm" />
+                <span className="text-gray-600 dark:text-white/70">
+                  <span className="hidden sm:inline">Vocab: </span>{sessionStats.avgVocab}%
+                </span>
+              </div>
               <div className="text-gray-600 dark:text-white/70">
-                <span className="hidden sm:inline">Average Score: </span>
+                <span className="hidden sm:inline">Average: </span>
                 <span className="font-semibold">{sessionStats.avgScore}%</span>
               </div>
             </div>
@@ -155,7 +169,7 @@ export default function TranslatePracticeSession() {
 
           {/* Progress Bar */}
           <div>
-            <div className="flex items-center justify-between text-sm text-gray-600 dark:text-white/70 mb-2">
+            <div className="flex items-center justify-between text-xs sm:text-sm text-gray-600 dark:text-white/70 mb-2">
               <span className="flex items-center gap-2">
                 <FaDumbbell className="text-sm sm:hidden" />
                 <span>

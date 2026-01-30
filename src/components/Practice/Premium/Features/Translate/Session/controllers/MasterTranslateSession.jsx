@@ -201,11 +201,57 @@ export default function MasterTranslateSession({
     return null;
   }
 
+  // Shared action buttons used in both mobile and desktop layouts
+  const actionButtons = (
+    <>
+      {!showResult ? (
+        <button
+          onClick={handleSubmit}
+          disabled={isGrading || !userAnswer.trim()}
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all
+                   bg-gradient-to-r from-[#e30a5f] to-[#f41567] hover:from-[#f41567] hover:to-[#e30a5f] text-white
+                   disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+        >
+          {isGrading ? (
+            <>
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              Grading...
+            </>
+          ) : (
+            'Submit Translation'
+          )}
+        </button>
+      ) : (
+        <div className="flex gap-2">
+          <button
+            onClick={handleRetry}
+            className="flex-1 px-4 py-3 rounded-lg border-2 border-[#e30a5f] text-[#e30a5f] font-medium hover:bg-[#e30a5f]/10"
+          >
+            I Was Correct
+          </button>
+          <button
+            onClick={handleNext}
+            className="flex-1 px-4 py-3 rounded-lg bg-[#e30a5f] text-white font-medium hover:opacity-90"
+          >
+            {currentQuestionIndex + 1 >= sessionLength ? 'Finish' : 'Next Question'}
+          </button>
+        </div>
+      )}
+    </>
+  );
+
+  const expectedAnswer = showResult && (
+    <div className="mt-4 p-3 bg-gray-50 dark:bg-white/5 rounded-lg">
+      <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Expected Answer:</p>
+      <p className="text-sm text-gray-900 dark:text-white">{currentQuestion.expectedJapanese}</p>
+    </div>
+  );
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="lg:grid lg:grid-cols-2 lg:gap-6">
       {/* Error Message */}
       {error && (
-        <div className="col-span-full mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+        <div className="lg:col-span-full mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
           <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
           <button
             onClick={() => setError(null)}
@@ -217,7 +263,8 @@ export default function MasterTranslateSession({
       )}
 
       {/* Left Panel - Translation Area */}
-      <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
+      {/* Desktop: always visible | Mobile: hidden when showing results */}
+      <div className={`bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-4 sm:p-6 ${showResult ? 'hidden lg:block' : 'block'}`}>
         {/* English Sentence */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -253,58 +300,43 @@ export default function MasterTranslateSession({
           />
         </div>
 
-        {/* Action Button */}
-        {!showResult ? (
-          <button
-            onClick={handleSubmit}
-            disabled={isGrading || !userAnswer.trim()}
-            className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all
-                     bg-gradient-to-r from-[#e30a5f] to-[#f41567] hover:from-[#f41567] hover:to-[#e30a5f] text-white
-                     disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
-          >
-            {isGrading ? (
-              <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                Grading...
-              </>
-            ) : (
-              'Submit Translation'
-            )}
-          </button>
-        ) : (
-          <div className="flex gap-2">
-            <button
-              onClick={handleRetry}
-              className="flex-1 px-4 py-3 rounded-lg border-2 border-[#e30a5f] text-[#e30a5f] font-medium hover:bg-[#e30a5f]/10"
-            >
-              I Was Correct
-            </button>
-            <button
-              onClick={handleNext}
-              className="flex-1 px-4 py-3 rounded-lg bg-[#e30a5f] text-white font-medium hover:opacity-90"
-            >
-              {currentQuestionIndex + 1 >= sessionLength ? 'Finish' : 'Next Question'}
-            </button>
-          </div>
-        )}
+        {/* Action Buttons & Expected Answer - Desktop only */}
+        <div className="hidden lg:block">
+          {actionButtons}
+          {expectedAnswer}
+        </div>
 
-        {/* Expected Answer (show after grading) */}
-        {showResult && (
-          <div className="mt-4 p-3 bg-gray-50 dark:bg-white/5 rounded-lg">
-            <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Expected Answer:</p>
-            <p className="text-sm text-gray-900 dark:text-white">{currentQuestion.expectedJapanese}</p>
+        {/* Action Buttons - Mobile only (submit state) */}
+        {!showResult && (
+          <div className="lg:hidden">
+            {actionButtons}
           </div>
         )}
       </div>
 
       {/* Right Panel - Grading Results */}
-      <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
+      {/* Desktop: always visible | Mobile: hidden until results ready */}
+      <div className={`bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-4 sm:p-6 ${showResult ? 'block' : 'hidden lg:block'} mt-4 lg:mt-0`}>
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Grading Results
         </h2>
 
         {showResult && gradeResult ? (
-          <GradeResultView gradeResult={gradeResult} />
+          <>
+            <GradeResultView gradeResult={gradeResult} />
+
+            {/* Mobile-only: show user answer, expected answer & action buttons here */}
+            <div className="lg:hidden mt-4 space-y-4">
+              <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Your Answer:</p>
+                <p className="text-sm text-gray-900 dark:text-white">{userAnswer}</p>
+              </div>
+              {expectedAnswer}
+              <div>
+                {actionButtons}
+              </div>
+            </div>
+          </>
         ) : (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="w-20 h-20 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center mb-4">

@@ -16,7 +16,7 @@ const PremiumContext = createContext({
 
 // Daily session limits
 const FREE_DAILY_LIMIT = 1;
-const PREMIUM_DAILY_LIMIT = 5;
+const PREMIUM_DAILY_LIMIT = 1000;
 
 export function PremiumProvider({ children }) {
   const { user, isLoading: userLoading } = useUser();
