@@ -468,7 +468,8 @@ export default function VocabularyDashboard() {
                                             Translate
                                         </span>
                                     </button>
-                                    <button
+                                    {/* TODO: Unhide when QuickTime feature is ready */}
+                                    {/* <button
                                         onClick={() => setActiveTab("QuickTime")}
                                         className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
                                             ${activeTab === "QuickTime"
@@ -480,7 +481,7 @@ export default function VocabularyDashboard() {
                                             <LuAlarmClock className="text-xl" />
                                             QuickTime
                                         </span>
-                                    </button>
+                                    </button> */}
 
                                 </div>
                             </div>

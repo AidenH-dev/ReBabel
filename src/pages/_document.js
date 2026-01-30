@@ -17,7 +17,6 @@ export default function Document() {
         {/* DNS Prefetch for External Services */}
         <link rel="dns-prefetch" href="https://analytics.vercel.com" />
         <link rel="dns-prefetch" href="https://auth.rebabel.org" />
-        <link rel="dns-prefetch" href="https://storage.ko-fi.com" />
         <link rel="dns-prefetch" href="https://api.supabase.co" />
 
         {/* Preconnect to critical origins */}

@@ -1,4 +1,3 @@
-import Script from "next/script";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -139,21 +138,6 @@ export default function Home() {
           <link rel="sitemap" href="https://rebabel.org/sitemap.xml" />
         </Head>
 
-        <Script
-          src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
-          strategy="afterInteractive"
-          onLoad={() => {
-            if (window?.kofiWidgetOverlay?.draw) {
-              window.kofiWidgetOverlay.draw("rebabel", {
-                type: "floating-chat",
-                "floating-chat.position": "bottom-left",
-                "floating-chat.donateButton.text": "Support Us",
-                "floating-chat.donateButton.background-color": "#E30B5C",
-                "floating-chat.donateButton.text-color": "#fff",
-              });
-            }
-          }}
-        />
 
         {/* Hero Section */}
         <section className="w-full px-4 sm:px-6 lg:px-8 pt-16 pb-12 md:pt-16 md:pb-18">

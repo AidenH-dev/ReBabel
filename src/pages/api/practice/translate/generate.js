@@ -27,7 +27,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     deepseek: {
       url: 'https://api.deepseek.com/v1/chat/completions',
       key: process.env.DEEPSEEK_KEY,
-      model: 'deepseek-reasoner',
+      model: 'deepseek-chat',
     }
   };
 
