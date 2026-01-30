@@ -108,7 +108,7 @@ export default function ConfigPanelView({
   return (
     <div className="sticky top-0 z-10"> {/** bg-white dark:bg-[#1c2b35] border border-black/5 dark:border-white/5 rounded-xl p-4 mb-4 shadow-sm */}
       {/* Pool Headers */}
-      <div className="grid grid-cols-2 gap-3 mb-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
         <div className="flex flex-col gap-2 bg-white dark:bg-[#22333e] border border-black/5 dark:border-white/5 rounded-xl p-4 inset-shadow-xs dark:inset-shadow-[#1c2b35]">
           <div className="flex items-center justify-between">
             <span className="font-medium text-black dark:text-white">Vocabulary</span>
@@ -247,7 +247,7 @@ export default function ConfigPanelView({
           <h4 className="text-xs font-semibold uppercase text-black/60 dark:text-white/60">Focus Configuration</h4>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
           <TagInputView
             label="Vocabulary"
             placeholder="Add vocabulary focal points..."
@@ -271,7 +271,7 @@ export default function ConfigPanelView({
           />
         </div>
 
-        <div className="flex gap-2 text-xs justify-between items-center">
+        <div className="flex flex-col md:flex-row gap-2 text-xs md:justify-between md:items-center">
           <div className="flex gap-3">
             <div>
               <span className="text-black/60 dark:text-white/60">Total Grammar: </span>
@@ -284,7 +284,7 @@ export default function ConfigPanelView({
           </div>
 
           {/* Validation & Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
             {validationMessage && (
               <p className="text-xs text-orange-600 dark:text-orange-400">{validationMessage}</p>
             )}
@@ -305,7 +305,7 @@ export default function ConfigPanelView({
               <button
                 onClick={onStartPractice}
                 disabled={!canStart}
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#e30a5f] text-white rounded-lg hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-[#e30a5f] text-white rounded-lg hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FaPlay /> Start Practice
               </button>
