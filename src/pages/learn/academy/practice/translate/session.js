@@ -8,6 +8,7 @@ import TranslateSummaryView from "@/components/Practice/Premium/Features/Transla
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { usePremium } from "@/contexts/PremiumContext";
 import { TbX } from "react-icons/tb";
 import { FaDumbbell } from "react-icons/fa";
 import { BiBook } from "react-icons/bi";
@@ -15,6 +16,7 @@ import { TbLanguage } from "react-icons/tb";
 
 export default function TranslatePracticeSession() {
   const router = useRouter();
+  const { incrementSessionCount } = usePremium();
   const [config, setConfig] = useState(null);
   const [sessionComplete, setSessionComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -82,6 +84,23 @@ export default function TranslatePracticeSession() {
 
   const handleSessionComplete = () => {
     setSessionComplete(true);
+  };
+
+  const handleGenerationSuccess = async () => {
+    incrementSessionCount();
+    try {
+      await fetch('/api/analytics/user/sessions/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionType: 'translate' })
+      });
+    } catch (e) {
+      console.error('Failed to record session start:', e);
+    }
+  };
+
+  const handleGenerationError = () => {
+    router.push('/learn/academy/practice');
   };
 
   if (isLoading) {
@@ -199,6 +218,8 @@ export default function TranslatePracticeSession() {
             sessionLength={config.sessionLength}
             onQuestionCompleted={handleQuestionCompleted}
             onSessionComplete={handleSessionComplete}
+            onGenerationSuccess={handleGenerationSuccess}
+            onGenerationError={handleGenerationError}
           />
         </div>
       </main>

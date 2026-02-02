@@ -15,7 +15,7 @@ import { usePremium } from "@/contexts/PremiumContext";
 
 export default function VocabularyDashboard() {
     // Premium context for session gating
-    const { canStartSession, sessionsRemaining, dailyLimit, isPremium, isLoading: isPremiumLoading, incrementSessionCount } = usePremium();
+    const { canStartSession, sessionsRemaining, dailyLimit, isPremium, isLoading: isPremiumLoading } = usePremium();
 
     // Tabs: "srs" | "translate" | "groups"
     const [activeTab, setActiveTab] = useState("translate");
@@ -399,19 +399,7 @@ export default function VocabularyDashboard() {
             // Store config in sessionStorage before navigation
             sessionStorage.setItem('translate-practice-config', JSON.stringify(config));
 
-            // Increment session count (optimistic update)
-            incrementSessionCount();
-
-            // Start session in database
-            try {
-                await fetch('/api/analytics/user/sessions/start', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sessionType: 'translate' })
-                });
-            } catch (e) {
-                console.error('Failed to record session start:', e);
-            }
+            // Session start logging is deferred to session page after successful generation
 
             // Navigate to session with simple query param
             router.push({
