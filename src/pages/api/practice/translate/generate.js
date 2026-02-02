@@ -1,5 +1,9 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
+export const config = {
+  maxDuration: 60,
+};
+
 export default withApiAuthRequired(async function handler(req, res) {
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
