@@ -12,6 +12,7 @@ export default function Settings() {
   const [portalLoading, setPortalLoading] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
+  const [subscription, setSubscription] = useState(null);
 
   const themeOptions = [
     { value: 'system', label: 'System', icon: FiMonitor },
@@ -32,7 +33,18 @@ export default function Settings() {
       }
     };
 
+    const fetchSubscription = async () => {
+      try {
+        const res = await fetch("/api/subscriptions/stripe/subscription-status");
+        const data = await res.json();
+        setSubscription(data);
+      } catch (error) {
+        console.error("Error fetching subscription:", error);
+      }
+    };
+
     fetchUserProfile();
+    fetchSubscription();
   }, []);
 
   const handleResetPassword = async () => {
@@ -141,34 +153,36 @@ export default function Settings() {
                 </div>
               </div>
 
-              {/* Subscription Section */}
-              <div className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
-                    <FiCreditCard className="text-lg text-gray-600 dark:text-gray-400" />
+              {/* Subscription Section - Only show for premium users */}
+              {subscription?.isPremium && (
+                <div className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
+                      <FiCreditCard className="text-lg text-gray-600 dark:text-gray-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                        Subscription
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Manage billing & plan
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleManageSubscription}
+                      disabled={portalLoading}
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
+                    >
+                      {portalLoading ? (
+                        <FiLoader className="text-sm animate-spin" />
+                      ) : (
+                        <FiExternalLink className="text-sm" />
+                      )}
+                      Manage
+                    </button>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                      Subscription
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Manage billing & plan
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleManageSubscription}
-                    disabled={portalLoading}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
-                  >
-                    {portalLoading ? (
-                      <FiLoader className="text-sm animate-spin" />
-                    ) : (
-                      <FiExternalLink className="text-sm" />
-                    )}
-                    Manage
-                  </button>
                 </div>
-              </div>
+              )}
 
               {/* Theme Section */}
               <div className="p-4">
