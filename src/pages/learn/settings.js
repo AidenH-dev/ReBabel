@@ -2,7 +2,7 @@ import Head from "next/head";
 import MainSidebar from "../../components/Sidebars/MainSidebar";
 import { useEffect, useState } from "react";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { FiMail, FiKey, FiCreditCard, FiLogOut, FiLoader, FiCheck, FiExternalLink, FiSun, FiMoon, FiMonitor } from "react-icons/fi";
+import { FiMail, FiKey, FiCreditCard, FiLogOut, FiLoader, FiCheck, FiExternalLink, FiSun, FiMoon, FiMonitor, FiX, FiAlertCircle } from "react-icons/fi";
 import { useTheme } from "../../contexts/ThemeContext";
 
 export default function Settings() {
@@ -13,6 +13,16 @@ export default function Settings() {
   const [resetLoading, setResetLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const [subscription, setSubscription] = useState(null);
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [showContact, setShowContact] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const copyEmail = async () => {
+    await navigator.clipboard.writeText("rebabel.development@gmail.com");
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
+  };
 
   const themeOptions = [
     { value: 'system', label: 'System', icon: FiMonitor },
@@ -90,7 +100,7 @@ export default function Settings() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <div className="px-4 md:p-6">
+        <div className="px-4 md:p-6 pb-8">
           <div className="max-w-lg mx-auto">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
               Settings
@@ -245,9 +255,221 @@ export default function Settings() {
                 </div>
               </div>
             </div>
+
+            {/* Footer Links - Small text below card */}
+            <div className="mt-4 flex items-center justify-center gap-3 text-xs text-gray-500 dark:text-gray-500 flex-wrap">
+              <button
+                onClick={() => setShowContact(true)}
+                className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+              >
+                Contact
+              </button>
+              <span>·</span>
+              <button
+                onClick={() => setShowPrivacy(true)}
+                className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+              >
+                Privacy
+              </button>
+              <span>·</span>
+              <button
+                onClick={() => setShowTerms(true)}
+                className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+              >
+                Terms
+              </button>
+            </div>
           </div>
         </div>
       </main>
+
+      {/* Contact Modal */}
+      {showContact && (
+        <div
+          className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={(e) => e.target === e.currentTarget && setShowContact(false)}
+        >
+          <div className="w-full max-w-sm rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/5 dark:border-white/10">
+            <div className="p-4 flex items-center justify-between border-b border-black/5 dark:border-white/10">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Contact Us</h2>
+              <button
+                onClick={() => setShowContact(false)}
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <FiX className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300">
+              <p>Need help or have feedback? We'd love to hear from you.</p>
+              <div className="space-y-2">
+                <button
+                  onClick={copyEmail}
+                  className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
+                >
+                  <FiMail className="text-[#e30a5f]" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-900 dark:text-white text-sm">Email</p>
+                    <p className="text-xs text-gray-500 truncate">{copiedEmail ? "Copied to clipboard!" : "rebabel.development@gmail.com"}</p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => { setShowContact(false); window.dispatchEvent(new Event("open-report-issue")); }}
+                  className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
+                >
+                  <FiAlertCircle className="text-[#e30a5f]" />
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white text-sm">Report an Issue</p>
+                    <p className="text-xs text-gray-500">Found a bug? Let us know</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Privacy Policy Modal */}
+      {showPrivacy && (
+        <div
+          className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={(e) => e.target === e.currentTarget && setShowPrivacy(false)}
+        >
+          <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/5 dark:border-white/10 flex flex-col">
+            <div className="sticky top-0 bg-white dark:bg-[#1c2b35] border-b border-black/5 dark:border-white/10 p-4 flex items-center justify-between rounded-t-xl">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Privacy Policy</h2>
+              <button
+                onClick={() => setShowPrivacy(false)}
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <FiX className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="overflow-y-auto p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300">
+              <p className="text-xs text-gray-500">Last updated: February 2026</p>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Introduction</h3>
+                <p>ReBabel ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our language learning platform.</p>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Information We Collect</h3>
+                <p className="mb-2"><strong>Account Information:</strong> When you create an account, we collect your email address and authentication credentials through Auth0.</p>
+                <p className="mb-2"><strong>Learning Data:</strong> We store your learning progress, vocabulary decks, lesson completions, and study statistics.</p>
+                <p className="mb-2"><strong>Payment Information:</strong> Payment processing is handled by Stripe. We do not store your credit card information directly.</p>
+                <p><strong>Usage Analytics:</strong> We use PostHog and Google Analytics to understand how users interact with our platform.</p>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">How We Use Your Information</h3>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>To provide and maintain our language learning services</li>
+                  <li>To personalize your learning experience</li>
+                  <li>To process subscriptions and payments</li>
+                  <li>To send important account and service updates</li>
+                  <li>To improve our platform based on usage patterns</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Third-Party Services</h3>
+                <ul className="list-disc list-inside space-y-1">
+                  <li><strong>Auth0</strong> - Authentication and identity management</li>
+                  <li><strong>Stripe</strong> - Payment processing</li>
+                  <li><strong>Supabase</strong> - Database and data storage</li>
+                  <li><strong>PostHog</strong> - Product analytics</li>
+                  <li><strong>Google Analytics</strong> - Website analytics</li>
+                  <li><strong>OpenAI</strong> - AI-powered language learning features</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Your Rights</h3>
+                <p>You have the right to access, correct, or delete your personal data. Contact us at <button onClick={copyEmail} className="text-[#e30a5f] hover:underline">{copiedEmail ? "Copied!" : "rebabel.development@gmail.com"}</button> to exercise these rights.</p>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Contact Us</h3>
+                <p>Questions? Email us at <button onClick={copyEmail} className="text-[#e30a5f] hover:underline">{copiedEmail ? "Copied!" : "rebabel.development@gmail.com"}</button></p>
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Terms of Service Modal */}
+      {showTerms && (
+        <div
+          className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={(e) => e.target === e.currentTarget && setShowTerms(false)}
+        >
+          <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/5 dark:border-white/10 flex flex-col">
+            <div className="sticky top-0 bg-white dark:bg-[#1c2b35] border-b border-black/5 dark:border-white/10 p-4 flex items-center justify-between rounded-t-xl">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Terms of Service</h2>
+              <button
+                onClick={() => setShowTerms(false)}
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <FiX className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="overflow-y-auto p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300">
+              <p className="text-xs text-gray-500">Last updated: February 2026</p>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Agreement to Terms</h3>
+                <p>By accessing or using ReBabel, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our service.</p>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Description of Service</h3>
+                <p>ReBabel is a language learning platform that provides educational content, vocabulary training, AI-powered tutoring, and learning tools.</p>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">User Accounts</h3>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Provide accurate and complete information</li>
+                  <li>Maintain the security of your account credentials</li>
+                  <li>Accept responsibility for all activities under your account</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Subscriptions and Payments</h3>
+                <p className="mb-2">ReBabel offers both free and premium subscription options. Premium subscriptions are billed on a recurring basis through Stripe.</p>
+                <p className="mb-2"><strong>Cancellation:</strong> You may cancel your subscription at any time. Cancellation takes effect at the end of your current billing period.</p>
+                <p><strong>Refunds:</strong> Contact <button onClick={copyEmail} className="text-[#e30a5f] hover:underline">{copiedEmail ? "Copied!" : "rebabel.development@gmail.com"}</button> for refund requests.</p>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Acceptable Use</h3>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Do not use the service for any unlawful purpose</li>
+                  <li>Do not share your account credentials</li>
+                  <li>Do not attempt to circumvent security features</li>
+                  <li>Do not copy or distribute our content without permission</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">AI Features</h3>
+                <p>ReBabel uses artificial intelligence for language learning assistance. While we strive for accuracy, AI-generated content may contain errors. The AI tutor supplements, not replaces, traditional learning methods.</p>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Disclaimer</h3>
+                <p>ReBabel is provided "as is" without warranties of any kind. We do not guarantee uninterrupted service or specific learning outcomes.</p>
+              </section>
+
+              <section>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Contact Us</h3>
+                <p>Questions? Email us at <button onClick={copyEmail} className="text-[#e30a5f] hover:underline">{copiedEmail ? "Copied!" : "rebabel.development@gmail.com"}</button></p>
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
