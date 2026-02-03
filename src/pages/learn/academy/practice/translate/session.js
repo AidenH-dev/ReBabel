@@ -107,7 +107,7 @@ export default function TranslatePracticeSession() {
     return (
       <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#141f25]">
         <AcademySidebar />
-        <main className="flex-1 flex items-center justify-center">
+        <main className="flex-1 flex items-center justify-center pt-[max(1rem,env(safe-area-inset-top))]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#e30a5f] mx-auto"></div>
             <p className="mt-4 text-sm text-black/60 dark:text-white/60">Loading practice session...</p>
@@ -121,7 +121,7 @@ export default function TranslatePracticeSession() {
     return (
       <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#141f25]">
         <AcademySidebar />
-        <main className="flex-1 p-3 sm:p-6 overflow-y-auto">
+        <main className="flex-1 p-3 sm:p-6 pt-[max(0.75rem,env(safe-area-inset-top))] overflow-y-auto">
           <TranslateSummaryView
             sessionStats={sessionStats}
             questionResults={questionResults}
@@ -144,7 +144,7 @@ export default function TranslatePracticeSession() {
 
       <AcademySidebar />
 
-      <main className="flex-1 flex flex-col p-3 sm:p-6 overflow-y-auto">
+      <main className="flex-1 flex flex-col p-3 sm:p-6 pt-[max(0.75rem,env(safe-area-inset-top))] overflow-y-auto">
         {/* Header - Quiz Mode Style */}
         <div className="w-full max-w-5xl mx-auto mb-4 sm:mb-6">
           <div className="flex items-center justify-between mb-4 mt-2 sm:mt-0 ">

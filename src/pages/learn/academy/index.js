@@ -175,7 +175,7 @@ export default function AcademyHome() {
         <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
             <AcademySidebar />
 
-            <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6">
+            <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6 pt-[max(1.5rem,env(safe-area-inset-top))]">
                 <Head>
                     <title>Academy • ReBabel</title>
                     <link rel="icon" href="/favicon.ico" />
@@ -190,7 +190,7 @@ export default function AcademyHome() {
                     </div>
 
 
-                    {/* Coming Soon Stats */}
+                    {/* Coming Soon Stats
                     <div className="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg p-4 mb-6 border border-orange-200 dark:border-orange-800 text-sm">
                         <div className="flex items-start gap-3">
                             <MdConstruction className="text-orange-500 text-lg mt-0.5" />
@@ -225,7 +225,7 @@ export default function AcademyHome() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                 </div>
 

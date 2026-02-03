@@ -420,7 +420,7 @@ export default function VocabularyDashboard() {
             <AcademySidebar />
 
             {/* Main */}
-            <main className="ml-auto flex-1 flex h-screen overflow-y-auto bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 mt-5 sm:mt-0">
+            <main className="ml-auto flex-1 flex h-screen overflow-y-auto bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 mt-5 sm:mt-0 pt-[max(1rem,env(safe-area-inset-top))]">
                 <div className="w-full flex min-h-full mx-2">
                     <div className="w-full max-w-6xl mx-auto py-8">
                         <BeginnerPackPopup

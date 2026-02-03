@@ -28,7 +28,7 @@ export default function Account() {
       <MainSidebar />
 
       {/* Main Content */}
-      <main className="ml-auto flex-1 flex flex-col min-h-screen bg-gray-100 dark:bg-[#172229] p-10">
+      <main className="ml-auto flex-1 flex flex-col min-h-screen bg-gray-100 dark:bg-[#172229] p-10 pt-[max(2.5rem,env(safe-area-inset-top))]">
         <Head>
           <title>Account Info</title>
           <link rel="icon" href="/favicon.ico" />

@@ -51,12 +51,17 @@
 //  },
 //});
 
-import { handleAuth, handleLogin } from '@auth0/nextjs-auth0';
+import { handleAuth, handleLogin, handleLogout } from '@auth0/nextjs-auth0';
 
 export default handleAuth({
   async login(req, res) {
     await handleLogin(req, res, {
-      returnTo: '/learn/dashboard', // This specifies where to redirect after login
+      returnTo: '/learn/dashboard',
+    });
+  },
+  async logout(req, res) {
+    await handleLogout(req, res, {
+      returnTo: '/learn/dashboard',
     });
   },
 });

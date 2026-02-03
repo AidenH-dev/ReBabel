@@ -215,7 +215,7 @@ export default function GrammarDashboard() {
                 >
                   <div
                     onClick={toggleTranslateSettings}
-                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-2 hover:outline-gray-200 hover:border-0 border-2 border-gray-200 bg-gradient-to-r from-[#662f45] to-[#e30a5f] bg-[length:200%] hover:animate-gradient-ease rounded-lg p-5 shadow-lg flex flex-col justify-center items-center h-[200px]"
+                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-gray-200 hover:border-0 border-2 border-gray-200 bg-gradient-to-r from-[#662f45] to-[#e30a5f] bg-[length:200%] hover:animate-gradient-ease rounded-lg p-5 shadow-lg flex flex-col justify-center items-center h-[200px]"
                   >
                     <h2 className="text-sm sm:text-base font-semibold mb-1.5 text-white flex items-center">
                       <FaArrowRightArrowLeft className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-2.5" />

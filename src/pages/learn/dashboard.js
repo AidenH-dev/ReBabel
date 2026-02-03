@@ -120,12 +120,12 @@ export default function DashboardPage() {
       <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
         <MainSidebar />
         
-        <main className="ml-auto flex-1 overflow-y-auto">
+        <main className="ml-auto flex-1 overflow-y-auto pt-[max(1rem,env(safe-area-inset-top))]">
           <Head>
             <title>Dashboard • ReBabel</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
-          
+
           <div className="p-4">
             <div className="max-w-5xl mx-auto space-y-4">
               <div>
@@ -137,14 +137,14 @@ export default function DashboardPage() {
                 </p>
               </div>
 
-              {/* Compact Stats Row */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+              {/* Compact Stats Row - Desktop only */}
+              <div className="hidden md:grid md:grid-cols-4 gap-3">
                 {/* Streak Card */}
                 <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-4 text-white shadow border-2 border-dashed border-orange-300 relative cursor-not-allowed">
                   <div className="absolute top-2 right-2 px-2.5 py-1 bg-white/90 backdrop-blur-sm border border-orange-600 text-orange-600 text-[10px] rounded-lg font-semibold shadow-sm z-10">
                     Coming Soon
                   </div>
-                  
+
                   <div className="opacity-40 pointer-events-none">
                     <div className="flex items-center justify-between mb-2">
                       <FaFire className="text-2xl" />
@@ -163,7 +163,7 @@ export default function DashboardPage() {
                   <div className="absolute top-2 right-2 px-2.5 py-1 bg-white/90 dark:bg-[#1c2b35]/90 backdrop-blur-sm border border-orange-500 text-orange-600 dark:text-orange-400 text-[10px] rounded-lg font-semibold shadow-sm z-10">
                     Coming Soon
                   </div>
-                  
+
                   <div className="opacity-40 pointer-events-none">
                     <div className="flex items-center gap-2 mb-2">
                       <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
@@ -182,7 +182,7 @@ export default function DashboardPage() {
                   <div className="absolute top-2 right-2 px-2.5 py-1 bg-white/90 dark:bg-[#1c2b35]/90 backdrop-blur-sm border border-orange-500 text-orange-600 dark:text-orange-400 text-[10px] rounded-lg font-semibold shadow-sm z-10">
                     Coming Soon
                   </div>
-                  
+
                   <div className="opacity-40 pointer-events-none">
                     <div className="flex items-center gap-2 mb-2">
                       <div className="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
@@ -201,7 +201,7 @@ export default function DashboardPage() {
                   <div className="absolute top-2 right-2 px-2.5 py-1 bg-white/90 dark:bg-[#1c2b35]/90 backdrop-blur-sm border border-orange-500 text-orange-600 dark:text-orange-400 text-[10px] rounded-lg font-semibold shadow-sm z-10">
                     Coming Soon
                   </div>
-                  
+
                   <div className="opacity-40 pointer-events-none">
                     <div className="flex items-center gap-2 mb-2">
                       <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
@@ -221,7 +221,7 @@ export default function DashboardPage() {
                 <div className="absolute top-3 right-3 px-3 py-1.5 bg-white/90 dark:bg-[#1c2b35]/90 backdrop-blur-sm border border-orange-500 text-orange-600 dark:text-orange-400 text-xs rounded-lg font-semibold shadow-sm z-10">
                   Coming Soon
                 </div>
-                
+
                 <div className="opacity-40 pointer-events-none">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -242,9 +242,54 @@ export default function DashboardPage() {
                       <span>More</span>
                     </div>
                   </div>
-                  
+
                   <div className="h-16 flex items-center justify-center text-gray-400 dark:text-gray-600">
                     Loading...
+                  </div>
+                </div>
+              </div>
+
+              {/* Compact Stats - Mobile only */}
+              <div className="md:hidden bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm border-2 border-dashed border-gray-300 dark:border-gray-700 relative cursor-not-allowed">
+                <div className="absolute top-2 right-2 px-2 py-0.5 bg-white/90 dark:bg-[#1c2b35]/90 backdrop-blur-sm border border-orange-500 text-orange-600 dark:text-orange-400 text-[10px] rounded-lg font-semibold shadow-sm z-10">
+                  Coming Soon
+                </div>
+                <div className="opacity-40 pointer-events-none grid grid-cols-2 gap-2">
+                  <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-3 text-white">
+                    <div className="flex items-center gap-2">
+                      <FaFire className="text-base" />
+                      <div>
+                        <div className="text-lg font-bold leading-tight">{userData.currentStreak}</div>
+                        <p className="text-[10px] opacity-80">Day Streak</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
+                    <div className="flex items-center gap-2">
+                      <FaClock className="text-base text-blue-500" />
+                      <div>
+                        <div className="text-lg font-bold leading-tight text-gray-900 dark:text-white">{userData.totalStudyTime}</div>
+                        <p className="text-[10px] text-gray-500">Study Time</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
+                    <div className="flex items-center gap-2">
+                      <FaCheck className="text-base text-green-500" />
+                      <div>
+                        <div className="text-lg font-bold leading-tight text-gray-900 dark:text-white">{userData.accuracyRate}%</div>
+                        <p className="text-[10px] text-gray-500">Accuracy</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
+                    <div className="flex items-center gap-2">
+                      <TbCards className="text-base text-purple-500" />
+                      <div>
+                        <div className="text-lg font-bold leading-tight text-gray-900 dark:text-white">{userData.cardsReviewed}</div>
+                        <p className="text-[10px] text-gray-500">Reviewed</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -320,13 +365,13 @@ export default function DashboardPage() {
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
       <MainSidebar />
       
-      <main className="ml-auto flex-1 overflow-y-auto">
+      <main className="ml-auto flex-1 overflow-y-auto pt-[max(1rem,env(safe-area-inset-top))]">
         <Head>
           <title>Dashboard • ReBabel</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        
-        <div className="p-4">
+
+        <div className="px-4 md:p-4">
           <div className="max-w-5xl mx-auto space-y-4">
             {/* Header */}
             <div>
@@ -338,14 +383,14 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            {/* Compact Stats Row */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            {/* Compact Stats Row - Desktop only */}
+            <div className="hidden md:grid md:grid-cols-4 gap-3">
               {/* Streak Card */}
               <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-4 text-white shadow border-2 border-dashed border-orange-300 relative cursor-not-allowed">
                 <div className="absolute top-2 right-2 px-2.5 py-1 bg-white/90 backdrop-blur-sm border border-orange-600 text-orange-600 text-[10px] rounded-lg font-semibold shadow-sm z-10">
                   Coming Soon
                 </div>
-                
+
                 <div className="opacity-40 pointer-events-none">
                   <div className="flex items-center justify-between mb-2">
                     <FaFire className="text-2xl" />
@@ -364,7 +409,7 @@ export default function DashboardPage() {
                 <div className="absolute top-2 right-2 px-2.5 py-1 bg-white/90 dark:bg-[#1c2b35]/90 backdrop-blur-sm border border-orange-500 text-orange-600 dark:text-orange-400 text-[10px] rounded-lg font-semibold shadow-sm z-10">
                   Coming Soon
                 </div>
-                
+
                 <div className="opacity-40 pointer-events-none">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
@@ -383,7 +428,7 @@ export default function DashboardPage() {
                 <div className="absolute top-2 right-2 px-2.5 py-1 bg-white/90 dark:bg-[#1c2b35]/90 backdrop-blur-sm border border-orange-500 text-orange-600 dark:text-orange-400 text-[10px] rounded-lg font-semibold shadow-sm z-10">
                   Coming Soon
                 </div>
-                
+
                 <div className="opacity-40 pointer-events-none">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
@@ -402,7 +447,7 @@ export default function DashboardPage() {
                 <div className="absolute top-2 right-2 px-2.5 py-1 bg-white/90 dark:bg-[#1c2b35]/90 backdrop-blur-sm border border-orange-500 text-orange-600 dark:text-orange-400 text-[10px] rounded-lg font-semibold shadow-sm z-10">
                   Coming Soon
                 </div>
-                
+
                 <div className="opacity-40 pointer-events-none">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
@@ -422,7 +467,7 @@ export default function DashboardPage() {
               <div className="absolute top-3 right-3 px-3 py-1.5 bg-white/90 dark:bg-[#1c2b35]/90 backdrop-blur-sm border border-orange-500 text-orange-600 dark:text-orange-400 text-xs rounded-lg font-semibold shadow-sm z-10">
                 Coming Soon
               </div>
-              
+
               <div className="opacity-40 pointer-events-none">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -443,11 +488,11 @@ export default function DashboardPage() {
                     <span>More</span>
                   </div>
                 </div>
-                
+
                 {userData.activityData.length > 0 && (
                   <>
                     <ActivityCalendar activityData={userData.activityData} />
-                    
+
                     <div className="mt-3 grid grid-cols-4 gap-3">
                       <div className="text-center">
                         <div className="text-lg font-bold text-gray-900 dark:text-white">
@@ -476,6 +521,51 @@ export default function DashboardPage() {
                     </div>
                   </>
                 )}
+              </div>
+            </div>
+
+            {/* Compact Stats - Mobile only */}
+            <div className="md:hidden bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm border-2 border-dashed border-gray-300 dark:border-gray-700 relative cursor-not-allowed">
+              <div className="absolute top-2 right-2 px-2 py-0.5 bg-white/90 dark:bg-[#1c2b35]/90 backdrop-blur-sm border border-orange-500 text-orange-600 dark:text-orange-400 text-[10px] rounded-lg font-semibold shadow-sm z-10">
+                Coming Soon
+              </div>
+              <div className="opacity-40 pointer-events-none grid grid-cols-2 gap-2">
+                <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-3 text-white">
+                  <div className="flex items-center gap-2">
+                    <FaFire className="text-base" />
+                    <div>
+                      <div className="text-lg font-bold leading-tight">{userData.currentStreak}</div>
+                      <p className="text-[10px] opacity-80">Day Streak</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
+                  <div className="flex items-center gap-2">
+                    <FaClock className="text-base text-blue-500" />
+                    <div>
+                      <div className="text-lg font-bold leading-tight text-gray-900 dark:text-white">{userData.totalStudyTime}</div>
+                      <p className="text-[10px] text-gray-500">Study Time</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
+                  <div className="flex items-center gap-2">
+                    <FaCheck className="text-base text-green-500" />
+                    <div>
+                      <div className="text-lg font-bold leading-tight text-gray-900 dark:text-white">{userData.accuracyRate}%</div>
+                      <p className="text-[10px] text-gray-500">Accuracy</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
+                  <div className="flex items-center gap-2">
+                    <TbCards className="text-base text-purple-500" />
+                    <div>
+                      <div className="text-lg font-bold leading-tight text-gray-900 dark:text-white">{userData.cardsReviewed}</div>
+                      <p className="text-[10px] text-gray-500">Reviewed</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

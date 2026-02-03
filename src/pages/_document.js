@@ -7,7 +7,7 @@ export default function Document() {
         {/* Global Meta Tags */}
         <meta charSet="utf-8" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
         {/* Global SEO Tags */}
         <meta name="format-detection" content="telephone=no" />

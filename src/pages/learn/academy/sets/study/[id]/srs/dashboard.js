@@ -189,7 +189,7 @@ export default function SRSDashboard() {
             <MainSidebar />
 
             {/* Main content area */}
-            <main className="ml-auto flex-1 flex flex-col min-h-0 overflow-hidden">
+            <main className="ml-auto flex-1 flex flex-col min-h-0 overflow-hidden pt-[max(1rem,env(safe-area-inset-top))]">
                 {/* Page metadata */}
                 <Head>
                     <title>{setTitle} - SRS Dashboard</title>

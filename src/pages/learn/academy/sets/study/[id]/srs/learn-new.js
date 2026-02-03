@@ -734,7 +734,7 @@ export default function LearnNew() {
     return (
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
         <AcademySidebar />
-        <main className="flex-1 flex items-center justify-center px-4 sm:px-6">
+        <main className="flex-1 flex items-center justify-center px-4 sm:px-6 pt-[max(1rem,env(safe-area-inset-top))]">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
               Error Loading Set
@@ -765,7 +765,7 @@ export default function LearnNew() {
         {/* Only show sidebar during complete phase (summary) */}
         {currentPhase === 'complete' && <AcademySidebar />}
 
-        <main className="flex-1 flex flex-col p-3 sm:p-6">
+        <main className="flex-1 flex flex-col p-3 sm:p-6 pt-[max(0.75rem,env(safe-area-inset-top))]">
           {/* Loading State */}
           {isLoading ? (
             <div className="flex-1 flex items-center justify-center">
