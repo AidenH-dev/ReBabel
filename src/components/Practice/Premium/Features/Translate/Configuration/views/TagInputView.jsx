@@ -146,7 +146,7 @@ export default function TagInputView({
             onKeyDown={handleKeyDown}
             placeholder={isAtMaxTags ? `Max ${maxTags} items selected` : placeholder}
             disabled={isAtMaxTags}
-            className="w-full bg-transparent border-none outline-none text-sm placeholder:text-black/40 dark:placeholder:text-white/40 disabled:cursor-not-allowed"
+            className="w-full bg-transparent border-none outline-none text-base placeholder:text-black/40 dark:placeholder:text-white/40 disabled:cursor-not-allowed"
           />
         </div>
 

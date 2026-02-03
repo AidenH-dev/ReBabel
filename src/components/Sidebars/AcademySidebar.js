@@ -187,9 +187,9 @@ function AcademySidebar() {
   return (
     <>
       {/* Mobile Bubble Menu - Only visible on small screens */}
-      <div ref={bubbleMenuRef} className="lg:hidden fixed bottom-6 left-6 z-[60] flex flex-col-reverse items-start gap-2">
+      <div ref={bubbleMenuRef} className="lg:hidden fixed bottom-6 left-6 z-[60] flex flex-col-reverse items-start gap-2 pointer-events-none">
         {/* Bottom row: Menu toggle + Create button */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pointer-events-auto">
           <button
             onClick={() => setIsMobileMenuOpen((v) => !v)}
             className={bubbleBase}
@@ -206,7 +206,7 @@ function AcademySidebar() {
           {/* Create button - appears to the right when open */}
           <button
             onClick={() => { router.push("/learn/academy/sets/create"); setIsMobileMenuOpen(false); }}
-            className={`${bubbleBase} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}
+            className={`${bubbleBase} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
             aria-label="Create new set"
             tabIndex={isMobileMenuOpen ? 0 : -1}
           >
@@ -216,7 +216,7 @@ function AcademySidebar() {
           {/* Report button - appears to the right of plus when open */}
           <button
             onClick={() => { window.dispatchEvent(new CustomEvent("open-report-issue")); setIsMobileMenuOpen(false); }}
-            className={`${bubbleBase} !border-red-600/60 !bg-red-600/20 hover:!bg-red-600/30 hover:!border-red-500 transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}
+            className={`${bubbleBase} !border-red-600/60 !bg-red-600/20 hover:!bg-red-600/30 hover:!border-red-500 transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
             aria-label="Report issue"
             tabIndex={isMobileMenuOpen ? 0 : -1}
           >
@@ -227,7 +227,7 @@ function AcademySidebar() {
         {/* Stacked above: Back button, then nav items */}
         <button
           onClick={() => { router.push("/learn/dashboard"); setIsMobileMenuOpen(false); }}
-          className={`${bubbleBase} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}
+          className={`${bubbleBase} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
           style={{ transitionDelay: isMobileMenuOpen ? "50ms" : "0ms" }}
           aria-label="Back to dashboard"
           tabIndex={isMobileMenuOpen ? 0 : -1}
@@ -243,7 +243,7 @@ function AcademySidebar() {
               key={item.href}
               href={item.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`${bubbleBase} ${item.active ? bubbleActive : ""} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}
+              className={`${bubbleBase} ${item.active ? bubbleActive : ""} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
               style={{ transitionDelay: isMobileMenuOpen ? `${(i + 2) * 50}ms` : "0ms" }}
               aria-label={item.label}
               aria-current={item.active ? "page" : undefined}

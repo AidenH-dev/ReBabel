@@ -44,8 +44,9 @@ export default function ConfigPanelView({
       ...base,
       backgroundColor: "transparent",
       color: "#000",
-      minHeight: 32,
-      height: 32,
+      fontSize: "1rem",
+      minHeight: 40,
+      height: 40,
       borderColor: state.isFocused ? "#e30a5f" : "rgba(0,0,0,0.1)",
       boxShadow: state.isFocused ? "0 0 0 1px #e30a5f" : "none",
       "&:hover": {
@@ -56,20 +57,20 @@ export default function ConfigPanelView({
       ...base,
       padding: "0 8px",
     }),
-    input: (base) => ({ ...base, margin: 0, padding: 0 }),
+    input: (base) => ({ ...base, margin: 0, padding: 0, fontSize: "1rem" }),
     indicatorsContainer: (base) => ({
       ...base,
-      height: 32,
+      height: 40,
     }),
-    singleValue: (base) => ({ ...base, color: "#000" }),
+    singleValue: (base) => ({ ...base, color: "#000", fontSize: "1rem" }),
     menu: (base) => ({ ...base, backgroundColor: "#fff", zIndex: 50 }),
     option: (base, state) => ({
       ...base,
-      fontSize: "0.875rem",
+      fontSize: "1rem",
       backgroundColor: state.isFocused ? "#f0f0f0" : "#fff",
       color: "#000",
     }),
-    placeholder: (base) => ({ ...base, color: "#999", fontSize: "0.875rem" }),
+    placeholder: (base) => ({ ...base, color: "#999", fontSize: "1rem" }),
   };
 
   const customSelectStylesDark = {
@@ -77,8 +78,9 @@ export default function ConfigPanelView({
       ...base,
       backgroundColor: "transparent",
       color: "#fff",
-      minHeight: 32,
-      height: 32,
+      fontSize: "1rem",
+      minHeight: 40,
+      height: 40,
       borderColor: state.isFocused ? "#e30a5f" : "rgba(255,255,255,0.1)",
       boxShadow: state.isFocused ? "0 0 0 1px #e30a5f" : "none",
       "&:hover": {
@@ -89,24 +91,24 @@ export default function ConfigPanelView({
       ...base,
       padding: "0 8px",
     }),
-    input: (base) => ({ ...base, margin: 0, padding: 0, color: "#fff" }),
+    input: (base) => ({ ...base, margin: 0, padding: 0, color: "#fff", fontSize: "1rem" }),
     indicatorsContainer: (base) => ({
       ...base,
-      height: 32,
+      height: 40,
     }),
-    singleValue: (base) => ({ ...base, color: "#fff" }),
+    singleValue: (base) => ({ ...base, color: "#fff", fontSize: "1rem" }),
     menu: (base) => ({ ...base, backgroundColor: "#1c2b35", zIndex: 50 }),
     option: (base, state) => ({
       ...base,
-      fontSize: "0.875rem",
+      fontSize: "1rem",
       backgroundColor: state.isFocused ? "#22333e" : "#1c2b35",
       color: "#fff",
     }),
-    placeholder: (base) => ({ ...base, color: "#999", fontSize: "0.875rem" }),
+    placeholder: (base) => ({ ...base, color: "#999", fontSize: "1rem" }),
   };
 
   return (
-    <div className="sticky top-0 z-10"> {/** bg-white dark:bg-[#1c2b35] border border-black/5 dark:border-white/5 rounded-xl p-4 mb-4 shadow-sm */}
+    <div className="md:sticky md:top-0 z-10"> {/** bg-white dark:bg-[#1c2b35] border border-black/5 dark:border-white/5 rounded-xl p-4 mb-4 shadow-sm */}
       {/* Pool Headers */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
         <div className="flex flex-col gap-2 bg-white dark:bg-[#22333e] border border-black/5 dark:border-white/5 rounded-xl p-4 inset-shadow-xs dark:inset-shadow-[#1c2b35]">
