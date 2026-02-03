@@ -888,16 +888,6 @@ export default function VocabularyDashboard() {
             )}
           </section>
 
-          {/* Floating action button on mobile */}
-          {activeTab === "sets" && (
-            <button
-              onClick={() => router.push("/learn/academy/sets/create")}
-              className="sm:hidden fixed bottom-6 left-6 z-10 shadow-lg rounded-full p-4 bg-[#e30a5f] text-white focus:outline-none focus:ring-2 focus:ring-white/60"
-              aria-label="Create new set"
-            >
-              <FaPlus />
-            </button>
-          )}
         </div>
       </main>
     </div>

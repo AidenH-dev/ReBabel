@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
-import { FaPlus } from "react-icons/fa";
 import { FiSearch, FiGrid, FiList, FiPlay, FiExternalLink } from "react-icons/fi";
 import { LuTextCursorInput } from "react-icons/lu";
 import { BeginnerPackPopup } from "@/components/popups/sets/newUserPopup";
@@ -535,16 +534,6 @@ export default function VocabularyDashboard() {
                                 )}
                             </section>
 
-                            {/* Floating action button on mobile */}
-                            {activeTab === "translate" && (
-                                <button
-                                    onClick={() => router.push("/learn/academy/sets/create")}
-                                    className="sm:hidden fixed bottom-6 left-6 z-10 shadow-lg rounded-full p-4 bg-[#e30a5f] text-white focus:outline-none focus:ring-2 focus:ring-white/60"
-                                    aria-label="Create new set"
-                                >
-                                    <FaPlus />
-                                </button>
-                            )}
                         </div>
                     </div>
                 </div>

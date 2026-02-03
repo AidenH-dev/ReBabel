@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import {
   TbSettings,
@@ -15,27 +15,33 @@ import Link from "next/link";
 import { TbInfoSquareRounded } from "react-icons/tb";
 import { HiOutlineStar } from "react-icons/hi2";
 import { BsBookmarkStar } from "react-icons/bs";
+import { FiAlertTriangle } from "react-icons/fi";
 
 
 function MainSidebar() {
   const router = useRouter();
   const path = router.pathname;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const bubbleMenuRef = useRef(null);
 
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [path]);
 
-  // Lock body scroll when the menu is open
+  // Close mobile menu when tapping outside
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+    if (!isMobileMenuOpen) return;
+    function handleClickOutside(e) {
+      if (bubbleMenuRef.current && !bubbleMenuRef.current.contains(e.target)) {
+        setIsMobileMenuOpen(false);
+      }
     }
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
     return () => {
-      document.body.style.overflow = "";
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
     };
   }, [isMobileMenuOpen]);
 
@@ -175,43 +181,69 @@ function MainSidebar() {
     </>
   );
 
+  const bubbleBase =
+    "flex items-center justify-center w-15 h-15 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/60 hover:bg-gray-100/90 dark:hover:bg-gray-700/70 hover:border-gray-400 dark:hover:border-gray-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600";
+  const bubbleActive =
+    "border-[#e30a5f] dark:border-[#e30a5f] bg-gray-100/90 dark:bg-[#172229]/80";
+  const bubbleIconBase = "w-6.5 h-6.5 text-gray-700 dark:text-gray-300";
+  const bubbleIconActive = "w-6 h-6 text-[#e30a5f]";
+
+  const mobileNavItems = [
+    { href: "/learn/dashboard", icon: TbLayoutDashboard, active: isDashboardActive, label: "Dashboard" },
+    { href: "/learn/academy", icon: TbSchool, active: isAcademyActive, label: "Academy" },
+    { href: "/learn/resources", icon: TbInfoSquareRounded, active: isResourcesActive, label: "Information" },
+    { href: "/learn/subscription", icon: BsBookmarkStar, active: isSubscriptionActive, label: "Subscription" },
+    { href: "/learn/settings", icon: TbSettings, active: isMainSettingsActive, label: "Settings" },
+  ];
+
   return (
     <>
-      {/* Mobile Menu Button - Only visible on small screens */}
-      <button
-        id="menu-toggle"
-        onClick={() => setIsMobileMenuOpen((v) => !v)}
-        className="lg:hidden fixed top-4 left-4 z-[60] p-2 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-        aria-label="Toggle menu"
-        aria-expanded={isMobileMenuOpen}
-        aria-controls="mobile-sidebar"
-      >
-        {isMobileMenuOpen ? (
-          <TbX className="w-6 h-6 text-gray-700 dark:text-white" />
-        ) : (
-          <TbMenu2 className="w-6 h-6 text-gray-700 dark:text-white" />
-        )}
-      </button>
+      {/* Mobile Bubble Menu - Only visible on small screens */}
+      <div ref={bubbleMenuRef} className="lg:hidden fixed bottom-6 left-6 z-[60] flex flex-col-reverse items-start gap-2">
+        {/* Bottom row: Menu toggle + Report button */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsMobileMenuOpen((v) => !v)}
+            className={bubbleBase}
+            aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? (
+              <TbX className={bubbleIconBase} />
+            ) : (
+              <TbMenu2 className={bubbleIconBase} />
+            )}
+          </button>
 
-      {/* Mobile Sidebar Overlay */}
-      {isMobileMenuOpen && (
-        <div
-          className="lg:hidden fixed inset-0 z-40 bg-black/50 transition-opacity"
-          aria-hidden="true"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
+          {/* Report button - appears to the right when open */}
+          <button
+            onClick={() => { window.dispatchEvent(new CustomEvent("open-report-issue")); setIsMobileMenuOpen(false); }}
+            className={`${bubbleBase} !border-red-600/60 !bg-red-600/20 hover:!bg-red-600/30 hover:!border-red-500 transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}
+            aria-label="Report issue"
+            tabIndex={isMobileMenuOpen ? 0 : -1}
+          >
+            <FiAlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
+          </button>
+        </div>
 
-      {/* Mobile Sidebar */}
-      <div
-        id="mobile-sidebar"
-        className={`lg:hidden fixed top-0 left-0 z-50 w-64 h-screen p-4 bg-white dark:bg-[#172229] border-r-2 border-gray-300 dark:border-gray-600 transform transition-transform duration-300 ease-in-out ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-        role="dialog"
-        aria-modal="true"
-      >
-        <NavigationContent />
+        {/* Nav items stacked above: Settings, Subscription, Information, Academy, Dashboard (bottom to top) */}
+        {[...mobileNavItems].reverse().map((item, i) => {
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`${bubbleBase} ${item.active ? bubbleActive : ""} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}
+              style={{ transitionDelay: isMobileMenuOpen ? `${(i + 1) * 50}ms` : "0ms" }}
+              aria-label={item.label}
+              aria-current={item.active ? "page" : undefined}
+              tabIndex={isMobileMenuOpen ? 0 : -1}
+            >
+              <Icon className={item.active ? bubbleIconActive : bubbleIconBase} />
+            </Link>
+          );
+        })}
       </div>
 
       {/* Desktop Sidebar - Hidden on small screens */}

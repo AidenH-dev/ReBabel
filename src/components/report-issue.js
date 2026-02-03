@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiAlertTriangle, FiX } from "react-icons/fi";
 
 function ReportIssueButton() {
   const [open, setOpen] = useState(false);
+
+  // Allow opening the report modal from anywhere via custom event
+  useEffect(() => {
+    const handler = () => setOpen(true);
+    window.addEventListener("open-report-issue", handler);
+    return () => window.removeEventListener("open-report-issue", handler);
+  }, []);
   const [formData, setFormData] = useState({
     location: "",
     feature: "",
@@ -82,10 +89,10 @@ function ReportIssueButton() {
       <button
         onClick={handleOpen}
         className="
-          group fixed bottom-4 right-4 sm:right-6 z-50 flex items-center rounded-full
-          bg-red-600/20 backdrop-blur-sm border-2 border-red-600/60 px-3 py-2 
+          hidden lg:flex group fixed bottom-4 right-4 sm:right-6 z-50 items-center rounded-full
+          bg-red-600/20 backdrop-blur-sm border-2 border-red-600/60 px-3 py-2
           text-red-600 dark:text-red-400 shadow-lg transition-all duration-200
-          hover:bg-red-600/30 hover:border-red-500 active:scale-95 
+          hover:bg-red-600/30 hover:border-red-500 active:scale-95
           focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2
         "
         aria-label="Report Issue"
