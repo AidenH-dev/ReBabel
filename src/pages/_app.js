@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { Fredoka } from "@next/font/google";
 import { UserProvider, useUser } from "@auth0/nextjs-auth0/client";
 import { PremiumProvider } from '@/contexts/PremiumContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import ReportIssueButton from '@/components/report-issue';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -57,6 +58,7 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <UserProvider>
+      <ThemeProvider>
       <PremiumProvider>
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-VRBTF7S087" />
         <Script id="google-analytics">
@@ -86,6 +88,7 @@ export default function MyApp({ Component, pageProps }) {
           </div>
         )}
       </PremiumProvider>
+      </ThemeProvider>
     </UserProvider>
   );
 }

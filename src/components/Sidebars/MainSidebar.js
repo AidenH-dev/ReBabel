@@ -230,10 +230,9 @@ function MainSidebar() {
         {[...mobileNavItems].reverse().map((item, i) => {
           const Icon = item.icon;
           return (
-            <Link
+            <button
               key={item.href}
-              href={item.href}
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={() => { router.push(item.href); setIsMobileMenuOpen(false); }}
               className={`${bubbleBase} ${item.active ? bubbleActive : ""} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
               style={{ transitionDelay: isMobileMenuOpen ? `${(i + 1) * 50}ms` : "0ms" }}
               aria-label={item.label}
@@ -241,7 +240,7 @@ function MainSidebar() {
               tabIndex={isMobileMenuOpen ? 0 : -1}
             >
               <Icon className={item.active ? bubbleIconActive : bubbleIconBase} />
-            </Link>
+            </button>
           );
         })}
       </div>
