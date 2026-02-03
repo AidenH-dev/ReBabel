@@ -559,8 +559,8 @@ export default function CreateNewSet() {
 
                 <div className="w-full max-w-6xl mx-auto relative">
                     {/* Header */}
-                    <div className="mb-3">
-                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <div className="mb-3 ">
+                        <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
                             <Link href="/learn/academy/sets" className="hover:text-[#e30a5f] transition-colors">
                                 Set
                             </Link>

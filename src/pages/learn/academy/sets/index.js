@@ -235,7 +235,7 @@ export default function VocabularyDashboard() {
       <AcademySidebar />
 
       {/* Main */}
-      <main className="ml-auto flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 mt-10 sm:mt-0 py-8 pt-[max(2rem,env(safe-area-inset-top))]">
+      <main className="ml-auto flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 sm:mt-0 py-8 pt-[max(2rem,env(safe-area-inset-top))]">
         <BeginnerPackPopup
           isOpen={showBeginnerPopup}
           onClose={() => setShowBeginnerPopup(false)}

@@ -274,7 +274,7 @@ export default function ViewSet() {
       <MainSidebar />
 
       {/* Main content area */}
-      <main className="ml-auto flex-1 px-4 sm:px-6 py-4 pt-[max(1rem,env(safe-area-inset-top))] flex flex-col min-h-0 sm:overflow-hidden">
+      <main className="ml-auto flex-1 px-4 sm:px-6 py-6 md:pt-0 flex flex-col min-h-0 sm:overflow-hidden">
         {/* Page metadata */}
         <Head>
           <title>{setData.title} - View Set</title>
