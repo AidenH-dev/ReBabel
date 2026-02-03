@@ -10,6 +10,7 @@ import {
   TbLayoutGrid,
   TbStack2,
   TbPlus,
+  TbSchool,
   TbBooks
 } from "react-icons/tb";
 import { LuTextCursorInput } from "react-icons/lu";
@@ -198,7 +199,7 @@ function AcademySidebar() {
             {isMobileMenuOpen ? (
               <TbX className={bubbleIconBase} />
             ) : (
-              <TbMenu2 className={bubbleIconBase} />
+              <TbSchool className={bubbleIconBase} />
             )}
           </button>
 
