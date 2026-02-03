@@ -148,7 +148,7 @@ export default function TranslatePracticeSession() {
         {/* Header - Quiz Mode Style */}
         <div className="w-full max-w-5xl mx-auto mb-4 sm:mb-6">
           <div className="flex items-center justify-between mb-4 mt-2 sm:mt-0 ">
-            <div className="flex items-center gap-3 sm:gap-4 min-w-0 ml-13 sm:ml-0 ">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0 ml-0 ">
               <button
                 onClick={() => router.push('/learn/academy/practice')}
                 className="shrink-0 p-2 rounded-lg bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 transition-colors"
