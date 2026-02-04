@@ -300,7 +300,7 @@ export default function Settings() {
               </button>
             </div>
             <div className="p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300">
-              <p>Need help or have feedback? We'd love to hear from you.</p>
+              <p>Need help or have feedback? We&apos;d love to hear from you.</p>
               <div className="space-y-2">
                 <button
                   onClick={copyEmail}
@@ -349,7 +349,7 @@ export default function Settings() {
 
               <section>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Introduction</h3>
-                <p>ReBabel ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our language learning platform.</p>
+                <p>ReBabel (&ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our language learning platform.</p>
               </section>
 
               <section>
@@ -459,7 +459,7 @@ export default function Settings() {
 
               <section>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Disclaimer</h3>
-                <p>ReBabel is provided "as is" without warranties of any kind. We do not guarantee uninterrupted service or specific learning outcomes.</p>
+                <p>ReBabel is provided &ldquo;as is&rdquo; without warranties of any kind. We do not guarantee uninterrupted service or specific learning outcomes.</p>
               </section>
 
               <section>
