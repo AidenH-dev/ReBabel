@@ -25,10 +25,10 @@ export default function Footer(options) {
                     <h2 className="mb-6 text-sm font-semibold text-gray-800 uppercase">Resources</h2>
                     <ul className="text-gray-600 font-medium"> 
                         <li className="mb-4">
-                            <Link href="#" className="hover:underline">Contact Us</Link>
+                            <Link href="/contact" className="hover:underline">Contact Us</Link>
                         </li>
                         <li>
-                            <Link href="#" className="hover:underline">FAQ</Link>
+                            <Link href="/help" className="hover:underline">FAQ</Link>
                         </li>
                     </ul>
                 </div>

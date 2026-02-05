@@ -792,7 +792,7 @@ export default function Home() {
                   </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="/contact" className="hover:text-white">
                     Contact
                   </a>
                 </li>
