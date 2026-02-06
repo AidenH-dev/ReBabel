@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
+import KeyboardShortcutHint from "./KeyboardShortcutHint";
 
 /**
  * ReviewView - Shared presentational component for review phase card display
@@ -29,6 +31,20 @@ export default function ReviewView({
   onNext,
   onPrevious
 }) {
+  // Keyboard shortcuts: ←/→ for navigation, Enter to advance
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "ArrowRight" || e.key === "Enter") {
+        onNext();
+      } else if (e.key === "ArrowLeft" && !isFirstCard) {
+        onPrevious();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onNext, onPrevious, isFirstCard]);
+
   if (!currentCard) return null;
 
   return (
@@ -211,10 +227,14 @@ export default function ReviewView({
           </button>
         </div>
 
-        {/* Helper Text */}
-        <div className="mt-6 text-center text-xs sm:text-sm text-gray-500 dark:text-white/40 flex-shrink-0">
-          Take your time to review each card before starting the quiz
-        </div>
+        {/* Keyboard Shortcuts */}
+        <KeyboardShortcutHint
+          className="mt-6 flex-shrink-0"
+          shortcuts={[
+            { key: "←/→", label: "Navigate" },
+            { key: "Enter", label: isLastCard ? "Start Quiz" : "Next" }
+          ]}
+        />
       </div>
     </div>
   );

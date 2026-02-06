@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { FaArrowRight, FaTimesCircle } from "react-icons/fa";
 import { BsCheckCircleFill } from "react-icons/bs";
+import KeyboardShortcutHint from "./KeyboardShortcutHint";
 
 /**
  * MultipleChoiceView - Shared presentational component for multiple choice questions
@@ -180,10 +181,15 @@ export default function MultipleChoiceView({
           </button>
         </div>
 
-        {/* Helper Text */}
-        <div className="mt-6 text-center text-xs sm:text-sm text-gray-500 dark:text-white/40">
-          {!showResult ? "Press 1-4 to select an answer" : "Press Enter to continue"}
-        </div>
+        {/* Keyboard Shortcuts */}
+        <KeyboardShortcutHint
+          className="mt-6"
+          shortcuts={
+            !showResult
+              ? [{ key: "1-4", label: "Select answer" }]
+              : [{ key: "Enter", label: "Continue" }]
+          }
+        />
       </div>
     </div>
   );

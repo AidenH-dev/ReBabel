@@ -4,17 +4,17 @@ import MainSidebar from "../../../../../../components/Sidebars/AcademySidebar";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { 
-  FaArrowLeft, 
-  FaArrowRight, 
+import {
+  FaArrowLeft,
+  FaArrowRight,
   FaTimes,
   FaRedo,
   FaCheckCircle,
   FaTimesCircle,
-  FaKeyboard,
   FaVolumeUp,
   FaBrain
 } from "react-icons/fa";
+import KeyboardShortcutHint from "../../../../../../components/Set/Features/Field-Card-Session/shared/views/KeyboardShortcutHint";
 import { TbCards, TbX } from "react-icons/tb";
 import { MdFlip } from "react-icons/md";
 
@@ -258,7 +258,7 @@ export default function SetFlashcards() {
     if (e.key === ' ') {
       e.preventDefault();
       handleFlip();
-    } else if (e.key === 'ArrowRight') {
+    } else if (e.key === 'ArrowRight' || e.key === 'Enter') {
       handleNext();
     } else if (e.key === 'ArrowLeft') {
       handlePrevious();
@@ -647,14 +647,15 @@ export default function SetFlashcards() {
               </div>
 
               {/* Keyboard Shortcuts */}
-              <div className="mt-8 hidden md:flex items-center justify-center gap-6 text-xs text-gray-500 dark:text-white/40">
-                <span className="flex items-center gap-2">
-                  <FaKeyboard /> Keyboard shortcuts:
-                </span>
-                <span>Space: Flip</span>
-                <span>←/→: Navigate</span>
-                {studyMode === 'interval' && <span>1-4: Rate difficulty</span>}
-              </div>
+              <KeyboardShortcutHint
+                className="mt-8"
+                shortcuts={[
+                  { key: "Space", label: "Flip" },
+                  { key: "←/→", label: "Navigate" },
+                  { key: "Enter", label: "Next" },
+                  ...(studyMode === 'interval' ? [{ key: "1-4", label: "Rate difficulty" }] : [])
+                ]}
+              />
             </div>
           </div>
         ) : null}

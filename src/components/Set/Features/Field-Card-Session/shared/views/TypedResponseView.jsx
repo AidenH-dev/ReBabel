@@ -4,11 +4,11 @@ import {
   FaTimes,
   FaCheckCircle,
   FaTimesCircle,
-  FaKeyboard,
   FaRedo,
   FaCheck
 } from "react-icons/fa";
 import { toKana } from "wanakana";
+import KeyboardShortcutHint from "./KeyboardShortcutHint";
 
 /**
  * TypedResponseView - Shared presentational component for typed response questions
@@ -250,12 +250,10 @@ export default function TypedResponseView({
         </div>
 
         {/* Keyboard Shortcuts */}
-        <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-gray-500 dark:text-white/40">
-          <span className="flex items-center gap-2">
-            <FaKeyboard /> <span className="hidden sm:inline">Keyboard shortcuts:</span>
-          </span>
-          <span>Enter: Submit/Continue</span>
-        </div>
+        <KeyboardShortcutHint
+          className="mt-6 sm:mt-8"
+          shortcuts={[{ key: "Enter", label: "Submit/Continue" }]}
+        />
       </div>
     </div>
   );
