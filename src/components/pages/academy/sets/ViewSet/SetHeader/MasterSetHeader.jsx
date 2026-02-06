@@ -272,22 +272,11 @@ export default function MasterSetHeader({
 
   return (
     <>
-      <div className=" sm:mb-3 flex-shrink-0 pt-11 sm:pt-0">
-        {/* Breadcrumbs - Hidden on mobile */}
-        <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
-          <Link href="/learn/academy/sets" className="hover:text-[#e30a5f] transition-colors">
-            Sets
-          </Link>
-          <span>/</span>
-          <span className="text-gray-900 dark:text-white truncate max-w-xs">
-            {setData.title}
-          </span>
-        </div>
-
+      <div className=" sm:mb-3 flex-shrink-0 pt-11 sm:pt-5">
         {/* Set Title and Actions - Always horizontal on all screen sizes */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1 flex-wrap">
+          <div className="flex-1 min-w-0 ">
+            <div className="flex items-center gap-2 mb-1 flex-wrap ">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {setData.title}
               </h1>

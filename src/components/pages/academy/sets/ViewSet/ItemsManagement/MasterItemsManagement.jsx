@@ -36,6 +36,9 @@ export default function MasterItemsManagement({
 
   // Add item modal state
   const [showAddItemModal, setShowAddItemModal] = useState(false);
+
+  // View item modal state
+  const [viewingItem, setViewingItem] = useState(null);
   const [addItemType, setAddItemType] = useState("vocabulary");
   const [grammarTitleInputType, setGrammarTitleInputType] = useState("english");
   const [isAddingItem, setIsAddingItem] = useState(false);
@@ -488,17 +491,17 @@ export default function MasterItemsManagement({
             viewMode === "list" ? (
               <div className="space-y-1.5">
                 {sortedItems.map((item, idx) => (
-                  <div key={item.id} className="group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-2 shadow-sm hover:shadow-md transition-all">
-                    <div className="flex items-start gap-2">
+                  <div key={item.id} onClick={() => setViewingItem(item)} className="group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-2 shadow-sm hover:shadow-md transition-all overflow-hidden cursor-pointer">
+                    <div className="flex items-start gap-2 w-full">
                       <div className="flex-shrink-0 w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-[10px] font-medium text-gray-600 dark:text-gray-400">
                         {idx + 1}
                       </div>
 
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 overflow-hidden">
                         {item.type === "vocabulary" ? (
-                          <div>
+                          <div className="w-full">
                             <div className="flex items-start justify-between gap-2">
-                              <div className="flex-1 min-w-0">
+                              <div className="flex-1 w-0">
                                 <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
                                   {item.english}
                                 </div>
@@ -519,9 +522,9 @@ export default function MasterItemsManagement({
                             )}
                           </div>
                         ) : (
-                          <div>
+                          <div className="w-full">
                             <div className="flex items-start justify-between gap-2">
-                              <div className="flex-1 min-w-0">
+                              <div className="flex-1 w-0">
                                 <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
                                   {item.title}
                                 </div>
@@ -548,7 +551,7 @@ export default function MasterItemsManagement({
 
                       <div className="flex items-center gap-0.5 transition-opacity flex-shrink-0">
                         <button
-                          onClick={() => handleEditItem(item.id, item.type)}
+                          onClick={(e) => { e.stopPropagation(); handleEditItem(item.id, item.type); }}
                           className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400"
                           title={`Edit (ID: ${item.id})`}
                         >
@@ -562,7 +565,7 @@ export default function MasterItemsManagement({
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
                 {sortedItems.map((item, idx) => (
-                  <div key={item.id} className="group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-3 hover:shadow-sm transition-all">
+                  <div key={item.id} onClick={() => setViewingItem(item)} className="group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-3 hover:shadow-sm transition-all cursor-pointer">
                     <div className="flex items-start justify-between mb-1.5">
                       <span className="text-[10px] text-gray-500 dark:text-gray-500">#{idx + 1}</span>
                     </div>
@@ -607,7 +610,7 @@ export default function MasterItemsManagement({
                       )}
                       <div className="flex gap-0.5 transition-opacity ml-auto flex-shrink-0">
                         <button
-                          onClick={() => handleEditItem(item.id, item.type)}
+                          onClick={(e) => { e.stopPropagation(); handleEditItem(item.id, item.type); }}
                           className="p-0.5 rounded hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
                           title={`Edit (ID: ${item.id})`}
                         >
@@ -1213,6 +1216,124 @@ export default function MasterItemsManagement({
                     Yes, Remove Item
                   </>
                 )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Item Modal */}
+      {viewingItem && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setViewingItem(null)}>
+          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-lg max-h-[85vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  {viewingItem.type === 'vocabulary' ? viewingItem.english : viewingItem.title}
+                </h2>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  {viewingItem.type === 'vocabulary' ? 'Vocabulary' : 'Grammar'}
+                </p>
+              </div>
+              <button
+                onClick={() => setViewingItem(null)}
+                className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-6 py-4">
+              <div className="space-y-4">
+                {viewingItem.type === 'vocabulary' ? (
+                  <>
+                    <div className="text-center py-4 border-b border-gray-200 dark:border-gray-700">
+                      <div className="text-3xl font-japanese text-gray-900 dark:text-white mb-1">
+                        {viewingItem.kanji || viewingItem.kana}
+                      </div>
+                      {viewingItem.kanji && (
+                        <div className="text-lg text-gray-600 dark:text-gray-400 font-japanese">
+                          {viewingItem.kana}
+                        </div>
+                      )}
+                      <div className="text-lg text-gray-700 dark:text-gray-300 mt-2">
+                        {viewingItem.english}
+                      </div>
+                      {viewingItem.lexical_category && (
+                        <span className="inline-block mt-2 px-2 py-1 text-xs rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                          {viewingItem.lexical_category}
+                        </span>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {viewingItem.description && (
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Description</h3>
+                        <p className="text-gray-900 dark:text-white">{viewingItem.description}</p>
+                      </div>
+                    )}
+                    {viewingItem.topic && (
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Topic</h3>
+                        <span className="inline-block px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400">
+                          {viewingItem.topic}
+                        </span>
+                      </div>
+                    )}
+                    {viewingItem.notes && (
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Notes</h3>
+                        <p className="text-gray-900 dark:text-white whitespace-pre-wrap">{viewingItem.notes}</p>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {viewingItem.example_sentences?.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Example Sentences</h3>
+                    <div className="space-y-2">
+                      {viewingItem.example_sentences.map((sentence, i) => (
+                        <div key={i} className="p-3 bg-gray-50 dark:bg-[#0f1a1f] rounded-lg text-gray-900 dark:text-white font-japanese">
+                          {sentence}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {viewingItem.tags?.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Tags</h3>
+                    <div className="flex flex-wrap gap-1">
+                      {viewingItem.tags.map((tag, i) => (
+                        <span key={i} className="px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3 flex-shrink-0">
+              <button
+                onClick={() => setViewingItem(null)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => { handleEditItem(viewingItem.id, viewingItem.type); setViewingItem(null); }}
+                className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors flex items-center gap-2"
+              >
+                <FiEdit2 className="w-4 h-4" />
+                Edit
               </button>
             </div>
           </div>
