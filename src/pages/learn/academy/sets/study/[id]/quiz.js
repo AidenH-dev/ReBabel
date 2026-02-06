@@ -49,6 +49,13 @@ export default function SetQuiz() {
     const [answeredItems, setAnsweredItems] = useState([]);
     const [animateAccuracy, setAnimateAccuracy] = useState(false);
 
+    // Track completed items per phase (for progress bar)
+    const [completedItems, setCompletedItems] = useState({
+        'review': new Set(),
+        'multiple-choice': new Set(),
+        'translation': new Set()
+    });
+
     // Fetch Data from API
     useEffect(() => {
         if (!id) return;
@@ -396,7 +403,16 @@ export default function SetQuiz() {
                 ((answerData.isCorrect ? prev.correct + 1 : prev.correct) / (prev.totalAttempts + 1)) * 100
             )
         }));
-    }, []);
+
+        // Track completed items for progress bar (only on correct answers)
+        if (answerData.isCorrect) {
+            setCompletedItems(prev => {
+                const newSet = new Set(prev[currentPhase]);
+                newSet.add(answerData.itemId);
+                return { ...prev, [currentPhase]: newSet };
+            });
+        }
+    }, [currentPhase]);
 
     // Handle quiz retry
     const handleRetry = () => {
@@ -405,6 +421,11 @@ export default function SetQuiz() {
         setAnsweredItems([]);
         setAnimateAccuracy(false);
         setCompletedPhases([]);
+        setCompletedItems({
+            'review': new Set(),
+            'multiple-choice': new Set(),
+            'translation': new Set()
+        });
         setSessionStats({
             correct: 0,
             incorrect: 0,
@@ -521,6 +542,7 @@ export default function SetQuiz() {
                                 quizMode={quizMode}
                                 quizType={quizType}
                                 completedPhases={completedPhases}
+                                completedCount={completedItems[currentPhase]?.size || 0}
                                 onExit={handleExit}
                             />
                         )}
@@ -541,6 +563,12 @@ export default function SetQuiz() {
                                 isLastCard={currentIndex === reviewItems.length - 1}
                                 isFirstCard={currentIndex === 0}
                                 onNext={() => {
+                                    // Mark current card as completed before moving
+                                    setCompletedItems(prev => {
+                                        const newSet = new Set(prev['review']);
+                                        newSet.add(reviewItems[currentIndex].id);
+                                        return { ...prev, 'review': newSet };
+                                    });
                                     if (currentIndex < reviewItems.length - 1) {
                                         setCurrentIndex(prev => prev + 1);
                                     } else {

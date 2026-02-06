@@ -41,6 +41,7 @@ export default function MasterQuizHeader({
   quizMode,
   quizType,
   completedPhases,
+  completedCount = 0,
   onExit
 }) {
   // Select appropriate phase configs based on set type
@@ -51,8 +52,8 @@ export default function MasterQuizHeader({
   const currentPhaseConfig = phases[currentPhaseIndex];
   const CurrentPhaseIcon = currentPhaseConfig?.icon;
 
-  // Calculate progress within current phase (1-indexed for display)
-  const progressInPhase = totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
+  // Calculate progress within current phase based on completed items count
+  const progressInPhase = totalQuestions > 0 ? (completedCount / totalQuestions) * 100 : 0;
 
   // Render using shared SessionStatHeaderView component
   return (

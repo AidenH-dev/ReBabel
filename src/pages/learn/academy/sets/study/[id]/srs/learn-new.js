@@ -706,9 +706,9 @@ export default function LearnNew() {
   // Calculate progress percentage based on unique items completed
   const calculateProgressPercentage = () => {
     if (currentPhase === 'review') {
-      // Review phase: use current index
+      // Review phase: use completed count (currentIndex represents cards reviewed)
       return activeReviewArray.length > 0
-        ? ((currentIndex + 1) / activeReviewArray.length) * 100
+        ? (currentIndex / activeReviewArray.length) * 100
         : 0;
     }
 
