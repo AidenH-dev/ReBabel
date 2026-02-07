@@ -151,11 +151,9 @@ export default function Home() {
                 </div>
 
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-                  Master Japanese with
-                  <span className="text-[#e30a5f] block mt-2">
-                    Intelligent Learning
-                  </span>
+                  Study Japanese <span className="text-[#e30a5f]">smarter</span>, not harder.
                 </h1>
+
 
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
                   We&apos;re striving to make practicing Japanese a more accessible and less complicated experience.
@@ -200,7 +198,7 @@ export default function Home() {
               <div className="relative">
                 <div className="relative z-10">
                   <Image
-                    src="/LPI.png"
+                    src="/Flagship_Feature.png"
                     alt="ReBabel Learning Platform"
                     width={600}
                     height={400}
@@ -209,7 +207,7 @@ export default function Home() {
                   />
                   {/* Beta Badge on Image */}
                   <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg transform rotate-12">
-                    Early Access
+                    Latest Feature
                   </div>
                 </div>
                 {/* Decorative Elements */}
@@ -307,7 +305,7 @@ export default function Home() {
                 What Do You Get?
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto italic">
-                All of these features are free and will stay that way! We are working on even better paid features if you want to support us in the future.
+                All of these features below are free and will stay that way! We are working on even better paid features if you want to support us in the future.
               </p>
             </div>
 
