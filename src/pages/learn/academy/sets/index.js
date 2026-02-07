@@ -267,7 +267,7 @@ export default function VocabularyDashboard() {
                 <div className="flex-1">
                   <div className="flex items-center gap-1 mb-1">
                     <h2 className="text-sm font-bold">Smart Review</h2>
-                    <span className="text-xs text-white/70 hidden sm:inline">• AI-powered spaced repetition</span>
+                    <span className="text-xs text-white/70 hidden sm:inline">• Grouped spaced repetition</span>
                   </div>
 
                   <p className="text-xs text-white/80">

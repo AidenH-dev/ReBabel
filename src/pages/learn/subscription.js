@@ -220,7 +220,7 @@ export default function Subscription() {
                 </li>
                 <li className="flex items-center gap-2">
                   <TbCheck className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                  <span>AI-powered grammar feedback</span>
+                  <span>Automatic grading & feedback</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <TbCheck className="w-4 h-4 text-amber-500 flex-shrink-0" />

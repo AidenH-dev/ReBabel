@@ -340,7 +340,7 @@ export default function AcademyHome() {
                                     },
                                     {
                                         title: "Adaptive Learning",
-                                        description: "AI-powered personalized study paths",
+                                        description: "Personalized study paths",
                                         icon: FaBrain,
                                         color: "pink"
                                     }
