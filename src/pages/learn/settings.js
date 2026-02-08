@@ -322,7 +322,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              {/* Push Notifications Test Section - Only show in native app */}
+              {/* Push Notifications Test Section - Only show in native app 
               {isNativeApp && (
                 <div className="p-4">
                   <div className="flex items-center gap-3">
@@ -363,7 +363,7 @@ export default function Settings() {
                     </button>
                   </div>
                 </div>
-              )}
+              )}*/}
 
               {/* Sign Out Section */}
               <div className="p-4">
