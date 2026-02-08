@@ -157,6 +157,17 @@ export default function Settings() {
 
       if (res.ok) {
         setPushStatus('success');
+
+        // Register token for future notifications
+        try {
+          await fetch('/api/push/register-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ deviceToken: token, platform: 'ios' }),
+          });
+        } catch (regError) {
+          console.error('Failed to register token:', regError);
+        }
       } else {
         setPushStatus('error');
         setPushError(data.error || 'Failed to send notification');
