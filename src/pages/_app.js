@@ -36,6 +36,50 @@ function PostHogAuthBridge() {
   return null;
 }
 
+// 🔔 Bridge component for push notification permission on native app
+function PushNotificationBridge() {
+  const { user, isLoading } = useUser();
+
+  useEffect(() => {
+    if (isLoading || !user) return;
+
+    const initPushNotifications = async () => {
+      // Check if already requested
+      if (localStorage.getItem('push_permission_requested')) return;
+
+      try {
+        const { Capacitor } = await import('@capacitor/core');
+        if (!Capacitor.isNativePlatform()) return;
+
+        const { PushNotifications } = await import('@capacitor/push-notifications');
+
+        // Request permission
+        const result = await PushNotifications.requestPermissions();
+        localStorage.setItem('push_permission_requested', 'true');
+
+        if (result.receive === 'granted') {
+          await PushNotifications.register();
+
+          // Listen for token and register it
+          PushNotifications.addListener('registration', async (token) => {
+            await fetch('/api/push/register-token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ deviceToken: token.value, platform: 'ios' }),
+            });
+          });
+        }
+      } catch (e) {
+        // Not in Capacitor environment
+      }
+    };
+
+    initPushNotifications();
+  }, [user, isLoading]);
+
+  return null;
+}
+
 export default function MyApp({ Component, pageProps }) {
   const [isPosthogEnabled, setIsPosthogEnabled] = useState(false);
 
@@ -58,6 +102,7 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <UserProvider>
+      <PushNotificationBridge />
       <ThemeProvider>
       <PremiumProvider>
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-VRBTF7S087" />
