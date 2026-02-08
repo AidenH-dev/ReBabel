@@ -2,7 +2,7 @@ import Head from "next/head";
 import MainSidebar from "../../components/Sidebars/MainSidebar";
 import { useEffect, useState } from "react";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { FiMail, FiKey, FiCreditCard, FiLogOut, FiLoader, FiCheck, FiExternalLink, FiSun, FiMoon, FiMonitor, FiX, FiAlertCircle } from "react-icons/fi";
+import { FiMail, FiKey, FiCreditCard, FiLogOut, FiLoader, FiCheck, FiExternalLink, FiSun, FiMoon, FiMonitor, FiX, FiAlertCircle, FiBell } from "react-icons/fi";
 import { useTheme } from "../../contexts/ThemeContext";
 
 export default function Settings() {
@@ -17,6 +17,11 @@ export default function Settings() {
   const [showTerms, setShowTerms] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [isNativeApp, setIsNativeApp] = useState(false);
+  const [pushToken, setPushToken] = useState(null);
+  const [pushLoading, setPushLoading] = useState(false);
+  const [pushStatus, setPushStatus] = useState(null); // 'success' | 'error' | null
+  const [pushError, setPushError] = useState(null);
 
   const copyEmail = async () => {
     await navigator.clipboard.writeText("rebabel.development@gmail.com");
@@ -55,6 +60,19 @@ export default function Settings() {
 
     fetchUserProfile();
     fetchSubscription();
+
+    // Check if running in Capacitor native app
+    const checkNativeApp = async () => {
+      try {
+        const { Capacitor } = await import('@capacitor/core');
+        if (Capacitor.isNativePlatform()) {
+          setIsNativeApp(true);
+        }
+      } catch {
+        // Not in Capacitor environment
+      }
+    };
+    checkNativeApp();
   }, []);
 
   const handleResetPassword = async () => {
@@ -87,6 +105,68 @@ export default function Settings() {
       console.error("Portal error:", error);
     } finally {
       setPortalLoading(false);
+    }
+  };
+
+  const handleTestPush = async () => {
+    setPushLoading(true);
+    setPushStatus(null);
+    setPushError(null);
+
+    try {
+      const { PushNotifications } = await import('@capacitor/push-notifications');
+
+      // Request permission if needed
+      const permResult = await PushNotifications.requestPermissions();
+      if (permResult.receive !== 'granted') {
+        setPushStatus('error');
+        setPushError('Push notification permission denied');
+        setPushLoading(false);
+        return;
+      }
+
+      // Register for push notifications
+      await PushNotifications.register();
+
+      // Wait for registration token
+      const tokenPromise = new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => reject(new Error('Registration timeout')), 10000);
+
+        PushNotifications.addListener('registration', (token) => {
+          clearTimeout(timeout);
+          resolve(token.value);
+        });
+
+        PushNotifications.addListener('registrationError', (error) => {
+          clearTimeout(timeout);
+          reject(error);
+        });
+      });
+
+      const token = await tokenPromise;
+      setPushToken(token);
+
+      // Send test notification via our API
+      const res = await fetch('/api/push/send-test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deviceToken: token }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setPushStatus('success');
+      } else {
+        setPushStatus('error');
+        setPushError(data.error || 'Failed to send notification');
+      }
+    } catch (error) {
+      console.error('Push test error:', error);
+      setPushStatus('error');
+      setPushError(error.message || 'Failed to test push notifications');
+    } finally {
+      setPushLoading(false);
     }
   };
 
@@ -230,6 +310,49 @@ export default function Settings() {
                   })}
                 </div>
               </div>
+
+              {/* Push Notifications Test Section - Only show in native app */}
+              {isNativeApp && (
+                <div className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
+                      <FiBell className="text-lg text-gray-600 dark:text-gray-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                        Push Notifications
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {pushStatus === 'success'
+                          ? 'Test notification sent!'
+                          : pushStatus === 'error'
+                          ? pushError
+                          : 'Test push notification delivery'}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleTestPush}
+                      disabled={pushLoading}
+                      className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors disabled:opacity-50 ${
+                        pushStatus === 'success'
+                          ? "border-green-500 text-green-600 dark:text-green-400"
+                          : pushStatus === 'error'
+                          ? "border-red-500 text-red-600 dark:text-red-400"
+                          : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      {pushLoading ? (
+                        <FiLoader className="text-sm animate-spin" />
+                      ) : pushStatus === 'success' ? (
+                        <FiCheck className="text-sm" />
+                      ) : (
+                        <FiBell className="text-sm" />
+                      )}
+                      {pushLoading ? 'Sending...' : pushStatus === 'success' ? 'Sent!' : 'Test'}
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Sign Out Section */}
               <div className="p-4">
