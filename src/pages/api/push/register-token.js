@@ -23,11 +23,13 @@ async function handler(req, res) {
       return res.status(400).json({ error: 'Device token is required' });
     }
 
-    const { data, error } = await supabase.rpc('register_device_token', {
-      p_user_id: session.user.sub,
-      p_token: deviceToken,
-      p_platform: platform,
-    }, { schema: 'v1_kvs_rebabel' });
+    const { data, error } = await supabase
+      .schema('v1_kvs_rebabel')
+      .rpc('register_device_token', {
+        p_user_id: session.user.sub,
+        p_token: deviceToken,
+        p_platform: platform,
+      });
 
     if (error) {
       console.error('Error registering device token:', error);

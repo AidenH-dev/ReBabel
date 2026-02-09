@@ -58,16 +58,27 @@ function PushNotificationBridge() {
         localStorage.setItem('push_permission_requested', 'true');
 
         if (result.receive === 'granted') {
-          await PushNotifications.register();
-
-          // Listen for token and register it
+          // Add listener BEFORE calling register to avoid race condition
           PushNotifications.addListener('registration', async (token) => {
-            await fetch('/api/push/register-token', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ deviceToken: token.value, platform: 'ios' }),
-            });
+            console.log('Push token received:', token.value);
+            try {
+              const res = await fetch('/api/push/register-token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ deviceToken: token.value, platform: 'ios' }),
+              });
+              const data = await res.json();
+              console.log('Token registration result:', data);
+            } catch (err) {
+              console.error('Failed to register token:', err);
+            }
           });
+
+          PushNotifications.addListener('registrationError', (error) => {
+            console.error('Push registration error:', error);
+          });
+
+          await PushNotifications.register();
         }
       } catch (e) {
         // Not in Capacitor environment

@@ -104,9 +104,9 @@ export default async function handler(req, res) {
 
   try {
     // Get users with due items from Supabase
-    const { data: users, error } = await supabase.rpc('get_users_with_due_items', {}, {
-      schema: 'v1_kvs_rebabel'
-    });
+    const { data: users, error } = await supabase
+      .schema('v1_kvs_rebabel')
+      .rpc('get_users_with_due_items');
 
     if (error) {
       console.error('Error fetching users with due items:', error);
