@@ -144,7 +144,7 @@ export default async function handler(req, res) {
       const notification = {
         aps: {
           alert: {
-            title: 'がんばれ! Time to Review',
+            title: 'がんばれ! Time to Review SRS',
             body: user.due_count === 1
               ? 'You have 1 item ready for review'
               : `You have ${user.due_count} items ready for review`,
