@@ -82,11 +82,22 @@ function sendAPNsNotification(deviceToken, payload, jwt, bundleId, isProduction 
 }
 
 export default async function handler(req, res) {
-  // Verify cron secret (Vercel sets CRON_SECRET for cron requests)
+  // Verify request is from Vercel Cron or has valid secret
   const authHeader = req.headers.authorization;
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    // Allow manual testing in development
-    if (process.env.NODE_ENV === 'production') {
+  const cronSecret = process.env.CRON_SECRET;
+
+  // If CRON_SECRET is set, verify it (Pro/Enterprise plans)
+  // Otherwise, check for Vercel's cron user-agent or allow in development
+  if (cronSecret) {
+    if (authHeader !== `Bearer ${cronSecret}`) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+  } else {
+    // For Hobby plans: verify it's coming from Vercel's cron system
+    const isVercelCron = req.headers['user-agent']?.includes('vercel-cron');
+    const isLocalDev = process.env.NODE_ENV !== 'production';
+
+    if (!isVercelCron && !isLocalDev) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
   }
