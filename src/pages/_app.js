@@ -1,19 +1,20 @@
-import "@/styles/globals.css";
-import { Fredoka } from "@next/font/google";
-import { UserProvider, useUser } from "@auth0/nextjs-auth0/client";
+import '@/styles/globals.css';
+import { Fredoka } from '@next/font/google';
+import { UserProvider, useUser } from '@auth0/nextjs-auth0/client';
 import { PremiumProvider } from '@/contexts/PremiumContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import ReportIssueButton from '@/components/report-issue';
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 import { useEffect, useState } from 'react';
 import Script from 'next/script';
+import { SRSNotificationPrompt } from '@/components/popups/SRSNotificationPrompt';
 
 const fredoka = Fredoka({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
 });
 
 // 🔹 Bridge component that runs inside <UserProvider>
@@ -39,11 +40,14 @@ function PostHogAuthBridge() {
 // 🔔 Bridge component for push notification permission on native app
 function PushNotificationBridge() {
   const { user, isLoading } = useUser();
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [srsCount, setSrsCount] = useState(0);
+  const [isNativePlatform, setIsNativePlatform] = useState(false);
 
   useEffect(() => {
     if (isLoading || !user) return;
 
-    const initPushNotifications = async () => {
+    const checkSrsAndPrompt = async () => {
       // Check if already requested
       if (localStorage.getItem('push_permission_requested')) return;
 
@@ -51,44 +55,81 @@ function PushNotificationBridge() {
         const { Capacitor } = await import('@capacitor/core');
         if (!Capacitor.isNativePlatform()) return;
 
-        const { PushNotifications } = await import('@capacitor/push-notifications');
+        setIsNativePlatform(true);
 
-        // Request permission
-        const result = await PushNotifications.requestPermissions();
-        localStorage.setItem('push_permission_requested', 'true');
+        // Check if user has SRS-enabled sets
+        const response = await fetch('/api/database/v2/sets/srs-count');
+        if (!response.ok) return;
 
-        if (result.receive === 'granted') {
-          // Add listener BEFORE calling register to avoid race condition
-          PushNotifications.addListener('registration', async (token) => {
-            console.log('Push token received:', token.value);
-            try {
-              const res = await fetch('/api/push/register-token', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ deviceToken: token.value, platform: 'ios' }),
-              });
-              const data = await res.json();
-              console.log('Token registration result:', data);
-            } catch (err) {
-              console.error('Failed to register token:', err);
-            }
-          });
-
-          PushNotifications.addListener('registrationError', (error) => {
-            console.error('Push registration error:', error);
-          });
-
-          await PushNotifications.register();
+        const data = await response.json();
+        if (data.success && data.count > 0) {
+          setSrsCount(data.count);
+          setShowPrompt(true);
         }
       } catch (e) {
-        // Not in Capacitor environment
+        // Not in Capacitor environment or API error
       }
     };
 
-    initPushNotifications();
+    checkSrsAndPrompt();
   }, [user, isLoading]);
 
-  return null;
+  const handleEnableNotifications = async () => {
+    if (!isNativePlatform) return;
+
+    try {
+      const { PushNotifications } =
+        await import('@capacitor/push-notifications');
+
+      // Request permission
+      const result = await PushNotifications.requestPermissions();
+      localStorage.setItem('push_permission_requested', 'true');
+
+      if (result.receive === 'granted') {
+        // Add listener BEFORE calling register to avoid race condition
+        PushNotifications.addListener('registration', async (token) => {
+          console.log('Push token received:', token.value);
+          try {
+            const res = await fetch('/api/push/register-token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                deviceToken: token.value,
+                platform: 'ios',
+              }),
+            });
+            const data = await res.json();
+            console.log('Token registration result:', data);
+          } catch (err) {
+            console.error('Failed to register token:', err);
+          }
+        });
+
+        PushNotifications.addListener('registrationError', (error) => {
+          console.error('Push registration error:', error);
+        });
+
+        await PushNotifications.register();
+      }
+    } catch (e) {
+      console.error('Failed to request push permissions:', e);
+    }
+  };
+
+  const handleClosePrompt = () => {
+    setShowPrompt(false);
+    // Mark as requested so we don't show again
+    localStorage.setItem('push_permission_requested', 'true');
+  };
+
+  return (
+    <SRSNotificationPrompt
+      isOpen={showPrompt}
+      onClose={handleClosePrompt}
+      onEnableNotifications={handleEnableNotifications}
+      srsSetCount={srsCount}
+    />
+  );
 }
 
 export default function MyApp({ Component, pageProps }) {
@@ -98,7 +139,8 @@ export default function MyApp({ Component, pageProps }) {
     // Only initialize PostHog outside of development
     if (process.env.NEXT_PUBLIC_NODE_ENV !== 'development') {
       posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
+        api_host:
+          process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
         person_profiles: 'identified_only',
         defaults: '2025-05-24',
         session_recording: {
@@ -107,7 +149,7 @@ export default function MyApp({ Component, pageProps }) {
       });
       setIsPosthogEnabled(true);
     } else {
-      console.log("🔹 PostHog disabled in development");
+      console.log('🔹 PostHog disabled in development');
     }
   }, []);
 
@@ -115,35 +157,38 @@ export default function MyApp({ Component, pageProps }) {
     <UserProvider>
       <PushNotificationBridge />
       <ThemeProvider>
-      <PremiumProvider>
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-VRBTF7S087" />
-        <Script id="google-analytics">
-          {`
+        <PremiumProvider>
+          <Script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-VRBTF7S087"
+          />
+          <Script id="google-analytics">
+            {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-VRBTF7S087');
           `}
-        </Script>
-        {isPosthogEnabled ? (
-          <PostHogProvider client={posthog}>
-            <PostHogAuthBridge />
+          </Script>
+          {isPosthogEnabled ? (
+            <PostHogProvider client={posthog}>
+              <PostHogAuthBridge />
+              <div className={fredoka.className}>
+                <Component {...pageProps} />
+                <ReportIssueButton />
+                <Analytics />
+                <SpeedInsights />
+              </div>
+            </PostHogProvider>
+          ) : (
             <div className={fredoka.className}>
               <Component {...pageProps} />
               <ReportIssueButton />
               <Analytics />
               <SpeedInsights />
             </div>
-          </PostHogProvider>
-        ) : (
-          <div className={fredoka.className}>
-            <Component {...pageProps} />
-            <ReportIssueButton />
-            <Analytics />
-            <SpeedInsights />
-          </div>
-        )}
-      </PremiumProvider>
+          )}
+        </PremiumProvider>
       </ThemeProvider>
     </UserProvider>
   );
