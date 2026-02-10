@@ -132,6 +132,7 @@ export default function TypedResponseView({
               }
               inputMode="text"
               autoComplete="off"
+              autoCapitalize="off"
               className={`w-full px-3 sm:px-4 py-3 sm:py-4 text-base sm:text-lg rounded-lg border-2 transition-all
                 ${
                   showResult
