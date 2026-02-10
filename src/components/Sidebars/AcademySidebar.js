@@ -18,6 +18,10 @@ import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { LuSquarePen } from "react-icons/lu";
 import { FiAlertTriangle } from "react-icons/fi";
+import { IoExitOutline } from "react-icons/io5";
+import { SlOptionsVertical } from "react-icons/sl";
+import { LuListStart } from "react-icons/lu";
+
 
 
 import Link from "next/link";
@@ -118,6 +122,22 @@ function AcademySidebar() {
               <span className="ms-3">Home</span>
             </Link>
           </li>
+
+          <li>
+            <Link
+              href="/learn/academy/sets"
+              className={`${baseLink} ${isSetsActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
+                }`}
+              aria-current={isSetsActive ? "page" : undefined}
+            >
+              <TbStack2
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isSetsActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                  }`}
+              />
+              <span className="ms-3">Sets</span>
+            </Link>
+          </li>
+
           <li>
             <Link
               href="/learn/academy/practice"
@@ -127,8 +147,8 @@ function AcademySidebar() {
             >
               <HiOutlinePencilAlt
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isPracticeActive
-                    ? "text-[#e30a5f]"
-                    : `${inactiveIconLight} ${inactiveIconDark}`
+                  ? "text-[#e30a5f]"
+                  : `${inactiveIconLight} ${inactiveIconDark}`
                   }`}
               />
               <span className="ms-3">Practice</span>
@@ -152,20 +172,7 @@ function AcademySidebar() {
             </Link>
               </li>*/}
 
-          <li>
-            <Link
-              href="/learn/academy/sets"
-              className={`${baseLink} ${isSetsActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
-                }`}
-              aria-current={isSetsActive ? "page" : undefined}
-            >
-              <TbStack2
-                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isSetsActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
-                  }`}
-              />
-              <span className="ms-3">Sets</span>
-            </Link>
-          </li>
+
         </ul>
       </div>
     </>
@@ -179,9 +186,9 @@ function AcademySidebar() {
   const bubbleIconActive = "w-6 h-6 text-[#e30a5f]";
 
   const mobileNavItems = [
-    { href: "/learn/academy", icon: TbHome, active: isAcademyHomeActive, label: "Home" },
-    { href: "/learn/academy/practice", icon: HiOutlinePencilAlt, active: isPracticeActive, label: "Practice" },
+    //{ href: "/learn/academy", icon: TbHome, active: isAcademyHomeActive, label: "Home" },
     { href: "/learn/academy/sets", icon: TbStack2, active: isSetsActive, label: "Sets" },
+    { href: "/learn/academy/practice", icon: HiOutlinePencilAlt, active: isPracticeActive, label: "Practice" },
   ];
 
   return (
@@ -203,14 +210,14 @@ function AcademySidebar() {
             )}
           </button>
 
-          {/* Create button - appears to the right when open */}
+          {/* Options button - appears to the right when open */}
           <button
-            onClick={() => { router.push("/learn/academy/sets/create"); setIsMobileMenuOpen(false); }}
+            onClick={() => { router.push("/learn/dashboard"); setIsMobileMenuOpen(false); }}
             className={`${bubbleBase} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
-            aria-label="Create new set"
+            aria-label="Back to dashboard"
             tabIndex={isMobileMenuOpen ? 0 : -1}
           >
-            <TbPlus className={bubbleIconBase} />
+            <LuListStart className={bubbleIconBase} />
           </button>
 
           {/* Report button - appears to the right of plus when open */}
@@ -224,15 +231,15 @@ function AcademySidebar() {
           </button>
         </div>
 
-        {/* Stacked above: Back button, then nav items */}
+        {/* Stacked above: Create button, then nav items */}
         <button
-          onClick={() => { router.push("/learn/dashboard"); setIsMobileMenuOpen(false); }}
+          onClick={() => { router.push("/learn/academy/sets/create"); setIsMobileMenuOpen(false); }}
           className={`${bubbleBase} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
           style={{ transitionDelay: isMobileMenuOpen ? "50ms" : "0ms" }}
-          aria-label="Back to dashboard"
+          aria-label="Create new set"
           tabIndex={isMobileMenuOpen ? 0 : -1}
         >
-          <TbArrowLeft className={bubbleIconBase} />
+          <TbPlus className={bubbleIconBase} />
         </button>
 
         {/* Nav items: Sets, Practice, Home (bottom to top) */}

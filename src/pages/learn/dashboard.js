@@ -376,7 +376,7 @@ export default function DashboardPage() {
             {/* Header */}
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                {greeting}{userData.name ? `, ${userData.name}` : ''}!
+                {greeting}{/*userData.name ? `, ${userData.name}` : ''*/}
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Ready to continue your Japanese learning journey?

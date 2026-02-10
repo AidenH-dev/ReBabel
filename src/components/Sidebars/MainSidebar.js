@@ -94,7 +94,7 @@ function MainSidebar() {
 
           <li>
             <Link
-              href="/learn/academy"
+              href="/learn/academy/sets"
               className={`${baseLink} ${
                 isAcademyActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
               }`}
@@ -190,7 +190,7 @@ function MainSidebar() {
 
   const mobileNavItems = [
     { href: "/learn/dashboard", icon: TbLayoutDashboard, active: isDashboardActive, label: "Dashboard" },
-    { href: "/learn/academy", icon: TbSchool, active: isAcademyActive, label: "Academy" },
+    { href: "/learn/academy/sets", icon: TbSchool, active: isAcademyActive, label: "Academy" },
     { href: "/learn/resources", icon: TbInfoSquareRounded, active: isResourcesActive, label: "Information" },
     { href: "/learn/subscription", icon: BsBookmarkStar, active: isSubscriptionActive, label: "Subscription" },
     { href: "/learn/settings", icon: TbSettings, active: isMainSettingsActive, label: "Settings" },
