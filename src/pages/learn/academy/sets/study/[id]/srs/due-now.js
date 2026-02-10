@@ -777,7 +777,7 @@ export default function DueNow() {
       <Head>
         <title>Due Now - {setInfo?.title || "Study Set"}</title>
         <meta name="description" content="Review cards that are due now" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

@@ -757,7 +757,7 @@ export default function LearnNew() {
       <Head>
         <title>Learn New - {setInfo?.title || "Study Set"}</title>
         <meta name="description" content="Learn new cards in your study set" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
