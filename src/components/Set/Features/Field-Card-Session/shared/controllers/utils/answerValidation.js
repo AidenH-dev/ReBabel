@@ -33,11 +33,23 @@ export function normalizeAnswer(answer, answerType) {
   // Trim leading/trailing whitespace first
   let normalized = answer.trim();
 
+  // Remove content inside parentheses (including the parentheses)
+  // Handles both regular () and Japanese-style （）
+  normalized = normalized.replace(/\([^)]*\)/g, '');
+  normalized = normalized.replace(/（[^）]*）/g, '');
+
+  // Remove special characters that shouldn't affect matching
+  // Includes: 〜 (wave dash), ～ (fullwidth tilde), . , ! ? - _ and other punctuation
+  normalized = normalized.replace(
+    /[〜～．。、，！？!?,.\-_:;：；'"'"「」『』【】]/g,
+    ''
+  );
+
   // Determine if this is English-like text (should be lowercased)
   const isEnglishLike =
-    answerType === "English" ||
-    answerType === "Description" ||
-    answerType === "Grammar Pattern";
+    answerType === 'English' ||
+    answerType === 'Description' ||
+    answerType === 'Grammar Pattern';
 
   // Apply case normalization for English-like text
   if (isEnglishLike) {
@@ -81,8 +93,8 @@ export function parseMultipleDefinitions(answerString, answerType) {
 
   // Normalize each definition and filter out empty strings
   const normalizedDefinitions = definitions
-    .map(def => normalizeAnswer(def, answerType))
-    .filter(def => def.length > 0);
+    .map((def) => normalizeAnswer(def, answerType))
+    .filter((def) => def.length > 0);
 
   return normalizedDefinitions;
 }
@@ -112,16 +124,16 @@ export function validateTypedAnswer(userAnswer, correctAnswer, answerType) {
 
   // For English-like answer types, check if correctAnswer contains multiple definitions
   const isEnglishLike =
-    answerType === "English" ||
-    answerType === "Description" ||
-    answerType === "Grammar Pattern";
+    answerType === 'English' ||
+    answerType === 'Description' ||
+    answerType === 'Grammar Pattern';
 
   if (isEnglishLike && correctAnswer.includes(';')) {
     // Multi-definition answer: parse into array of definitions
     const definitions = parseMultipleDefinitions(correctAnswer, answerType);
 
     // User answer is correct if it matches ANY definition (with fuzzy matching)
-    return definitions.some(definition =>
+    return definitions.some((definition) =>
       fuzzyLevenshteinMatch(definition, normalizedUserAnswer)
     );
   }
@@ -130,13 +142,12 @@ export function validateTypedAnswer(userAnswer, correctAnswer, answerType) {
   const normalizedCorrectAnswer = normalizeAnswer(correctAnswer, answerType);
 
   // Implement fuzzyLevenshteinMatch for English answers to allow minor typos
-  if (answerType === "English") {
+  if (answerType === 'English') {
     return fuzzyLevenshteinMatch(normalizedCorrectAnswer, normalizedUserAnswer);
   }
 
   return normalizedUserAnswer === normalizedCorrectAnswer;
 }
-
 
 /**
  * Implements fuzzy matching using Levenshtein distance to allow for minor typos in typed answers.
@@ -152,7 +163,11 @@ export function validateTypedAnswer(userAnswer, correctAnswer, answerType) {
  * fuzzyLevenshteinMatch("hello", "goodbye", 0.85) // false (too different)
  * fuzzyLevenshteinMatch("食べる", "食べる", 0.85) // true (exact match)
  */
-export function fuzzyLevenshteinMatch(expectedAnswer, userAnswer, threasholdPercent=0.75) {
+export function fuzzyLevenshteinMatch(
+  expectedAnswer,
+  userAnswer,
+  threasholdPercent = 0.75
+) {
   // Handle edge cases
   if (!expectedAnswer || !userAnswer) {
     return false;
@@ -168,7 +183,7 @@ export function fuzzyLevenshteinMatch(expectedAnswer, userAnswer, threasholdPerc
 
   // Calculate similarity percentage (1 = identical, 0 = completely different)
   const maxLength = Math.max(expectedAnswer.length, userAnswer.length);
-  const similarity = 1 - (distance / maxLength);
+  const similarity = 1 - distance / maxLength;
 
   // Check if similarity meets threshold
   return similarity >= threasholdPercent;
@@ -190,7 +205,9 @@ function levenshteinDistance(str1, str2) {
   const len2 = str2.length;
 
   // Create a 2D array for dynamic programming
-  const matrix = Array(len1 + 1).fill(null).map(() => Array(len2 + 1).fill(0));
+  const matrix = Array(len1 + 1)
+    .fill(null)
+    .map(() => Array(len2 + 1).fill(0));
 
   // Initialize first column (deletions from str1)
   for (let i = 0; i <= len1; i++) {
@@ -208,8 +225,8 @@ function levenshteinDistance(str1, str2) {
       const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
 
       matrix[i][j] = Math.min(
-        matrix[i - 1][j] + 1,      // deletion
-        matrix[i][j - 1] + 1,      // insertion
+        matrix[i - 1][j] + 1, // deletion
+        matrix[i][j - 1] + 1, // insertion
         matrix[i - 1][j - 1] + cost // substitution
       );
     }
@@ -217,7 +234,6 @@ function levenshteinDistance(str1, str2) {
 
   return matrix[len1][len2];
 }
-
 
 /**
  * Validates a multiple choice answer.
@@ -274,13 +290,13 @@ export function validateAnswer({
   correctAnswer,
   answerType,
   questionType,
-  validationType = "typed"
+  validationType = 'typed',
 }) {
   let isCorrect = false;
   let normalizedUserAnswer = '';
   let normalizedCorrectAnswer = '';
 
-  if (validationType === "multiple-choice") {
+  if (validationType === 'multiple-choice') {
     isCorrect = validateMultipleChoice(userAnswer, correctAnswer);
     normalizedUserAnswer = userAnswer?.trim() || '';
     normalizedCorrectAnswer = correctAnswer?.trim() || '';
@@ -300,7 +316,7 @@ export function validateAnswer({
     answerType,
     questionType,
     validationType,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   };
 }
 
@@ -311,7 +327,7 @@ export function validateAnswer({
  * @returns {boolean} True if the answer type is Japanese
  */
 export function isJapaneseAnswerType(answerType) {
-  return answerType === "Kana" || answerType === "Kanji";
+  return answerType === 'Kana' || answerType === 'Kanji';
 }
 
 /**
@@ -322,9 +338,8 @@ export function isJapaneseAnswerType(answerType) {
  */
 export function isEnglishAnswerType(answerType) {
   return (
-    answerType === "English" ||
-    answerType === "Description" ||
-    answerType === "Grammar Pattern"
+    answerType === 'English' ||
+    answerType === 'Description' ||
+    answerType === 'Grammar Pattern'
   );
 }
-

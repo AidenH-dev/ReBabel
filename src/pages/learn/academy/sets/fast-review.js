@@ -1,0 +1,848 @@
+// pages/learn/academy/sets/fast-review.js
+import Head from 'next/head';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import AcademySidebar from '@/components/Sidebars/AcademySidebar';
+
+// Import icons for phase indicators
+import { FaDumbbell } from 'react-icons/fa';
+import { IoSparkles } from 'react-icons/io5';
+
+// Import SRS Learn New Components
+import SessionStatHeaderView from '@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView.jsx';
+import TypedResponseView from '@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx';
+import MultipleChoiceView from '@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx';
+import SummaryView from '@/components/Set/Features/Field-Card-Session/shared/views/SummaryView';
+import LevelChangeView from '@/components/Set/Features/Field-Card-Session/SRS/views/LevelChangeView';
+import {
+  validateTypedAnswer,
+  validateMultipleChoice,
+} from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation';
+import {
+  pregenerateMultipleChoiceItems,
+  shuffleArray,
+  shuffleOptionsWithDistractors,
+} from '@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration';
+
+export default function FastReview() {
+  const router = useRouter();
+
+  // Data states
+  const [itemData, setItemData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Multi-set tracking
+  const [setBreakdown, setSetBreakdown] = useState([]);
+
+  // SRS Array states - translation and multiple choice
+  const [translationArray, setTranslationArray] = useState([]);
+  const [multipleChoiceArray, setMultipleChoiceArray] = useState([]);
+
+  // ============ PHASE MANAGEMENT ============
+  const [currentPhase, setCurrentPhase] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // ============ ACTIVE ARRAYS (MUTABLE) ============
+  const [activeTranslationArray, setActiveTranslationArray] = useState([]);
+  const [activeMCArray, setActiveMCArray] = useState([]);
+
+  // ============ QUESTION STATE (Translation) ============
+  const [showResult, setShowResult] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [userAnswer, setUserAnswer] = useState('');
+
+  // ============ QUESTION STATE (Multiple Choice) ============
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [currentShuffledOptions, setCurrentShuffledOptions] = useState([]);
+
+  // ============ SUMMARY STATE ============
+  const [animateAccuracy, setAnimateAccuracy] = useState(false);
+
+  // ============ SESSION TRACKING ============
+  const [sessionStats, setSessionStats] = useState({
+    correct: 0,
+    incorrect: 0,
+    totalAttempts: 0,
+    accuracy: 0,
+  });
+  const [answeredItems, setAnsweredItems] = useState([]);
+
+  // ============ PHASE PROGRESS TRACKING ============
+  const [phaseProgress, setPhaseProgress] = useState({
+    translation: {
+      completedItems: new Set(),
+      totalUniqueItems: 0,
+    },
+  });
+  const [completedPhases, setCompletedPhases] = useState([]);
+
+  // ============ SRS LEVEL TRACKING ============
+  const [itemSRSLevels, setItemSRSLevels] = useState({}); // Map of originalId -> { level, mistakes }
+  const [mistakesPerItem, setMistakesPerItem] = useState({}); // Map of originalId -> number of mistakes in this session
+  const [showLevelChange, setShowLevelChange] = useState(false);
+  const [currentLevelChange, setCurrentLevelChange] = useState(null); // { item, oldLevel, newLevel }
+  const [
+    shouldGoToSummaryAfterLevelChange,
+    setShouldGoToSummaryAfterLevelChange,
+  ] = useState(false);
+
+  // ============ REFS ============
+  const translationInputRef = useRef(null);
+
+  // Helper function to transform API items to internal format
+  // Preserves setId and setTitle for multi-set tracking
+  const transformItems = (apiItems) => {
+    return Array.isArray(apiItems)
+      ? apiItems
+          .map((item, index) => {
+            if (item.type === 'vocab' || item.type === 'vocabulary') {
+              return {
+                id: `vocab-${index}`,
+                uuid: item.id,
+                type: 'vocabulary',
+                kana: item.kana || '',
+                kanji: item.kanji || null,
+                english: item.english || '',
+                lexical_category: item.lexical_category || '',
+                example_sentences: Array.isArray(item.example_sentences)
+                  ? item.example_sentences
+                  : [item.example_sentences].filter(Boolean),
+                srs_level: item.srs?.srs_level || 1,
+                setId: item.setId,
+                setTitle: item.setTitle,
+              };
+            } else if (item.type === 'grammar') {
+              return {
+                id: `grammar-${index}`,
+                uuid: item.id,
+                type: 'grammar',
+                title: item.title || '',
+                description: item.description || '',
+                topic: item.topic || '',
+                example_sentences: Array.isArray(item.example_sentences)
+                  ? item.example_sentences.map((ex) =>
+                      typeof ex === 'string'
+                        ? ex
+                        : `${ex.japanese || ''} (${ex.english || ''})`
+                    )
+                  : [],
+                srs_level: item.srs?.srs_level || 1,
+                setId: item.setId,
+                setTitle: item.setTitle,
+              };
+            }
+            return null;
+          })
+          .filter(Boolean)
+      : [];
+  };
+
+  // Fetch all due items across sets
+  useEffect(() => {
+    const fetchAllDueItems = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch('/api/database/v2/srs/all-due');
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch due items: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+
+        if (!result.success || !result.data) {
+          throw new Error(result.error || 'Failed to load due items');
+        }
+
+        const apiData = result.data;
+        const apiItems = apiData.items || [];
+        const metadata = apiData.metadata || {};
+
+        if (apiItems.length === 0) {
+          throw new Error('No items due for review');
+        }
+
+        // Store set breakdown for summary
+        setSetBreakdown(metadata.setBreakdown || []);
+
+        // Transform items to internal format
+        const transformedItemData = transformItems(apiItems);
+
+        if (transformedItemData.length === 0) {
+          throw new Error('No items due for review');
+        }
+
+        setItemData(transformedItemData);
+
+        // ============================================
+        // Initialize SRS levels for each item
+        // ============================================
+        const srsLevelsMap = {};
+        const mistakesMap = {};
+        transformedItemData.forEach((item) => {
+          srsLevelsMap[item.id] = item.srs_level || 1;
+          mistakesMap[item.id] = 0; // Start with 0 mistakes
+        });
+        setItemSRSLevels(srsLevelsMap);
+        setMistakesPerItem(mistakesMap);
+
+        // ============================================
+        // QUESTION ARRAYS: Separate by Type
+        // ============================================
+        const translation = [];
+
+        // Generate translation questions for vocabulary items only
+        transformedItemData.forEach((item) => {
+          if (item.type === 'vocabulary') {
+            // English -> Kana
+            translation.push({
+              id: `${item.id}-tr-en-kana`,
+              originalId: item.id,
+              uuid: item.uuid,
+              type: 'vocabulary',
+              questionType: 'English',
+              answerType: 'Kana',
+              question: item.english,
+              answer: item.kana,
+              hint: item.lexical_category,
+              setId: item.setId,
+              setTitle: item.setTitle,
+            });
+
+            // Kana -> English
+            translation.push({
+              id: `${item.id}-tr-kana-en`,
+              originalId: item.id,
+              uuid: item.uuid,
+              type: 'vocabulary',
+              questionType: 'Kana',
+              answerType: 'English',
+              question: item.kana,
+              answer: item.english,
+              hint: item.lexical_category,
+              setId: item.setId,
+              setTitle: item.setTitle,
+            });
+
+            // If kanji exists, add kanji question variations
+            if (item.kanji) {
+              // Kanji -> English (user types English)
+              translation.push({
+                id: `${item.id}-tr-kanji-en`,
+                originalId: item.id,
+                uuid: item.uuid,
+                type: 'vocabulary',
+                questionType: 'Kanji',
+                answerType: 'English',
+                question: item.kanji,
+                answer: item.english,
+                hint: `${item.lexical_category} (${item.kana})`,
+                setId: item.setId,
+                setTitle: item.setTitle,
+              });
+
+              // Kanji -> Kana (user types Kana)
+              translation.push({
+                id: `${item.id}-tr-kanji-kana`,
+                originalId: item.id,
+                uuid: item.uuid,
+                type: 'vocabulary',
+                questionType: 'Kanji',
+                answerType: 'Kana',
+                question: item.kanji,
+                answer: item.kana,
+                hint: item.english,
+                setId: item.setId,
+                setTitle: item.setTitle,
+              });
+            }
+          }
+        });
+
+        // Generate multiple choice questions for grammar items only
+        const grammarItems = transformedItemData.filter(
+          (item) => item.type === 'grammar'
+        );
+
+        const multipleChoice = pregenerateMultipleChoiceItems(
+          grammarItems,
+          grammarItems,
+          3
+        );
+
+        // Shuffle the arrays so questions appear in random order
+        const shuffledTranslation = shuffleArray(translation);
+        const shuffledMultipleChoice = shuffleArray(multipleChoice);
+        setTranslationArray(shuffledTranslation);
+        setMultipleChoiceArray(shuffledMultipleChoice);
+
+        // Determine initial phase based on which arrays have content
+        let initialPhase = null;
+        if (shuffledMultipleChoice.length > 0) {
+          initialPhase = 'multiple-choice';
+        } else if (shuffledTranslation.length > 0) {
+          initialPhase = 'translation';
+        }
+        setCurrentPhase(initialPhase);
+
+        console.log('=== FAST REVIEW DATA LOADED ===');
+        console.log('Total Items:', transformedItemData.length);
+        console.log('Set Breakdown:', metadata.setBreakdown);
+        console.log('MC Questions:', multipleChoice.length);
+        console.log('Translation Questions:', translation.length);
+      } catch (err) {
+        console.error('Error fetching due items:', err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAllDueItems();
+  }, []);
+
+  // Initialize active arrays when data is loaded
+  useEffect(() => {
+    if (itemData.length > 0) {
+      setActiveTranslationArray([...translationArray]);
+      setActiveMCArray([...multipleChoiceArray]);
+
+      // Calculate total questions per phase
+      const phaseProgressObj = {};
+      if (multipleChoiceArray.length > 0) {
+        phaseProgressObj['multiple-choice'] = {
+          completedItems: new Set(),
+          totalUniqueItems: multipleChoiceArray.length,
+        };
+      }
+      if (translationArray.length > 0) {
+        phaseProgressObj['translation'] = {
+          completedItems: new Set(),
+          totalUniqueItems: translationArray.length,
+        };
+      }
+      setPhaseProgress(phaseProgressObj);
+    }
+  }, [itemData, translationArray, multipleChoiceArray]);
+
+  // Shuffle MC options whenever the current item or phase changes
+  useEffect(() => {
+    if (currentPhase === 'multiple-choice' && activeMCArray.length > 0) {
+      const currentItem = activeMCArray[currentIndex];
+      if (currentItem) {
+        const shuffled = shuffleOptionsWithDistractors(currentItem);
+        setCurrentShuffledOptions(shuffled);
+        setSelectedOption(null);
+      }
+    }
+  }, [currentPhase, activeMCArray, currentIndex]);
+
+  // ============ HELPER FUNCTIONS ============
+
+  // Get current array based on phase
+  const getCurrentArray = () => {
+    if (currentPhase === 'multiple-choice') {
+      return activeMCArray;
+    }
+    return activeTranslationArray;
+  };
+
+  // ============ CORE LOGIC HANDLERS ============
+
+  // Handle Multiple Choice option selection
+  const handleMCOptionSelect = (selectedAnswer) => {
+    const currentItem = activeMCArray[currentIndex];
+    const isCorrect = validateMultipleChoice(
+      selectedAnswer,
+      currentItem.answer
+    );
+
+    handleAnswerSubmitted({
+      isCorrect,
+      userAnswer: selectedAnswer,
+      correctAnswer: currentItem.answer,
+      questionId: currentItem.id,
+      questionType: currentItem.questionType,
+      answerType: currentItem.answerType,
+      question: currentItem.question,
+    });
+
+    setSelectedOption(selectedAnswer);
+    setShowResult(true);
+    setIsCorrect(isCorrect);
+  };
+
+  // Handle answer submission for Translation phase
+  const handleAnswerSubmitted = (answerData) => {
+    const currentItem = getCurrentArray()[currentIndex];
+    const originalId = currentItem.originalId;
+
+    // Record the answer
+    setAnsweredItems((prev) => [
+      ...prev,
+      {
+        ...answerData,
+        phase: currentPhase,
+        timestamp: Date.now(),
+        originalId: originalId,
+        setId: currentItem.setId,
+        setTitle: currentItem.setTitle,
+      },
+    ]);
+
+    // Update session stats
+    setSessionStats((prev) => {
+      const newCorrect = prev.correct + (answerData.isCorrect ? 1 : 0);
+      const newIncorrect = prev.incorrect + (answerData.isCorrect ? 0 : 1);
+      const newTotal = prev.totalAttempts + 1;
+
+      return {
+        correct: newCorrect,
+        incorrect: newIncorrect,
+        totalAttempts: newTotal,
+        accuracy: Math.round((newCorrect / newTotal) * 100),
+      };
+    });
+
+    // Track mistakes per original item
+    if (!answerData.isCorrect) {
+      setMistakesPerItem((prev) => ({
+        ...prev,
+        [originalId]: (prev[originalId] || 0) + 1,
+      }));
+    }
+
+    // Track unique items completed
+    if (answerData.isCorrect) {
+      setPhaseProgress((prev) => {
+        const newCompletedItems = new Set(prev[currentPhase].completedItems);
+        newCompletedItems.add(currentItem.id);
+        return {
+          ...prev,
+          [currentPhase]: {
+            ...prev[currentPhase],
+            completedItems: newCompletedItems,
+          },
+        };
+      });
+    }
+
+    // If incorrect, add current item to end of array
+    if (!answerData.isCorrect) {
+      setActiveTranslationArray((prev) => [...prev, currentItem]);
+    }
+
+    setIsCorrect(answerData.isCorrect);
+    setShowResult(true);
+  };
+
+  // Handle next navigation for Translation
+  const handleNext = () => {
+    const currentArray = getCurrentArray();
+    const currentItem = currentArray[currentIndex];
+    const originalId = currentItem.originalId;
+
+    const isLastQuestion = currentIndex >= currentArray.length - 1;
+
+    setShowResult(false);
+    setIsCorrect(false);
+    setUserAnswer('');
+
+    const willShowLevelChange = checkAndTriggerLevelChange(originalId);
+
+    if (isLastQuestion && willShowLevelChange) {
+      setShouldGoToSummaryAfterLevelChange(true);
+      return;
+    }
+
+    if (currentIndex < currentArray.length - 1) {
+      setCurrentIndex((prev) => prev + 1);
+    } else {
+      handlePhaseComplete();
+    }
+  };
+
+  // Check if all variations of an item are completed and trigger level change
+  const checkAndTriggerLevelChange = (originalId) => {
+    const questionsForItem = translationArray.filter(
+      (q) => q.originalId === originalId
+    );
+    const totalVariations = questionsForItem.length;
+
+    const completedVariations = questionsForItem.filter((q) =>
+      phaseProgress.translation.completedItems.has(q.id)
+    ).length;
+
+    if (completedVariations === totalVariations) {
+      const originalItem = itemData.find((item) => item.id === originalId);
+      if (!originalItem) return false;
+
+      const oldLevel = itemSRSLevels[originalId] || 1;
+      const mistakes = mistakesPerItem[originalId] || 0;
+
+      const newLevel =
+        mistakes === 0 ? oldLevel + 1 : Math.max(1, oldLevel - 1);
+
+      setItemSRSLevels((prev) => ({
+        ...prev,
+        [originalId]: newLevel,
+      }));
+
+      setCurrentLevelChange({
+        item: originalItem,
+        oldLevel,
+        newLevel,
+      });
+      setShowLevelChange(true);
+
+      saveSRSLevel(originalItem.uuid, newLevel);
+
+      console.log(
+        `SRS Level Update: ${originalId} - ${oldLevel} -> ${newLevel} (mistakes: ${mistakes})`
+      );
+
+      return true;
+    }
+
+    return false;
+  };
+
+  // Save SRS level to database
+  const saveSRSLevel = async (uuid, newLevel) => {
+    try {
+      const response = await fetch(
+        `/api/database/v2/srs/item/create-entry/${uuid}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            srs_level: newLevel,
+            scope: 'fast_review_multi_set',
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!result.success) {
+        console.error('Failed to save SRS level:', result.error);
+      } else {
+        console.log(`Successfully saved SRS level for ${uuid}: ${newLevel}`);
+      }
+    } catch (error) {
+      console.error('Error saving SRS level:', error);
+    }
+  };
+
+  // Handle phase completion and transition
+  const handlePhaseComplete = () => {
+    if (currentPhase === 'multiple-choice') {
+      if (translationArray.length > 0) {
+        setCurrentPhase('translation');
+        setCurrentIndex(0);
+        setShowResult(false);
+        setUserAnswer('');
+      } else {
+        setCurrentPhase('complete');
+        setTimeout(() => setAnimateAccuracy(true), 100);
+      }
+    } else if (currentPhase === 'translation') {
+      setCurrentPhase('complete');
+      setTimeout(() => setAnimateAccuracy(true), 100);
+    }
+  };
+
+  // ============ TRANSLATION HANDLERS ============
+
+  const handleTranslationCheck = () => {
+    const currentItem = activeTranslationArray[currentIndex];
+
+    const isCorrect = validateTypedAnswer(
+      userAnswer,
+      currentItem.answer,
+      currentItem.answerType
+    );
+
+    handleAnswerSubmitted({
+      isCorrect,
+      userAnswer,
+      correctAnswer: currentItem.answer,
+      questionId: currentItem.id,
+      questionType: currentItem.questionType,
+      answerType: currentItem.answerType,
+      question: currentItem.question,
+    });
+  };
+
+  const handleTranslationRetry = () => {
+    const currentItem = activeTranslationArray[currentIndex];
+    const originalId = currentItem.originalId;
+
+    setAnsweredItems((prev) => prev.slice(0, -1));
+
+    setSessionStats((prev) => {
+      const newIncorrect = Math.max(0, prev.incorrect - 1);
+      const newCorrect = prev.correct + 1;
+      const newTotal = prev.totalAttempts;
+      const newAccuracy =
+        newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0;
+
+      return {
+        ...prev,
+        correct: newCorrect,
+        incorrect: newIncorrect,
+        accuracy: newAccuracy,
+      };
+    });
+
+    setMistakesPerItem((prev) => ({
+      ...prev,
+      [originalId]: Math.max(0, (prev[originalId] || 0) - 1),
+    }));
+
+    setPhaseProgress((prev) => {
+      const newCompletedItems = new Set(prev[currentPhase].completedItems);
+      newCompletedItems.add(currentItem.id);
+      return {
+        ...prev,
+        [currentPhase]: {
+          ...prev[currentPhase],
+          completedItems: newCompletedItems,
+        },
+      };
+    });
+
+    setActiveTranslationArray((prev) => prev.slice(0, -1));
+
+    setShowResult(false);
+    setIsCorrect(false);
+    setUserAnswer('');
+
+    if (translationInputRef?.current) {
+      translationInputRef.current.focus();
+    }
+  };
+
+  // ============ GENERAL HANDLERS ============
+
+  const handleExit = () => {
+    router.push('/learn/academy/sets');
+  };
+
+  const handleLevelChangeComplete = () => {
+    setShowLevelChange(false);
+    setCurrentLevelChange(null);
+
+    if (shouldGoToSummaryAfterLevelChange) {
+      setShouldGoToSummaryAfterLevelChange(false);
+      handlePhaseComplete();
+    }
+  };
+
+  // ============ COMPUTED VALUES ============
+
+  const phases = useMemo(() => {
+    const phaseArray = [];
+
+    if (multipleChoiceArray.length > 0) {
+      phaseArray.push({
+        id: 'multiple-choice',
+        name: 'Multiple Choice',
+        icon: IoSparkles,
+        color: 'bg-purple-500',
+        borderColor: 'border-purple-500',
+      });
+    }
+
+    if (translationArray.length > 0) {
+      phaseArray.push({
+        id: 'translation',
+        name: 'Translation',
+        icon: FaDumbbell,
+        color: 'bg-[#e30a5f]',
+        borderColor: 'border-[#e30a5f]',
+      });
+    }
+
+    return phaseArray;
+  }, [multipleChoiceArray, translationArray]);
+
+  const currentPhaseIndex = phases.findIndex((p) => p.id === currentPhase);
+  const currentPhaseConfig = phases[currentPhaseIndex];
+  const CurrentPhaseIcon = currentPhaseConfig?.icon;
+
+  const getCompletedCount = () => {
+    return phaseProgress[currentPhase]?.completedItems.size || 0;
+  };
+
+  const getTotalUniqueItems = () => {
+    return phaseProgress[currentPhase]?.totalUniqueItems || 0;
+  };
+
+  const calculateProgressPercentage = () => {
+    const completed = getCompletedCount();
+    const total = getTotalUniqueItems();
+    return total > 0 ? (completed / total) * 100 : 0;
+  };
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+        <AcademySidebar />
+        <main className="flex-1 flex items-center justify-center px-4 sm:px-6 pt-[max(1rem,env(safe-area-inset-top))]">
+          <div className="text-center">
+            <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
+              {error === 'No items due for review'
+                ? 'All Caught Up!'
+                : 'Error Loading Items'}
+            </div>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              {error === 'No items due for review'
+                ? 'You have no items due for review right now. Check back later!'
+                : error}
+            </p>
+            <button
+              onClick={() => router.push('/learn/academy/sets')}
+              className="px-4 py-2 bg-[#e30a5f] text-white rounded-lg hover:bg-[#c00950] transition-colors"
+            >
+              Back to Sets
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Head>
+        <title>Fast Review</title>
+        <meta
+          name="description"
+          content="Review all due items across your sets"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
+        {/* Only show sidebar during complete phase (summary) */}
+        {currentPhase === 'complete' && <AcademySidebar />}
+
+        {/* SRS Level Change Animation Overlay */}
+        {showLevelChange && currentLevelChange && (
+          <LevelChangeView
+            item={currentLevelChange.item}
+            oldLevel={currentLevelChange.oldLevel}
+            newLevel={currentLevelChange.newLevel}
+            onComplete={handleLevelChangeComplete}
+          />
+        )}
+
+        <main className="flex-1 flex flex-col p-3 sm:p-6 pt-[max(0.75rem,env(safe-area-inset-top))]">
+          {/* Loading State */}
+          {isLoading ? (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center">
+                <div className="animate-pulse mb-4">
+                  <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
+                </div>
+                <p className="text-gray-600 dark:text-white/70">
+                  Loading due items...
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Show completion summary */}
+              {currentPhase === 'complete' && (
+                <SummaryView
+                  sessionStats={sessionStats}
+                  answeredItems={answeredItems}
+                  animateAccuracy={animateAccuracy}
+                  onBackToSet={handleExit}
+                  completionTitle="Fast Review Complete!"
+                  setBreakdown={setBreakdown}
+                />
+              )}
+
+              {/* Show active phase components */}
+              {currentPhase !== 'complete' && (
+                <>
+                  {/* Quiz Header */}
+                  <SessionStatHeaderView
+                    setTitle="Fast Review"
+                    sessionStats={sessionStats}
+                    currentIndex={currentIndex}
+                    totalQuestions={getCurrentArray().length}
+                    currentPhase={currentPhase}
+                    completedPhases={completedPhases}
+                    phases={phases}
+                    currentPhaseIndex={currentPhaseIndex}
+                    currentPhaseConfig={currentPhaseConfig}
+                    CurrentPhaseIcon={CurrentPhaseIcon}
+                    progressInPhase={calculateProgressPercentage()}
+                    completedCount={getCompletedCount()}
+                    totalUniqueItems={getTotalUniqueItems()}
+                    displayMode={'completion-count'}
+                    onExit={handleExit}
+                  />
+
+                  {/* Multiple Choice Phase */}
+                  {currentPhase === 'multiple-choice' &&
+                    activeMCArray.length > 0 && (
+                      <MultipleChoiceView
+                        currentItem={activeMCArray[currentIndex]}
+                        uniqueOptions={currentShuffledOptions}
+                        selectedOption={selectedOption}
+                        showResult={showResult}
+                        isCorrect={isCorrect}
+                        isTransitioning={false}
+                        isLastQuestion={
+                          currentIndex === activeMCArray.length - 1
+                        }
+                        onOptionSelect={handleMCOptionSelect}
+                        onNext={handleNext}
+                      />
+                    )}
+
+                  {/* Translation Phase */}
+                  {currentPhase === 'translation' &&
+                    activeTranslationArray.length > 0 && (
+                      <TypedResponseView
+                        currentItem={activeTranslationArray[currentIndex]}
+                        userAnswer={userAnswer}
+                        showResult={showResult}
+                        isCorrect={isCorrect}
+                        showHint={false}
+                        isLastQuestion={
+                          currentIndex === activeTranslationArray.length - 1
+                        }
+                        inputRef={translationInputRef}
+                        onInputChange={(e) => setUserAnswer(e.target.value)}
+                        onCheckAnswer={handleTranslationCheck}
+                        onNext={handleNext}
+                        onRetry={handleTranslationRetry}
+                      />
+                    )}
+                </>
+              )}
+            </>
+          )}
+        </main>
+      </div>
+    </>
+  );
+}
+
+export const getServerSideProps = withPageAuthRequired();
