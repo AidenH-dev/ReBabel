@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# Read the commit message
+commit_msg=$(cat "$1")
+
+# Define allowed prefixes
+allowed_prefixes="^(build|development|css|seo|confi|docs|feat|fix|improvement|chore|vuln|perf|refactor|style|test|auth|edit):"
+
+# Check if commit message starts with an allowed prefix
+if ! echo "$commit_msg" | grep -qE "$allowed_prefixes"; then
+  echo ""
+  echo "ERROR: Invalid commit message format!"
+  echo ""
+  echo "Commit message must start with one of these prefixes:"
+  echo "  build:       Changes to build system or dependencies"
+  echo "  development: In-process changes"
+  echo "  css:         Page styling changes"
+  echo "  seo:         Improving site traffic"
+  echo "  confi:       Configuration changes (VSCode, Prettier..)"
+  echo "  docs:        Documentation only changes"
+  echo "  feat:        A new feature"
+  echo "  fix:         A bug fix"
+  echo "  improvement: Streamlines/improves a feature"
+  echo "  chore:       Routine maintenance tasks"
+  echo "  vuln:        Security vulnerability patch"
+  echo "  perf:        Performance improvements"
+  echo "  refactor:    Code change (no bug fix or feature)"
+  echo "  style:       Formatting changes (whitespace, etc)"
+  echo "  test:        Adding or correcting tests"
+  echo "  auth:        Authentication changes"
+  echo "  edit:        A general code change"
+  echo ""
+  echo "Example: feat: add user login page"
+  echo ""
+  exit 1
+fi
