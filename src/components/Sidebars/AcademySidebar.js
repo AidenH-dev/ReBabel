@@ -1,6 +1,6 @@
-import { useRouter } from "next/router";
-import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
+import { useRouter } from 'next/router';
+import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import {
   TbSettings,
   TbHome,
@@ -11,20 +11,19 @@ import {
   TbStack2,
   TbPlus,
   TbSchool,
-  TbBooks
-} from "react-icons/tb";
-import { LuTextCursorInput } from "react-icons/lu";
-import { HiOutlinePencilSquare } from "react-icons/hi2";
-import { HiOutlinePencilAlt } from "react-icons/hi";
-import { LuSquarePen } from "react-icons/lu";
-import { FiAlertTriangle } from "react-icons/fi";
-import { IoExitOutline } from "react-icons/io5";
-import { SlOptionsVertical } from "react-icons/sl";
-import { LuListStart } from "react-icons/lu";
+  TbBooks,
+  TbLayoutDashboard,
+} from 'react-icons/tb';
+import { LuTextCursorInput } from 'react-icons/lu';
+import { HiOutlinePencilSquare } from 'react-icons/hi2';
+import { HiOutlinePencilAlt } from 'react-icons/hi';
+import { LuSquarePen } from 'react-icons/lu';
+import { FiAlertTriangle } from 'react-icons/fi';
+import { IoExitOutline } from 'react-icons/io5';
+import { SlOptionsVertical } from 'react-icons/sl';
+import { LuListStart } from 'react-icons/lu';
 
-
-
-import Link from "next/link";
+import Link from 'next/link';
 
 function AcademySidebar() {
   const router = useRouter();
@@ -45,30 +44,32 @@ function AcademySidebar() {
         setIsMobileMenuOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [isMobileMenuOpen]);
 
   // Academy nav active states
+  const isDashboardActive = /^\/learn\/dashboard/.test(path);
   const isAcademyHomeActive = /^\/learn\/academy$/.test(path);
   const isModulesActive = /^\/learn\/modules/.test(path);
   const isSetsActive = /^\/learn\/academy\/sets/.test(path);
   const isAcademySettingsActive = /^\/learn\/academy\/settings/.test(path);
   const isPracticeActive = /^\/learn\/academy\/practice/.test(path);
 
-
   const baseLink =
-    "flex items-center p-2 rounded-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-colors";
-  const inactiveLinkLight = "text-gray-700 hover:bg-gray-200 hover:text-gray-900";
-  const inactiveIconLight = "text-gray-600 group-hover:text-gray-900";
+    'flex items-center p-2 rounded-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-colors';
+  const inactiveLinkLight =
+    'text-gray-700 hover:bg-gray-200 hover:text-gray-900';
+  const inactiveIconLight = 'text-gray-600 group-hover:text-gray-900';
   const activeLink =
-    "text-[#e30a5f] bg-gray-100 dark:bg-[#172229] shadow-[inset_0_0_0_2px_rgb(209,213,219)] dark:shadow-[inset_0_0_0_2px_rgb(75,85,99)]";
-  const inactiveLinkDark = "dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700";
-  const inactiveIconDark = "dark:text-gray-400 dark:group-hover:text-white";
+    'text-[#e30a5f] bg-gray-100 dark:bg-[#172229] shadow-[inset_0_0_0_2px_rgb(209,213,219)] dark:shadow-[inset_0_0_0_2px_rgb(75,85,99)]';
+  const inactiveLinkDark =
+    'dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700';
+  const inactiveIconDark = 'dark:text-gray-400 dark:group-hover:text-white';
 
   const NavigationContent = () => (
     <>
@@ -89,7 +90,7 @@ function AcademySidebar() {
             <div className="flex gap-2 mb-3">
               <button
                 onClick={() => {
-                  router.push("/learn/dashboard");
+                  router.push('/learn/dashboard');
                 }}
                 className="flex-1 flex items-center justify-center p-2.5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-800/30 hover:bg-gray-100/70 dark:hover:bg-gray-700/50 hover:border-gray-400 dark:hover:border-gray-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                 aria-label="Back to dashboard"
@@ -98,7 +99,7 @@ function AcademySidebar() {
               </button>
               <button
                 onClick={() => {
-                  router.push("/learn/academy/sets/create");
+                  router.push('/learn/academy/sets/create');
                 }}
                 className="flex-1 flex items-center justify-center p-2.5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-800/30 hover:bg-gray-100/70 dark:hover:bg-gray-700/50 hover:border-gray-400 dark:hover:border-gray-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                 aria-label="Create new set"
@@ -108,7 +109,7 @@ function AcademySidebar() {
             </div>
           </li>
 
-          <li>
+          {/*<li>
             <Link
               href="/learn/academy"
               className={`${baseLink} ${isAcademyHomeActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
@@ -121,18 +122,24 @@ function AcademySidebar() {
               />
               <span className="ms-3">Home</span>
             </Link>
-          </li>
+          </li>*/}
 
           <li>
             <Link
               href="/learn/academy/sets"
-              className={`${baseLink} ${isSetsActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
-                }`}
-              aria-current={isSetsActive ? "page" : undefined}
+              className={`${baseLink} ${
+                isSetsActive
+                  ? activeLink
+                  : `${inactiveLinkLight} ${inactiveLinkDark}`
+              }`}
+              aria-current={isSetsActive ? 'page' : undefined}
             >
               <TbStack2
-                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isSetsActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
-                  }`}
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
+                  isSetsActive
+                    ? 'text-[#e30a5f]'
+                    : `${inactiveIconLight} ${inactiveIconDark}`
+                }`}
               />
               <span className="ms-3">Sets</span>
             </Link>
@@ -141,15 +148,19 @@ function AcademySidebar() {
           <li>
             <Link
               href="/learn/academy/practice"
-              className={`${baseLink} ${isPracticeActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`
-                }`}
-              aria-current={isPracticeActive ? "page" : undefined}
+              className={`${baseLink} ${
+                isPracticeActive
+                  ? activeLink
+                  : `${inactiveLinkLight} ${inactiveLinkDark}`
+              }`}
+              aria-current={isPracticeActive ? 'page' : undefined}
             >
               <HiOutlinePencilAlt
-                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isPracticeActive
-                  ? "text-[#e30a5f]"
-                  : `${inactiveIconLight} ${inactiveIconDark}`
-                  }`}
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
+                  isPracticeActive
+                    ? 'text-[#e30a5f]'
+                    : `${inactiveIconLight} ${inactiveIconDark}`
+                }`}
               />
               <span className="ms-3">Practice</span>
             </Link>
@@ -171,30 +182,42 @@ function AcademySidebar() {
               <span className="ms-3">Modules</span>
             </Link>
               </li>*/}
-
-
         </ul>
       </div>
     </>
   );
 
   const bubbleBase =
-    "flex items-center justify-center w-15 h-15 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/60 hover:bg-gray-100/90 dark:hover:bg-gray-700/70 hover:border-gray-400 dark:hover:border-gray-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600";
+    'flex items-center justify-center w-15 h-15 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/60 hover:bg-gray-100/90 dark:hover:bg-gray-700/70 hover:border-gray-400 dark:hover:border-gray-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600';
   const bubbleActive =
-    "border-[#e30a5f] dark:border-[#e30a5f] bg-gray-100/90 dark:bg-[#172229]/80";
-  const bubbleIconBase = "w-6.5 h-6.5 text-gray-700 dark:text-gray-300";
-  const bubbleIconActive = "w-6 h-6 text-[#e30a5f]";
+    'border-[#e30a5f] dark:border-[#e30a5f] bg-gray-100/90 dark:bg-[#172229]/80';
+  const bubbleIconBase = 'w-6.5 h-6.5 text-gray-700 dark:text-gray-300';
+  const bubbleIconActive = 'w-6 h-6 text-[#e30a5f]';
 
   const mobileNavItems = [
+    //{ href: "/learn/dashboard", icon: TbLayoutDashboard, active: isDashboardActive, label: "Dashboard" },
     //{ href: "/learn/academy", icon: TbHome, active: isAcademyHomeActive, label: "Home" },
-    { href: "/learn/academy/sets", icon: TbStack2, active: isSetsActive, label: "Sets" },
-    { href: "/learn/academy/practice", icon: HiOutlinePencilAlt, active: isPracticeActive, label: "Practice" },
+    {
+      href: '/learn/academy/sets',
+      icon: TbStack2,
+      active: isSetsActive,
+      label: 'Sets',
+    },
+    {
+      href: '/learn/academy/practice',
+      icon: HiOutlinePencilAlt,
+      active: isPracticeActive,
+      label: 'Practice',
+    },
   ];
 
   return (
     <>
       {/* Mobile Bubble Menu - Only visible on small screens */}
-      <div ref={bubbleMenuRef} className="lg:hidden fixed bottom-6 left-6 z-[60] flex flex-col-reverse items-start gap-2 pointer-events-none">
+      <div
+        ref={bubbleMenuRef}
+        className="lg:hidden fixed bottom-6 left-6 z-[60] flex flex-col-reverse items-start gap-2 pointer-events-none"
+      >
         {/* Bottom row: Menu toggle + Create button */}
         <div className="flex items-center gap-2 pointer-events-auto">
           <button
@@ -212,8 +235,11 @@ function AcademySidebar() {
 
           {/* Options button - appears to the right when open */}
           <button
-            onClick={() => { router.push("/learn/dashboard"); setIsMobileMenuOpen(false); }}
-            className={`${bubbleBase} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
+            onClick={() => {
+              router.push('/learn/dashboard');
+              setIsMobileMenuOpen(false);
+            }}
+            className={`${bubbleBase} transition-all duration-200 ${isMobileMenuOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-75 pointer-events-none'}`}
             aria-label="Back to dashboard"
             tabIndex={isMobileMenuOpen ? 0 : -1}
           >
@@ -222,8 +248,11 @@ function AcademySidebar() {
 
           {/* Report button - appears to the right of plus when open */}
           <button
-            onClick={() => { window.dispatchEvent(new CustomEvent("open-report-issue")); setIsMobileMenuOpen(false); }}
-            className={`${bubbleBase} !border-red-600/60 !bg-red-600/20 hover:!bg-red-600/30 hover:!border-red-500 transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
+            onClick={() => {
+              window.dispatchEvent(new CustomEvent('open-report-issue'));
+              setIsMobileMenuOpen(false);
+            }}
+            className={`${bubbleBase} !border-red-600/60 !bg-red-600/20 hover:!bg-red-600/30 hover:!border-red-500 transition-all duration-200 ${isMobileMenuOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-75 pointer-events-none'}`}
             aria-label="Report issue"
             tabIndex={isMobileMenuOpen ? 0 : -1}
           >
@@ -233,9 +262,12 @@ function AcademySidebar() {
 
         {/* Stacked above: Create button, then nav items */}
         <button
-          onClick={() => { router.push("/learn/academy/sets/create"); setIsMobileMenuOpen(false); }}
-          className={`${bubbleBase} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
-          style={{ transitionDelay: isMobileMenuOpen ? "50ms" : "0ms" }}
+          onClick={() => {
+            router.push('/learn/academy/sets/create');
+            setIsMobileMenuOpen(false);
+          }}
+          className={`${bubbleBase} transition-all duration-200 ${isMobileMenuOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-75 pointer-events-none'}`}
+          style={{ transitionDelay: isMobileMenuOpen ? '50ms' : '0ms' }}
           aria-label="Create new set"
           tabIndex={isMobileMenuOpen ? 0 : -1}
         >
@@ -250,13 +282,17 @@ function AcademySidebar() {
               key={item.href}
               href={item.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`${bubbleBase} ${item.active ? bubbleActive : ""} transition-all duration-200 ${isMobileMenuOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none"}`}
-              style={{ transitionDelay: isMobileMenuOpen ? `${(i + 2) * 50}ms` : "0ms" }}
+              className={`${bubbleBase} ${item.active ? bubbleActive : ''} transition-all duration-200 ${isMobileMenuOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-75 pointer-events-none'}`}
+              style={{
+                transitionDelay: isMobileMenuOpen ? `${(i + 2) * 50}ms` : '0ms',
+              }}
               aria-label={item.label}
-              aria-current={item.active ? "page" : undefined}
+              aria-current={item.active ? 'page' : undefined}
               tabIndex={isMobileMenuOpen ? 0 : -1}
             >
-              <Icon className={item.active ? bubbleIconActive : bubbleIconBase} />
+              <Icon
+                className={item.active ? bubbleIconActive : bubbleIconBase}
+              />
             </Link>
           );
         })}

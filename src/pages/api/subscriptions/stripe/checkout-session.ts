@@ -60,8 +60,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
           quantity: 1,
         },
       ],
-      success_url: `${req.headers.origin}/learn/subscription?success=true`,
-      cancel_url: `${req.headers.origin}/learn/subscription?canceled=true`,
+      success_url: `${req.headers.origin}/learn/account/subscription?success=true`,
+      cancel_url: `${req.headers.origin}/learn/account/subscription?canceled=true`,
       subscription_data: {
         metadata: { auth0_user_id: userId },
       },

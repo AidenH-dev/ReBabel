@@ -39,7 +39,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
 
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: customerId,
-      return_url: `${req.headers.origin}/learn/subscription`,
+      return_url: `${req.headers.origin}/learn/account/subscription`,
     });
 
     return res.status(200).json({ success: true, url: portalSession.url });

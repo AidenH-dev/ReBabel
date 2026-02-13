@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import MainSidebar from '../../components/Sidebars/MainSidebar';
+import MainSidebar from '../../../components/Sidebars/MainSidebar';
 import { useEffect, useState } from 'react';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { TbCheck, TbLoader, TbExternalLink } from 'react-icons/tb';
@@ -20,10 +20,10 @@ export default function Subscription() {
         text: 'Subscription activated successfully!',
       });
       // Clean URL
-      window.history.replaceState({}, '', '/learn/subscription');
+      window.history.replaceState({}, '', '/learn/account/subscription');
     } else if (params.get('canceled') === 'true') {
       setMessage({ type: 'info', text: 'Checkout was canceled.' });
-      window.history.replaceState({}, '', '/learn/subscription');
+      window.history.replaceState({}, '', '/learn/account/subscription');
     }
 
     fetchSubscription();

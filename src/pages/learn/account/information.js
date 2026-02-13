@@ -1,9 +1,9 @@
-import Head from "next/head";
-import Link from "next/link";
-import Image from "next/image";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { useState, useMemo } from "react";
-import MainSidebar from "../../../components/Sidebars/MainSidebar";
+import Head from 'next/head';
+import Link from 'next/link';
+import Image from 'next/image';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { useState, useMemo } from 'react';
+import MainSidebar from '../../../components/Sidebars/MainSidebar';
 import {
   TbExternalLink,
   TbX,
@@ -15,7 +15,7 @@ import {
   TbArrowRight,
   TbNews,
   TbBooks,
-} from "react-icons/tb";
+} from 'react-icons/tb';
 
 /**
  * Resources Dashboard (JS)
@@ -42,15 +42,15 @@ export default function Information() {
   const articles = useMemo(
     () => ({
       srs_basics: {
-        id: "srs_basics",
-        title: "Spaced Repetition (SRS): The 5‑minute Primer",
-        badge: "Study Method",
+        id: 'srs_basics',
+        title: 'Spaced Repetition (SRS): The 5‑minute Primer',
+        badge: 'Study Method',
         content: (
           <div className="space-y-4">
             <p>
               Spaced Repetition schedules reviews right before you would forget,
               strengthening memory with minimal time. A practical starter
-              schedule:{" "}
+              schedule:{' '}
               <span className="font-medium">10m → 1d → 3d → 1w → 1m → 3m</span>.
             </p>
             <ul className="list-disc list-inside space-y-1">
@@ -69,12 +69,12 @@ export default function Information() {
             </ul>
           </div>
         ),
-        cta: { label: "Build SRS Decks", href: "/learn/academy/sets" },
+        cta: { label: 'Build SRS Decks', href: '/learn/academy/sets' },
       },
       why_tracks: {
-        id: "why_tracks",
-        title: "Why Academy vs Certificate Tracks",
-        badge: "Program Structure",
+        id: 'why_tracks',
+        title: 'Why Academy vs Certificate Tracks',
+        badge: 'Program Structure',
         content: (
           <div className="space-y-4">
             <p>
@@ -100,16 +100,16 @@ export default function Information() {
             </ul>
           </div>
         ),
-        cta: { label: "Explore Tracks", href: "/learn/jlpt" },
+        cta: { label: 'Explore Tracks', href: '/learn/jlpt' },
       },
       jlpt_overview: {
-        id: "jlpt_overview",
-        title: "JLPT Overview (N5 → N1)",
-        badge: "Certification",
+        id: 'jlpt_overview',
+        title: 'JLPT Overview (N5 → N1)',
+        badge: 'Certification',
         content: (
           <div className="space-y-4">
             <p>
-              JLPT measures{" "}
+              JLPT measures{' '}
               <span className="font-medium">reading and listening</span>. Use
               level‑tagged SRS decks and graded reading to progress.
             </p>
@@ -120,7 +120,7 @@ export default function Information() {
             </ol>
           </div>
         ),
-        cta: { label: "Open JLPT Tracks", href: "/learn/jlpt" },
+        cta: { label: 'Open JLPT Tracks', href: '/learn/jlpt' },
       },
     }),
     []
@@ -133,7 +133,7 @@ export default function Information() {
     >
       <div
         className={`h-1 ${
-          gradient || "bg-gradient-to-r from-gray-200 to-gray-300"
+          gradient || 'bg-gradient-to-r from-gray-200 to-gray-300'
         }`}
       />
       <div className="p-5 flex items-start gap-4">
@@ -216,7 +216,7 @@ export default function Information() {
           width: `${100 / zoom}%`,
           height: `${100 / zoom}%`,
           transform: `scale(${zoom})`,
-          transformOrigin: "0 0",
+          transformOrigin: '0 0',
         }}
       >
         <iframe
@@ -233,7 +233,7 @@ export default function Information() {
   // NHK window WITHOUT traffic‑light dots (tall/portrait)
   // MODIFIED to accept and use the height prop
   const NHKPreviewWindow = ({ height = 750 }) => {
-    const IMAGE_SRC = "/nhk_preview_standin.jpg";
+    const IMAGE_SRC = '/nhk_preview_standin.jpg';
     // HEIGHT is now received via props, defaulting to 720
 
     return (
@@ -336,7 +336,7 @@ export default function Information() {
 
         <Header />
 
-        {/* SECTION 1: ABOUT OUR PLATFORM 
+        {/* SECTION 1: ABOUT OUR PLATFORM
                 <section aria-labelledby="about-heading" className="mb-8">
                     <h2 id="about-heading" className="text-lg font-semibold text-gray-900 dark:text-white mb-3">About Our Platform</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -448,7 +448,8 @@ export default function Information() {
           {/* How-to helpers under the tiles (Unchanged) */}
           <div
             id="nhk-how"
-            className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6"
+          >
             <section className="bg-white dark:bg-[#1c2b35] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                 <TbBooks /> NHK Easy To Learn

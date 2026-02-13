@@ -1,9 +1,23 @@
-import Head from "next/head";
-import MainSidebar from "../../components/Sidebars/MainSidebar";
-import { useEffect, useState } from "react";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { FiMail, FiKey, FiCreditCard, FiLogOut, FiLoader, FiCheck, FiExternalLink, FiSun, FiMoon, FiMonitor, FiX, FiAlertCircle, FiBell } from "react-icons/fi";
-import { useTheme } from "../../contexts/ThemeContext";
+import Head from 'next/head';
+import MainSidebar from '../../../components/Sidebars/MainSidebar';
+import { useEffect, useState } from 'react';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import {
+  FiMail,
+  FiKey,
+  FiCreditCard,
+  FiLogOut,
+  FiLoader,
+  FiCheck,
+  FiExternalLink,
+  FiSun,
+  FiMoon,
+  FiMonitor,
+  FiX,
+  FiAlertCircle,
+  FiBell,
+} from 'react-icons/fi';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 export default function Settings() {
   const { theme, setTheme } = useTheme();
@@ -24,7 +38,7 @@ export default function Settings() {
   const [pushError, setPushError] = useState(null);
 
   const copyEmail = async () => {
-    await navigator.clipboard.writeText("rebabel.development@gmail.com");
+    await navigator.clipboard.writeText('rebabel.development@gmail.com');
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
@@ -38,11 +52,11 @@ export default function Settings() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch("/api/auth/me");
+        const response = await fetch('/api/auth/me');
         const profile = await response.json();
         setUserProfile(profile);
       } catch (error) {
-        console.error("Error fetching user profile:", error);
+        console.error('Error fetching user profile:', error);
       } finally {
         setLoading(false);
       }
@@ -50,11 +64,13 @@ export default function Settings() {
 
     const fetchSubscription = async () => {
       try {
-        const res = await fetch("/api/subscriptions/stripe/subscription-status");
+        const res = await fetch(
+          '/api/subscriptions/stripe/subscription-status'
+        );
         const data = await res.json();
         setSubscription(data);
       } catch (error) {
-        console.error("Error fetching subscription:", error);
+        console.error('Error fetching subscription:', error);
       }
     };
 
@@ -78,14 +94,14 @@ export default function Settings() {
   const handleResetPassword = async () => {
     setResetLoading(true);
     try {
-      const res = await fetch("/api/auth/reset-password", {
-        method: "POST",
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
       });
       if (res.ok) {
         setResetSent(true);
       }
     } catch (error) {
-      console.error("Reset password error:", error);
+      console.error('Reset password error:', error);
     } finally {
       setResetLoading(false);
     }
@@ -94,15 +110,15 @@ export default function Settings() {
   const handleManageSubscription = async () => {
     setPortalLoading(true);
     try {
-      const res = await fetch("/api/subscriptions/stripe/customer-portal", {
-        method: "POST",
+      const res = await fetch('/api/subscriptions/stripe/customer-portal', {
+        method: 'POST',
       });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
       }
     } catch (error) {
-      console.error("Portal error:", error);
+      console.error('Portal error:', error);
     } finally {
       setPortalLoading(false);
     }
@@ -114,7 +130,8 @@ export default function Settings() {
     setPushError(null);
 
     try {
-      const { PushNotifications } = await import('@capacitor/push-notifications');
+      const { PushNotifications } =
+        await import('@capacitor/push-notifications');
 
       // Request permission if needed
       const permResult = await PushNotifications.requestPermissions();
@@ -130,7 +147,10 @@ export default function Settings() {
 
       // Wait for registration token
       const tokenPromise = new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => reject(new Error('Registration timeout')), 10000);
+        const timeout = setTimeout(
+          () => reject(new Error('Registration timeout')),
+          10000
+        );
 
         PushNotifications.addListener('registration', (token) => {
           clearTimeout(timeout);
@@ -212,7 +232,7 @@ export default function Settings() {
                       <p className="text-sm text-gray-400">Loading...</p>
                     ) : (
                       <p className="text-gray-900 dark:text-white truncate">
-                        {userProfile?.email || "Not available"}
+                        {userProfile?.email || 'Not available'}
                       </p>
                     )}
                   </div>
@@ -230,7 +250,9 @@ export default function Settings() {
                       Password
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {resetSent ? "Check your email for reset link" : "Send a password reset email"}
+                      {resetSent
+                        ? 'Check your email for reset link'
+                        : 'Send a password reset email'}
                     </p>
                   </div>
                   <button
@@ -238,8 +260,8 @@ export default function Settings() {
                     disabled={resetLoading || resetSent}
                     className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors disabled:opacity-50 ${
                       resetSent
-                        ? "border-green-500 text-green-600 dark:text-green-400"
-                        : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                        ? 'border-green-500 text-green-600 dark:text-green-400'
+                        : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                     }`}
                   >
                     {resetLoading ? (
@@ -249,7 +271,7 @@ export default function Settings() {
                     ) : (
                       <FiKey className="text-sm" />
                     )}
-                    {resetSent ? "Email Sent" : "Reset Password"}
+                    {resetSent ? 'Email Sent' : 'Reset Password'}
                   </button>
                 </div>
               </div>
@@ -310,8 +332,8 @@ export default function Settings() {
                         onClick={() => setTheme(option.value)}
                         className={`flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
                           isActive
-                            ? "border-[#e30a5f] bg-[#e30a5f]/10 text-[#e30a5f]"
-                            : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                            ? 'border-[#e30a5f] bg-[#e30a5f]/10 text-[#e30a5f]'
+                            : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                         }`}
                       >
                         <Icon className="text-sm" />
@@ -322,7 +344,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              {/* Push Notifications Test Section - Only show in native app 
+              {/* Push Notifications Test Section - Only show in native app
               {isNativeApp && (
                 <div className="p-4">
                   <div className="flex items-center gap-3">
@@ -380,7 +402,7 @@ export default function Settings() {
                     </p>
                   </div>
                   <button
-                    onClick={() => window.location.href = "/api/auth/logout"}
+                    onClick={() => (window.location.href = '/api/auth/logout')}
                     className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-red-500 hover:bg-red-600 text-white transition-colors"
                   >
                     <FiLogOut className="text-sm" />
@@ -425,7 +447,9 @@ export default function Settings() {
         >
           <div className="w-full max-w-sm rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/5 dark:border-white/10">
             <div className="p-4 flex items-center justify-between border-b border-black/5 dark:border-white/10">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Contact Us</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                Contact Us
+              </h2>
               <button
                 onClick={() => setShowContact(false)}
                 className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -434,7 +458,9 @@ export default function Settings() {
               </button>
             </div>
             <div className="p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300">
-              <p>Need help or have feedback? We&apos;d love to hear from you.</p>
+              <p>
+                Need help or have feedback? We&apos;d love to hear from you.
+              </p>
               <div className="space-y-2">
                 <button
                   onClick={copyEmail}
@@ -442,18 +468,31 @@ export default function Settings() {
                 >
                   <FiMail className="text-[#e30a5f]" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 dark:text-white text-sm">Email</p>
-                    <p className="text-xs text-gray-500 truncate">{copiedEmail ? "Copied to clipboard!" : "rebabel.development@gmail.com"}</p>
+                    <p className="font-medium text-gray-900 dark:text-white text-sm">
+                      Email
+                    </p>
+                    <p className="text-xs text-gray-500 truncate">
+                      {copiedEmail
+                        ? 'Copied to clipboard!'
+                        : 'rebabel.development@gmail.com'}
+                    </p>
                   </div>
                 </button>
                 <button
-                  onClick={() => { setShowContact(false); window.dispatchEvent(new Event("open-report-issue")); }}
+                  onClick={() => {
+                    setShowContact(false);
+                    window.dispatchEvent(new Event('open-report-issue'));
+                  }}
                   className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
                 >
                   <FiAlertCircle className="text-[#e30a5f]" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white text-sm">Report an Issue</p>
-                    <p className="text-xs text-gray-500">Found a bug? Let us know</p>
+                    <p className="font-medium text-gray-900 dark:text-white text-sm">
+                      Report an Issue
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Found a bug? Let us know
+                    </p>
                   </div>
                 </button>
               </div>
@@ -470,7 +509,9 @@ export default function Settings() {
         >
           <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/5 dark:border-white/10 flex flex-col">
             <div className="sticky top-0 bg-white dark:bg-[#1c2b35] border-b border-black/5 dark:border-white/10 p-4 flex items-center justify-between rounded-t-xl">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Privacy Policy</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                Privacy Policy
+              </h2>
               <button
                 onClick={() => setShowPrivacy(false)}
                 className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -479,25 +520,56 @@ export default function Settings() {
               </button>
             </div>
             <div className="overflow-y-auto p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300">
-              <p className="text-xs text-gray-500">Last updated: February 2026</p>
+              <p className="text-xs text-gray-500">
+                Last updated: February 2026
+              </p>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Introduction</h3>
-                <p>ReBabel (&ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our language learning platform.</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Introduction
+                </h3>
+                <p>
+                  ReBabel (&ldquo;we&rdquo;, &ldquo;our&rdquo;, or
+                  &ldquo;us&rdquo;) is committed to protecting your privacy.
+                  This Privacy Policy explains how we collect, use, disclose,
+                  and safeguard your information when you use our language
+                  learning platform.
+                </p>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Information We Collect</h3>
-                <p className="mb-2"><strong>Account Information:</strong> When you create an account, we collect your email address and authentication credentials through Auth0.</p>
-                <p className="mb-2"><strong>Learning Data:</strong> We store your learning progress, vocabulary decks, lesson completions, and study statistics.</p>
-                <p className="mb-2"><strong>Payment Information:</strong> Payment processing is handled by Stripe. We do not store your credit card information directly.</p>
-                <p><strong>Usage Analytics:</strong> We use PostHog and Google Analytics to understand how users interact with our platform.</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Information We Collect
+                </h3>
+                <p className="mb-2">
+                  <strong>Account Information:</strong> When you create an
+                  account, we collect your email address and authentication
+                  credentials through Auth0.
+                </p>
+                <p className="mb-2">
+                  <strong>Learning Data:</strong> We store your learning
+                  progress, vocabulary decks, lesson completions, and study
+                  statistics.
+                </p>
+                <p className="mb-2">
+                  <strong>Payment Information:</strong> Payment processing is
+                  handled by Stripe. We do not store your credit card
+                  information directly.
+                </p>
+                <p>
+                  <strong>Usage Analytics:</strong> We use PostHog and Google
+                  Analytics to understand how users interact with our platform.
+                </p>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">How We Use Your Information</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  How We Use Your Information
+                </h3>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>To provide and maintain our language learning services</li>
+                  <li>
+                    To provide and maintain our language learning services
+                  </li>
                   <li>To personalize your learning experience</li>
                   <li>To process subscriptions and payments</li>
                   <li>To send important account and service updates</li>
@@ -506,25 +578,63 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Third-Party Services</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Third-Party Services
+                </h3>
                 <ul className="list-disc list-inside space-y-1">
-                  <li><strong>Auth0</strong> - Authentication and identity management</li>
-                  <li><strong>Stripe</strong> - Payment processing</li>
-                  <li><strong>Supabase</strong> - Database and data storage</li>
-                  <li><strong>PostHog</strong> - Product analytics</li>
-                  <li><strong>Google Analytics</strong> - Website analytics</li>
-                  <li><strong>OpenAI</strong> - AI-powered language learning features</li>
+                  <li>
+                    <strong>Auth0</strong> - Authentication and identity
+                    management
+                  </li>
+                  <li>
+                    <strong>Stripe</strong> - Payment processing
+                  </li>
+                  <li>
+                    <strong>Supabase</strong> - Database and data storage
+                  </li>
+                  <li>
+                    <strong>PostHog</strong> - Product analytics
+                  </li>
+                  <li>
+                    <strong>Google Analytics</strong> - Website analytics
+                  </li>
+                  <li>
+                    <strong>OpenAI</strong> - AI-powered language learning
+                    features
+                  </li>
                 </ul>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Your Rights</h3>
-                <p>You have the right to access, correct, or delete your personal data. Contact us at <button onClick={copyEmail} className="text-[#e30a5f] hover:underline">{copiedEmail ? "Copied!" : "rebabel.development@gmail.com"}</button> to exercise these rights.</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Your Rights
+                </h3>
+                <p>
+                  You have the right to access, correct, or delete your personal
+                  data. Contact us at{' '}
+                  <button
+                    onClick={copyEmail}
+                    className="text-[#e30a5f] hover:underline"
+                  >
+                    {copiedEmail ? 'Copied!' : 'rebabel.development@gmail.com'}
+                  </button>{' '}
+                  to exercise these rights.
+                </p>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Contact Us</h3>
-                <p>Questions? Email us at <button onClick={copyEmail} className="text-[#e30a5f] hover:underline">{copiedEmail ? "Copied!" : "rebabel.development@gmail.com"}</button></p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Contact Us
+                </h3>
+                <p>
+                  Questions? Email us at{' '}
+                  <button
+                    onClick={copyEmail}
+                    className="text-[#e30a5f] hover:underline"
+                  >
+                    {copiedEmail ? 'Copied!' : 'rebabel.development@gmail.com'}
+                  </button>
+                </p>
               </section>
             </div>
           </div>
@@ -539,7 +649,9 @@ export default function Settings() {
         >
           <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/5 dark:border-white/10 flex flex-col">
             <div className="sticky top-0 bg-white dark:bg-[#1c2b35] border-b border-black/5 dark:border-white/10 p-4 flex items-center justify-between rounded-t-xl">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Terms of Service</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                Terms of Service
+              </h2>
               <button
                 onClick={() => setShowTerms(false)}
                 className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -548,57 +660,121 @@ export default function Settings() {
               </button>
             </div>
             <div className="overflow-y-auto p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300">
-              <p className="text-xs text-gray-500">Last updated: February 2026</p>
+              <p className="text-xs text-gray-500">
+                Last updated: February 2026
+              </p>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Agreement to Terms</h3>
-                <p>By accessing or using ReBabel, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our service.</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Agreement to Terms
+                </h3>
+                <p>
+                  By accessing or using ReBabel, you agree to be bound by these
+                  Terms of Service. If you do not agree to these terms, please
+                  do not use our service.
+                </p>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Description of Service</h3>
-                <p>ReBabel is a language learning platform that provides educational content, vocabulary training, AI-powered tutoring, and learning tools.</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Description of Service
+                </h3>
+                <p>
+                  ReBabel is a language learning platform that provides
+                  educational content, vocabulary training, AI-powered tutoring,
+                  and learning tools.
+                </p>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">User Accounts</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  User Accounts
+                </h3>
                 <ul className="list-disc list-inside space-y-1">
                   <li>Provide accurate and complete information</li>
                   <li>Maintain the security of your account credentials</li>
-                  <li>Accept responsibility for all activities under your account</li>
+                  <li>
+                    Accept responsibility for all activities under your account
+                  </li>
                 </ul>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Subscriptions and Payments</h3>
-                <p className="mb-2">ReBabel offers both free and premium subscription options. Premium subscriptions are billed on a recurring basis through Stripe.</p>
-                <p className="mb-2"><strong>Cancellation:</strong> You may cancel your subscription at any time. Cancellation takes effect at the end of your current billing period.</p>
-                <p><strong>Refunds:</strong> Contact <button onClick={copyEmail} className="text-[#e30a5f] hover:underline">{copiedEmail ? "Copied!" : "rebabel.development@gmail.com"}</button> for refund requests.</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Subscriptions and Payments
+                </h3>
+                <p className="mb-2">
+                  ReBabel offers both free and premium subscription options.
+                  Premium subscriptions are billed on a recurring basis through
+                  Stripe.
+                </p>
+                <p className="mb-2">
+                  <strong>Cancellation:</strong> You may cancel your
+                  subscription at any time. Cancellation takes effect at the end
+                  of your current billing period.
+                </p>
+                <p>
+                  <strong>Refunds:</strong> Contact{' '}
+                  <button
+                    onClick={copyEmail}
+                    className="text-[#e30a5f] hover:underline"
+                  >
+                    {copiedEmail ? 'Copied!' : 'rebabel.development@gmail.com'}
+                  </button>{' '}
+                  for refund requests.
+                </p>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Acceptable Use</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Acceptable Use
+                </h3>
                 <ul className="list-disc list-inside space-y-1">
                   <li>Do not use the service for any unlawful purpose</li>
                   <li>Do not share your account credentials</li>
                   <li>Do not attempt to circumvent security features</li>
-                  <li>Do not copy or distribute our content without permission</li>
+                  <li>
+                    Do not copy or distribute our content without permission
+                  </li>
                 </ul>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">AI Features</h3>
-                <p>ReBabel uses artificial intelligence for language learning assistance. While we strive for accuracy, AI-generated content may contain errors. The AI tutor supplements, not replaces, traditional learning methods.</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  AI Features
+                </h3>
+                <p>
+                  ReBabel uses artificial intelligence for language learning
+                  assistance. While we strive for accuracy, AI-generated content
+                  may contain errors. The AI tutor supplements, not replaces,
+                  traditional learning methods.
+                </p>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Disclaimer</h3>
-                <p>ReBabel is provided &ldquo;as is&rdquo; without warranties of any kind. We do not guarantee uninterrupted service or specific learning outcomes.</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Disclaimer
+                </h3>
+                <p>
+                  ReBabel is provided &ldquo;as is&rdquo; without warranties of
+                  any kind. We do not guarantee uninterrupted service or
+                  specific learning outcomes.
+                </p>
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Contact Us</h3>
-                <p>Questions? Email us at <button onClick={copyEmail} className="text-[#e30a5f] hover:underline">{copiedEmail ? "Copied!" : "rebabel.development@gmail.com"}</button></p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Contact Us
+                </h3>
+                <p>
+                  Questions? Email us at{' '}
+                  <button
+                    onClick={copyEmail}
+                    className="text-[#e30a5f] hover:underline"
+                  >
+                    {copiedEmail ? 'Copied!' : 'rebabel.development@gmail.com'}
+                  </button>
+                </p>
               </section>
             </div>
           </div>
