@@ -1,9 +1,9 @@
-import Head from "next/head";
-import MainSidebar from "../../components/Sidebars/MainSidebar";
-import { useEffect, useState } from "react";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { TbCheck, TbLoader, TbExternalLink } from "react-icons/tb";
-import { HiOutlineStar } from "react-icons/hi2";
+import Head from 'next/head';
+import MainSidebar from '../../components/Sidebars/MainSidebar';
+import { useEffect, useState } from 'react';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { TbCheck, TbLoader, TbExternalLink } from 'react-icons/tb';
+import { HiOutlineStar } from 'react-icons/hi2';
 
 export default function Subscription() {
   const [subscription, setSubscription] = useState(null);
@@ -14,13 +14,16 @@ export default function Subscription() {
   useEffect(() => {
     // Check URL params for success/cancel messages
     const params = new URLSearchParams(window.location.search);
-    if (params.get("success") === "true") {
-      setMessage({ type: "success", text: "Subscription activated successfully!" });
+    if (params.get('success') === 'true') {
+      setMessage({
+        type: 'success',
+        text: 'Subscription activated successfully!',
+      });
       // Clean URL
-      window.history.replaceState({}, "", "/learn/subscription");
-    } else if (params.get("canceled") === "true") {
-      setMessage({ type: "info", text: "Checkout was canceled." });
-      window.history.replaceState({}, "", "/learn/subscription");
+      window.history.replaceState({}, '', '/learn/subscription');
+    } else if (params.get('canceled') === 'true') {
+      setMessage({ type: 'info', text: 'Checkout was canceled.' });
+      window.history.replaceState({}, '', '/learn/subscription');
     }
 
     fetchSubscription();
@@ -28,39 +31,35 @@ export default function Subscription() {
 
   const fetchSubscription = async () => {
     try {
-      const res = await fetch(
-        `/api/subscriptions/stripe/subscription-status`,
-        {
-          cache: "no-store",
-          headers: { "Cache-Control": "no-cache" },
-        }
-      );
+      const res = await fetch(`/api/subscriptions/stripe/subscription-status`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' },
+      });
       const data = await res.json();
-      console.log("FUCK", data)
+      console.log('FUCK', data);
       setSubscription(data);
     } catch (error) {
-      console.error("Failed to fetch subscription:", error);
+      console.error('Failed to fetch subscription:', error);
     } finally {
       setLoading(false);
     }
   };
 
-
   const handleUpgrade = async () => {
     setProcessing(true);
     try {
-      const res = await fetch("/api/subscriptions/stripe/checkout-session", {
-        method: "POST",
+      const res = await fetch('/api/subscriptions/stripe/checkout-session', {
+        method: 'POST',
       });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
       } else {
-        setMessage({ type: "error", text: "Failed to start checkout." });
+        setMessage({ type: 'error', text: 'Failed to start checkout.' });
       }
     } catch (error) {
-      console.error("Checkout error:", error);
-      setMessage({ type: "error", text: "Failed to start checkout." });
+      console.error('Checkout error:', error);
+      setMessage({ type: 'error', text: 'Failed to start checkout.' });
     } finally {
       setProcessing(false);
     }
@@ -69,18 +68,18 @@ export default function Subscription() {
   const handleManageBilling = async () => {
     setProcessing(true);
     try {
-      const res = await fetch("/api/subscriptions/stripe/customer-portal", {
-        method: "POST",
+      const res = await fetch('/api/subscriptions/stripe/customer-portal', {
+        method: 'POST',
       });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
       } else {
-        setMessage({ type: "error", text: "Failed to open billing portal." });
+        setMessage({ type: 'error', text: 'Failed to open billing portal.' });
       }
     } catch (error) {
-      console.error("Portal error:", error);
-      setMessage({ type: "error", text: "Failed to open billing portal." });
+      console.error('Portal error:', error);
+      setMessage({ type: 'error', text: 'Failed to open billing portal.' });
     } finally {
       setProcessing(false);
     }
@@ -103,29 +102,26 @@ export default function Subscription() {
             <HiOutlineStar className="text-[#e30a5f]" />
             Subscription
           </h1>
-          {
-            isPremium ?
-              (
-                <p className="text-gray-600 dark:text-gray-400 mb-8">
-                  ありがとうございました! Your support means the world!
-                </p>
-              ) : (
-                <p className="text-gray-600 dark:text-gray-400 mb-8">
-                  Unlock premium features with ReBabel Premium
-                </p>
-              )
-          }
-
+          {isPremium ? (
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
+              ありがとうございました! Your support means the world!
+            </p>
+          ) : (
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
+              Unlock premium features with ReBabel Premium
+            </p>
+          )}
 
           {/* Message Banner */}
           {message && (
             <div
-              className={`mb-6 p-4 rounded-lg ${message.type === "success"
-                ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                : message.type === "error"
-                  ? "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
-                  : "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300"
-                }`}
+              className={`mb-6 p-4 rounded-lg ${
+                message.type === 'success'
+                  ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+                  : message.type === 'error'
+                    ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+                    : 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300'
+              }`}
             >
               {message.text}
             </div>
@@ -152,13 +148,13 @@ export default function Subscription() {
                 <p className="mb-2">Your premium subscription is active.</p>
                 {subscription?.subscription?.current_period_end && (
                   <p>
-                    {subscription.subscription.cancel_at_period_end === "true"
+                    {subscription.subscription.cancel_at_period_end === 'true'
                       ? `Access until: ${new Date(
-                        subscription.subscription.current_period_end
-                      ).toLocaleDateString()}`
+                          subscription.subscription.current_period_end
+                        ).toLocaleDateString()}`
                       : `Next billing date: ${new Date(
-                        subscription.subscription.current_period_end
-                      ).toLocaleDateString()}`}
+                          subscription.subscription.current_period_end
+                        ).toLocaleDateString()}`}
                   </p>
                 )}
               </div>
@@ -167,13 +163,16 @@ export default function Subscription() {
                 <h3 className="font-medium mb-3">Premium Benefits:</h3>
                 <ul className="space-y-2 text-gray-600 dark:text-gray-400 text-sm">
                   <li className="flex items-center gap-2">
-                    <TbCheck className="text-amber-500" /> 10 translation practice sessions per day
+                    <TbCheck className="text-amber-500" /> 10 translation
+                    practice sessions per day
                   </li>
                   <li className="flex items-center gap-2">
-                    <TbCheck className="text-amber-500" /> AI-powered grammar feedback
+                    <TbCheck className="text-amber-500" /> AI-powered grammar
+                    feedback
                   </li>
                   <li className="flex items-center gap-2">
-                    <TbCheck className="text-amber-500" /> Advanced practice modes
+                    <TbCheck className="text-amber-500" /> Advanced practice
+                    modes
                   </li>
                   <li className="flex items-center gap-2">
                     <TbCheck className="text-amber-500" /> Priority support
@@ -208,7 +207,9 @@ export default function Subscription() {
                   </p>
                 </div>
                 <div className="ml-auto text-right">
-                  <span className="text-2xl font-bold text-[#e30a5f]">$5.50</span>
+                  <span className="text-2xl font-bold text-[#e30a5f]">
+                    $5.50
+                  </span>
                   <span className="text-gray-500 text-sm">/mo</span>
                 </div>
               </div>
@@ -216,7 +217,7 @@ export default function Subscription() {
               <ul className="space-y-2 mb-4 text-sm">
                 <li className="flex items-center gap-2">
                   <TbCheck className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                  <span>10 translation practice sessions per day</span>
+                  <span>5 translation practice sessions per day</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <TbCheck className="w-4 h-4 text-amber-500 flex-shrink-0" />
