@@ -7,6 +7,86 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// SRS level time factors in milliseconds
+const SRS_TIME_FACTORS = {
+  1: 10 * 60 * 1000, // 10 minutes
+  2: 1 * 24 * 60 * 60 * 1000, // 1 day
+  3: 3 * 24 * 60 * 60 * 1000, // 3 days
+  4: 7 * 24 * 60 * 60 * 1000, // 7 days
+  5: 14 * 24 * 60 * 60 * 1000, // 14 days
+  6: 30 * 24 * 60 * 60 * 1000, // 30 days
+  7: 60 * 24 * 60 * 60 * 1000, // 60 days
+  8: 120 * 24 * 60 * 60 * 1000, // 120 days
+  9: 180 * 24 * 60 * 60 * 1000, // 180 days (6 months)
+};
+
+function isItemNewlyDue(item, lastNotifiedAt) {
+  if (!item.srs?.srs_level || !item.srs?.time_created) return false;
+
+  const srsLevel = item.srs.srs_level;
+  if (srsLevel < 1 || srsLevel > 9) return false;
+
+  const timeCreated = new Date(item.srs.time_created).getTime();
+  const interval = SRS_TIME_FACTORS[srsLevel];
+  const dueTime = timeCreated + interval;
+  const now = Date.now();
+  const lastNotified = lastNotifiedAt ? new Date(lastNotifiedAt).getTime() : 0;
+
+  // Item is due AND became due after last notification
+  return dueTime <= now && dueTime > lastNotified;
+}
+
+async function getNewlyDueCount(userId, lastNotifiedAt) {
+  try {
+    // Get user's sets
+    const { data: setsData, error: setsError } = await supabase
+      .schema('v1_kvs_rebabel')
+      .rpc('get_user_sets', { user_id: userId.trim() });
+
+    if (setsError || !setsData) return 0;
+
+    // Parse sets data
+    let setsArray = [];
+    if (typeof setsData === 'string') {
+      try {
+        setsArray = JSON.parse(setsData);
+      } catch {
+        setsArray = Array.isArray(setsData) ? setsData : [];
+      }
+    } else if (Array.isArray(setsData)) {
+      setsArray = setsData;
+    }
+
+    // Filter to SRS-enabled sets
+    const srsEnabledSets = setsArray.filter(
+      (set) => set.data?.srs_enabled === 'true'
+    );
+
+    if (srsEnabledSets.length === 0) return 0;
+
+    let newlyDueCount = 0;
+
+    // Check each set for newly due items
+    for (const set of srsEnabledSets) {
+      const { data: setData, error: setError } = await supabase
+        .schema('v1_kvs_rebabel')
+        .rpc('get_set_items_srs_status_full', { set_id: set.entity_id });
+
+      if (setError || !setData?.items) continue;
+
+      const newlyDueItems = setData.items.filter((item) =>
+        isItemNewlyDue(item, lastNotifiedAt)
+      );
+      newlyDueCount += newlyDueItems.length;
+    }
+
+    return newlyDueCount;
+  } catch (e) {
+    console.error(`Error calculating newly due count for ${userId}:`, e);
+    return 0;
+  }
+}
+
 function createJWT(keyId, teamId, privateKey) {
   const header = {
     alg: 'ES256',
@@ -18,8 +98,12 @@ function createJWT(keyId, teamId, privateKey) {
     iat: Math.floor(Date.now() / 1000),
   };
 
-  const base64Header = Buffer.from(JSON.stringify(header)).toString('base64url');
-  const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const base64Header = Buffer.from(JSON.stringify(header)).toString(
+    'base64url'
+  );
+  const base64Payload = Buffer.from(JSON.stringify(payload)).toString(
+    'base64url'
+  );
   const signatureInput = `${base64Header}.${base64Payload}`;
 
   const sign = crypto.createSign('SHA256');
@@ -29,9 +113,17 @@ function createJWT(keyId, teamId, privateKey) {
   return `${signatureInput}.${signature}`;
 }
 
-function sendAPNsNotification(deviceToken, payload, jwt, bundleId, isProduction = false) {
+function sendAPNsNotification(
+  deviceToken,
+  payload,
+  jwt,
+  bundleId,
+  isProduction = false
+) {
   return new Promise((resolve, reject) => {
-    const host = isProduction ? 'api.push.apple.com' : 'api.sandbox.push.apple.com';
+    const host = isProduction
+      ? 'api.push.apple.com'
+      : 'api.sandbox.push.apple.com';
 
     const client = http2.connect(`https://${host}`);
 
@@ -42,7 +134,7 @@ function sendAPNsNotification(deviceToken, payload, jwt, bundleId, isProduction 
     const headers = {
       ':method': 'POST',
       ':path': `/3/device/${deviceToken}`,
-      'authorization': `bearer ${jwt}`,
+      authorization: `bearer ${jwt}`,
       'apns-topic': bundleId,
       'apns-push-type': 'alert',
       'apns-priority': '10',
@@ -126,7 +218,9 @@ export default async function handler(req, res) {
 
     if (!apnsKeyId || !apnsTeamId || !apnsKey) {
       console.error('Missing APNs configuration');
-      return res.status(500).json({ error: 'Push notifications not configured' });
+      return res
+        .status(500)
+        .json({ error: 'Push notifications not configured' });
     }
 
     let privateKey;
@@ -141,17 +235,49 @@ export default async function handler(req, res) {
     // Send notifications to each user
     const results = [];
     for (const user of users) {
+      // Get last_notified_at if not included in RPC response
+      let lastNotifiedAt = user.last_notified_at;
+      if (!lastNotifiedAt) {
+        const { data: prefData } = await supabase
+          .schema('v1_kvs_rebabel')
+          .from('notification_preferences')
+          .select('last_notified_at')
+          .eq('user_id', user.user_id)
+          .single();
+        lastNotifiedAt = prefData?.last_notified_at;
+      }
+
+      // Calculate newly due items (items that became due since last notification)
+      const newlyDueCount = await getNewlyDueCount(
+        user.user_id,
+        lastNotifiedAt
+      );
+
+      // Skip if no newly due items
+      if (newlyDueCount === 0) {
+        results.push({
+          user_id: user.user_id,
+          success: true,
+          skipped: true,
+          reason: 'No newly due items',
+        });
+        continue;
+      }
+
       const notification = {
         aps: {
           alert: {
             title: 'SRS: がんばれ! Time to Review',
-            body: user.due_count === 1
-              ? 'You have 1 item ready for review'
-              : `You have ${user.due_count} items ready for review`,
+            body:
+              newlyDueCount === 1
+                ? '1 item just became ready for review'
+                : `${newlyDueCount} items just became ready for review`,
           },
           sound: 'default',
           badge: Number(user.due_count),
         },
+        // Custom data for deep linking
+        route: '/learn/academy/sets/fast-review',
       };
 
       try {
@@ -166,7 +292,7 @@ export default async function handler(req, res) {
         results.push({
           user_id: user.user_id,
           success: result.success,
-          error: result.error
+          error: result.error,
         });
 
         // Update last_notified_at for this user
@@ -182,15 +308,15 @@ export default async function handler(req, res) {
         results.push({
           user_id: user.user_id,
           success: false,
-          error: err.message
+          error: err.message,
         });
       }
     }
 
-    const successCount = results.filter(r => r.success).length;
+    const successCount = results.filter((r) => r.success).length;
     return res.json({
       message: `Sent ${successCount}/${results.length} notifications`,
-      results
+      results,
     });
   } catch (error) {
     console.error('Cron job error:', error);

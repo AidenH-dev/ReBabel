@@ -12,6 +12,38 @@ import { useEffect, useState } from 'react';
 import Script from 'next/script';
 import { SRSNotificationPrompt } from '@/components/popups/SRSNotificationPrompt';
 
+// 🔔 Early push notification listener setup (for cold start handling)
+// This runs immediately when the module loads on the client
+if (typeof window !== 'undefined') {
+  (async () => {
+    try {
+      const { Capacitor } = await import('@capacitor/core');
+      if (!Capacitor.isNativePlatform()) return;
+
+      const { PushNotifications } =
+        await import('@capacitor/push-notifications');
+
+      console.log('[Push] Early listener setup for cold start');
+
+      PushNotifications.addListener(
+        'pushNotificationActionPerformed',
+        (notification) => {
+          console.log('[Push] Cold start notification action:', notification);
+
+          const route =
+            notification.notification?.data?.route ||
+            '/learn/academy/sets/fast-review';
+
+          console.log('[Push] Navigating to:', route);
+          window.location.href = route;
+        }
+      );
+    } catch (e) {
+      console.error('[Push] Early listener setup error:', e);
+    }
+  })();
+}
+
 const fredoka = Fredoka({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],

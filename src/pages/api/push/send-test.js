@@ -13,8 +13,12 @@ function createJWT(keyId, teamId, privateKey) {
     iat: Math.floor(Date.now() / 1000),
   };
 
-  const base64Header = Buffer.from(JSON.stringify(header)).toString('base64url');
-  const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const base64Header = Buffer.from(JSON.stringify(header)).toString(
+    'base64url'
+  );
+  const base64Payload = Buffer.from(JSON.stringify(payload)).toString(
+    'base64url'
+  );
   const signatureInput = `${base64Header}.${base64Payload}`;
 
   const sign = crypto.createSign('SHA256');
@@ -24,9 +28,17 @@ function createJWT(keyId, teamId, privateKey) {
   return `${signatureInput}.${signature}`;
 }
 
-function sendAPNsNotification(deviceToken, payload, jwt, bundleId, isProduction = false) {
+function sendAPNsNotification(
+  deviceToken,
+  payload,
+  jwt,
+  bundleId,
+  isProduction = false
+) {
   return new Promise((resolve, reject) => {
-    const host = isProduction ? 'api.push.apple.com' : 'api.sandbox.push.apple.com';
+    const host = isProduction
+      ? 'api.push.apple.com'
+      : 'api.sandbox.push.apple.com';
 
     const client = http2.connect(`https://${host}`);
 
@@ -37,7 +49,7 @@ function sendAPNsNotification(deviceToken, payload, jwt, bundleId, isProduction 
     const headers = {
       ':method': 'POST',
       ':path': `/3/device/${deviceToken}`,
-      'authorization': `bearer ${jwt}`,
+      authorization: `bearer ${jwt}`,
       'apns-topic': bundleId,
       'apns-push-type': 'alert',
       'apns-priority': '10',
@@ -101,7 +113,9 @@ async function handler(req, res) {
 
     if (!apnsKeyId || !apnsTeamId || !apnsKey) {
       console.error('Missing APNs configuration');
-      return res.status(500).json({ error: 'Push notifications not configured' });
+      return res
+        .status(500)
+        .json({ error: 'Push notifications not configured' });
     }
 
     // Convert the key from base64, escaped newlines, or use directly
@@ -120,11 +134,13 @@ async function handler(req, res) {
       aps: {
         alert: {
           title: 'Test Notification',
-          body: 'Push notifications are working!',
+          body: 'Push notifications are working! Tap to open fast review.',
         },
         sound: 'default',
         badge: 1,
       },
+      // Custom data for deep linking
+      route: '/learn/academy/sets/fast-review',
     };
 
     const result = await sendAPNsNotification(
@@ -136,18 +152,22 @@ async function handler(req, res) {
     );
 
     if (result.success) {
-      return res.status(200).json({ success: true, message: 'Test notification sent!' });
+      return res
+        .status(200)
+        .json({ success: true, message: 'Test notification sent!' });
     } else {
       console.error('APNs error:', result);
       return res.status(500).json({
         error: 'Failed to send notification',
         details: result.error,
-        statusCode: result.statusCode
+        statusCode: result.statusCode,
       });
     }
   } catch (error) {
     console.error('Push notification error:', error);
-    return res.status(500).json({ error: 'Failed to send notification', details: error.message });
+    return res
+      .status(500)
+      .json({ error: 'Failed to send notification', details: error.message });
   }
 }
 
