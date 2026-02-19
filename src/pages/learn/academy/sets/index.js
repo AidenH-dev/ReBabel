@@ -363,7 +363,7 @@ export default function VocabularyDashboard() {
       <AcademySidebar />
 
       {/* Main */}
-      <main className="ml-auto flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 sm:mt-0 py-8 pt-[max(2rem,env(safe-area-inset-top))]">
+      <main className="ml-auto flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50 dark:bg-[#141f25] px-6 sm:px-10 sm:mt-0 py-8 pt-[calc(env(safe-area-inset-top)+1rem)]">
         <BeginnerPackPopup
           isOpen={showBeginnerPopup}
           onClose={() => setShowBeginnerPopup(false)}
@@ -465,7 +465,7 @@ export default function VocabularyDashboard() {
             </div>
 
             {/* Fast Review Widget - Right Justified */}
-            {(isLoadingDueCount || totalDueItems > 0) && (
+            {!isLoadingDueCount && totalDueItems > 0 && (
               <div className="flex w-full items-center justify-between bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-xl shadow-md px-4 py-2 text-white">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center justify-center w-10 h-10 bg-white/20 rounded-lg">
@@ -480,12 +480,7 @@ export default function VocabularyDashboard() {
                 </div>
                 <button
                   onClick={handleStartFastReview}
-                  disabled={isLoadingDueCount}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isLoadingDueCount
-                      ? 'bg-white/20 text-white/60 cursor-not-allowed'
-                      : 'bg-white text-[#667eea] hover:bg-white/90'
-                  }`}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-white text-[#667eea] hover:bg-white/90"
                 >
                   <MdAutorenew className="text-base" />
                   Review{' '}
@@ -496,7 +491,7 @@ export default function VocabularyDashboard() {
           </div>
         </div>
         {/* Fast Review Widget - Mobile */}
-        {(isLoadingDueCount || totalDueItems > 0) && (
+        {!isLoadingDueCount && totalDueItems > 0 && (
           <div className="sm:hidden w-full max-w-6xl mx-auto mb-4">
             <div className="bg-gradient-to-r from-[#667eea]/80 to-[#764ba2]/80 rounded-xl shadow-md px-4 py-4 text-white">
               <div className="flex items-center justify-between gap-3">
@@ -507,20 +502,13 @@ export default function VocabularyDashboard() {
                   <div className="min-w-0">
                     <h2 className="text-sm font-bold truncate">Fast Review</h2>
                     <p className="text-xs text-white/70 truncate">
-                      {isLoadingDueCount
-                        ? 'Loading...'
-                        : 'Review All SRS Item(s) Due'}
+                      Review All SRS Item(s) Due
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={handleStartFastReview}
-                  disabled={isLoadingDueCount}
-                  className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                    isLoadingDueCount
-                      ? 'bg-white/20 text-white/60 cursor-not-allowed'
-                      : 'bg-white text-[#667eea] hover:bg-white/90'
-                  }`}
+                  className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-white text-[#667eea] hover:bg-white/90"
                 >
                   <MdAutorenew className="text-base" />
                   <span>
