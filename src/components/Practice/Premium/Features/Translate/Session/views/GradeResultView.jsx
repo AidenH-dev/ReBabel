@@ -94,7 +94,7 @@ export default function GradeResultView({ gradeResult }) {
         <div className="flex justify-center gap-8">
           {categories.map(({ id, key, label }) => {
             const score = gradeResult.grades[key] || 0;
-            const displayScore = Math.round(score);
+            const displayScore = Math.floor(score);
             return (
               <div key={id} className="flex flex-col items-center gap-2">
                 <div className="relative w-24 h-24">
