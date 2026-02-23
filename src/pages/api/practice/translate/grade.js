@@ -1,4 +1,5 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { tracedLLMCall } from '@/lib/langsmith';
 
 export default withApiAuthRequired(async function handler(req, res) {
   const session = await getSession(req, res);
@@ -49,7 +50,7 @@ export default withApiAuthRequired(async function handler(req, res) {
   const systemInstructions = `You are a Japanese language grading system.
 
 CATEGORIES (NO OVERLAP - never deduct same error twice):
-1. Grammar (0-100%): Particles (は/が/を/に/で/へ/と/も/から/まで/の/か/よ/ね), verb conjugation, tense, sentence structure
+1. Grammar (0-100%): Particles (は/が/を/に/で/へ/と/も/の/か/よ/ね), verb conjugation, tense, sentence structure
 2. Vocabulary (0-100%): Word choices ONLY (nouns, verb stems, adjectives) - NOT particles
 
 SCORING METHOD (PROPORTIONAL):
@@ -93,7 +94,7 @@ Step 1 - Count elements:
 
 Step 2 - Score:
 - Grammar: が=1, ます=1 → 2/2 = 100%
-- Vocabulary: いぬ=0 (user said ねこ), い=1 → 1/2 = 50%
+- Vocabulary: いぬ=0 (user said ねこ), い(ます)=1 → 1/2 = 50%
 
 Result: {"grades":{"grammar":100,"vocabulary":50},"errors":{"vocabulary":["Used ねこ instead of いぬ"]},"feedback":"Verb correct but wrong noun"}
 
@@ -155,47 +156,66 @@ Grade this translation.`;
   }
 
   try {
-    const response = await fetch(config.url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${config.key}`,
-        'Content-Type': 'application/json',
+    const result = await tracedLLMCall({
+      name: 'grade-translation',
+      provider,
+      model: config.model,
+      messages: requestBody.messages,
+      metadata: {
+        englishSentence,
+        focalPointType: focalPoint?.type,
+        userId: session.user.sub,
       },
-      body: JSON.stringify(requestBody),
+      fetchFn: async () => {
+        const response = await fetch(config.url, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${config.key}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error(`${provider} API error:`, errorData);
+          throw new Error(
+            `${provider} API error: ${response.status} - ${JSON.stringify(errorData)}`
+          );
+        }
+
+        const data = await response.json();
+
+        // Log token usage
+        if (data.usage) {
+          console.log(`[GRADE - ${provider.toUpperCase()}] Token Usage:`, {
+            model: data.model,
+            prompt_tokens: data.usage.prompt_tokens,
+            completion_tokens: data.usage.completion_tokens,
+            total_tokens: data.usage.total_tokens,
+          });
+        }
+
+        return {
+          content: data.choices?.[0]?.message?.content,
+          usage: data.usage,
+        };
+      },
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error(`${provider} API error:`, errorData);
-      throw new Error(
-        `${provider} API error: ${response.status} - ${JSON.stringify(errorData)}`
-      );
-    }
-
-    const data = await response.json();
-
-    // Log token usage
-    if (data.usage) {
-      console.log(`[GRADE - ${provider.toUpperCase()}] Token Usage:`, {
-        model: data.model,
-        prompt_tokens: data.usage.prompt_tokens,
-        completion_tokens: data.usage.completion_tokens,
-        total_tokens: data.usage.total_tokens,
-      });
-    }
-
-    const content = data.choices?.[0]?.message?.content;
+    const content = result.content;
 
     if (!content) {
       throw new Error(`No response from ${provider}`);
     }
 
     // Parse JSON response
-    const result = JSON.parse(content);
+    const parsed = JSON.parse(content);
 
     return res.status(200).json({
       success: true,
-      data: result,
+      data: parsed,
+      runId: result.runId,
     });
   } catch (error) {
     console.error('Grading error:', error);

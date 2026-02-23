@@ -1,4 +1,5 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { tracedLLMCall } from '@/lib/langsmith';
 
 export const config = {
   maxDuration: 60,
@@ -14,11 +15,27 @@ export default withApiAuthRequired(async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { grammarPool, vocabPool, focalPoints, count = 10, provider = 'deepseek' } = req.body;
+  const {
+    grammarPool,
+    vocabPool,
+    focalPoints,
+    count = 10,
+    provider = 'deepseek',
+  } = req.body;
 
   // Validate inputs
-  if (!grammarPool || !vocabPool || !focalPoints || !Array.isArray(focalPoints)) {
-    return res.status(400).json({ error: 'Missing required fields: grammarPool, vocabPool, focalPoints (array)' });
+  if (
+    !grammarPool ||
+    !vocabPool ||
+    !focalPoints ||
+    !Array.isArray(focalPoints)
+  ) {
+    return res
+      .status(400)
+      .json({
+        error:
+          'Missing required fields: grammarPool, vocabPool, focalPoints (array)',
+      });
   }
 
   // Provider configuration
@@ -32,12 +49,14 @@ export default withApiAuthRequired(async function handler(req, res) {
       url: 'https://api.deepseek.com/v1/chat/completions',
       key: process.env.DEEPSEEK_KEY,
       model: 'deepseek-chat',
-    }
+    },
   };
 
   const config = providers[provider] || providers.openai;
   if (!config.key) {
-    return res.status(500).json({ error: `API key not configured for provider: ${provider}` });
+    return res
+      .status(500)
+      .json({ error: `API key not configured for provider: ${provider}` });
   }
 
   // Randomly select subset of pools to reduce token usage
@@ -57,28 +76,34 @@ export default withApiAuthRequired(async function handler(req, res) {
   const trimmedGrammarPool = shuffleArray(grammarPool).slice(0, MAX_GRAMMAR);
 
   // Separate focal points by type
-  const grammarFocalPoints = focalPoints.filter(fp => fp.type === 'grammar');
-  const vocabFocalPoints = focalPoints.filter(fp => fp.type === 'vocabulary' || fp.type === 'vocab');
+  const grammarFocalPoints = focalPoints.filter((fp) => fp.type === 'grammar');
+  const vocabFocalPoints = focalPoints.filter(
+    (fp) => fp.type === 'vocabulary' || fp.type === 'vocab'
+  );
 
   // Build system prompt for batch generation
   const systemInstructions = `
 You are a Japanese language tutor creating translation practice sentences.
 
 FOCAL GRAMMAR (MUST use at least 1 per sentence):
-${grammarFocalPoints.map((fp, i) =>
-  `${i + 1}. ${fp.item.title} - ${fp.item.description}`
-).join('\n') || 'None specified'}
+${
+  grammarFocalPoints
+    .map((fp, i) => `${i + 1}. ${fp.item.title} - ${fp.item.description}`)
+    .join('\n') || 'None specified'
+}
 
 FOCAL VOCABULARY (MUST use at least 1 per sentence):
-${vocabFocalPoints.map((fp, i) =>
-  `${i + 1}. ${fp.item.english} (${fp.item.kana})`
-).join('\n') || 'None specified'}
+${
+  vocabFocalPoints
+    .map((fp, i) => `${i + 1}. ${fp.item.english} (${fp.item.kana})`)
+    .join('\n') || 'None specified'
+}
 
 AVAILABLE VOCABULARY POOL:
-${JSON.stringify(trimmedVocabPool.map(v => ({ english: v.english, kana: v.kana })))}
+${JSON.stringify(trimmedVocabPool.map((v) => ({ english: v.english, kana: v.kana })))}
 
 AVAILABLE GRAMMAR POOL:
-${JSON.stringify(trimmedGrammarPool.map(g => ({ title: g.title, description: g.description })))}
+${JSON.stringify(trimmedGrammarPool.map((g) => ({ title: g.title, description: g.description })))}
 
 STRICT REQUIREMENTS:
 1. Generate exactly ${count} UNIQUE practice sentences
@@ -94,19 +119,20 @@ STRICT REQUIREMENTS:
 `;
 
   // DeepSeek needs JSON format specified in prompt since it doesn't support json_schema
-  const userMessageWithFormat = provider === 'deepseek'
-    ? `Generate ${count} unique practice sentences using the focal points provided.
+  const userMessageWithFormat =
+    provider === 'deepseek'
+      ? `Generate ${count} unique practice sentences using the focal points provided.
 
 Return JSON in this exact format:
 {"sentences": [{"english_sentence": "...", "expected_japanese_translation": "...", "focal_point_index": 0}, ...]}`
-    : `Generate ${count} unique practice sentences using the focal points provided.`;
+      : `Generate ${count} unique practice sentences using the focal points provided.`;
 
   // Build request body - OpenAI uses json_schema, DeepSeek uses json_object
   const requestBody = {
     model: config.model,
     messages: [
       { role: 'system', content: systemInstructions },
-      { role: 'user', content: userMessageWithFormat }
+      { role: 'user', content: userMessageWithFormat },
     ],
   };
 
@@ -127,81 +153,108 @@ Return JSON in this exact format:
                 properties: {
                   english_sentence: { type: 'string' },
                   expected_japanese_translation: { type: 'string' },
-                  focal_point_index: { type: 'number' }
+                  focal_point_index: { type: 'number' },
                 },
-                required: ['english_sentence', 'expected_japanese_translation', 'focal_point_index'],
-                additionalProperties: false
-              }
-            }
+                required: [
+                  'english_sentence',
+                  'expected_japanese_translation',
+                  'focal_point_index',
+                ],
+                additionalProperties: false,
+              },
+            },
           },
           required: ['sentences'],
-          additionalProperties: false
-        }
-      }
+          additionalProperties: false,
+        },
+      },
     };
   } else if (provider === 'deepseek') {
     requestBody.response_format = { type: 'json_object' };
   }
 
   try {
-    const response = await fetch(config.url, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${config.key}`,
-        'Content-Type': 'application/json',
+    const result = await tracedLLMCall({
+      name: 'generate-sentences',
+      provider,
+      model: config.model,
+      messages: requestBody.messages,
+      metadata: {
+        focalPointCount: focalPoints.length,
+        sentenceCount: count,
+        userId: session.user.sub,
       },
-      body: JSON.stringify(requestBody),
+      fetchFn: async () => {
+        const response = await fetch(config.url, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${config.key}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error(`${provider} API error:`, errorData);
+          throw new Error(
+            `${provider} API error: ${response.status} - ${JSON.stringify(errorData)}`
+          );
+        }
+
+        const data = await response.json();
+
+        // Log token usage
+        if (data.usage) {
+          console.log(
+            `[GENERATE BATCH - ${provider.toUpperCase()}] Token Usage:`,
+            {
+              model: data.model,
+              prompt_tokens: data.usage.prompt_tokens,
+              completion_tokens: data.usage.completion_tokens,
+              total_tokens: data.usage.total_tokens,
+              sentences_generated: count,
+            }
+          );
+        }
+
+        return {
+          content: data.choices?.[0]?.message?.content,
+          usage: data.usage,
+        };
+      },
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error(`${provider} API error:`, errorData);
-      throw new Error(`${provider} API error: ${response.status} - ${JSON.stringify(errorData)}`);
-    }
-
-    const data = await response.json();
-
-    // Log token usage
-    if (data.usage) {
-      console.log(`[GENERATE BATCH - ${provider.toUpperCase()}] Token Usage:`, {
-        model: data.model,
-        prompt_tokens: data.usage.prompt_tokens,
-        completion_tokens: data.usage.completion_tokens,
-        total_tokens: data.usage.total_tokens,
-        sentences_generated: count
-      });
-    }
-
-    const content = data.choices?.[0]?.message?.content;
+    const content = result.content;
 
     if (!content) {
       throw new Error(`No response from ${provider}`);
     }
 
     // Parse JSON response
-    const result = JSON.parse(content);
+    const parsed = JSON.parse(content);
 
     // Map focal points back to sentences
-    const sentencesWithFocalPoints = result.sentences.map(s => ({
+    const sentencesWithFocalPoints = parsed.sentences.map((s) => ({
       english: s.english_sentence,
       expectedJapanese: s.expected_japanese_translation,
-      focalPoint: focalPoints[s.focal_point_index] || focalPoints[0]
+      focalPoint: focalPoints[s.focal_point_index] || focalPoints[0],
     }));
 
     return res.status(200).json({
       success: true,
       data: {
         sentences: sentencesWithFocalPoints,
-        count: sentencesWithFocalPoints.length
-      }
+        count: sentencesWithFocalPoints.length,
+      },
+      runId: result.runId,
     });
-
   } catch (error) {
     console.error('Generation error:', error);
     return res.status(500).json({
       success: false,
       error: 'Failed to generate sentences',
-      details: error.message
+      details: error.message,
     });
   }
 });

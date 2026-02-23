@@ -1,28 +1,28 @@
 // Grade Result View - 2 Category Doughnut Charts (Grammar & Vocabulary)
 
-import { useEffect, useRef } from "react";
-import Chart from "chart.js/auto";
+import { useEffect, useRef } from 'react';
+import Chart from 'chart.js/auto';
 
 export default function GradeResultView({ gradeResult }) {
   const chartRefs = useRef({});
 
   const getScoreColor = (score) => {
-    if (score >= 90) return "text-green-600 dark:text-green-400";
-    if (score >= 70) return "text-blue-600 dark:text-blue-400";
-    if (score >= 50) return "text-yellow-600 dark:text-yellow-400";
-    return "text-red-600 dark:text-red-400";
+    if (score >= 90) return 'text-green-600 dark:text-green-400';
+    if (score >= 70) return 'text-blue-600 dark:text-blue-400';
+    if (score >= 50) return 'text-yellow-600 dark:text-yellow-400';
+    return 'text-red-600 dark:text-red-400';
   };
 
   const getChartColor = (score) => {
-    if (score >= 90) return "#10b981";
-    if (score >= 70) return "#3b82f6";
-    if (score >= 50) return "#f59e0b";
-    return "#ef4444";
+    if (score >= 90) return '#10b981';
+    if (score >= 70) return '#3b82f6';
+    if (score >= 50) return '#f59e0b';
+    return '#ef4444';
   };
 
   const categories = [
-    { id: "grammarChart", key: "grammar", label: "Grammar & Structure" },
-    { id: "vocabularyChart", key: "vocabulary", label: "Vocabulary" },
+    { id: 'grammarChart', key: 'grammar', label: 'Grammar & Structure' },
+    { id: 'vocabularyChart', key: 'vocabulary', label: 'Vocabulary' },
   ];
 
   // Render charts when grade result changes
@@ -45,16 +45,18 @@ export default function GradeResultView({ gradeResult }) {
       const canvas = document.getElementById(id);
       if (canvas) {
         chartRefs.current[id] = new Chart(canvas, {
-          type: "doughnut",
+          type: 'doughnut',
           data: {
-            datasets: [{
-              data: [value, 100 - value],
-              backgroundColor: [color, "rgba(200,200,200,0.15)"],
-              borderWidth: 0,
-            }],
+            datasets: [
+              {
+                data: [value, 100 - value],
+                backgroundColor: [color, 'rgba(200,200,200,0.15)'],
+                borderWidth: 0,
+              },
+            ],
           },
           options: {
-            cutout: "72%",
+            cutout: '72%',
             plugins: {
               tooltip: { enabled: false },
               legend: { display: false },
@@ -62,7 +64,7 @@ export default function GradeResultView({ gradeResult }) {
             animation: {
               animateRotate: true,
               animateScale: false,
-            }
+            },
           },
         });
       }
@@ -81,7 +83,8 @@ export default function GradeResultView({ gradeResult }) {
   if (!gradeResult) return null;
 
   const avgScore = Math.round(
-    ((gradeResult.grades.grammar || 0) + (gradeResult.grades.vocabulary || 0)) / 2
+    ((gradeResult.grades.grammar || 0) + (gradeResult.grades.vocabulary || 0)) /
+      2
   );
 
   return (
@@ -91,15 +94,20 @@ export default function GradeResultView({ gradeResult }) {
         <div className="flex justify-center gap-8">
           {categories.map(({ id, key, label }) => {
             const score = gradeResult.grades[key] || 0;
+            const displayScore = Math.round(score);
             return (
               <div key={id} className="flex flex-col items-center gap-2">
                 <div className="relative w-24 h-24">
                   <canvas id={id}></canvas>
-                  <span className={`absolute inset-0 flex items-center justify-center text-lg font-bold ${getScoreColor(score)}`}>
-                    {score}%
+                  <span
+                    className={`absolute inset-0 flex items-center justify-center text-lg font-bold ${getScoreColor(score)}`}
+                  >
+                    {displayScore}%
                   </span>
                 </div>
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {label}
+                </p>
               </div>
             );
           })}
@@ -136,20 +144,27 @@ export default function GradeResultView({ gradeResult }) {
               View Error Details
             </summary>
             <div className="mt-2 space-y-2">
-              {Object.entries(gradeResult.errors).map(([category, errors]) => (
-                errors && errors.length > 0 && (
-                  <div key={category} className="p-3 bg-gray-50 dark:bg-white/5 rounded">
-                    <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
-                      {category === 'grammar' ? 'Grammar & Structure' : 'Vocabulary'}
-                    </p>
-                    <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1">
-                      {errors.map((err, idx) => (
-                        <li key={idx}>• {err}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )
-              ))}
+              {Object.entries(gradeResult.errors).map(
+                ([category, errors]) =>
+                  errors &&
+                  errors.length > 0 && (
+                    <div
+                      key={category}
+                      className="p-3 bg-gray-50 dark:bg-white/5 rounded"
+                    >
+                      <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                        {category === 'grammar'
+                          ? 'Grammar & Structure'
+                          : 'Vocabulary'}
+                      </p>
+                      <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1">
+                        {errors.map((err, idx) => (
+                          <li key={idx}>• {err}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )
+              )}
             </div>
           </details>
         )}

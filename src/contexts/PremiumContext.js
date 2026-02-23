@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 
 const PremiumContext = createContext({
@@ -15,7 +21,7 @@ const PremiumContext = createContext({
 });
 
 // Daily session limits
-const FREE_DAILY_LIMIT = 1;
+const FREE_DAILY_LIMIT = 10;
 const PREMIUM_DAILY_LIMIT = 5;
 
 export function PremiumProvider({ children }) {
@@ -70,7 +76,7 @@ export function PremiumProvider({ children }) {
 
   // Increment local session count (optimistic update)
   const incrementSessionCount = useCallback(() => {
-    setSessionsUsedToday(prev => prev + 1);
+    setSessionsUsedToday((prev) => prev + 1);
   }, []);
 
   // Initial fetch
