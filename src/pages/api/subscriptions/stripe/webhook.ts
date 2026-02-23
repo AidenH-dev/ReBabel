@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { buffer } from 'micro';
+import { notifySubscription, notifyError } from '@/lib/webhooks/peko';
 
 type SupabaseClientAny = SupabaseClient<any, any, any>;
 
@@ -46,17 +47,45 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription;
         await handleSubscriptionUpdate(supabase, subscription, event.id);
+        notifySubscription(
+          event.type === 'customer.subscription.created' ? 'created' : 'updated',
+          {
+            userId: subscription.metadata.auth0_user_id,
+            stripeCustomerId: subscription.customer as string,
+            stripeSubscriptionId: subscription.id,
+            status: subscription.status,
+            priceId: subscription.items.data[0]?.price.id,
+            eventId: event.id,
+          }
+        );
         break;
       }
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
         await handleSubscriptionCanceled(supabase, subscription, event.id);
+        notifySubscription('canceled', {
+          userId: subscription.metadata.auth0_user_id,
+          stripeCustomerId: subscription.customer as string,
+          stripeSubscriptionId: subscription.id,
+          status: 'canceled',
+          eventId: event.id,
+        });
         break;
       }
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice;
+        const inv = invoice as any;
+        if (inv.subscription) {
+          const sub = await stripe.subscriptions.retrieve(inv.subscription as string);
+          notifySubscription('payment_failed', {
+            userId: sub.metadata.auth0_user_id,
+            stripeSubscriptionId: inv.subscription as string,
+            status: 'past_due',
+            eventId: event.id,
+          });
+        }
         await handlePaymentFailed(supabase, invoice, event.id);
         break;
       }
@@ -65,6 +94,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ received: true });
   } catch (error) {
     console.error('Webhook handler error:', error);
+    notifyError(error instanceof Error ? error : new Error(String(error)), {
+      context: 'stripe_webhook',
+      endpoint: '/api/subscriptions/stripe/webhook',
+    });
     return res.status(500).json({ error: 'Webhook handler failed' });
   }
 }
