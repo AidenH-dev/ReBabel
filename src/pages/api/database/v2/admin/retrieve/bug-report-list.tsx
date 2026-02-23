@@ -59,11 +59,13 @@ async function handleGET(
     };
 
     // Call the RPC function to retrieve bug reports
+    console.log('[BugReportList] RPC params:', JSON.stringify(rpcParams));
     const { data, error } = await supabase
       .schema('v1_kvs_rebabel')
       .rpc('get_admin_info_entities_by_time_range', {
         data: rpcParams
       });
+    console.log('[BugReportList] RPC response:', JSON.stringify({ data, error }));
 
     if (error) {
       console.error('Failed to retrieve bug reports:', error);

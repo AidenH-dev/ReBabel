@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { fetchBugReports, calculateDateRange } from '../models/bugReportDataModel';
+import {
+  fetchBugReports,
+  calculateDateRange,
+} from '../models/bugReportDataModel';
 import { DEFAULT_TIME_RANGE } from '../models/bugReportConstants';
 
 export const useBugReports = () => {
@@ -20,7 +23,9 @@ export const useBugReports = () => {
     setError(null);
     try {
       const dateRange = calculateDateRange(timeRangePreset, customDateRange);
+      console.log('[BugReports] Fetching with date range:', dateRange);
       const result = await fetchBugReports(dateRange);
+      console.log('[BugReports] API result:', result);
 
       if (result.success) {
         setBugReports(result.data);
@@ -51,9 +56,9 @@ export const useBugReports = () => {
   };
 
   const handleCustomDateChange = (field, value) => {
-    setCustomDateRange(prev => ({
-      ...prev || { startDate: '', endDate: '' },
-      [field]: value
+    setCustomDateRange((prev) => ({
+      ...(prev || { startDate: '', endDate: '' }),
+      [field]: value,
     }));
   };
 
@@ -75,6 +80,6 @@ export const useBugReports = () => {
     setRowsPerPage,
     handleTimeRangeChange,
     handleCustomDateChange,
-    applyCustomRange
+    applyCustomRange,
   };
 };

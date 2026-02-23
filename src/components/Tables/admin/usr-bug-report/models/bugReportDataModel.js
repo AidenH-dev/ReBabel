@@ -38,14 +38,20 @@ export const calculateDateRange = (preset, customDateRange) => {
 
   return {
     startDate: startDate.toISOString().split('T')[0],
-    endDate: now.toISOString().split('T')[0]
+    endDate: now.toISOString().split('T')[0],
   };
 };
 
 export const fetchBugReports = async (dateRange) => {
   try {
-    const startTime = new Date(dateRange.startDate).toISOString();
-    const endTime = new Date(dateRange.endDate).toISOString();
+    // Use UTC midnight for start of day
+    const startTime = new Date(
+      dateRange.startDate + 'T00:00:00.000Z'
+    ).toISOString();
+    // Use UTC end of day (23:59:59.999) to include all reports from that day
+    const endTime = new Date(
+      dateRange.endDate + 'T23:59:59.999Z'
+    ).toISOString();
 
     const response = await fetch(
       `/api/database/v2/admin/retrieve/bug-report-list?start_time=${encodeURIComponent(startTime)}&end_time=${encodeURIComponent(endTime)}`
@@ -60,18 +66,18 @@ export const fetchBugReports = async (dateRange) => {
     if (data.success) {
       return {
         success: true,
-        data: data.data || []
+        data: data.data || [],
       };
     } else {
       return {
         success: false,
-        error: data.error || 'Failed to fetch bug reports'
+        error: data.error || 'Failed to fetch bug reports',
       };
     }
   } catch (err) {
     return {
       success: false,
-      error: err instanceof Error ? err.message : 'An error occurred'
+      error: err instanceof Error ? err.message : 'An error occurred',
     };
   }
 };
@@ -98,7 +104,9 @@ export const sortBugReports = (reports, sortColumn, sortDirection) => {
     }
 
     if (typeof aValue === 'string' && typeof bValue === 'string') {
-      return sortDirection === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      return sortDirection === 'asc'
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
     }
 
     if (sortDirection === 'asc') {

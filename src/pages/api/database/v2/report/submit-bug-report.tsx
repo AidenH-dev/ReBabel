@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { notifyBugReport } from '@/lib/webhooks/peko';
 
 interface BugReportRequest {
   browser_type?: string;
@@ -67,11 +68,13 @@ async function handlePOST(
     }
 
     // Prepare data for the RPC function
+    // Use server-side timestamp for accuracy instead of client-submitted time
+    const serverTimestamp = new Date().toISOString().replace('T', ' ').replace('Z', '+00');
     const bugReportData = {
       user_id: userId,
       user_email: userEmail,
       browser_type: body.browser_type || null,
-      time_submitted: body.time_submitted,
+      time_submitted: serverTimestamp,
       form_json: body.form_json
     };
 
@@ -114,6 +117,15 @@ async function handlePOST(
         message: data?.message
       });
     }
+
+    notifyBugReport({
+      reportId: data.entity_id,
+      userId: userId,
+      userEmail: userEmail,
+      location: body.form_json?.bug_location,
+      feature: body.form_json?.bugged_feature,
+      description: body.form_json?.user_details,
+    });
 
     return res.status(201).json({
       success: true,
