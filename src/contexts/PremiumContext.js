@@ -21,7 +21,7 @@ const PremiumContext = createContext({
 });
 
 // Daily session limits
-const FREE_DAILY_LIMIT = 10;
+const FREE_DAILY_LIMIT = 1;
 const PREMIUM_DAILY_LIMIT = 5;
 
 export function PremiumProvider({ children }) {
