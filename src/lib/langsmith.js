@@ -3,6 +3,42 @@ import { randomUUID } from 'crypto';
 
 const client = new Client();
 
+function toUsageMetadata(usage = {}) {
+  const inputTokens = usage.prompt_tokens ?? usage.input_tokens;
+  const outputTokens = usage.completion_tokens ?? usage.output_tokens;
+  const totalTokens =
+    usage.total_tokens ??
+    (typeof inputTokens === 'number' && typeof outputTokens === 'number'
+      ? inputTokens + outputTokens
+      : undefined);
+
+  if (
+    typeof inputTokens !== 'number' ||
+    typeof outputTokens !== 'number' ||
+    typeof totalTokens !== 'number'
+  ) {
+    return null;
+  }
+
+  const cachedInputTokens =
+    usage.prompt_tokens_details?.cached_tokens ?? usage.prompt_cache_hit_tokens;
+
+  const inputTokenDetails = {
+    ...(typeof cachedInputTokens === 'number' && {
+      cache_read: cachedInputTokens,
+    }),
+  };
+
+  return {
+    input_tokens: inputTokens,
+    output_tokens: outputTokens,
+    total_tokens: totalTokens,
+    ...(Object.keys(inputTokenDetails).length > 0 && {
+      input_token_details: inputTokenDetails,
+    }),
+  };
+}
+
 /**
  * Wraps an LLM fetch call with LangSmith tracing
  * @param {Object} options
@@ -45,19 +81,35 @@ export async function tracedLLMCall({
       name,
       run_type: 'llm',
       inputs: { messages, provider, model, ...metadata },
+      extra: {
+        metadata: {
+          ls_provider: provider,
+          ls_model_name: model,
+          ls_model_type: 'chat',
+        },
+      },
       start_time: startTime,
       project_name: projectName,
     });
 
     // Execute the actual LLM call
     const result = await fetchFn();
+    const usageMetadata = toUsageMetadata(result.usage);
 
     // Update run with success
     await client.updateRun(runId, {
       outputs: {
         content: result.content,
         usage: result.usage,
+        ...(usageMetadata && {
+          usage_metadata: usageMetadata,
+        }),
       },
+      ...(usageMetadata && {
+        prompt_tokens: usageMetadata.input_tokens,
+        completion_tokens: usageMetadata.output_tokens,
+        total_tokens: usageMetadata.total_tokens,
+      }),
       end_time: Date.now(),
     });
 
