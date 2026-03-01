@@ -1,14 +1,16 @@
 // /components/pages/academy/sets/QuizSet/QuestionCard/MasterQuestionCard.jsx
-import { useState, useRef, useEffect, useCallback } from "react";
-import TypedResponseView from "@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx";
-import { validateTypedAnswer } from "@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation";
+import { useState, useRef, useEffect, useCallback } from 'react';
+import TypedResponseView from '@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx';
+import { validateTypedAnswer } from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation';
 
 export default function MasterQuestionCard({
   quizItems,
   currentIndex,
   onAnswerSubmitted,
   onNext,
-  onComplete
+  onComplete,
+  onEditItem,
+  disableKeyboardShortcuts,
 }) {
   const inputRef = useRef(null);
 
@@ -18,7 +20,7 @@ export default function MasterQuestionCard({
   const isLastQuestion = currentIndex === quizItems.length - 1;
 
   // Local state for question interaction
-  const [userAnswer, setUserAnswer] = useState("");
+  const [userAnswer, setUserAnswer] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -32,7 +34,7 @@ export default function MasterQuestionCard({
 
   // Reset state when question changes
   useEffect(() => {
-    setUserAnswer("");
+    setUserAnswer('');
     setShowResult(false);
     setIsCorrect(false);
     setShowHint(false);
@@ -62,7 +64,7 @@ export default function MasterQuestionCard({
       correctAnswer: currentItem.answer,
       isCorrect: correct,
       questionType: currentItem.questionType,
-      answerType: currentItem.answerType
+      answerType: currentItem.answerType,
     });
 
     // Log to console
@@ -70,7 +72,7 @@ export default function MasterQuestionCard({
       question: currentItem.question,
       correctAnswer: currentItem.answer,
       userAnswer: userAnswer,
-      result: correct ? "PASSED" : "FAILED"
+      result: correct ? 'PASSED' : 'FAILED',
     });
   }, [userAnswer, currentItem, onAnswerSubmitted]);
 
@@ -88,11 +90,11 @@ export default function MasterQuestionCard({
     // Notify parent to retract the last answer
     onAnswerSubmitted({
       itemId: currentItem.id,
-      isRetraction: true
+      isRetraction: true,
     });
 
     // Reset UI to allow re-answering
-    setUserAnswer("");
+    setUserAnswer('');
     setShowResult(false);
     setIsCorrect(false);
   };
@@ -116,6 +118,8 @@ export default function MasterQuestionCard({
       onCheckAnswer={handleCheckAnswer}
       onNext={handleNext}
       onRetry={handleRetry}
+      onEditItem={onEditItem}
+      disableKeyboardShortcuts={disableKeyboardShortcuts}
     />
   );
 }

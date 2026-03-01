@@ -7,6 +7,7 @@ import MasterQuestionCard from '@/components/Set/Features/Field-Card-Session/Qui
 import SummaryView from '@/components/Set/Features/Field-Card-Session/shared/views/SummaryView';
 import ReviewView from '@/components/Set/Features/Field-Card-Session/shared/views/ReviewView.jsx';
 import MasterMultipleChoice from '@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterMultipleChoice';
+import ItemEditModal from '@/components/Set/Features/Field-Card-Session/shared/views/ItemEditModal.jsx';
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
@@ -14,6 +15,12 @@ import {
   generateOptionsFromQuizItems,
   shuffleArray,
 } from '@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration';
+import {
+  buildEditableItem,
+  toUpdateRequest,
+  mergeIntoBaseItem,
+  mergeIntoQuestionItem,
+} from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
 
 export default function SetQuiz() {
   const router = useRouter();
@@ -40,6 +47,11 @@ export default function SetQuiz() {
   // Quiz specific states
   const [quizItems, setQuizItems] = useState([]);
   const [quizCompleted, setQuizCompleted] = useState(false);
+
+  // Item editing states
+  const [editingItem, setEditingItem] = useState(null);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [editError, setEditError] = useState(null);
 
   // Quiz statistics
   const [itemStats, setItemStats] = useState({});
@@ -105,6 +117,7 @@ export default function SetQuiz() {
                 if (item.type === 'vocab' || item.type === 'vocabulary') {
                   return {
                     id: `vocab-${index}`,
+                    uuid: item.id,
                     type: 'vocabulary',
                     kana: item.kana || '',
                     kanji: item.kanji || null,
@@ -117,10 +130,12 @@ export default function SetQuiz() {
                 } else if (item.type === 'grammar') {
                   return {
                     id: `grammar-${index}`,
+                    uuid: item.id,
                     type: 'grammar',
                     title: item.title || '',
                     description: item.description || '',
                     topic: item.topic || '',
+                    notes: item.notes || '',
                     example_sentences: Array.isArray(item.example_sentences)
                       ? item.example_sentences.map((ex) =>
                           typeof ex === 'string'
@@ -186,7 +201,13 @@ export default function SetQuiz() {
         items.push({
           id: `${card.id}-en-kana`,
           originalId: card.id,
+          uuid: card.uuid,
           type: 'vocab-en-kana',
+          cardType: 'vocabulary',
+          english: card.english,
+          kana: card.kana,
+          kanji: card.kanji,
+          lexical_category: card.lexical_category,
           question: card.english,
           answer: card.kana,
           hint: card.lexical_category,
@@ -199,7 +220,13 @@ export default function SetQuiz() {
           items.push({
             id: `${card.id}-kanji-en`,
             originalId: card.id,
+            uuid: card.uuid,
             type: 'vocab-kanji-en',
+            cardType: 'vocabulary',
+            english: card.english,
+            kana: card.kana,
+            kanji: card.kanji,
+            lexical_category: card.lexical_category,
             question: card.kanji,
             answer: card.english,
             hint: `${card.lexical_category} (${card.kana})`,
@@ -211,7 +238,13 @@ export default function SetQuiz() {
           items.push({
             id: `${card.id}-kanji-kana`,
             originalId: card.id,
+            uuid: card.uuid,
             type: 'vocab-kanji-kana',
+            cardType: 'vocabulary',
+            english: card.english,
+            kana: card.kana,
+            kanji: card.kanji,
+            lexical_category: card.lexical_category,
             question: card.kanji,
             answer: card.kana,
             hint: card.english,
@@ -223,7 +256,13 @@ export default function SetQuiz() {
           items.push({
             id: `${card.id}-kana-en`,
             originalId: card.id,
+            uuid: card.uuid,
             type: 'vocab-kana-en',
+            cardType: 'vocabulary',
+            english: card.english,
+            kana: card.kana,
+            kanji: card.kanji,
+            lexical_category: card.lexical_category,
             question: card.kana,
             answer: card.english,
             hint: card.lexical_category,
@@ -236,7 +275,13 @@ export default function SetQuiz() {
         items.push({
           id: `${card.id}-title-desc`,
           originalId: card.id,
+          uuid: card.uuid,
           type: 'grammar-title-desc',
+          cardType: 'grammar',
+          title: card.title,
+          description: card.description,
+          topic: card.topic,
+          notes: card.notes,
           question: card.title,
           answer: card.description,
           hint: card.topic,
@@ -248,7 +293,13 @@ export default function SetQuiz() {
         items.push({
           id: `${card.id}-desc-title`,
           originalId: card.id,
+          uuid: card.uuid,
           type: 'grammar-desc-title',
+          cardType: 'grammar',
+          title: card.title,
+          description: card.description,
+          topic: card.topic,
+          notes: card.notes,
           question: card.description,
           answer: card.title,
           hint: card.topic,
@@ -427,6 +478,65 @@ export default function SetQuiz() {
     },
     [currentPhase]
   );
+
+  const handleOpenEditItem = (questionItem) => {
+    const editable = buildEditableItem(questionItem);
+
+    if (!editable) {
+      setEditError('This item cannot be edited right now.');
+      return;
+    }
+
+    setEditError(null);
+    setEditingItem(editable);
+  };
+
+  const handleCloseEditItem = () => {
+    if (isSavingEdit) return;
+    setEditingItem(null);
+    setEditError(null);
+  };
+
+  const handleSaveEditedItem = async (updatedItem) => {
+    setIsSavingEdit(true);
+    setEditError(null);
+
+    try {
+      const request = toUpdateRequest(updatedItem);
+      const response = await fetch(
+        '/api/database/v2/sets/update-from-full-set',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(request),
+        }
+      );
+
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to update item');
+      }
+
+      setCardsData((prev) =>
+        prev.map((item) => mergeIntoBaseItem(item, updatedItem))
+      );
+      setReviewItems((prev) =>
+        prev.map((item) => mergeIntoBaseItem(item, updatedItem))
+      );
+      setQuizItems((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+
+      setEditingItem(null);
+    } catch (error) {
+      console.error('Error updating field card item:', error);
+      setEditError(error.message || 'Failed to update item');
+    } finally {
+      setIsSavingEdit(false);
+    }
+  };
 
   // Handle quiz retry
   const handleRetry = () => {
@@ -613,6 +723,8 @@ export default function SetQuiz() {
                 currentIndex={currentIndex}
                 onAnswerSubmitted={handleAnswerSubmitted}
                 onNext={() => setCurrentIndex((prev) => prev + 1)}
+                onEditItem={handleOpenEditItem}
+                disableKeyboardShortcuts={Boolean(editingItem)}
                 onComplete={() => {
                   console.log('=== QUIZ COMPLETED ===');
                   console.log('Final Statistics:', {
@@ -623,6 +735,15 @@ export default function SetQuiz() {
                 }}
               />
             )}
+
+            <ItemEditModal
+              item={editingItem}
+              isOpen={Boolean(editingItem)}
+              isSaving={isSavingEdit}
+              error={editError}
+              onClose={handleCloseEditItem}
+              onSave={handleSaveEditedItem}
+            />
           </>
         )}
       </main>

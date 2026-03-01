@@ -1,22 +1,36 @@
 // pages/learn/academy/sets/study/[id]/srs/learn-new.js
-import Head from "next/head";
-import { useState, useEffect, useRef, useMemo } from "react";
-import { useRouter } from "next/router";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import AcademySidebar from "@/components/Sidebars/AcademySidebar";
+import Head from 'next/head';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import AcademySidebar from '@/components/Sidebars/AcademySidebar';
 
 // Import icons for phase indicators
-import { FaBook, FaDumbbell } from "react-icons/fa";
-import { IoSparkles } from "react-icons/io5";
+import { FaBook, FaDumbbell } from 'react-icons/fa';
+import { IoSparkles } from 'react-icons/io5';
 
 // Import SRS Learn New Components
-import SessionStatHeaderView from "@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView.jsx";
-import TypedResponseView from "@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx";
-import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx";
-import ReviewView from "@/components/Set/Features/Field-Card-Session/shared/views/ReviewView.jsx";
-import SummaryView from "@/components/Set/Features/Field-Card-Session/shared/views/SummaryView";
-import { validateTypedAnswer, validateMultipleChoice } from "@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation";
-import { pregenerateMultipleChoiceItems, shuffleArray, shuffleOptionsWithDistractors } from "@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration";
+import SessionStatHeaderView from '@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView.jsx';
+import TypedResponseView from '@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx';
+import MultipleChoiceView from '@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx';
+import ReviewView from '@/components/Set/Features/Field-Card-Session/shared/views/ReviewView.jsx';
+import SummaryView from '@/components/Set/Features/Field-Card-Session/shared/views/SummaryView';
+import ItemEditModal from '@/components/Set/Features/Field-Card-Session/shared/views/ItemEditModal.jsx';
+import {
+  validateTypedAnswer,
+  validateMultipleChoice,
+} from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation';
+import {
+  pregenerateMultipleChoiceItems,
+  shuffleArray,
+  shuffleOptionsWithDistractors,
+} from '@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration';
+import {
+  buildEditableItem,
+  toUpdateRequest,
+  mergeIntoBaseItem,
+  mergeIntoQuestionItem,
+} from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
 
 export default function LearnNew() {
   const router = useRouter();
@@ -55,6 +69,11 @@ export default function LearnNew() {
   const [userAnswer, setUserAnswer] = useState('');
   const [currentShuffledOptions, setCurrentShuffledOptions] = useState([]);
 
+  // ============ ITEM EDITING STATE ============
+  const [editingItem, setEditingItem] = useState(null);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [editError, setEditError] = useState(null);
+
   // ============ SUMMARY STATE ============
   const [animateAccuracy, setAnimateAccuracy] = useState(false);
 
@@ -63,7 +82,7 @@ export default function LearnNew() {
     correct: 0,
     incorrect: 0,
     totalAttempts: 0,
-    accuracy: 0
+    accuracy: 0,
   });
   const [answeredItems, setAnsweredItems] = useState([]);
 
@@ -71,12 +90,12 @@ export default function LearnNew() {
   const [phaseProgress, setPhaseProgress] = useState({
     'multiple-choice': {
       completedItems: new Set(),
-      totalUniqueItems: 0
+      totalUniqueItems: 0,
     },
-    'translation': {
+    translation: {
       completedItems: new Set(),
-      totalUniqueItems: 0
-    }
+      totalUniqueItems: 0,
+    },
   });
   const [completedPhases, setCompletedPhases] = useState([]);
 
@@ -88,34 +107,34 @@ export default function LearnNew() {
     return Array.isArray(apiItems)
       ? apiItems
           .map((item, index) => {
-            if (item.type === "vocab" || item.type === "vocabulary") {
+            if (item.type === 'vocab' || item.type === 'vocabulary') {
               return {
                 id: `vocab-${index}`,
                 uuid: item.id,
-                type: "vocabulary",
-                kana: item.kana || "",
+                type: 'vocabulary',
+                kana: item.kana || '',
                 kanji: item.kanji || null,
-                english: item.english || "",
-                lexical_category: item.lexical_category || "",
+                english: item.english || '',
+                lexical_category: item.lexical_category || '',
                 example_sentences: Array.isArray(item.example_sentences)
                   ? item.example_sentences
-                  : [item.example_sentences].filter(Boolean)
+                  : [item.example_sentences].filter(Boolean),
               };
-            } else if (item.type === "grammar") {
+            } else if (item.type === 'grammar') {
               return {
                 id: `grammar-${index}`,
                 uuid: item.id,
-                type: "grammar",
-                title: item.title || "",
-                description: item.description || "",
-                topic: item.topic || "",
+                type: 'grammar',
+                title: item.title || '',
+                description: item.description || '',
+                topic: item.topic || '',
                 example_sentences: Array.isArray(item.example_sentences)
                   ? item.example_sentences.map((ex) =>
-                      typeof ex === "string"
+                      typeof ex === 'string'
                         ? ex
-                        : `${ex.japanese || ""} (${ex.english || ""})`
+                        : `${ex.japanese || ''} (${ex.english || ''})`
                     )
-                  : []
+                  : [],
               };
             }
             return null;
@@ -134,10 +153,15 @@ export default function LearnNew() {
 
       try {
         // Get limit from URL query params, default to 10 if not provided
-        const limitParam = router.query.limit ? parseInt(router.query.limit, 10) : 10;
-        const validLimit = isNaN(limitParam) || limitParam <= 0 ? 10 : limitParam;
+        const limitParam = router.query.limit
+          ? parseInt(router.query.limit, 10)
+          : 10;
+        const validLimit =
+          isNaN(limitParam) || limitParam <= 0 ? 10 : limitParam;
 
-        const response = await fetch(`/api/database/v2/srs/set/learn/${id}?limit=${validLimit}`);
+        const response = await fetch(
+          `/api/database/v2/srs/set/learn/${id}?limit=${validLimit}`
+        );
 
         if (!response.ok) {
           throw new Error(`Failed to fetch set: ${response.statusText}`);
@@ -146,19 +170,19 @@ export default function LearnNew() {
         const result = await response.json();
 
         if (!result.success || !result.data) {
-          throw new Error(result.error || "Failed to load set data");
+          throw new Error(result.error || 'Failed to load set data');
         }
 
         const setInfoData = result.data.set;
         const setItemsAPI = result.data.items || [];
 
         if (!setInfoData) {
-          throw new Error("Invalid set data structure received from API");
+          throw new Error('Invalid set data structure received from API');
         }
 
         setSetInfo({
-          title: setInfoData.title || "Untitled Set",
-          description: setInfoData.description?.toString() || ""
+          title: setInfoData.title || 'Untitled Set',
+          description: setInfoData.description?.toString() || '',
         });
 
         // Extract and store set type
@@ -168,7 +192,7 @@ export default function LearnNew() {
         const transformedItemData = transformItems(setItemsAPI);
 
         if (transformedItemData.length === 0) {
-          throw new Error("This set has no items to study");
+          throw new Error('This set has no items to study');
         }
 
         setItemData(transformedItemData);
@@ -180,7 +204,9 @@ export default function LearnNew() {
 
         if (transformedItemData.length < 4) {
           try {
-            const fullSetResponse = await fetch(`/api/database/v2/sets/retrieve-set/${id}`);
+            const fullSetResponse = await fetch(
+              `/api/database/v2/sets/retrieve-set/${id}`
+            );
 
             if (fullSetResponse.ok) {
               const fullSetResult = await fullSetResponse.json();
@@ -194,7 +220,10 @@ export default function LearnNew() {
               }
             }
           } catch (error) {
-            console.warn('Failed to fetch full set for distractors, using session items:', error);
+            console.warn(
+              'Failed to fetch full set for distractors, using session items:',
+              error
+            );
           }
         }
 
@@ -209,8 +238,8 @@ export default function LearnNew() {
         // ============================================
         // Use centralized utility to pre-generate MC items with distractors
         const multipleChoice = pregenerateMultipleChoiceItems(
-          transformedItemData,  // Items to create questions for
-          distractorPool,       // Items to pull distractors from
+          transformedItemData, // Items to create questions for
+          distractorPool, // Items to pull distractors from
           3
         );
 
@@ -227,18 +256,18 @@ export default function LearnNew() {
         // Only generate translation questions for vocabulary sets
         if (setInfoData.set_type !== 'grammar') {
           transformedItemData.forEach((item) => {
-            if (item.type === "vocabulary") {
+            if (item.type === 'vocabulary') {
               // English → Kana
               translation.push({
                 id: `${item.id}-tr-en-kana`,
                 originalId: item.id,
                 uuid: item.uuid,
-                type: "vocabulary",
-                questionType: "English",
-                answerType: "Kana",
+                type: 'vocabulary',
+                questionType: 'English',
+                answerType: 'Kana',
                 question: item.english,
                 answer: item.kana,
-                hint: item.lexical_category
+                hint: item.lexical_category,
               });
 
               // Kana → English
@@ -246,12 +275,12 @@ export default function LearnNew() {
                 id: `${item.id}-tr-kana-en`,
                 originalId: item.id,
                 uuid: item.uuid,
-                type: "vocabulary",
-                questionType: "Kana",
-                answerType: "English",
+                type: 'vocabulary',
+                questionType: 'Kana',
+                answerType: 'English',
                 question: item.kana,
                 answer: item.english,
-                hint: item.lexical_category
+                hint: item.lexical_category,
               });
 
               // If kanji exists, add kanji question variations
@@ -263,12 +292,12 @@ export default function LearnNew() {
                   id: `${item.id}-tr-kanji-en`,
                   originalId: item.id,
                   uuid: item.uuid,
-                  type: "vocabulary",
-                  questionType: "Kanji",
-                  answerType: "English",
+                  type: 'vocabulary',
+                  questionType: 'Kanji',
+                  answerType: 'English',
                   question: item.kanji,
                   answer: item.english,
-                  hint: `${item.lexical_category} (${item.kana})`
+                  hint: `${item.lexical_category} (${item.kana})`,
                 });
 
                 // Kanji → Kana (user types Kana)
@@ -276,26 +305,26 @@ export default function LearnNew() {
                   id: `${item.id}-tr-kanji-kana`,
                   originalId: item.id,
                   uuid: item.uuid,
-                  type: "vocabulary",
-                  questionType: "Kanji",
-                  answerType: "Kana",
+                  type: 'vocabulary',
+                  questionType: 'Kanji',
+                  answerType: 'Kana',
                   question: item.kanji,
                   answer: item.kana,
-                  hint: item.english
+                  hint: item.english,
                 });
               }
-            } else if (item.type === "grammar") {
+            } else if (item.type === 'grammar') {
               // Title → Description
               translation.push({
                 id: `${item.id}-tr-title-desc`,
                 originalId: item.id,
                 uuid: item.uuid,
-                type: "grammar",
-                questionType: "Grammar Pattern",
-                answerType: "Description",
+                type: 'grammar',
+                questionType: 'Grammar Pattern',
+                answerType: 'Description',
                 question: item.title,
                 answer: item.description,
-                hint: item.topic
+                hint: item.topic,
               });
 
               // Description → Title
@@ -303,12 +332,12 @@ export default function LearnNew() {
                 id: `${item.id}-tr-desc-title`,
                 originalId: item.id,
                 uuid: item.uuid,
-                type: "grammar",
-                questionType: "Description",
-                answerType: "Grammar Pattern",
+                type: 'grammar',
+                questionType: 'Description',
+                answerType: 'Grammar Pattern',
                 question: item.description,
                 answer: item.title,
-                hint: item.topic
+                hint: item.topic,
               });
             }
           });
@@ -319,21 +348,21 @@ export default function LearnNew() {
         setTranslationArray(shuffledTranslation);
 
         // Console log all arrays for development
-        console.log("=== SET DATA LOADED ===");
-        console.log("Set Info:", setInfoData);
-        console.log("Transformed Item Data:", transformedItemData);
-        console.log("Total Items:", transformedItemData.length);
-        console.log("\n=== REVIEW ARRAY ===");
-        console.log("Review Items:", review);
-        console.log("Total Review Items:", review.length);
-        console.log("\n=== MULTIPLE CHOICE ARRAY ===");
-        console.log("Multiple Choice Questions:", multipleChoice);
-        console.log("Total Multiple Choice Questions:", multipleChoice.length);
-        console.log("\n=== TRANSLATION ARRAY ===");
-        console.log("Translation Questions:", translation);
-        console.log("Total Translation Questions:", translation.length);
+        console.log('=== SET DATA LOADED ===');
+        console.log('Set Info:', setInfoData);
+        console.log('Transformed Item Data:', transformedItemData);
+        console.log('Total Items:', transformedItemData.length);
+        console.log('\n=== REVIEW ARRAY ===');
+        console.log('Review Items:', review);
+        console.log('Total Review Items:', review.length);
+        console.log('\n=== MULTIPLE CHOICE ARRAY ===');
+        console.log('Multiple Choice Questions:', multipleChoice);
+        console.log('Total Multiple Choice Questions:', multipleChoice.length);
+        console.log('\n=== TRANSLATION ARRAY ===');
+        console.log('Translation Questions:', translation);
+        console.log('Total Translation Questions:', translation.length);
       } catch (err) {
-        console.error("Error fetching set:", err);
+        console.error('Error fetching set:', err);
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -354,15 +383,15 @@ export default function LearnNew() {
       const progressConfig = {
         'multiple-choice': {
           completedItems: new Set(),
-          totalUniqueItems: multipleChoiceArray.length
-        }
+          totalUniqueItems: multipleChoiceArray.length,
+        },
       };
 
       // Only track translation phase for non-grammar sets
       if (setType !== 'grammar') {
         progressConfig['translation'] = {
           completedItems: new Set(),
-          totalUniqueItems: translationArray.length
+          totalUniqueItems: translationArray.length,
         };
       }
 
@@ -391,14 +420,17 @@ export default function LearnNew() {
   // Handle answer submission for MC and Translation phases
   const handleAnswerSubmitted = (answerData) => {
     // Record the answer
-    setAnsweredItems(prev => [...prev, {
-      ...answerData,
-      phase: currentPhase,
-      timestamp: Date.now()
-    }]);
+    setAnsweredItems((prev) => [
+      ...prev,
+      {
+        ...answerData,
+        phase: currentPhase,
+        timestamp: Date.now(),
+      },
+    ]);
 
     // Update session stats
-    setSessionStats(prev => {
+    setSessionStats((prev) => {
       const newCorrect = prev.correct + (answerData.isCorrect ? 1 : 0);
       const newIncorrect = prev.incorrect + (answerData.isCorrect ? 0 : 1);
       const newTotal = prev.totalAttempts + 1;
@@ -407,23 +439,26 @@ export default function LearnNew() {
         correct: newCorrect,
         incorrect: newIncorrect,
         totalAttempts: newTotal,
-        accuracy: Math.round((newCorrect / newTotal) * 100)
+        accuracy: Math.round((newCorrect / newTotal) * 100),
       };
     });
 
     // Track unique items completed for MC and Translation phases
     // Each variation (e.g., "English → Kana") counts as a separate completion
-    if (answerData.isCorrect && (currentPhase === 'multiple-choice' || currentPhase === 'translation')) {
+    if (
+      answerData.isCorrect &&
+      (currentPhase === 'multiple-choice' || currentPhase === 'translation')
+    ) {
       const currentItem = getCurrentArray()[currentIndex];
-      setPhaseProgress(prev => {
+      setPhaseProgress((prev) => {
         const newCompletedItems = new Set(prev[currentPhase].completedItems);
         newCompletedItems.add(currentItem.id); // Use item.id (e.g., "vocab-1-mc-en-kana")
         return {
           ...prev,
           [currentPhase]: {
             ...prev[currentPhase],
-            completedItems: newCompletedItems
-          }
+            completedItems: newCompletedItems,
+          },
         };
       });
     }
@@ -433,9 +468,9 @@ export default function LearnNew() {
       const currentItem = getCurrentArray()[currentIndex];
 
       if (currentPhase === 'multiple-choice') {
-        setActiveMCArray(prev => [...prev, currentItem]);
+        setActiveMCArray((prev) => [...prev, currentItem]);
       } else if (currentPhase === 'translation') {
-        setActiveTranslationArray(prev => [...prev, currentItem]);
+        setActiveTranslationArray((prev) => [...prev, currentItem]);
       }
     }
 
@@ -456,7 +491,7 @@ export default function LearnNew() {
 
     // Check if there are more items in current phase
     if (currentIndex < currentArray.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+      setCurrentIndex((prev) => prev + 1);
     } else {
       handlePhaseComplete();
     }
@@ -503,7 +538,7 @@ export default function LearnNew() {
 
   const handleReviewNext = () => {
     if (currentIndex < activeReviewArray.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+      setCurrentIndex((prev) => prev + 1);
     } else {
       handlePhaseComplete();
     }
@@ -511,7 +546,7 @@ export default function LearnNew() {
 
   const handleReviewPrevious = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
+      setCurrentIndex((prev) => prev - 1);
     }
   };
 
@@ -531,7 +566,7 @@ export default function LearnNew() {
       questionId: currentItem.id,
       questionType: currentItem.questionType,
       answerType: currentItem.answerType,
-      question: currentItem.question
+      question: currentItem.question,
     });
   };
 
@@ -554,7 +589,7 @@ export default function LearnNew() {
       questionId: currentItem.id,
       questionType: currentItem.questionType,
       answerType: currentItem.answerType,
-      question: currentItem.question
+      question: currentItem.question,
     });
   };
 
@@ -570,40 +605,41 @@ export default function LearnNew() {
     const currentItem = activeTranslationArray[currentIndex];
 
     // Remove last answered item
-    setAnsweredItems(prev => prev.slice(0, -1));
+    setAnsweredItems((prev) => prev.slice(0, -1));
 
     // Reverse stats changes (remove 1 incorrect, remove 1 total attempt)
     // Then add 1 correct (user claims they were correct)
-    setSessionStats(prev => {
+    setSessionStats((prev) => {
       const newIncorrect = Math.max(0, prev.incorrect - 1);
       const newCorrect = prev.correct + 1;
       const newTotal = prev.totalAttempts; // Same total, just switching incorrect to correct
-      const newAccuracy = newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0;
+      const newAccuracy =
+        newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0;
 
       return {
         ...prev,
         correct: newCorrect,
         incorrect: newIncorrect,
-        accuracy: newAccuracy
+        accuracy: newAccuracy,
       };
     });
 
     // Mark item as completed (user claims correct)
-    setPhaseProgress(prev => {
+    setPhaseProgress((prev) => {
       const newCompletedItems = new Set(prev[currentPhase].completedItems);
       newCompletedItems.add(currentItem.id); // Use item.id for individual variation
       return {
         ...prev,
         [currentPhase]: {
           ...prev[currentPhase],
-          completedItems: newCompletedItems
-        }
+          completedItems: newCompletedItems,
+        },
       };
     });
 
     // Remove the duplicate item from the end of the translation array
     // (it was added because the answer was marked incorrect)
-    setActiveTranslationArray(prev => prev.slice(0, -1));
+    setActiveTranslationArray((prev) => prev.slice(0, -1));
 
     // Reset UI state to allow retyping
     setShowResult(false);
@@ -613,6 +649,72 @@ export default function LearnNew() {
     // Focus the input field
     if (translationInputRef?.current) {
       translationInputRef.current.focus();
+    }
+  };
+
+  // ============ ITEM EDITING HANDLERS ============
+
+  const handleOpenEditItem = (questionItem) => {
+    const editable = buildEditableItem(questionItem);
+    if (!editable) {
+      setEditError('This item cannot be edited right now.');
+      return;
+    }
+
+    setEditError(null);
+    setEditingItem(editable);
+  };
+
+  const handleCloseEditItem = () => {
+    if (isSavingEdit) return;
+    setEditingItem(null);
+    setEditError(null);
+  };
+
+  const handleSaveEditedItem = async (updatedItem) => {
+    setIsSavingEdit(true);
+    setEditError(null);
+
+    try {
+      const request = toUpdateRequest(updatedItem);
+      const response = await fetch(
+        '/api/database/v2/sets/update-from-full-set',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(request),
+        }
+      );
+
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to update item');
+      }
+
+      setItemData((prev) =>
+        prev.map((item) => mergeIntoBaseItem(item, updatedItem))
+      );
+      setReviewArray((prev) =>
+        prev.map((item) => mergeIntoBaseItem(item, updatedItem))
+      );
+      setActiveReviewArray((prev) =>
+        prev.map((item) => mergeIntoBaseItem(item, updatedItem))
+      );
+      setTranslationArray((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+      setActiveTranslationArray((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+
+      setEditingItem(null);
+    } catch (error) {
+      console.error('Error updating field card item:', error);
+      setEditError(error.message || 'Failed to update item');
+    } finally {
+      setIsSavingEdit(false);
     }
   };
 
@@ -638,18 +740,23 @@ export default function LearnNew() {
       }
 
       try {
-        const response = await fetch(`/api/database/v2/srs/item/create-entry/${item.uuid}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            srs_level: 1,
-            scope: 'set_srs_flow_learn_new'
-          })
-        });
+        const response = await fetch(
+          `/api/database/v2/srs/item/create-entry/${item.uuid}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              srs_level: 1,
+              scope: 'set_srs_flow_learn_new',
+            }),
+          }
+        );
 
         if (!response.ok) {
           const errorData = await response.json();
-          errors.push(`Item ${item.uuid}: ${errorData.error || 'Failed to save'}`);
+          errors.push(
+            `Item ${item.uuid}: ${errorData.error || 'Failed to save'}`
+          );
         }
       } catch (error) {
         errors.push(`Item ${item.uuid}: ${error.message}`);
@@ -659,7 +766,9 @@ export default function LearnNew() {
     setIsSavingSRS(false);
 
     if (errors.length > 0) {
-      setSrsError(`Failed to save ${errors.length} item(s) to SRS. Please try again.`);
+      setSrsError(
+        `Failed to save ${errors.length} item(s) to SRS. Please try again.`
+      );
       return false;
     }
 
@@ -671,19 +780,37 @@ export default function LearnNew() {
   // Phase configuration for header
   const phases = useMemo(() => {
     const basePhases = [
-      { id: 'review', name: 'Review', icon: FaBook, color: 'bg-blue-500', borderColor: 'border-blue-500' },
-      { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' }
+      {
+        id: 'review',
+        name: 'Review',
+        icon: FaBook,
+        color: 'bg-blue-500',
+        borderColor: 'border-blue-500',
+      },
+      {
+        id: 'multiple-choice',
+        name: 'Multiple Choice',
+        icon: IoSparkles,
+        color: 'bg-purple-500',
+        borderColor: 'border-purple-500',
+      },
     ];
 
     // Only add translation phase for non-grammar sets
     if (setType !== 'grammar') {
-      basePhases.push({ id: 'translation', name: 'Translation', icon: FaDumbbell, color: 'bg-[#e30a5f]', borderColor: 'border-[#e30a5f]' });
+      basePhases.push({
+        id: 'translation',
+        name: 'Translation',
+        icon: FaDumbbell,
+        color: 'bg-[#e30a5f]',
+        borderColor: 'border-[#e30a5f]',
+      });
     }
 
     return basePhases;
   }, [setType]);
 
-  const currentPhaseIndex = phases.findIndex(p => p.id === currentPhase);
+  const currentPhaseIndex = phases.findIndex((p) => p.id === currentPhase);
   const currentPhaseConfig = phases[currentPhaseIndex];
   const CurrentPhaseIcon = currentPhaseConfig?.icon;
 
@@ -721,7 +848,11 @@ export default function LearnNew() {
   // Shuffle multiple choice options when question changes
   // Store shuffled options to preserve their positions when showing results
   useEffect(() => {
-    if (currentPhase === 'multiple-choice' && activeMCArray[currentIndex] && !showResult) {
+    if (
+      currentPhase === 'multiple-choice' &&
+      activeMCArray[currentIndex] &&
+      !showResult
+    ) {
       const currentItem = activeMCArray[currentIndex];
       // Use centralized utility to shuffle options with distractors
       const shuffled = shuffleOptionsWithDistractors(currentItem);
@@ -755,9 +886,12 @@ export default function LearnNew() {
   return (
     <>
       <Head>
-        <title>Learn New - {setInfo?.title || "Study Set"}</title>
+        <title>Learn New - {setInfo?.title || 'Study Set'}</title>
         <meta name="description" content="Learn new cards in your study set" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -773,7 +907,9 @@ export default function LearnNew() {
                 <div className="animate-pulse mb-4">
                   <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
                 </div>
-                <p className="text-gray-600 dark:text-white/70">Loading set data...</p>
+                <p className="text-gray-600 dark:text-white/70">
+                  Loading set data...
+                </p>
               </div>
             </div>
           ) : (
@@ -807,52 +943,69 @@ export default function LearnNew() {
                     progressInPhase={calculateProgressPercentage()}
                     completedCount={getCompletedCount()}
                     totalUniqueItems={getTotalUniqueItems()}
-                    displayMode={currentPhase === 'review' ? 'question-count' : 'completion-count'}
+                    displayMode={
+                      currentPhase === 'review'
+                        ? 'question-count'
+                        : 'completion-count'
+                    }
                     onExit={handleExit}
                   />
 
                   {/* Review Phase */}
-                  {currentPhase === 'review' && activeReviewArray.length > 0 && (
-                    <ReviewView
-                      currentCard={activeReviewArray[currentIndex]}
-                      isLastCard={currentIndex === activeReviewArray.length - 1}
-                      isFirstCard={currentIndex === 0}
-                      onNext={handleReviewNext}
-                      onPrevious={handleReviewPrevious}
-                    />
-                  )}
+                  {currentPhase === 'review' &&
+                    activeReviewArray.length > 0 && (
+                      <ReviewView
+                        currentCard={activeReviewArray[currentIndex]}
+                        isLastCard={
+                          currentIndex === activeReviewArray.length - 1
+                        }
+                        isFirstCard={currentIndex === 0}
+                        onNext={handleReviewNext}
+                        onPrevious={handleReviewPrevious}
+                      />
+                    )}
 
                   {/* Multiple Choice Phase */}
-                  {currentPhase === 'multiple-choice' && activeMCArray.length > 0 && (
-                    <MultipleChoiceView
-                      currentItem={activeMCArray[currentIndex]}
-                      uniqueOptions={currentShuffledOptions}
-                      selectedOption={selectedOption}
-                      showResult={showResult}
-                      isCorrect={isCorrect}
-                      isTransitioning={false}
-                      isLastQuestion={currentIndex === activeMCArray.length - 1}
-                      onOptionSelect={handleMCOptionSelect}
-                      onNext={handleNext}
-                    />
-                  )}
+                  {currentPhase === 'multiple-choice' &&
+                    activeMCArray.length > 0 && (
+                      <MultipleChoiceView
+                        currentItem={activeMCArray[currentIndex]}
+                        uniqueOptions={currentShuffledOptions}
+                        selectedOption={selectedOption}
+                        showResult={showResult}
+                        isCorrect={isCorrect}
+                        isTransitioning={false}
+                        isLastQuestion={
+                          currentIndex === activeMCArray.length - 1
+                        }
+                        onOptionSelect={handleMCOptionSelect}
+                        onNext={handleNext}
+                      />
+                    )}
 
                   {/* Translation Phase - Only for vocabulary sets */}
-                  {currentPhase === 'translation' && setType !== 'grammar' && activeTranslationArray.length > 0 && !isSavingSRS && (
-                    <TypedResponseView
-                      currentItem={activeTranslationArray[currentIndex]}
-                      userAnswer={userAnswer}
-                      showResult={showResult}
-                      isCorrect={isCorrect}
-                      showHint={false}
-                      isLastQuestion={currentIndex === activeTranslationArray.length - 1}
-                      inputRef={translationInputRef}
-                      onInputChange={(e) => setUserAnswer(e.target.value)}
-                      onCheckAnswer={handleTranslationCheck}
-                      onNext={handleNext}
-                      onRetry={handleTranslationRetry}
-                    />
-                  )}
+                  {currentPhase === 'translation' &&
+                    setType !== 'grammar' &&
+                    activeTranslationArray.length > 0 &&
+                    !isSavingSRS && (
+                      <TypedResponseView
+                        currentItem={activeTranslationArray[currentIndex]}
+                        userAnswer={userAnswer}
+                        showResult={showResult}
+                        isCorrect={isCorrect}
+                        showHint={false}
+                        isLastQuestion={
+                          currentIndex === activeTranslationArray.length - 1
+                        }
+                        inputRef={translationInputRef}
+                        onInputChange={(e) => setUserAnswer(e.target.value)}
+                        onCheckAnswer={handleTranslationCheck}
+                        onNext={handleNext}
+                        onRetry={handleTranslationRetry}
+                        onEditItem={handleOpenEditItem}
+                        disableKeyboardShortcuts={Boolean(editingItem)}
+                      />
+                    )}
 
                   {/* SRS Saving Loading Screen */}
                   {isSavingSRS && (
@@ -877,8 +1030,18 @@ export default function LearnNew() {
                   <div className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-2xl max-w-md w-full p-6 space-y-4">
                     <div className="flex items-center space-x-3">
                       <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                        <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        <svg
+                          className="w-6 h-6 text-red-600 dark:text-red-400"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                          />
                         </svg>
                       </div>
                       <div className="flex-1">
@@ -916,6 +1079,15 @@ export default function LearnNew() {
                   </div>
                 </div>
               )}
+
+              <ItemEditModal
+                item={editingItem}
+                isOpen={Boolean(editingItem)}
+                isSaving={isSavingEdit}
+                error={editError}
+                onClose={handleCloseEditItem}
+                onSave={handleSaveEditedItem}
+              />
             </>
           )}
         </main>

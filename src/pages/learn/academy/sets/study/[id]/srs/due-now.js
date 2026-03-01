@@ -15,6 +15,7 @@ import TypedResponseView from '@/components/Set/Features/Field-Card-Session/shar
 import MultipleChoiceView from '@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx';
 import SummaryView from '@/components/Set/Features/Field-Card-Session/shared/views/SummaryView';
 import LevelChangeView from '@/components/Set/Features/Field-Card-Session/SRS/views/LevelChangeView';
+import ItemEditModal from '@/components/Set/Features/Field-Card-Session/shared/views/ItemEditModal.jsx';
 import {
   validateTypedAnswer,
   validateMultipleChoice,
@@ -24,6 +25,12 @@ import {
   shuffleArray,
   shuffleOptionsWithDistractors,
 } from '@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration';
+import {
+  buildEditableItem,
+  toUpdateRequest,
+  mergeIntoBaseItem,
+  mergeIntoQuestionItem,
+} from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
 
 export default function DueNow() {
   const router = useRouter();
@@ -57,6 +64,11 @@ export default function DueNow() {
   // ============ QUESTION STATE (Multiple Choice) ============
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentShuffledOptions, setCurrentShuffledOptions] = useState([]);
+
+  // ============ ITEM EDITING STATE ============
+  const [editingItem, setEditingItem] = useState(null);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [editError, setEditError] = useState(null);
 
   // ============ SUMMARY STATE ============
   const [animateAccuracy, setAnimateAccuracy] = useState(false);
@@ -727,6 +739,66 @@ export default function DueNow() {
     }
   };
 
+  // ============ ITEM EDITING HANDLERS ============
+
+  const handleOpenEditItem = (questionItem) => {
+    const editable = buildEditableItem(questionItem);
+    if (!editable) {
+      setEditError('This item cannot be edited right now.');
+      return;
+    }
+
+    setEditError(null);
+    setEditingItem(editable);
+  };
+
+  const handleCloseEditItem = () => {
+    if (isSavingEdit) return;
+    setEditingItem(null);
+    setEditError(null);
+  };
+
+  const handleSaveEditedItem = async (updatedItem) => {
+    setIsSavingEdit(true);
+    setEditError(null);
+
+    try {
+      const request = toUpdateRequest(updatedItem);
+      const response = await fetch(
+        '/api/database/v2/sets/update-from-full-set',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(request),
+        }
+      );
+
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to update item');
+      }
+
+      setItemData((prev) =>
+        prev.map((item) => mergeIntoBaseItem(item, updatedItem))
+      );
+      setTranslationArray((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+      setActiveTranslationArray((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+
+      setEditingItem(null);
+    } catch (error) {
+      console.error('Error updating field card item:', error);
+      setEditError(error.message || 'Failed to update item');
+    } finally {
+      setIsSavingEdit(false);
+    }
+  };
+
   // ============ GENERAL HANDLERS ============
 
   const handleExit = () => {
@@ -927,12 +999,23 @@ export default function DueNow() {
                         onCheckAnswer={handleTranslationCheck}
                         onNext={handleNext}
                         onRetry={handleTranslationRetry}
+                        onEditItem={handleOpenEditItem}
+                        disableKeyboardShortcuts={Boolean(editingItem)}
                       />
                     )}
                 </div>
               )}
             </>
           )}
+
+          <ItemEditModal
+            item={editingItem}
+            isOpen={Boolean(editingItem)}
+            isSaving={isSavingEdit}
+            error={editError}
+            onClose={handleCloseEditItem}
+            onSave={handleSaveEditedItem}
+          />
         </main>
       </div>
     </>

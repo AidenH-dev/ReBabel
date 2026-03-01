@@ -7,6 +7,7 @@ import {
   FaRedo,
   FaCheck,
 } from 'react-icons/fa';
+import { FiEdit2 } from 'react-icons/fi';
 import { toKana } from 'wanakana';
 import KeyboardShortcutHint from './KeyboardShortcutHint';
 
@@ -33,6 +34,8 @@ import KeyboardShortcutHint from './KeyboardShortcutHint';
  * @param {function(): void} onCheckAnswer - Callback to check/submit the answer
  * @param {function(): void} onNext - Callback to proceed to next question
  * @param {function(): void} onRetry - Callback for "I was correct" button (retracts incorrect answer)
+ * @param {function(Object): void} [onEditItem] - Optional callback to edit current item
+ * @param {boolean} [disableKeyboardShortcuts] - Temporarily disable Enter shortcut handling
  */
 export default function TypedResponseView({
   currentItem,
@@ -46,6 +49,8 @@ export default function TypedResponseView({
   onCheckAnswer,
   onNext,
   onRetry,
+  onEditItem,
+  disableKeyboardShortcuts = false,
 }) {
   // Auto-focus input when component loads or question changes
   useEffect(() => {
@@ -56,6 +61,8 @@ export default function TypedResponseView({
 
   // Global Enter key handler: submits first, then advances
   useEffect(() => {
+    if (disableKeyboardShortcuts) return;
+
     const handleGlobalKeyDown = (e) => {
       if (e.key !== 'Enter' || e.shiftKey) return;
       e.preventDefault();
@@ -71,7 +78,7 @@ export default function TypedResponseView({
 
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, [showResult, userAnswer, onCheckAnswer, onNext]);
+  }, [showResult, userAnswer, onCheckAnswer, onNext, disableKeyboardShortcuts]);
 
   if (!currentItem) return null;
 
@@ -103,6 +110,17 @@ export default function TypedResponseView({
       <div className="w-full max-w-3xl">
         {/* Question Card */}
         <div className="relative z-10 bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
+          {showResult && onEditItem && currentItem?.uuid && (
+            <button
+              onClick={() => onEditItem(currentItem)}
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600 hover:shadow-sm transition-all text-xs sm:text-sm font-medium"
+              title="Edit Item"
+            >
+              <span>Edit Item</span>
+              <FiEdit2 className="w-4 h-4" />
+            </button>
+          )}
+
           <div className="mb-2 text-xs sm:text-sm text-gray-500 dark:text-white/50">
             {currentItem.questionType} → {currentItem.answerType}
           </div>
