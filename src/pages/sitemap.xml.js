@@ -26,7 +26,7 @@ function generateSiteMap(posts) {
          return `
      <url>
        <loc>${`https://www.rebabel.org/blog/${slug}`}</loc>
-       <lastmod>${frontmatter.date}</lastmod>
+       <lastmod>${frontmatter.lastmod || frontmatter.date}</lastmod>
        <changefreq>monthly</changefreq>
        <priority>0.8</priority>
      </url>
