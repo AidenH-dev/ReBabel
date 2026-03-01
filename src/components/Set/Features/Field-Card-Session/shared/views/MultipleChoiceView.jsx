@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { FaArrowRight, FaTimesCircle } from "react-icons/fa";
-import { BsCheckCircleFill } from "react-icons/bs";
-import KeyboardShortcutHint from "./KeyboardShortcutHint";
+import { useEffect } from 'react';
+import { FaArrowRight, FaTimesCircle } from 'react-icons/fa';
+import { BsCheckCircleFill } from 'react-icons/bs';
+import KeyboardShortcutHint from './KeyboardShortcutHint';
 
 /**
  * MultipleChoiceView - Shared presentational component for multiple choice questions
@@ -33,7 +33,7 @@ export default function MultipleChoiceView({
   isTransitioning,
   isLastQuestion,
   onOptionSelect,
-  onNext
+  onNext,
 }) {
   // Keyboard shortcuts: 1-4 for options, Enter for next
   useEffect(() => {
@@ -64,7 +64,8 @@ export default function MultipleChoiceView({
 
   // Get option button style
   const getOptionStyle = (option) => {
-    const baseStyle = "w-full text-left p-4 sm:p-5 rounded-xl border-2 transition-all duration-200 font-medium text-sm sm:text-base";
+    const baseStyle =
+      'w-full text-left p-4 sm:p-5 rounded-xl border-2 transition-all duration-200 font-medium text-sm sm:text-base';
 
     if (!showResult || isTransitioning) {
       // Before answer submission or during transition
@@ -91,9 +92,13 @@ export default function MultipleChoiceView({
     if (!showResult || isTransitioning) return null;
 
     if (option.trim() === currentItem.answer.trim()) {
-      return <BsCheckCircleFill className="text-green-500 text-lg sm:text-xl flex-shrink-0" />;
+      return (
+        <BsCheckCircleFill className="text-green-500 text-lg sm:text-xl flex-shrink-0" />
+      );
     } else if (selectedOption === option) {
-      return <FaTimesCircle className="text-red-500 text-lg sm:text-xl flex-shrink-0" />;
+      return (
+        <FaTimesCircle className="text-red-500 text-lg sm:text-xl flex-shrink-0" />
+      );
     }
     return null;
   };
@@ -103,9 +108,10 @@ export default function MultipleChoiceView({
     return (
       <div className="flex-1 flex flex-col items-center justify-center px-2 sm:px-4">
         <div className="w-full max-w-3xl">
-          <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
+          <div className="relative z-10 bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
             <div className="text-center text-gray-500 dark:text-white/50">
-              Not enough valid options for this question. Please check the quiz data.
+              Not enough valid options for this question. Please check the quiz
+              data.
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-end gap-3 sm:gap-4">
@@ -113,7 +119,7 @@ export default function MultipleChoiceView({
               onClick={onNext}
               className="w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all text-sm sm:text-base flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white active:scale-95"
             >
-              {isLastQuestion ? "Start Translation" : "Skip Question"}
+              {isLastQuestion ? 'Start Translation' : 'Skip Question'}
               <FaArrowRight />
             </button>
           </div>
@@ -126,7 +132,7 @@ export default function MultipleChoiceView({
     <div className="flex-1 flex flex-col items-center justify-center px-2 sm:px-4">
       <div className="w-full max-w-3xl">
         {/* Question Card */}
-        <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
+        <div className="relative z-10 bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
           {/* Question Type Badge */}
           <div className="mb-2 text-xs sm:text-sm text-gray-500 dark:text-white/50">
             {currentItem.questionType} → {currentItem.answerType}
@@ -153,9 +159,7 @@ export default function MultipleChoiceView({
                   </div>
 
                   {/* Option Text */}
-                  <div className="flex-1 min-w-0">
-                    {option}
-                  </div>
+                  <div className="flex-1 min-w-0">{option}</div>
 
                   {/* Result Icon */}
                   {getOptionIcon(option)}
@@ -171,12 +175,12 @@ export default function MultipleChoiceView({
             onClick={onNext}
             className={`w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all text-sm sm:text-base flex items-center justify-center gap-2 ${
               showResult
-                ? "bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white active:scale-95 opacity-100"
-                : "bg-transparent text-transparent pointer-events-none opacity-0"
+                ? 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white active:scale-95 opacity-100'
+                : 'bg-transparent text-transparent pointer-events-none opacity-0'
             }`}
             disabled={!showResult}
           >
-            {isLastQuestion ? "Start Translation" : "Next Question"}
+            {isLastQuestion ? 'Start Translation' : 'Next Question'}
             <FaArrowRight />
           </button>
         </div>
@@ -186,8 +190,8 @@ export default function MultipleChoiceView({
           className="mt-6"
           shortcuts={
             !showResult
-              ? [{ key: "1-4", label: "Select answer" }]
-              : [{ key: "Enter", label: "Continue" }]
+              ? [{ key: '1-4', label: 'Select answer' }]
+              : [{ key: 'Enter', label: 'Continue' }]
           }
         />
       </div>

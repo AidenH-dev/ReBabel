@@ -1,22 +1,29 @@
 // pages/learn/academy/sets/study/[id]/srs/due-now.js
-import Head from "next/head";
-import { useState, useEffect, useRef, useMemo } from "react";
-import { useRouter } from "next/router";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import AcademySidebar from "@/components/Sidebars/AcademySidebar";
+import Head from 'next/head';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import AcademySidebar from '@/components/Sidebars/AcademySidebar';
 
 // Import icons for phase indicators
-import { FaDumbbell } from "react-icons/fa";
-import { IoSparkles } from "react-icons/io5";
+import { FaDumbbell } from 'react-icons/fa';
+import { IoSparkles } from 'react-icons/io5';
 
 // Import SRS Learn New Components
-import SessionStatHeaderView from "@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView.jsx";
-import TypedResponseView from "@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx";
-import MultipleChoiceView from "@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx";
-import SummaryView from "@/components/Set/Features/Field-Card-Session/shared/views/SummaryView";
-import LevelChangeView from "@/components/Set/Features/Field-Card-Session/SRS/views/LevelChangeView";
-import { validateTypedAnswer, validateMultipleChoice } from "@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation";
-import { pregenerateMultipleChoiceItems, shuffleArray, shuffleOptionsWithDistractors } from "@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration";
+import SessionStatHeaderView from '@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView.jsx';
+import TypedResponseView from '@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx';
+import MultipleChoiceView from '@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx';
+import SummaryView from '@/components/Set/Features/Field-Card-Session/shared/views/SummaryView';
+import LevelChangeView from '@/components/Set/Features/Field-Card-Session/SRS/views/LevelChangeView';
+import {
+  validateTypedAnswer,
+  validateMultipleChoice,
+} from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation';
+import {
+  pregenerateMultipleChoiceItems,
+  shuffleArray,
+  shuffleOptionsWithDistractors,
+} from '@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration';
 
 export default function DueNow() {
   const router = useRouter();
@@ -59,16 +66,16 @@ export default function DueNow() {
     correct: 0,
     incorrect: 0,
     totalAttempts: 0,
-    accuracy: 0
+    accuracy: 0,
   });
   const [answeredItems, setAnsweredItems] = useState([]);
 
   // ============ PHASE PROGRESS TRACKING ============
   const [phaseProgress, setPhaseProgress] = useState({
-    'translation': {
+    translation: {
       completedItems: new Set(),
-      totalUniqueItems: 0
-    }
+      totalUniqueItems: 0,
+    },
   });
   const [completedPhases, setCompletedPhases] = useState([]);
 
@@ -77,46 +84,50 @@ export default function DueNow() {
   const [mistakesPerItem, setMistakesPerItem] = useState({}); // Map of originalId -> number of mistakes in this session
   const [showLevelChange, setShowLevelChange] = useState(false);
   const [currentLevelChange, setCurrentLevelChange] = useState(null); // { item, oldLevel, newLevel }
-  const [shouldGoToSummaryAfterLevelChange, setShouldGoToSummaryAfterLevelChange] = useState(false);
+  const [
+    shouldGoToSummaryAfterLevelChange,
+    setShouldGoToSummaryAfterLevelChange,
+  ] = useState(false);
 
   // ============ REFS ============
   const translationInputRef = useRef(null);
+  const leveledItemIdsRef = useRef(new Set());
 
   // Helper function to transform API items to internal format
   const transformItems = (apiItems) => {
     return Array.isArray(apiItems)
       ? apiItems
           .map((item, index) => {
-            if (item.type === "vocab" || item.type === "vocabulary") {
+            if (item.type === 'vocab' || item.type === 'vocabulary') {
               return {
                 id: `vocab-${index}`,
                 uuid: item.id,
-                type: "vocabulary",
-                kana: item.kana || "",
+                type: 'vocabulary',
+                kana: item.kana || '',
                 kanji: item.kanji || null,
-                english: item.english || "",
-                lexical_category: item.lexical_category || "",
+                english: item.english || '',
+                lexical_category: item.lexical_category || '',
                 example_sentences: Array.isArray(item.example_sentences)
                   ? item.example_sentences
                   : [item.example_sentences].filter(Boolean),
-                srs_level: item.srs?.srs_level || 1
+                srs_level: item.srs?.srs_level || 1,
               };
-            } else if (item.type === "grammar") {
+            } else if (item.type === 'grammar') {
               return {
                 id: `grammar-${index}`,
                 uuid: item.id,
-                type: "grammar",
-                title: item.title || "",
-                description: item.description || "",
-                topic: item.topic || "",
+                type: 'grammar',
+                title: item.title || '',
+                description: item.description || '',
+                topic: item.topic || '',
                 example_sentences: Array.isArray(item.example_sentences)
                   ? item.example_sentences.map((ex) =>
-                      typeof ex === "string"
+                      typeof ex === 'string'
                         ? ex
-                        : `${ex.japanese || ""} (${ex.english || ""})`
+                        : `${ex.japanese || ''} (${ex.english || ''})`
                     )
                   : [],
-                srs_level: item.srs?.srs_level || 1
+                srs_level: item.srs?.srs_level || 1,
               };
             }
             return null;
@@ -143,7 +154,7 @@ export default function DueNow() {
         const result = await response.json();
 
         if (!result.success || !result.data) {
-          throw new Error(result.error || "Failed to load set data");
+          throw new Error(result.error || 'Failed to load set data');
         }
 
         const apiData = result.data;
@@ -151,12 +162,12 @@ export default function DueNow() {
         const setItemsAPI = apiData.items || [];
 
         if (!setInfoData) {
-          throw new Error("Invalid set data structure received from API");
+          throw new Error('Invalid set data structure received from API');
         }
 
         setSetInfo({
-          title: setInfoData.title || "Untitled Set",
-          description: setInfoData.description?.toString() || ""
+          title: setInfoData.title || 'Untitled Set',
+          description: setInfoData.description?.toString() || '',
         });
 
         // Extract and store set type
@@ -166,7 +177,7 @@ export default function DueNow() {
         const transformedItemData = transformItems(setItemsAPI);
 
         if (transformedItemData.length === 0) {
-          throw new Error("This set has no items to study");
+          throw new Error('This set has no items to study');
         }
 
         setItemData(transformedItemData);
@@ -177,11 +188,15 @@ export default function DueNow() {
         let distractorPool = transformedItemData; // Default to session items
 
         // Filter to grammar items to check if we need full set
-        const grammarSessionItems = transformedItemData.filter(item => item.type === "grammar");
+        const grammarSessionItems = transformedItemData.filter(
+          (item) => item.type === 'grammar'
+        );
 
         if (grammarSessionItems.length > 0 && grammarSessionItems.length < 4) {
           try {
-            const fullSetResponse = await fetch(`/api/database/v2/sets/retrieve-set/${id}`);
+            const fullSetResponse = await fetch(
+              `/api/database/v2/sets/retrieve-set/${id}`
+            );
 
             if (fullSetResponse.ok) {
               const fullSetResult = await fullSetResponse.json();
@@ -195,7 +210,10 @@ export default function DueNow() {
               }
             }
           } catch (error) {
-            console.warn('Failed to fetch full set for distractors, using session items:', error);
+            console.warn(
+              'Failed to fetch full set for distractors, using session items:',
+              error
+            );
           }
         }
 
@@ -218,18 +236,18 @@ export default function DueNow() {
 
         // Generate translation questions for vocabulary items only
         transformedItemData.forEach((item) => {
-          if (item.type === "vocabulary") {
+          if (item.type === 'vocabulary') {
             // English → Kana
             translation.push({
               id: `${item.id}-tr-en-kana`,
               originalId: item.id,
               uuid: item.uuid,
-              type: "vocabulary",
-              questionType: "English",
-              answerType: "Kana",
+              type: 'vocabulary',
+              questionType: 'English',
+              answerType: 'Kana',
               question: item.english,
               answer: item.kana,
-              hint: item.lexical_category
+              hint: item.lexical_category,
             });
 
             // Kana → English
@@ -237,12 +255,12 @@ export default function DueNow() {
               id: `${item.id}-tr-kana-en`,
               originalId: item.id,
               uuid: item.uuid,
-              type: "vocabulary",
-              questionType: "Kana",
-              answerType: "English",
+              type: 'vocabulary',
+              questionType: 'Kana',
+              answerType: 'English',
               question: item.kana,
               answer: item.english,
-              hint: item.lexical_category
+              hint: item.lexical_category,
             });
 
             // If kanji exists, add kanji question variations
@@ -254,12 +272,12 @@ export default function DueNow() {
                 id: `${item.id}-tr-kanji-en`,
                 originalId: item.id,
                 uuid: item.uuid,
-                type: "vocabulary",
-                questionType: "Kanji",
-                answerType: "English",
+                type: 'vocabulary',
+                questionType: 'Kanji',
+                answerType: 'English',
                 question: item.kanji,
                 answer: item.english,
-                hint: `${item.lexical_category} (${item.kana})`
+                hint: `${item.lexical_category} (${item.kana})`,
               });
 
               // Kanji → Kana (user types Kana)
@@ -267,12 +285,12 @@ export default function DueNow() {
                 id: `${item.id}-tr-kanji-kana`,
                 originalId: item.id,
                 uuid: item.uuid,
-                type: "vocabulary",
-                questionType: "Kanji",
-                answerType: "Kana",
+                type: 'vocabulary',
+                questionType: 'Kanji',
+                answerType: 'Kana',
                 question: item.kanji,
                 answer: item.kana,
-                hint: item.english
+                hint: item.english,
               });
             }
           }
@@ -280,14 +298,18 @@ export default function DueNow() {
 
         // Generate multiple choice questions for grammar items only using centralized utility
         // Filter to grammar items only, then use pregenerateMultipleChoiceItems
-        const grammarItems = transformedItemData.filter(item => item.type === "grammar");
+        const grammarItems = transformedItemData.filter(
+          (item) => item.type === 'grammar'
+        );
 
         // Filter distractor pool to grammar items as well
-        const grammarDistractorPool = distractorPool.filter(item => item.type === "grammar");
+        const grammarDistractorPool = distractorPool.filter(
+          (item) => item.type === 'grammar'
+        );
 
         const multipleChoice = pregenerateMultipleChoiceItems(
-          grammarItems,           // Grammar items to create questions for
-          grammarDistractorPool,  // Grammar items to pull distractors from
+          grammarItems, // Grammar items to create questions for
+          grammarDistractorPool, // Grammar items to pull distractors from
           3
         );
 
@@ -307,19 +329,19 @@ export default function DueNow() {
         setCurrentPhase(initialPhase);
 
         // Console log all arrays for development
-        console.log("=== SET DATA LOADED ===");
-        console.log("Set Info:", setInfoData);
-        console.log("Set Type:", setInfoData.set_type);
-        console.log("Transformed Item Data:", transformedItemData);
-        console.log("Total Items:", transformedItemData.length);
-        console.log("\n=== MULTIPLE CHOICE ARRAY ===");
-        console.log("MC Questions:", multipleChoice);
-        console.log("Total MC Questions:", multipleChoice.length);
-        console.log("\n=== TRANSLATION ARRAY ===");
-        console.log("Translation Questions:", translation);
-        console.log("Total Translation Questions:", translation.length);
+        console.log('=== SET DATA LOADED ===');
+        console.log('Set Info:', setInfoData);
+        console.log('Set Type:', setInfoData.set_type);
+        console.log('Transformed Item Data:', transformedItemData);
+        console.log('Total Items:', transformedItemData.length);
+        console.log('\n=== MULTIPLE CHOICE ARRAY ===');
+        console.log('MC Questions:', multipleChoice);
+        console.log('Total MC Questions:', multipleChoice.length);
+        console.log('\n=== TRANSLATION ARRAY ===');
+        console.log('Translation Questions:', translation);
+        console.log('Total Translation Questions:', translation.length);
       } catch (err) {
-        console.error("Error fetching set:", err);
+        console.error('Error fetching set:', err);
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -340,13 +362,13 @@ export default function DueNow() {
       if (multipleChoiceArray.length > 0) {
         phaseProgressObj['multiple-choice'] = {
           completedItems: new Set(),
-          totalUniqueItems: multipleChoiceArray.length
+          totalUniqueItems: multipleChoiceArray.length,
         };
       }
       if (translationArray.length > 0) {
         phaseProgressObj['translation'] = {
           completedItems: new Set(),
-          totalUniqueItems: translationArray.length
+          totalUniqueItems: translationArray.length,
         };
       }
       setPhaseProgress(phaseProgressObj);
@@ -382,7 +404,10 @@ export default function DueNow() {
   const handleMCOptionSelect = (selectedAnswer) => {
     const currentItem = activeMCArray[currentIndex];
     // Use shared validation utility
-    const isCorrect = validateMultipleChoice(selectedAnswer, currentItem.answer);
+    const isCorrect = validateMultipleChoice(
+      selectedAnswer,
+      currentItem.answer
+    );
 
     // Call handleAnswerSubmitted with MC answer data
     handleAnswerSubmitted({
@@ -392,7 +417,7 @@ export default function DueNow() {
       questionId: currentItem.id,
       questionType: currentItem.questionType,
       answerType: currentItem.answerType,
-      question: currentItem.question
+      question: currentItem.question,
     });
 
     // Show result
@@ -407,15 +432,18 @@ export default function DueNow() {
     const originalId = currentItem.originalId; // e.g., "vocab-1"
 
     // Record the answer
-    setAnsweredItems(prev => [...prev, {
-      ...answerData,
-      phase: currentPhase,
-      timestamp: Date.now(),
-      originalId: originalId
-    }]);
+    setAnsweredItems((prev) => [
+      ...prev,
+      {
+        ...answerData,
+        phase: currentPhase,
+        timestamp: Date.now(),
+        originalId: originalId,
+      },
+    ]);
 
     // Update session stats
-    setSessionStats(prev => {
+    setSessionStats((prev) => {
       const newCorrect = prev.correct + (answerData.isCorrect ? 1 : 0);
       const newIncorrect = prev.incorrect + (answerData.isCorrect ? 0 : 1);
       const newTotal = prev.totalAttempts + 1;
@@ -424,37 +452,42 @@ export default function DueNow() {
         correct: newCorrect,
         incorrect: newIncorrect,
         totalAttempts: newTotal,
-        accuracy: Math.round((newCorrect / newTotal) * 100)
+        accuracy: Math.round((newCorrect / newTotal) * 100),
       };
     });
 
     // Track mistakes per original item (not per question variation)
     if (!answerData.isCorrect) {
-      setMistakesPerItem(prev => ({
+      setMistakesPerItem((prev) => ({
         ...prev,
-        [originalId]: (prev[originalId] || 0) + 1
+        [originalId]: (prev[originalId] || 0) + 1,
       }));
     }
 
     // Track unique items completed for Translation phase
     // Each variation (e.g., "English → Kana") counts as a separate completion
     if (answerData.isCorrect) {
-      setPhaseProgress(prev => {
+      setPhaseProgress((prev) => {
         const newCompletedItems = new Set(prev[currentPhase].completedItems);
         newCompletedItems.add(currentItem.id); // Use item.id (e.g., "vocab-1-tr-en-kana")
         return {
           ...prev,
           [currentPhase]: {
             ...prev[currentPhase],
-            completedItems: newCompletedItems
-          }
+            completedItems: newCompletedItems,
+          },
         };
       });
     }
 
     // If incorrect, add current item to end of array
     if (!answerData.isCorrect) {
-      setActiveTranslationArray(prev => [...prev, currentItem]);
+      setActiveTranslationArray((prev) => {
+        const hasRetryQueued = prev
+          .slice(currentIndex + 1)
+          .some((item) => item.id === currentItem.id);
+        return hasRetryQueued ? prev : [...prev, currentItem];
+      });
     }
 
     // Store correctness for UI feedback
@@ -489,7 +522,7 @@ export default function DueNow() {
 
     // Check if there are more items in current phase
     if (currentIndex < currentArray.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+      setCurrentIndex((prev) => prev + 1);
     } else {
       handlePhaseComplete();
     }
@@ -498,44 +531,54 @@ export default function DueNow() {
   // Check if all variations of an item are completed and trigger level change
   // Returns true if level change was triggered, false otherwise
   const checkAndTriggerLevelChange = (originalId) => {
+    if (leveledItemIdsRef.current.has(originalId)) {
+      return false;
+    }
+
     // Find all question variations for this original item in the translation array
-    const questionsForItem = translationArray.filter(q => q.originalId === originalId);
+    const questionsForItem = translationArray.filter(
+      (q) => q.originalId === originalId
+    );
     const totalVariations = questionsForItem.length;
 
     // Count how many variations have been completed
-    const completedVariations = questionsForItem.filter(q =>
+    const completedVariations = questionsForItem.filter((q) =>
       phaseProgress.translation.completedItems.has(q.id)
     ).length;
 
     // If all variations are completed, calculate and show level change
     if (completedVariations === totalVariations) {
-      const originalItem = itemData.find(item => item.id === originalId);
+      const originalItem = itemData.find((item) => item.id === originalId);
       if (!originalItem) return false;
 
       const oldLevel = itemSRSLevels[originalId] || 1;
       const mistakes = mistakesPerItem[originalId] || 0;
 
       // Calculate new level: +1 if no mistakes, -1 if any mistakes
-      const newLevel = mistakes === 0 ? oldLevel + 1 : Math.max(1, oldLevel - 1);
+      const newLevel =
+        mistakes === 0 ? oldLevel + 1 : Math.max(1, oldLevel - 1);
 
       // Update the SRS level
-      setItemSRSLevels(prev => ({
+      setItemSRSLevels((prev) => ({
         ...prev,
-        [originalId]: newLevel
+        [originalId]: newLevel,
       }));
 
       // Show level change animation
       setCurrentLevelChange({
         item: originalItem,
         oldLevel,
-        newLevel
+        newLevel,
       });
       setShowLevelChange(true);
+      leveledItemIdsRef.current.add(originalId);
 
       // Save the new SRS level to the database (pass UUID, not generated ID)
       saveSRSLevel(originalItem.uuid, newLevel);
 
-      console.log(`SRS Level Update: ${originalId} - ${oldLevel} → ${newLevel} (mistakes: ${mistakes})`);
+      console.log(
+        `SRS Level Update: ${originalId} - ${oldLevel} → ${newLevel} (mistakes: ${mistakes})`
+      );
 
       return true; // Level change was triggered
     }
@@ -546,16 +589,19 @@ export default function DueNow() {
   // Save SRS level to database
   const saveSRSLevel = async (uuid, newLevel) => {
     try {
-      const response = await fetch(`/api/database/v2/srs/item/create-entry/${uuid}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          srs_level: newLevel,
-          scope: 'set_srs_flow_due_now_review'
-        })
-      });
+      const response = await fetch(
+        `/api/database/v2/srs/item/create-entry/${uuid}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            srs_level: newLevel,
+            scope: 'set_srs_flow_due_now_review',
+          }),
+        }
+      );
 
       const result = await response.json();
 
@@ -610,7 +656,7 @@ export default function DueNow() {
       questionId: currentItem.id,
       questionType: currentItem.questionType,
       answerType: currentItem.answerType,
-      question: currentItem.question
+      question: currentItem.question,
     });
   };
 
@@ -628,46 +674,47 @@ export default function DueNow() {
     const originalId = currentItem.originalId;
 
     // Remove last answered item
-    setAnsweredItems(prev => prev.slice(0, -1));
+    setAnsweredItems((prev) => prev.slice(0, -1));
 
     // Reverse stats changes (remove 1 incorrect, remove 1 total attempt)
     // Then add 1 correct (user claims they were correct)
-    setSessionStats(prev => {
+    setSessionStats((prev) => {
       const newIncorrect = Math.max(0, prev.incorrect - 1);
       const newCorrect = prev.correct + 1;
       const newTotal = prev.totalAttempts; // Same total, just switching incorrect to correct
-      const newAccuracy = newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0;
+      const newAccuracy =
+        newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0;
 
       return {
         ...prev,
         correct: newCorrect,
         incorrect: newIncorrect,
-        accuracy: newAccuracy
+        accuracy: newAccuracy,
       };
     });
 
     // Decrement mistake count (user claims they were correct)
-    setMistakesPerItem(prev => ({
+    setMistakesPerItem((prev) => ({
       ...prev,
-      [originalId]: Math.max(0, (prev[originalId] || 0) - 1)
+      [originalId]: Math.max(0, (prev[originalId] || 0) - 1),
     }));
 
     // Mark item as completed (user claims correct)
-    setPhaseProgress(prev => {
+    setPhaseProgress((prev) => {
       const newCompletedItems = new Set(prev[currentPhase].completedItems);
       newCompletedItems.add(currentItem.id); // Use item.id for individual variation
       return {
         ...prev,
         [currentPhase]: {
           ...prev[currentPhase],
-          completedItems: newCompletedItems
-        }
+          completedItems: newCompletedItems,
+        },
       };
     });
 
     // Remove the duplicate item from the end of the translation array
     // (it was added because the answer was marked incorrect)
-    setActiveTranslationArray(prev => prev.slice(0, -1));
+    setActiveTranslationArray((prev) => prev.slice(0, -1));
 
     // Reset UI state to allow retyping
     setShowResult(false);
@@ -710,7 +757,7 @@ export default function DueNow() {
         name: 'Multiple Choice',
         icon: IoSparkles,
         color: 'bg-purple-500',
-        borderColor: 'border-purple-500'
+        borderColor: 'border-purple-500',
       });
     }
 
@@ -720,14 +767,14 @@ export default function DueNow() {
         name: 'Translation',
         icon: FaDumbbell,
         color: 'bg-[#e30a5f]',
-        borderColor: 'border-[#e30a5f]'
+        borderColor: 'border-[#e30a5f]',
       });
     }
 
     return phaseArray;
   }, [multipleChoiceArray, translationArray]);
 
-  const currentPhaseIndex = phases.findIndex(p => p.id === currentPhase);
+  const currentPhaseIndex = phases.findIndex((p) => p.id === currentPhase);
   const currentPhaseConfig = phases[currentPhaseIndex];
   const CurrentPhaseIcon = currentPhaseConfig?.icon;
 
@@ -775,25 +822,18 @@ export default function DueNow() {
   return (
     <>
       <Head>
-        <title>Due Now - {setInfo?.title || "Study Set"}</title>
+        <title>Due Now - {setInfo?.title || 'Study Set'}</title>
         <meta name="description" content="Review cards that are due now" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
         {/* Only show sidebar during complete phase (summary) */}
         {currentPhase === 'complete' && <AcademySidebar />}
-
-        {/* SRS Level Change Animation Overlay */}
-        {showLevelChange && currentLevelChange && (
-          <LevelChangeView
-            item={currentLevelChange.item}
-            oldLevel={currentLevelChange.oldLevel}
-            newLevel={currentLevelChange.newLevel}
-            onComplete={handleLevelChangeComplete}
-          />
-        )}
 
         <main className="flex-1 flex flex-col p-3 sm:p-6 pt-[max(0.75rem,env(safe-area-inset-top))]">
           {/* Loading State */}
@@ -803,7 +843,9 @@ export default function DueNow() {
                 <div className="animate-pulse mb-4">
                   <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
                 </div>
-                <p className="text-gray-600 dark:text-white/70">Loading set data...</p>
+                <p className="text-gray-600 dark:text-white/70">
+                  Loading set data...
+                </p>
               </div>
             </div>
           ) : (
@@ -821,7 +863,16 @@ export default function DueNow() {
 
               {/* Show active phase components */}
               {currentPhase !== 'complete' && (
-                <>
+                <div className="relative flex-1">
+                  {showLevelChange && currentLevelChange && (
+                    <LevelChangeView
+                      item={currentLevelChange.item}
+                      oldLevel={currentLevelChange.oldLevel}
+                      newLevel={currentLevelChange.newLevel}
+                      onComplete={handleLevelChangeComplete}
+                    />
+                  )}
+
                   {/* Quiz Header */}
                   <SessionStatHeaderView
                     setTitle={setInfo?.title}
@@ -842,37 +893,43 @@ export default function DueNow() {
                   />
 
                   {/* Multiple Choice Phase */}
-                  {currentPhase === 'multiple-choice' && activeMCArray.length > 0 && (
-                    <MultipleChoiceView
-                      currentItem={activeMCArray[currentIndex]}
-                      uniqueOptions={currentShuffledOptions}
-                      selectedOption={selectedOption}
-                      showResult={showResult}
-                      isCorrect={isCorrect}
-                      isTransitioning={false}
-                      isLastQuestion={currentIndex === activeMCArray.length - 1}
-                      onOptionSelect={handleMCOptionSelect}
-                      onNext={handleNext}
-                    />
-                  )}
+                  {currentPhase === 'multiple-choice' &&
+                    activeMCArray.length > 0 && (
+                      <MultipleChoiceView
+                        currentItem={activeMCArray[currentIndex]}
+                        uniqueOptions={currentShuffledOptions}
+                        selectedOption={selectedOption}
+                        showResult={showResult}
+                        isCorrect={isCorrect}
+                        isTransitioning={false}
+                        isLastQuestion={
+                          currentIndex === activeMCArray.length - 1
+                        }
+                        onOptionSelect={handleMCOptionSelect}
+                        onNext={handleNext}
+                      />
+                    )}
 
                   {/* Translation Phase */}
-                  {currentPhase === 'translation' && activeTranslationArray.length > 0 && (
-                    <TypedResponseView
-                      currentItem={activeTranslationArray[currentIndex]}
-                      userAnswer={userAnswer}
-                      showResult={showResult}
-                      isCorrect={isCorrect}
-                      showHint={false}
-                      isLastQuestion={currentIndex === activeTranslationArray.length - 1}
-                      inputRef={translationInputRef}
-                      onInputChange={(e) => setUserAnswer(e.target.value)}
-                      onCheckAnswer={handleTranslationCheck}
-                      onNext={handleNext}
-                      onRetry={handleTranslationRetry}
-                    />
-                  )}
-                </>
+                  {currentPhase === 'translation' &&
+                    activeTranslationArray.length > 0 && (
+                      <TypedResponseView
+                        currentItem={activeTranslationArray[currentIndex]}
+                        userAnswer={userAnswer}
+                        showResult={showResult}
+                        isCorrect={isCorrect}
+                        showHint={false}
+                        isLastQuestion={
+                          currentIndex === activeTranslationArray.length - 1
+                        }
+                        inputRef={translationInputRef}
+                        onInputChange={(e) => setUserAnswer(e.target.value)}
+                        onCheckAnswer={handleTranslationCheck}
+                        onNext={handleNext}
+                        onRetry={handleTranslationRetry}
+                      />
+                    )}
+                </div>
               )}
             </>
           )}

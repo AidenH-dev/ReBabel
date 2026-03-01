@@ -1,4 +1,4 @@
-import { FaCheckCircle, FaTimesCircle, FaRedo } from "react-icons/fa";
+import { FaCheckCircle, FaTimesCircle, FaRedo } from 'react-icons/fa';
 
 /**
  * SummaryView - Shared presentational component for session completion summary
@@ -29,7 +29,7 @@ export default function SummaryView({
   animateAccuracy = false,
   onRetry,
   onBackToSet,
-  completionTitle
+  completionTitle,
 }) {
   // Calculate total questions from all answered items (includes all phases)
   const totalQuestions = answeredItems.length;
@@ -96,7 +96,11 @@ export default function SummaryView({
                 <div className="relative w-full h-6 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden shadow-inner">
                   <div
                     className="h-full relative overflow-hidden rounded-full transition-all duration-[1500ms] ease-out"
-                    style={{ width: animateAccuracy ? `${sessionStats.accuracy}%` : '0%' }}
+                    style={{
+                      width: animateAccuracy
+                        ? `${sessionStats.accuracy}%`
+                        : '0%',
+                    }}
                   >
                     {/* Base gradient */}
                     <div className="absolute inset-0 bg-gradient-to-r from-[#e30a5f] via-[#f41567] to-[#e30a5f]"></div>
@@ -105,8 +109,9 @@ export default function SummaryView({
                     <div
                       className="absolute inset-0 opacity-40"
                       style={{
-                        background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.8) 0%, transparent 70%)',
-                        animation: 'liquid 3s ease-in-out infinite'
+                        background:
+                          'radial-gradient(ellipse at center, rgba(255,255,255,0.8) 0%, transparent 70%)',
+                        animation: 'liquid 3s ease-in-out infinite',
                       }}
                     ></div>
 
@@ -114,7 +119,7 @@ export default function SummaryView({
                     <div
                       className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
                       style={{
-                        animation: 'shimmer 2s infinite linear'
+                        animation: 'shimmer 2s infinite linear',
                       }}
                     ></div>
 
@@ -122,51 +127,94 @@ export default function SummaryView({
                     <div
                       className="absolute bottom-0 left-1/4 w-2 h-2 bg-white/50 rounded-full"
                       style={{
-                        animation: 'bubble1 4s ease-in-out infinite'
+                        animation: 'bubble1 4s ease-in-out infinite',
                       }}
                     ></div>
                     <div
                       className="absolute bottom-0 left-1/2 w-1.5 h-1.5 bg-white/40 rounded-full"
                       style={{
-                        animation: 'bubble2 5s ease-in-out infinite 1s'
+                        animation: 'bubble2 5s ease-in-out infinite 1s',
                       }}
                     ></div>
                     <div
                       className="absolute bottom-0 left-3/4 w-2.5 h-2.5 bg-white/30 rounded-full"
                       style={{
-                        animation: 'bubble3 3.5s ease-in-out infinite 0.5s'
+                        animation: 'bubble3 3.5s ease-in-out infinite 0.5s',
                       }}
                     ></div>
                   </div>
                 </div>
                 <style jsx>{`
                   @keyframes shimmer {
-                    0% { transform: translateX(-100%); }
-                    100% { transform: translateX(100%); }
+                    0% {
+                      transform: translateX(-100%);
+                    }
+                    100% {
+                      transform: translateX(100%);
+                    }
                   }
                   @keyframes liquid {
-                    0%, 100% { transform: translateX(-10%) translateY(0) scale(1); }
-                    25% { transform: translateX(10%) translateY(-5%) scale(1.1); }
-                    50% { transform: translateX(-5%) translateY(5%) scale(0.9); }
-                    75% { transform: translateX(15%) translateY(-3%) scale(1.05); }
+                    0%,
+                    100% {
+                      transform: translateX(-10%) translateY(0) scale(1);
+                    }
+                    25% {
+                      transform: translateX(10%) translateY(-5%) scale(1.1);
+                    }
+                    50% {
+                      transform: translateX(-5%) translateY(5%) scale(0.9);
+                    }
+                    75% {
+                      transform: translateX(15%) translateY(-3%) scale(1.05);
+                    }
                   }
                   @keyframes bubble1 {
-                    0% { transform: translateY(0) scale(0); opacity: 0; }
-                    10% { opacity: 1; }
-                    90% { opacity: 0.8; }
-                    100% { transform: translateY(-24px) scale(1); opacity: 0; }
+                    0% {
+                      transform: translateY(0) scale(0);
+                      opacity: 0;
+                    }
+                    10% {
+                      opacity: 1;
+                    }
+                    90% {
+                      opacity: 0.8;
+                    }
+                    100% {
+                      transform: translateY(-24px) scale(1);
+                      opacity: 0;
+                    }
                   }
                   @keyframes bubble2 {
-                    0% { transform: translateY(0) scale(0); opacity: 0; }
-                    10% { opacity: 1; }
-                    90% { opacity: 0.6; }
-                    100% { transform: translateY(-24px) scale(1.2); opacity: 0; }
+                    0% {
+                      transform: translateY(0) scale(0);
+                      opacity: 0;
+                    }
+                    10% {
+                      opacity: 1;
+                    }
+                    90% {
+                      opacity: 0.6;
+                    }
+                    100% {
+                      transform: translateY(-24px) scale(1.2);
+                      opacity: 0;
+                    }
                   }
                   @keyframes bubble3 {
-                    0% { transform: translateY(0) scale(0); opacity: 0; }
-                    10% { opacity: 1; }
-                    90% { opacity: 0.5; }
-                    100% { transform: translateY(-24px) scale(0.8); opacity: 0; }
+                    0% {
+                      transform: translateY(0) scale(0);
+                      opacity: 0;
+                    }
+                    10% {
+                      opacity: 1;
+                    }
+                    90% {
+                      opacity: 0.5;
+                    }
+                    100% {
+                      transform: translateY(-24px) scale(0.8);
+                      opacity: 0;
+                    }
                   }
                 `}</style>
               </div>
@@ -216,16 +264,24 @@ export default function SummaryView({
                   <div className="flex-1">
                     <div className="flex items-center gap-1 mb-1">
                       {item.isCorrect ? (
-                        <FaCheckCircle className="text-green-500 flex-shrink-0" style={{ fontSize: '10px' }} />
+                        <FaCheckCircle
+                          className="text-green-500 flex-shrink-0"
+                          style={{ fontSize: '10px' }}
+                        />
                       ) : (
-                        <FaTimesCircle className="text-red-500 flex-shrink-0" style={{ fontSize: '10px' }} />
+                        <FaTimesCircle
+                          className="text-red-500 flex-shrink-0"
+                          style={{ fontSize: '10px' }}
+                        />
                       )}
                       <span className="text-xs text-gray-500 dark:text-white/50">
                         {item.questionType} → {item.answerType}
                       </span>
                     </div>
                     <div className="mb-1">
-                      <span className="text-xs text-gray-600 dark:text-white/60">Q: </span>
+                      <span className="text-xs text-gray-600 dark:text-white/60">
+                        Q:{' '}
+                      </span>
                       <span className="font-semibold text-xs text-gray-900 dark:text-white">
                         {item.question}
                       </span>
@@ -233,7 +289,9 @@ export default function SummaryView({
                     <div className="space-y-0.5">
                       {!item.isCorrect && (
                         <div>
-                          <span className="text-xs text-gray-600 dark:text-white/60">You: </span>
+                          <span className="text-xs text-gray-600 dark:text-white/60">
+                            You:{' '}
+                          </span>
                           <span className="text-xs text-red-600 dark:text-red-400 line-through">
                             {item.userAnswer}
                           </span>
@@ -243,12 +301,16 @@ export default function SummaryView({
                         <span className="text-xs text-gray-600 dark:text-white/60">
                           {item.isCorrect ? 'You: ' : 'Answer: '}
                         </span>
-                        <span className={`font-medium text-xs ${
-                          item.isCorrect
-                            ? 'text-green-700 dark:text-green-300'
-                            : 'text-gray-900 dark:text-white'
-                        }`}>
-                          {item.correctAnswer}
+                        <span
+                          className={`font-medium text-xs ${
+                            item.isCorrect
+                              ? 'text-green-700 dark:text-green-300'
+                              : 'text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          {item.isCorrect
+                            ? item.userAnswer
+                            : item.correctAnswer}
                         </span>
                       </div>
                     </div>

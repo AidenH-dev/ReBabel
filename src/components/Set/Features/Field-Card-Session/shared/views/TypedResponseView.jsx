@@ -1,14 +1,14 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import {
   FaArrowRight,
   FaTimes,
   FaCheckCircle,
   FaTimesCircle,
   FaRedo,
-  FaCheck
-} from "react-icons/fa";
-import { toKana } from "wanakana";
-import KeyboardShortcutHint from "./KeyboardShortcutHint";
+  FaCheck,
+} from 'react-icons/fa';
+import { toKana } from 'wanakana';
+import KeyboardShortcutHint from './KeyboardShortcutHint';
 
 /**
  * TypedResponseView - Shared presentational component for typed response questions
@@ -45,7 +45,7 @@ export default function TypedResponseView({
   onInputChange,
   onCheckAnswer,
   onNext,
-  onRetry
+  onRetry,
 }) {
   // Auto-focus input when component loads or question changes
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function TypedResponseView({
   // Global Enter key handler: submits first, then advances
   useEffect(() => {
     const handleGlobalKeyDown = (e) => {
-      if (e.key !== "Enter" || e.shiftKey) return;
+      if (e.key !== 'Enter' || e.shiftKey) return;
       e.preventDefault();
 
       if (!showResult) {
@@ -69,14 +69,14 @@ export default function TypedResponseView({
       }
     };
 
-    window.addEventListener("keydown", handleGlobalKeyDown);
-    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [showResult, userAnswer, onCheckAnswer, onNext]);
 
   if (!currentItem) return null;
 
   // Helper: does this question expect Kana?
-  const expectsKana = (item) => item?.answerType === "Kana";
+  const expectsKana = (item) => item?.answerType === 'Kana';
 
   // Input change handler with conditional kana conversion
   const handleInputChange = (e) => {
@@ -89,8 +89,8 @@ export default function TypedResponseView({
         ...e,
         target: {
           ...e.target,
-          value: convertedValue
-        }
+          value: convertedValue,
+        },
       };
       onInputChange(syntheticEvent);
     } else {
@@ -102,7 +102,7 @@ export default function TypedResponseView({
     <div className="flex-1 flex flex-col items-center justify-center px-2 sm:px-0">
       <div className="w-full max-w-3xl">
         {/* Question Card */}
-        <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
+        <div className="relative z-10 bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
           <div className="mb-2 text-xs sm:text-sm text-gray-500 dark:text-white/50">
             {currentItem.questionType} → {currentItem.answerType}
           </div>
@@ -127,8 +127,8 @@ export default function TypedResponseView({
               disabled={showResult}
               placeholder={
                 expectsKana(currentItem)
-                  ? "Type in romaji: ka → か, shi → し, kyo → きょ"
-                  : "Type your answer..."
+                  ? 'Type in romaji: ka → か, shi → し, kyo → きょ'
+                  : 'Type your answer...'
               }
               inputMode="text"
               autoComplete="off"
@@ -137,9 +137,9 @@ export default function TypedResponseView({
                 ${
                   showResult
                     ? isCorrect
-                      ? "border-green-500 bg-green-50 dark:bg-green-900/20"
-                      : "border-red-500 bg-red-50 dark:bg-red-900/20"
-                    : "border-gray-300 dark:border-white/20 bg-white dark:bg-white/5"
+                      ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                      : 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                    : 'border-gray-300 dark:border-white/20 bg-white dark:bg-white/5'
                 }
                 text-gray-900 dark:text-white
                 placeholder-gray-400 dark:placeholder-white/40
@@ -150,7 +150,7 @@ export default function TypedResponseView({
             {showResult && (
               <div
                 className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
-                  isCorrect ? "text-green-500" : "text-red-500"
+                  isCorrect ? 'text-green-500' : 'text-red-500'
                 }`}
               >
                 {isCorrect ? (
@@ -168,8 +168,8 @@ export default function TypedResponseView({
               <div
                 className={`p-3 sm:p-4 rounded-lg text-sm sm:text-base ${
                   isCorrect
-                    ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                    : "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+                    : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
                 }`}
               >
                 {isCorrect ? (
@@ -184,7 +184,7 @@ export default function TypedResponseView({
                       <span className="font-semibold">Incorrect</span>
                     </div>
                     <div className="text-xs sm:text-sm">
-                      The correct answer is:{" "}
+                      The correct answer is:{' '}
                       <span className="font-bold">{currentItem.answer}</span>
                     </div>
                   </div>
@@ -202,8 +202,8 @@ export default function TypedResponseView({
               disabled={!userAnswer.trim()}
               className={`w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
                 userAnswer.trim()
-                  ? "bg-[#e30a5f] hover:bg-[#f41567] text-white active:scale-95"
-                  : "bg-gray-200 dark:bg-white/10 text-gray-400 dark:text-white/30 cursor-not-allowed"
+                  ? 'bg-[#e30a5f] hover:bg-[#f41567] text-white active:scale-95'
+                  : 'bg-gray-200 dark:bg-white/10 text-gray-400 dark:text-white/30 cursor-not-allowed'
               }`}
             >
               Check Answer
@@ -219,8 +219,7 @@ export default function TypedResponseView({
                     focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2
                     focus:ring-offset-white dark:focus:ring-pink-400 dark:focus:ring-offset-gray-900"
                 >
-                  <FaRedo className="inline mr-2" />
-                  I was correct
+                  <FaRedo className="inline mr-2" />I was correct
                 </button>
               )}
 
@@ -239,8 +238,8 @@ export default function TypedResponseView({
                   onClick={onNext}
                   className={`w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base ${
                     isCorrect
-                      ? "bg-[#e30a5f] hover:bg-[#f41567] text-white"
-                      : "bg-gray-600 hover:bg-gray-700 text-white"
+                      ? 'bg-[#e30a5f] hover:bg-[#f41567] text-white'
+                      : 'bg-gray-600 hover:bg-gray-700 text-white'
                   }`}
                 >
                   View Results <FaArrowRight className="inline ml-2" />
@@ -253,7 +252,7 @@ export default function TypedResponseView({
         {/* Keyboard Shortcuts */}
         <KeyboardShortcutHint
           className="mt-6 sm:mt-8"
-          shortcuts={[{ key: "Enter", label: "Submit/Continue" }]}
+          shortcuts={[{ key: 'Enter', label: 'Submit/Continue' }]}
         />
       </div>
     </div>

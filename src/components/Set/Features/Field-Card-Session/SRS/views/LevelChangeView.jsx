@@ -1,12 +1,11 @@
-// components/pages/academy/sets/SRSLearnNewSet/LevelChange/SRSLevelChange.jsx
 import { useEffect, useState, useRef } from 'react';
-import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 export default function SRSLevelChange({
   item,
   oldLevel,
   newLevel,
-  onComplete
+  onComplete,
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -15,194 +14,133 @@ export default function SRSLevelChange({
   const levelIncreased = newLevel > oldLevel;
   const levelDecreased = newLevel < oldLevel;
 
-  // Function to immediately dismiss and continue
-  const handleDismiss = () => {
-    // Clear all timers
-    Object.values(timersRef.current).forEach(timer => clearTimeout(timer));
-    timersRef.current = {};
-
-    // Immediately hide and complete
-    setIsVisible(false);
-    if (onComplete) onComplete();
-  };
-
   useEffect(() => {
-    // Trigger entrance animation
-    timersRef.current.showTimer = setTimeout(() => {
+    const timers = timersRef.current;
+
+    timers.showTimer = setTimeout(() => {
       setIsVisible(true);
-    }, 100);
+    }, 80);
 
-    // Start number animation
-    timersRef.current.animateTimer = setTimeout(() => {
+    timers.animateTimer = setTimeout(() => {
       setIsAnimating(true);
-    }, 800);
+    }, 450);
 
-    // Auto-dismiss after showing
-    timersRef.current.hideTimer = setTimeout(() => {
+    timers.hideTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 3800);
+    }, 1800);
 
-    // Call onComplete to continue to next item
-    timersRef.current.completeTimer = setTimeout(() => {
+    timers.completeTimer = setTimeout(() => {
       if (onComplete) onComplete();
-    }, 4300);
+    }, 2100);
 
     return () => {
-      Object.values(timersRef.current).forEach(timer => clearTimeout(timer));
+      Object.values(timers).forEach((timer) => clearTimeout(timer));
     };
   }, [onComplete]);
 
-  // Keyboard shortcut: Enter to dismiss
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Enter') {
-        handleDismiss();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onComplete]);
-
-  // Get display text for item
   const getItemDisplay = () => {
     if (item.type === 'vocabulary') {
       return item.kanji || item.kana;
-    } else if (item.type === 'grammar') {
+    }
+    if (item.type === 'grammar') {
       return item.title;
     }
     return '';
   };
 
-  // Get subtitle text
   const getSubtitle = () => {
     if (item.type === 'vocabulary') {
       return item.english;
-    } else if (item.type === 'grammar') {
+    }
+    if (item.type === 'grammar') {
       return item.topic;
     }
     return '';
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      {/* Animated Card */}
-      <div
-        className={`
-          transform transition-all duration-500 ease-out
-          ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}
-        `}
-      >
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
-          {/* Item Display */}
-          <div className="text-center mb-6">
-            <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              {getItemDisplay()}
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              {getSubtitle()}
-            </div>
-          </div>
+  const changeLabel = levelIncreased
+    ? 'Level Up'
+    : levelDecreased
+      ? 'Level Down'
+      : 'Level Stable';
 
-          {/* Level Change Display */}
-          <div className="flex items-center justify-center gap-4 mb-6">
-            {/* Old Level */}
-            <div className="text-center">
-              <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
-                Previous
+  const toneClass = levelIncreased
+    ? 'border-emerald-500/80 text-emerald-700 dark:text-emerald-300'
+    : levelDecreased
+      ? 'border-red-500/80 text-red-700 dark:text-red-300'
+      : 'border-gray-500/70 text-gray-700 dark:text-gray-300';
+
+  return (
+    <div className="pointer-events-none absolute left-1/2 top-20 z-20 -translate-x-1/2 sm:top-24 lg:left-[calc(50%+24.5rem)] lg:top-1/2 lg:z-0 lg:-translate-x-0 lg:-translate-y-1/2 xl:left-[calc(50%+25rem)]">
+      <div
+        className={`transform transition-all duration-700 ease-out ${
+          isVisible ? 'translate-y-0 opacity-100' : '-translate-y-8 opacity-0'
+        }`}
+      >
+        <div
+          className={`w-[calc(100vw-1.5rem)] max-w-2xl rounded-xl border-2 border-dashed bg-white/90 px-3 py-3 shadow-lg backdrop-blur-sm sm:px-4 sm:py-3.5 lg:w-40 lg:max-w-none lg:px-4 lg:py-4 xl:w-48 dark:bg-[#141f25]/90 ${toneClass}`}
+        >
+          <div className="flex items-center justify-between gap-3 sm:gap-5 lg:flex-col lg:items-start lg:gap-4">
+            <div className="min-w-0 lg:w-full">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.16em] opacity-80 sm:text-xs lg:text-sm">
+                SRS {changeLabel}
               </div>
+              <div className="truncate text-base font-bold text-gray-900 dark:text-white sm:text-lg lg:whitespace-normal lg:break-words lg:text-lg lg:leading-tight">
+                {getItemDisplay()}
+              </div>
+              <div className="truncate text-xs text-gray-600 dark:text-white/70 sm:text-sm lg:mt-1 lg:whitespace-normal lg:break-words lg:text-sm lg:leading-tight">
+                {getSubtitle()}
+              </div>
+            </div>
+
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3 lg:w-full lg:flex-col lg:items-center lg:gap-1.5 lg:border-t lg:border-current/20 lg:pt-3">
               <div
-                className={`
-                  text-4xl font-bold transition-all duration-500
-                  ${isAnimating ? 'opacity-50 scale-90' : 'opacity-100 scale-100'}
-                  ${levelDecreased ? 'text-red-500' : 'text-gray-400 dark:text-gray-500'}
-                `}
+                className={`text-xl font-bold text-gray-500 dark:text-gray-300 sm:text-2xl lg:text-2xl ${
+                  levelIncreased ? 'lg:order-3' : 'lg:order-1'
+                }`}
               >
                 {oldLevel}
               </div>
-            </div>
 
-            {/* Arrow */}
-            <div className="flex items-center">
               {levelIncreased && (
                 <div
-                  className={`
-                    transform transition-all duration-500
-                    ${isAnimating ? 'scale-110 translate-y-[-4px]' : 'scale-100'}
-                  `}
+                  className={`transform transition-all duration-300 lg:order-2 ${
+                    isAnimating ? '-translate-y-1 scale-110' : 'scale-100'
+                  }`}
                 >
-                  <FaArrowUp className="text-4xl text-green-500" />
+                  <FaArrowUp className="text-lg text-emerald-500 sm:text-xl lg:text-xl" />
                 </div>
               )}
+
               {levelDecreased && (
                 <div
-                  className={`
-                    transform transition-all duration-500
-                    ${isAnimating ? 'scale-110 translate-y-[4px]' : 'scale-100'}
-                  `}
+                  className={`transform transition-all duration-300 lg:order-2 ${
+                    isAnimating ? 'translate-y-1 scale-110' : 'scale-100'
+                  }`}
                 >
-                  <FaArrowDown className="text-4xl text-red-500" />
+                  <FaArrowDown className="text-lg text-red-500 sm:text-xl lg:text-xl" />
                 </div>
               )}
-              {!levelIncreased && !levelDecreased && (
-                <div className="text-4xl text-gray-400 dark:text-gray-500">→</div>
-              )}
-            </div>
 
-            {/* New Level */}
-            <div className="text-center">
-              <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
-                New
-              </div>
+              {!levelIncreased && !levelDecreased && (
+                <div className="text-lg text-gray-500 dark:text-gray-300 sm:text-xl lg:order-2 lg:text-xl">
+                  -
+                </div>
+              )}
+
               <div
-                className={`
-                  text-4xl font-bold transition-all duration-500
-                  ${isAnimating ? 'opacity-100 scale-110' : 'opacity-50 scale-90'}
-                  ${levelIncreased ? 'text-green-500' : levelDecreased ? 'text-red-500' : 'text-gray-700 dark:text-gray-300'}
-                `}
+                className={`text-xl font-bold transition-all duration-300 sm:text-2xl lg:text-2xl ${
+                  isAnimating ? 'scale-110 opacity-100' : 'scale-95 opacity-80'
+                } ${
+                  levelIncreased
+                    ? 'text-emerald-600 dark:text-emerald-400'
+                    : levelDecreased
+                      ? 'text-red-600 dark:text-red-400'
+                      : 'text-gray-800 dark:text-white'
+                } ${levelIncreased ? 'lg:order-1' : 'lg:order-3'}`}
               >
                 {newLevel}
               </div>
-            </div>
-          </div>
-
-          {/* Status Message */}
-          <div className="text-center">
-            {levelIncreased && (
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-green-700 dark:text-green-400">
-                  Perfect! Level increased
-                </span>
-              </div>
-            )}
-            {levelDecreased && (
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-red-700 dark:text-red-400">
-                  Keep practicing! Level decreased
-                </span>
-              </div>
-            )}
-            {!levelIncreased && !levelDecreased && (
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700/30 rounded-lg">
-                <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-400">
-                  Level maintained
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* SRS Info */}
-          <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
-              {levelIncreased && `Next review scheduled further out`}
-              {levelDecreased && `You'll see this item sooner`}
-              {!levelIncreased && !levelDecreased && `Review schedule unchanged`}
-            </div>
-            <div className="text-xs text-gray-400 dark:text-gray-500 text-center mt-2">
-              Press Enter to continue
             </div>
           </div>
         </div>

@@ -90,6 +90,7 @@ export default function FastReview() {
 
   // ============ REFS ============
   const translationInputRef = useRef(null);
+  const leveledItemIdsRef = useRef(new Set());
 
   // Helper function to transform API items to internal format
   // Preserves setId and setTitle for multi-set tracking
@@ -433,7 +434,12 @@ export default function FastReview() {
 
     // If incorrect, add current item to end of array
     if (!answerData.isCorrect) {
-      setActiveTranslationArray((prev) => [...prev, currentItem]);
+      setActiveTranslationArray((prev) => {
+        const hasRetryQueued = prev
+          .slice(currentIndex + 1)
+          .some((item) => item.id === currentItem.id);
+        return hasRetryQueued ? prev : [...prev, currentItem];
+      });
     }
 
     setIsCorrect(answerData.isCorrect);
@@ -468,6 +474,10 @@ export default function FastReview() {
 
   // Check if all variations of an item are completed and trigger level change
   const checkAndTriggerLevelChange = (originalId) => {
+    if (leveledItemIdsRef.current.has(originalId)) {
+      return false;
+    }
+
     const questionsForItem = translationArray.filter(
       (q) => q.originalId === originalId
     );
@@ -498,6 +508,7 @@ export default function FastReview() {
         newLevel,
       });
       setShowLevelChange(true);
+      leveledItemIdsRef.current.add(originalId);
 
       saveSRSLevel(originalItem.uuid, newLevel);
 
@@ -739,16 +750,6 @@ export default function FastReview() {
         {/* Only show sidebar during complete phase (summary) */}
         {currentPhase === 'complete' && <AcademySidebar />}
 
-        {/* SRS Level Change Animation Overlay */}
-        {showLevelChange && currentLevelChange && (
-          <LevelChangeView
-            item={currentLevelChange.item}
-            oldLevel={currentLevelChange.oldLevel}
-            newLevel={currentLevelChange.newLevel}
-            onComplete={handleLevelChangeComplete}
-          />
-        )}
-
         <main className="flex-1 flex flex-col p-3 sm:p-6 pt-[max(0.75rem,env(safe-area-inset-top))]">
           {/* Loading State */}
           {isLoading ? (
@@ -778,7 +779,16 @@ export default function FastReview() {
 
               {/* Show active phase components */}
               {currentPhase !== 'complete' && (
-                <>
+                <div className="relative flex-1">
+                  {showLevelChange && currentLevelChange && (
+                    <LevelChangeView
+                      item={currentLevelChange.item}
+                      oldLevel={currentLevelChange.oldLevel}
+                      newLevel={currentLevelChange.newLevel}
+                      onComplete={handleLevelChangeComplete}
+                    />
+                  )}
+
                   {/* Quiz Header */}
                   <SessionStatHeaderView
                     setTitle="Fast Review"
@@ -835,7 +845,7 @@ export default function FastReview() {
                         onRetry={handleTranslationRetry}
                       />
                     )}
-                </>
+                </div>
               )}
             </>
           )}
