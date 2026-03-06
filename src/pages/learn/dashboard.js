@@ -208,7 +208,7 @@ export default function DashboardPage() {
 
           <div className="p-4">
             <div className="max-w-5xl mx-auto space-y-4">
-              <div>
+              <div className="hidden md:block">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                   Hello!
                 </h1>
@@ -216,6 +216,7 @@ export default function DashboardPage() {
                   Ready to continue your Japanese learning journey?
                 </p>
               </div>
+              <div className="md:hidden h-2" aria-hidden="true" />
 
               {/* Compact Stats Row - Desktop only */}
               <div className="hidden md:grid md:grid-cols-4 gap-3">
@@ -372,7 +373,7 @@ export default function DashboardPage() {
                   <div className="h-8 w-24 rounded-lg bg-black/5 dark:bg-white/5 animate-pulse" />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {Array.from({ length: 8 }).map((_, i) => (
+                  {Array.from({ length: 3 }).map((_, i) => (
                     <div
                       key={i}
                       className="animate-pulse rounded-lg bg-black/5 dark:bg-white/5 h-24"
@@ -400,7 +401,7 @@ export default function DashboardPage() {
         <div className="px-4 md:p-4">
           <div className="max-w-5xl mx-auto space-y-4">
             {/* Header */}
-            <div>
+            <div className="hidden md:block">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                 {greeting}
                 {/*userData.name ? `, ${userData.name}` : ''*/}
@@ -409,6 +410,7 @@ export default function DashboardPage() {
                 Ready to continue your Japanese learning journey?
               </p>
             </div>
+            <div className="md:hidden h-2" aria-hidden="true" />
 
             {/* Compact Stats Row - Desktop only */}
             <div className="hidden md:grid md:grid-cols-4 gap-3">
@@ -646,7 +648,7 @@ export default function DashboardPage() {
               {/* Sets */}
               {setsLoading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {Array.from({ length: 8 }).map((_, i) => (
+                  {Array.from({ length: 3 }).map((_, i) => (
                     <div
                       key={i}
                       className="animate-pulse rounded-lg bg-black/5 dark:bg-white/5 h-24"

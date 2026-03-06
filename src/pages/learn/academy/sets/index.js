@@ -465,89 +465,68 @@ export default function VocabularyDashboard() {
             </div>
 
             {/* Fast Review Widget - Right Justified */}
-            {!isLoadingDueCount &&
-              (totalDueItems > 0 ? (
-                <div className="flex w-full items-center justify-between bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-xl shadow-md px-4 py-2 text-white">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-10 h-10 bg-white/20 rounded-lg">
-                      <HiOutlineLightningBolt className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold">Fast Review</p>
-                      <p className="text-xs text-white/70">
-                        Review all due item(s)
-                      </p>
-                    </div>
+            {!isLoadingDueCount && totalDueItems > 0 && (
+              <div className="flex w-full items-center justify-between bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-xl shadow-md px-4 py-2 text-white">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center w-10 h-10 bg-white/20 rounded-lg">
+                    <HiOutlineLightningBolt className="w-5 h-5" />
                   </div>
-                  <button
-                    onClick={handleStartFastReview}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-white text-[#667eea] hover:bg-white/90"
-                  >
-                    <MdAutorenew className="text-base" />
-                    Review{' '}
-                    <span className="text-sm font-md">{totalDueItems}</span>
-                  </button>
-                </div>
-              ) : (
-                <div className="hidden md:flex w-full items-center justify-between bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm px-4 py-2 border border-black/5 dark:border-white/10">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-10 h-10 bg-emerald-50 dark:bg-emerald-500/15 rounded-lg">
-                      <MdAutorenew className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-black dark:text-white">
-                        Fast Review
-                      </p>
-                      <p className="text-xs text-black/60 dark:text-white/60">
-                        You are all caught up right now.
-                      </p>
-                    </div>
+                  <div>
+                    <p className="text-sm font-bold">Fast Review</p>
+                    <p className="text-xs text-white/70">
+                      Review all due item(s)
+                    </p>
                   </div>
                 </div>
-              ))}
+                <button
+                  onClick={handleStartFastReview}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-white text-[#667eea] hover:bg-white/90"
+                >
+                  <MdAutorenew className="text-base" />
+                  Review{' '}
+                  <span className="text-sm font-md">{totalDueItems}</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
         {/* Fast Review Widget - Mobile */}
-        {!isLoadingDueCount &&
-          (totalDueItems > 0 ? (
-            <div className="sm:hidden w-full max-w-6xl mx-auto mb-4">
-              <div className="bg-gradient-to-r from-[#667eea]/80 to-[#764ba2]/80 rounded-xl shadow-md px-4 py-4 text-white">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white/20 rounded-lg">
-                      <HiOutlineLightningBolt className="w-5 h-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <h2 className="text-sm font-bold truncate">
-                        Fast Review
-                      </h2>
-                      <p className="text-xs text-white/70 truncate">
-                        Review All SRS Item(s) Due
-                      </p>
-                    </div>
+        {!isLoadingDueCount && totalDueItems > 0 && (
+          <div className="sm:hidden w-full max-w-6xl mx-auto mb-4">
+            <div className="bg-gradient-to-r from-[#667eea]/80 to-[#764ba2]/80 rounded-xl shadow-md px-4 py-4 text-white">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white/20 rounded-lg">
+                    <HiOutlineLightningBolt className="w-5 h-5" />
                   </div>
-                  <button
-                    onClick={handleStartFastReview}
-                    className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-white text-[#667eea] hover:bg-white/90"
-                  >
-                    <MdAutorenew className="text-base" />
-                    <span>
-                      Review{' '}
-                      <span className="text-sm font-md">{totalDueItems}</span>
-                    </span>
-                  </button>
+                  <div className="min-w-0">
+                    <h2 className="text-sm font-bold truncate">Fast Review</h2>
+                    <p className="text-xs text-white/70 truncate">
+                      Review All SRS Item(s) Due
+                    </p>
+                  </div>
                 </div>
+                <button
+                  onClick={handleStartFastReview}
+                  className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-white text-[#667eea] hover:bg-white/90"
+                >
+                  <MdAutorenew className="text-base" />
+                  <span>
+                    Review{' '}
+                    <span className="text-sm font-md">{totalDueItems}</span>
+                  </span>
+                </button>
               </div>
             </div>
-          ) : (
-            <div className="sm:hidden w-full max-w-6xl mx-auto mb-4">
-              <div className="rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#1c2b35] px-4 py-3">
-                <p className="text-sm font-medium text-black dark:text-white">
-                  Fast Review: all caught up
-                </p>
-              </div>
-            </div>
-          ))}
+          </div>
+        )}
+
+        {(isLoadingDueCount || totalDueItems === 0) && (
+          <div
+            className="w-full max-w-6xl mx-auto mb-4 h-3"
+            aria-hidden="true"
+          />
+        )}
 
         {/* Top tabs */}
         <div className="w-full max-w-6xl mx-auto">
