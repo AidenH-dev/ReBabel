@@ -116,7 +116,7 @@ export default function DashboardPage() {
             .map((record) => ({
               id: record.entity_id,
               name: record.data.title || 'Untitled Set',
-              item_num: record.data.item_num || 0,
+              item_num: parseInt(record.data.item_num, 10) || 0,
               date: record.data.date_created || record.data.updated_at,
               set_type: record.data.set_type || null,
             }))
