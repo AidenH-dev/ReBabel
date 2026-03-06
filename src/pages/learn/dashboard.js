@@ -536,16 +536,14 @@ export default function DashboardPage() {
                     </div>
                     <div className="text-center">
                       <div className="text-lg font-bold text-gray-900 dark:text-white">
-                        {Math.round(
-                          userData.activityData.reduce(
-                            (sum, d) => sum + d.minutes,
-                            0
-                          ) / 60
+                        {formatStudyTime(
+                          userData.activityData
+                            .slice(-30)
+                            .reduce((sum, d) => sum + d.minutes, 0)
                         )}
-                        h
                       </div>
                       <div className="text-[10px] text-gray-600 dark:text-gray-400">
-                        60 Days
+                        30 Days
                       </div>
                     </div>
                   </div>
