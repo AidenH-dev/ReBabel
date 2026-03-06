@@ -19,14 +19,16 @@ export default function Subscription() {
         type: 'success',
         text: 'Subscription activated successfully!',
       });
-      // Clean URL
       window.history.replaceState({}, '', '/learn/account/subscription');
+      // Sync directly from Stripe before reading DB — webhook may not have fired yet
+      syncAndFetch();
     } else if (params.get('canceled') === 'true') {
       setMessage({ type: 'info', text: 'Checkout was canceled.' });
       window.history.replaceState({}, '', '/learn/account/subscription');
+      fetchSubscription();
+    } else {
+      fetchSubscription();
     }
-
-    fetchSubscription();
   }, []);
 
   const fetchSubscription = async () => {
@@ -36,13 +38,22 @@ export default function Subscription() {
         headers: { 'Cache-Control': 'no-cache' },
       });
       const data = await res.json();
-      console.log('FUCK', data);
       setSubscription(data);
     } catch (error) {
       console.error('Failed to fetch subscription:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const syncAndFetch = async () => {
+    setLoading(true);
+    try {
+      await fetch('/api/subscriptions/stripe/sync', { method: 'POST' });
+    } catch (error) {
+      console.error('Sync error:', error);
+    }
+    await fetchSubscription();
   };
 
   const handleUpgrade = async () => {
@@ -249,6 +260,14 @@ export default function Subscription() {
               <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-3">
                 Free tier: 1 session per day
               </p>
+
+              <button
+                onClick={syncAndFetch}
+                disabled={processing || loading}
+                className="w-full mt-2 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors disabled:opacity-50"
+              >
+                Already purchased? Restore subscription
+              </button>
             </div>
           )}
         </div>
