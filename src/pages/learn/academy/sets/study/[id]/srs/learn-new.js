@@ -1029,21 +1029,19 @@ export default function LearnNew() {
                   {/* Multiple Choice Phase */}
                   {currentPhase === 'multiple-choice' &&
                     activeMCArray.length > 0 && (
-                      <div className="relative flex-1">
-                        <MultipleChoiceView
-                          currentItem={activeMCArray[currentIndex]}
-                          uniqueOptions={currentShuffledOptions}
-                          selectedOption={selectedOption}
-                          showResult={showResult}
-                          isCorrect={isCorrect}
-                          isTransitioning={false}
-                          isLastQuestion={
-                            currentIndex === activeMCArray.length - 1
-                          }
-                          onOptionSelect={handleMCOptionSelect}
-                          onNext={handleNext}
-                        />
-                      </div>
+                      <MultipleChoiceView
+                        currentItem={activeMCArray[currentIndex]}
+                        uniqueOptions={currentShuffledOptions}
+                        selectedOption={selectedOption}
+                        showResult={showResult}
+                        isCorrect={isCorrect}
+                        isTransitioning={false}
+                        isLastQuestion={
+                          currentIndex === activeMCArray.length - 1
+                        }
+                        onOptionSelect={handleMCOptionSelect}
+                        onNext={handleNext}
+                      />
                     )}
 
                   {/* Translation Phase - Only for vocabulary sets */}
