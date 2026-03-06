@@ -44,7 +44,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       return res.status(500).json({ error: 'Failed to fetch session count' });
     }
 
-    const candidateEntities = [...new Set(ownerRows?.map(row => row.entity) || [])];
+    const candidateEntities = Array.from(new Set(ownerRows?.map(row => row.entity) || []));
 
     if (candidateEntities.length === 0) {
       return res.status(200).json({ count: 0 });
