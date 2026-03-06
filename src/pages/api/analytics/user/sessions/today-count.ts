@@ -29,8 +29,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     const todayEnd = new Date();
     todayEnd.setUTCHours(23, 59, 59, 999);
 
-    // Count sessions started today for this user
-    const { data, error } = await supabase
+    // Find all session entities owned by this user that were created today
+    const { data: ownerRows, error: ownerError } = await supabase
       .schema('v1_kvs_rebabel')
       .from('user_stats')
       .select('entity')
@@ -39,15 +39,34 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       .gte('ts', todayStart.toISOString())
       .lte('ts', todayEnd.toISOString());
 
-    if (error) {
-      console.error('Failed to fetch session count:', error);
+    if (ownerError) {
+      console.error('Failed to fetch session count:', ownerError);
       return res.status(500).json({ error: 'Failed to fetch session count' });
     }
 
-    // Get unique entity IDs (each represents a session)
-    const uniqueEntities = new Set(data?.map(row => row.entity) || []);
+    const candidateEntities = [...new Set(ownerRows?.map(row => row.entity) || [])];
 
-    return res.status(200).json({ count: uniqueEntities.size });
+    if (candidateEntities.length === 0) {
+      return res.status(200).json({ count: 0 });
+    }
+
+    // Filter to only 'translate' session types
+    const { data: translateRows, error: translateError } = await supabase
+      .schema('v1_kvs_rebabel')
+      .from('user_stats')
+      .select('entity')
+      .eq('property', 'session_type')
+      .eq('value', 'translate')
+      .in('entity', candidateEntities);
+
+    if (translateError) {
+      console.error('Failed to filter translate sessions:', translateError);
+      return res.status(500).json({ error: 'Failed to fetch session count' });
+    }
+
+    const translateEntities = new Set(translateRows?.map(row => row.entity) || []);
+
+    return res.status(200).json({ count: translateEntities.size });
   } catch (error) {
     console.error('Session count error:', error);
     return res.status(500).json({ error: 'Internal server error' });
