@@ -1,8 +1,8 @@
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import { useRef, useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRef, useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   FaBrain,
   FaChartLine,
@@ -14,17 +14,17 @@ import {
   FaGraduationCap,
   FaClock,
   FaShieldAlt,
-} from "react-icons/fa";
-import { FaArrowRightLong } from "react-icons/fa6";
+} from 'react-icons/fa';
+import { FaArrowRightLong } from 'react-icons/fa6';
 
 export default function Home() {
   const animationsRef = useRef(null);
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSignup = () => {
-    router.push("/api/auth/login");
+    router.push('/api/auth/login');
   };
 
   const handleEarlyAccess = (e) => {
@@ -71,12 +71,18 @@ export default function Home() {
           {/* Primary Meta Tags */}
           <title>ReBabel - Master Japanese with Science-Based Learning</title>
           <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=5"
+          />
           <meta
             name="description"
             content="Learn Japanese with ReBabel - a science-based language platform using spaced repetition, grammar SRS, and interactive practice. Join our free beta today."
           />
-          <meta name="keywords" content="japanese learning, language learning, spaced repetition, jlpt, japanese practice, grammar, vocabulary" />
+          <meta
+            name="keywords"
+            content="japanese learning, language learning, spaced repetition, jlpt, japanese practice, grammar, vocabulary"
+          />
           <meta name="author" content="ReBabel" />
           <meta name="theme-color" content="#e30a5f" />
 
@@ -86,25 +92,40 @@ export default function Home() {
           {/* Open Graph / Facebook */}
           <meta property="og:type" content="website" />
           <meta property="og:url" content="https://rebabel.org/" />
-          <meta property="og:title" content="ReBabel - Master Japanese with Science-Based Learning" />
+          <meta
+            property="og:title"
+            content="ReBabel - Master Japanese with Science-Based Learning"
+          />
           <meta
             property="og:description"
             content="Learn Japanese with ReBabel - a science-based language platform using spaced repetition, grammar SRS, and interactive practice. Join our free beta today."
           />
-          <meta property="og:image" content="https://rebabel.org/og-image.png" />
-          <meta property="og:image:alt" content="ReBabel - Japanese Learning Platform" />
+          <meta
+            property="og:image"
+            content="https://rebabel.org/og-image.png"
+          />
+          <meta
+            property="og:image:alt"
+            content="ReBabel - Japanese Learning Platform"
+          />
           <meta property="og:site_name" content="ReBabel" />
           <meta property="og:locale" content="en_US" />
 
           {/* Twitter */}
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:url" content="https://rebabel.org/" />
-          <meta property="twitter:title" content="ReBabel - Master Japanese with Science-Based Learning" />
+          <meta
+            property="twitter:title"
+            content="ReBabel - Master Japanese with Science-Based Learning"
+          />
           <meta
             property="twitter:description"
             content="Learn Japanese with ReBabel - a science-based language platform using spaced repetition, grammar SRS, and interactive practice. Join our free beta today."
           />
-          <meta property="twitter:image" content="https://rebabel.org/og-image.png" />
+          <meta
+            property="twitter:image"
+            content="https://rebabel.org/og-image.png"
+          />
           <meta property="twitter:creator" content="@rebabel" />
 
           {/* Favicons */}
@@ -116,28 +137,31 @@ export default function Home() {
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                "name": "ReBabel",
-                "description": "Science-based Japanese language learning platform",
-                "url": "https://rebabel.org",
-                "image": "https://rebabel.org/og-image.png",
-                "potentialAction": {
-                  "@type": "JoinAction",
-                  "target": {
-                    "@type": "EntryPoint",
-                    "urlTemplate": "https://rebabel.org/api/auth/login"
-                  }
-                }
-              })
+                '@context': 'https://schema.org',
+                '@type': 'WebSite',
+                name: 'ReBabel',
+                description:
+                  'Science-based Japanese language learning platform',
+                url: 'https://rebabel.org',
+                image: 'https://rebabel.org/og-image.png',
+                potentialAction: {
+                  '@type': 'JoinAction',
+                  target: {
+                    '@type': 'EntryPoint',
+                    urlTemplate: 'https://rebabel.org/api/auth/login',
+                  },
+                },
+              }),
             }}
           />
 
           {/* Additional SEO */}
-          <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+          <meta
+            name="robots"
+            content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+          />
           <link rel="sitemap" href="https://rebabel.org/sitemap.xml" />
         </Head>
-
 
         {/* Hero Section */}
         <section className="w-full px-4 sm:px-6 lg:px-8 pt-16 pb-12 md:pt-16 md:pb-18">
@@ -151,17 +175,18 @@ export default function Home() {
                 </div>
 
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-                  Study Japanese <span className="text-[#e30a5f]">smarter</span>, not harder.
+                  Study Japanese <span className="text-[#e30a5f]">smarter</span>
+                  , not harder.
                 </h1>
 
-
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
-                  We&apos;re striving to make practicing Japanese a more accessible and less complicated experience.
-                  Be part of our journey from day one.
+                  We&apos;re striving to make practicing Japanese a more
+                  accessible and less complicated experience. Be part of our
+                  journey from day one.
                 </p>
 
                 {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
                   <div className="relative inline-block">
                     <div className="absolute inset-x-0 bottom-0 bg-[#B0104F] rounded-lg translate-y-1 h-[90%]"></div>
                     <button
@@ -172,9 +197,34 @@ export default function Home() {
                     </button>
                   </div>
 
-                  {/*<button className="px-8 py-3 text-lg text-gray-700 bg-white border-2 border-gray-300 hover:border-gray-400 font-medium rounded-lg transition-colors">
-                    Watch Demo
-        </button>*/}
+                  {/* App Store Badge */}
+                  <div className="relative inline-block w-full sm:w-auto">
+                    <div className="absolute inset-x-0 bottom-0 bg-black rounded-lg translate-y-1 h-[90%]"></div>
+                    <a
+                      href="https://apps.apple.com/us/app/rebabel/id6758738478"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative inline-flex items-center gap-3 bg-black hover:bg-gray-900 text-white px-5 py-3 rounded-lg transform transition-all duration-200 active:translate-y-1 border-2 border-gray-500 w-full sm:w-auto justify-center"
+                      aria-label="Download ReBabel on the App Store"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="w-5 h-5 flex-shrink-0"
+                        fill="white"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                      </svg>
+                      <div className="flex flex-col items-start leading-none">
+                        <span className="text-[9px] text-gray-300 tracking-wide mb-0.5">
+                          Download on the
+                        </span>
+                        <span className="text-[15px] font-semibold tracking-tight">
+                          App Store
+                        </span>
+                      </div>
+                    </a>
+                  </div>
                 </div>
 
                 {/* Trust Indicators */}
@@ -305,7 +355,9 @@ export default function Home() {
                 What Do You Get?
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto italic">
-                All of these features below are free and will stay that way! We are working on even better paid features if you want to support us in the future.
+                All of these features below are free and will stay that way! We
+                are working on even better paid features if you want to support
+                us in the future.
               </p>
             </div>
 
@@ -324,13 +376,13 @@ export default function Home() {
                     Integrated Study System
                   </h3>
                   <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-                    Stop juggling multiple paid apps. Study vocabulary and grammar with SRS, test yourself with quizzes, or review with flashcards - all in one place.
+                    Stop juggling multiple paid apps. Study vocabulary and
+                    grammar with SRS, test yourself with quizzes, or review with
+                    flashcards - all in one place.
                   </p>
                 </div>
               </div>
-              <div
-                className="order-1 md:order-2 flex items-center justify-center"
-              >
+              <div className="order-1 md:order-2 flex items-center justify-center">
                 <Image
                   src="/Feature1.png"
                   alt="Integrated Study System"
@@ -345,9 +397,7 @@ export default function Home() {
 
             {/* Feature #2 - Grammar + Vocab SRS */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center mb-16 md:mb-24">
-              <div
-                className="flex items-center justify-center"
-              >
+              <div className="flex items-center justify-center">
                 <Image
                   src="/Feature2.png"
                   alt="Grammar + Vocab SRS"
@@ -371,7 +421,9 @@ export default function Home() {
                     Grammar + Vocab SRS
                   </h3>
                   <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-                    Practice grammar patterns with spaced repetition, not just vocabulary. Most tools ignore grammar in SRS - we don&apos;t.
+                    Practice grammar patterns with spaced repetition, not just
+                    vocabulary. Most tools ignore grammar in SRS - we
+                    don&apos;t.
                   </p>
                 </div>
               </div>
@@ -392,13 +444,13 @@ export default function Home() {
                     Custom Study Sets
                   </h3>
                   <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-                    Create sets for exactly what you&apos;re learning right now. Your textbook chapter, your weak points, or upcoming test material.
+                    Create sets for exactly what you&apos;re learning right now.
+                    Your textbook chapter, your weak points, or upcoming test
+                    material.
                   </p>
                 </div>
               </div>
-              <div
-                className="order-1 md:order-2 flex items-center justify-center"
-              >
+              <div className="order-1 md:order-2 flex items-center justify-center">
                 <Image
                   src="/Feature3.png"
                   alt="Custom Study Sets"
@@ -413,9 +465,7 @@ export default function Home() {
 
             {/* Feature #4 - Fast Vocabulary Practice */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-              <div
-                className="flex items-center justify-center"
-              >
+              <div className="flex items-center justify-center">
                 <Image
                   src="/Feature4.png"
                   alt="Fast Vocabulary Practice"
@@ -439,7 +489,9 @@ export default function Home() {
                     Fast Vocabulary Practice
                   </h3>
                   <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-                    Type answers automatically in romaji or katakana without switching keyboards. Practice vocabulary translations quickly with a fluid typing interface.
+                    Type answers automatically in romaji or katakana without
+                    switching keyboards. Practice vocabulary translations
+                    quickly with a fluid typing interface.
                   </p>
                 </div>
               </div>
@@ -703,18 +755,35 @@ export default function Home() {
                 <div className="relative group">
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5865F2] via-[#7289da] to-[#5865F2] rounded-xl opacity-75 group-hover:opacity-100 blur-sm transition duration-300 animate-pulse"></div>
                   <div className="relative px-10 py-4 bg-[#5865F2] rounded-xl flex items-center gap-3 transition-all duration-300 transform group-hover:scale-105 shadow-2xl border border-white/10">
-                    <svg className="w-7 h-7 transition-transform duration-300 group-hover:rotate-12" fill="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg
+                      className="w-7 h-7 transition-transform duration-300 group-hover:rotate-12"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
                       <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z" />
                     </svg>
-                    <span className="text-xl font-bold text-white tracking-wide">Join Our Discord</span>
-                    <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                    <span className="text-xl font-bold text-white tracking-wide">
+                      Join Our Discord
+                    </span>
+                    <svg
+                      className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                      fill="white"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                 </div>
               </a>
               <p className="text-sm text-white/90 mt-5 max-w-lg mx-auto font-medium">
-                Connect with fellow learners • Get exclusive updates • Chat with the team
+                Connect with fellow learners • Get exclusive updates • Chat with
+                the team
               </p>
             </div>
             <p className="text-lg text-white/90 mt-10 mb-6 max-w-2xl mx-auto">
@@ -736,8 +805,8 @@ export default function Home() {
             </div>
 
             <p className="text-sm text-white/70 max-w-lg mx-auto">
-              Limited founder subscriptions coming soon with exclusive lifetime discounts
-              for beta members. Free access will always be available.
+              Limited founder subscriptions coming soon with exclusive lifetime
+              discounts for beta members. Free access will always be available.
             </p>
           </div>
         </section>
@@ -813,7 +882,10 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2025 ReBabel. All rights reserved. Currently in beta development.</p>
+            <p>
+              &copy; 2025 ReBabel. All rights reserved. Currently in beta
+              development.
+            </p>
           </div>
         </div>
       </footer>
