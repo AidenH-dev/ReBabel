@@ -139,6 +139,23 @@ export default function FastReview() {
     }
   };
 
+  const markSetsStudied = async (breakdown) => {
+    const now = new Date().toISOString();
+    await Promise.allSettled(
+      breakdown.map((s) =>
+        fetch('/api/database/v2/sets/update-from-full-set', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            entityType: 'set',
+            entityId: s.setId,
+            updates: { last_studied: now },
+          }),
+        })
+      )
+    );
+  };
+
   // Helper function to transform API items to internal format
   // Preserves setId and setTitle for multi-set tracking
   const transformItems = (apiItems) => {
@@ -382,6 +399,7 @@ export default function FastReview() {
   useEffect(() => {
     if (currentPhase === 'complete') {
       finishAnalyticsSession(sessionStats.totalAttempts, sessionStats.correct);
+      markSetsStudied(setBreakdown);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPhase]);

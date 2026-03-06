@@ -117,7 +117,10 @@ export default function DashboardPage() {
               id: record.entity_id,
               name: record.data.title || 'Untitled Set',
               item_num: parseInt(record.data.item_num, 10) || 0,
-              date: record.data.date_created || record.data.updated_at,
+              date:
+                record.data.last_studied ||
+                record.data.date_created ||
+                record.data.updated_at,
               set_type: record.data.set_type || null,
             }))
             .sort((a, b) => new Date(b.date) - new Date(a.date));

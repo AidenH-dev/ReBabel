@@ -84,6 +84,22 @@ export default function SetFlashcards() {
     }
   };
 
+  const markSetStudied = async (setId) => {
+    try {
+      await fetch('/api/database/v2/sets/update-from-full-set', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          entityType: 'set',
+          entityId: setId,
+          updates: { last_studied: new Date().toISOString() },
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to mark set studied:', err);
+    }
+  };
+
   // Study mode
   const [studyMode, setStudyMode] = useState('plain'); // plain, quiz, interval
 
@@ -252,6 +268,7 @@ export default function SetFlashcards() {
 
   const handleExit = useCallback(() => {
     finishAnalyticsSession(currentIndexRef.current + 1);
+    markSetStudied(id);
     router.push(`/learn/academy/sets/study/${id}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, id]);

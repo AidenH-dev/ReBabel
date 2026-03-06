@@ -137,6 +137,22 @@ export default function LearnNew() {
     }
   };
 
+  const markSetStudied = async (setId) => {
+    try {
+      await fetch('/api/database/v2/sets/update-from-full-set', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          entityType: 'set',
+          entityId: setId,
+          updates: { last_studied: new Date().toISOString() },
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to mark set studied:', err);
+    }
+  };
+
   // Helper function to transform API items to internal format
   const transformItems = (apiItems) => {
     return Array.isArray(apiItems)
@@ -885,6 +901,7 @@ export default function LearnNew() {
   useEffect(() => {
     if (currentPhase === 'complete') {
       finishAnalyticsSession(sessionStats.totalAttempts, sessionStats.correct);
+      markSetStudied(id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPhase]);
