@@ -308,12 +308,22 @@ export default function LearnNew() {
         if (setInfoData.set_type !== 'grammar') {
           transformedItemData.forEach((item) => {
             if (item.type === 'vocabulary') {
-              // English → Kana
-              translation.push({
-                id: `${item.id}-tr-en-kana`,
+              const vocabBase = {
                 originalId: item.id,
                 uuid: item.uuid,
                 type: 'vocabulary',
+                english: item.english,
+                kana: item.kana,
+                kanji: item.kanji,
+                lexical_category: item.lexical_category,
+                example_sentences: item.example_sentences,
+                tags: item.tags || [],
+              };
+
+              // English → Kana
+              translation.push({
+                ...vocabBase,
+                id: `${item.id}-tr-en-kana`,
                 questionType: 'English',
                 answerType: 'Kana',
                 question: item.english,
@@ -323,10 +333,8 @@ export default function LearnNew() {
 
               // Kana → English
               translation.push({
+                ...vocabBase,
                 id: `${item.id}-tr-kana-en`,
-                originalId: item.id,
-                uuid: item.uuid,
-                type: 'vocabulary',
                 questionType: 'Kana',
                 answerType: 'English',
                 question: item.kana,
@@ -340,10 +348,8 @@ export default function LearnNew() {
               if (item.kanji) {
                 // Kanji → English (user types English)
                 translation.push({
+                  ...vocabBase,
                   id: `${item.id}-tr-kanji-en`,
-                  originalId: item.id,
-                  uuid: item.uuid,
-                  type: 'vocabulary',
                   questionType: 'Kanji',
                   answerType: 'English',
                   question: item.kanji,
@@ -353,10 +359,8 @@ export default function LearnNew() {
 
                 // Kanji → Kana (user types Kana)
                 translation.push({
+                  ...vocabBase,
                   id: `${item.id}-tr-kanji-kana`,
-                  originalId: item.id,
-                  uuid: item.uuid,
-                  type: 'vocabulary',
                   questionType: 'Kanji',
                   answerType: 'Kana',
                   question: item.kanji,
@@ -365,12 +369,21 @@ export default function LearnNew() {
                 });
               }
             } else if (item.type === 'grammar') {
-              // Title → Description
-              translation.push({
-                id: `${item.id}-tr-title-desc`,
+              const grammarBase = {
                 originalId: item.id,
                 uuid: item.uuid,
                 type: 'grammar',
+                title: item.title,
+                description: item.description,
+                topic: item.topic,
+                example_sentences: item.example_sentences,
+                tags: item.tags || [],
+              };
+
+              // Title → Description
+              translation.push({
+                ...grammarBase,
+                id: `${item.id}-tr-title-desc`,
                 questionType: 'Grammar Pattern',
                 answerType: 'Description',
                 question: item.title,
@@ -380,10 +393,8 @@ export default function LearnNew() {
 
               // Description → Title
               translation.push({
+                ...grammarBase,
                 id: `${item.id}-tr-desc-title`,
-                originalId: item.id,
-                uuid: item.uuid,
-                type: 'grammar',
                 questionType: 'Description',
                 answerType: 'Grammar Pattern',
                 question: item.description,

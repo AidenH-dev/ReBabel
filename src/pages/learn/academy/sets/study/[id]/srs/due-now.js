@@ -300,12 +300,22 @@ export default function DueNow() {
         // Generate translation questions for vocabulary items only
         transformedItemData.forEach((item) => {
           if (item.type === 'vocabulary') {
-            // English → Kana
-            translation.push({
-              id: `${item.id}-tr-en-kana`,
+            const vocabBase = {
               originalId: item.id,
               uuid: item.uuid,
               type: 'vocabulary',
+              english: item.english,
+              kana: item.kana,
+              kanji: item.kanji,
+              lexical_category: item.lexical_category,
+              example_sentences: item.example_sentences,
+              tags: item.tags || [],
+            };
+
+            // English → Kana
+            translation.push({
+              ...vocabBase,
+              id: `${item.id}-tr-en-kana`,
               questionType: 'English',
               answerType: 'Kana',
               question: item.english,
@@ -315,10 +325,8 @@ export default function DueNow() {
 
             // Kana → English
             translation.push({
+              ...vocabBase,
               id: `${item.id}-tr-kana-en`,
-              originalId: item.id,
-              uuid: item.uuid,
-              type: 'vocabulary',
               questionType: 'Kana',
               answerType: 'English',
               question: item.kana,
@@ -332,10 +340,8 @@ export default function DueNow() {
             if (item.kanji) {
               // Kanji → English (user types English)
               translation.push({
+                ...vocabBase,
                 id: `${item.id}-tr-kanji-en`,
-                originalId: item.id,
-                uuid: item.uuid,
-                type: 'vocabulary',
                 questionType: 'Kanji',
                 answerType: 'English',
                 question: item.kanji,
@@ -345,10 +351,8 @@ export default function DueNow() {
 
               // Kanji → Kana (user types Kana)
               translation.push({
+                ...vocabBase,
                 id: `${item.id}-tr-kanji-kana`,
-                originalId: item.id,
-                uuid: item.uuid,
-                type: 'vocabulary',
                 questionType: 'Kanji',
                 answerType: 'Kana',
                 question: item.kanji,
