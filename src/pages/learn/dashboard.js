@@ -526,7 +526,9 @@ export default function DashboardPage() {
                     </div>
                     <div className="text-center">
                       <div className="text-lg font-bold text-gray-900 dark:text-white">
-                        {userData.cardsReviewed ?? '—'}
+                        {setsLoading
+                          ? '—'
+                          : sets.reduce((sum, s) => sum + (s.item_num || 0), 0)}
                       </div>
                       <div className="text-[10px] text-gray-600 dark:text-gray-400">
                         Total Items
