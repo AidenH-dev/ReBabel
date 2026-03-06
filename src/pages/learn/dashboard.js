@@ -529,7 +529,7 @@ export default function DashboardPage() {
                         {userData.cardsReviewed ?? '—'}
                       </div>
                       <div className="text-[10px] text-gray-600 dark:text-gray-400">
-                        Cards
+                        Total Items
                       </div>
                     </div>
                     <div className="text-center">
