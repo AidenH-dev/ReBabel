@@ -104,6 +104,41 @@ export default function FastReview() {
   const translationInputRef = useRef(null);
   const leveledItemIdsRef = useRef(new Set());
 
+  // ============ ANALYTICS ============
+  const analyticsSessionIdRef = useRef(null);
+
+  const startAnalyticsSession = async () => {
+    try {
+      const res = await fetch('/api/analytics/user/sessions/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionType: 'srs_fast_review' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        analyticsSessionIdRef.current = data.entity_id;
+      }
+    } catch (err) {
+      console.error('Failed to start analytics session:', err);
+    }
+  };
+
+  const finishAnalyticsSession = async (itemsReviewed, itemsCorrect) => {
+    if (!analyticsSessionIdRef.current) return;
+    try {
+      await fetch(
+        `/api/analytics/user/sessions/${analyticsSessionIdRef.current}/finish`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemsReviewed, itemsCorrect }),
+        }
+      );
+    } catch (err) {
+      console.error('Failed to finish analytics session:', err);
+    }
+  };
+
   // Helper function to transform API items to internal format
   // Preserves setId and setTitle for multi-set tracking
   const transformItems = (apiItems) => {
@@ -321,6 +356,7 @@ export default function FastReview() {
   // Initialize active arrays when data is loaded
   useEffect(() => {
     if (itemData.length > 0) {
+      startAnalyticsSession();
       setActiveTranslationArray([...translationArray]);
       setActiveMCArray([...multipleChoiceArray]);
 
@@ -341,6 +377,14 @@ export default function FastReview() {
       setPhaseProgress(phaseProgressObj);
     }
   }, [itemData, translationArray, multipleChoiceArray]);
+
+  // Finish analytics session when review completes
+  useEffect(() => {
+    if (currentPhase === 'complete') {
+      finishAnalyticsSession(sessionStats.totalAttempts, sessionStats.correct);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPhase]);
 
   // Shuffle MC options whenever the current item or phase changes
   useEffect(() => {
