@@ -1,67 +1,103 @@
 # ReBabel - Japanese Study Aid
 
-A modern web application that helps users learn Japanese through interactive AI-powered tutoring sessions. Built with Next.js and leveraging OpenAI's capabilities, this platform provides personalized language learning experiences.
+A modern web application that helps users learn Japanese through interactive AI-powered tutoring sessions. Built with Next.js 14, this platform provides personalized language learning experiences with SRS flashcards, AI translation practice, vocabulary/grammar sets, and study analytics.
 
 ## Features
 
-- SRS
+- SRS (Spaced Repetition System) flashcards
 - Vocabulary & Grammar Sets
-- Flashcards
-- Quiz
+- AI-powered translation practice with feedback
+- Flashcards & Quiz modes
+- Push notifications for study reminders
+- Premium subscriptions via Stripe
 
 ## Tech Stack
 
-- **Frontend Framework**: Next.js 14
+- **Frontend Framework**: Next.js 14 (Pages Router)
 - **Styling**: Tailwind CSS
 - **Authentication**: Auth0
-- **Database**: Supabase
-- **AI Integration**: OpenAI API
+- **Database**: Supabase (`v1_kvs_rebabel` schema)
+- **AI Integration**: DeepSeek
+- **LLM Tracing**: LangSmith
+- **Payments**: Stripe
+- **Analytics**: PostHog, Vercel Analytics
+- **Push Notifications**: APNS
 - **Form Handling**: Formik + Yup
 - **Charts**: Chart.js
-- **Analytics**: Vercel Analytics & Speed Insights
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
 - Node.js (v18 or higher)
-- npm or yarn
+- npm
 - Git
 
 ## Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/japanese-tutor.git
-cd japanese-tutor
-```
+1. Install dependencies:
 
-2. Install dependencies:
 ```bash
 npm install
-# or
-yarn install
 ```
 
 3. Set up environment variables:
-Create a `.env.local` file in the root directory with the following variables:
+   Create a `.env.local` file in the root directory with the following variables:
+
 ```env
-AUTH0_SECRET='your-auth0-secret'
-AUTH0_BASE_URL='http://localhost:3000'
-AUTH0_ISSUER_BASE_URL='your-auth0-domain'
-AUTH0_CLIENT_ID='your-auth0-client-id'
-AUTH0_CLIENT_SECRET='your-auth0-client-secret'
-OPENAI_API_KEY='your-openai-api-key'
-NEXT_SUPABASE_URL='your-supabase-url'
-NEXT_SUPABASE_ANON_KEY='your-supabase-anon-key'
+# AI
+DEEPSEEK_KEY=
+
+# Auth0
+AUTH0_SECRET=
+AUTH0_BASE_URL=
+AUTH0_ISSUER_BASE_URL=
+AUTH0_CLIENT_ID=
+AUTH0_CLIENT_SECRET=
+AUTH0_REDIRECT_URI=
+AUTH0_DOMAIN=
+AUTH0_TRANSACTION_COOKIE_SAME_SITE=
+AUTH0_COOKIE_DOMAIN=
+
+# Supabase
+SUPABASE_SERVICE_ROLE_KEY=
+NEXT_SUPABASE_ANON_KEY=
+NEXT_SUPABASE_URL=
+
+# Stripe
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_PRICE_ID=
+
+# Analytics
+NEXT_PUBLIC_POSTHOG_KEY=
+NEXT_PUBLIC_POSTHOG_HOST=
+NEXT_PUBLIC_NODE_ENV=
+
+# Push Notifications (APNS)
+APNS_KEY_ID=
+APNS_TEAM_ID=
+APNS_BUNDLE_ID=
+APNS_PRODUCTION=
+APNS_KEY=
+
+# Webhooks
+PEKO_WEBHOOK_URL=
+PEKO_WEBHOOK_TOKEN=
+
+# LangSmith (optional for local dev)
+LANGSMITH_TRACING=
+LANGSMITH_ENDPOINT=
+LANGSMITH_API_KEY=
+LANGSMITH_PROJECT=
+LANGCHAIN_TRACING_V2=
 ```
 
 ## Running the Application
 
 1. Start the development server:
+
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 2. Open [http://localhost:3000](http://localhost:3000) in your browser
@@ -77,16 +113,31 @@ yarn dev
 
 ```
 src/
-├── app/          # Next.js app directory
-├── components/   # React components
-├── lib/         # Utility functions and configurations
-├── styles/      # Global styles
-└── types/       # TypeScript type definitions
+├── pages/
+│   ├── api/
+│   │   ├── auth/               # Auth0 callbacks
+│   │   ├── database/v1/        # Active CRUD routes
+│   │   ├── practice/translate/ # AI translation practice
+│   │   ├── subscriptions/      # Stripe subscription management
+│   │   ├── push/               # APNS push notifications
+│   │   └── cron/               # SRS notification jobs
+│   ├── learn/
+│   │   ├── grammar/            # Grammar lessons & translation exercises
+│   │   └── academy/            # SRS study interface
+│   ├── admin/
+│   └── blog/
+├── components/
+│   ├── SRS/                    # Spaced repetition UI
+│   ├── Set/Features/           # Flashcard session (Quiz, SRS)
+│   ├── Practice/               # Translation practice components
+│   └── Sidebars/               # MainSidebar, AcademySidebar, AdminSidebar
+├── contexts/
+│   ├── PremiumContext.js       # Subscription state + session limits
+│   └── ThemeContext.js         # Light/dark/system theme
+└── lib/
+    ├── langsmith.js            # LLM call tracing
+    └── supabaseAdmin.js        # Shared Supabase admin client
 ```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Commercial Use
 
@@ -100,20 +151,19 @@ ReBabel is free for personal, non-commercial use under MIT.
 [rebabel.development@gmail.com](mailto:rebabel.development@gmail.com)
 
 ## License
+
 This software is licensed under TWO licenses:
 
-1. MIT License see the [LICENSE](./LICENSE)  - for non-commercial use
-2. Commercial License - for commercial use
+1. MIT License — see the [LICENSE](./LICENSE) — for non-commercial use
+2. Commercial License — for commercial use
 
 ## Acknowledgments
 
-- OpenAI for providing the AI capabilities
 - Next.js team for the amazing framework
 - Auth0 for authentication services
 - Supabase for database services
 - All contributors and users of the platform
-- All my teachers and mentors who have guided me and fostered my passion for development and Japanese 
-
+- All my teachers and mentors who have guided me and fostered my passion for development and Japanese
 
 ## Support
 
