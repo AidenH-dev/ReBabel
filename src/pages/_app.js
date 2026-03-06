@@ -12,6 +12,29 @@ import { useEffect, useState } from 'react';
 import Script from 'next/script';
 import { SRSNotificationPrompt } from '@/components/popups/SRSNotificationPrompt';
 
+const IOS_VIEWPORT_CONTENT =
+  'width=device-width, initial-scale=1, viewport-fit=cover';
+
+function ensureNativeIOSViewportCover() {
+  if (typeof document === 'undefined') return;
+
+  const viewportMeta = document.querySelector('meta[name="viewport"]');
+
+  if (!viewportMeta) {
+    const createdMeta = document.createElement('meta');
+    createdMeta.setAttribute('name', 'viewport');
+    createdMeta.setAttribute('content', IOS_VIEWPORT_CONTENT);
+    document.head.appendChild(createdMeta);
+    return;
+  }
+
+  const content = viewportMeta.getAttribute('content') || '';
+
+  if (!content.includes('viewport-fit=cover')) {
+    viewportMeta.setAttribute('content', `${content}, viewport-fit=cover`);
+  }
+}
+
 // 🔔 Early push notification listener setup (for cold start handling)
 // This runs immediately when the module loads on the client
 if (typeof window !== 'undefined') {
@@ -166,6 +189,22 @@ function PushNotificationBridge() {
 
 export default function MyApp({ Component, pageProps }) {
   const [isPosthogEnabled, setIsPosthogEnabled] = useState(false);
+
+  useEffect(() => {
+    const enforceForNativeIOS = async () => {
+      try {
+        const { Capacitor } = await import('@capacitor/core');
+        if (!Capacitor.isNativePlatform()) return;
+        if (!/iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
+
+        ensureNativeIOSViewportCover();
+      } catch (e) {
+        // Ignore if Capacitor is unavailable.
+      }
+    };
+
+    enforceForNativeIOS();
+  }, []);
 
   useEffect(() => {
     // Only initialize PostHog outside of development
