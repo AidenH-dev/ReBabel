@@ -668,7 +668,7 @@ export default function DashboardPage() {
               ) : (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                    {sets.slice(0, 8).map((set) => {
+                    {sets.slice(0, 3).map((set) => {
                       const typeMap = {
                         vocab: {
                           label: 'Vocab',
@@ -724,7 +724,7 @@ export default function DashboardPage() {
                       );
                     })}
                   </div>
-                  {sets.length > 8 && (
+                  {sets.length > 3 && (
                     <div className="flex justify-center mt-4">
                       <button
                         onClick={() => router.push('/learn/academy/sets')}
