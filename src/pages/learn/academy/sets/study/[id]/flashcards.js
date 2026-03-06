@@ -1,7 +1,7 @@
 // pages/learn/academy/sets/study/[id]/flashcards.js
 import Head from 'next/head';
 import MainSidebar from '../../../../../../components/Sidebars/AcademySidebar';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import {
@@ -48,6 +48,42 @@ export default function SetFlashcards() {
   // Card confidence levels
   const [cardConfidence, setCardConfidence] = useState({});
 
+  // ============ ANALYTICS ============
+  const analyticsSessionIdRef = useRef(null);
+  const currentIndexRef = useRef(0);
+
+  const startAnalyticsSession = async () => {
+    try {
+      const res = await fetch('/api/analytics/user/sessions/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionType: 'flashcards' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        analyticsSessionIdRef.current = data.entity_id;
+      }
+    } catch (err) {
+      console.error('Failed to start analytics session:', err);
+    }
+  };
+
+  const finishAnalyticsSession = async (itemsReviewed) => {
+    if (!analyticsSessionIdRef.current) return;
+    try {
+      await fetch(
+        `/api/analytics/user/sessions/${analyticsSessionIdRef.current}/finish`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemsReviewed }),
+        }
+      );
+    } catch (err) {
+      console.error('Failed to finish analytics session:', err);
+    }
+  };
+
   // Study mode
   const [studyMode, setStudyMode] = useState('plain'); // plain, quiz, interval
 
@@ -64,6 +100,11 @@ export default function SetFlashcards() {
     'slide-in-left':
       'transition-all duration-300 ease-out -translate-x-full opacity-0',
   };
+
+  // Keep currentIndexRef in sync for use in analytics finish (avoids stale closure)
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
 
   // ----- Fetch Data from API -----
   useEffect(() => {
@@ -168,6 +209,14 @@ export default function SetFlashcards() {
     fetchSetData();
   }, [id]);
 
+  // Start analytics session when card data is ready
+  useEffect(() => {
+    if (cardsData.length > 0) {
+      startAnalyticsSession();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cardsData.length]);
+
   const handleFlip = useCallback(() => {
     setShouldAnimate(true);
     setIsFront((prev) => !prev);
@@ -202,7 +251,9 @@ export default function SetFlashcards() {
   }, [currentIndex, slideCard]);
 
   const handleExit = useCallback(() => {
+    finishAnalyticsSession(currentIndexRef.current + 1);
     router.push(`/learn/academy/sets/study/${id}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, id]);
 
   const markCard = useCallback(

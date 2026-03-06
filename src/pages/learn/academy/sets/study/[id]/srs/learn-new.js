@@ -102,6 +102,41 @@ export default function LearnNew() {
   // ============ REFS ============
   const translationInputRef = useRef(null);
 
+  // ============ ANALYTICS ============
+  const analyticsSessionIdRef = useRef(null);
+
+  const startAnalyticsSession = async () => {
+    try {
+      const res = await fetch('/api/analytics/user/sessions/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionType: 'srs_learn_new' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        analyticsSessionIdRef.current = data.entity_id;
+      }
+    } catch (err) {
+      console.error('Failed to start analytics session:', err);
+    }
+  };
+
+  const finishAnalyticsSession = async (itemsReviewed, itemsCorrect) => {
+    if (!analyticsSessionIdRef.current) return;
+    try {
+      await fetch(
+        `/api/analytics/user/sessions/${analyticsSessionIdRef.current}/finish`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemsReviewed, itemsCorrect }),
+        }
+      );
+    } catch (err) {
+      console.error('Failed to finish analytics session:', err);
+    }
+  };
+
   // Helper function to transform API items to internal format
   const transformItems = (apiItems) => {
     return Array.isArray(apiItems)
@@ -375,6 +410,7 @@ export default function LearnNew() {
   // Initialize active arrays when data is loaded
   useEffect(() => {
     if (itemData.length > 0) {
+      startAnalyticsSession();
       setActiveReviewArray([...reviewArray]);
       setActiveMCArray([...multipleChoiceArray]);
       setActiveTranslationArray([...translationArray]);
@@ -844,6 +880,14 @@ export default function LearnNew() {
     const total = getTotalUniqueItems();
     return total > 0 ? (completed / total) * 100 : 0;
   };
+
+  // Finish analytics session when study session completes
+  useEffect(() => {
+    if (currentPhase === 'complete') {
+      finishAnalyticsSession(sessionStats.totalAttempts, sessionStats.correct);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPhase]);
 
   // Shuffle multiple choice options when question changes
   // Store shuffled options to preserve their positions when showing results

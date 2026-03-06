@@ -1,3 +1,6 @@
+// Implements SPEC-LLM-001
+// POST /api/analytics/user/sessions/[id]/finish
+// Body: { itemsReviewed?: number, itemsCorrect?: number }
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
@@ -6,8 +9,8 @@ interface ApiResponse {
   success: boolean;
   session_status?: string;
   end_time?: string;
-  tokens_used?: number;
-  avg_accuracy?: number;
+  items_reviewed?: number | null;
+  items_correct?: number | null;
   error?: string;
 }
 
@@ -26,7 +29,36 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     return res.status(400).json({ success: false, error: 'Session ID required' });
   }
 
-  const { avgAccuracy } = req.body || {};
+  const { itemsReviewed, itemsCorrect } = req.body || {};
+
+  // Validate itemsReviewed
+  if (itemsReviewed !== undefined && itemsReviewed !== null) {
+    if (!Number.isInteger(itemsReviewed) || itemsReviewed < 0) {
+      return res.status(400).json({ success: false, error: 'itemsReviewed must be a non-negative integer' });
+    }
+  }
+
+  // Validate itemsCorrect
+  if (itemsCorrect !== undefined && itemsCorrect !== null) {
+    if (!Number.isInteger(itemsCorrect) || itemsCorrect < 0) {
+      return res.status(400).json({ success: false, error: 'itemsCorrect must be a non-negative integer' });
+    }
+  }
+
+  // itemsCorrect cannot be present without itemsReviewed
+  if ((itemsCorrect !== undefined && itemsCorrect !== null) &&
+      (itemsReviewed === undefined || itemsReviewed === null)) {
+    return res.status(400).json({ success: false, error: 'itemsCorrect cannot be provided without itemsReviewed' });
+  }
+
+  // itemsCorrect must be <= itemsReviewed when both provided
+  if (
+    itemsCorrect !== undefined && itemsCorrect !== null &&
+    itemsReviewed !== undefined && itemsReviewed !== null &&
+    itemsCorrect > itemsReviewed
+  ) {
+    return res.status(400).json({ success: false, error: 'itemsCorrect cannot exceed itemsReviewed' });
+  }
 
   try {
     const supabase = createClient(
@@ -45,9 +77,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
 
     const { data, error } = await supabase
       .schema('v1_kvs_rebabel')
-      .rpc('finish_user_stat_session', {
+      .rpc('finish_user_stat_session_v2', {
         p_entity_id: id,
-        p_avg_accuracy: avgAccuracy ?? null,
+        p_items_reviewed: itemsReviewed ?? null,
+        p_items_correct: itemsCorrect ?? null,
       });
 
     if (error) {
@@ -63,8 +96,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       success: true,
       session_status: data.session_status,
       end_time: data.end_time,
-      tokens_used: data.tokens_used,
-      avg_accuracy: data.avg_accuracy,
+      items_reviewed: data.items_reviewed,
+      items_correct: data.items_correct,
     });
   } catch (error) {
     console.error('Finish session error:', error);

@@ -8,7 +8,7 @@ import SummaryView from '@/components/Set/Features/Field-Card-Session/shared/vie
 import ReviewView from '@/components/Set/Features/Field-Card-Session/shared/views/ReviewView.jsx';
 import MasterMultipleChoice from '@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterMultipleChoice';
 import ItemEditModal from '@/components/Set/Features/Field-Card-Session/shared/views/ItemEditModal.jsx';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import {
@@ -25,6 +25,41 @@ import {
 export default function SetQuiz() {
   const router = useRouter();
   const { id } = router.query;
+
+  // ============ ANALYTICS ============
+  const analyticsSessionIdRef = useRef(null);
+
+  const startAnalyticsSession = async () => {
+    try {
+      const res = await fetch('/api/analytics/user/sessions/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionType: 'quiz' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        analyticsSessionIdRef.current = data.entity_id;
+      }
+    } catch (err) {
+      console.error('Failed to start analytics session:', err);
+    }
+  };
+
+  const finishAnalyticsSession = async (itemsReviewed, itemsCorrect) => {
+    if (!analyticsSessionIdRef.current) return;
+    try {
+      await fetch(
+        `/api/analytics/user/sessions/${analyticsSessionIdRef.current}/finish`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemsReviewed, itemsCorrect }),
+        }
+      );
+    } catch (err) {
+      console.error('Failed to finish analytics session:', err);
+    }
+  };
 
   const [cardsData, setCardsData] = useState([]);
   const [setInfo, setSetInfo] = useState(null);
@@ -191,6 +226,14 @@ export default function SetQuiz() {
     }
   }, [quizCompleted]);
 
+  // Finish analytics session when quiz completes
+  useEffect(() => {
+    if (quizCompleted) {
+      finishAnalyticsSession(sessionStats.totalAttempts, sessionStats.correct);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quizCompleted]);
+
   // Generate quiz items based on card type
   const generateQuizItems = (cards, setType = 'vocab') => {
     const items = [];
@@ -325,6 +368,7 @@ export default function SetQuiz() {
   // Handle mode selection
   const handleModeSelect = (mode) => {
     console.log('Selected quiz mode:', mode);
+    startAnalyticsSession();
 
     // For grammar sets, mode is the quizType
     if (setType === 'grammar') {
@@ -540,6 +584,8 @@ export default function SetQuiz() {
 
   // Handle quiz retry
   const handleRetry = () => {
+    analyticsSessionIdRef.current = null;
+    startAnalyticsSession();
     setQuizCompleted(false);
     setCurrentIndex(0);
     setAnsweredItems([]);
