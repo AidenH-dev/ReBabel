@@ -724,16 +724,6 @@ export default function DashboardPage() {
                       );
                     })}
                   </div>
-                  {sets.length > 3 && (
-                    <div className="flex justify-center mt-4">
-                      <button
-                        onClick={() => router.push('/learn/academy/sets')}
-                        className="text-sm px-3 py-2 rounded-md border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-gray-700 dark:text-white hover:opacity-90"
-                      >
-                        Show all ({sets.length})
-                      </button>
-                    </div>
-                  )}
                 </>
               )}
             </div>
