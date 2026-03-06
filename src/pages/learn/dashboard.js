@@ -606,24 +606,21 @@ export default function DashboardPage() {
             </div>
 
             {/* Recent Sets */}
-            <div
-              onClick={() => router.push('/learn/academy/sets')}
-              className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
-            >
+            <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm overflow-hidden">
               {/* Header */}
-              <div className="mb-4 flex items-center gap-1">
-                <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white">
+              <Link
+                href="/learn/academy/sets"
+                className="mb-4 flex items-center gap-1 w-fit group"
+              >
+                <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white group-hover:text-[#e30a5f] transition-colors">
                   Recent Sets
                 </h2>
-                <FiChevronRight className="text-gray-400 dark:text-gray-500 text-lg mt-px" />
-              </div>
+                <FiChevronRight className="text-gray-400 dark:text-gray-500 text-lg mt-px group-hover:text-[#e30a5f] transition-colors" />
+              </Link>
 
               {/* Fast Review banner */}
               {!dueLoading && totalDueItems > 0 && (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="mb-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-xl shadow-md px-4 py-3 text-white flex items-center justify-between gap-3"
-                >
+                <div className="mb-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-xl shadow-md px-4 py-3 text-white flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white/20 rounded-lg">
                       <TbRepeat className="w-4 h-4" />
@@ -636,10 +633,9 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      router.push('/learn/academy/sets/fast-review');
-                    }}
+                    onClick={() =>
+                      router.push('/learn/academy/sets/fast-review')
+                    }
                     className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-[#667eea] hover:bg-white/90 transition-colors"
                   >
                     <TbRepeat className="text-base" /> Review {totalDueItems}
@@ -661,10 +657,7 @@ export default function DashboardPage() {
                 <div className="rounded-xl border border-dashed border-black/10 dark:border-white/10 p-8 text-center text-sm text-black/70 dark:text-white/70">
                   <p className="mb-3">You don&apos;t have any sets yet.</p>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      router.push('/learn/academy/sets/create');
-                    }}
+                    onClick={() => router.push('/learn/academy/sets/create')}
                     className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95"
                   >
                     <FaPlus /> Create your first set
@@ -694,8 +687,7 @@ export default function DashboardPage() {
                       return (
                         <div
                           key={set.id}
-                          onClick={(e) => e.stopPropagation()}
-                          className="group rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] p-3 transition-all hover:shadow-sm hover:-translate-y-px focus-within:ring-2 focus-within:ring-[#e30a5f]"
+                          className="group rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] p-3 transition-all hover:shadow-sm focus-within:ring-2 focus-within:ring-[#e30a5f]"
                         >
                           <div className="flex items-start justify-between gap-3">
                             <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 flex-1">
@@ -733,7 +725,7 @@ export default function DashboardPage() {
                   {sets.length > 8 && (
                     <div className="flex justify-center mt-4">
                       <button
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={() => router.push('/learn/academy/sets')}
                         className="text-sm px-3 py-2 rounded-md border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-gray-700 dark:text-white hover:opacity-90"
                       >
                         Show all ({sets.length})
