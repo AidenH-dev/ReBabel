@@ -174,7 +174,7 @@ export default function Subscription() {
                 <h3 className="font-medium mb-3">Premium Benefits:</h3>
                 <ul className="space-y-2 text-gray-600 dark:text-gray-400 text-sm">
                   <li className="flex items-center gap-2">
-                    <TbCheck className="text-amber-500" /> 10 translation
+                    <TbCheck className="text-amber-500" /> 5 translation
                     practice sessions per day
                   </li>
                   <li className="flex items-center gap-2">
