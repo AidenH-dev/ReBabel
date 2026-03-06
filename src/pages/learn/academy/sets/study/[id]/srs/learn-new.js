@@ -1029,19 +1029,21 @@ export default function LearnNew() {
                   {/* Multiple Choice Phase */}
                   {currentPhase === 'multiple-choice' &&
                     activeMCArray.length > 0 && (
-                      <MultipleChoiceView
-                        currentItem={activeMCArray[currentIndex]}
-                        uniqueOptions={currentShuffledOptions}
-                        selectedOption={selectedOption}
-                        showResult={showResult}
-                        isCorrect={isCorrect}
-                        isTransitioning={false}
-                        isLastQuestion={
-                          currentIndex === activeMCArray.length - 1
-                        }
-                        onOptionSelect={handleMCOptionSelect}
-                        onNext={handleNext}
-                      />
+                      <div className="relative flex-1">
+                        <MultipleChoiceView
+                          currentItem={activeMCArray[currentIndex]}
+                          uniqueOptions={currentShuffledOptions}
+                          selectedOption={selectedOption}
+                          showResult={showResult}
+                          isCorrect={isCorrect}
+                          isTransitioning={false}
+                          isLastQuestion={
+                            currentIndex === activeMCArray.length - 1
+                          }
+                          onOptionSelect={handleMCOptionSelect}
+                          onNext={handleNext}
+                        />
+                      </div>
                     )}
 
                   {/* Translation Phase - Only for vocabulary sets */}
@@ -1049,23 +1051,25 @@ export default function LearnNew() {
                     setType !== 'grammar' &&
                     activeTranslationArray.length > 0 &&
                     !isSavingSRS && (
-                      <TypedResponseView
-                        currentItem={activeTranslationArray[currentIndex]}
-                        userAnswer={userAnswer}
-                        showResult={showResult}
-                        isCorrect={isCorrect}
-                        showHint={false}
-                        isLastQuestion={
-                          currentIndex === activeTranslationArray.length - 1
-                        }
-                        inputRef={translationInputRef}
-                        onInputChange={(e) => setUserAnswer(e.target.value)}
-                        onCheckAnswer={handleTranslationCheck}
-                        onNext={handleNext}
-                        onRetry={handleTranslationRetry}
-                        onEditItem={handleOpenEditItem}
-                        disableKeyboardShortcuts={Boolean(editingItem)}
-                      />
+                      <div className="relative flex-1">
+                        <TypedResponseView
+                          currentItem={activeTranslationArray[currentIndex]}
+                          userAnswer={userAnswer}
+                          showResult={showResult}
+                          isCorrect={isCorrect}
+                          showHint={false}
+                          isLastQuestion={
+                            currentIndex === activeTranslationArray.length - 1
+                          }
+                          inputRef={translationInputRef}
+                          onInputChange={(e) => setUserAnswer(e.target.value)}
+                          onCheckAnswer={handleTranslationCheck}
+                          onNext={handleNext}
+                          onRetry={handleTranslationRetry}
+                          onEditItem={handleOpenEditItem}
+                          disableKeyboardShortcuts={Boolean(editingItem)}
+                        />
+                      </div>
                     )}
 
                   {/* SRS Saving Loading Screen */}
