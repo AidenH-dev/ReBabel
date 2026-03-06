@@ -1,5 +1,24 @@
 # ReBabel – LLM-Tutor
 
+## VSDD Methodology
+
+This project uses **Verified Spec-Driven Development** with parallel Claude Code agents.
+
+- **Spec ID convention:** `SPEC-LLM-NNN` (e.g., `SPEC-LLM-001`)
+- **Specs:** `docs/specs/{feature-name}.md` — written by spec-writer agent before any implementation
+- **Adversary reports:** `docs/reviews/{feature-name}-review-{N}.md`
+- **Test framework:** Jest + React Testing Library (`npm test`)
+- **Cross-project:** rebabel-database (`/Users/ah/Desktop/Dev/ReBabel/rebabel-database`) is the Supabase backend. When adding new API calls, check `rebabel-database/supabase/migrations/` for available RPC functions. New backend capabilities should be specced jointly with the DB implementation.
+
+### VSDD Pipeline for this project
+
+1. Spec → `docs/specs/` (spec-writer agent)
+2. Tests → `__tests__/` or colocated `.test.ts` files using Jest (tdd-builder agent, Red phase first)
+3. Implementation → pages, components, lib functions (tdd-builder agent, Green phase)
+4. Review → adversary agent reads spec + tests + implementation, outputs to `docs/reviews/`
+
+---
+
 Japanese tutoring platform built with Next.js 14 (Pages Router). Users practice translation, build vocabulary/grammar sets, and study with SRS flashcards as well as AI dynamic practice modules and feedback.
 
 ## Dev Setup
