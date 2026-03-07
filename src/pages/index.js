@@ -198,13 +198,13 @@ export default function Home() {
                   </div>
 
                   {/* App Store Badge */}
-                  <div className="relative inline-block w-full sm:w-auto">
+                  <div className="relative inline-block w-auto">
                     <div className="absolute inset-x-0 bottom-0 bg-black rounded-lg translate-y-1 h-[90%]"></div>
                     <a
                       href="https://apps.apple.com/us/app/rebabel/id6758738478"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="relative inline-flex items-center gap-3 bg-black hover:bg-gray-900 text-white px-5 py-3 rounded-lg transform transition-all duration-200 active:translate-y-1 border-2 border-gray-500 w-full sm:w-auto justify-center"
+                      className="relative inline-flex items-center gap-3 bg-black hover:bg-gray-900 text-white px-5 py-3 rounded-lg transform transition-all duration-200 active:translate-y-1 border-2 border-gray-500 w-auto justify-center"
                       aria-label="Download ReBabel on the App Store"
                     >
                       <svg
