@@ -8,7 +8,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Script from 'next/script';
 import { SRSNotificationPrompt } from '@/components/popups/SRSNotificationPrompt';
 
@@ -87,6 +87,22 @@ function PostHogAuthBridge() {
     } else {
       posthog.reset();
     }
+  }, [user, isLoading]);
+
+  return null;
+}
+
+// Bridge component that fires a heartbeat once per app load when authenticated.
+// Implements SPEC-DB-003 (client caller)
+function PlatformHeartbeatBridge() {
+  const { user, isLoading } = useUser();
+  const firedRef = useRef(false);
+
+  useEffect(() => {
+    if (isLoading || !user || firedRef.current) return;
+    firedRef.current = true;
+    // Fire-and-forget: do not await, do not surface errors to the user
+    fetch('/api/analytics/heartbeat', { method: 'POST' }).catch(() => {});
   }, [user, isLoading]);
 
   return null;
@@ -226,6 +242,7 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <UserProvider>
+      <PlatformHeartbeatBridge />
       <PushNotificationBridge />
       <ThemeProvider>
         <PremiumProvider>
