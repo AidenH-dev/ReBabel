@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import MainSidebar from '../../components/Sidebars/MainSidebar';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import {
   FaFire,
@@ -63,6 +63,8 @@ export default function DashboardPage() {
   const [setsLoading, setSetsLoading] = useState(true);
   const [totalDueItems, setTotalDueItems] = useState(0);
   const [dueLoading, setDueLoading] = useState(true);
+  const setsCardRef = useRef(null);
+  const [visibleSetCount, setVisibleSetCount] = useState(3);
 
   // Initialize with null to distinguish "not yet loaded" from "loaded with zero"
   const [userData, setUserData] = useState({
@@ -196,6 +198,38 @@ export default function DashboardPage() {
 
     fetchDashboard();
   }, []);
+
+  // Calculate how many set cards fit without scrolling
+  useEffect(() => {
+    const calculate = () => {
+      const card = setsCardRef.current;
+      if (!card) return;
+
+      const width = window.innerWidth;
+
+      // Desktop/tablet: one row = match column count
+      if (width >= 768) {
+        if (width >= 1024) return setVisibleSetCount(4);
+        return setVisibleSetCount(3);
+      }
+      if (width >= 640) return setVisibleSetCount(2);
+
+      // Mobile: measure actual remaining space below the card's top
+      const cardTop = card.getBoundingClientRect().top;
+      const headerAndPadding = 76; // p-4 top(16) + header(28) + mb-3(12) + p-4 bottom(16) + page bottom margin(4)
+      const available = window.innerHeight - cardTop - headerAndPadding;
+      const cardH = 110;
+      const gap = 12;
+      setVisibleSetCount(
+        Math.max(1, Math.floor((available + gap) / (cardH + gap)))
+      );
+    };
+
+    // Recalculate after a frame so layout is settled
+    requestAnimationFrame(calculate);
+    window.addEventListener('resize', calculate);
+    return () => window.removeEventListener('resize', calculate);
+  }, [dashboardLoading, setsLoading]);
 
   // Show loading state until client-side hydration is complete
   if (!mounted) {
@@ -418,65 +452,65 @@ export default function DashboardPage() {
             {/* Compact Stats Row - Desktop only */}
             <div className="hidden md:grid md:grid-cols-4 gap-3">
               {/* Streak Card */}
-              <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-4 text-white shadow">
-                <div className="flex items-center justify-between mb-2">
-                  <FaFire className="text-2xl" />
+              <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-3 text-white shadow">
+                <div className="flex items-center justify-between mb-1">
+                  <FaFire className="text-lg" />
                   <div className="text-right">
-                    <div className="text-xs opacity-75">Longest</div>
-                    <div className="text-lg font-bold">
+                    <div className="text-[10px] opacity-75">Longest</div>
+                    <div className="text-sm font-bold">
                       {userData.longestStreak ?? '—'}
                     </div>
                   </div>
                 </div>
-                <div className="text-3xl font-bold mb-0.5">
+                <div className="text-2xl font-bold">
                   {userData.currentStreak ?? '—'}
                 </div>
-                <p className="text-xs opacity-90">day streak</p>
+                <p className="text-[10px] opacity-90">day streak</p>
               </div>
 
               {/* Study Time */}
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                    <FaClock className="text-sm text-blue-600 dark:text-blue-400" />
+              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                    <FaClock className="text-xs text-blue-600 dark:text-blue-400" />
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white mb-0.5">
+                <div className="text-xl font-bold text-gray-900 dark:text-white">
                   {userData.totalStudyTime ?? '—'}
                 </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
+                <p className="text-[10px] text-gray-600 dark:text-gray-400">
                   Total Study Time
                 </p>
               </div>
 
               {/* Accuracy */}
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                    <FaCheck className="text-sm text-green-600 dark:text-green-400" />
+              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-6 h-6 rounded-md bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                    <FaCheck className="text-xs text-green-600 dark:text-green-400" />
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white mb-0.5">
+                <div className="text-xl font-bold text-gray-900 dark:text-white">
                   {userData.accuracyRate != null
                     ? `${userData.accuracyRate}%`
                     : '—'}
                 </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
+                <p className="text-[10px] text-gray-600 dark:text-gray-400">
                   Accuracy Rate
                 </p>
               </div>
 
               {/* Items Reviewed */}
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                    <TbCards className="text-sm text-purple-600 dark:text-purple-400" />
+              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-6 h-6 rounded-md bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                    <TbCards className="text-xs text-purple-600 dark:text-purple-400" />
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white mb-0.5">
+                <div className="text-xl font-bold text-gray-900 dark:text-white">
                   {userData.cardsReviewed ?? '—'}
                 </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
+                <p className="text-[10px] text-gray-600 dark:text-gray-400">
                   Items Reviewed
                 </p>
               </div>
@@ -611,7 +645,10 @@ export default function DashboardPage() {
             </div>
 
             {/* Recent Sets */}
-            <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm overflow-hidden">
+            <div
+              ref={setsCardRef}
+              className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm overflow-hidden"
+            >
               {/* Header */}
               <Link
                 href="/learn/academy/sets"
@@ -622,31 +659,6 @@ export default function DashboardPage() {
                 </h2>
                 <FiChevronRight className="text-gray-400 dark:text-gray-500 text-lg mt-px group-hover:text-[#e30a5f] transition-colors" />
               </Link>
-
-              {/* Fast Review banner */}
-              {!dueLoading && totalDueItems > 0 && (
-                <div className="mb-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-xl shadow-md px-4 py-3 text-white flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white/20 rounded-lg">
-                      <TbRepeat className="w-4 h-4" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-bold">Fast Review</p>
-                      <p className="text-xs text-white/70">
-                        {totalDueItems} item{totalDueItems !== 1 ? 's' : ''} due
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() =>
-                      router.push('/learn/academy/sets/fast-review')
-                    }
-                    className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-[#667eea] hover:bg-white/90 transition-colors"
-                  >
-                    <TbRepeat className="text-base" /> Review {totalDueItems}
-                  </button>
-                </div>
-              )}
 
               {/* Sets */}
               {setsLoading ? (
@@ -671,7 +683,7 @@ export default function DashboardPage() {
               ) : (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                    {sets.slice(0, 3).map((set) => {
+                    {sets.slice(0, visibleSetCount).map((set) => {
                       const typeMap = {
                         vocab: {
                           label: 'Vocab',
