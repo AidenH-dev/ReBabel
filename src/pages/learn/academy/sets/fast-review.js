@@ -108,8 +108,11 @@ export default function FastReview() {
   const leveledItemIdsRef = useRef(new Set());
 
   // ============ ANALYTICS ============
-  const { start: startAnalyticsSession, finish: finishAnalyticsSession } =
-    useAnalyticsSession('srs_fast_review');
+  const {
+    start: startAnalyticsSession,
+    finish: finishAnalyticsSession,
+    abort: abortAnalyticsSession,
+  } = useAnalyticsSession('srs_fast_review');
 
   const markSetsStudied = async (breakdown) => {
     const now = new Date().toISOString();
@@ -637,6 +640,7 @@ export default function FastReview() {
   // ============ GENERAL HANDLERS ============
 
   const handleExit = () => {
+    abortAnalyticsSession();
     router.push('/learn/academy/sets');
   };
 

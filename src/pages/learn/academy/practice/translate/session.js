@@ -84,8 +84,11 @@ export default function TranslatePracticeSession() {
   };
 
   // ============ ANALYTICS ============
-  const { start: startAnalyticsSession, finish: finishAnalyticsSession } =
-    useAnalyticsSession('translate');
+  const {
+    start: startAnalyticsSession,
+    finish: finishAnalyticsSession,
+    abort: abortAnalyticsSession,
+  } = useAnalyticsSession('translate');
 
   const handleSessionComplete = () => {
     finishAnalyticsSession();
@@ -150,7 +153,10 @@ export default function TranslatePracticeSession() {
           <div className="flex items-center justify-between mb-4 mt-2 sm:mt-0 ">
             <div className="flex items-center gap-3 sm:gap-4 min-w-0 ml-0 ">
               <button
-                onClick={() => router.push('/learn/academy/practice')}
+                onClick={() => {
+                  abortAnalyticsSession();
+                  router.push('/learn/academy/practice');
+                }}
                 className="shrink-0 p-2 rounded-lg bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 transition-colors"
                 aria-label="Exit"
               >

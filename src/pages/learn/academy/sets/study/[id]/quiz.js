@@ -30,8 +30,11 @@ export default function SetQuiz() {
   const { id } = router.query;
 
   // ============ ANALYTICS ============
-  const { start: startAnalyticsSession, finish: finishAnalyticsSession } =
-    useAnalyticsSession('quiz');
+  const {
+    start: startAnalyticsSession,
+    finish: finishAnalyticsSession,
+    abort: abortAnalyticsSession,
+  } = useAnalyticsSession('quiz');
 
   const markSetStudied = async (setId) => {
     try {
@@ -460,6 +463,7 @@ export default function SetQuiz() {
 
   // Handle exit
   const handleExit = () => {
+    abortAnalyticsSession();
     console.log('=== QUIZ SESSION ENDED ===');
     console.log('Final Statistics:', {
       sessionStats,

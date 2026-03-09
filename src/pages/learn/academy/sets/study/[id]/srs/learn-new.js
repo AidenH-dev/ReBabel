@@ -106,8 +106,11 @@ export default function LearnNew() {
   const translationInputRef = useRef(null);
 
   // ============ ANALYTICS ============
-  const { start: startAnalyticsSession, finish: finishAnalyticsSession } =
-    useAnalyticsSession('srs_learn_new');
+  const {
+    start: startAnalyticsSession,
+    finish: finishAnalyticsSession,
+    abort: abortAnalyticsSession,
+  } = useAnalyticsSession('srs_learn_new');
 
   const markSetStudied = async (setId) => {
     try {
@@ -619,6 +622,7 @@ export default function LearnNew() {
   // ============ GENERAL HANDLERS ============
 
   const handleExit = () => {
+    abortAnalyticsSession();
     router.push(`/learn/academy/sets/study/${id}`);
   };
 

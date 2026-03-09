@@ -109,8 +109,11 @@ export default function DueNow() {
   const leveledItemIdsRef = useRef(new Set());
 
   // ============ ANALYTICS ============
-  const { start: startAnalyticsSession, finish: finishAnalyticsSession } =
-    useAnalyticsSession('srs_due_review');
+  const {
+    start: startAnalyticsSession,
+    finish: finishAnalyticsSession,
+    abort: abortAnalyticsSession,
+  } = useAnalyticsSession('srs_due_review');
 
   const markSetStudied = async (setId) => {
     try {
@@ -736,6 +739,7 @@ export default function DueNow() {
   // ============ GENERAL HANDLERS ============
 
   const handleExit = () => {
+    abortAnalyticsSession();
     router.push(`/learn/academy/sets/study/${id}`);
   };
 
