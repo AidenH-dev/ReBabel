@@ -23,45 +23,15 @@ import {
   mergeIntoBaseItem,
   mergeIntoQuestionItem,
 } from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
+import useAnalyticsSession from '@/hooks/useAnalyticsSession';
 
 export default function SetQuiz() {
   const router = useRouter();
   const { id } = router.query;
 
   // ============ ANALYTICS ============
-  const analyticsSessionIdRef = useRef(null);
-
-  const startAnalyticsSession = async () => {
-    try {
-      const res = await fetch('/api/analytics/user/sessions/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionType: 'quiz' }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        analyticsSessionIdRef.current = data.entity_id;
-      }
-    } catch (err) {
-      console.error('Failed to start analytics session:', err);
-    }
-  };
-
-  const finishAnalyticsSession = async (itemsReviewed, itemsCorrect) => {
-    if (!analyticsSessionIdRef.current) return;
-    try {
-      await fetch(
-        `/api/analytics/user/sessions/${analyticsSessionIdRef.current}/finish`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ itemsReviewed, itemsCorrect }),
-        }
-      );
-    } catch (err) {
-      console.error('Failed to finish analytics session:', err);
-    }
-  };
+  const { start: startAnalyticsSession, finish: finishAnalyticsSession } =
+    useAnalyticsSession('quiz');
 
   const markSetStudied = async (setId) => {
     try {
@@ -442,7 +412,6 @@ export default function SetQuiz() {
 
   // Handle quiz retry
   const handleRetry = () => {
-    analyticsSessionIdRef.current = null;
     startAnalyticsSession();
     setQuizCompleted(false);
     setCurrentIndex(0);

@@ -17,6 +17,7 @@ import {
 import KeyboardShortcutHint from '../../../../../../components/Set/Features/Field-Card-Session/shared/views/KeyboardShortcutHint';
 import { TbCards, TbX } from 'react-icons/tb';
 import { MdFlip } from 'react-icons/md';
+import useAnalyticsSession from '@/hooks/useAnalyticsSession';
 
 export default function SetFlashcards() {
   const router = useRouter();
@@ -49,40 +50,9 @@ export default function SetFlashcards() {
   const [cardConfidence, setCardConfidence] = useState({});
 
   // ============ ANALYTICS ============
-  const analyticsSessionIdRef = useRef(null);
+  const { start: startAnalyticsSession, finish: finishAnalyticsSession } =
+    useAnalyticsSession('flashcards');
   const currentIndexRef = useRef(0);
-
-  const startAnalyticsSession = async () => {
-    try {
-      const res = await fetch('/api/analytics/user/sessions/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionType: 'flashcards' }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        analyticsSessionIdRef.current = data.entity_id;
-      }
-    } catch (err) {
-      console.error('Failed to start analytics session:', err);
-    }
-  };
-
-  const finishAnalyticsSession = async (itemsReviewed) => {
-    if (!analyticsSessionIdRef.current) return;
-    try {
-      await fetch(
-        `/api/analytics/user/sessions/${analyticsSessionIdRef.current}/finish`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ itemsReviewed }),
-        }
-      );
-    } catch (err) {
-      console.error('Failed to finish analytics session:', err);
-    }
-  };
 
   const markSetStudied = async (setId) => {
     try {

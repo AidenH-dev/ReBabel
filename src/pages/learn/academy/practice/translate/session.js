@@ -5,10 +5,11 @@ import Head from 'next/head';
 import AcademySidebar from '@/components/Sidebars/AcademySidebar';
 import MasterTranslateSession from '@/components/Practice/Premium/Features/Translate/Session/controllers/MasterTranslateSession';
 import TranslateSummaryView from '@/components/Practice/Premium/Features/Translate/Session/views/TranslateSummaryView';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { usePremium } from '@/contexts/PremiumContext';
+import useAnalyticsSession from '@/hooks/useAnalyticsSession';
 import { TbX } from 'react-icons/tb';
 import { FaDumbbell } from 'react-icons/fa';
 import { BiBook } from 'react-icons/bi';
@@ -83,23 +84,8 @@ export default function TranslatePracticeSession() {
   };
 
   // ============ ANALYTICS ============
-  const analyticsSessionIdRef = useRef(null);
-
-  const finishAnalyticsSession = async () => {
-    if (!analyticsSessionIdRef.current) return;
-    try {
-      await fetch(
-        `/api/analytics/user/sessions/${analyticsSessionIdRef.current}/finish`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({}),
-        }
-      );
-    } catch (err) {
-      console.error('Failed to finish analytics session:', err);
-    }
-  };
+  const { start: startAnalyticsSession, finish: finishAnalyticsSession } =
+    useAnalyticsSession('translate');
 
   const handleSessionComplete = () => {
     finishAnalyticsSession();
@@ -108,19 +94,7 @@ export default function TranslatePracticeSession() {
 
   const handleGenerationSuccess = async () => {
     incrementSessionCount();
-    try {
-      const res = await fetch('/api/analytics/user/sessions/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionType: 'translate' }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        analyticsSessionIdRef.current = data.entity_id;
-      }
-    } catch (e) {
-      console.error('Failed to record session start:', e);
-    }
+    await startAnalyticsSession();
   };
 
   const handleGenerationError = () => {
