@@ -82,6 +82,8 @@ export default function FastReview() {
     totalAttempts: 0,
     accuracy: 0,
   });
+  const sessionStatsRef = useRef(sessionStats);
+  sessionStatsRef.current = sessionStats;
   const [answeredItems, setAnsweredItems] = useState([]);
 
   // ============ PHASE PROGRESS TRACKING ============
@@ -261,11 +263,11 @@ export default function FastReview() {
   // Finish analytics session when review completes
   useEffect(() => {
     if (currentPhase === 'complete') {
-      finishAnalyticsSession(sessionStats.totalAttempts, sessionStats.correct);
+      const stats = sessionStatsRef.current;
+      finishAnalyticsSession(stats.totalAttempts, stats.correct);
       markSetsStudied(setBreakdown);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPhase]);
+  }, [currentPhase, finishAnalyticsSession, setBreakdown]);
 
   // Shuffle MC options whenever the current item or phase changes
   useEffect(() => {

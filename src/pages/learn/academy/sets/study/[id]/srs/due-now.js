@@ -83,6 +83,8 @@ export default function DueNow() {
     totalAttempts: 0,
     accuracy: 0,
   });
+  const sessionStatsRef = useRef(sessionStats);
+  sessionStatsRef.current = sessionStats;
   const [answeredItems, setAnsweredItems] = useState([]);
 
   // ============ PHASE PROGRESS TRACKING ============
@@ -318,11 +320,11 @@ export default function DueNow() {
   // Finish analytics session when study session completes
   useEffect(() => {
     if (currentPhase === 'complete') {
-      finishAnalyticsSession(sessionStats.totalAttempts, sessionStats.correct);
+      const stats = sessionStatsRef.current;
+      finishAnalyticsSession(stats.totalAttempts, stats.correct);
       markSetStudied(id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPhase]);
+  }, [currentPhase, finishAnalyticsSession, id]);
 
   // Shuffle MC options whenever the current item or phase changes
   useEffect(() => {

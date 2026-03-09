@@ -87,6 +87,8 @@ export default function LearnNew() {
     totalAttempts: 0,
     accuracy: 0,
   });
+  const sessionStatsRef = useRef(sessionStats);
+  sessionStatsRef.current = sessionStats;
   const [answeredItems, setAnsweredItems] = useState([]);
 
   // ============ PHASE PROGRESS TRACKING ============
@@ -750,11 +752,11 @@ export default function LearnNew() {
   // Finish analytics session when study session completes
   useEffect(() => {
     if (currentPhase === 'complete') {
-      finishAnalyticsSession(sessionStats.totalAttempts, sessionStats.correct);
+      const stats = sessionStatsRef.current;
+      finishAnalyticsSession(stats.totalAttempts, stats.correct);
       markSetStudied(id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPhase]);
+  }, [currentPhase, finishAnalyticsSession, id]);
 
   // Shuffle multiple choice options when question changes
   // Store shuffled options to preserve their positions when showing results

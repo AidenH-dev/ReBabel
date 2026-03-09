@@ -87,6 +87,8 @@ export default function SetQuiz() {
     totalAttempts: 0,
     accuracy: 0,
   });
+  const sessionStatsRef = useRef(sessionStats);
+  sessionStatsRef.current = sessionStats;
   const [answeredItems, setAnsweredItems] = useState([]);
   const [animateAccuracy, setAnimateAccuracy] = useState(false);
 
@@ -180,11 +182,11 @@ export default function SetQuiz() {
   // Finish analytics session when quiz completes
   useEffect(() => {
     if (quizCompleted) {
-      finishAnalyticsSession(sessionStats.totalAttempts, sessionStats.correct);
+      const stats = sessionStatsRef.current;
+      finishAnalyticsSession(stats.totalAttempts, stats.correct);
       markSetStudied(id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quizCompleted]);
+  }, [quizCompleted, finishAnalyticsSession, id]);
 
   // Function to initialize multiple choice questions
   const initializeMultipleChoice = () => {
