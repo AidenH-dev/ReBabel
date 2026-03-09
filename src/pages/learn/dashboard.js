@@ -4,6 +4,7 @@ import Link from 'next/link';
 import MainSidebar from '../../components/Sidebars/MainSidebar';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
 import {
   FaFire,
@@ -17,6 +18,9 @@ import { FiPlay, FiChevronRight } from 'react-icons/fi';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 
 function ActivityCalendar({ activityData }) {
+  const [tooltip, setTooltip] = useState(null);
+  const containerRef = useRef(null);
+
   const getColorClass = (level) => {
     if (level === 0) return 'bg-gray-100 dark:bg-white/[0.07]';
     if (level === 1) return 'bg-green-200 dark:bg-green-900';
@@ -25,6 +29,27 @@ function ActivityCalendar({ activityData }) {
     return 'bg-green-700 dark:bg-green-400';
   };
 
+  const formatDate = (dateStr) => {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
+  const showTooltip = (e, day) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTooltip({
+      date: day.date,
+      minutes: day.minutes,
+      x: rect.left + rect.width / 2,
+      y: rect.top - 4,
+    });
+  };
+
+  const hideTooltip = () => setTooltip(null);
+
   // Group by week
   const weeks = [];
   for (let i = 0; i < activityData.length; i += 7) {
@@ -32,7 +57,26 @@ function ActivityCalendar({ activityData }) {
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto" ref={containerRef}>
+      {tooltip &&
+        createPortal(
+          <div
+            className="fixed z-50 px-2 py-1 rounded-md bg-gray-900 dark:bg-gray-700 text-white text-[10px] leading-tight whitespace-nowrap pointer-events-none"
+            style={{
+              left: tooltip.x,
+              top: tooltip.y,
+              transform: 'translate(-50%, -100%)',
+            }}
+          >
+            <div className="font-medium">{formatDate(tooltip.date)}</div>
+            <div className="text-gray-300">
+              {tooltip.minutes > 0
+                ? `${tooltip.minutes} min studied`
+                : 'No activity'}
+            </div>
+          </div>,
+          document.body
+        )}
       <div className="inline-flex gap-0.5 p-px">
         {weeks.map((week, weekIdx) => (
           <div key={weekIdx} className="flex flex-col gap-0.5">
@@ -40,7 +84,9 @@ function ActivityCalendar({ activityData }) {
               <div
                 key={day.date}
                 className={`w-2.5 h-2.5 rounded-sm ${getColorClass(day.level)} transition-all hover:ring-1 hover:ring-[#e30a5f] cursor-pointer`}
-                title={`${day.date}: ${day.minutes}min`}
+                onMouseEnter={(e) => showTooltip(e, day)}
+                onMouseLeave={hideTooltip}
+                onClick={(e) => showTooltip(e, day)}
               />
             ))}
           </div>
