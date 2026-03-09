@@ -321,7 +321,7 @@ export default function DueNow() {
   useEffect(() => {
     if (currentPhase === 'complete') {
       const stats = sessionStatsRef.current;
-      finishAnalyticsSession(stats.totalAttempts, stats.correct);
+      finishAnalyticsSession(leveledItemIdsRef.current.size, stats.correct);
       markSetStudied(id);
     }
   }, [currentPhase, finishAnalyticsSession, id]);

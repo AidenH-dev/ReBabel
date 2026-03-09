@@ -264,7 +264,7 @@ export default function FastReview() {
   useEffect(() => {
     if (currentPhase === 'complete') {
       const stats = sessionStatsRef.current;
-      finishAnalyticsSession(stats.totalAttempts, stats.correct);
+      finishAnalyticsSession(leveledItemIdsRef.current.size, stats.correct);
       markSetsStudied(setBreakdown);
     }
   }, [currentPhase, finishAnalyticsSession, setBreakdown]);

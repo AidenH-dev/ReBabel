@@ -183,7 +183,7 @@ export default function SetQuiz() {
   useEffect(() => {
     if (quizCompleted) {
       const stats = sessionStatsRef.current;
-      finishAnalyticsSession(stats.totalAttempts, stats.correct);
+      finishAnalyticsSession(quizItems.length, stats.correct);
       markSetStudied(id);
     }
   }, [quizCompleted, finishAnalyticsSession, id]);
