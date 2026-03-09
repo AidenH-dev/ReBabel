@@ -25,6 +25,8 @@ import {
   shuffleArray,
   shuffleOptionsWithDistractors,
 } from '@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration';
+import { transformItems } from '@/components/Set/Features/Field-Card-Session/shared/models/itemTransform';
+import { generateTranslationItems } from '@/components/Set/Features/Field-Card-Session/shared/models/translationGeneration';
 import {
   buildEditableItem,
   toUpdateRequest,
@@ -156,54 +158,6 @@ export default function FastReview() {
     );
   };
 
-  // Helper function to transform API items to internal format
-  // Preserves setId and setTitle for multi-set tracking
-  const transformItems = (apiItems) => {
-    return Array.isArray(apiItems)
-      ? apiItems
-          .map((item, index) => {
-            if (item.type === 'vocab' || item.type === 'vocabulary') {
-              return {
-                id: `vocab-${index}`,
-                uuid: item.id,
-                type: 'vocabulary',
-                kana: item.kana || '',
-                kanji: item.kanji || null,
-                english: item.english || '',
-                lexical_category: item.lexical_category || '',
-                example_sentences: Array.isArray(item.example_sentences)
-                  ? item.example_sentences
-                  : [item.example_sentences].filter(Boolean),
-                srs_level: item.srs?.srs_level || 1,
-                setId: item.setId,
-                setTitle: item.setTitle,
-              };
-            } else if (item.type === 'grammar') {
-              return {
-                id: `grammar-${index}`,
-                uuid: item.id,
-                type: 'grammar',
-                title: item.title || '',
-                description: item.description || '',
-                topic: item.topic || '',
-                example_sentences: Array.isArray(item.example_sentences)
-                  ? item.example_sentences.map((ex) =>
-                      typeof ex === 'string'
-                        ? ex
-                        : `${ex.japanese || ''} (${ex.english || ''})`
-                    )
-                  : [],
-                srs_level: item.srs?.srs_level || 1,
-                setId: item.setId,
-                setTitle: item.setTitle,
-              };
-            }
-            return null;
-          })
-          .filter(Boolean)
-      : [];
-  };
-
   // Fetch all due items across sets
   useEffect(() => {
     const fetchAllDueItems = async () => {
@@ -235,7 +189,9 @@ export default function FastReview() {
         setSetBreakdown(metadata.setBreakdown || []);
 
         // Transform items to internal format
-        const transformedItemData = transformItems(apiItems);
+        const transformedItemData = transformItems(apiItems, {
+          includeSrsLevel: true,
+        });
 
         if (transformedItemData.length === 0) {
           throw new Error('No items due for review');
@@ -258,75 +214,9 @@ export default function FastReview() {
         // ============================================
         // QUESTION ARRAYS: Separate by Type
         // ============================================
-        const translation = [];
 
         // Generate translation questions for vocabulary items only
-        transformedItemData.forEach((item) => {
-          if (item.type === 'vocabulary') {
-            // English -> Kana
-            translation.push({
-              id: `${item.id}-tr-en-kana`,
-              originalId: item.id,
-              uuid: item.uuid,
-              type: 'vocabulary',
-              questionType: 'English',
-              answerType: 'Kana',
-              question: item.english,
-              answer: item.kana,
-              hint: item.lexical_category,
-              setId: item.setId,
-              setTitle: item.setTitle,
-            });
-
-            // Kana -> English
-            translation.push({
-              id: `${item.id}-tr-kana-en`,
-              originalId: item.id,
-              uuid: item.uuid,
-              type: 'vocabulary',
-              questionType: 'Kana',
-              answerType: 'English',
-              question: item.kana,
-              answer: item.english,
-              hint: item.lexical_category,
-              setId: item.setId,
-              setTitle: item.setTitle,
-            });
-
-            // If kanji exists, add kanji question variations
-            if (item.kanji) {
-              // Kanji -> English (user types English)
-              translation.push({
-                id: `${item.id}-tr-kanji-en`,
-                originalId: item.id,
-                uuid: item.uuid,
-                type: 'vocabulary',
-                questionType: 'Kanji',
-                answerType: 'English',
-                question: item.kanji,
-                answer: item.english,
-                hint: `${item.lexical_category} (${item.kana})`,
-                setId: item.setId,
-                setTitle: item.setTitle,
-              });
-
-              // Kanji -> Kana (user types Kana)
-              translation.push({
-                id: `${item.id}-tr-kanji-kana`,
-                originalId: item.id,
-                uuid: item.uuid,
-                type: 'vocabulary',
-                questionType: 'Kanji',
-                answerType: 'Kana',
-                question: item.kanji,
-                answer: item.kana,
-                hint: item.english,
-                setId: item.setId,
-                setTitle: item.setTitle,
-              });
-            }
-          }
-        });
+        const translation = generateTranslationItems(transformedItemData);
 
         // Generate multiple choice questions for grammar items only
         const grammarItems = transformedItemData.filter(

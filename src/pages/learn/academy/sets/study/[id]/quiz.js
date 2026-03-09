@@ -15,6 +15,8 @@ import {
   generateOptionsFromQuizItems,
   shuffleArray,
 } from '@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration';
+import { transformItems } from '@/components/Set/Features/Field-Card-Session/shared/models/itemTransform';
+import { generateQuizItems } from '@/components/Set/Features/Field-Card-Session/shared/models/translationGeneration';
 import {
   buildEditableItem,
   toUpdateRequest,
@@ -162,44 +164,7 @@ export default function SetQuiz() {
         setSetType(setInfoData.set_type || 'vocab');
 
         // Transform items to flashcard format
-        const transformedCards = Array.isArray(setItemsAPI)
-          ? setItemsAPI
-              .map((item, index) => {
-                if (item.type === 'vocab' || item.type === 'vocabulary') {
-                  return {
-                    id: `vocab-${index}`,
-                    uuid: item.id,
-                    type: 'vocabulary',
-                    kana: item.kana || '',
-                    kanji: item.kanji || null,
-                    english: item.english || '',
-                    lexical_category: item.lexical_category || '',
-                    example_sentences: Array.isArray(item.example_sentences)
-                      ? item.example_sentences
-                      : [item.example_sentences].filter(Boolean),
-                  };
-                } else if (item.type === 'grammar') {
-                  return {
-                    id: `grammar-${index}`,
-                    uuid: item.id,
-                    type: 'grammar',
-                    title: item.title || '',
-                    description: item.description || '',
-                    topic: item.topic || '',
-                    notes: item.notes || '',
-                    example_sentences: Array.isArray(item.example_sentences)
-                      ? item.example_sentences.map((ex) =>
-                          typeof ex === 'string'
-                            ? ex
-                            : `${ex.japanese || ''} (${ex.english || ''})`
-                        )
-                      : [],
-                  };
-                }
-                return null;
-              })
-              .filter(Boolean)
-          : [];
+        const transformedCards = transformItems(setItemsAPI);
 
         if (transformedCards.length === 0) {
           throw new Error('This set has no items to study');
@@ -208,10 +173,7 @@ export default function SetQuiz() {
         setCardsData(transformedCards);
 
         // Generate quiz items from cards
-        const generatedQuizItems = generateQuizItems(
-          transformedCards,
-          setInfoData.set_type || 'vocab'
-        );
+        const generatedQuizItems = generateQuizItems(transformedCards);
         setQuizItems(shuffleArray(generatedQuizItems));
 
         // Initialize item statistics
@@ -250,127 +212,6 @@ export default function SetQuiz() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizCompleted]);
-
-  // Generate quiz items based on card type
-  const generateQuizItems = (cards, setType = 'vocab') => {
-    const items = [];
-
-    cards.forEach((card) => {
-      if (card.type === 'vocabulary') {
-        // English to Kana
-        items.push({
-          id: `${card.id}-en-kana`,
-          originalId: card.id,
-          uuid: card.uuid,
-          type: 'vocab-en-kana',
-          cardType: 'vocabulary',
-          english: card.english,
-          kana: card.kana,
-          kanji: card.kanji,
-          lexical_category: card.lexical_category,
-          question: card.english,
-          answer: card.kana,
-          hint: card.lexical_category,
-          questionType: 'English',
-          answerType: 'Kana',
-        });
-
-        if (card.kanji) {
-          // Kanji to English
-          items.push({
-            id: `${card.id}-kanji-en`,
-            originalId: card.id,
-            uuid: card.uuid,
-            type: 'vocab-kanji-en',
-            cardType: 'vocabulary',
-            english: card.english,
-            kana: card.kana,
-            kanji: card.kanji,
-            lexical_category: card.lexical_category,
-            question: card.kanji,
-            answer: card.english,
-            hint: `${card.lexical_category} (${card.kana})`,
-            questionType: 'Kanji',
-            answerType: 'English',
-          });
-
-          // Kanji to Kana
-          items.push({
-            id: `${card.id}-kanji-kana`,
-            originalId: card.id,
-            uuid: card.uuid,
-            type: 'vocab-kanji-kana',
-            cardType: 'vocabulary',
-            english: card.english,
-            kana: card.kana,
-            kanji: card.kanji,
-            lexical_category: card.lexical_category,
-            question: card.kanji,
-            answer: card.kana,
-            hint: card.english,
-            questionType: 'Kanji',
-            answerType: 'Kana',
-          });
-        } else {
-          // Kana to English (when no kanji)
-          items.push({
-            id: `${card.id}-kana-en`,
-            originalId: card.id,
-            uuid: card.uuid,
-            type: 'vocab-kana-en',
-            cardType: 'vocabulary',
-            english: card.english,
-            kana: card.kana,
-            kanji: card.kanji,
-            lexical_category: card.lexical_category,
-            question: card.kana,
-            answer: card.english,
-            hint: card.lexical_category,
-            questionType: 'Kana',
-            answerType: 'English',
-          });
-        }
-      } else if (card.type === 'grammar') {
-        // Title to Description
-        items.push({
-          id: `${card.id}-title-desc`,
-          originalId: card.id,
-          uuid: card.uuid,
-          type: 'grammar-title-desc',
-          cardType: 'grammar',
-          title: card.title,
-          description: card.description,
-          topic: card.topic,
-          notes: card.notes,
-          question: card.title,
-          answer: card.description,
-          hint: card.topic,
-          questionType: 'Grammar Pattern',
-          answerType: 'Description',
-        });
-
-        // Description to Title
-        items.push({
-          id: `${card.id}-desc-title`,
-          originalId: card.id,
-          uuid: card.uuid,
-          type: 'grammar-desc-title',
-          cardType: 'grammar',
-          title: card.title,
-          description: card.description,
-          topic: card.topic,
-          notes: card.notes,
-          question: card.description,
-          answer: card.title,
-          hint: card.topic,
-          questionType: 'Description',
-          answerType: 'Grammar Pattern',
-        });
-      }
-    });
-
-    return items;
-  };
 
   // Function to initialize multiple choice questions
   const initializeMultipleChoice = () => {
