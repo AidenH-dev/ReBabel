@@ -1,18 +1,18 @@
 // Translate Practice Session Page
 // Main session page for on-demand translate practice
 
-import Head from "next/head";
-import AcademySidebar from "@/components/Sidebars/AcademySidebar";
-import MasterTranslateSession from "@/components/Practice/Premium/Features/Translate/Session/controllers/MasterTranslateSession";
-import TranslateSummaryView from "@/components/Practice/Premium/Features/Translate/Session/views/TranslateSummaryView";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { usePremium } from "@/contexts/PremiumContext";
-import { TbX } from "react-icons/tb";
-import { FaDumbbell } from "react-icons/fa";
-import { BiBook } from "react-icons/bi";
-import { TbLanguage } from "react-icons/tb";
+import Head from 'next/head';
+import AcademySidebar from '@/components/Sidebars/AcademySidebar';
+import MasterTranslateSession from '@/components/Practice/Premium/Features/Translate/Session/controllers/MasterTranslateSession';
+import TranslateSummaryView from '@/components/Practice/Premium/Features/Translate/Session/views/TranslateSummaryView';
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { usePremium } from '@/contexts/PremiumContext';
+import { TbX } from 'react-icons/tb';
+import { FaDumbbell } from 'react-icons/fa';
+import { BiBook } from 'react-icons/bi';
+import { TbLanguage } from 'react-icons/tb';
 
 export default function TranslatePracticeSession() {
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function TranslatePracticeSession() {
     totalScore: 0,
     _grammarSum: 0,
     _vocabSum: 0,
-    _avgSum: 0
+    _avgSum: 0,
   });
 
   // Load config from sessionStorage
@@ -58,13 +58,13 @@ export default function TranslatePracticeSession() {
   }, [router.query, router]);
 
   const handleQuestionCompleted = (result) => {
-    setQuestionResults(prev => [...prev, result]);
+    setQuestionResults((prev) => [...prev, result]);
 
     const grammarScore = result.gradeResult?.grades?.grammar || 0;
     const vocabScore = result.gradeResult?.grades?.vocabulary || 0;
     const questionAvg = (grammarScore + vocabScore) / 2;
 
-    setSessionStats(prev => {
+    setSessionStats((prev) => {
       const newTotal = prev.totalQuestions + 1;
       const newAvgSum = prev._avgSum + questionAvg;
       const newGrammarSum = prev._grammarSum + grammarScore;
@@ -82,18 +82,42 @@ export default function TranslatePracticeSession() {
     });
   };
 
+  // ============ ANALYTICS ============
+  const analyticsSessionIdRef = useRef(null);
+
+  const finishAnalyticsSession = async () => {
+    if (!analyticsSessionIdRef.current) return;
+    try {
+      await fetch(
+        `/api/analytics/user/sessions/${analyticsSessionIdRef.current}/finish`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({}),
+        }
+      );
+    } catch (err) {
+      console.error('Failed to finish analytics session:', err);
+    }
+  };
+
   const handleSessionComplete = () => {
+    finishAnalyticsSession();
     setSessionComplete(true);
   };
 
   const handleGenerationSuccess = async () => {
     incrementSessionCount();
     try {
-      await fetch('/api/analytics/user/sessions/start', {
+      const res = await fetch('/api/analytics/user/sessions/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionType: 'translate' })
+        body: JSON.stringify({ sessionType: 'translate' }),
       });
+      const data = await res.json();
+      if (data.success) {
+        analyticsSessionIdRef.current = data.entity_id;
+      }
     } catch (e) {
       console.error('Failed to record session start:', e);
     }
@@ -110,7 +134,9 @@ export default function TranslatePracticeSession() {
         <main className="flex-1 flex items-center justify-center pt-[max(1rem,env(safe-area-inset-top))]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#e30a5f] mx-auto"></div>
-            <p className="mt-4 text-sm text-black/60 dark:text-white/60">Loading practice session...</p>
+            <p className="mt-4 text-sm text-black/60 dark:text-white/60">
+              Loading practice session...
+            </p>
           </div>
         </main>
       </div>
@@ -170,13 +196,15 @@ export default function TranslatePracticeSession() {
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <TbLanguage className="text-green-500 text-sm" />
                 <span className="text-gray-600 dark:text-white/70">
-                  <span className="hidden sm:inline">Grammar: </span>{sessionStats.avgGrammar}%
+                  <span className="hidden sm:inline">Grammar: </span>
+                  {sessionStats.avgGrammar}%
                 </span>
               </div>
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <BiBook className="text-blue-500 text-sm" />
                 <span className="text-gray-600 dark:text-white/70">
-                  <span className="hidden sm:inline">Vocab: </span>{sessionStats.avgVocab}%
+                  <span className="hidden sm:inline">Vocab: </span>
+                  {sessionStats.avgVocab}%
                 </span>
               </div>
               <div className="text-gray-600 dark:text-white/70">
@@ -192,10 +220,16 @@ export default function TranslatePracticeSession() {
               <span className="flex items-center gap-2">
                 <FaDumbbell className="text-sm sm:hidden" />
                 <span>
-                  Question {questionResults.length + 1} of {config.sessionLength}
+                  Question {questionResults.length + 1} of{' '}
+                  {config.sessionLength}
                 </span>
               </span>
-              <span>{Math.round((questionResults.length / config.sessionLength) * 100)}% Complete</span>
+              <span>
+                {Math.round(
+                  (questionResults.length / config.sessionLength) * 100
+                )}
+                % Complete
+              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -203,7 +237,9 @@ export default function TranslatePracticeSession() {
               <div className="flex-1 bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
                 <div
                   className="h-full transition-all duration-500 ease-out rounded-full bg-[#e30a5f]"
-                  style={{ width: `${(questionResults.length / config.sessionLength) * 100}%` }}
+                  style={{
+                    width: `${(questionResults.length / config.sessionLength) * 100}%`,
+                  }}
                 />
               </div>
             </div>
