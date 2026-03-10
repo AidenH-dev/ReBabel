@@ -753,7 +753,7 @@ export default function LearnNew() {
   useEffect(() => {
     if (currentPhase === 'complete') {
       const stats = sessionStatsRef.current;
-      finishAnalyticsSession(reviewArray.length, stats.correct);
+      finishAnalyticsSession(reviewArray.length);
       markSetStudied(id);
     }
   }, [currentPhase, finishAnalyticsSession, id]);
