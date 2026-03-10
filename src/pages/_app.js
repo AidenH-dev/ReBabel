@@ -4,6 +4,9 @@ import { UserProvider, useUser } from '@auth0/nextjs-auth0/client';
 import { PremiumProvider } from '@/contexts/PremiumContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import ReportIssueButton from '@/components/report-issue';
+import BugReporter from '@/components/BugReporter'; // Implements SPEC-LLM-UI-001
+import BugReporterErrorBoundary from '@/components/BugReporter/BugReporterErrorBoundary';
+import { BugReporterProvider } from '@/contexts/BugReporterContext';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import posthog from 'posthog-js';
@@ -258,24 +261,32 @@ export default function MyApp({ Component, pageProps }) {
             gtag('config', 'G-VRBTF7S087');
           `}
           </Script>
-          {isPosthogEnabled ? (
-            <PostHogProvider client={posthog}>
-              <PostHogAuthBridge />
+          <BugReporterProvider>
+            {isPosthogEnabled ? (
+              <PostHogProvider client={posthog}>
+                <PostHogAuthBridge />
+                <div className={fredoka.className}>
+                  <BugReporterErrorBoundary>
+                    <Component {...pageProps} />
+                  </BugReporterErrorBoundary>
+                  <ReportIssueButton />
+                  <BugReporter />
+                  <Analytics />
+                  <SpeedInsights />
+                </div>
+              </PostHogProvider>
+            ) : (
               <div className={fredoka.className}>
-                <Component {...pageProps} />
+                <BugReporterErrorBoundary>
+                  <Component {...pageProps} />
+                </BugReporterErrorBoundary>
                 <ReportIssueButton />
+                <BugReporter />
                 <Analytics />
                 <SpeedInsights />
               </div>
-            </PostHogProvider>
-          ) : (
-            <div className={fredoka.className}>
-              <Component {...pageProps} />
-              <ReportIssueButton />
-              <Analytics />
-              <SpeedInsights />
-            </div>
-          )}
+            )}
+          </BugReporterProvider>
         </PremiumProvider>
       </ThemeProvider>
     </UserProvider>
