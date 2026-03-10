@@ -17,7 +17,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     userTranslation, // User's Japanese attempt
     focalPoint, // The focal point being practiced
     context, // Pools for reference
-    provider = 'deepseek', // LLM provider
+    provider = 'openai', // LLM provider
   } = req.body;
 
   // Validate inputs
@@ -37,68 +37,51 @@ export default withApiAuthRequired(async function handler(req, res) {
       key: process.env.DEEPSEEK_KEY,
       model: 'deepseek-chat',
     },
+    anthropic: {
+      url: 'https://api.anthropic.com/v1/messages',
+      key: process.env.CLAUDE_KEY,
+      model: 'claude-haiku-4-5-20251001',
+    },
   };
 
-  const config = providers[provider] || providers.deepseek;
-  if (!config.key) {
+  const providerConfig = providers[provider] || providers.anthropic;
+  if (!providerConfig.key) {
     return res
       .status(500)
       .json({ error: `API key not configured for provider: ${provider}` });
   }
 
-  // Build grading prompt - PROPORTIONAL SCORING
-  const systemInstructions = `You are a Japanese language grading system.
+  // Build system prompt (XML tags for Claude)
+  const systemInstructions = `You are a Japanese language grading system. Grade the user's Japanese translation against the expected answer.
 
-CATEGORIES (NO OVERLAP - never deduct same error twice):
-1. Grammar (0-100%): Particles (は/が/を/に/で/へ/と/も/の/か/よ/ね), verb conjugation, tense, sentence structure
-2. Vocabulary (0-100%): Word choices ONLY (nouns, verb stems, adjectives) - NOT particles
+<scoring_rules>
+Two independent categories — never penalize the same error in both:
 
-SCORING METHOD (PROPORTIONAL):
-- First, COUNT the actual elements in the expected sentence
-- Grammar score = (correct grammar elements / total grammar elements) × 100
-- Vocabulary score = (correct vocabulary words / total vocabulary words) × 100
+Grammar (0–100%): particles (は/が/を/に/で/へ/と/も/の/か), verb conjugation, tense, sentence structure
+Vocabulary (0–100%): word choices only (nouns, verb stems, adjectives) — NOT particles
 
-ELEMENT SCORING:
-- Correct: 1 point
-- Similar (synonym, related form): 0.5 points
-- Wrong or missing: 0 points
+Score = (points earned / total elements) × 100
+  correct match → 1 point
+  synonym or related form → 0.5 points
+  wrong or missing → 0 points
+</scoring_rules>
 
-CRITICAL - BEFORE SCORING:
-1. List each expected element from the expected answer
-2. Search for that EXACT element in the user's answer
-3. Check character-by-character for kana (か vs が, は vs わ, つ vs っ)
-4. Only mark wrong if element is CONFIRMED missing or wrong
-5. If unsure, mark as correct
+<grading_process>
+1. List every grammar element in the expected answer
+2. List every vocabulary element in the expected answer
+3. For each element, search the user's answer character-by-character
+4. Score each element — if unsure, mark as correct
+5. Calculate grammar% and vocabulary% separately
+6. Set confidence (0–100) reflecting how clear-cut this grading was
+</grading_process>
 
-EXAMPLE 1:
+<example>
 Expected: わたしはりんごをたべますか
 User: わたしがりんごをたべますか
 
-Step 1 - Count elements:
-- Grammar (4): は, を, ます, か
-- Vocabulary (3): わたし, りんご, たべ
-
-Step 2 - Score:
-- Grammar: は=0 (wrong), を=1, ます=1, か=1 → 3/4 = 75%
-- Vocabulary: all correct → 3/3 = 100%
-
-Result: {"grades":{"grammar":75,"vocabulary":100},"errors":{"grammar":["Used が instead of は"]},"feedback":"Good vocabulary, watch topic particle"}
-
-EXAMPLE 2:
-Expected: いぬがいます
-User: ねこがいます
-
-Step 1 - Count elements:
-- Grammar (2): が (particle), ます (polite conjugation)
-- Vocabulary (2): いぬ (noun), い (verb stem of いる)
-
-Step 2 - Score:
-- Grammar: が=1, ます=1 → 2/2 = 100%
-- Vocabulary: いぬ=0 (user said ねこ), い(ます)=1 → 1/2 = 50%
-
-Result: {"grades":{"grammar":100,"vocabulary":50},"errors":{"vocabulary":["Used ねこ instead of いぬ"]},"feedback":"Verb correct but wrong noun"}
-
-Return JSON only.`;
+Grammar elements: は を ます か → user has: が(✗) を(✓) ます(✓) か(✓) = 3/4 = 75%
+Vocabulary elements: わたし りんご たべ → all correct = 3/3 = 100%
+</example>`;
 
   const userMessage = `ENGLISH: ${englishSentence}
 EXPECTED: ${expectedTranslation}
@@ -107,99 +90,176 @@ FOCAL: ${focalPoint.type === 'grammar' ? focalPoint.item.title : focalPoint.item
 
 Grade this translation.`;
 
-  // Build request body
-  const requestBody = {
-    model: config.model,
-    messages: [
-      { role: 'system', content: systemInstructions },
-      { role: 'user', content: userMessage },
-    ],
-  };
-
-  // Add response format based on provider
-  if (provider === 'openai') {
-    requestBody.response_format = {
-      type: 'json_schema',
-      json_schema: {
-        name: 'translation_grading',
-        strict: true,
-        schema: {
+  // Tool schema for structured output
+  const gradeTool = {
+    name: 'submit_grade',
+    description: 'Submit the grading result for a Japanese translation',
+    input_schema: {
+      type: 'object',
+      properties: {
+        grades: {
           type: 'object',
           properties: {
-            grades: {
-              type: 'object',
-              properties: {
-                grammar: { type: 'number' },
-                vocabulary: { type: 'number' },
-              },
-              required: ['grammar', 'vocabulary'],
-              additionalProperties: false,
-            },
-            errors: {
-              type: 'object',
-              properties: {
-                grammar: { type: 'array', items: { type: 'string' } },
-                vocabulary: { type: 'array', items: { type: 'string' } },
-              },
-              required: ['grammar', 'vocabulary'],
-              additionalProperties: false,
-            },
-            feedback: { type: 'string' },
+            grammar: { type: 'number' },
+            vocabulary: { type: 'number' },
           },
-          required: ['grades', 'errors', 'feedback'],
-          additionalProperties: false,
+          required: ['grammar', 'vocabulary'],
         },
+        errors: {
+          type: 'object',
+          properties: {
+            grammar: { type: 'array', items: { type: 'string' } },
+            vocabulary: { type: 'array', items: { type: 'string' } },
+          },
+          required: ['grammar', 'vocabulary'],
+        },
+        feedback: { type: 'string' },
+        confidence: { type: 'number' },
       },
-    };
-  } else if (provider === 'deepseek') {
-    requestBody.response_format = { type: 'json_object' };
-  }
+      required: ['grades', 'errors', 'feedback', 'confidence'],
+    },
+  };
 
   try {
     const result = await tracedLLMCall({
       name: 'grade-translation',
       provider,
-      model: config.model,
-      messages: requestBody.messages,
+      model: providerConfig.model,
+      messages: [{ role: 'user', content: userMessage }],
       metadata: {
         englishSentence,
         focalPointType: focalPoint?.type,
         userId: session.user.sub,
       },
       fetchFn: async () => {
-        const response = await fetch(config.url, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${config.key}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody),
-        });
+        if (provider === 'anthropic') {
+          const requestBody = {
+            model: providerConfig.model,
+            max_tokens: 1024,
+            system: systemInstructions,
+            messages: [{ role: 'user', content: userMessage }],
+            tools: [gradeTool],
+            tool_choice: { type: 'tool', name: 'submit_grade' },
+          };
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error(`${provider} API error:`, errorData);
-          throw new Error(
-            `${provider} API error: ${response.status} - ${JSON.stringify(errorData)}`
-          );
-        }
-
-        const data = await response.json();
-
-        // Log token usage
-        if (data.usage) {
-          console.log(`[GRADE - ${provider.toUpperCase()}] Token Usage:`, {
-            model: data.model,
-            prompt_tokens: data.usage.prompt_tokens,
-            completion_tokens: data.usage.completion_tokens,
-            total_tokens: data.usage.total_tokens,
+          const response = await fetch(providerConfig.url, {
+            method: 'POST',
+            headers: {
+              'x-api-key': providerConfig.key,
+              'anthropic-version': '2023-06-01',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
           });
-        }
 
-        return {
-          content: data.choices?.[0]?.message?.content,
-          usage: data.usage,
-        };
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error('anthropic API error:', errorData);
+            throw new Error(
+              `anthropic API error: ${response.status} - ${JSON.stringify(errorData)}`
+            );
+          }
+
+          const data = await response.json();
+
+          if (data.usage) {
+            console.log('[GRADE - ANTHROPIC] Token Usage:', {
+              model: data.model,
+              input_tokens: data.usage.input_tokens,
+              output_tokens: data.usage.output_tokens,
+              cache_read_input_tokens: data.usage.cache_read_input_tokens,
+            });
+          }
+
+          const toolBlock = data.content.find((b) => b.type === 'tool_use');
+          return {
+            content: JSON.stringify(toolBlock.input),
+            usage: data.usage,
+          };
+        } else {
+          // OpenAI / DeepSeek path
+          const requestBody = {
+            model: providerConfig.model,
+            messages: [
+              { role: 'system', content: systemInstructions },
+              { role: 'user', content: userMessage },
+            ],
+          };
+
+          if (provider === 'openai') {
+            requestBody.response_format = {
+              type: 'json_schema',
+              json_schema: {
+                name: 'translation_grading',
+                strict: true,
+                schema: {
+                  type: 'object',
+                  properties: {
+                    grades: {
+                      type: 'object',
+                      properties: {
+                        grammar: { type: 'number' },
+                        vocabulary: { type: 'number' },
+                      },
+                      required: ['grammar', 'vocabulary'],
+                      additionalProperties: false,
+                    },
+                    errors: {
+                      type: 'object',
+                      properties: {
+                        grammar: { type: 'array', items: { type: 'string' } },
+                        vocabulary: {
+                          type: 'array',
+                          items: { type: 'string' },
+                        },
+                      },
+                      required: ['grammar', 'vocabulary'],
+                      additionalProperties: false,
+                    },
+                    feedback: { type: 'string' },
+                  },
+                  required: ['grades', 'errors', 'feedback'],
+                  additionalProperties: false,
+                },
+              },
+            };
+          } else if (provider === 'deepseek') {
+            requestBody.response_format = { type: 'json_object' };
+          }
+
+          const fetchResponse = await fetch(providerConfig.url, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${providerConfig.key}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+          });
+
+          if (!fetchResponse.ok) {
+            const errorData = await fetchResponse.json();
+            console.error(`${provider} API error:`, errorData);
+            throw new Error(
+              `${provider} API error: ${fetchResponse.status} - ${JSON.stringify(errorData)}`
+            );
+          }
+
+          const data = await fetchResponse.json();
+
+          if (data.usage) {
+            console.log(`[GRADE - ${provider.toUpperCase()}] Token Usage:`, {
+              model: data.model,
+              prompt_tokens: data.usage.prompt_tokens,
+              completion_tokens: data.usage.completion_tokens,
+              total_tokens: data.usage.total_tokens,
+            });
+          }
+
+          return {
+            content: data.choices?.[0]?.message?.content,
+            usage: data.usage,
+          };
+        }
       },
     });
 
