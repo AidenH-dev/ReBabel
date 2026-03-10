@@ -21,9 +21,15 @@ function generateSiteMap(posts) {
        <changefreq>monthly</changefreq>
        <priority>0.8</priority>
      </url>
-     ${posts
-       .map(({ slug, frontmatter }) => {
-         return `
+      <url>
+        <loc>https://www.rebabel.org/study-guide/what-is-srs</loc>
+        <lastmod>2026-03-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+      </url>
+      ${posts
+        .map(({ slug, frontmatter }) => {
+          return `
      <url>
        <loc>${`https://www.rebabel.org/blog/${slug}`}</loc>
        <lastmod>${frontmatter.lastmod || frontmatter.date}</lastmod>
@@ -31,8 +37,8 @@ function generateSiteMap(posts) {
        <priority>0.8</priority>
      </url>
    `;
-       })
-       .join('')}
+        })
+        .join('')}
    </urlset>
  `;
 }

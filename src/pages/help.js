@@ -40,7 +40,7 @@ export default function Help() {
           Optimal timing to automate practicing vocabulary and grammar right
           before you forget them. Check out our{' '}
           <Link
-            href="/what-is-srs"
+            href="/study-guide/what-is-srs"
             className="text-[#e30a5f] font-semibold hover:text-[#f41567] transition-colors"
           >
             SRS guide
