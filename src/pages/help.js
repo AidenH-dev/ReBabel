@@ -1,24 +1,25 @@
-import Head from "next/head";
-import Link from "next/link";
-import { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
-import { FiAlertTriangle } from "react-icons/fi";
+import Head from 'next/head';
+import Link from 'next/link';
+import { useState } from 'react';
+import { FaChevronDown } from 'react-icons/fa';
+import { FiAlertTriangle } from 'react-icons/fi';
 
 export default function Help() {
   const [expandedIndex, setExpandedIndex] = useState(null);
 
   const faqs = [
     {
-      question: "What is ReBabel?",
+      question: 'What is ReBabel?',
       answer:
-        "We are a Japanese language learning aid dedicated to developing tools to make studying japanese more efficient and more effective",
+        'We are a Japanese language learning aid dedicated to developing tools to make studying japanese more efficient and more effective',
     },
     {
-      question: "How do I contact support/report issues?",
+      question: 'How do I contact support/report issues?',
       answer: (
         <div>
           <p className="mb-4">
-            Use the &quot;Report Issue&quot; button located in the bottom-right corner of the app, or email us at{" "}
+            Use the &quot;Report Issue&quot; button located in the bottom-right
+            corner of the app, or email us at{' '}
             <span className="font-semibold">rebabel.development@gmail.com</span>
           </p>
           <div className="flex items-center justify-center p-6 bg-gray-100 rounded-lg">
@@ -33,30 +34,34 @@ export default function Help() {
       ),
     },
     {
-      question: "What is Spaced Repetition (SRS)?",
+      question: 'What is Spaced Repetition (SRS)?',
       answer: (
         <p>
-          Optimal timing to automate practicing vocabulary and grammar right before you forget them. Check out our{" "}
-          <Link href="/blog" className="text-[#e30a5f] font-semibold hover:text-[#f41567] transition-colors">
-            blog
-          </Link>
-          {" "}to read more.
+          Optimal timing to automate practicing vocabulary and grammar right
+          before you forget them. Check out our{' '}
+          <Link
+            href="/what-is-srs"
+            className="text-[#e30a5f] font-semibold hover:text-[#f41567] transition-colors"
+          >
+            SRS guide
+          </Link>{' '}
+          to read more.
         </p>
       ),
     },
     {
-      question: "How do I create a custom study set?",
-      answer: "Login > Academy > Create Set",
+      question: 'How do I create a custom study set?',
+      answer: 'Login > Academy > Create Set',
     },
     {
-      question: "Do I have to pay?",
+      question: 'Do I have to pay?',
       answer:
-        "No! We are commited to maintaining a robust free tier for all of our users. Our goal will always remain to make learning lanuguages a more accesible experieince.",
+        'No! We are commited to maintaining a robust free tier for all of our users. Our goal will always remain to make learning lanuguages a more accesible experieince.',
     },
     {
-      question: "Will there be a subscriptions?",
+      question: 'Will there be a subscriptions?',
       answer:
-        "Yes, we plan on adding advanced integrated practice features that will need a subscription to access, but there will always be a free version of out platform.",
+        'Yes, we plan on adding advanced integrated practice features that will need a subscription to access, but there will always be a free version of out platform.',
     },
   ];
 
@@ -69,12 +74,18 @@ export default function Help() {
       <Head>
         <title>Help & FAQ - ReBabel</title>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
         <meta
           name="description"
           content="Get help with ReBabel - answers to frequently asked questions about our Japanese learning platform, features, pricing, and support."
         />
-        <meta name="keywords" content="help, faq, japanese learning, support, rebabel" />
+        <meta
+          name="keywords"
+          content="help, faq, japanese learning, support, rebabel"
+        />
         <meta name="author" content="ReBabel" />
         <meta name="theme-color" content="#e30a5f" />
 
@@ -106,55 +117,55 @@ export default function Help() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
               mainEntity: [
                 {
-                  "@type": "Question",
-                  name: "What is ReBabel?",
+                  '@type': 'Question',
+                  name: 'What is ReBabel?',
                   acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "We are a Japanese language learning aid dedicated to developing tools to make studying japanese more efficient and more effective",
+                    '@type': 'Answer',
+                    text: 'We are a Japanese language learning aid dedicated to developing tools to make studying japanese more efficient and more effective',
                   },
                 },
                 {
-                  "@type": "Question",
-                  name: "How do I contact support/report issues?",
+                  '@type': 'Question',
+                  name: 'How do I contact support/report issues?',
                   acceptedAnswer: {
-                    "@type": "Answer",
+                    '@type': 'Answer',
                     text: 'Use the "Report Issue" button located in the bottom-right corner of the app, or email us at rebabel.development@gmail.com',
                   },
                 },
                 {
-                  "@type": "Question",
-                  name: "What is Spaced Repetition (SRS)?",
+                  '@type': 'Question',
+                  name: 'What is Spaced Repetition (SRS)?',
                   acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Optimal timing to automate practicing vocabulary and grammar right before you forget them. Check out our blog to read more.",
+                    '@type': 'Answer',
+                    text: 'Optimal timing to automate practicing vocabulary and grammar right before you forget them. Check out our SRS guide to read more.',
                   },
                 },
                 {
-                  "@type": "Question",
-                  name: "How do I create a custom study set?",
+                  '@type': 'Question',
+                  name: 'How do I create a custom study set?',
                   acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Login > Academy > Create Set",
+                    '@type': 'Answer',
+                    text: 'Login > Academy > Create Set',
                   },
                 },
                 {
-                  "@type": "Question",
-                  name: "Do I have to pay?",
+                  '@type': 'Question',
+                  name: 'Do I have to pay?',
                   acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "No! We are commited to maintaining a robust free tier for all of our users. Our goal will always remain to make learning lanuguages a more accesible experieince.",
+                    '@type': 'Answer',
+                    text: 'No! We are commited to maintaining a robust free tier for all of our users. Our goal will always remain to make learning lanuguages a more accesible experieince.',
                   },
                 },
                 {
-                  "@type": "Question",
-                  name: "Will there be a subscriptions?",
+                  '@type': 'Question',
+                  name: 'Will there be a subscriptions?',
                   acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes, we plan on adding advanced integrated practice features that will need a subscription to access, but there will always be a free version of out platform.",
+                    '@type': 'Answer',
+                    text: 'Yes, we plan on adding advanced integrated practice features that will need a subscription to access, but there will always be a free version of out platform.',
                   },
                 },
               ],
@@ -219,7 +230,7 @@ export default function Help() {
                     </dt>
                     <FaChevronDown
                       className={`flex-shrink-0 text-[#e30a5f] transition-transform duration-300 ${
-                        expandedIndex === index ? "rotate-180" : ""
+                        expandedIndex === index ? 'rotate-180' : ''
                       }`}
                     />
                   </button>
@@ -227,16 +238,18 @@ export default function Help() {
                   {/* Answer - Animated */}
                   <div
                     className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      expandedIndex === index
-                        ? "max-h-full"
-                        : "max-h-0"
+                      expandedIndex === index ? 'max-h-full' : 'max-h-0'
                     }`}
                   >
                     <dd className="px-6 py-4 bg-gradient-to-r from-gray-50/50 to-white border-t border-gray-200">
-                      {typeof faq.answer === "string" ? (
-                        <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                      {typeof faq.answer === 'string' ? (
+                        <p className="text-gray-700 leading-relaxed">
+                          {faq.answer}
+                        </p>
                       ) : (
-                        <div className="text-gray-700 leading-relaxed">{faq.answer}</div>
+                        <div className="text-gray-700 leading-relaxed">
+                          {faq.answer}
+                        </div>
                       )}
                     </dd>
                   </div>
@@ -253,8 +266,11 @@ export default function Help() {
               Still have questions?
             </h2>
             <p className="text-white/90 mb-6 max-w-xl mx-auto">
-              Use the &quot;Report Issue&quot; button in the app or reach out to us at{" "}
-              <span className="font-semibold">rebabel.development@gmail.com</span>
+              Use the &quot;Report Issue&quot; button in the app or reach out to
+              us at{' '}
+              <span className="font-semibold">
+                rebabel.development@gmail.com
+              </span>
             </p>
             <Link href="/">
               <button className="px-8 py-3 bg-white text-[#e30a5f] font-semibold rounded-lg hover:bg-gray-100 transition-colors">
@@ -317,7 +333,10 @@ export default function Help() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2025 ReBabel. All rights reserved. Currently in beta development.</p>
+            <p>
+              &copy; 2025 ReBabel. All rights reserved. Currently in beta
+              development.
+            </p>
           </div>
         </div>
       </footer>
