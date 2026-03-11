@@ -1,11 +1,19 @@
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { TbShieldLock, TbMenu2, TbX, TbLogout, TbHome, TbSchool } from "react-icons/tb";
-import { GrHomeRounded } from "react-icons/gr";
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import {
+  TbShieldLock,
+  TbMenu2,
+  TbX,
+  TbLogout,
+  TbHome,
+  TbSchool,
+  TbArrowsSort,
+} from 'react-icons/tb';
+import { GrHomeRounded } from 'react-icons/gr';
 
-import { VscFeedback } from "react-icons/vsc";
-import Link from "next/link";
+import { VscFeedback } from 'react-icons/vsc';
+import Link from 'next/link';
 
 function AdminSidebar() {
   const router = useRouter();
@@ -20,24 +28,29 @@ function AdminSidebar() {
   // Lock body scroll when the menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     };
   }, [isMobileMenuOpen]);
 
   const isAdminActive = /^\/admin\/?$/.test(path);
   const isUserReportsActive = /^\/admin\/user-reports/.test(path);
+  const isSetReorderActive = /^\/admin\/set-reorder/.test(path);
 
-  const baseLink = "flex items-center p-2 rounded-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-colors";
-  const inactiveLinkLight = "text-gray-700 hover:bg-gray-200 hover:text-gray-900";
-  const inactiveIconLight = "text-gray-600 group-hover:text-gray-900";
-  const activeLink = "text-[#e30a5f] bg-gray-100 dark:bg-[#172229] shadow-[inset_0_0_0_2px_rgb(209,213,219)] dark:shadow-[inset_0_0_0_2px_rgb(75,85,99)]";
-  const inactiveLinkDark = "dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700";
-  const inactiveIconDark = "dark:text-gray-400 dark:group-hover:text-white";
+  const baseLink =
+    'flex items-center p-2 rounded-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition-colors';
+  const inactiveLinkLight =
+    'text-gray-700 hover:bg-gray-200 hover:text-gray-900';
+  const inactiveIconLight = 'text-gray-600 group-hover:text-gray-900';
+  const activeLink =
+    'text-[#e30a5f] bg-gray-100 dark:bg-[#172229] shadow-[inset_0_0_0_2px_rgb(209,213,219)] dark:shadow-[inset_0_0_0_2px_rgb(75,85,99)]';
+  const inactiveLinkDark =
+    'dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700';
+  const inactiveIconDark = 'dark:text-gray-400 dark:group-hover:text-white';
 
   const NavigationContent = () => (
     <>
@@ -56,11 +69,14 @@ function AdminSidebar() {
             <Link
               href="/admin"
               className={`${baseLink} ${isAdminActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`}`}
-              aria-current={isAdminActive ? "page" : undefined}
+              aria-current={isAdminActive ? 'page' : undefined}
             >
               <TbShieldLock
-                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isAdminActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
-                  }`}
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
+                  isAdminActive
+                    ? 'text-[#e30a5f]'
+                    : `${inactiveIconLight} ${inactiveIconDark}`
+                }`}
               />
               <span className="ms-3">Admin</span>
             </Link>
@@ -69,13 +85,32 @@ function AdminSidebar() {
             <Link
               href="/admin/user-reports"
               className={`${baseLink} ${isUserReportsActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`}`}
-              aria-current={isUserReportsActive ? "page" : undefined}
+              aria-current={isUserReportsActive ? 'page' : undefined}
             >
               <VscFeedback
-                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isUserReportsActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
-                  }`}
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
+                  isUserReportsActive
+                    ? 'text-[#e30a5f]'
+                    : `${inactiveIconLight} ${inactiveIconDark}`
+                }`}
               />
               <span className="ms-3">User Reports</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/admin/set-reorder"
+              className={`${baseLink} ${isSetReorderActive ? activeLink : `${inactiveLinkLight} ${inactiveLinkDark}`}`}
+              aria-current={isSetReorderActive ? 'page' : undefined}
+            >
+              <TbArrowsSort
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
+                  isSetReorderActive
+                    ? 'text-[#e30a5f]'
+                    : `${inactiveIconLight} ${inactiveIconDark}`
+                }`}
+              />
+              <span className="ms-3">Set Reorder</span>
             </Link>
           </li>
         </ul>
@@ -87,7 +122,9 @@ function AdminSidebar() {
               href="/api/auth/logout"
               className={`${baseLink} ${inactiveLinkLight} ${inactiveLinkDark}`}
             >
-              <TbLogout className={`flex-shrink-0 w-7 h-7 transition duration-75 ${inactiveIconLight} ${inactiveIconDark}`} />
+              <TbLogout
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${inactiveIconLight} ${inactiveIconDark}`}
+              />
               <span className="ms-3">Logout</span>
             </Link>
           </li>
@@ -98,18 +135,22 @@ function AdminSidebar() {
               href="/"
               className={`${baseLink} ${inactiveLinkLight} ${inactiveLinkDark}`}
             >
-              <TbHome className={`flex-shrink-0 w-7 h-7 transition duration-75 ${inactiveIconLight} ${inactiveIconDark}`} />
+              <TbHome
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${inactiveIconLight} ${inactiveIconDark}`}
+              />
               <span className="ms-3">Landing Page</span>
             </Link>
           </li>
         </ul>
-          <ul className="space-y-2 font-medium">
+        <ul className="space-y-2 font-medium">
           <li>
             <Link
               href="/learn"
               className={`${baseLink} ${inactiveLinkLight} ${inactiveLinkDark}`}
             >
-              <TbSchool className={`flex-shrink-0 w-7 h-7 transition duration-75 ${inactiveIconLight} ${inactiveIconDark}`} />
+              <TbSchool
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${inactiveIconLight} ${inactiveIconDark}`}
+              />
               <span className="ms-3">Learn Portal</span>
             </Link>
           </li>
@@ -130,7 +171,7 @@ function AdminSidebar() {
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="p-2 rounded-lg bg-white dark:bg-[#1c2b35] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
         >
           {isMobileMenuOpen ? <TbX size={24} /> : <TbMenu2 size={24} />}
         </button>
