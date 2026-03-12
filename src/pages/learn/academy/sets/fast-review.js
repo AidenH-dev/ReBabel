@@ -108,6 +108,8 @@ export default function FastReview() {
   // ============ REFS ============
   const translationInputRef = useRef(null);
   const leveledItemIdsRef = useRef(new Set());
+  const mistakesPerItemRef = useRef(mistakesPerItem);
+  mistakesPerItemRef.current = mistakesPerItem;
 
   // ============ ANALYTICS ============
   const {
@@ -263,8 +265,13 @@ export default function FastReview() {
   // Finish analytics session when review completes
   useEffect(() => {
     if (currentPhase === 'complete') {
-      const stats = sessionStatsRef.current;
-      finishAnalyticsSession(leveledItemIdsRef.current.size, stats.correct);
+      const leveledIds = [...leveledItemIdsRef.current];
+      const mistakes = mistakesPerItemRef.current;
+      const itemsReviewed = leveledIds.length;
+      const itemsCorrect = leveledIds.filter(
+        (id) => (mistakes[id] || 0) === 0
+      ).length;
+      finishAnalyticsSession(itemsReviewed, itemsCorrect);
       markSetsStudied(setBreakdown);
     }
   }, [currentPhase, finishAnalyticsSession, setBreakdown]);
