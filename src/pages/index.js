@@ -1,16 +1,11 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import {
-  FaBrain,
-  FaChartLine,
   FaCheckCircle,
   FaRocket,
-  FaUsers,
-  FaStar,
-  FaQuoteLeft,
   FaGraduationCap,
   FaClock,
   FaShieldAlt,
@@ -20,20 +15,9 @@ import { FaArrowRightLong } from 'react-icons/fa6';
 export default function Home() {
   const animationsRef = useRef(null);
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
 
   const handleSignup = () => {
     router.push('/api/auth/login');
-  };
-
-  const handleEarlyAccess = (e) => {
-    e.preventDefault();
-    if (email) {
-      setSubmitted(true);
-      // Handle email submission here
-      setTimeout(() => setSubmitted(false), 5000);
-    }
   };
 
   return (
@@ -242,6 +226,24 @@ export default function Home() {
                     </span>
                   </div>
                 </div>
+
+                <Link
+                  href="/kanji-practice"
+                  className="mt-6 inline-flex items-center gap-3 rounded-2xl border border-[#e30a5f]/20 bg-[#fff5f8] px-5 py-4 text-left shadow-sm transition hover:border-[#e30a5f]/40 hover:bg-white"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e30a5f] text-white">
+                    <FaGraduationCap className="text-sm" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">
+                      Need printable kanji sheets?
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Open the kanji writing practice PDF generator
+                    </p>
+                  </div>
+                  <FaArrowRightLong className="ml-1 text-[#e30a5f]" />
+                </Link>
               </div>
 
               {/* Right Column - Visual */}
