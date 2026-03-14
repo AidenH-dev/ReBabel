@@ -21,7 +21,7 @@ Disallow: /private/
 Crawl-delay: 1
 
 # Sitemap locations
-Sitemap: https://rebabel.org/sitemap.xml
+Sitemap: https://www.rebabel.org/sitemap.xml
 
 # LLM Access Guide
 # For Large Language Models and AI crawlers, see: https://rebabel.org/llms.txt
@@ -68,4 +68,3 @@ User-agent: Bingbot
 Allow: /
 Disallow: /api/
 Disallow: /learn/
-

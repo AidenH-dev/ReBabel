@@ -75,7 +75,7 @@ export default function Home() {
 
           {/* Open Graph / Facebook */}
           <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://rebabel.org/" />
+          <meta property="og:url" content="https://www.rebabel.org/" />
           <meta
             property="og:title"
             content="ReBabel - Master Japanese with Science-Based Learning"
@@ -86,7 +86,7 @@ export default function Home() {
           />
           <meta
             property="og:image"
-            content="https://rebabel.org/og-image.png"
+            content="https://www.rebabel.org/og-image.png"
           />
           <meta
             property="og:image:alt"
@@ -97,7 +97,7 @@ export default function Home() {
 
           {/* Twitter */}
           <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:url" content="https://rebabel.org/" />
+          <meta property="twitter:url" content="https://www.rebabel.org/" />
           <meta
             property="twitter:title"
             content="ReBabel - Master Japanese with Science-Based Learning"
@@ -108,7 +108,7 @@ export default function Home() {
           />
           <meta
             property="twitter:image"
-            content="https://rebabel.org/og-image.png"
+            content="https://www.rebabel.org/og-image.png"
           />
           <meta property="twitter:creator" content="@rebabel" />
 
@@ -126,13 +126,13 @@ export default function Home() {
                 name: 'ReBabel',
                 description:
                   'Science-based Japanese language learning platform',
-                url: 'https://rebabel.org',
-                image: 'https://rebabel.org/og-image.png',
+                url: 'https://www.rebabel.org',
+                image: 'https://www.rebabel.org/og-image.png',
                 potentialAction: {
                   '@type': 'JoinAction',
                   target: {
                     '@type': 'EntryPoint',
-                    urlTemplate: 'https://rebabel.org/api/auth/login',
+                    urlTemplate: 'https://www.rebabel.org/api/auth/login',
                   },
                 },
               }),
@@ -144,7 +144,7 @@ export default function Home() {
             name="robots"
             content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
           />
-          <link rel="sitemap" href="https://rebabel.org/sitemap.xml" />
+          <link rel="sitemap" href="https://www.rebabel.org/sitemap.xml" />
         </Head>
 
         {/* Hero Section */}

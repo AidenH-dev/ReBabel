@@ -462,7 +462,7 @@ export default function KanjiPdfTestPage() {
           name="keywords"
           content="kanji worksheet generator, kanji writing practice, japanese writing sheets, printable kanji pdf, rebabel"
         />
-        <link rel="canonical" href="https://rebabel.org/kanji-practice" />
+        <link rel="canonical" href="https://www.rebabel.org/kanji-practice" />
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
@@ -472,9 +472,16 @@ export default function KanjiPdfTestPage() {
           property="og:description"
           content="Build clean printable kanji practice PDFs with custom rows, guides, and readings."
         />
-        <meta property="og:url" content="https://rebabel.org/kanji-practice" />
+        <meta
+          property="og:url"
+          content="https://www.rebabel.org/kanji-practice"
+        />
         <meta property="og:site_name" content="ReBabel" />
         <meta property="twitter:card" content="summary_large_image" />
+        <meta
+          property="twitter:url"
+          content="https://www.rebabel.org/kanji-practice"
+        />
         <meta
           property="twitter:title"
           content="Kanji Writing Practice Sheet Generator | ReBabel"

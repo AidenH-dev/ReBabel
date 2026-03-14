@@ -15,15 +15,21 @@ function generateSiteMap(posts) {
        <changefreq>weekly</changefreq>
        <priority>0.9</priority>
      </url>
-     <url>
-       <loc>https://www.rebabel.org/help</loc>
-       <lastmod>2025-11-11</lastmod>
-       <changefreq>monthly</changefreq>
-       <priority>0.8</priority>
-     </url>
       <url>
-        <loc>https://www.rebabel.org/study-guide/what-is-srs</loc>
-        <lastmod>2026-03-09</lastmod>
+        <loc>https://www.rebabel.org/help</loc>
+        <lastmod>2025-11-11</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+      <url>
+        <loc>https://www.rebabel.org/kanji-practice</loc>
+        <lastmod>2026-03-14</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+       <url>
+         <loc>https://www.rebabel.org/study-guide/what-is-srs</loc>
+         <lastmod>2026-03-09</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
       </url>
