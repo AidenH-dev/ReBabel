@@ -1,7 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useMemo, useRef, useState } from 'react';
+
+const KanjiPracticeViewer = dynamic(
+  () => import('@/components/KanjiPractice/KanjiPracticeViewer'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-[500px] w-full items-center justify-center text-sm text-slate-400">
+        Loading preview…
+      </div>
+    ),
+  }
+);
 import {
   DndContext,
   PointerSensor,
@@ -319,7 +332,6 @@ function PracticeCell({ value, faint, showGuides, guideStyle }) {
 }
 
 export default function KanjiPdfTestPage() {
-  const previewRef = useRef(null);
   const [kanji, setKanji] = useState('水');
   const [meaningList, setMeaningList] = useState([createListItem('water')]);
   const [onyomiList, setOnyomiList] = useState([createListItem('スイ')]);
@@ -331,23 +343,6 @@ export default function KanjiPdfTestPage() {
   const [includeTraceRow, setIncludeTraceRow] = useState(true);
   const [noBackgroundColor, setNoBackgroundColor] = useState(true);
   const [downloading, setDownloading] = useState(false);
-  const [previewScale, setPreviewScale] = useState(0.6);
-
-  useEffect(() => {
-    const updatePreviewScale = () => {
-      if (window.innerWidth < 640) {
-        setPreviewScale(0.36);
-      } else if (window.innerWidth < 1024) {
-        setPreviewScale(0.48);
-      } else {
-        setPreviewScale(0.6);
-      }
-    };
-
-    updatePreviewScale();
-    window.addEventListener('resize', updatePreviewScale);
-    return () => window.removeEventListener('resize', updatePreviewScale);
-  }, []);
 
   const meaningText = useMemo(
     () =>
@@ -398,57 +393,36 @@ export default function KanjiPdfTestPage() {
   const handleDownload = async () => {
     try {
       setDownloading(true);
-      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
-        import('html2canvas'),
-        import('jspdf'),
+      const [{ pdf }, { default: KanjiPracticeDocument }] = await Promise.all([
+        import('@react-pdf/renderer'),
+        import('@/components/KanjiPractice/KanjiPracticeDocument'),
       ]);
 
-      const canvas = await html2canvas(previewRef.current, {
-        backgroundColor: noBackgroundColor ? '#ffffff' : '#f6f1ea',
-        scale: 4,
-        useCORS: true,
-      });
+      const blob = await pdf(
+        <KanjiPracticeDocument
+          kanji={kanji}
+          meaningText={meaningText}
+          onList={onList}
+          kunList={kunList}
+          practiceColumns={practiceColumns}
+          practiceRows={practiceRows}
+          showGuides={showGuides}
+          guideStyle={guideStyle}
+          includeTraceRow={includeTraceRow}
+          noBackgroundColor={noBackgroundColor}
+        />
+      ).toBlob();
 
-      const imageData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      });
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const ratio = Math.min(
-        pageWidth / canvas.width,
-        pageHeight / canvas.height
-      );
-      const renderWidth = canvas.width * ratio;
-      const renderHeight = canvas.height * ratio;
-      const offsetX = (pageWidth - renderWidth) / 2;
-      const offsetY = (pageHeight - renderHeight) / 2;
-
-      pdf.addImage(
-        imageData,
-        'PNG',
-        offsetX,
-        offsetY,
-        renderWidth,
-        renderHeight
-      );
-
-      pdf.save(`kanji-practice-${kanji || 'sheet'}.pdf`);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `kanji-practice-${kanji || 'sheet'}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
     } finally {
       setDownloading(false);
     }
   };
-
-  const printableRows = Array.from(
-    { length: practiceRows },
-    (_, rowIndex) => rowIndex
-  );
-  const printableCols = Array.from(
-    { length: practiceColumns },
-    (_, colIndex) => colIndex
-  );
 
   return (
     <>
@@ -722,306 +696,19 @@ export default function KanjiPdfTestPage() {
             </div>
           </section>
 
-          <section className="rounded-[2rem] border border-white/70 bg-white/40 p-1 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-2 lg:flex lg:min-h-0 lg:items-start lg:justify-center lg:overflow-hidden">
-            <div
-              className="mx-auto overflow-hidden"
-              style={{
-                height: `${1123 * previewScale}px`,
-                width: `${794 * previewScale}px`,
-              }}
-            >
-              <div
-                className="origin-top-left"
-                style={{
-                  transform: `scale(${previewScale})`,
-                  width: '794px',
-                  height: '1123px',
-                }}
-              >
-                <div
-                  ref={previewRef}
-                  className="flex min-h-[1123px] w-[794px] flex-col px-[54px] py-[52px] text-[#111111]"
-                  style={{
-                    backgroundColor: noBackgroundColor ? '#ffffff' : '#f6f1ea',
-                  }}
-                >
-                  <div
-                    className="pb-6"
-                    style={{
-                      borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
-                      paddingBottom: '42px',
-                    }}
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <div
-                        style={{
-                          fontFamily: japaneseHeaderFontFamily,
-                          transform: 'translateY(5px)',
-                        }}
-                      >
-                        <SvgText
-                          text="書く練習"
-                          width={110}
-                          height={28}
-                          fontSize={20}
-                          color="#334155"
-                          weight="600"
-                          family={japaneseHeaderFontFamily}
-                          baseline="58%"
-                        />
-                        <div style={{ marginTop: '2px' }}>
-                          <SvgText
-                            text="かくれんしゅう"
-                            width={110}
-                            height={18}
-                            fontSize={12}
-                            color="#64748b"
-                            weight="500"
-                            family={japaneseHeaderFontFamily}
-                            baseline="54%"
-                          />
-                        </div>
-                      </div>
-
-                      <div
-                        className="flex items-center justify-end gap-3 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.22em]"
-                        style={{
-                          border: '1px solid rgba(0, 0, 0, 0.1)',
-                          backgroundColor: 'rgba(255, 255, 255, 0.55)',
-                          color: '#64748b',
-                        }}
-                      >
-                        <div className="flex min-w-[150px] items-end gap-2">
-                          <ExportStableText
-                            text="Name:"
-                            width={34}
-                            height={14}
-                            fontSize={11}
-                            color="#64748b"
-                            weight="700"
-                            letterSpacing="1"
-                            family={labelFontFamily}
-                            strokeColor="#64748b"
-                            strokeWidth={0.2}
-                            baseline="58%"
-                          />
-                        </div>
-                        <div className="flex min-w-[130px] items-end gap-2">
-                          <ExportStableText
-                            text="Date:"
-                            width={30}
-                            height={14}
-                            fontSize={11}
-                            color="#64748b"
-                            weight="700"
-                            letterSpacing="1"
-                            family={labelFontFamily}
-                            strokeColor="#64748b"
-                            strokeWidth={0.2}
-                            baseline="58%"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div
-                      className="mt-3 flex items-start gap-4"
-                      style={{ transform: 'translateY(7px)' }}
-                    >
-                      <SvgText
-                        text={kanji || '水'}
-                        width={78}
-                        height={78}
-                        fontSize={78}
-                        color="#111111"
-                        weight="400"
-                        family={kanjiFontFamily}
-                        align="center"
-                        baseline="66%"
-                      />
-                      <div
-                        className="space-y-1 pt-1 text-[14px] leading-5"
-                        style={{
-                          color: '#334155',
-                          transform: 'translateY(6px)',
-                        }}
-                      >
-                        <div className="flex items-center gap-1">
-                          <SvgText
-                            text="Meaning:"
-                            width={68}
-                            height={18}
-                            fontSize={14}
-                            color="#111827"
-                            weight="700"
-                            family={japaneseUiFontFamily}
-                            baseline="54%"
-                            strokeColor="#111827"
-                            strokeWidth={0.2}
-                          />
-                          <SvgText
-                            text={meaningText || 'water'}
-                            width={150}
-                            height={18}
-                            fontSize={14}
-                            color="#334155"
-                            weight="500"
-                            family={japaneseUiFontFamily}
-                            baseline="54%"
-                          />
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <SvgText
-                            text="On:"
-                            width={26}
-                            height={18}
-                            fontSize={14}
-                            color="#111827"
-                            weight="700"
-                            family={japaneseUiFontFamily}
-                            baseline="54%"
-                            strokeColor="#111827"
-                            strokeWidth={0.2}
-                          />
-                          <SvgText
-                            text={onList.length ? onList.join(', ') : '-'}
-                            width={192}
-                            height={18}
-                            fontSize={14}
-                            color="#334155"
-                            weight="500"
-                            family={japaneseUiFontFamily}
-                            baseline="54%"
-                          />
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <SvgText
-                            text="Kun:"
-                            width={34}
-                            height={18}
-                            fontSize={14}
-                            color="#111827"
-                            weight="700"
-                            family={japaneseUiFontFamily}
-                            baseline="54%"
-                            strokeColor="#111827"
-                            strokeWidth={0.2}
-                          />
-                          <SvgText
-                            text={kunList.length ? kunList.join(', ') : '-'}
-                            width={184}
-                            height={18}
-                            fontSize={14}
-                            color="#334155"
-                            weight="500"
-                            family={japaneseUiFontFamily}
-                            baseline="54%"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-8 space-y-4">
-                    {includeTraceRow ? (
-                      <div style={{ transform: 'translateY(-1px)' }}>
-                        <ExportStableText
-                          text="Model row"
-                          width={110}
-                          height={20}
-                          fontSize={14}
-                          color="#334155"
-                          weight="700"
-                          strokeColor="#334155"
-                          strokeWidth={0.2}
-                          letterSpacing="1.6"
-                          family={labelFontFamily}
-                        />
-                        <div
-                          className="grid justify-start gap-0"
-                          style={{
-                            marginTop: '4px',
-                            gridTemplateColumns: `repeat(${practiceColumns}, ${cellSizePx}px)`,
-                          }}
-                        >
-                          {printableCols.map((col) => (
-                            <PracticeCell
-                              key={`trace-${col}`}
-                              value={kanji || '水'}
-                              faint
-                              showGuides={showGuides}
-                              guideStyle={guideStyle}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
-
-                    <div style={{ transform: 'translateY(-1px)' }}>
-                      <ExportStableText
-                        text="Practice grid"
-                        width={132}
-                        height={20}
-                        fontSize={14}
-                        color="#334155"
-                        weight="700"
-                        strokeColor="#334155"
-                        strokeWidth={0.2}
-                        letterSpacing="1.6"
-                        family={labelFontFamily}
-                      />
-                      <div
-                        className="space-y-[7px]"
-                        style={{ marginTop: '4px' }}
-                      >
-                        {printableRows.map((row) => (
-                          <div
-                            key={`row-${row}`}
-                            className="grid justify-start gap-0"
-                            style={{
-                              gridTemplateColumns: `repeat(${practiceColumns}, ${cellSizePx}px)`,
-                            }}
-                          >
-                            {printableCols.map((col) => (
-                              <PracticeCell
-                                key={`cell-${row}-${col}`}
-                                showGuides={showGuides}
-                                guideStyle={guideStyle}
-                              />
-                            ))}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div
-                    className="mt-auto flex items-center justify-between pt-8 text-[11px]"
-                    style={{ color: '#64748b' }}
-                  >
-                    <ExportStableText
-                      text="Practice slowly and aim for balance, proportion, and clean stroke direction."
-                      width={430}
-                      height={14}
-                      fontSize={11}
-                      color="#64748b"
-                      weight="500"
-                      family={labelFontFamily}
-                    />
-                    <ExportStableText
-                      text="ReBabel.org"
-                      width={84}
-                      height={14}
-                      fontSize={11}
-                      color={accentColor}
-                      weight="700"
-                      family={labelFontFamily}
-                      align="right"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+          <section className="rounded-[2rem] border border-white/70 bg-white/40 p-1 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-2 lg:overflow-hidden">
+            <KanjiPracticeViewer
+              kanji={kanji}
+              meaningText={meaningText}
+              onList={onList}
+              kunList={kunList}
+              practiceColumns={practiceColumns}
+              practiceRows={practiceRows}
+              showGuides={showGuides}
+              guideStyle={guideStyle}
+              includeTraceRow={includeTraceRow}
+              noBackgroundColor={noBackgroundColor}
+            />
           </section>
         </div>
       </main>

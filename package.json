@@ -26,6 +26,7 @@
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@next/font": "^14.2.15",
+    "@react-pdf/renderer": "^4.3.2",
     "@supabase/supabase-js": "^2.48.1",
     "@vercel/analytics": "^1.4.1",
     "@vercel/speed-insights": "^1.1.0",
