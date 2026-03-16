@@ -106,6 +106,7 @@ export default function LearnNew() {
 
   // ============ REFS ============
   const translationInputRef = useRef(null);
+  const sessionInitializedRef = useRef(false);
 
   // ============ ANALYTICS ============
   const {
@@ -274,9 +275,10 @@ export default function LearnNew() {
     fetchSetData();
   }, [id, router.query.limit]);
 
-  // Initialize active arrays when data is loaded
+  // Initialize active arrays when data is loaded (once only)
   useEffect(() => {
-    if (itemData.length > 0) {
+    if (itemData.length > 0 && !sessionInitializedRef.current) {
+      sessionInitializedRef.current = true;
       startAnalyticsSession();
       setActiveReviewArray([...reviewArray]);
       setActiveMCArray([...multipleChoiceArray]);
@@ -609,6 +611,12 @@ export default function LearnNew() {
         prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
       );
       setActiveTranslationArray((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+      setMultipleChoiceArray((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+      setActiveMCArray((prev) =>
         prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
       );
 

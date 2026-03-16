@@ -344,14 +344,12 @@ export default function SetQuiz() {
         ),
       }));
 
-      // Track completed items for progress bar (only on correct answers)
-      if (answerData.isCorrect) {
-        setCompletedItems((prev) => {
-          const newSet = new Set(prev[currentPhase]);
-          newSet.add(answerData.itemId);
-          return { ...prev, [currentPhase]: newSet };
-        });
-      }
+      // Track completed items for progress bar (any answered item)
+      setCompletedItems((prev) => {
+        const newSet = new Set(prev[currentPhase]);
+        newSet.add(answerData.itemId);
+        return { ...prev, [currentPhase]: newSet };
+      });
     },
     [currentPhase]
   );
@@ -403,6 +401,9 @@ export default function SetQuiz() {
         prev.map((item) => mergeIntoBaseItem(item, updatedItem))
       );
       setQuizItems((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+      setMultipleChoiceItems((prev) =>
         prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
       );
 
