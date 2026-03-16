@@ -108,6 +108,7 @@ export default function DueNow() {
 
   // ============ REFS ============
   const translationInputRef = useRef(null);
+  const sessionInitializedRef = useRef(false);
   const leveledItemIdsRef = useRef(new Set());
   const mistakesPerItemRef = useRef(mistakesPerItem);
   mistakesPerItemRef.current = mistakesPerItem;
@@ -294,9 +295,10 @@ export default function DueNow() {
     fetchSetData();
   }, [id]);
 
-  // Initialize active arrays when data is loaded
+  // Initialize active arrays when data is loaded (once only)
   useEffect(() => {
-    if (itemData.length > 0) {
+    if (itemData.length > 0 && !sessionInitializedRef.current) {
+      sessionInitializedRef.current = true;
       startAnalyticsSession();
       setActiveTranslationArray([...translationArray]);
       setActiveMCArray([...multipleChoiceArray]);
@@ -462,21 +464,21 @@ export default function DueNow() {
     // Check if this is the last question
     const isLastQuestion = currentIndex >= currentArray.length - 1;
 
-    // Reset question state before checking for level change
-    setShowResult(false);
-    setIsCorrect(false);
-    setUserAnswer('');
-
     // Check if all question variations for this original item are now completed
     const willShowLevelChange = checkAndTriggerLevelChange(originalId);
 
     // If this is the last question AND we're showing a level change,
-    // wait for the level change animation to complete before going to summary
+    // wait for the level change animation to complete before going to summary.
+    // Don't reset UI state here — keep showing the answered card behind the animation.
     if (isLastQuestion && willShowLevelChange) {
       setShouldGoToSummaryAfterLevelChange(true);
-      // Don't proceed further - wait for level change animation to complete
       return;
     }
+
+    // Reset question state for the next card
+    setShowResult(false);
+    setIsCorrect(false);
+    setUserAnswer('');
 
     // Check if there are more items in current phase
     if (currentIndex < currentArray.length - 1) {
@@ -733,6 +735,12 @@ export default function DueNow() {
         prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
       );
       setActiveTranslationArray((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+      setMultipleChoiceArray((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+      setActiveMCArray((prev) =>
         prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
       );
 

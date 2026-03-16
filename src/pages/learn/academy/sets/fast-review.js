@@ -400,16 +400,20 @@ export default function FastReview() {
 
     const isLastQuestion = currentIndex >= currentArray.length - 1;
 
-    setShowResult(false);
-    setIsCorrect(false);
-    setUserAnswer('');
-
     const willShowLevelChange = checkAndTriggerLevelChange(originalId);
 
+    // If this is the last question AND we're showing a level change,
+    // wait for the level change animation to complete before going to summary.
+    // Don't reset UI state — keep showing the answered card behind the animation.
     if (isLastQuestion && willShowLevelChange) {
       setShouldGoToSummaryAfterLevelChange(true);
       return;
     }
+
+    // Reset question state for the next card
+    setShowResult(false);
+    setIsCorrect(false);
+    setUserAnswer('');
 
     if (currentIndex < currentArray.length - 1) {
       setCurrentIndex((prev) => prev + 1);
