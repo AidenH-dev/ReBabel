@@ -31,19 +31,7 @@ export function useSrsTimeGrid(initialItems = []) {
     return () => clearInterval(timer);
   }, []);
 
-  // Auto-scroll to current hour on mount
-  useEffect(() => {
-    const scrollTimer = setTimeout(() => {
-      const currentHour = new Date().getHours();
-      const hourElements = document.querySelectorAll('[data-hour]');
-      if (hourElements.length > currentHour) {
-        const element = hourElements[currentHour];
-        element?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
-    }, 500);
-
-    return () => clearTimeout(scrollTimer);
-  }, []);
+  // Auto-scroll is handled by TimeGridWeek view component via ref
 
   /**
    * Get all week days starting from today

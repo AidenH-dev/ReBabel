@@ -24,6 +24,7 @@ export default function SRSDashboard({ setId, setData }) {
   const [nextDueTime, setNextDueTime] = useState(null);
   const [countdown, setCountdown] = useState('');
   const [learnNewLeftLimit, setLearnNewLeftLimit] = useState(0);
+  const [refreshTick, setRefreshTick] = useState(0);
 
   // SRS time intervals for each level (matching API backend)
   const SRS_TIME_FACTORS = {
@@ -73,7 +74,7 @@ export default function SRSDashboard({ setId, setData }) {
     };
 
     fetchDueCount();
-  }, [setId]);
+  }, [setId, refreshTick]);
 
   // Fetch new items count and total items
   useEffect(() => {
@@ -228,7 +229,7 @@ export default function SRSDashboard({ setId, setData }) {
     };
 
     calculateNextDueTime();
-  }, [setId]);
+  }, [setId, refreshTick]);
 
   // Fetch full set data to calculate accurate completion progress
   useEffect(() => {
@@ -282,12 +283,18 @@ export default function SRSDashboard({ setId, setData }) {
       return;
     }
 
+    let hasTriggeredRefresh = false;
+
     const updateCountdown = () => {
       const now = new Date();
       const diff = nextDueTime - now;
 
       if (diff <= 0) {
         setCountdown('0h 0m');
+        if (!hasTriggeredRefresh) {
+          hasTriggeredRefresh = true;
+          setRefreshTick((t) => t + 1);
+        }
         return;
       }
 
@@ -338,7 +345,7 @@ export default function SRSDashboard({ setId, setData }) {
             e.stopPropagation();
             handleDashboardClick();
           }}
-          className="flex-1 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border-2 border-gray-300 dark:border-gray-500 hover:border-gray-400 dark:hover:border-gray-400 hover:shadow-md transition-all hover:-translate-y-0.5 will-change-transform"
+          className="flex-1 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border-2 border-gray-300 dark:border-gray-500 hover:border-gray-400 dark:hover:border-gray-400 hover:brightness-105 transition-all"
         >
           <PiClockClockwiseBold className="text-gray-700 dark:text-gray-200 flex-shrink-0 text-lg" />
           <div className="flex-1 text-left flex items-center gap-1">
@@ -376,8 +383,8 @@ export default function SRSDashboard({ setId, setData }) {
               e.stopPropagation();
               handleDueNowClick();
             }}
-            className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#c1084d] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5 will-change-transform disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loading || error}
+            className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#c1084d] rounded-lg text-white enabled:hover:brightness-110 enabled:hover:ring-2 enabled:hover:ring-[#e30a5f]/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading || error || stats.dueNow === 0}
           >
             <div className="hidden sm:inline font-medium text-sm">Due Now</div>
             <div className="text-2xl font-bold flex items-center">
@@ -405,7 +412,7 @@ export default function SRSDashboard({ setId, setData }) {
                 e.stopPropagation();
                 handleLearnNewClick();
               }}
-              className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg text-white hover:shadow-lg transition-all hover:-translate-y-0.5 will-change-transform disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-lg text-white hover:brightness-110 hover:ring-2 hover:ring-[#667eea]/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={learnNewLeftLimit === 0}
             >
               <div className="hidden sm:flex font-medium text-sm">
