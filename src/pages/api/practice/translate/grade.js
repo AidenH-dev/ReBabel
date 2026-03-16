@@ -136,7 +136,13 @@ Grade this translation.`;
           const requestBody = {
             model: providerConfig.model,
             max_tokens: 1024,
-            system: systemInstructions,
+            system: [
+              {
+                type: 'text',
+                text: systemInstructions,
+                cache_control: { type: 'ephemeral' },
+              },
+            ],
             messages: [{ role: 'user', content: userMessage }],
             tools: [gradeTool],
             tool_choice: { type: 'tool', name: 'submit_grade' },
