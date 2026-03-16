@@ -21,6 +21,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     focalPoints,
     count = 10,
     provider = 'anthropic',
+    analyticsSessionId,
   } = req.body;
 
   // Validate inputs
@@ -211,6 +212,7 @@ ${trimmedVocabPoolText}
         focalPointCount: focalPoints.length,
         sentenceCount: count,
         userId: session.user.sub,
+        analyticsSessionId: analyticsSessionId || null,
         poolVocabIds: trimmedVocabPool.map((v) => v.id),
         poolGrammarIds: trimmedGrammarPool.map((g) => g.id),
         focalVocabIds: vocabFocalPoints.map((fp) => fp.item.id),

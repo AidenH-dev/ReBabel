@@ -9,6 +9,7 @@ export default function MasterTranslateSession({
   pools, // { grammar: [...], vocab: [...] }
   focalPoints, // { grammar: [...], vocab: [...] }
   sessionLength, // 10 questions
+  analyticsSessionId, // UUID from useAnalyticsSession — links LangSmith traces to this session
   onQuestionCompleted,
   onSessionComplete,
   onGenerationSuccess,
@@ -58,6 +59,7 @@ export default function MasterTranslateSession({
           vocabPool: pools.vocab,
           focalPoints: allFocalPoints,
           count: sessionLength,
+          analyticsSessionId,
         }),
       });
 
@@ -100,6 +102,7 @@ export default function MasterTranslateSession({
           userTranslation: userAnswer,
           focalPoint: currentQuestion.focalPoint,
           context: { grammarPool: pools.grammar, vocabPool: pools.vocab },
+          analyticsSessionId,
         }),
       });
 

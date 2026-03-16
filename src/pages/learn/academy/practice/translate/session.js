@@ -88,6 +88,7 @@ export default function TranslatePracticeSession() {
     start: startAnalyticsSession,
     finish: finishAnalyticsSession,
     abort: abortAnalyticsSession,
+    sessionIdRef,
   } = useAnalyticsSession('translate');
 
   const handleSessionComplete = () => {
@@ -232,6 +233,7 @@ export default function TranslatePracticeSession() {
             pools={config.pools}
             focalPoints={config.focalPoints}
             sessionLength={config.sessionLength}
+            analyticsSessionId={sessionIdRef.current}
             onQuestionCompleted={handleQuestionCompleted}
             onSessionComplete={handleSessionComplete}
             onGenerationSuccess={handleGenerationSuccess}

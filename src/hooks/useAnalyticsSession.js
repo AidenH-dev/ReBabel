@@ -91,5 +91,5 @@ export default function useAnalyticsSession(sessionType) {
     };
   }, [markHung]);
 
-  return { start, finish, abort };
+  return { start, finish, abort, sessionIdRef };
 }

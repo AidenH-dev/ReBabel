@@ -77,51 +77,78 @@ export async function tracedLLMCall({
   const startTime = Date.now();
 
   try {
-    // Create the run
-    await client.createRun({
-      id: runId,
-      name,
-      run_type: 'llm',
-      inputs: { messages, provider, model, ...metadata },
-      extra: {
-        metadata: {
-          ls_provider: provider,
-          ls_model_name: model,
-          ls_model_type: 'chat',
+    // Create the run — tracing failures should not block the LLM call
+    try {
+      await client.createRun({
+        id: runId,
+        name,
+        run_type: 'llm',
+        inputs: { messages, provider, model, ...metadata },
+        extra: {
+          metadata: {
+            ls_provider: provider,
+            ls_model_name: model,
+            ls_model_type: 'chat',
+            ...(metadata.analyticsSessionId && {
+              analytics_session_id: metadata.analyticsSessionId,
+            }),
+          },
         },
-      },
-      start_time: startTime,
-      project_name: projectName,
-    });
+        ...(metadata.analyticsSessionId && {
+          tags: [`session:${metadata.analyticsSessionId}`],
+        }),
+        start_time: startTime,
+        project_name: projectName,
+      });
+    } catch (traceError) {
+      console.error(
+        'LangSmith createRun failed (non-blocking):',
+        traceError.message
+      );
+    }
 
     // Execute the actual LLM call
     const result = await fetchFn();
     const usageMetadata = toUsageMetadata(result.usage);
 
-    // Update run with success
-    await client.updateRun(runId, {
-      outputs: {
-        content: result.content,
-        usage: result.usage,
+    // Update run with success — tracing failures should not block the response
+    try {
+      await client.updateRun(runId, {
+        outputs: {
+          content: result.content,
+          usage: result.usage,
+          ...(usageMetadata && {
+            usage_metadata: usageMetadata,
+          }),
+        },
         ...(usageMetadata && {
-          usage_metadata: usageMetadata,
+          prompt_tokens: usageMetadata.input_tokens,
+          completion_tokens: usageMetadata.output_tokens,
+          total_tokens: usageMetadata.total_tokens,
         }),
-      },
-      ...(usageMetadata && {
-        prompt_tokens: usageMetadata.input_tokens,
-        completion_tokens: usageMetadata.output_tokens,
-        total_tokens: usageMetadata.total_tokens,
-      }),
-      end_time: Date.now(),
-    });
+        end_time: Date.now(),
+      });
+    } catch (traceError) {
+      console.error(
+        'LangSmith updateRun failed (non-blocking):',
+        traceError.message
+      );
+    }
 
     return { ...result, runId };
   } catch (error) {
-    // Update run with error
-    await client.updateRun(runId, {
-      error: error.message,
-      end_time: Date.now(),
-    });
+    // Update run with error — best-effort, don't mask the original error
+    try {
+      await client.updateRun(runId, {
+        error: error.message,
+        end_time: Date.now(),
+      });
+    } catch (traceError) {
+      console.error(
+        'LangSmith error updateRun failed (non-blocking):',
+        traceError.message
+      );
+    }
     throw error;
   }
 }
@@ -144,28 +171,49 @@ export async function traced(name, metadata, fn) {
   const runId = randomUUID();
 
   try {
-    await client.createRun({
-      id: runId,
-      name,
-      run_type: 'chain',
-      inputs: metadata,
-      start_time: Date.now(),
-      project_name: projectName,
-    });
+    try {
+      await client.createRun({
+        id: runId,
+        name,
+        run_type: 'chain',
+        inputs: metadata,
+        start_time: Date.now(),
+        project_name: projectName,
+      });
+    } catch (traceError) {
+      console.error(
+        'LangSmith createRun failed (non-blocking):',
+        traceError.message
+      );
+    }
 
     const result = await fn();
 
-    await client.updateRun(runId, {
-      outputs: { result },
-      end_time: Date.now(),
-    });
+    try {
+      await client.updateRun(runId, {
+        outputs: { result },
+        end_time: Date.now(),
+      });
+    } catch (traceError) {
+      console.error(
+        'LangSmith updateRun failed (non-blocking):',
+        traceError.message
+      );
+    }
 
     return result;
   } catch (error) {
-    await client.updateRun(runId, {
-      error: error.message,
-      end_time: Date.now(),
-    });
+    try {
+      await client.updateRun(runId, {
+        error: error.message,
+        end_time: Date.now(),
+      });
+    } catch (traceError) {
+      console.error(
+        'LangSmith error updateRun failed (non-blocking):',
+        traceError.message
+      );
+    }
     throw error;
   }
 }

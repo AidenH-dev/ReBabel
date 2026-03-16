@@ -18,6 +18,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     focalPoint, // The focal point being practiced
     context, // Pools for reference
     provider = 'openai', // LLM provider
+    analyticsSessionId, // Links trace to analytics session
   } = req.body;
 
   // Validate inputs
@@ -130,6 +131,7 @@ Grade this translation.`;
         englishSentence,
         focalPointType: focalPoint?.type,
         userId: session.user.sub,
+        analyticsSessionId: analyticsSessionId || null,
       },
       fetchFn: async () => {
         if (provider === 'anthropic') {
