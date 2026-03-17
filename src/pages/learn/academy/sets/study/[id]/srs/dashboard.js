@@ -226,8 +226,8 @@ export default function SRSDashboard() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        {/* Sticky header — stays at top, safe area padding included */}
-        <div className="flex-shrink-0 bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 pt-[max(1rem,var(--cap-safe-top))] pb-4">
+        {/* Sticky header — extends behind notch/Dynamic Island with negative margin, padding pushes content below */}
+        <div className="-mt-[var(--cap-safe-top)] flex-shrink-0 bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 pt-[calc(var(--cap-safe-top)+1rem)] pb-4">
           {/* Top row: nav + title + action buttons */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
