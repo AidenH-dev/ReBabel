@@ -3,6 +3,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  :root {
+    --cap-safe-top: 0px;
+  }
+
   html,
   body {
     @apply m-0 p-0 bg-[#141f25] overscroll-none;
@@ -11,5 +15,5 @@
 
 /* Outside @layer so it beats Tailwind utility classes like py-4, p-6 etc. */
 main {
-  padding-top: max(1rem, env(safe-area-inset-top)) !important;
+  padding-top: max(1rem, var(--cap-safe-top)) !important;
 }

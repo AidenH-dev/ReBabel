@@ -18,6 +18,18 @@ import { SRSNotificationPrompt } from '@/components/popups/SRSNotificationPrompt
 const IOS_VIEWPORT_CONTENT =
   'width=device-width, initial-scale=1, viewport-fit=cover';
 
+// Detect iPhone model by screen size and set --cap-safe-top CSS variable.
+// Capacitor's webview returns 0 for env(safe-area-inset-*), so we detect manually.
+function applyCapacitorSafeArea() {
+  if (typeof window === 'undefined') return;
+  const screenH = Math.max(window.screen.height, window.screen.width);
+  let top = 20;
+  if (screenH >= 852)
+    top = 59; // Dynamic Island (iPhone 14 Pro, 15, 16, etc.)
+  else if (screenH >= 812) top = 47; // Notch (iPhone X, 11, 12, 13, 14, etc.)
+  document.documentElement.style.setProperty('--cap-safe-top', `${top}px`);
+}
+
 function ensureNativeIOSViewportCover() {
   if (typeof document === 'undefined') return;
 
@@ -217,6 +229,7 @@ export default function MyApp({ Component, pageProps }) {
         if (!/iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
 
         ensureNativeIOSViewportCover();
+        applyCapacitorSafeArea();
       } catch (e) {
         // Ignore if Capacitor is unavailable.
       }

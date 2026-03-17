@@ -227,7 +227,7 @@ export default function SRSDashboard() {
         </Head>
 
         {/* Sticky header — stays at top, safe area padding included */}
-        <div className="flex-shrink-0 bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 pt-[max(1rem,env(safe-area-inset-top))] pb-4">
+        <div className="flex-shrink-0 bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 pt-[max(1rem,var(--cap-safe-top))] pb-4">
           {/* Top row: nav + title + action buttons */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
