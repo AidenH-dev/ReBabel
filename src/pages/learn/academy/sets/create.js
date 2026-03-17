@@ -840,7 +840,7 @@ export default function CreateNewSet() {
                               />
                             </div>
                           </div>
-                          <div className="grid grid-cols-2 gap-3 mb-3">
+                          <div className="grid grid-cols-2 gap-3 mb-3 items-end">
                             <div>
                               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 Tags
@@ -855,19 +855,14 @@ export default function CreateNewSet() {
                                 className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
                               />
                             </div>
-                            {/*
-                                                        <div>
-                                                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                                Audio URL
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                value={singleForm.audio}
-                                                                onChange={(e) => handleSingleFormChange("audio", e.target.value)}
-                                                                placeholder="https://..."
-                                                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
-                                                            />
-                                                        </div> */}
+                            <div>
+                              <button
+                                type="submit"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 transition-opacity"
+                              >
+                                <FiPlus className="w-3 h-3" /> Add to Set
+                              </button>
+                            </div>
                           </div>
                         </>
                       ) : (
@@ -1025,13 +1020,6 @@ export default function CreateNewSet() {
                           </div>
                         </>
                       )}
-
-                      <button
-                        type="submit"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 transition-opacity"
-                      >
-                        <FiPlus className="w-3 h-3" /> Add to Set
-                      </button>
                     </form>
                   )}
 
