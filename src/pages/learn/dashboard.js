@@ -20,6 +20,19 @@ import { FaRegFolderOpen } from 'react-icons/fa6';
 function ActivityCalendar({ activityData }) {
   const [tooltip, setTooltip] = useState(null);
   const containerRef = useRef(null);
+  const [maxWeeks, setMaxWeeks] = useState(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      const w = entries[0].contentRect.width;
+      // cell = 10px (w-2.5), gap = 2px (gap-0.5), plus 1px padding each side
+      setMaxWeeks(Math.floor((w + 2) / 12));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const getColorClass = (level) => {
     if (level === 0) return 'bg-gray-100 dark:bg-white/[0.07]';
