@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FiGrid, FiList, FiEdit2, FiSearch, FiPlus } from 'react-icons/fi';
 import { MdDragHandle } from 'react-icons/md';
+import CustomSelect from '@/components/ui/CustomSelect';
 import { toKana } from 'wanakana';
 import {
   DndContext,
@@ -652,14 +653,14 @@ export default function MasterItemsManagement({
 
             {/* Combined row for filters and buttons - stays horizontal on mobile */}
             <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-              <select
+              <CustomSelect
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 bg-gray-50 dark:text-white dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
-              >
-                <option value="default">Default Order</option>
-                <option value="alpha">Alphabetical</option>
-              </select>
+                onChange={(val) => setSortBy(val)}
+                options={[
+                  { value: 'default', label: 'Default Order' },
+                  { value: 'alpha', label: 'Alphabetical' },
+                ]}
+              />
 
               {/* Hide grid/list toggle on mobile */}
               <div className="hidden sm:flex items-center gap-1 rounded-lg bg-gray-100 dark:bg-[#0f1a1f] p-1">

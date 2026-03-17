@@ -18,6 +18,7 @@ import {
 import { FiSearch, FiUpload, FiPlus, FiX, FiCheck } from 'react-icons/fi';
 import { toKana } from 'wanakana';
 import CSVUpload from '../../../../components/pages/academy/sets/CreateSet/CSVUpload/CSVUpload';
+import CustomSelect from '@/components/ui/CustomSelect';
 
 export default function CreateNewSet() {
   const router = useRouter();
@@ -798,24 +799,24 @@ export default function CreateNewSet() {
                               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 Category
                               </label>
-                              <select
+                              <CustomSelect
                                 value={singleForm.lexical_category}
-                                onChange={(e) =>
+                                onChange={(val) =>
                                   handleSingleFormChange(
                                     'lexical_category',
-                                    e.target.value
+                                    val
                                   )
                                 }
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
-                              >
-                                <option value="">Select category</option>
-                                <option value="noun">Noun</option>
-                                <option value="verb">Verb</option>
-                                <option value="adjective">Adjective</option>
-                                <option value="adverb">Adverb</option>
-                                <option value="particle">Particle</option>
-                                <option value="expression">Expression</option>
-                              </select>
+                                placeholder="Select category"
+                                options={[
+                                  { value: 'noun', label: 'Noun' },
+                                  { value: 'verb', label: 'Verb' },
+                                  { value: 'adjective', label: 'Adjective' },
+                                  { value: 'adverb', label: 'Adverb' },
+                                  { value: 'particle', label: 'Particle' },
+                                  { value: 'expression', label: 'Expression' },
+                                ]}
+                              />
                             </div>
                           </div>
                           <div className="grid grid-cols-1 gap-3 mb-3">

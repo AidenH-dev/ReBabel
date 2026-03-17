@@ -18,6 +18,7 @@ import {
 import { TbChartInfographic, TbRepeat, TbStack2 } from 'react-icons/tb';
 import { MdAutorenew } from 'react-icons/md';
 import { BeginnerPackPopup } from '@/components/popups/sets/newUserPopup';
+import CustomSelect from '@/components/ui/CustomSelect';
 import { HiOutlineLightningBolt } from 'react-icons/hi';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 import { TiChartPieOutline } from 'react-icons/ti';
@@ -843,8 +844,8 @@ export default function VocabularyDashboard() {
                         />
                       </div>
 
-                      {/* View toggle */}
-                      <div className="flex items-center w-min gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
+                      {/* View toggle — hidden on mobile */}
+                      <div className="hidden sm:flex items-center w-min gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
                         <button
                           onClick={() => setSrsSetView('grid')}
                           className={`px-2 py-1 rounded-md text-xs flex items-center gap-1 transition ${
@@ -1113,8 +1114,8 @@ export default function VocabularyDashboard() {
                     )}
                   </h2>
 
-                  {/* View toggle */}
-                  <div className="flex items-center w-min gap-1 h-min rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
+                  {/* View toggle — hidden on mobile */}
+                  <div className="hidden sm:flex items-center w-min gap-1 h-min rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1">
                     <button
                       onClick={() => setView('grid')}
                       className={`px-2 py-1 rounded-md text-xs flex items-center gap-1 transition ${
@@ -1140,18 +1141,20 @@ export default function VocabularyDashboard() {
                   </div>
 
                   {/* Sort */}
-                  <label className="text-xs text-black/60 dark:text-white/60 flex items-center gap-2">
-                    <span className="hidden sm:inline">Sort</span>
-                    <select
+                  <div className="flex items-center gap-2">
+                    <span className="hidden sm:inline text-xs text-black/60 dark:text-white/60">
+                      Sort
+                    </span>
+                    <CustomSelect
                       value={sortKey}
-                      onChange={(e) => setSortKey(e.target.value)}
-                      className="text-sm bg-white dark:bg-[#0f1a1f] border border-black/10 dark:border-white/10 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
-                    >
-                      <option value="recent">Most recent</option>
-                      <option value="az">A–Z</option>
-                      <option value="size">Most terms</option>
-                    </select>
-                  </label>
+                      onChange={(val) => setSortKey(val)}
+                      options={[
+                        { value: 'recent', label: 'Most recent' },
+                        { value: 'az', label: 'A–Z' },
+                        { value: 'size', label: 'Most terms' },
+                      ]}
+                    />
+                  </div>
 
                   {/* New set */}
                   <button
