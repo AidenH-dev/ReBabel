@@ -28,11 +28,11 @@ export default function CustomSelect({
     options.find((o) => o.value === value)?.label || placeholder;
 
   return (
-    <div ref={ref} className={`relative ${className}`}>
+    <div ref={ref} className={`relative inline-block ${className}`}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between gap-2 bg-white dark:bg-[#0f1a1f] border border-black/10 dark:border-white/10 rounded-md px-3 py-2 text-sm text-gray-900 dark:text-white text-left"
+        className="flex items-center justify-between gap-2 bg-white dark:bg-[#0f1a1f] border border-black/10 dark:border-white/10 rounded-md px-3 py-2 text-sm text-gray-900 dark:text-white text-left whitespace-nowrap"
       >
         <span className="truncate">{selectedLabel}</span>
         <svg
@@ -50,7 +50,7 @@ export default function CustomSelect({
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute z-50 mt-1 w-full min-w-max bg-white dark:bg-[#1a2834] border border-black/10 dark:border-white/10 rounded-md shadow-lg overflow-hidden">
+        <div className="absolute z-50 mt-1 right-0 min-w-full bg-white dark:bg-[#1a2834] border border-black/10 dark:border-white/10 rounded-md shadow-lg overflow-hidden">
           {options.map((option) => (
             <button
               key={option.value}
@@ -59,7 +59,7 @@ export default function CustomSelect({
                 onChange(option.value);
                 setIsOpen(false);
               }}
-              className={`w-full text-left px-3 py-2 text-sm transition-colors ${
+              className={`w-full text-left px-3 py-2 text-sm whitespace-nowrap transition-colors ${
                 value === option.value
                   ? 'bg-[#e30a5f]/10 text-[#e30a5f] dark:text-[#ff4d8d] font-medium'
                   : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5'
