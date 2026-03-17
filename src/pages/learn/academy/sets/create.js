@@ -871,7 +871,10 @@ export default function CreateNewSet() {
                             <div>
                               <label className=" text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center justify-between">
                                 <span>
-                                  Title * (enter only in jp or eng){' '}
+                                  Title *{' '}
+                                  <span className="hidden sm:inline">
+                                    (enter only in jp or eng)
+                                  </span>{' '}
                                   {grammarForm.title && (
                                     <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-1">
                                       (
