@@ -206,68 +206,93 @@ export default function Subscription() {
             </div>
           ) : (
             /* Free User View */
-            <div className="bg-white dark:bg-[#1c2b35] p-6 rounded-lg shadow-md border border-[#e30a5f]/20">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#e30a5f]/10 border border-[#e30a5f]/30">
-                  <HiOutlineStar className="w-6 h-6 text-amber-500" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold">Upgrade to Premium</h2>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Unlock all features
-                  </p>
-                </div>
-                <div className="ml-auto text-right">
-                  <span className="text-2xl font-bold text-[#e30a5f]">
-                    $5.50
+            <div className="relative overflow-hidden bg-white dark:bg-[#1c2b35] rounded-lg shadow-md border border-[#e30a5f]/20">
+              {/* Founder Banner */}
+              <div className="bg-[#e30a5f] px-6 py-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                      <HiOutlineStar className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-white text-sm font-semibold tracking-wide">
+                      Founder Pricing
+                    </span>
+                  </div>
+                  <span className="text-white/80 text-xs font-medium">
+                    Early access — locks in for life
                   </span>
-                  <span className="text-gray-500 text-sm">/mo</span>
                 </div>
               </div>
 
-              <ul className="space-y-2 mb-4 text-sm">
-                <li className="flex items-center gap-2">
-                  <TbCheck className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                  <span>5 translation practice sessions per day</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <TbCheck className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                  <span>Automatic grading & feedback</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <TbCheck className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                  <span>Advanced practice modes</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <TbCheck className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                  <span>Priority support</span>
-                </li>
-              </ul>
+              <div className="p-6">
+                {/* Pricing */}
+                <div className="text-center mb-5">
+                  <h2 className="text-lg font-semibold mb-3">
+                    ReBabel Premium
+                  </h2>
+                  <div className="flex items-baseline justify-center gap-2">
+                    <span className="text-gray-400 dark:text-gray-500 text-lg line-through">
+                      $8
+                    </span>
+                    <span className="text-4xl font-bold text-[#e30a5f]">
+                      $5.50
+                    </span>
+                    <span className="text-gray-500 dark:text-gray-400 text-sm">
+                      /mo
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#e30a5f] font-medium mt-1">
+                    Save 31% as a founding member
+                  </p>
+                </div>
 
-              <button
-                onClick={handleUpgrade}
-                disabled={processing}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium transition-all disabled:opacity-50"
-              >
-                {processing ? (
-                  <TbLoader className="w-4 h-4 animate-spin" />
-                ) : (
-                  <HiOutlineStar className="w-4 h-4 text-amber-300" />
-                )}
-                Upgrade Now
-              </button>
+                {/* Divider */}
+                <div className="border-t border-gray-200 dark:border-gray-700 mb-4" />
 
-              <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-3">
-                Free tier: 1 session per day
-              </p>
+                <ul className="space-y-2.5 mb-5 text-sm">
+                  <li className="flex items-center gap-2.5">
+                    <TbCheck className="w-4 h-4 text-[#e30a5f] flex-shrink-0" />
+                    <span>5 translation practice sessions per day</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <TbCheck className="w-4 h-4 text-[#e30a5f] flex-shrink-0" />
+                    <span>Automatic grading & feedback</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <TbCheck className="w-4 h-4 text-[#e30a5f] flex-shrink-0" />
+                    <span>Advanced practice modes</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <TbCheck className="w-4 h-4 text-[#e30a5f] flex-shrink-0" />
+                    <span>Priority support</span>
+                  </li>
+                </ul>
 
-              <button
-                onClick={syncAndFetch}
-                disabled={processing || loading}
-                className="w-full mt-2 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors disabled:opacity-50"
-              >
-                Already purchased? Restore subscription
-              </button>
+                <button
+                  onClick={handleUpgrade}
+                  disabled={processing}
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#e30a5f] hover:bg-[#f41567] text-white font-semibold transition-all disabled:opacity-50"
+                >
+                  {processing ? (
+                    <TbLoader className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <HiOutlineStar className="w-4 h-4" />
+                  )}
+                  Get Founder Pricing
+                </button>
+
+                <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-3">
+                  Free tier always available — 1 session per day
+                </p>
+
+                <button
+                  onClick={syncAndFetch}
+                  disabled={processing || loading}
+                  className="w-full mt-2 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors disabled:opacity-50"
+                >
+                  Already purchased? Restore subscription
+                </button>
+              </div>
             </div>
           )}
         </div>
