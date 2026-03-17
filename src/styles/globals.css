@@ -16,3 +16,22 @@
     padding-right: env(safe-area-inset-right) !important;
   }
 }
+
+/* Override Tailwind screen-height utilities to account for safe area padding on html.
+   Without this, h-screen (100vh) elements overflow by the safe area amount
+   because the html padding reduces the available content area. */
+.h-screen {
+  height: calc(
+    100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+  ) !important;
+}
+.min-h-screen {
+  min-height: calc(
+    100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+  ) !important;
+}
+.max-h-screen {
+  max-height: calc(
+    100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+  ) !important;
+}
