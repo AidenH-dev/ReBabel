@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { notifyBugReport } from '@/lib/webhooks/peko';
+import { notifySlackBugReport } from '@/lib/webhooks/slack';
 
 interface BugReportRequest {
   browser_type?: string;
@@ -118,14 +119,16 @@ async function handlePOST(
       });
     }
 
-    notifyBugReport({
+    const bugData = {
       reportId: data.entity_id,
       userId: userId,
       userEmail: userEmail,
       location: body.form_json?.bug_location,
       feature: body.form_json?.bugged_feature,
       description: body.form_json?.user_details,
-    });
+    };
+    notifyBugReport(bugData);
+    notifySlackBugReport(bugData);
 
     return res.status(201).json({
       success: true,

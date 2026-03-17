@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { notifySubscription, notifyError } from '@/lib/webhooks/peko';
+import { notifySlackSubscription, notifySlackError } from '@/lib/webhooks/slack';
 
 function getRawBody(req: NextApiRequest): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -56,14 +57,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (session.mode === 'subscription' && session.subscription) {
           const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
           await handleSubscriptionUpdate(supabase, subscription, event.id);
-          notifySubscription('created', {
+          const subData = {
             userId: subscription.metadata.auth0_user_id,
             stripeCustomerId: subscription.customer as string,
             stripeSubscriptionId: subscription.id,
             status: subscription.status,
             priceId: subscription.items.data[0]?.price.id,
             eventId: event.id,
-          });
+          };
+          notifySubscription('created', subData);
+          notifySlackSubscription('created', subData);
         }
         break;
       }
@@ -72,30 +75,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription;
         await handleSubscriptionUpdate(supabase, subscription, event.id);
-        notifySubscription(
-          event.type === 'customer.subscription.created' ? 'created' : 'updated',
-          {
-            userId: subscription.metadata.auth0_user_id,
-            stripeCustomerId: subscription.customer as string,
-            stripeSubscriptionId: subscription.id,
-            status: subscription.status,
-            priceId: subscription.items.data[0]?.price.id,
-            eventId: event.id,
-          }
-        );
+        const notifyType = event.type === 'customer.subscription.created' ? 'created' : 'updated' as const;
+        const subEventData = {
+          userId: subscription.metadata.auth0_user_id,
+          stripeCustomerId: subscription.customer as string,
+          stripeSubscriptionId: subscription.id,
+          status: subscription.status,
+          priceId: subscription.items.data[0]?.price.id,
+          eventId: event.id,
+        };
+        notifySubscription(notifyType, subEventData);
+        notifySlackSubscription(notifyType, subEventData);
         break;
       }
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
         await handleSubscriptionCanceled(supabase, subscription, event.id);
-        notifySubscription('canceled', {
+        const cancelData = {
           userId: subscription.metadata.auth0_user_id,
           stripeCustomerId: subscription.customer as string,
           stripeSubscriptionId: subscription.id,
           status: 'canceled',
           eventId: event.id,
-        });
+        };
+        notifySubscription('canceled', cancelData);
+        notifySlackSubscription('canceled', cancelData);
         break;
       }
 
@@ -104,12 +109,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const inv = invoice as any;
         if (inv.subscription) {
           const sub = await stripe.subscriptions.retrieve(inv.subscription as string);
-          notifySubscription('payment_failed', {
+          const failData = {
             userId: sub.metadata.auth0_user_id,
             stripeSubscriptionId: inv.subscription as string,
             status: 'past_due',
             eventId: event.id,
-          });
+          };
+          notifySubscription('payment_failed', failData);
+          notifySlackSubscription('payment_failed', failData);
         }
         await handlePaymentFailed(supabase, invoice, event.id);
         break;
@@ -119,10 +126,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ received: true });
   } catch (error) {
     console.error('Webhook handler error:', error);
-    notifyError(error instanceof Error ? error : new Error(String(error)), {
-      context: 'stripe_webhook',
-      endpoint: '/api/subscriptions/stripe/webhook',
-    });
+    const err = error instanceof Error ? error : new Error(String(error));
+    const errCtx = { context: 'stripe_webhook', endpoint: '/api/subscriptions/stripe/webhook' };
+    notifyError(err, errCtx);
+    notifySlackError(err, errCtx);
     return res.status(500).json({ error: 'Webhook handler failed' });
   }
 }
