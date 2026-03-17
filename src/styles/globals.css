@@ -3,11 +3,6 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
-  :root {
-    --cap-safe-top: 0px;
-    --cap-safe-bottom: 0px;
-  }
-
   html,
   body {
     @apply m-0 p-0 bg-[#141f25] overscroll-none;

@@ -38,47 +38,6 @@ function ensureNativeIOSViewportCover() {
   }
 }
 
-// Detect iPhone model by screen size and set CSS safe area variables.
-// This runs on Capacitor iOS where env(safe-area-inset-*) returns 0.
-function applyCapacitorSafeArea() {
-  if (typeof window === 'undefined') return;
-
-  const h = window.screen.height;
-  const w = window.screen.width;
-  // Use the larger dimension (handles any orientation)
-  const screenH = Math.max(h, w);
-
-  let top = 0;
-  let bottom = 0;
-
-  // Dynamic Island phones (iPhone 14 Pro, 15, 15 Pro, 16, 16 Pro, etc.)
-  // Screen heights: 852, 932, 874, 956
-  if (screenH >= 852) {
-    top = 59;
-    bottom = 34;
-  }
-  // Notch phones (iPhone X, XS, XR, 11, 12, 13, 14, etc.)
-  // Screen heights: 812, 844, 896, 926
-  else if (screenH >= 812) {
-    top = 47;
-    bottom = 34;
-  }
-  // Older phones with home button (iPhone SE, 8, etc.)
-  // Status bar only, no home indicator
-  else {
-    top = 20;
-    bottom = 0;
-  }
-
-  document.documentElement.style.setProperty('--cap-safe-top', `${top}px`);
-  document.documentElement.style.setProperty(
-    '--cap-safe-bottom',
-    `${bottom}px`
-  );
-  document.documentElement.style.setProperty('--cap-safe-left', '0px');
-  document.documentElement.style.setProperty('--cap-safe-right', '0px');
-}
-
 // 🔔 Early push notification listener setup (for cold start handling)
 // This runs immediately when the module loads on the client
 if (typeof window !== 'undefined') {
@@ -247,43 +206,8 @@ function PushNotificationBridge() {
   );
 }
 
-// Wraps app content in a flex column with safe area spacers.
-// The outer div is exactly 100dvh with overflow hidden, so:
-// - Top/bottom spacers push content into the safe zone
-// - The content area (flex-1) gets the remaining height
-// - Pages with h-screen fill the content area, not the viewport
-function CapacitorSafeAreaWrapper({ children }) {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100dvh',
-        overflow: 'hidden',
-      }}
-    >
-      <div
-        style={{
-          flexShrink: 0,
-          height: 'var(--cap-safe-top)',
-          background: '#141f25',
-        }}
-      />
-      <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>{children}</div>
-      <div
-        style={{
-          flexShrink: 0,
-          height: 'var(--cap-safe-bottom)',
-          background: '#141f25',
-        }}
-      />
-    </div>
-  );
-}
-
 export default function MyApp({ Component, pageProps }) {
   const [isPosthogEnabled, setIsPosthogEnabled] = useState(false);
-  const [isCapacitorIOS, setIsCapacitorIOS] = useState(false);
 
   useEffect(() => {
     const enforceForNativeIOS = async () => {
@@ -293,8 +217,6 @@ export default function MyApp({ Component, pageProps }) {
         if (!/iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
 
         ensureNativeIOSViewportCover();
-        applyCapacitorSafeArea();
-        setIsCapacitorIOS(true);
       } catch (e) {
         // Ignore if Capacitor is unavailable.
       }
@@ -343,32 +265,6 @@ export default function MyApp({ Component, pageProps }) {
             {isPosthogEnabled ? (
               <PostHogProvider client={posthog}>
                 <PostHogAuthBridge />
-                {isCapacitorIOS ? (
-                  <CapacitorSafeAreaWrapper>
-                    <div className={fredoka.className}>
-                      <BugReporterErrorBoundary>
-                        <Component {...pageProps} />
-                      </BugReporterErrorBoundary>
-                      <ReportIssueButton />
-                      <BugReporter />
-                      <Analytics />
-                      <SpeedInsights />
-                    </div>
-                  </CapacitorSafeAreaWrapper>
-                ) : (
-                  <div className={fredoka.className}>
-                    <BugReporterErrorBoundary>
-                      <Component {...pageProps} />
-                    </BugReporterErrorBoundary>
-                    <ReportIssueButton />
-                    <BugReporter />
-                    <Analytics />
-                    <SpeedInsights />
-                  </div>
-                )}
-              </PostHogProvider>
-            ) : isCapacitorIOS ? (
-              <CapacitorSafeAreaWrapper>
                 <div className={fredoka.className}>
                   <BugReporterErrorBoundary>
                     <Component {...pageProps} />
@@ -378,7 +274,7 @@ export default function MyApp({ Component, pageProps }) {
                   <Analytics />
                   <SpeedInsights />
                 </div>
-              </CapacitorSafeAreaWrapper>
+              </PostHogProvider>
             ) : (
               <div className={fredoka.className}>
                 <BugReporterErrorBoundary>

@@ -328,7 +328,7 @@ export default function Information() {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
       <MainSidebar />
-      <main className="ml-auto max-h-screen overflow-y-auto flex-1 px-8 py-6">
+      <main className="ml-auto max-h-screen overflow-y-auto flex-1 px-8 py-6 pt-[max(1.5rem,env(safe-area-inset-top))]">
         <Head>
           <title>Resources • ReBabel</title>
           <link rel="icon" href="/favicon.ico" />
