@@ -11,6 +11,13 @@
   body {
     @apply m-0 p-0 bg-[#141f25] overscroll-none;
   }
+
+  /* Prevent iOS auto-zoom on input focus — triggers on any font-size < 16px */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
 }
 
 /* Outside @layer so it beats Tailwind utility classes like py-4, p-6 etc. */
