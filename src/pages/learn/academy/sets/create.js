@@ -778,12 +778,14 @@ export default function CreateNewSet() {
                             <div>
                               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 Kanji{' '}
-                                <span className="text-gray-500 dark:text-gray-400">
+                                <span className="hidden sm:inline text-gray-500 dark:text-gray-400">
                                   (Please Paste The Entry)
                                 </span>
                               </label>
                               <input
                                 type="text"
+                                inputMode="text"
+                                lang="ja"
                                 value={singleForm.kanji}
                                 onChange={(e) =>
                                   handleSingleFormChange(
