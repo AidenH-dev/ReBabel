@@ -38,6 +38,47 @@ function ensureNativeIOSViewportCover() {
   }
 }
 
+// Detect iPhone model by screen size and set CSS safe area variables.
+// This runs on Capacitor iOS where env(safe-area-inset-*) returns 0.
+function applyCapacitorSafeArea() {
+  if (typeof window === 'undefined') return;
+
+  const h = window.screen.height;
+  const w = window.screen.width;
+  // Use the larger dimension (handles any orientation)
+  const screenH = Math.max(h, w);
+
+  let top = 0;
+  let bottom = 0;
+
+  // Dynamic Island phones (iPhone 14 Pro, 15, 15 Pro, 16, 16 Pro, etc.)
+  // Screen heights: 852, 932, 874, 956
+  if (screenH >= 852) {
+    top = 59;
+    bottom = 34;
+  }
+  // Notch phones (iPhone X, XS, XR, 11, 12, 13, 14, etc.)
+  // Screen heights: 812, 844, 896, 926
+  else if (screenH >= 812) {
+    top = 47;
+    bottom = 34;
+  }
+  // Older phones with home button (iPhone SE, 8, etc.)
+  // Status bar only, no home indicator
+  else {
+    top = 20;
+    bottom = 0;
+  }
+
+  document.documentElement.style.setProperty('--cap-safe-top', `${top}px`);
+  document.documentElement.style.setProperty(
+    '--cap-safe-bottom',
+    `${bottom}px`
+  );
+  document.documentElement.style.setProperty('--cap-safe-left', '0px');
+  document.documentElement.style.setProperty('--cap-safe-right', '0px');
+}
+
 // 🔔 Early push notification listener setup (for cold start handling)
 // This runs immediately when the module loads on the client
 if (typeof window !== 'undefined') {
@@ -217,6 +258,7 @@ export default function MyApp({ Component, pageProps }) {
         if (!/iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
 
         ensureNativeIOSViewportCover();
+        applyCapacitorSafeArea();
       } catch (e) {
         // Ignore if Capacitor is unavailable.
       }
