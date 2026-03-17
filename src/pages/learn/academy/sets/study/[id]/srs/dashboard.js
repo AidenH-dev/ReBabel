@@ -226,81 +226,81 @@ export default function SRSDashboard() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        {/* Scrollable content area */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
-          {/* Header */}
-          <div className="bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 py-4">
-            {/* Top row: nav + title + action buttons */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                <button
-                  onClick={() => router.push(`/learn/academy/sets/study/${id}`)}
-                  className="flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-500 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 hover:border-gray-400 dark:hover:border-gray-400 hover:shadow-md transition-all flex-shrink-0"
-                >
-                  <TbArrowLeft className="text-gray-700 dark:text-gray-200 text-lg" />
-                  <div className="hidden sm:flex items-center gap-2 ml-1">
-                    <TbStack2 className="text-gray-700 dark:text-gray-200 text-lg" />
-                    <span className="text-lg text-gray-900 dark:text-white font-semibold truncate max-w-[200px]">
-                      {setTitle}
-                    </span>
-                  </div>
-                </button>
-                <div className="min-w-0">
-                  <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
-                    SRS Dashboard
-                  </h1>
-                  <p className="sm:hidden text-xs text-gray-500 dark:text-gray-400 truncate">
+        {/* Sticky header — stays at top, safe area padding included */}
+        <div className="flex-shrink-0 bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 pt-[max(1rem,env(safe-area-inset-top))] pb-4">
+          {/* Top row: nav + title + action buttons */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <button
+                onClick={() => router.push(`/learn/academy/sets/study/${id}`)}
+                className="flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-500 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 hover:border-gray-400 dark:hover:border-gray-400 hover:shadow-md transition-all flex-shrink-0"
+              >
+                <TbArrowLeft className="text-gray-700 dark:text-gray-200 text-lg" />
+                <div className="hidden sm:flex items-center gap-2 ml-1">
+                  <TbStack2 className="text-gray-700 dark:text-gray-200 text-lg" />
+                  <span className="text-lg text-gray-900 dark:text-white font-semibold truncate max-w-[200px]">
                     {setTitle}
-                  </p>
+                  </span>
                 </div>
-              </div>
-
-              {/* Action buttons */}
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <Link
-                  href={`/learn/academy/sets/study/${id}/srs/due-now`}
-                  className={`flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-semibold transition-all ${
-                    stats.dueNow > 0
-                      ? 'bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
-                  }`}
-                >
-                  <LuRepeat className="text-lg opacity-80" />
-                  <span className="hidden sm:inline">Due Now</span>
-                  <span
-                    className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
-                      stats.dueNow > 0
-                        ? 'bg-white/20 text-white'
-                        : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
-                    }`}
-                  >
-                    {stats.dueNow}
-                  </span>
-                </Link>
-                <Link
-                  href={`/learn/academy/sets/study/${id}/srs/learn-new`}
-                  className={`flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-semibold transition-all ${
-                    learnNewLeft > 0
-                      ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:brightness-110 hover:ring-2 hover:ring-[#667eea]/40'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
-                  }`}
-                >
-                  <FaPlus className="text-sm opacity-80" />
-                  <span className="hidden sm:inline">Learn New</span>
-                  <span
-                    className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
-                      learnNewLeft > 0
-                        ? 'bg-white/20 text-white'
-                        : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
-                    }`}
-                  >
-                    {learnNewLeft}
-                  </span>
-                </Link>
+              </button>
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
+                  SRS Dashboard
+                </h1>
+                <p className="sm:hidden text-xs text-gray-500 dark:text-gray-400 truncate">
+                  {setTitle}
+                </p>
               </div>
             </div>
-          </div>
 
+            {/* Action buttons */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <Link
+                href={`/learn/academy/sets/study/${id}/srs/due-now`}
+                className={`flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-semibold transition-all ${
+                  stats.dueNow > 0
+                    ? 'bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
+                }`}
+              >
+                <LuRepeat className="text-lg opacity-80" />
+                <span className="hidden sm:inline">Due Now</span>
+                <span
+                  className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
+                    stats.dueNow > 0
+                      ? 'bg-white/20 text-white'
+                      : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
+                  }`}
+                >
+                  {stats.dueNow}
+                </span>
+              </Link>
+              <Link
+                href={`/learn/academy/sets/study/${id}/srs/learn-new`}
+                className={`flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-semibold transition-all ${
+                  learnNewLeft > 0
+                    ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:brightness-110 hover:ring-2 hover:ring-[#667eea]/40'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
+                }`}
+              >
+                <FaPlus className="text-sm opacity-80" />
+                <span className="hidden sm:inline">Learn New</span>
+                <span
+                  className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
+                    learnNewLeft > 0
+                      ? 'bg-white/20 text-white'
+                      : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
+                  }`}
+                >
+                  {learnNewLeft}
+                </span>
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Scrollable content area */}
+        <div className="flex-1 min-h-0 overflow-y-auto">
           {/* Progress section: pipeline + mastery bar */}
           <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-4 sm:gap-6 sm:items-start">
             <div className="order-2 sm:order-1 flex-1 min-w-0 sm:pt-[21px]">
