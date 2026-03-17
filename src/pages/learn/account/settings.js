@@ -205,7 +205,7 @@ export default function Settings() {
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
       <MainSidebar />
 
-      <main className="ml-auto flex-1 overflow-y-auto pt-[max(1rem,env(safe-area-inset-top))]">
+      <main className="ml-auto flex-1 overflow-y-auto pt-4">
         <Head>
           <title>Settings - ReBabel</title>
           <link rel="icon" href="/favicon.ico" />

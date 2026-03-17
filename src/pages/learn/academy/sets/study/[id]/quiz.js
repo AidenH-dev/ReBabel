@@ -487,7 +487,7 @@ export default function SetQuiz() {
     return (
       <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
         <MainSidebar />
-        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 pt-[calc(env(safe-area-inset-top)+1rem)] flex items-center justify-center">
+        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 pt-4 flex items-center justify-center">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
               Error Loading Quiz
@@ -509,7 +509,7 @@ export default function SetQuiz() {
     <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
       {quizCompleted && <MainSidebar />}
       <main
-        className={`flex-1 flex flex-col p-3 sm:p-6 pt-[calc(env(safe-area-inset-top)+1rem)] ${quizCompleted ? 'ml-0 lg:ml-auto' : 'w-full'}`}
+        className={`flex-1 flex flex-col p-3 sm:p-6 pt-4 ${quizCompleted ? 'ml-0 lg:ml-auto' : 'w-full'}`}
       >
         <Head>
           <title>Quiz • {setInfo?.title || 'Study Set'}</title>

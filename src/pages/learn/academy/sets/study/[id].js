@@ -2,13 +2,13 @@
 
 /**
  * ViewSet Page
- * 
+ *
  * Main page for viewing and managing a study set.
  * This page orchestrates three main sections:
  * 1. SetHeader - Displays set info, breadcrumbs, edit/export controls
  * 2. PracticeOptions - Quiz and flashcard launch buttons
  * 3. ItemsManagement - List/grid view of vocabulary and grammar items
- * 
+ *
  * Responsibilities:
  * - Fetches set data and items from API
  * - Manages page-level state (setData, items, userProfile)
@@ -20,16 +20,16 @@
 // IMPORTS
 // ============================================================================
 
-import Head from "next/head";
-import MainSidebar from "@/components/Sidebars/AcademySidebar";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import Head from 'next/head';
+import MainSidebar from '@/components/Sidebars/AcademySidebar';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 // Component imports
-import MasterItemsManagement from "@/components/pages/academy/sets/ViewSet/ItemsManagement/MasterItemsManagement";
-import PracticeOptions from "@/components/pages/academy/sets/ViewSet/PracticeOptions/MasterPracticeOptions";
-import MasterSetHeader from "@/components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader";
+import MasterItemsManagement from '@/components/pages/academy/sets/ViewSet/ItemsManagement/MasterItemsManagement';
+import PracticeOptions from '@/components/pages/academy/sets/ViewSet/PracticeOptions/MasterPracticeOptions';
+import MasterSetHeader from '@/components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader';
 
 // ============================================================================
 // MAIN COMPONENT
@@ -53,11 +53,11 @@ export default function ViewSet() {
   // Set metadata and configuration
   const [setData, setSetData] = useState({
     id: id,
-    title: "",
-    description: "",
-    owner: "",
-    dateCreated: "",
-    lastStudied: "",
+    title: '',
+    description: '',
+    owner: '',
+    dateCreated: '',
+    lastStudied: '',
     srsEnabled: false, // SRS status from database
     set_type: null, // 'vocab', 'grammar', or null for legacy sets
     tags: [],
@@ -66,8 +66,8 @@ export default function ViewSet() {
       known: 0,
       learning: 0,
       unknown: 0,
-      lastScore: 0
-    }
+      lastScore: 0,
+    },
   });
 
   // Study items (vocabulary and grammar)
@@ -90,7 +90,9 @@ export default function ViewSet() {
 
       try {
         // Call API to retrieve set and its items
-        const response = await fetch(`/api/database/v2/sets/retrieve-set/${id}`);
+        const response = await fetch(
+          `/api/database/v2/sets/retrieve-set/${id}`
+        );
 
         if (!response.ok) {
           throw new Error(`Failed to fetch set: ${response.statusText}`);
@@ -102,7 +104,7 @@ export default function ViewSet() {
           throw new Error(result.error || 'Failed to load set data');
         }
 
-        console.log("Set Result: ", result);
+        console.log('Set Result: ', result);
 
         // Extract data from API response
         const apiData = result.data;
@@ -120,11 +122,11 @@ export default function ViewSet() {
         // Populate set metadata
         setSetData({
           id: apiData.set_id,
-          title: setInfo.title || "Untitled Set",
-          description: setInfo.description?.toString() || "",
-          owner: setInfo.owner || "",
-          dateCreated: setInfo.date_created || "",
-          lastStudied: setInfo.last_studied || "",
+          title: setInfo.title || 'Untitled Set',
+          description: setInfo.description?.toString() || '',
+          owner: setInfo.owner || '',
+          dateCreated: setInfo.date_created || '',
+          lastStudied: setInfo.last_studied || '',
           srsEnabled: setInfo.srs_enabled === 'true', // Convert string to boolean
           set_type: setInfo.set_type || null, // 'vocab', 'grammar', or null for legacy sets
           tags: Array.isArray(setInfo.tags) ? setInfo.tags : [],
@@ -133,55 +135,60 @@ export default function ViewSet() {
             known: 0,
             learning: 0,
             unknown: 0,
-            lastScore: 0
-          }
+            lastScore: 0,
+          },
         });
 
-        console.log("SetData.set_type set to:", setInfo.set_type || null);
+        console.log('SetData.set_type set to:', setInfo.set_type || null);
 
         // Transform API items into consistent format for UI
-        const transformedItems = Array.isArray(setItemsAPI) ? setItemsAPI.map((item, index) => {
-          // Handle vocabulary items
-          if (item.type === 'vocab' || item.type === 'vocabulary') {
-            return {
-              id: item.id || `temp-vocab-${index}`,
-              type: 'vocabulary',
-              english: item.english || "",
-              kana: item.kana || "",
-              kanji: item.kanji || "",
-              lexical_category: item.lexical_category || "",
-              status: item.known_status || "unknown",
-              srs_level: item.srs_level || 0,
-              example_sentences: Array.isArray(item.example_sentences)
-                ? item.example_sentences
-                : [item.example_sentences].filter(Boolean),
-              tags: Array.isArray(item.tags) ? item.tags : []
-            };
-          } 
-          // Handle grammar items
-          else if (item.type === 'grammar') {
-            return {
-              id: item.id || `temp-grammar-${index}`,
-              type: 'grammar',
-              title: item.title || "",
-              description: item.description || "",
-              topic: item.topic || "",
-              status: item.known_status || "unknown",
-              srs_level: item.srs_level || 0,
-              notes: item.notes || "",
-              example_sentences: Array.isArray(item.example_sentences)
-                ? item.example_sentences.map(ex =>
-                  typeof ex === 'string' ? ex : `${ex.japanese || ''} (${ex.english || ''})`
-                )
-                : [],
-              tags: Array.isArray(item.tags) ? item.tags : []
-            };
-          }
-          return null;
-        }).filter(Boolean) : [];
+        const transformedItems = Array.isArray(setItemsAPI)
+          ? setItemsAPI
+              .map((item, index) => {
+                // Handle vocabulary items
+                if (item.type === 'vocab' || item.type === 'vocabulary') {
+                  return {
+                    id: item.id || `temp-vocab-${index}`,
+                    type: 'vocabulary',
+                    english: item.english || '',
+                    kana: item.kana || '',
+                    kanji: item.kanji || '',
+                    lexical_category: item.lexical_category || '',
+                    status: item.known_status || 'unknown',
+                    srs_level: item.srs_level || 0,
+                    example_sentences: Array.isArray(item.example_sentences)
+                      ? item.example_sentences
+                      : [item.example_sentences].filter(Boolean),
+                    tags: Array.isArray(item.tags) ? item.tags : [],
+                  };
+                }
+                // Handle grammar items
+                else if (item.type === 'grammar') {
+                  return {
+                    id: item.id || `temp-grammar-${index}`,
+                    type: 'grammar',
+                    title: item.title || '',
+                    description: item.description || '',
+                    topic: item.topic || '',
+                    status: item.known_status || 'unknown',
+                    srs_level: item.srs_level || 0,
+                    notes: item.notes || '',
+                    example_sentences: Array.isArray(item.example_sentences)
+                      ? item.example_sentences.map((ex) =>
+                          typeof ex === 'string'
+                            ? ex
+                            : `${ex.japanese || ''} (${ex.english || ''})`
+                        )
+                      : [],
+                    tags: Array.isArray(item.tags) ? item.tags : [],
+                  };
+                }
+                return null;
+              })
+              .filter(Boolean)
+          : [];
 
         setItems(transformedItems);
-
       } catch (err) {
         console.error('Error fetching set:', err);
         setError(err.message);
@@ -200,11 +207,11 @@ export default function ViewSet() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch("/api/auth/me");
+        const response = await fetch('/api/auth/me');
         const profile = await response.json();
         setUserProfile(profile);
       } catch (error) {
-        console.error("Error fetching user profile:", error);
+        console.error('Error fetching user profile:', error);
       }
     };
     fetchUserProfile();
@@ -219,7 +226,7 @@ export default function ViewSet() {
    * @param {Object} updates - Partial setData object with updated fields
    */
   const handleSetDataUpdate = (updates) => {
-    setSetData(prev => {
+    setSetData((prev) => {
       const newState = { ...prev, ...updates };
 
       // Handle srsEnabled property if it's being updated
@@ -246,7 +253,7 @@ export default function ViewSet() {
     return (
       <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
         <MainSidebar />
-        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 pt-[max(1rem,env(safe-area-inset-top))] flex items-center justify-center">
+        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 pt-4 flex items-center justify-center">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
               Error Loading Set
@@ -283,7 +290,6 @@ export default function ViewSet() {
 
         {/* Content container with max width */}
         <div className="w-full max-w-6xl mx-auto flex-1 min-h-0 flex flex-col">
-          
           {/* Section 1: Set Header - Breadcrumbs, title, edit, export */}
           <MasterSetHeader
             setData={setData}
@@ -293,7 +299,11 @@ export default function ViewSet() {
             srsEnabled={setData.srsEnabled}
           />
           {/* Section 2: Practice Options - Quiz and flashcard buttons */}
-          <PracticeOptions setId={id} setData={setData} enableSrsModule={setData.srsEnabled} />
+          <PracticeOptions
+            setId={id}
+            setData={setData}
+            enableSrsModule={setData.srsEnabled}
+          />
 
           {/* Section 3: Items Management - Item list/grid, add/edit/delete */}
           <MasterItemsManagement
