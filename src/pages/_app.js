@@ -25,8 +25,8 @@ function applyCapacitorSafeArea() {
   const screenH = Math.max(window.screen.height, window.screen.width);
   let top = 20;
   if (screenH >= 852)
-    top = 59; // Dynamic Island (iPhone 14 Pro, 15, 16, etc.)
-  else if (screenH >= 812) top = 47; // Notch (iPhone X, 11, 12, 13, 14, etc.)
+    top = 44; // Dynamic Island (iPhone 14 Pro, 15, 16, etc.)
+  else if (screenH >= 812) top = 32; // Notch (iPhone X, 11, 12, 13, 14, etc.)
   document.documentElement.style.setProperty('--cap-safe-top', `${top}px`);
 }
 
