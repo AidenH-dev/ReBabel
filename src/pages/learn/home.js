@@ -181,7 +181,7 @@ export default function Home() {
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
       <MainSidebar />
 
-      <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6 pt-6">
+      <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6">
         <Head>
           <title>Learning Dashboard • ReBabel</title>
           <link rel="icon" href="/favicon.ico" />

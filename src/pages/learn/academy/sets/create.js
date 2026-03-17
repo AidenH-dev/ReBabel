@@ -600,7 +600,7 @@ export default function CreateNewSet() {
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
       <MainSidebar />
 
-      <main className="ml-auto flex-1 px-4 sm:px-6 py-4 pt-4">
+      <main className="ml-auto flex-1 px-4 sm:px-6 py-4">
         <Head>
           <title>Create New Set</title>
           <link rel="icon" href="/favicon.ico" />

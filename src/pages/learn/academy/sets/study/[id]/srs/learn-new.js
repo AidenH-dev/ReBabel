@@ -820,7 +820,7 @@ export default function LearnNew() {
         {/* Only show sidebar during complete phase (summary) */}
         {currentPhase === 'complete' && <AcademySidebar />}
 
-        <main className="flex-1 flex flex-col p-3 sm:p-6 pt-3">
+        <main className="flex-1 flex flex-col p-3 sm:p-6">
           {/* Loading State */}
           {isLoading ? (
             <div className="flex-1 flex items-center justify-center">

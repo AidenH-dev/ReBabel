@@ -253,7 +253,7 @@ export default function ViewSet() {
     return (
       <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
         <MainSidebar />
-        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 pt-4 flex items-center justify-center">
+        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex items-center justify-center">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
               Error Loading Set

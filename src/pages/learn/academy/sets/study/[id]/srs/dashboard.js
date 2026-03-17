@@ -229,7 +229,7 @@ export default function SRSDashboard() {
         {/* Scrollable content area */}
         <div className="flex-1 min-h-0 overflow-y-auto">
           {/* Header */}
-          <div className="bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 py-4 pt-4">
+          <div className="bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 py-4">
             {/* Top row: nav + title + action buttons */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 sm:gap-3 min-w-0">

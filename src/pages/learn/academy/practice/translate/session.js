@@ -125,7 +125,7 @@ export default function TranslatePracticeSession() {
     return (
       <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#141f25]">
         <AcademySidebar />
-        <main className="flex-1 p-3 sm:p-6 pt-3 overflow-y-auto">
+        <main className="flex-1 p-3 sm:p-6 overflow-y-auto">
           <TranslateSummaryView
             sessionStats={sessionStats}
             questionResults={questionResults}
@@ -148,7 +148,7 @@ export default function TranslatePracticeSession() {
 
       <AcademySidebar />
 
-      <main className="flex-1 flex flex-col p-3 sm:p-6 pt-3 overflow-y-auto">
+      <main className="flex-1 flex flex-col p-3 sm:p-6 overflow-y-auto">
         {/* Header - Quiz Mode Style */}
         <div className="w-full max-w-5xl mx-auto mb-4 sm:mb-6">
           <div className="flex items-center justify-between mb-4 mt-2 sm:mt-0 ">
