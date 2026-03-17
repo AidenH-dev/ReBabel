@@ -6,37 +6,10 @@
   :root {
     --cap-safe-top: 0px;
     --cap-safe-bottom: 0px;
-    --cap-safe-left: 0px;
-    --cap-safe-right: 0px;
   }
 
   html,
   body {
     @apply m-0 p-0 bg-[#141f25] overscroll-none;
   }
-
-  /* Capacitor safe area — values set by JS on native iOS, 0 on web */
-  html {
-    padding-top: var(--cap-safe-top) !important;
-    padding-bottom: var(--cap-safe-bottom) !important;
-    padding-left: var(--cap-safe-left) !important;
-    padding-right: var(--cap-safe-right) !important;
-  }
-}
-
-/* Fix h-screen/min-h-screen to account for Capacitor safe area padding */
-.h-screen {
-  height: calc(
-    100dvh - var(--cap-safe-top) - var(--cap-safe-bottom)
-  ) !important;
-}
-.min-h-screen {
-  min-height: calc(
-    100dvh - var(--cap-safe-top) - var(--cap-safe-bottom)
-  ) !important;
-}
-.max-h-screen {
-  max-height: calc(
-    100dvh - var(--cap-safe-top) - var(--cap-safe-bottom)
-  ) !important;
 }

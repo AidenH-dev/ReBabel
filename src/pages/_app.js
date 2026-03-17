@@ -247,8 +247,44 @@ function PushNotificationBridge() {
   );
 }
 
+// Fixed bars that cover the notch/Dynamic Island and home indicator areas.
+// Content scrolls behind these bars instead of being visible in the safe area.
+function CapacitorSafeAreaBars() {
+  return (
+    <>
+      {/* Top bar — covers notch / Dynamic Island */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 'var(--cap-safe-top)',
+          zIndex: 99999,
+          backgroundColor: '#141f25',
+          pointerEvents: 'none',
+        }}
+      />
+      {/* Bottom bar — covers home indicator */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 'var(--cap-safe-bottom)',
+          zIndex: 99999,
+          backgroundColor: '#141f25',
+          pointerEvents: 'none',
+        }}
+      />
+    </>
+  );
+}
+
 export default function MyApp({ Component, pageProps }) {
   const [isPosthogEnabled, setIsPosthogEnabled] = useState(false);
+  const [isCapacitorIOS, setIsCapacitorIOS] = useState(false);
 
   useEffect(() => {
     const enforceForNativeIOS = async () => {
@@ -259,6 +295,7 @@ export default function MyApp({ Component, pageProps }) {
 
         ensureNativeIOSViewportCover();
         applyCapacitorSafeArea();
+        setIsCapacitorIOS(true);
       } catch (e) {
         // Ignore if Capacitor is unavailable.
       }
@@ -304,10 +341,21 @@ export default function MyApp({ Component, pageProps }) {
           `}
           </Script>
           <BugReporterProvider>
+            {isCapacitorIOS && <CapacitorSafeAreaBars />}
             {isPosthogEnabled ? (
               <PostHogProvider client={posthog}>
                 <PostHogAuthBridge />
-                <div className={fredoka.className}>
+                <div
+                  className={fredoka.className}
+                  style={
+                    isCapacitorIOS
+                      ? {
+                          paddingTop: 'var(--cap-safe-top)',
+                          paddingBottom: 'var(--cap-safe-bottom)',
+                        }
+                      : undefined
+                  }
+                >
                   <BugReporterErrorBoundary>
                     <Component {...pageProps} />
                   </BugReporterErrorBoundary>
@@ -318,7 +366,17 @@ export default function MyApp({ Component, pageProps }) {
                 </div>
               </PostHogProvider>
             ) : (
-              <div className={fredoka.className}>
+              <div
+                className={fredoka.className}
+                style={
+                  isCapacitorIOS
+                    ? {
+                        paddingTop: 'var(--cap-safe-top)',
+                        paddingBottom: 'var(--cap-safe-bottom)',
+                      }
+                    : undefined
+                }
+              >
                 <BugReporterErrorBoundary>
                   <Component {...pageProps} />
                 </BugReporterErrorBoundary>
