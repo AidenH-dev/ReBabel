@@ -247,38 +247,37 @@ function PushNotificationBridge() {
   );
 }
 
-// Fixed bars that cover the notch/Dynamic Island and home indicator areas.
-// Content scrolls behind these bars instead of being visible in the safe area.
-function CapacitorSafeAreaBars() {
+// Wraps app content in a flex column with safe area spacers.
+// The outer div is exactly 100dvh with overflow hidden, so:
+// - Top/bottom spacers push content into the safe zone
+// - The content area (flex-1) gets the remaining height
+// - Pages with h-screen fill the content area, not the viewport
+function CapacitorSafeAreaWrapper({ children }) {
   return (
-    <>
-      {/* Top bar — covers notch / Dynamic Island */}
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100dvh',
+        overflow: 'hidden',
+      }}
+    >
       <div
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
+          flexShrink: 0,
           height: 'var(--cap-safe-top)',
-          zIndex: 99999,
-          backgroundColor: '#141f25',
-          pointerEvents: 'none',
+          background: '#141f25',
         }}
       />
-      {/* Bottom bar — covers home indicator */}
+      <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>{children}</div>
       <div
         style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
+          flexShrink: 0,
           height: 'var(--cap-safe-bottom)',
-          zIndex: 99999,
-          backgroundColor: '#141f25',
-          pointerEvents: 'none',
+          background: '#141f25',
         }}
       />
-    </>
+    </div>
   );
 }
 
@@ -341,21 +340,36 @@ export default function MyApp({ Component, pageProps }) {
           `}
           </Script>
           <BugReporterProvider>
-            {isCapacitorIOS && <CapacitorSafeAreaBars />}
             {isPosthogEnabled ? (
               <PostHogProvider client={posthog}>
                 <PostHogAuthBridge />
-                <div
-                  className={fredoka.className}
-                  style={
-                    isCapacitorIOS
-                      ? {
-                          paddingTop: 'var(--cap-safe-top)',
-                          paddingBottom: 'var(--cap-safe-bottom)',
-                        }
-                      : undefined
-                  }
-                >
+                {isCapacitorIOS ? (
+                  <CapacitorSafeAreaWrapper>
+                    <div className={fredoka.className}>
+                      <BugReporterErrorBoundary>
+                        <Component {...pageProps} />
+                      </BugReporterErrorBoundary>
+                      <ReportIssueButton />
+                      <BugReporter />
+                      <Analytics />
+                      <SpeedInsights />
+                    </div>
+                  </CapacitorSafeAreaWrapper>
+                ) : (
+                  <div className={fredoka.className}>
+                    <BugReporterErrorBoundary>
+                      <Component {...pageProps} />
+                    </BugReporterErrorBoundary>
+                    <ReportIssueButton />
+                    <BugReporter />
+                    <Analytics />
+                    <SpeedInsights />
+                  </div>
+                )}
+              </PostHogProvider>
+            ) : isCapacitorIOS ? (
+              <CapacitorSafeAreaWrapper>
+                <div className={fredoka.className}>
                   <BugReporterErrorBoundary>
                     <Component {...pageProps} />
                   </BugReporterErrorBoundary>
@@ -364,19 +378,9 @@ export default function MyApp({ Component, pageProps }) {
                   <Analytics />
                   <SpeedInsights />
                 </div>
-              </PostHogProvider>
+              </CapacitorSafeAreaWrapper>
             ) : (
-              <div
-                className={fredoka.className}
-                style={
-                  isCapacitorIOS
-                    ? {
-                        paddingTop: 'var(--cap-safe-top)',
-                        paddingBottom: 'var(--cap-safe-bottom)',
-                      }
-                    : undefined
-                }
-              >
+              <div className={fredoka.className}>
                 <BugReporterErrorBoundary>
                   <Component {...pageProps} />
                 </BugReporterErrorBoundary>
