@@ -403,7 +403,7 @@ export default function SetFlashcards() {
     return (
       <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
         <MainSidebar />
-        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 pt-[calc(env(safe-area-inset-top)+1rem)] flex items-center justify-center">
+        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex items-center justify-center">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
               Error Loading Flashcards
@@ -423,7 +423,7 @@ export default function SetFlashcards() {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] overflow-x-hidden">
-      <main className="ml-auto flex-1 flex flex-col p-6 pt-[calc(env(safe-area-inset-top)+1rem)] overflow-x-hidden">
+      <main className="ml-auto flex-1 flex flex-col p-6 overflow-x-hidden">
         <Head>
           <title>Flashcards • {setInfo?.title || 'Study Set'}</title>
           <link rel="icon" href="/favicon.ico" />

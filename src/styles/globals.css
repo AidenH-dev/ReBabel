@@ -7,4 +7,8 @@
   body {
     @apply m-0 p-0 bg-[#141f25] overscroll-none;
   }
+
+  main {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
 }
