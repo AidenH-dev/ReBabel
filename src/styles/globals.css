@@ -20,7 +20,7 @@
   }
 }
 
-/* Outside @layer so it beats Tailwind utility classes like py-4, p-6 etc. */
+/* Only adds safe area padding on Capacitor iOS (--cap-safe-top is 0px on web) */
 main {
-  padding-top: max(1rem, var(--cap-safe-top)) !important;
+  padding-top: var(--cap-safe-top) !important;
 }

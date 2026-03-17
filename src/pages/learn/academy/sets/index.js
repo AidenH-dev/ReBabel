@@ -493,7 +493,7 @@ export default function VocabularyDashboard() {
         </div>
         {/* Fast Review Widget - Mobile */}
         {!isLoadingDueCount && totalDueItems > 0 && (
-          <div className="sm:hidden w-full max-w-6xl mx-auto mb-4">
+          <div className="mt-5 sm:hidden w-full max-w-6xl mx-auto mb-4">
             <div className="bg-gradient-to-r from-[#667eea]/80 to-[#764ba2]/80 rounded-xl shadow-md px-4 py-4 text-white">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">

@@ -1,4 +1,4 @@
-# ReBabel – LLM-Tutor
+# ReBabel – rebabel-nextjs
 
 ## VSDD Methodology
 
