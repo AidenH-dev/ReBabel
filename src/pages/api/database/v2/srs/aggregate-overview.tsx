@@ -93,6 +93,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse, userId: stri
             totalDue: 0,
             srsEnabledSets: 0,
           },
+          loadChart: [],
         },
       });
     }

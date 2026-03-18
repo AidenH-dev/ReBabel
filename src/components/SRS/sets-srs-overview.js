@@ -159,7 +159,7 @@ export default function SetsSrsOverview({ active = true }) {
       }
     };
     fetchData();
-  }, []);
+  }, [active]);
 
   // Refetch on visibility change
   useEffect(() => {
