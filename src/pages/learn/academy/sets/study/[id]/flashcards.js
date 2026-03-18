@@ -312,6 +312,60 @@ export default function SetFlashcards() {
     [currentIndex, cardsData.length, handleNext]
   );
 
+  // Touch swipe handling
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
+  const touchCurrentX = useRef(null);
+  const cardContainerRef = useRef(null);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+    touchStartY.current = e.targetTouches[0].clientY;
+    touchCurrentX.current = e.targetTouches[0].clientX;
+  }, []);
+
+  const handleTouchMove = useCallback((e) => {
+    if (!touchStartX.current) return;
+    touchCurrentX.current = e.targetTouches[0].clientX;
+
+    // Check if horizontal swipe is dominant (prevent hijacking vertical scroll)
+    const dx = Math.abs(touchCurrentX.current - touchStartX.current);
+    const dy = Math.abs(e.targetTouches[0].clientY - touchStartY.current);
+    if (dy > dx) return; // vertical scroll, ignore
+
+    const diff = touchCurrentX.current - touchStartX.current;
+    const capped = Math.max(-80, Math.min(80, diff));
+
+    if (cardContainerRef.current) {
+      cardContainerRef.current.style.transform = `translateX(${capped}px) rotate(${capped * 0.05}deg)`;
+      cardContainerRef.current.style.opacity = `${1 - Math.abs(capped) / 250}`;
+      cardContainerRef.current.style.transition = 'none';
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!touchStartX.current || !touchCurrentX.current) return;
+
+    const diff = touchCurrentX.current - touchStartX.current;
+
+    // Reset visual state
+    if (cardContainerRef.current) {
+      cardContainerRef.current.style.transform = '';
+      cardContainerRef.current.style.opacity = '';
+      cardContainerRef.current.style.transition = '';
+    }
+
+    if (Math.abs(diff) >= 60) {
+      if (diff < 0)
+        handleNext(); // swipe left = next
+      else handlePrevious(); // swipe right = previous
+    }
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+    touchCurrentX.current = null;
+  }, [handleNext, handlePrevious]);
+
   const handleKeyPress = useCallback(
     (e) => {
       if (e.key === ' ') {
@@ -422,7 +476,7 @@ export default function SetFlashcards() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] overflow-x-hidden">
+    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] overflow-x-hidden  sm:mt-10">
       <main className="ml-auto flex-1 flex flex-col p-6 overflow-x-hidden">
         <Head>
           <title>Flashcards • {setInfo?.title || 'Study Set'}</title>
@@ -430,7 +484,7 @@ export default function SetFlashcards() {
         </Head>
 
         {/* Header */}
-        <div className="w-full max-w-5xl mx-auto mb-6">
+        <div className="w-full max-w-5xl mx-auto mb-6 sm:mb-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
@@ -503,7 +557,7 @@ export default function SetFlashcards() {
 
         {/* Main Card Area */}
         {isLoading ? (
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex-1 flex items-center justify-center sm:mb-10">
             <div className="text-center">
               <div className="animate-pulse mb-4">
                 <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
@@ -514,8 +568,8 @@ export default function SetFlashcards() {
             </div>
           </div>
         ) : cardsData.length > 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center overflow-x-hidden">
-            <div className="w-full max-w-3xl overflow-x-hidden">
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div className="w-full max-w-3xl">
               {/* Stats Bar */}
               <div className="flex items-center justify-center gap-6 mb-6">
                 {studyMode === 'quiz' ? (
@@ -567,13 +621,18 @@ export default function SetFlashcards() {
                 )}
               </div>
 
-              {/* Card Container */}
+              {/* Card Container — swipeable */}
               <div
-                className="relative w-full h-96 mb-8 overflow-hidden"
+                className="relative w-full h-96 mb-8 touch-pan-y"
                 style={container3DStyles}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
               >
                 <div
+                  ref={cardContainerRef}
                   className={`absolute w-full h-full ${transitionClasses[transitionState]}`}
+                  style={{ willChange: 'transform, opacity' }}
                 >
                   <div
                     style={flipCardStyles}
@@ -610,7 +669,12 @@ export default function SetFlashcards() {
                         )}
 
                       <div className="absolute bottom-6 text-white/50 text-sm">
-                        Click or press Space to flip
+                        <span className="hidden sm:inline">
+                          Click or press Space to flip
+                        </span>
+                        <span className="sm:hidden">
+                          Tap to flip · Swipe to navigate
+                        </span>
                       </div>
                     </div>
 

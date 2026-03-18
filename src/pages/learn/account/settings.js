@@ -214,140 +214,179 @@ export default function Settings() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <div className="px-4 md:p-6 pb-8 md:w-full">
+        <div className="px-4 pt-[max(1.5rem,var(--cap-safe-top))] md:pt-0 md:p-6 pb-8 md:w-full">
           <div className="max-w-lg mx-auto">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-6">
               Settings
             </h1>
 
             <div className="bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 dusk:border-[#3a4556] divide-y divide-gray-200 dark:divide-gray-700 dusk:divide-[#3a4556]">
-              {/* Email Section */}
-              <div className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
-                    <FiMail className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                      Email
-                    </p>
-                    {loading ? (
-                      <p className="text-sm text-gray-400">Loading...</p>
-                    ) : (
-                      <p className="text-gray-900 dark:text-white dusk:text-[#e8e0d8] truncate">
-                        {userProfile?.email || 'Not available'}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Password Section */}
-              <div className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
-                    <FiKey className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                      Password
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                      {resetSent
-                        ? 'Check your email for reset link'
-                        : 'Send a password reset email'}
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleResetPassword}
-                    disabled={resetLoading || resetSent}
-                    className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors disabled:opacity-50 ${
-                      resetSent
-                        ? 'border-green-500 text-green-600 dark:text-green-400'
-                        : 'border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]'
-                    }`}
-                  >
-                    {resetLoading ? (
-                      <FiLoader className="text-sm animate-spin" />
-                    ) : resetSent ? (
-                      <FiCheck className="text-sm" />
-                    ) : (
-                      <FiKey className="text-sm" />
-                    )}
-                    {resetSent ? 'Email Sent' : 'Reset Password'}
-                  </button>
-                </div>
-              </div>
-
-              {/* Subscription Section - Only show for premium users */}
-              {subscription?.isPremium && (
-                <div className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
-                      <FiCreditCard className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                        Subscription
-                      </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                        Manage billing & plan
-                      </p>
-                    </div>
-                    <button
-                      onClick={handleManageSubscription}
-                      disabled={portalLoading}
-                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors disabled:opacity-50"
-                    >
-                      {portalLoading ? (
-                        <FiLoader className="text-sm animate-spin" />
-                      ) : (
-                        <FiExternalLink className="text-sm" />
+              {loading ? (
+                /* Skeleton loading state */
+                <>
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-10 h-10 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
+                          style={{ animationDelay: `${i * 75}ms` }}
+                        />
+                        <div className="flex-1 min-w-0 space-y-2">
+                          <div
+                            className="h-3.5 w-16 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                            style={{ animationDelay: `${i * 75 + 25}ms` }}
+                          />
+                          <div
+                            className="h-4 w-40 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                            style={{ animationDelay: `${i * 75 + 50}ms` }}
+                          />
+                        </div>
+                        {i !== 3 && (
+                          <div
+                            className="h-9 w-24 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
+                            style={{ animationDelay: `${i * 75 + 75}ms` }}
+                          />
+                        )}
+                      </div>
+                      {i === 3 && (
+                        <div className="mt-3 ml-13 flex flex-wrap gap-2">
+                          {[1, 2, 3, 4, 5].map((j) => (
+                            <div
+                              key={j}
+                              className="h-9 w-20 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                              style={{ animationDelay: `${j * 50 + 300}ms` }}
+                            />
+                          ))}
+                        </div>
                       )}
-                      Manage
-                    </button>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {/* Email Section */}
+                  <div className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                        <FiMail className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                          Email
+                        </p>
+                        <p className="text-gray-900 dark:text-white dusk:text-[#e8e0d8] truncate">
+                          {userProfile?.email || 'Not available'}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              )}
 
-              {/* Theme Section */}
-              <div className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
-                    <FiSun className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                      Appearance
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                      Choose your preferred theme
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-3 ml-13 flex flex-wrap gap-2">
-                  {themeOptions.map((option) => {
-                    const Icon = option.icon;
-                    const isActive = theme === option.value;
-                    return (
+                  {/* Password Section */}
+                  <div className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                        <FiKey className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                          Password
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                          {resetSent
+                            ? 'Check your email for reset link'
+                            : 'Send a password reset email'}
+                        </p>
+                      </div>
                       <button
-                        key={option.value}
-                        onClick={() => setTheme(option.value)}
-                        className={`inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                          isActive
-                            ? 'border-[#e30a5f] bg-[#e30a5f]/10 text-[#e30a5f]'
+                        onClick={handleResetPassword}
+                        disabled={resetLoading || resetSent}
+                        className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors disabled:opacity-50 ${
+                          resetSent
+                            ? 'border-green-500 text-green-600 dark:text-green-400'
                             : 'border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]'
                         }`}
                       >
-                        <Icon className="text-sm" />
-                        {option.label}
+                        {resetLoading ? (
+                          <FiLoader className="text-sm animate-spin" />
+                        ) : resetSent ? (
+                          <FiCheck className="text-sm" />
+                        ) : (
+                          <FiKey className="text-sm" />
+                        )}
+                        {resetSent ? 'Email Sent' : 'Reset Password'}
                       </button>
-                    );
-                  })}
-                </div>
-              </div>
+                    </div>
+                  </div>
 
-              {/* Push Notifications Test Section - Only show in native app
+                  {/* Subscription Section - Only show for premium users */}
+                  {subscription?.isPremium && (
+                    <div className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                          <FiCreditCard className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                            Subscription
+                          </p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                            Manage billing & plan
+                          </p>
+                        </div>
+                        <button
+                          onClick={handleManageSubscription}
+                          disabled={portalLoading}
+                          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors disabled:opacity-50"
+                        >
+                          {portalLoading ? (
+                            <FiLoader className="text-sm animate-spin" />
+                          ) : (
+                            <FiExternalLink className="text-sm" />
+                          )}
+                          Manage
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Theme Section */}
+                  <div className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                        <FiSun className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                          Appearance
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                          Choose your preferred theme
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-3 ml-13 flex flex-wrap gap-2">
+                      {themeOptions.map((option) => {
+                        const Icon = option.icon;
+                        const isActive = theme === option.value;
+                        return (
+                          <button
+                            key={option.value}
+                            onClick={() => setTheme(option.value)}
+                            className={`inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                              isActive
+                                ? 'border-[#e30a5f] bg-[#e30a5f]/10 text-[#e30a5f]'
+                                : 'border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]'
+                            }`}
+                          >
+                            <Icon className="text-sm" />
+                            {option.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Push Notifications Test Section - Only show in native app
               {isNativeApp && (
                 <div className="p-4">
                   <div className="flex items-center gap-3">
@@ -390,29 +429,33 @@ export default function Settings() {
                 </div>
               )}*/}
 
-              {/* Sign Out Section */}
-              <div className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 dusk:bg-red-900/20 flex items-center justify-center flex-shrink-0">
-                    <FiLogOut className="text-lg text-red-500 dark:text-red-400" />
+                  {/* Sign Out Section */}
+                  <div className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 dusk:bg-red-900/20 flex items-center justify-center flex-shrink-0">
+                        <FiLogOut className="text-lg text-red-500 dark:text-red-400" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                          Sign Out
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                          Log out of your account
+                        </p>
+                      </div>
+                      <button
+                        onClick={() =>
+                          (window.location.href = '/api/auth/logout')
+                        }
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-red-500 hover:bg-red-600 text-white transition-colors"
+                      >
+                        <FiLogOut className="text-sm" />
+                        Sign Out
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                      Sign Out
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                      Log out of your account
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => (window.location.href = '/api/auth/logout')}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-red-500 hover:bg-red-600 text-white transition-colors"
-                  >
-                    <FiLogOut className="text-sm" />
-                    Sign Out
-                  </button>
-                </div>
-              </div>
+                </>
+              )}
             </div>
 
             {/* Footer Links - Small text below card */}

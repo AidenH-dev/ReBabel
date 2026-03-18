@@ -506,7 +506,7 @@ export default function SetQuiz() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
+    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] sm:mt-10">
       {quizCompleted && <MainSidebar />}
       <main
         className={`flex-1 flex flex-col p-3 sm:p-6 ${quizCompleted ? 'ml-0 lg:ml-auto' : 'w-full'}`}

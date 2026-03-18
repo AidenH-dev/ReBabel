@@ -759,9 +759,8 @@ export default function FastReview() {
 
       <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
         {/* Only show sidebar during complete phase (summary) */}
-        {currentPhase === 'complete' && <AcademySidebar />}
-
-        <main className="flex-1 flex flex-col p-3 sm:p-6">
+        {currentPhase === 'complete' && <AcademySidebar />}v
+        <main className="flex-1 flex flex-col p-3 sm:p-6 md:mt-10">
           {/* Loading State */}
           {isLoading ? (
             <div className="flex-1 flex items-center justify-center">

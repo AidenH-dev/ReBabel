@@ -5,7 +5,7 @@ import {
   useState,
   useCallback,
 } from 'react';
-import { useUserPreferences } from '@/lib/useUserPreferences';
+import { useUserPreferences } from '@/contexts/PreferencesContext';
 
 const ThemeContext = createContext();
 
@@ -14,7 +14,6 @@ export function ThemeProvider({ children }) {
   const [mounted, setMounted] = useState(false);
 
   const { savePreference } = useUserPreferences((serverPrefs) => {
-    // When server prefs load, apply theme if present
     if (serverPrefs.theme) {
       setThemeState(serverPrefs.theme);
     }
@@ -41,8 +40,6 @@ export function ThemeProvider({ children }) {
     if (!mounted) return;
 
     const root = document.documentElement;
-
-    // Clear all theme classes first
     root.classList.remove('dark', 'dusk', 'cream');
 
     if (theme === 'system') {

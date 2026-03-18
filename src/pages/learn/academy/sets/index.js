@@ -30,7 +30,7 @@ import CustomSelect from '@/components/ui/CustomSelect';
 import { HiOutlineLightningBolt } from 'react-icons/hi';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 import { TiChartPieOutline } from 'react-icons/ti';
-import { useUserPreferences } from '@/lib/useUserPreferences';
+import { useUserPreferences } from '@/contexts/PreferencesContext';
 
 export default function VocabularyDashboard() {
   // Tabs: "srs" | "sets" | "groups"

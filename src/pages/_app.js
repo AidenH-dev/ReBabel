@@ -3,6 +3,7 @@ import { Fredoka } from '@next/font/google';
 import { UserProvider, useUser } from '@auth0/nextjs-auth0/client';
 import { PremiumProvider } from '@/contexts/PremiumContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { PreferencesProvider } from '@/contexts/PreferencesContext';
 import ReportIssueButton from '@/components/report-issue';
 import BugReporter from '@/components/BugReporter'; // Implements SPEC-LLM-UI-001
 import BugReporterErrorBoundary from '@/components/BugReporter/BugReporterErrorBoundary';
@@ -260,24 +261,36 @@ export default function MyApp({ Component, pageProps }) {
     <UserProvider>
       <PlatformHeartbeatBridge />
       <PushNotificationBridge />
-      <ThemeProvider>
-        <PremiumProvider>
-          <Script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-VRBTF7S087"
-          />
-          <Script id="google-analytics">
-            {`
+      <PreferencesProvider>
+        <ThemeProvider>
+          <PremiumProvider>
+            <Script
+              async
+              src="https://www.googletagmanager.com/gtag/js?id=G-VRBTF7S087"
+            />
+            <Script id="google-analytics">
+              {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-VRBTF7S087');
           `}
-          </Script>
-          <BugReporterProvider>
-            {isPosthogEnabled ? (
-              <PostHogProvider client={posthog}>
-                <PostHogAuthBridge />
+            </Script>
+            <BugReporterProvider>
+              {isPosthogEnabled ? (
+                <PostHogProvider client={posthog}>
+                  <PostHogAuthBridge />
+                  <div className={fredoka.className}>
+                    <BugReporterErrorBoundary>
+                      <Component {...pageProps} />
+                    </BugReporterErrorBoundary>
+                    <ReportIssueButton />
+                    <BugReporter />
+                    <Analytics />
+                    <SpeedInsights />
+                  </div>
+                </PostHogProvider>
+              ) : (
                 <div className={fredoka.className}>
                   <BugReporterErrorBoundary>
                     <Component {...pageProps} />
@@ -287,21 +300,11 @@ export default function MyApp({ Component, pageProps }) {
                   <Analytics />
                   <SpeedInsights />
                 </div>
-              </PostHogProvider>
-            ) : (
-              <div className={fredoka.className}>
-                <BugReporterErrorBoundary>
-                  <Component {...pageProps} />
-                </BugReporterErrorBoundary>
-                <ReportIssueButton />
-                <BugReporter />
-                <Analytics />
-                <SpeedInsights />
-              </div>
-            )}
-          </BugReporterProvider>
-        </PremiumProvider>
-      </ThemeProvider>
+              )}
+            </BugReporterProvider>
+          </PremiumProvider>
+        </ThemeProvider>
+      </PreferencesProvider>
     </UserProvider>
   );
 }

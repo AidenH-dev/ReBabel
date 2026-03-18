@@ -862,7 +862,7 @@ export default function DueNow() {
         {/* Only show sidebar during complete phase (summary) */}
         {currentPhase === 'complete' && <AcademySidebar />}
 
-        <main className="flex-1 flex flex-col p-3 sm:p-6">
+        <main className="flex-1 flex flex-col p-3 sm:p-6 sm:mt-10">
           {/* Loading State */}
           {isLoading ? (
             <div className="flex-1 flex items-center justify-center">
