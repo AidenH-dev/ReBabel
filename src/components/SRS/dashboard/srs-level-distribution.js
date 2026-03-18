@@ -22,7 +22,10 @@ const LEVEL_COLORS = {
   9: 'bg-purple-500/60',
 };
 
-export default function SrsLevelDistribution({ levelCounts }) {
+export default function SrsLevelDistribution({
+  levelCounts,
+  compactMobile = false,
+}) {
   const levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const maxCount = Math.max(...levels.map((l) => levelCounts[l] || 0), 1);
 
@@ -31,7 +34,7 @@ export default function SrsLevelDistribution({ levelCounts }) {
       <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
         Level Distribution
       </h3>
-      <div className="space-y-2">
+      <div className={compactMobile ? 'space-y-1 lg:space-y-2' : 'space-y-2'}>
         {levels.map((level) => {
           const count = levelCounts[level] || 0;
           const widthPercent = (count / maxCount) * 100;
@@ -46,7 +49,9 @@ export default function SrsLevelDistribution({ levelCounts }) {
                   {INTERVAL_LABELS[level]}
                 </span>
               </div>
-              <div className="flex-1 h-5 bg-gray-100 dark:bg-gray-800 rounded overflow-hidden">
+              <div
+                className={`flex-1 ${compactMobile ? 'h-3.5 lg:h-5' : 'h-5'} bg-gray-100 dark:bg-gray-800 rounded overflow-hidden`}
+              >
                 {count > 0 && (
                   <div
                     className={`h-full ${LEVEL_COLORS[level]} rounded transition-all duration-500 ease-out`}
