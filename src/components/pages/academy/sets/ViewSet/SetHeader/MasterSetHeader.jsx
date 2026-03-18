@@ -1,10 +1,14 @@
 // components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader.jsx
-import Link from "next/link";
-import { useState } from "react";
-import { FiEdit2, FiMoreVertical } from "react-icons/fi";
-import { HiOutlineDownload } from "react-icons/hi";
-import { TbRepeat, TbRepeatOff } from "react-icons/tb";
-import { buildCSV, toSlug, downloadCSV } from "@/components/pages/academy/sets/ViewSet/utils/csvUtils.js";
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { FiEdit2, FiMoreVertical } from 'react-icons/fi';
+import { HiOutlineDownload } from 'react-icons/hi';
+import { TbRepeat, TbRepeatOff } from 'react-icons/tb';
+import {
+  buildCSV,
+  toSlug,
+  downloadCSV,
+} from '@/components/pages/academy/sets/ViewSet/utils/csvUtils.js';
 
 export default function MasterSetHeader({
   setData,
@@ -12,7 +16,8 @@ export default function MasterSetHeader({
   onSetDataUpdate,
   onDeleteSet,
   srsEnabled = true,
-  showSRS = true
+  showSRS = true,
+  actionsRef,
 }) {
   const [showOptions, setShowOptions] = useState(false);
 
@@ -41,7 +46,7 @@ export default function MasterSetHeader({
     setSetFormData({
       title: setData.title,
       description: setData.description,
-      tags: setData.tags
+      tags: setData.tags,
     });
     setSaveSetError(null);
     setSaveSetSuccess(false);
@@ -68,17 +73,20 @@ export default function MasterSetHeader({
         updates.tags = JSON.stringify(setFormData.tags);
       }
 
-      const response = await fetch('/api/database/v2/sets/update-from-full-set', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          entityType: 'set',
-          entityId: setData.id,
-          updates
-        }),
-      });
+      const response = await fetch(
+        '/api/database/v2/sets/update-from-full-set',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            entityType: 'set',
+            entityId: setData.id,
+            updates,
+          }),
+        }
+      );
 
       const result = await response.json();
 
@@ -90,7 +98,7 @@ export default function MasterSetHeader({
       onSetDataUpdate({
         title: setFormData.title,
         description: setFormData.description,
-        tags: setFormData.tags
+        tags: setFormData.tags,
       });
 
       setSaveSetSuccess(true);
@@ -100,7 +108,6 @@ export default function MasterSetHeader({
         setSetFormData({});
         setSaveSetSuccess(false);
       }, 1000);
-
     } catch (err) {
       console.error('Error saving set:', err);
       setSaveSetError(err.message);
@@ -117,9 +124,9 @@ export default function MasterSetHeader({
   };
 
   const handleSetFieldChange = (field, value) => {
-    setSetFormData(prev => ({
+    setSetFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -159,7 +166,6 @@ export default function MasterSetHeader({
 
       // Call parent's delete handler (which will redirect)
       onDeleteSet();
-
     } catch (err) {
       console.error('Error deleting set:', err);
       setDeleteSetError(err.message);
@@ -171,17 +177,17 @@ export default function MasterSetHeader({
   const handleExportCSV = () => {
     try {
       if (!items.length) {
-        alert("No items to export.");
+        alert('No items to export.');
         return;
       }
       const csv = buildCSV(items);
-      const base = toSlug(setData.title) || "set";
-      const filename = `${base}-${setData.id || "id"}-items.csv`;
+      const base = toSlug(setData.title) || 'set';
+      const filename = `${base}-${setData.id || 'id'}-items.csv`;
       downloadCSV(csv, filename);
       setShowOptions(false);
     } catch (e) {
-      console.error("CSV export failed:", e);
-      alert("Failed to export CSV.");
+      console.error('CSV export failed:', e);
+      alert('Failed to export CSV.');
     }
   };
 
@@ -237,7 +243,7 @@ export default function MasterSetHeader({
         },
         body: JSON.stringify({
           setId: setData.id,
-          srsEnabled: isSrsEnabled
+          srsEnabled: isSrsEnabled,
         }),
       });
 
@@ -250,7 +256,7 @@ export default function MasterSetHeader({
       // Update parent component if needed (trigger re-fetch or update state)
       if (onSetDataUpdate) {
         onSetDataUpdate({
-          srsEnabled: isSrsEnabled
+          srsEnabled: isSrsEnabled,
         });
       }
 
@@ -261,7 +267,6 @@ export default function MasterSetHeader({
         handleCloseSRSModal();
         setSaveSRSSuccess(false);
       }, 1000);
-
     } catch (err) {
       console.error('Error saving SRS settings:', err);
       setSaveSRSError(err.message);
@@ -270,10 +275,22 @@ export default function MasterSetHeader({
     }
   };
 
+  // Expose actions to parent for desktop PageHeader
+  useEffect(() => {
+    if (actionsRef) {
+      actionsRef.current = {
+        openEdit: handleEditSetDetails,
+        openSRSModal: handleOpenSRSModal,
+        toggleOptions: () => setShowOptions((v) => !v),
+        exportCSV: handleExportCSV,
+      };
+    }
+  });
+
   return (
     <>
-      <div className=" sm:mb-3 flex-shrink-0 pt-11 sm:pt-5">
-        {/* Set Title and Actions - Always horizontal on all screen sizes */}
+      <div className="sm:mb-3 flex-shrink-0 pt-11 sm:pt-5 lg:hidden">
+        {/* Set Title and Actions - mobile only (desktop uses PageHeader) */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0 ">
             <div className="flex items-center gap-2 mb-1 flex-wrap ">
@@ -282,40 +299,42 @@ export default function MasterSetHeader({
               </h1>
 
               {/* SRS Status Badge - Clickable */}
-              {showSRS &&
-              <button
-                onClick={handleOpenSRSModal}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border-1 relative overflow-hidden transition-all  hover:scale-105 cursor-pointer ${srsEnabled
-                    ? 'bg-green-300/20 border-green-400 dark:border-green-400 hover:bg-green-300/30'
-                    : 'bg-gray-100/60 dark:bg-gray-800/60 border-gray-300 dark:border-gray-600 hover:bg-gray-200/60 dark:hover:bg-gray-700/60'
+              {showSRS && (
+                <button
+                  onClick={handleOpenSRSModal}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border-1 relative overflow-hidden transition-all  hover:scale-105 cursor-pointer ${
+                    srsEnabled
+                      ? 'bg-green-300/20 border-green-400 dark:border-green-400 hover:bg-green-300/30'
+                      : 'bg-gray-100/60 dark:bg-gray-800/60 border-gray-300 dark:border-gray-600 hover:bg-gray-200/60 dark:hover:bg-gray-700/60'
                   }`}
-                title="Click to configure SRS settings"
-              >
-
-                <div className="relative flex items-center gap-1.5">
-                  {srsEnabled ? (
-                    <>
-                      <TbRepeat className="w-4 h-4 text-purple-600 dark:text-purple-300" />
-                      <span className="text-xs font-semibold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-300 bg-clip-text text-transparent">
-                        <span className="md:hidden">SRS</span>
-                        <span className="hidden md:inline">SRS Enabled</span>
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <TbRepeatOff className="w-4 h-4 text-gray-500 dark:text-gray-500" />
-                      <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
-                        <span className="md:hidden">SRS</span>
-                        <span className="hidden md:inline">SRS Disabled</span>
-                      </span>
-                    </>
-                  )}
-                </div>
-              </button>}
+                  title="Click to configure SRS settings"
+                >
+                  <div className="relative flex items-center gap-1.5">
+                    {srsEnabled ? (
+                      <>
+                        <TbRepeat className="w-4 h-4 text-purple-600 dark:text-purple-300" />
+                        <span className="text-xs font-semibold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-300 bg-clip-text text-transparent">
+                          <span className="md:hidden">SRS</span>
+                          <span className="hidden md:inline">SRS Enabled</span>
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <TbRepeatOff className="w-4 h-4 text-gray-500 dark:text-gray-500" />
+                        <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+                          <span className="md:hidden">SRS</span>
+                          <span className="hidden md:inline">SRS Disabled</span>
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </button>
+              )}
 
               <style jsx>{`
                 @keyframes shimmer {
-                  0%, 100% {
+                  0%,
+                  100% {
                     transform: translateX(-100%);
                   }
                   50% {
@@ -396,8 +415,18 @@ export default function MasterSetHeader({
                 disabled={isSavingSet}
                 className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
@@ -406,8 +435,18 @@ export default function MasterSetHeader({
               <div className="px-6 pt-4 flex-shrink-0">
                 {saveSetSuccess && (
                   <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200 text-sm flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     Set details saved successfully!
                   </div>
@@ -429,7 +468,9 @@ export default function MasterSetHeader({
                   <input
                     type="text"
                     value={setFormData.title || ''}
-                    onChange={(e) => handleSetFieldChange('title', e.target.value)}
+                    onChange={(e) =>
+                      handleSetFieldChange('title', e.target.value)
+                    }
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
                     placeholder="Enter set title"
                   />
@@ -443,8 +484,18 @@ export default function MasterSetHeader({
                 disabled={isSavingSet || isDeletingSet}
                 className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
                 </svg>
                 Delete Set
               </button>
@@ -464,9 +515,24 @@ export default function MasterSetHeader({
                 >
                   {isSavingSet ? (
                     <>
-                      <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      <svg
+                        className="animate-spin h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
                       </svg>
                       Saving...
                     </>
@@ -486,8 +552,18 @@ export default function MasterSetHeader({
           <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                <svg
+                  className="w-5 h-5 text-red-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
                 </svg>
                 Confirm Set Deletion
               </h3>
@@ -498,7 +574,9 @@ export default function MasterSetHeader({
                 Are you sure you want to permanently delete this set?
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
-                This will remove the set and all item associations. The items themselves will remain in your library and can be added to other sets.
+                This will remove the set and all item associations. The items
+                themselves will remain in your library and can be added to other
+                sets.
               </p>
 
               {setData && (
@@ -507,7 +585,8 @@ export default function MasterSetHeader({
                     {setData.title}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {setData.itemCount} {setData.itemCount === 1 ? 'item' : 'items'}
+                    {setData.itemCount}{' '}
+                    {setData.itemCount === 1 ? 'item' : 'items'}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-mono">
                     ID: {setData.id}
@@ -537,16 +616,41 @@ export default function MasterSetHeader({
               >
                 {isDeletingSet ? (
                   <>
-                    <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Deleting Set...
                   </>
                 ) : (
                   <>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                     Yes, Delete Set
                   </>
@@ -576,8 +680,18 @@ export default function MasterSetHeader({
                 onClick={handleCloseSRSModal}
                 className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
@@ -587,8 +701,18 @@ export default function MasterSetHeader({
               <div className="px-6 pt-4 flex-shrink-0">
                 {saveSRSSuccess && (
                   <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200 text-sm flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     SRS settings saved successfully!
                   </div>
@@ -610,26 +734,63 @@ export default function MasterSetHeader({
                     What is Spaced Repetition?
                   </h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
-                    Spaced Repetition is a learning technique that optimizes memory retention by reviewing items at scientifically-determined intervals. Instead of cramming, you study items right before you&apos;re about to forget them.
+                    Spaced Repetition is a learning technique that optimizes
+                    memory retention by reviewing items at
+                    scientifically-determined intervals. Instead of cramming,
+                    you study items right before you&apos;re about to forget
+                    them.
                   </p>
                   <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                     <div className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      <svg
+                        className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
                       </svg>
-                      <span><strong>Proven Effective:</strong> Backed by decades of cognitive science research</span>
+                      <span>
+                        <strong>Proven Effective:</strong> Backed by decades of
+                        cognitive science research
+                      </span>
                     </div>
                     <div className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      <svg
+                        className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
                       </svg>
-                      <span><strong>Time-Efficient:</strong> Study smarter, not harder with optimized intervals</span>
+                      <span>
+                        <strong>Time-Efficient:</strong> Study smarter, not
+                        harder with optimized intervals
+                      </span>
                     </div>
                     <div className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      <svg
+                        className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
                       </svg>
-                      <span><strong>Long-Term Retention:</strong> Remember what you learn for the long term</span>
+                      <span>
+                        <strong>Long-Term Retention:</strong> Remember what you
+                        learn for the long term
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -640,7 +801,11 @@ export default function MasterSetHeader({
                     Why Use SRS for Japanese?
                   </h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                    Learning Japanese requires memorizing thousands of kanji, vocabulary words, and grammar patterns. Spaced repetition automatically schedules your reviews at the perfect time to maximize retention while minimizing the time you need to spend studying.
+                    Learning Japanese requires memorizing thousands of kanji,
+                    vocabulary words, and grammar patterns. Spaced repetition
+                    automatically schedules your reviews at the perfect time to
+                    maximize retention while minimizing the time you need to
+                    spend studying.
                   </p>
                 </div>
 
@@ -654,8 +819,7 @@ export default function MasterSetHeader({
                       <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
                         {isSrsEnabled
                           ? '✓ Enabled - Optimized learning with SRS review intervals'
-                          : '◯ Disabled - Quiz and Flashcard study modes only'
-                        }
+                          : '◯ Disabled - Quiz and Flashcard study modes only'}
                       </p>
                     </div>
 
@@ -667,7 +831,11 @@ export default function MasterSetHeader({
                           ? 'bg-gradient-to-r from-green-400 to-green-500 shadow-lg shadow-green-500/40'
                           : 'bg-gradient-to-r from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 shadow-md'
                       }`}
-                      title={isSrsEnabled ? 'Click to disable SRS' : 'Click to enable SRS'}
+                      title={
+                        isSrsEnabled
+                          ? 'Click to disable SRS'
+                          : 'Click to enable SRS'
+                      }
                     >
                       {/* Toggle Circle */}
                       <div
@@ -688,15 +856,26 @@ export default function MasterSetHeader({
                   {srsEnabled && !isSrsEnabled && (
                     <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300">
                       <div className="flex gap-3">
-                        <svg className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        <svg
+                          className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         <div>
                           <h4 className="font-semibold text-amber-900 dark:text-amber-200 text-sm mb-1">
                             Disabling SRS can interrupt your learning flow
                           </h4>
                           <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
-                            Any items already adopted into the SRS cycle that only exists in this set won&apos;t be reviewed. This can lead to untracked items. Consider keeping SRS enabled to maintain consistent progress.
+                            Any items already adopted into the SRS cycle that
+                            only exists in this set won&apos;t be reviewed. This
+                            can lead to untracked items. Consider keeping SRS
+                            enabled to maintain consistent progress.
                           </p>
                         </div>
                       </div>
@@ -711,8 +890,7 @@ export default function MasterSetHeader({
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 {isSrsEnabled !== srsEnabled
                   ? 'Click Save to confirm'
-                  : 'No changes to save'
-                }
+                  : 'No changes to save'}
               </p>
               <button
                 onClick={handleSaveSRSSettings}
@@ -721,16 +899,39 @@ export default function MasterSetHeader({
               >
                 {isSavingSRS ? (
                   <>
-                    <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Saving...
                   </>
                 ) : (
                   <>
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                     Save
                   </>
@@ -747,8 +948,16 @@ export default function MasterSetHeader({
           <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <svg className="w-5 h-5 text-amber-600 dark:text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                <svg
+                  className="w-5 h-5 text-amber-600 dark:text-amber-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
                 </svg>
                 Disable SRS?
               </h3>
@@ -759,11 +968,15 @@ export default function MasterSetHeader({
                 Are you sure you want to disable Spaced Repetition for this set?
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
-                Any items already adopted into the SRS cycle that only exists in this set won&apos;t be reviewed. This can lead to untracked items. Consider keeping SRS enabled to maintain consistent progress.
+                Any items already adopted into the SRS cycle that only exists in
+                this set won&apos;t be reviewed. This can lead to untracked
+                items. Consider keeping SRS enabled to maintain consistent
+                progress.
               </p>
               <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-lg">
                 <p className="text-xs text-amber-800 dark:text-amber-300">
-                  <strong>Recommendation:</strong> Keep SRS enabled to maintain consistent progress and ensure long-term retention.
+                  <strong>Recommendation:</strong> Keep SRS enabled to maintain
+                  consistent progress and ensure long-term retention.
                 </p>
               </div>
             </div>
@@ -779,8 +992,18 @@ export default function MasterSetHeader({
                 onClick={handleConfirmDisableSRS}
                 className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg transition-colors flex items-center gap-2"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
                 Yes, Disable SRS
               </button>

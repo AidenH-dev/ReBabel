@@ -25,7 +25,7 @@ import { LuListStart } from 'react-icons/lu';
 
 import Link from 'next/link';
 
-function AcademySidebar() {
+function AcademySidebar({ hideMobileMenu = false }) {
   const router = useRouter();
   const path = router.pathname;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -216,7 +216,7 @@ function AcademySidebar() {
       {/* Mobile Bubble Menu - Only visible on small screens */}
       <div
         ref={bubbleMenuRef}
-        className="lg:hidden fixed bottom-6 left-6 z-[60] flex flex-col-reverse items-start gap-2 pointer-events-none"
+        className={`lg:hidden fixed bottom-6 left-6 z-[60] flex flex-col-reverse items-start gap-2 pointer-events-none ${hideMobileMenu ? 'hidden' : ''}`}
       >
         {/* Bottom row: Menu toggle + Create button */}
         <div className="flex items-center gap-2 pointer-events-auto">

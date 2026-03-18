@@ -488,13 +488,13 @@ export default function DashboardPage() {
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
       <MainSidebar />
 
-      <main className="ml-auto flex-1 overflow-y-auto pt-[max(1rem,var(--cap-safe-top))]">
+      <main className="ml-auto flex-1 overflow-y-auto pt-[max(1rem,var(--cap-safe-top))] lg:grid lg:place-content-center lg:min-h-full">
         <Head>
           <title>Dashboard • ReBabel</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <div className="px-4 md:p-4">
+        <div className="px-4 md:p-4 lg:w-screen lg:max-w-[calc(100vw-16rem)]">
           <div className="max-w-5xl mx-auto space-y-4">
             {/* Header */}
             <div className="hidden md:block">

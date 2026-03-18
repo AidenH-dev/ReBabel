@@ -17,6 +17,7 @@ import {
   FiAlertCircle,
   FiBell,
 } from 'react-icons/fi';
+import { TbSunset2, TbCoffee } from 'react-icons/tb';
 import { useTheme } from '../../../contexts/ThemeContext';
 
 export default function Settings() {
@@ -47,6 +48,8 @@ export default function Settings() {
     { value: 'system', label: 'System', icon: FiMonitor },
     { value: 'light', label: 'Light', icon: FiSun },
     { value: 'dark', label: 'Dark', icon: FiMoon },
+    { value: 'cream', label: 'Cream', icon: TbCoffee },
+    { value: 'dusk', label: 'Dusk', icon: TbSunset2 },
   ];
 
   useEffect(() => {
@@ -202,36 +205,36 @@ export default function Settings() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25] dusk:bg-[#1e2530]">
       <MainSidebar />
 
-      <main className="ml-auto flex-1 overflow-y-auto">
+      <main className="ml-auto flex-1 overflow-y-auto md:flex md:items-center md:justify-center">
         <Head>
           <title>Settings - ReBabel</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <div className="px-4 md:p-6 pb-8">
+        <div className="px-4 md:p-6 pb-8 md:w-full">
           <div className="max-w-lg mx-auto">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-6">
               Settings
             </h1>
 
-            <div className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <div className="bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 dusk:border-[#3a4556] divide-y divide-gray-200 dark:divide-gray-700 dusk:divide-[#3a4556]">
               {/* Email Section */}
               <div className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
-                    <FiMail className="text-lg text-gray-600 dark:text-gray-400" />
+                  <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                    <FiMail className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
                       Email
                     </p>
                     {loading ? (
                       <p className="text-sm text-gray-400">Loading...</p>
                     ) : (
-                      <p className="text-gray-900 dark:text-white truncate">
+                      <p className="text-gray-900 dark:text-white dusk:text-[#e8e0d8] truncate">
                         {userProfile?.email || 'Not available'}
                       </p>
                     )}
@@ -242,14 +245,14 @@ export default function Settings() {
               {/* Password Section */}
               <div className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
-                    <FiKey className="text-lg text-gray-600 dark:text-gray-400" />
+                  <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                    <FiKey className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
                       Password
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
                       {resetSent
                         ? 'Check your email for reset link'
                         : 'Send a password reset email'}
@@ -261,7 +264,7 @@ export default function Settings() {
                     className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors disabled:opacity-50 ${
                       resetSent
                         ? 'border-green-500 text-green-600 dark:text-green-400'
-                        : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                        : 'border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]'
                     }`}
                   >
                     {resetLoading ? (
@@ -280,21 +283,21 @@ export default function Settings() {
               {subscription?.isPremium && (
                 <div className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
-                      <FiCreditCard className="text-lg text-gray-600 dark:text-gray-400" />
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                      <FiCreditCard className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
                         Subscription
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
                         Manage billing & plan
                       </p>
                     </div>
                     <button
                       onClick={handleManageSubscription}
                       disabled={portalLoading}
-                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors disabled:opacity-50"
                     >
                       {portalLoading ? (
                         <FiLoader className="text-sm animate-spin" />
@@ -310,19 +313,19 @@ export default function Settings() {
               {/* Theme Section */}
               <div className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
-                    <FiSun className="text-lg text-gray-600 dark:text-gray-400" />
+                  <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                    <FiSun className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
                       Appearance
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
                       Choose your preferred theme
                     </p>
                   </div>
                 </div>
-                <div className="mt-3 ml-13 flex gap-2">
+                <div className="mt-3 ml-13 flex flex-wrap gap-2">
                   {themeOptions.map((option) => {
                     const Icon = option.icon;
                     const isActive = theme === option.value;
@@ -330,10 +333,10 @@ export default function Settings() {
                       <button
                         key={option.value}
                         onClick={() => setTheme(option.value)}
-                        className={`flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                        className={`inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
                           isActive
                             ? 'border-[#e30a5f] bg-[#e30a5f]/10 text-[#e30a5f]'
-                            : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                            : 'border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]'
                         }`}
                       >
                         <Icon className="text-sm" />
@@ -348,14 +351,14 @@ export default function Settings() {
               {isNativeApp && (
                 <div className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
-                      <FiBell className="text-lg text-gray-600 dark:text-gray-400" />
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                      <FiBell className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
                         Push Notifications
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
                         {pushStatus === 'success'
                           ? 'Test notification sent!'
                           : pushStatus === 'error'
@@ -371,7 +374,7 @@ export default function Settings() {
                           ? "border-green-500 text-green-600 dark:text-green-400"
                           : pushStatus === 'error'
                           ? "border-red-500 text-red-600 dark:text-red-400"
-                          : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          : "border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]"
                       }`}
                     >
                       {pushLoading ? (
@@ -390,14 +393,14 @@ export default function Settings() {
               {/* Sign Out Section */}
               <div className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 dusk:bg-red-900/20 flex items-center justify-center flex-shrink-0">
                     <FiLogOut className="text-lg text-red-500 dark:text-red-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
                       Sign Out
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
                       Log out of your account
                     </p>
                   </div>
@@ -413,24 +416,24 @@ export default function Settings() {
             </div>
 
             {/* Footer Links - Small text below card */}
-            <div className="mt-4 flex items-center justify-center gap-3 text-xs text-gray-500 dark:text-gray-500 flex-wrap">
+            <div className="mt-4 flex items-center justify-center gap-3 text-xs text-gray-500 dark:text-gray-500 dusk:text-[#a8b2c1]/60 flex-wrap">
               <button
                 onClick={() => setShowContact(true)}
-                className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                className="hover:text-gray-700 dark:hover:text-gray-300 dusk:hover:text-[#e8e0d8] transition-colors"
               >
                 Contact
               </button>
               <span>·</span>
               <button
                 onClick={() => setShowPrivacy(true)}
-                className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                className="hover:text-gray-700 dark:hover:text-gray-300 dusk:hover:text-[#e8e0d8] transition-colors"
               >
                 Privacy
               </button>
               <span>·</span>
               <button
                 onClick={() => setShowTerms(true)}
-                className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                className="hover:text-gray-700 dark:hover:text-gray-300 dusk:hover:text-[#e8e0d8] transition-colors"
               >
                 Terms
               </button>
@@ -445,30 +448,30 @@ export default function Settings() {
           className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={(e) => e.target === e.currentTarget && setShowContact(false)}
         >
-          <div className="w-full max-w-sm rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/5 dark:border-white/10">
+          <div className="w-full max-w-sm rounded-xl bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] shadow-2xl border border-black/5 dark:border-white/10 dusk:border-[#3a4556]">
             <div className="p-4 flex items-center justify-between border-b border-black/5 dark:border-white/10">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8]">
                 Contact Us
               </h2>
               <button
                 onClick={() => setShowContact(false)}
-                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1] hover:bg-gray-100 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors"
               >
                 <FiX className="w-5 h-5" />
               </button>
             </div>
-            <div className="p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300">
+            <div className="p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1]">
               <p>
                 Need help or have feedback? We&apos;d love to hear from you.
               </p>
               <div className="space-y-2">
                 <button
                   onClick={copyEmail}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
+                  className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 dusk:border-[#3a4556] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors text-left"
                 >
                   <FiMail className="text-[#e30a5f]" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 dark:text-white text-sm">
+                    <p className="font-medium text-gray-900 dark:text-white dusk:text-[#e8e0d8] text-sm">
                       Email
                     </p>
                     <p className="text-xs text-gray-500 truncate">
@@ -483,11 +486,11 @@ export default function Settings() {
                     setShowContact(false);
                     window.dispatchEvent(new Event('open-report-issue'));
                   }}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
+                  className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 dusk:border-[#3a4556] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors text-left"
                 >
                   <FiAlertCircle className="text-[#e30a5f]" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white text-sm">
+                    <p className="font-medium text-gray-900 dark:text-white dusk:text-[#e8e0d8] text-sm">
                       Report an Issue
                     </p>
                     <p className="text-xs text-gray-500">
@@ -507,25 +510,25 @@ export default function Settings() {
           className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={(e) => e.target === e.currentTarget && setShowPrivacy(false)}
         >
-          <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/5 dark:border-white/10 flex flex-col">
-            <div className="sticky top-0 bg-white dark:bg-[#1c2b35] border-b border-black/5 dark:border-white/10 p-4 flex items-center justify-between rounded-t-xl">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+          <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] shadow-2xl border border-black/5 dark:border-white/10 dusk:border-[#3a4556] flex flex-col">
+            <div className="sticky top-0 bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] border-b border-black/5 dark:border-white/10 dusk:border-[#3a4556] p-4 flex items-center justify-between rounded-t-xl">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8]">
                 Privacy Policy
               </h2>
               <button
                 onClick={() => setShowPrivacy(false)}
-                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1] hover:bg-gray-100 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors"
               >
                 <FiX className="w-5 h-5" />
               </button>
             </div>
-            <div className="overflow-y-auto p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300">
+            <div className="overflow-y-auto p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1]">
               <p className="text-xs text-gray-500">
                 Last updated: February 2026
               </p>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Introduction
                 </h3>
                 <p>
@@ -538,7 +541,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Information We Collect
                 </h3>
                 <p className="mb-2">
@@ -563,7 +566,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   How We Use Your Information
                 </h3>
                 <ul className="list-disc list-inside space-y-1">
@@ -578,7 +581,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Third-Party Services
                 </h3>
                 <ul className="list-disc list-inside space-y-1">
@@ -606,7 +609,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Your Rights
                 </h3>
                 <p>
@@ -623,7 +626,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Contact Us
                 </h3>
                 <p>
@@ -647,25 +650,25 @@ export default function Settings() {
           className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={(e) => e.target === e.currentTarget && setShowTerms(false)}
         >
-          <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/5 dark:border-white/10 flex flex-col">
-            <div className="sticky top-0 bg-white dark:bg-[#1c2b35] border-b border-black/5 dark:border-white/10 p-4 flex items-center justify-between rounded-t-xl">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+          <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] shadow-2xl border border-black/5 dark:border-white/10 dusk:border-[#3a4556] flex flex-col">
+            <div className="sticky top-0 bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] border-b border-black/5 dark:border-white/10 dusk:border-[#3a4556] p-4 flex items-center justify-between rounded-t-xl">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8]">
                 Terms of Service
               </h2>
               <button
                 onClick={() => setShowTerms(false)}
-                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1] hover:bg-gray-100 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors"
               >
                 <FiX className="w-5 h-5" />
               </button>
             </div>
-            <div className="overflow-y-auto p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300">
+            <div className="overflow-y-auto p-4 space-y-4 text-sm text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1]">
               <p className="text-xs text-gray-500">
                 Last updated: February 2026
               </p>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Agreement to Terms
                 </h3>
                 <p>
@@ -676,7 +679,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Description of Service
                 </h3>
                 <p>
@@ -687,7 +690,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   User Accounts
                 </h3>
                 <ul className="list-disc list-inside space-y-1">
@@ -700,7 +703,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Subscriptions and Payments
                 </h3>
                 <p className="mb-2">
@@ -726,7 +729,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Acceptable Use
                 </h3>
                 <ul className="list-disc list-inside space-y-1">
@@ -740,7 +743,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   AI Features
                 </h3>
                 <p>
@@ -752,7 +755,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Disclaimer
                 </h3>
                 <p>
@@ -763,7 +766,7 @@ export default function Settings() {
               </section>
 
               <section>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-2">
                   Contact Us
                 </h3>
                 <p>

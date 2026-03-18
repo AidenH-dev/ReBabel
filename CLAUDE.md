@@ -238,6 +238,14 @@ LANGSMITH_PROJECT=
 LANGCHAIN_TRACING_V2=
 ```
 
+## UI Polish: Loading States
+
+When adding or modifying components that fetch data, always consider adding proper loading animations rather than leaving blank/empty space or showing raw "Loading..." text. Prefer:
+
+- **Skeleton shimmer** (`animate-pulse` on rounded placeholder divs) for inline data like stats, text, cards
+- **Branded spinner** (`TbLoader3` with `animate-spin`) for full-page or section-level loading
+- Loading states should match the approximate size and shape of the real content to prevent layout shift
+
 ## Notes
 
 - Two Next.js config files exist: `next.config.js` (active) and `next.config.mjs` (legacy) — use `next.config.js`

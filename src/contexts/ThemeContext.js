@@ -1,15 +1,38 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
+import { useUserPreferences } from '@/lib/useUserPreferences';
 
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('system');
+  const [theme, setThemeState] = useState('system');
   const [mounted, setMounted] = useState(false);
+
+  const { savePreference } = useUserPreferences((serverPrefs) => {
+    // When server prefs load, apply theme if present
+    if (serverPrefs.theme) {
+      setThemeState(serverPrefs.theme);
+    }
+  });
+
+  const setTheme = useCallback(
+    (newTheme) => {
+      setThemeState(newTheme);
+      localStorage.setItem('theme', newTheme);
+      savePreference('theme', newTheme);
+    },
+    [savePreference]
+  );
 
   // Load saved theme on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'system';
-    setTheme(savedTheme);
+    setThemeState(savedTheme);
     setMounted(true);
   }, []);
 
@@ -19,14 +42,21 @@ export function ThemeProvider({ children }) {
 
     const root = document.documentElement;
 
-    if (theme === 'system') {
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      root.classList.toggle('dark', systemDark);
-    } else {
-      root.classList.toggle('dark', theme === 'dark');
-    }
+    // Clear all theme classes first
+    root.classList.remove('dark', 'dusk', 'cream');
 
-    localStorage.setItem('theme', theme);
+    if (theme === 'system') {
+      const systemDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches;
+      root.classList.toggle('dark', systemDark);
+    } else if (theme === 'dusk') {
+      root.classList.add('dark', 'dusk');
+    } else if (theme === 'cream') {
+      root.classList.add('cream');
+    } else if (theme === 'dark') {
+      root.classList.add('dark');
+    }
   }, [theme, mounted]);
 
   // Listen for system theme changes when in system mode
@@ -35,6 +65,7 @@ export function ThemeProvider({ children }) {
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e) => {
+      document.documentElement.classList.remove('dark', 'dusk', 'cream');
       document.documentElement.classList.toggle('dark', e.matches);
     };
 

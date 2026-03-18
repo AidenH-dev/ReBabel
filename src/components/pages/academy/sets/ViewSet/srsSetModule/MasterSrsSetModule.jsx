@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { FaPlus, FaCheck } from 'react-icons/fa';
 import { FaArrowRight } from 'react-icons/fa6';
@@ -277,13 +277,26 @@ export default function SRSDashboard({ setId, setData }) {
   }, [setId]);
 
   // Update countdown every second
+  const hasRefreshedForDue = useRef(false);
   useEffect(() => {
     if (!nextDueTime) {
       setCountdown('--:--');
       return;
     }
 
-    let hasTriggeredRefresh = false;
+    // If the next due time is already in the past, refresh once then stop
+    const now = new Date();
+    if (nextDueTime <= now) {
+      setCountdown('0h 0m');
+      if (!hasRefreshedForDue.current) {
+        hasRefreshedForDue.current = true;
+        setRefreshTick((t) => t + 1);
+      }
+      return;
+    }
+
+    // Reset the flag since we have a future due time
+    hasRefreshedForDue.current = false;
 
     const updateCountdown = () => {
       const now = new Date();
@@ -291,8 +304,8 @@ export default function SRSDashboard({ setId, setData }) {
 
       if (diff <= 0) {
         setCountdown('0h 0m');
-        if (!hasTriggeredRefresh) {
-          hasTriggeredRefresh = true;
+        if (!hasRefreshedForDue.current) {
+          hasRefreshedForDue.current = true;
           setRefreshTick((t) => t + 1);
         }
         return;
