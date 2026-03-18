@@ -111,18 +111,36 @@ function StatsSkeleton() {
 
 // ── Main component ───────────────────────────────────────────────────
 
-export default function SetsSrsOverview() {
+export default function SetsSrsOverview({ active = true }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [srsView, setSrsView] = useState('sets'); // 'sets' | 'statistics'
+  const [srsView, setSrsViewState] = useState('sets'); // 'sets' | 'statistics'
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('due');
+  const [sortBy, setSortByState] = useState('due');
   const hasFetchedRef = useRef(false);
 
-  // Fetch on mount
+  // Persist SRS sub-view and sort preference
   useEffect(() => {
-    if (hasFetchedRef.current) return;
+    const savedView = localStorage.getItem('srs-tab-view');
+    if (savedView === 'sets' || savedView === 'statistics')
+      setSrsViewState(savedView);
+    const savedSort = localStorage.getItem('srs-tab-sort');
+    if (savedSort === 'due' || savedSort === 'mastery' || savedSort === 'alpha')
+      setSortByState(savedSort);
+  }, []);
+  const setSrsView = (v) => {
+    setSrsViewState(v);
+    localStorage.setItem('srs-tab-view', v);
+  };
+  const setSortBy = (v) => {
+    setSortByState(v);
+    localStorage.setItem('srs-tab-sort', v);
+  };
+
+  // Fetch when first activated
+  useEffect(() => {
+    if (!active || hasFetchedRef.current) return;
     hasFetchedRef.current = true;
 
     const fetchData = async () => {

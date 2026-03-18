@@ -34,7 +34,17 @@ import SetsSrsOverview from '@/components/SRS/sets-srs-overview';
 
 export default function VocabularyDashboard() {
   // Tabs: "srs" | "sets" | "groups"
-  const [activeTab, setActiveTab] = useState('sets');
+  const [activeTab, setActiveTabState] = useState('sets');
+
+  // Persist active tab
+  useEffect(() => {
+    const saved = localStorage.getItem('sets-active-tab');
+    if (saved === 'srs' || saved === 'sets') setActiveTabState(saved);
+  }, []);
+  const setActiveTab = (v) => {
+    setActiveTabState(v);
+    localStorage.setItem('sets-active-tab', v);
+  };
 
   // Search inputs
   const [searchSets, setSearchSets] = useState('');
@@ -529,8 +539,10 @@ export default function VocabularyDashboard() {
           {/* Content panel */}
           <div className="w-full max-w-6xl mx-auto">
             <section className="mt-3 rounded-2xl shadow-sm bg-white dark:bg-[#1c2b35] border border-black/5 dark:border-white/5 p-4 sm:p-6">
-              {/* SRS Section */}
-              {activeTab === 'srs' && <SetsSrsOverview />}
+              {/* SRS Section — kept mounted to preserve data, hidden when inactive */}
+              <div style={{ display: activeTab === 'srs' ? 'block' : 'none' }}>
+                <SetsSrsOverview active={activeTab === 'srs'} />
+              </div>
 
               {/* Header row for Notecards (formerly Sets) */}
               {activeTab === 'sets' && (
