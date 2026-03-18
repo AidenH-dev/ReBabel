@@ -5,9 +5,12 @@ import {
   TbSearch,
   TbClock,
   TbSortAZ,
+  TbFlame,
 } from 'react-icons/tb';
 import SrsItemHistoryChart from './srs-item-history-chart';
 import { calculateNextReviewDate } from '@/components/SRS/visuals/SrsTimeGrid/models/srsDataModel';
+
+const LEECH_THRESHOLD = 8;
 
 const LEVEL_BADGE_COLORS = {
   1: 'bg-blue-400/20 text-blue-400',
@@ -123,6 +126,42 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
     activeItems.forEach((item) => levels.add(item.srs?.srs_level || 0));
     return [...levels].sort((a, b) => a - b);
   }, [activeItems]);
+
+  // Compute lapse counts per item from history (level downs = lapses)
+  const lapseCounts = useMemo(() => {
+    if (!historyData) return {};
+
+    const byItem = {};
+    historyData.forEach((entry) => {
+      if (!byItem[entry.item_id]) byItem[entry.item_id] = [];
+      byItem[entry.item_id].push(entry);
+    });
+
+    const counts = {};
+    Object.entries(byItem).forEach(([itemId, entries]) => {
+      const sorted = [...entries].sort(
+        (a, b) => new Date(a.time_created) - new Date(b.time_created)
+      );
+      let lapses = 0;
+      for (let i = 1; i < sorted.length; i++) {
+        if (sorted[i].srs_level < sorted[i - 1].srs_level) lapses++;
+      }
+      counts[itemId] = lapses;
+    });
+
+    return counts;
+  }, [historyData]);
+
+  // Items flagged as leeches (>= LEECH_THRESHOLD lapses), sorted by worst first
+  const leechItems = useMemo(() => {
+    return rawItems
+      .filter((item) => (lapseCounts[item.id] || 0) >= LEECH_THRESHOLD)
+      .map((item) => ({
+        ...item,
+        lapseCount: lapseCounts[item.id] || 0,
+      }))
+      .sort((a, b) => b.lapseCount - a.lapseCount);
+  }, [rawItems, lapseCounts]);
 
   // Filtered + sorted items for the Items tab
   const filteredItems = useMemo(() => {
@@ -309,6 +348,17 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
           >
             Active Items ({activeItems.length})
           </button>
+          <button
+            onClick={() => handleTabSwitch('leeches')}
+            className={tabClass('leeches')}
+          >
+            <span className="flex items-center gap-1">
+              <TbFlame
+                className={`text-sm ${leechItems.length > 0 ? 'text-orange-500' : ''}`}
+              />
+              Leeches{leechItems.length > 0 ? ` (${leechItems.length})` : ''}
+            </span>
+          </button>
         </div>
       </div>
 
@@ -367,6 +417,22 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
                 )}
               </div>
             </div>
+
+            {/* Leech warning */}
+            {(lapseCounts[selectedItemId] || 0) >= LEECH_THRESHOLD && (
+              <div className="flex items-center gap-2 px-3 py-2 mb-3 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                <TbFlame className="text-orange-500 text-lg flex-shrink-0" />
+                <div>
+                  <p className="text-xs font-semibold text-orange-500">
+                    Leech — {lapseCounts[selectedItemId]} lapses
+                  </p>
+                  <p className="text-[10px] text-orange-400/80">
+                    This item keeps dropping levels. Consider reviewing the card
+                    or studying it differently.
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Stats grid */}
             <div className="grid grid-cols-2 gap-2 mb-3">
@@ -550,47 +616,125 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
                     No SRS activity yet
                   </p>
                 ) : (
+                  <div className="relative pl-6">
+                    <div
+                      className="absolute left-[7px] top-0 bottom-0 w-[2px] rounded-full bg-gray-200 dark:bg-white/10"
+                      style={{
+                        maskImage:
+                          'linear-gradient(to bottom, transparent, black 24px)',
+                        WebkitMaskImage:
+                          'linear-gradient(to bottom, transparent, black 24px)',
+                      }}
+                    />
+                    <div className="space-y-1.5">
+                      {activityLog.map((entry, i) => {
+                        const { datepart, timepart } = formatLocalDateTime(
+                          entry.time_created
+                        );
+                        const levelUp = entry.srs_level > entry.old_level;
+
+                        return (
+                          <button
+                            key={`${entry.item_id}-${entry.time_created}-${i}`}
+                            onClick={() => handleItemClick(entry.item_id)}
+                            className={`group relative w-full text-left px-2.5 py-2 text-xs rounded-md border bg-gray-50/50 dark:bg-white/[0.02] transition-colors ${
+                              levelUp
+                                ? 'border-green-300/70 dark:border-green-500/20 hover:bg-green-50/60 dark:hover:bg-green-500/5'
+                                : 'border-red-300/70 dark:border-red-400/20 hover:bg-red-50/60 dark:hover:bg-red-400/5'
+                            }`}
+                          >
+                            <div
+                              className={`absolute -left-[23.5px] top-1/2 -translate-y-1/2 flex h-3.5 w-3.5 items-center justify-center rounded-full border transition-transform duration-200 group-hover:scale-125 ${
+                                levelUp
+                                  ? 'border-green-400 dark:border-green-500'
+                                  : 'border-red-300 dark:border-red-400'
+                              } bg-white dark:bg-[#1a2834]`}
+                            >
+                              <div
+                                className={`h-1.5 w-1.5 rounded-full ${
+                                  levelUp ? 'bg-green-500' : 'bg-red-400'
+                                }`}
+                              />
+                            </div>
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="font-medium text-gray-900 dark:text-white truncate">
+                                {entry.displayName}
+                              </span>
+                              <div className="flex items-center gap-1.5 flex-shrink-0">
+                                <span
+                                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${getLevelColor(entry.old_level)}`}
+                                >
+                                  L{entry.old_level}
+                                </span>
+                                <span
+                                  className={
+                                    levelUp ? 'text-green-500' : 'text-red-400'
+                                  }
+                                >
+                                  &rarr;
+                                </span>
+                                <span
+                                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${getLevelColor(entry.srs_level)}`}
+                                >
+                                  L{entry.srs_level}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-1.5 mt-1 text-[10px] text-gray-400 dark:text-gray-500">
+                              <span>{datepart}</span>
+                              <span>&middot;</span>
+                              <span>{timepart}</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )
+              ) : activeTab === 'leeches' ? (
+                leechItems.length === 0 ? (
+                  <div className="py-8 text-center">
+                    <TbFlame className="mx-auto text-2xl text-gray-300 dark:text-gray-600 mb-2" />
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      No leeches detected
+                    </p>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
+                      Items with {LEECH_THRESHOLD}+ lapses will appear here
+                    </p>
+                  </div>
+                ) : (
                   <div className="divide-y divide-gray-100 dark:divide-white/5">
-                    {activityLog.map((entry, i) => {
-                      const { datepart, timepart } = formatLocalDateTime(
-                        entry.time_created
-                      );
-                      const levelUp = entry.srs_level > entry.old_level;
+                    {leechItems.map((item) => {
+                      const level = item.srs?.srs_level || 0;
+                      const displayName =
+                        item.kanji || item.kana || item.english || 'Unknown';
 
                       return (
                         <button
-                          key={`${entry.item_id}-${entry.time_created}-${i}`}
-                          onClick={() => handleItemClick(entry.item_id)}
+                          key={item.id}
+                          onClick={() => handleItemClick(item.id)}
                           className="w-full text-left px-2.5 py-2 transition-colors text-xs hover:bg-gray-100 dark:hover:bg-white/5"
                         >
                           <div className="flex items-center justify-between gap-2">
-                            <span className="font-medium text-gray-900 dark:text-white truncate">
-                              {entry.displayName}
-                            </span>
-                            <div className="flex items-center gap-1.5 flex-shrink-0">
-                              <span
-                                className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${getLevelColor(entry.old_level)}`}
-                              >
-                                L{entry.old_level}
-                              </span>
-                              <span
-                                className={
-                                  levelUp ? 'text-green-500' : 'text-red-400'
-                                }
-                              >
-                                &rarr;
-                              </span>
-                              <span
-                                className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${getLevelColor(entry.srs_level)}`}
-                              >
-                                L{entry.srs_level}
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <TbFlame className="text-orange-500 text-sm flex-shrink-0" />
+                              <span className="font-medium text-gray-900 dark:text-white truncate">
+                                {displayName}
                               </span>
                             </div>
-                          </div>
-                          <div className="flex items-center gap-1.5 mt-1 text-[10px] text-gray-400 dark:text-gray-500">
-                            <span>{datepart}</span>
-                            <span>&middot;</span>
-                            <span>{timepart}</span>
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-500/20 text-orange-500">
+                                {item.lapseCount} lapses
+                              </span>
+                              <span
+                                className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                                  LEVEL_BADGE_COLORS[level] ||
+                                  'bg-gray-400/20 text-gray-400'
+                                }`}
+                              >
+                                L{level}
+                              </span>
+                            </div>
                           </div>
                         </button>
                       );
@@ -613,6 +757,8 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
                     const isDue = nextReview && nextReview <= new Date();
                     const displayName =
                       item.kanji || item.kana || item.english || 'Unknown';
+                    const isLeech =
+                      (lapseCounts[item.id] || 0) >= LEECH_THRESHOLD;
 
                     return (
                       <button
@@ -621,9 +767,17 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
                         className="w-full text-left px-2.5 py-2 transition-colors text-xs hover:bg-gray-100 dark:hover:bg-white/5"
                       >
                         <div className="flex items-center justify-between gap-2">
-                          <span className="font-medium text-gray-900 dark:text-white truncate">
-                            {displayName}
-                          </span>
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            {isLeech && (
+                              <TbFlame
+                                className="text-orange-500 text-sm flex-shrink-0"
+                                title="Leech"
+                              />
+                            )}
+                            <span className="font-medium text-gray-900 dark:text-white truncate">
+                              {displayName}
+                            </span>
+                          </div>
                           <span
                             className={`px-1.5 py-0.5 rounded text-[10px] font-bold flex-shrink-0 ${
                               LEVEL_BADGE_COLORS[level] ||
