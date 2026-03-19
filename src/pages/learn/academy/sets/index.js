@@ -472,7 +472,7 @@ export default function VocabularyDashboard() {
               )}
               <Link
                 href="/learn/academy/practice"
-                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white transition-all"
+                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40 transition-all"
               >
                 <LuTextCursorInput className="text-base" />
                 <span>Study Translating</span>
