@@ -1,4 +1,4 @@
-import { Html, Head, Main, NextScript } from "next/document";
+import { Html, Head, Main, NextScript } from 'next/document';
 
 export default function Document() {
   return (
@@ -7,7 +7,10 @@ export default function Document() {
         {/* Global Meta Tags */}
         <meta charSet="utf-8" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
 
         {/* Global SEO Tags */}
         <meta name="format-detection" content="telephone=no" />
@@ -21,10 +24,25 @@ export default function Document() {
 
         {/* Preconnect to critical origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+
+        {/* M PLUS Rounded 1c — rounded Japanese font for date display */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
 
         {/* LLM Access Guide */}
-        <link rel="alternate" type="text/plain" href="https://rebabel.org/llms.txt" title="LLM Access Guide" />
+        <link
+          rel="alternate"
+          type="text/plain"
+          href="https://rebabel.org/llms.txt"
+          title="LLM Access Guide"
+        />
         <meta name="llms-txt" content="https://rebabel.org/llms.txt" />
       </Head>
       <body>

@@ -16,6 +16,10 @@ import {
 import { TbCards, TbRepeat } from 'react-icons/tb';
 import { FiPlay, FiChevronRight } from 'react-icons/fi';
 import { FaRegFolderOpen } from 'react-icons/fa6';
+import { HiOutlineLightningBolt } from 'react-icons/hi';
+import { LuTextCursorInput } from 'react-icons/lu';
+import PageHeader from '../../components/ui/PageHeader';
+import SetRow from '../../components/ui/SetRow';
 
 function ActivityCalendar({ activityData }) {
   const [tooltip, setTooltip] = useState(null);
@@ -109,8 +113,101 @@ function ActivityCalendar({ activityData }) {
   );
 }
 
+// [number reading, がつ/にち suffix reading]
+const MONTH_READINGS = [
+  ['いち', 'がつ'],
+  ['に', 'がつ'],
+  ['さん', 'がつ'],
+  ['し', 'がつ'],
+  ['ご', 'がつ'],
+  ['ろく', 'がつ'],
+  ['しち', 'がつ'],
+  ['はち', 'がつ'],
+  ['く', 'がつ'],
+  ['じゅう', 'がつ'],
+  ['じゅういち', 'がつ'],
+  ['じゅうに', 'がつ'],
+];
+
+// [number reading, にち suffix reading] — irregular days have combined readings
+const DAY_READINGS = [
+  ['', ''],
+  ['ついた', 'ち'],
+  ['ふつ', 'か'],
+  ['みっ', 'か'],
+  ['よっ', 'か'],
+  ['いつ', 'か'],
+  ['むい', 'か'],
+  ['なの', 'か'],
+  ['よう', 'か'],
+  ['ここの', 'か'],
+  ['とお', 'か'],
+  ['じゅういち', 'にち'],
+  ['じゅうに', 'にち'],
+  ['じゅうさん', 'にち'],
+  ['じゅうよっ', 'か'],
+  ['じゅうご', 'にち'],
+  ['じゅうろく', 'にち'],
+  ['じゅうしち', 'にち'],
+  ['じゅうはち', 'にち'],
+  ['じゅうく', 'にち'],
+  ['はつ', 'か'],
+  ['にじゅういち', 'にち'],
+  ['にじゅうに', 'にち'],
+  ['にじゅうさん', 'にち'],
+  ['にじゅうよっ', 'か'],
+  ['にじゅうご', 'にち'],
+  ['にじゅうろく', 'にち'],
+  ['にじゅうしち', 'にち'],
+  ['にじゅうはち', 'にち'],
+  ['にじゅうく', 'にち'],
+  ['さんじゅう', 'にち'],
+  ['さんじゅういち', 'にち'],
+];
+
+const DOW_KANJI = ['日', '月', '火', '水', '木', '金', '土'];
+const DOW_READINGS = ['にち', 'げつ', 'か', 'すい', 'もく', 'きん', 'ど'];
+
+function useJapaneseDate() {
+  const now = new Date();
+  const month = now.getMonth(); // 0-indexed
+  const day = now.getDate();
+  const dow = now.getDay();
+
+  const monthNum = `${month + 1}`;
+  const dayNum = `${day}`;
+  const dowKanji = DOW_KANJI[dow];
+
+  const [monthNumReading, monthKanjiReading] = MONTH_READINGS[month];
+  const [dayNumReading, dayKanjiReading] = DAY_READINGS[day];
+  const dowReading = DOW_READINGS[dow];
+
+  const englishDate = now.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
+
+  const rtClass =
+    'text-[0.55rem] font-normal text-gray-400 dark:text-gray-500 [ruby-align:center]';
+
+  return {
+    monthNum,
+    dayNum,
+    dowKanji,
+    monthNumReading,
+    monthKanjiReading,
+    dayNumReading,
+    dayKanjiReading,
+    dowReading,
+    englishDate,
+    rtClass,
+  };
+}
+
 export default function DashboardPage() {
   const router = useRouter();
+  const jpDate = useJapaneseDate();
   const [userProfile, setUserProfile] = useState(null);
   const [greeting, setGreeting] = useState('Hello');
   const [mounted, setMounted] = useState(false);
@@ -273,15 +370,8 @@ export default function DashboardPage() {
       }
       if (width >= 640) return setVisibleSetCount(2);
 
-      // Mobile: measure actual remaining space below the card's top
-      const cardTop = card.getBoundingClientRect().top;
-      const headerAndPadding = 76; // p-4 top(16) + header(28) + mb-3(12) + p-4 bottom(16) + page bottom margin(4)
-      const available = window.innerHeight - cardTop - headerAndPadding;
-      const cardH = 110;
-      const gap = 12;
-      setVisibleSetCount(
-        Math.max(1, Math.floor((available + gap) / (cardH + gap)))
-      );
+      // Mobile: max 3 sets (list view)
+      setVisibleSetCount(3);
     };
 
     // Recalculate after a frame so layout is settled
@@ -290,98 +380,511 @@ export default function DashboardPage() {
     return () => window.removeEventListener('resize', calculate);
   }, [dashboardLoading, setsLoading]);
 
-  // Show loading state until client-side hydration is complete
+  // Show loading skeleton
   if (!mounted) {
     return (
       <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
         <MainSidebar />
 
-        <main className="ml-auto flex-1 overflow-y-auto pt-[max(1rem,var(--cap-safe-top))]">
+        <main className="ml-auto flex-1 flex flex-col">
           <Head>
             <title>Dashboard • ReBabel</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
-          <div className="p-4">
+          {/* PageHeader skeleton */}
+          <div className="hidden lg:block -mt-[var(--cap-safe-top)] flex-shrink-0 bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 pt-[calc(var(--cap-safe-top)+1rem)] pb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {/* Date skeleton */}
+                <div className="animate-pulse h-8 w-44 rounded-lg bg-black/5 dark:bg-white/5" />
+                <div className="w-px h-7 bg-gray-200 dark:bg-gray-700" />
+                {/* Greeting skeleton */}
+                <div className="animate-pulse h-8 w-36 rounded-lg bg-black/5 dark:bg-white/5" />
+                {/* Pill skeletons */}
+                <div className="animate-pulse h-6 w-24 rounded-full bg-black/5 dark:bg-white/5" />
+                <div className="animate-pulse h-6 w-16 rounded-full bg-black/5 dark:bg-white/5" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="animate-pulse h-9 w-28 rounded-lg bg-black/5 dark:bg-white/5" />
+                <div className="animate-pulse h-9 w-28 rounded-lg bg-black/5 dark:bg-white/5" />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto pt-[max(1rem,var(--cap-safe-top))] lg:pt-4">
+            <div className="px-4 md:p-4 lg:w-screen lg:max-w-[calc(100vw-16rem)] lg:mx-auto">
+              <div className="max-w-5xl mx-auto space-y-4">
+                {/* Tablet greeting skeleton */}
+                <div className="lg:hidden md:block hidden">
+                  <div className="animate-pulse h-7 w-48 rounded-lg bg-black/5 dark:bg-white/5 mb-2" />
+                  <div className="animate-pulse h-4 w-72 rounded bg-black/5 dark:bg-white/5" />
+                </div>
+                <div className="md:hidden h-2" aria-hidden="true" />
+
+                {/* Stats Row - Desktop skeleton */}
+                <div className="hidden md:grid md:grid-cols-4 gap-3">
+                  {/* Streak card skeleton */}
+                  <div className="bg-gradient-to-br from-orange-500/60 to-red-500/60 rounded-lg p-3 shadow">
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="animate-pulse h-5 w-5 rounded bg-white/20" />
+                      <div className="text-right space-y-1">
+                        <div className="animate-pulse h-3 w-12 rounded bg-white/20 ml-auto" />
+                        <div className="animate-pulse h-4 w-8 rounded bg-white/20 ml-auto" />
+                      </div>
+                    </div>
+                    <div className="animate-pulse h-7 w-12 rounded bg-white/20 mt-1" />
+                    <div className="animate-pulse h-3 w-16 rounded bg-white/20 mt-2" />
+                  </div>
+                  {/* Study Time skeleton */}
+                  <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                    <div className="animate-pulse w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900/30 mb-1" />
+                    <div className="animate-pulse h-6 w-16 rounded bg-black/5 dark:bg-white/5 mt-1" />
+                    <div className="animate-pulse h-3 w-24 rounded bg-black/5 dark:bg-white/5 mt-2" />
+                  </div>
+                  {/* Accuracy skeleton */}
+                  <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                    <div className="animate-pulse w-6 h-6 rounded-md bg-green-100 dark:bg-green-900/30 mb-1" />
+                    <div className="animate-pulse h-6 w-14 rounded bg-black/5 dark:bg-white/5 mt-1" />
+                    <div className="animate-pulse h-3 w-20 rounded bg-black/5 dark:bg-white/5 mt-2" />
+                  </div>
+                  {/* Items Reviewed skeleton */}
+                  <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                    <div className="animate-pulse w-6 h-6 rounded-md bg-purple-100 dark:bg-purple-900/30 mb-1" />
+                    <div className="animate-pulse h-6 w-12 rounded bg-black/5 dark:bg-white/5 mt-1" />
+                    <div className="animate-pulse h-3 w-24 rounded bg-black/5 dark:bg-white/5 mt-2" />
+                  </div>
+                </div>
+
+                {/* Activity Calendar skeleton */}
+                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <FaCalendarAlt className="text-gray-400 dark:text-gray-600 text-sm" />
+                      <div className="animate-pulse h-4 w-14 rounded bg-black/5 dark:bg-white/5" />
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="animate-pulse h-3 w-8 rounded bg-black/5 dark:bg-white/5" />
+                      <div className="flex gap-0.5">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <div
+                            key={i}
+                            className="w-2.5 h-2.5 rounded-sm bg-gray-100 dark:bg-white/[0.05]"
+                          />
+                        ))}
+                      </div>
+                      <div className="animate-pulse h-3 w-8 rounded bg-black/5 dark:bg-white/5" />
+                    </div>
+                  </div>
+                  {/* Calendar grid skeleton */}
+                  <div className="flex gap-0.5 overflow-hidden">
+                    {Array.from({ length: 26 }).map((_, weekIdx) => (
+                      <div key={weekIdx} className="flex flex-col gap-0.5">
+                        {Array.from({ length: 7 }).map((_, dayIdx) => (
+                          <div
+                            key={dayIdx}
+                            className="w-2.5 h-2.5 rounded-sm animate-pulse"
+                            style={{
+                              backgroundColor: 'var(--cal-skel)',
+                              opacity: 0.3 + Math.random() * 0.4,
+                            }}
+                          />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                  {/* Stats row skeleton below calendar */}
+                  <div className="mt-3 grid grid-cols-4 gap-3">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div key={i} className="text-center">
+                        <div className="animate-pulse h-5 w-10 rounded bg-black/5 dark:bg-white/5 mx-auto" />
+                        <div className="animate-pulse h-3 w-16 rounded bg-black/5 dark:bg-white/5 mx-auto mt-1" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mobile Stats skeleton */}
+                <div className="md:hidden bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="bg-gradient-to-br from-orange-500/60 to-red-500/60 rounded-lg p-3">
+                      <div className="flex items-center gap-2">
+                        <div className="animate-pulse h-4 w-4 rounded bg-white/20" />
+                        <div>
+                          <div className="animate-pulse h-5 w-8 rounded bg-white/20" />
+                          <div className="animate-pulse h-2.5 w-14 rounded bg-white/20 mt-1" />
+                        </div>
+                      </div>
+                    </div>
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="animate-pulse h-4 w-4 rounded bg-black/5 dark:bg-white/5" />
+                          <div>
+                            <div className="animate-pulse h-5 w-10 rounded bg-black/5 dark:bg-white/5" />
+                            <div className="animate-pulse h-2.5 w-14 rounded bg-black/5 dark:bg-white/5 mt-1" />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Recent Sets skeleton */}
+                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-1">
+                      <div className="animate-pulse h-5 w-24 rounded bg-black/5 dark:bg-white/5" />
+                      <div className="animate-pulse h-4 w-4 rounded bg-black/5 dark:bg-white/5" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] p-3"
+                      >
+                        <div className="animate-pulse h-4 w-3/4 rounded bg-black/5 dark:bg-white/5" />
+                        <div className="mt-2 flex items-center justify-between">
+                          <div className="animate-pulse h-3 w-14 rounded bg-black/5 dark:bg-white/5" />
+                          <div className="animate-pulse h-5 w-12 rounded-full bg-black/5 dark:bg-white/5" />
+                        </div>
+                        <div className="mt-3 flex items-center gap-2">
+                          <div className="animate-pulse h-6 w-14 rounded-md bg-black/5 dark:bg-white/5" />
+                          <div className="animate-pulse h-6 w-14 rounded-md bg-black/5 dark:bg-white/5" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-[100dvh] overflow-hidden bg-gray-50 dark:bg-[#141f25]">
+      <MainSidebar />
+
+      <main className="ml-auto flex-1 flex flex-col min-h-0 overflow-hidden">
+        <Head>
+          <title>Dashboard • ReBabel</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+
+        <PageHeader
+          title={
+            <div>
+              <div className="flex items-center gap-3">
+                {/* Japanese date */}
+                <span
+                  className="relative text-2xl text-gray-900 dark:text-white"
+                  style={{ fontFeatureSettings: '"palt"' }}
+                >
+                  <ruby>
+                    <span className="font-bold">{jpDate.monthNum}</span>
+                    <rp>(</rp>
+                    <rt className={jpDate.rtClass}>{jpDate.monthNumReading}</rt>
+                    <rp>)</rp>
+                  </ruby>
+                  <ruby>
+                    <span
+                      className="font-medium"
+                      style={{ fontFamily: '"M PLUS Rounded 1c", sans-serif' }}
+                    >
+                      月
+                    </span>
+                    <rp>(</rp>
+                    <rt className={jpDate.rtClass}>
+                      {jpDate.monthKanjiReading}
+                    </rt>
+                    <rp>)</rp>
+                  </ruby>
+                  <ruby>
+                    <span className="font-bold">{jpDate.dayNum}</span>
+                    <rp>(</rp>
+                    <rt className={jpDate.rtClass}>{jpDate.dayNumReading}</rt>
+                    <rp>)</rp>
+                  </ruby>
+                  <ruby>
+                    <span
+                      className="font-medium"
+                      style={{ fontFamily: '"M PLUS Rounded 1c", sans-serif' }}
+                    >
+                      日
+                    </span>
+                    <rp>(</rp>
+                    <rt className={jpDate.rtClass}>{jpDate.dayKanjiReading}</rt>
+                    <rp>)</rp>
+                  </ruby>
+                  <span className="absolute left-0 top-full -mt-1 text-[0.55rem] text-gray-400 dark:text-gray-500 font-medium tracking-wider uppercase whitespace-nowrap">
+                    {jpDate.englishDate}
+                  </span>
+                  <span
+                    className="inline-block w-[5px] h-[5px] rounded-full bg-gray-400 dark:bg-gray-500 mx-2"
+                    style={{ verticalAlign: '0.3em' }}
+                  />
+                  <ruby>
+                    <span
+                      className="font-medium"
+                      style={{ fontFamily: '"M PLUS Rounded 1c", sans-serif' }}
+                    >
+                      {jpDate.dowKanji}
+                    </span>
+                    <rp>(</rp>
+                    <rt className={jpDate.rtClass}>{jpDate.dowReading}</rt>
+                    <rp>)</rp>
+                  </ruby>
+                  <ruby>
+                    <span
+                      className="font-medium"
+                      style={{ fontFamily: '"M PLUS Rounded 1c", sans-serif' }}
+                    >
+                      曜
+                    </span>
+                    <rp>(</rp>
+                    <rt className={jpDate.rtClass}>よう</rt>
+                    <rp>)</rp>
+                  </ruby>
+                  <ruby>
+                    <span
+                      className="font-medium"
+                      style={{ fontFamily: '"M PLUS Rounded 1c", sans-serif' }}
+                    >
+                      日
+                    </span>
+                    <rp>(</rp>
+                    <rt className={jpDate.rtClass}>び</rt>
+                    <rp>)</rp>
+                  </ruby>
+                </span>
+
+                {/* Divider */}
+                <div className="w-px self-stretch bg-gray-300 dark:bg-gray-600" />
+
+                {/* Greeting */}
+                <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {greeting}
+                </span>
+
+                {/* Meta pills */}
+                {userData.currentStreak != null &&
+                  userData.currentStreak > 0 && (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-xs font-semibold">
+                      <FaFire className="text-xs" />
+                      <span>{userData.currentStreak} day streak</span>
+                    </div>
+                  )}
+                {!setsLoading && sets.length > 0 && (
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 text-xs font-medium">
+                    <TbCards className="text-xs" />
+                    <span>{sets.length} sets</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          }
+          actions={
+            <>
+              {!dueLoading && totalDueItems > 0 && (
+                <Link
+                  href="/learn/academy/sets/fast-review"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:brightness-110 hover:ring-2 hover:ring-[#667eea]/40 transition-all"
+                >
+                  <HiOutlineLightningBolt className="text-base" />
+                  <span>Review Due</span>
+                  <span className="text-xs font-bold px-1.5 py-0.5 rounded-md bg-white/20 text-white min-w-[1.5rem] text-center">
+                    {totalDueItems}
+                  </span>
+                </Link>
+              )}
+              <Link
+                href="/learn/academy/sets/create"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40 transition-all"
+              >
+                <FaPlus className="text-xs" />
+                <span>Create Set</span>
+              </Link>
+            </>
+          }
+        />
+
+        {/* Mobile header */}
+        <div className="lg:hidden px-4 pt-[max(1rem,var(--cap-safe-top))] pb-4">
+          <div className="flex items-center gap-2.5 text-lg sm:text-xl md:text-2xl">
+            <span
+              className="relative text-gray-900 dark:text-white"
+              style={{ fontFeatureSettings: '"palt"' }}
+            >
+              <ruby>
+                <span className="font-bold">{jpDate.monthNum}</span>
+                <rp>(</rp>
+                <rt className={jpDate.rtClass}>{jpDate.monthNumReading}</rt>
+                <rp>)</rp>
+              </ruby>
+              <ruby>
+                <span
+                  className="font-medium"
+                  style={{ fontFamily: '"M PLUS Rounded 1c", sans-serif' }}
+                >
+                  月
+                </span>
+                <rp>(</rp>
+                <rt className={jpDate.rtClass}>{jpDate.monthKanjiReading}</rt>
+                <rp>)</rp>
+              </ruby>
+              <ruby>
+                <span className="font-bold">{jpDate.dayNum}</span>
+                <rp>(</rp>
+                <rt className={jpDate.rtClass}>{jpDate.dayNumReading}</rt>
+                <rp>)</rp>
+              </ruby>
+              <ruby>
+                <span
+                  className="font-medium"
+                  style={{ fontFamily: '"M PLUS Rounded 1c", sans-serif' }}
+                >
+                  日
+                </span>
+                <rp>(</rp>
+                <rt className={jpDate.rtClass}>{jpDate.dayKanjiReading}</rt>
+                <rp>)</rp>
+              </ruby>
+              <span className="absolute left-0 top-full -mt-1 text-[0.5rem] text-gray-400 dark:text-gray-500 font-medium tracking-wider uppercase whitespace-nowrap">
+                {jpDate.englishDate}
+              </span>
+              <span
+                className="inline-block w-[4px] h-[4px] rounded-full bg-gray-400 dark:bg-gray-500 mx-1.5"
+                style={{ verticalAlign: '0.25em' }}
+              />
+              <ruby>
+                <span
+                  className="font-medium"
+                  style={{ fontFamily: '"M PLUS Rounded 1c", sans-serif' }}
+                >
+                  {jpDate.dowKanji}
+                </span>
+                <rp>(</rp>
+                <rt className={jpDate.rtClass}>{jpDate.dowReading}</rt>
+                <rp>)</rp>
+              </ruby>
+              <ruby>
+                <span
+                  className="font-medium"
+                  style={{ fontFamily: '"M PLUS Rounded 1c", sans-serif' }}
+                >
+                  曜
+                </span>
+                <rp>(</rp>
+                <rt className={jpDate.rtClass}>よう</rt>
+                <rp>)</rp>
+              </ruby>
+              <ruby>
+                <span
+                  className="font-medium"
+                  style={{ fontFamily: '"M PLUS Rounded 1c", sans-serif' }}
+                >
+                  日
+                </span>
+                <rp>(</rp>
+                <rt className={jpDate.rtClass}>び</rt>
+                <rp>)</rp>
+              </ruby>
+            </span>
+            <div className="w-px h-5 bg-gray-300 dark:bg-gray-600" />
+            <span className="font-bold text-gray-900 dark:text-white">
+              {greeting}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto lg:pt-4">
+          <div className="px-4 md:p-4 lg:mx-auto lg:w-full lg:max-w-5xl">
             <div className="max-w-5xl mx-auto space-y-4">
-              <div className="hidden md:block">
+              {/* Tablet-only greeting (hidden on mobile where header handles it, hidden on desktop where PageHeader handles it) */}
+              <div className="hidden md:block lg:hidden">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                  Hello!
+                  {greeting}
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Ready to continue your Japanese learning journey?
                 </p>
               </div>
-              <div className="md:hidden h-2" aria-hidden="true" />
 
               {/* Compact Stats Row - Desktop only */}
               <div className="hidden md:grid md:grid-cols-4 gap-3">
                 {/* Streak Card */}
-                <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-4 text-white shadow">
-                  <div className="flex items-center justify-between mb-2">
-                    <FaFire className="text-2xl" />
+                <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-3 text-white shadow">
+                  <div className="flex items-center justify-between mb-1">
+                    <FaFire className="text-lg" />
                     <div className="text-right">
-                      <div className="text-xs opacity-75">Longest</div>
-                      <div className="text-lg font-bold">
+                      <div className="text-[10px] opacity-75">Longest</div>
+                      <div className="text-sm font-bold">
                         {userData.longestStreak ?? '—'}
                       </div>
                     </div>
                   </div>
-                  <div className="text-3xl font-bold mb-0.5">
+                  <div className="text-2xl font-bold">
                     {userData.currentStreak ?? '—'}
                   </div>
-                  <p className="text-xs opacity-90">day streak</p>
+                  <p className="text-[10px] opacity-90">day streak</p>
                 </div>
 
                 {/* Study Time */}
-                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                      <FaClock className="text-sm text-blue-600 dark:text-blue-400" />
+                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                      <FaClock className="text-xs text-blue-600 dark:text-blue-400" />
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white mb-0.5">
+                  <div className="text-xl font-bold text-gray-900 dark:text-white">
                     {userData.totalStudyTime ?? '—'}
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                  <p className="text-[10px] text-gray-600 dark:text-gray-400">
                     Total Study Time
                   </p>
                 </div>
 
                 {/* Accuracy */}
-                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                      <FaCheck className="text-sm text-green-600 dark:text-green-400" />
+                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-6 h-6 rounded-md bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                      <FaCheck className="text-xs text-green-600 dark:text-green-400" />
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white mb-0.5">
+                  <div className="text-xl font-bold text-gray-900 dark:text-white">
                     {userData.accuracyRate != null
                       ? `${userData.accuracyRate}%`
                       : '—'}
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                  <p className="text-[10px] text-gray-600 dark:text-gray-400">
                     Accuracy Rate
                   </p>
                 </div>
 
                 {/* Items Reviewed */}
-                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                      <TbCards className="text-sm text-purple-600 dark:text-purple-400" />
+                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-6 h-6 rounded-md bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                      <TbCards className="text-xs text-purple-600 dark:text-purple-400" />
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white mb-0.5">
+                  <div className="text-xl font-bold text-gray-900 dark:text-white">
                     {userData.cardsReviewed ?? '—'}
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                  <p className="text-[10px] text-gray-600 dark:text-gray-400">
                     Items Reviewed
                   </p>
                 </div>
               </div>
 
-              {/* Activity Calendar - Empty state */}
+              {/* Activity Calendar */}
               <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -393,19 +896,71 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400">
                     <span>Less</span>
                     <div className="flex gap-0.5">
-                      <div className="w-2.5 h-2.5 rounded-sm bg-gray-100 dark:bg-gray-800" />
-                      <div className="w-2.5 h-2.5 rounded-sm bg-green-200 dark:bg-green-900/40" />
-                      <div className="w-2.5 h-2.5 rounded-sm bg-green-400 dark:bg-green-700/60" />
-                      <div className="w-2.5 h-2.5 rounded-sm bg-green-600 dark:bg-green-600/80" />
-                      <div className="w-2.5 h-2.5 rounded-sm bg-green-700 dark:bg-green-500" />
+                      <div className="w-2.5 h-2.5 rounded-sm bg-gray-100 dark:bg-white/[0.07]" />
+                      <div className="w-2.5 h-2.5 rounded-sm bg-green-200 dark:bg-green-900" />
+                      <div className="w-2.5 h-2.5 rounded-sm bg-green-400 dark:bg-green-700" />
+                      <div className="w-2.5 h-2.5 rounded-sm bg-green-600 dark:bg-green-500" />
+                      <div className="w-2.5 h-2.5 rounded-sm bg-green-700 dark:bg-green-400" />
                     </div>
                     <span>More</span>
                   </div>
                 </div>
 
-                <div className="h-16 flex items-center justify-center text-gray-400 dark:text-gray-600">
-                  Loading...
-                </div>
+                {userData.activityData.length > 0 ? (
+                  <>
+                    <ActivityCalendar activityData={userData.activityData} />
+
+                    <div className="mt-3 grid grid-cols-4 gap-3">
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-gray-900 dark:text-white">
+                          {userData.daysActiveLast60 ??
+                            userData.activityData.filter((d) => d.level > 0)
+                              .length}
+                        </div>
+                        <div className="text-[10px] text-gray-600 dark:text-gray-400">
+                          Days Active
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-gray-900 dark:text-white">
+                          {userData.sessionsCompleted ?? '—'}
+                        </div>
+                        <div className="text-[10px] text-gray-600 dark:text-gray-400">
+                          Sessions
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-gray-900 dark:text-white">
+                          {setsLoading
+                            ? '—'
+                            : sets.reduce(
+                                (sum, s) => sum + (s.item_num || 0),
+                                0
+                              )}
+                        </div>
+                        <div className="text-[10px] text-gray-600 dark:text-gray-400">
+                          Total Items
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-gray-900 dark:text-white">
+                          {formatStudyTime(
+                            userData.activityData
+                              .slice(-30)
+                              .reduce((sum, d) => sum + d.minutes, 0)
+                          )}
+                        </div>
+                        <div className="text-[10px] text-gray-600 dark:text-gray-400">
+                          30 Days
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="h-16 flex items-center justify-center text-gray-400 dark:text-gray-600 text-sm">
+                    {dashboardLoading ? 'Loading...' : 'No activity yet'}
+                  </div>
+                )}
               </div>
 
               {/* Compact Stats - Mobile only */}
@@ -460,346 +1015,167 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Recent Sets – skeleton during SSR hydration */}
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white">
+              {/* Quick Actions - Mobile only */}
+              <div className="md:hidden flex gap-2">
+                {!dueLoading && totalDueItems > 0 && false ? (
+                  <Link
+                    href="/learn/academy/sets/fast-review"
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white transition-all"
+                  >
+                    <HiOutlineLightningBolt className="text-base" />
+                    <span>Fast Review</span>
+                    <span className="text-xs font-bold px-1.5 py-0.5 rounded-md bg-white/20 min-w-[1.5rem] text-center">
+                      {totalDueItems}
+                    </span>
+                  </Link>
+                ) : (
+                  <Link
+                    href="/learn/academy/practice"
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white transition-all"
+                  >
+                    <LuTextCursorInput className="text-base" />
+                    <span>Study Translating</span>
+                  </Link>
+                )}
+                <Link
+                  href="/learn/academy/sets"
+                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 transition-all"
+                >
+                  <FaRegFolderOpen className="text-sm" />
+                  <span>View Sets</span>
+                </Link>
+              </div>
+
+              {/* Recent Sets */}
+              <div
+                ref={setsCardRef}
+                className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm overflow-hidden"
+              >
+                {/* Header */}
+                <Link
+                  href="/learn/academy/sets"
+                  className="mb-4 flex items-center gap-1 w-fit group"
+                >
+                  <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white group-hover:text-[#e30a5f] transition-colors">
                     Recent Sets
                   </h2>
-                  <div className="h-8 w-24 rounded-lg bg-black/5 dark:bg-white/5 animate-pulse" />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="animate-pulse rounded-lg bg-black/5 dark:bg-white/5 h-24"
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
-  }
+                  <FiChevronRight className="text-gray-400 dark:text-gray-500 text-lg mt-px group-hover:text-[#e30a5f] transition-colors" />
+                </Link>
 
-  return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
-      <MainSidebar />
-
-      <main className="ml-auto flex-1 overflow-y-auto pt-[max(1rem,var(--cap-safe-top))] lg:grid lg:place-content-center lg:min-h-full">
-        <Head>
-          <title>Dashboard • ReBabel</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        <div className="px-4 md:p-4 lg:w-screen lg:max-w-[calc(100vw-16rem)]">
-          <div className="max-w-5xl mx-auto space-y-4">
-            {/* Header */}
-            <div className="hidden md:block">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                {greeting}
-                {/*userData.name ? `, ${userData.name}` : ''*/}
-              </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Ready to continue your Japanese learning journey?
-              </p>
-            </div>
-            <div className="md:hidden h-2" aria-hidden="true" />
-
-            {/* Compact Stats Row - Desktop only */}
-            <div className="hidden md:grid md:grid-cols-4 gap-3">
-              {/* Streak Card */}
-              <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-3 text-white shadow">
-                <div className="flex items-center justify-between mb-1">
-                  <FaFire className="text-lg" />
-                  <div className="text-right">
-                    <div className="text-[10px] opacity-75">Longest</div>
-                    <div className="text-sm font-bold">
-                      {userData.longestStreak ?? '—'}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-2xl font-bold">
-                  {userData.currentStreak ?? '—'}
-                </div>
-                <p className="text-[10px] opacity-90">day streak</p>
-              </div>
-
-              {/* Study Time */}
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                    <FaClock className="text-xs text-blue-600 dark:text-blue-400" />
-                  </div>
-                </div>
-                <div className="text-xl font-bold text-gray-900 dark:text-white">
-                  {userData.totalStudyTime ?? '—'}
-                </div>
-                <p className="text-[10px] text-gray-600 dark:text-gray-400">
-                  Total Study Time
-                </p>
-              </div>
-
-              {/* Accuracy */}
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-6 h-6 rounded-md bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                    <FaCheck className="text-xs text-green-600 dark:text-green-400" />
-                  </div>
-                </div>
-                <div className="text-xl font-bold text-gray-900 dark:text-white">
-                  {userData.accuracyRate != null
-                    ? `${userData.accuracyRate}%`
-                    : '—'}
-                </div>
-                <p className="text-[10px] text-gray-600 dark:text-gray-400">
-                  Accuracy Rate
-                </p>
-              </div>
-
-              {/* Items Reviewed */}
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-6 h-6 rounded-md bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                    <TbCards className="text-xs text-purple-600 dark:text-purple-400" />
-                  </div>
-                </div>
-                <div className="text-xl font-bold text-gray-900 dark:text-white">
-                  {userData.cardsReviewed ?? '—'}
-                </div>
-                <p className="text-[10px] text-gray-600 dark:text-gray-400">
-                  Items Reviewed
-                </p>
-              </div>
-            </div>
-
-            {/* Activity Calendar */}
-            <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <FaCalendarAlt className="text-gray-600 dark:text-gray-400 text-sm" />
-                  <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
-                    Activity
-                  </h2>
-                </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400">
-                  <span>Less</span>
-                  <div className="flex gap-0.5">
-                    <div className="w-2.5 h-2.5 rounded-sm bg-gray-100 dark:bg-white/[0.07]" />
-                    <div className="w-2.5 h-2.5 rounded-sm bg-green-200 dark:bg-green-900" />
-                    <div className="w-2.5 h-2.5 rounded-sm bg-green-400 dark:bg-green-700" />
-                    <div className="w-2.5 h-2.5 rounded-sm bg-green-600 dark:bg-green-500" />
-                    <div className="w-2.5 h-2.5 rounded-sm bg-green-700 dark:bg-green-400" />
-                  </div>
-                  <span>More</span>
-                </div>
-              </div>
-
-              {userData.activityData.length > 0 ? (
-                <>
-                  <ActivityCalendar activityData={userData.activityData} />
-
-                  <div className="mt-3 grid grid-cols-4 gap-3">
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-gray-900 dark:text-white">
-                        {userData.daysActiveLast60 ??
-                          userData.activityData.filter((d) => d.level > 0)
-                            .length}
-                      </div>
-                      <div className="text-[10px] text-gray-600 dark:text-gray-400">
-                        Days Active
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-gray-900 dark:text-white">
-                        {userData.sessionsCompleted ?? '—'}
-                      </div>
-                      <div className="text-[10px] text-gray-600 dark:text-gray-400">
-                        Sessions
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-gray-900 dark:text-white">
-                        {setsLoading
-                          ? '—'
-                          : sets.reduce((sum, s) => sum + (s.item_num || 0), 0)}
-                      </div>
-                      <div className="text-[10px] text-gray-600 dark:text-gray-400">
-                        Total Items
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-gray-900 dark:text-white">
-                        {formatStudyTime(
-                          userData.activityData
-                            .slice(-30)
-                            .reduce((sum, d) => sum + d.minutes, 0)
-                        )}
-                      </div>
-                      <div className="text-[10px] text-gray-600 dark:text-gray-400">
-                        30 Days
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className="h-16 flex items-center justify-center text-gray-400 dark:text-gray-600 text-sm">
-                  {dashboardLoading ? 'Loading...' : 'No activity yet'}
-                </div>
-              )}
-            </div>
-
-            {/* Compact Stats - Mobile only */}
-            <div className="md:hidden bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
-              <div className="grid grid-cols-2 gap-2">
-                <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-3 text-white">
-                  <div className="flex items-center gap-2">
-                    <FaFire className="text-base" />
-                    <div>
-                      <div className="text-lg font-bold leading-tight">
-                        {userData.currentStreak ?? '—'}
-                      </div>
-                      <p className="text-[10px] opacity-80">Day Streak</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
-                  <div className="flex items-center gap-2">
-                    <FaClock className="text-base text-blue-500" />
-                    <div>
-                      <div className="text-lg font-bold leading-tight text-gray-900 dark:text-white">
-                        {userData.totalStudyTime ?? '—'}
-                      </div>
-                      <p className="text-[10px] text-gray-500">Study Time</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
-                  <div className="flex items-center gap-2">
-                    <FaCheck className="text-base text-green-500" />
-                    <div>
-                      <div className="text-lg font-bold leading-tight text-gray-900 dark:text-white">
-                        {userData.accuracyRate != null
-                          ? `${userData.accuracyRate}%`
-                          : '—'}
-                      </div>
-                      <p className="text-[10px] text-gray-500">Accuracy</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
-                  <div className="flex items-center gap-2">
-                    <TbCards className="text-base text-purple-500" />
-                    <div>
-                      <div className="text-lg font-bold leading-tight text-gray-900 dark:text-white">
-                        {userData.cardsReviewed ?? '—'}
-                      </div>
-                      <p className="text-[10px] text-gray-500">Reviewed</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Recent Sets */}
-            <div
-              ref={setsCardRef}
-              className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm overflow-hidden"
-            >
-              {/* Header */}
-              <Link
-                href="/learn/academy/sets"
-                className="mb-4 flex items-center gap-1 w-fit group"
-              >
-                <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white group-hover:text-[#e30a5f] transition-colors">
-                  Recent Sets
-                </h2>
-                <FiChevronRight className="text-gray-400 dark:text-gray-500 text-lg mt-px group-hover:text-[#e30a5f] transition-colors" />
-              </Link>
-
-              {/* Sets */}
-              {setsLoading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="animate-pulse rounded-lg bg-black/5 dark:bg-white/5 h-24"
-                    />
-                  ))}
-                </div>
-              ) : sets.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-black/10 dark:border-white/10 p-8 text-center text-sm text-black/70 dark:text-white/70">
-                  <p className="mb-3">You don&apos;t have any sets yet.</p>
-                  <button
-                    onClick={() => router.push('/learn/academy/sets/create')}
-                    className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95"
-                  >
-                    <FaPlus /> Create your first set
-                  </button>
-                </div>
-              ) : (
-                <>
+                {/* Sets */}
+                {setsLoading ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                    {sets.slice(0, visibleSetCount).map((set) => {
-                      const typeMap = {
-                        vocab: {
-                          label: 'Vocab',
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="animate-pulse rounded-lg bg-black/5 dark:bg-white/5 h-24"
+                      />
+                    ))}
+                  </div>
+                ) : sets.length === 0 ? (
+                  <div className="rounded-xl border border-dashed border-black/10 dark:border-white/10 p-8 text-center text-sm text-black/70 dark:text-white/70">
+                    <p className="mb-3">You don&apos;t have any sets yet.</p>
+                    <button
+                      onClick={() => router.push('/learn/academy/sets/create')}
+                      className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95"
+                    >
+                      <FaPlus /> Create your first set
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {/* Desktop/tablet grid view */}
+                    <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                      {sets.slice(0, visibleSetCount).map((set) => {
+                        const typeMap = {
+                          vocab: {
+                            label: 'Vocab',
+                            colorClass:
+                              'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
+                          },
+                          grammar: {
+                            label: 'Grammar',
+                            colorClass:
+                              'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
+                          },
+                        };
+                        const typeIndicator = typeMap[set.set_type] ?? {
+                          label: 'V & G',
                           colorClass:
-                            'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
-                        },
-                        grammar: {
-                          label: 'Grammar',
-                          colorClass:
-                            'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
-                        },
-                      };
-                      const typeIndicator = typeMap[set.set_type] ?? {
-                        label: 'V & G',
-                        colorClass:
-                          'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300',
-                      };
-                      return (
-                        <div
-                          key={set.id}
-                          className="group rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] p-3 transition-all hover:shadow-sm focus-within:ring-2 focus-within:ring-[#e30a5f]"
-                        >
-                          <div className="flex items-start justify-between gap-3">
-                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 flex-1">
-                              {set.name}
-                            </h4>
-                          </div>
-                          <div className="mt-1 flex items-center justify-between">
-                            <p className="text-xs text-black/60 dark:text-white/60">
-                              {set.item_num} Items
-                            </p>
-                            <div
-                              className={`text-xs px-2 py-1 rounded-full font-medium ${typeIndicator.colorClass}`}
-                            >
-                              {typeIndicator.label}
+                            'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300',
+                        };
+                        return (
+                          <div
+                            key={set.id}
+                            className="group rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] p-3 transition-all hover:shadow-sm focus-within:ring-2 focus-within:ring-[#e30a5f]"
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 flex-1">
+                                {set.name}
+                              </h4>
+                            </div>
+                            <div className="mt-1 flex items-center justify-between">
+                              <p className="text-xs text-black/60 dark:text-white/60">
+                                {set.item_num} Items
+                              </p>
+                              <div
+                                className={`text-xs px-2 py-1 rounded-full font-medium ${typeIndicator.colorClass}`}
+                              >
+                                {typeIndicator.label}
+                              </div>
+                            </div>
+                            <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Link
+                                href={`/learn/academy/sets/study/${set.id}/quiz`}
+                                className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 text-gray-700 dark:text-white hover:opacity-90"
+                              >
+                                <FiPlay /> Study
+                              </Link>
+                              <Link
+                                href={`/learn/academy/sets/study/${set.id}`}
+                                className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 text-gray-700 dark:text-white hover:opacity-90"
+                              >
+                                <FaRegFolderOpen /> Open
+                              </Link>
                             </div>
                           </div>
-                          <div className="mt-3 flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                            <Link
-                              href={`/learn/academy/sets/study/${set.id}/quiz`}
-                              className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 text-gray-700 dark:text-white hover:opacity-90"
-                            >
-                              <FiPlay /> Study
-                            </Link>
-                            <Link
-                              href={`/learn/academy/sets/study/${set.id}`}
-                              className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 text-gray-700 dark:text-white hover:opacity-90"
-                            >
-                              <FaRegFolderOpen /> Open
-                            </Link>
+                        );
+                      })}
+                      {/* Fill empty grid slots with create/import CTA */}
+                      {sets.length < visibleSetCount && (
+                        <Link
+                          href="/learn/academy/sets/create"
+                          className="rounded-lg border-2 border-dashed border-[#e30a5f]/20 dark:border-[#e30a5f]/20 p-3 flex flex-col items-center justify-center gap-1.5 text-[#e30a5f]/60 dark:text-[#e30a5f]/50 hover:border-[#e30a5f]/50 hover:text-[#e30a5f] hover:bg-[#e30a5f]/[0.03] transition-colors"
+                        >
+                          <FaPlus className="text-sm" />
+                          <span className="text-xs font-medium">
+                            Create or Import
+                          </span>
+                        </Link>
+                      )}
+                    </div>
+                    {/* Mobile list view */}
+                    <div className="sm:hidden divide-y divide-black/5 dark:divide-white/10 rounded-lg overflow-hidden border border-black/5 dark:border-white/10">
+                      {sets.slice(0, visibleSetCount).map((set) => (
+                        <SetRow key={set.id} set={set} />
+                      ))}
+                      {sets.length < visibleSetCount && (
+                        <Link
+                          href="/learn/academy/sets/create"
+                          className="flex items-center gap-3 px-3 py-2 text-[#e30a5f]/60 dark:text-[#e30a5f]/50 hover:text-[#e30a5f] hover:bg-[#e30a5f]/[0.03] transition-colors"
+                        >
+                          <div className="w-6 h-6 rounded-md border-2 border-dashed border-[#e30a5f]/30 flex items-center justify-center">
+                            <FaPlus className="text-[8px]" />
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
+                          <span className="text-sm font-medium">
+                            Create or import a set
+                          </span>
+                        </Link>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>

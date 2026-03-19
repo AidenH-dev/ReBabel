@@ -26,6 +26,7 @@ import PageHeader from '@/components/ui/PageHeader';
 import { MdAutorenew } from 'react-icons/md';
 import { BeginnerPackPopup } from '@/components/popups/sets/newUserPopup';
 import CustomSelect from '@/components/ui/CustomSelect';
+import SetRow from '@/components/ui/SetRow';
 import { HiOutlineLightningBolt } from 'react-icons/hi';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 import { TiChartPieOutline } from 'react-icons/ti';
@@ -1053,63 +1054,6 @@ function SetCard({ set, formatDate }) {
       </div>
 
       <div className="mt-3 flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-        <Link
-          href={`/learn/academy/sets/study/${set.id}/quiz`}
-          className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 hover:opacity-90"
-        >
-          <FiPlay /> Study
-        </Link>
-        <Link
-          href={`/learn/academy/sets/study/${set.id}`}
-          className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 hover:opacity-90"
-        >
-          <FaRegFolderOpen /> Open
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-function SetRow({ set, formatDate }) {
-  const getTypeIndicator = () => {
-    if (set.set_type === 'vocab') {
-      return { label: 'Vocab', colorClass: 'bg-blue-100 dark:bg-blue-900/30' };
-    } else if (set.set_type === 'grammar') {
-      return {
-        label: 'Grammar',
-        colorClass: 'bg-green-100 dark:bg-green-900/30 ',
-      };
-    } else {
-      return {
-        label: 'V & G',
-        colorClass: 'bg-purple-100 dark:bg-purple-900/30',
-      };
-    }
-  };
-
-  const typeIndicator = getTypeIndicator();
-
-  return (
-    <div className="flex items-center justify-between gap-3 bg-white/70 dark:bg-white/[0.02] px-3 py-2">
-      <div className="min-w-0 flex-1">
-        <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
-          {set.name}
-        </div>
-        <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-xs text-black/60 dark:text-white/60">
-            {set.item_num} Items
-          </span>
-          <span
-            className={`text-xs px-2 py-0.5 rounded-full ${typeIndicator.colorClass}`}
-          >
-            {typeIndicator.label}
-          </span>
-        </div>
-      </div>
-      <div className="hidden sm:block text-[11px] text-black/60 dark:text-white/60 whitespace-nowrap">
-        {formatDate(set.date)}
-      </div>
-      <div className="flex items-center gap-2">
         <Link
           href={`/learn/academy/sets/study/${set.id}/quiz`}
           className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-black/5 dark:bg-white/10 hover:opacity-90"
