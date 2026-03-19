@@ -101,7 +101,7 @@ const rebabelSteps = [
     title: 'Stay in a daily practice rhythm',
     description:
       'Open your queue, clear due reviews, and keep sessions short enough to stay consistent. The goal is steady progress, not marathon cramming.',
-    video: '/DEMO.mp4',
+    image: '/DEMO.gif',
     alt: 'ReBabel study dashboard and review flow',
     tip: (
       <>
@@ -555,17 +555,12 @@ export default function WhatIsSrsPage() {
                   </div>
                   <div className={index % 2 === 1 ? 'lg:order-1' : ''}>
                     <div className="rounded-[2rem] bg-white dark:bg-[#1c2b35] border border-slate-200 dark:border-white/10 p-4 shadow-sm">
-                      {step.video ? (
-                        <video
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
+                      {step.image.endsWith('.gif') ? (
+                        <img
+                          src={step.image}
+                          alt={step.alt}
                           className="w-full rounded-[1.5rem] border border-slate-100 dark:border-white/10"
-                          aria-label={step.alt}
-                        >
-                          <source src={step.video} type="video/mp4" />
-                        </video>
+                        />
                       ) : (
                         <Image
                           src={step.image}
