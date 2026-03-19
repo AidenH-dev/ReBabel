@@ -28,12 +28,13 @@ function MainSidebar() {
 
   // Main nav active states
   const isDashboardActive = /^\/learn\/dashboard/.test(path);
+  const isResourcesActive = /^\/learn\/academy\/resources/.test(path);
   const isAcademyActive =
+    !isResourcesActive &&
     /^\/learn\/(academy|modules|sets|learning_material|material|section)/.test(
       path
     );
   const isCertificateActive = /^\/certificate/.test(path);
-  const isResourcesActive = /^\/learn\/academy\/resources/.test(path);
   const isSubscriptionActive = /^\/learn\/account\/subscription/.test(path);
   const isSettingsActive = /^\/learn\/account\/settings/.test(path);
   const isStudentMenuActive = isSubscriptionActive || isSettingsActive;
