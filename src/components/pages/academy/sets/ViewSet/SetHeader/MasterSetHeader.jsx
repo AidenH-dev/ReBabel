@@ -1161,12 +1161,11 @@ export default function MasterSetHeader({
                             dangerouslySetInnerHTML={{
                               __html: `
                             @keyframes dotFlux {
-                              0% { transform: scale(0); opacity: 0; }
-                              15% { transform: scale(1); opacity: 0.8; }
-                              30% { transform: scale(0.1); opacity: 0.05; }
-                              60% { transform: scale(0.7); opacity: 0.5; }
-                              80% { transform: scale(0); opacity: 0; }
-                              100% { transform: scale(0); opacity: 0; }
+                              0% { transform: scale(0.4); opacity: 0.25; }
+                              30% { transform: scale(1); opacity: 0.9; }
+                              55% { transform: scale(0.5); opacity: 0.3; }
+                              80% { transform: scale(0.9); opacity: 0.8; }
+                              100% { transform: scale(0.4); opacity: 0.25; }
                             }
                             @keyframes shimmerSlide {
                               0% { transform: translateX(-100%); }
@@ -1299,8 +1298,17 @@ export default function MasterSetHeader({
                                   document.documentElement.classList.contains(
                                     'dark'
                                   );
-                                const duration = 1.0 + Math.random() * 1.2;
-                                const delay = Math.random() * 2.0;
+                                // Loosely grouped — nearby dots nudged toward similar timing but with heavy randomness
+                                const groupRow = Math.floor(row / 4);
+                                const groupCol = Math.floor(col / 4);
+                                const groupNudge =
+                                  ((groupRow * 3 + groupCol) * 0.17) % 1;
+                                const duration = 1.8 + Math.random() * 1.4; // 1.8-3.2s, mostly random
+                                // Negative delay = start mid-animation, so dots are already in random states on mount
+                                const delay = -(
+                                  Math.random() * duration * 0.7 +
+                                  groupNudge * 0.6
+                                );
                                 return (
                                   <div
                                     key={i}
