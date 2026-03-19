@@ -28,6 +28,19 @@
     --color-gray-800: #272524;
     --color-gray-900: #1a1918;
     --color-gray-950: #110f0f;
+
+    /* Warm slate palette so slate-* utilities match the cream aesthetic */
+    --color-slate-50: #eee8e0;
+    --color-slate-100: #e5dfd7;
+    --color-slate-200: #d7d1c9;
+    --color-slate-300: #c3bdb4;
+    --color-slate-400: #9d9790;
+    --color-slate-500: #75706a;
+    --color-slate-600: #53504b;
+    --color-slate-700: #3b3836;
+    --color-slate-800: #282625;
+    --color-slate-900: #1b1a19;
+    --color-slate-950: #121110;
   }
 
   html.cream,

@@ -66,7 +66,7 @@ const rebabelSteps = [
     description: (
       <>
         From the{' '}
-        <span className="inline-flex items-center align-middle whitespace-nowrap rounded-md border border-slate-300 bg-slate-100 px-2 py-0.5 text-sm font-semibold text-slate-700">
+        <span className="inline-flex items-center align-middle whitespace-nowrap rounded-md border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 text-sm font-semibold text-slate-700 dark:text-slate-200">
           SRS Dashboard
         </span>
         , use{' '}
@@ -225,19 +225,19 @@ export default function WhatIsSrsPage() {
         />
       </Head>
 
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-rose-100 z-50">
+      <nav className="fixed top-0 w-full bg-white/90 dark:bg-[#141f25]/90 backdrop-blur-md border-b border-rose-100 dark:border-white/10 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center gap-2">
               <span className="text-2xl font-bold text-[#e30a5f]">ReBabel</span>
-              <span className="text-xs bg-[#fff1f6] text-[#b0104f] px-2 py-1 rounded-full border border-rose-200">
+              <span className="text-xs bg-[#fff1f6] dark:bg-rose-950/40 text-[#b0104f] dark:text-rose-300 px-2 py-1 rounded-full border border-rose-200 dark:border-rose-800/50">
                 Study Guide
               </span>
             </Link>
             <div className="flex items-center gap-3">
               <Link
                 href="/blog"
-                className="hidden sm:inline-flex px-4 py-2 text-sm text-gray-700 hover:text-gray-900 font-medium"
+                className="hidden sm:inline-flex px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
               >
                 Blog
               </Link>
@@ -252,15 +252,15 @@ export default function WhatIsSrsPage() {
         </div>
       </nav>
 
-      <main className="bg-[radial-gradient(circle_at_top_left,_rgba(227,11,92,0.12),_transparent_32%),linear-gradient(to_bottom,_#fffafc,_#f8fafc_55%,_#ffffff)] pt-16 overflow-hidden">
-        <section className="w-full px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-8 sm:pb-10">
+      <main className="bg-white dark:bg-[#141f25] overflow-hidden">
+        <section className="w-full px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-8 sm:pb-10">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] sm:gap-10 items-center">
             <div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-tight mb-6">
                 What is <span className="text-[#e30a5f]">SRS</span>, and why its
                 the best tool for memorizing Japanese
               </h1>
-              <p className="text-lg sm:text-xl text-slate-600 max-w-2xl leading-relaxed mb-4 sm:mb-8">
+              <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed mb-4 sm:mb-8">
                 SRS stands for spaced repetition system. It is a study method
                 that shows you Japanese study items again right before you are
                 likely to forget them, so you remember more while wasting less
@@ -269,65 +269,65 @@ export default function WhatIsSrsPage() {
             </div>
 
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-rose-200/50 via-white to-blue-100/50 rounded-[2rem] blur-3xl" />
-              <div className="relative bg-white/90 border border-white rounded-[2rem] shadow-2xl shadow-slate-200/70 p-4 md:p-6">
+              <div className="absolute inset-0 bg-gradient-to-br from-rose-200/50 dark:from-rose-900/30 via-white dark:via-transparent to-blue-100/50 dark:to-blue-900/20 rounded-[2rem] blur-3xl" />
+              <div className="relative bg-white/90 dark:bg-[#1c2b35]/90 border border-white dark:border-white/10 rounded-[2rem] shadow-2xl shadow-slate-200/70 dark:shadow-black/30 p-4 md:p-6">
                 <div className="sm:grid sm:grid-cols-2 flex w-full gap-4 mb-4">
-                  <div className=" w-full rounded-2xl bg-[#fff4f7] border border-rose-200 p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1 sm:mb-2">
+                  <div className="w-full rounded-2xl bg-[#fff4f7] dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/50 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-1 sm:mb-2">
                       SRS outcome
                     </p>
-                    <p className="sm:hidden text-2xl font-bold text-slate-900 mb-2">
+                    <p className="sm:hidden text-2xl font-bold text-slate-900 dark:text-white mb-2">
                       Better more reliable recall
                     </p>
                     <div className="flex">
-                      <p className="hidden sm:flex text-2xl font-bold text-slate-900 mb-2">
+                      <p className="hidden sm:flex text-2xl font-bold text-slate-900 dark:text-white mb-2">
                         Better recall
                       </p>
                       <FaArrowTrendUp className="text-[#e30a5f] text-3xl font-black ml-2 " />
                     </div>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
                       You review only what matters when it matters. Everything
                       is automated
                     </p>
                   </div>
-                  <div className="hidden sm:grid rounded-2xl bg-slate-50 border border-slate-200 p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">
+                  <div className="hidden sm:grid rounded-2xl bg-slate-50 dark:bg-[#243642] border border-slate-200 dark:border-white/10 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">
                       For Japanese
                     </p>
-                    <p className="text-2xl font-bold text-slate-900 mb-2">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                       Vocab + grammar
                     </p>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
                       Japanese demands heavy memorization across writing,
                       vocabulary, and grammar.
                     </p>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl">
-                  <div className="bg-white/90 border border-rose-100 rounded-2xl p-4 shadow-sm">
+                  <div className="bg-white/90 dark:bg-[#1c2b35]/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
                     <FaClock className="text-[#e30a5f] mb-3" />
-                    <p className="text-sm font-semibold text-slate-900 mb-1">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                       Review less often
                     </p>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
                       Easy items get spaced farther apart over time.
                     </p>
                   </div>
-                  <div className="hidden sm:grid bg-white/90 border border-rose-100 rounded-2xl p-4 shadow-sm">
+                  <div className="hidden sm:grid bg-white/90 dark:bg-[#1c2b35]/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
                     <FaCalendarCheck className="text-[#e30a5f] mb-3" />
-                    <p className="text-sm font-semibold text-slate-900 mb-1">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                       Catch forgetting early
                     </p>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
                       Hard items return sooner before they fully disappear.
                     </p>
                   </div>
-                  <div className="bg-white/90 border border-rose-100 rounded-2xl p-4 shadow-sm">
+                  <div className="bg-white/90 dark:bg-[#1c2b35]/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
                     <FaSeedling className="text-[#e30a5f] mb-3" />
-                    <p className="text-sm font-semibold text-slate-900 mb-1">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                       Build long-term retention
                     </p>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
                       Short daily sessions compound into durable knowledge.
                     </p>
                   </div>
@@ -338,7 +338,7 @@ export default function WhatIsSrsPage() {
         </section>
 
         <section className="w-full px-4 sm:px-6 lg:px-8 pb-8 sm:pb-14">
-          <div className="max-w-[68rem] mx-auto rounded-[1.45rem] bg-slate-950 text-white p-5 md:p-6 shadow-2xl shadow-slate-300/25">
+          <div className="max-w-[68rem] mx-auto rounded-[1.45rem] bg-slate-950 dark:bg-[#0f1a1f] text-white p-5 md:p-6 shadow-2xl shadow-slate-300/25 dark:shadow-black/30">
             <div className="max-w-[46rem] mb-6">
               <p className="text-sm uppercase tracking-[0.24em] text-rose-200 mb-3">
                 How it works
@@ -373,7 +373,7 @@ export default function WhatIsSrsPage() {
                       key={moment.day}
                       className="relative rounded-[1rem] bg-white/5 border border-white/10 p-3.5"
                     >
-                      <div className="absolute -left-6 top-4 flex h-4 w-4 items-center justify-center rounded-full border border-rose-200 bg-slate-950 shadow-[0_0_0_4px_rgba(15,23,42,1)]">
+                      <div className="absolute -left-6 top-4 flex h-4 w-4 items-center justify-center rounded-full border border-rose-200 bg-slate-950 dark:bg-[#0f1a1f] shadow-[0_0_0_4px_rgba(15,23,42,1)]">
                         <div className="h-1.5 w-1.5 rounded-full bg-rose-300" />
                       </div>
                       <p className="text-sm font-semibold text-rose-200 mb-1">
@@ -395,25 +395,25 @@ export default function WhatIsSrsPage() {
 
         <section className="w-full px-4 sm:px-6 lg:px-8 pb-8 sm:pb-16">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 shadow-sm">
-              <p className="text-sm uppercase tracking-[0.2em] text-slate-500 mb-3">
+            <div className="bg-white dark:bg-[#1c2b35] rounded-[2rem] border border-slate-200 dark:border-white/10 p-8 shadow-sm">
+              <p className="text-sm uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-3">
                 Anki and SRS
               </p>
-              <h2 className="flex items-center gap-4 text-2xl font-bold text-slate-900 mb-4">
+              <h2 className="flex items-center gap-4 text-2xl font-bold text-slate-900 dark:text-white mb-4">
                 <div className="flex-shrink-0">
                   <Image
                     src="/AnkiApp.jpeg"
                     alt="Anki app interface"
                     width={56}
                     height={56}
-                    className="w-14 h-14 rounded-2xl object-cover border border-rose-100"
+                    className="w-14 h-14 rounded-2xl object-cover border border-rose-100 dark:border-rose-900/50"
                   />
                 </div>
                 <div className="leading-tight">
                   How apps like Anki use spaced repetition
                 </div>
               </h2>
-              <p className="text-slate-600 leading-relaxed mb-6">
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
                 Anki is popular because it gives learners a flexible flashcard
                 system with a scheduler underneath. The core idea is simple:
                 your feedback after each card changes when you see it again.
@@ -422,17 +422,19 @@ export default function WhatIsSrsPage() {
                 {ankiSteps.map((step) => (
                   <div key={step} className="flex items-start gap-3">
                     <FaCheckCircle className="text-[#e30a5f] mt-1 flex-shrink-0" />
-                    <p className="text-slate-700 leading-relaxed">{step}</p>
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                      {step}
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-[#f5e1e9] via-white to-sky-50 rounded-[2rem] border border-rose-100 p-8 shadow-sm">
-              <p className="text-sm uppercase tracking-[0.2em] text-slate-500 mb-3">
+            <div className="bg-gradient-to-br from-[#f5e1e9] dark:from-[#2a1f25] via-white dark:via-[#1c2b35] to-sky-50 dark:to-[#1a2530] rounded-[2rem] border border-rose-100 dark:border-white/10 p-8 shadow-sm">
+              <p className="text-sm uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-3">
                 ReBabel AND SRS
               </p>
-              <h2 className="flex items-center gap-4 text-2xl font-bold text-slate-900 mb-4">
+              <h2 className="flex items-center gap-4 text-2xl font-bold text-slate-900 dark:text-white mb-4">
                 <div className="flex-shrink-0">
                   <Image
                     src="/ReBabelLogo.png"
@@ -440,7 +442,7 @@ export default function WhatIsSrsPage() {
                     width={56}
                     height={56}
                     quality={100}
-                    className="w-14 h-14 rounded-2xl object-cover border border-rose-100"
+                    className="w-14 h-14 rounded-2xl object-cover border border-rose-100 dark:border-rose-900/50"
                   />
                 </div>
                 <div className="leading-tight hidden sm:grid">
@@ -450,7 +452,7 @@ export default function WhatIsSrsPage() {
                   How ReBabel does it better
                 </div>
               </h2>
-              <p className="text-slate-600 leading-relaxed mb-6">
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
                 ReBabel takes the proven idea of spaced repition and integrates
                 it with better item introduction tools and a full study
                 ecosystem.
@@ -459,50 +461,50 @@ export default function WhatIsSrsPage() {
                 engaging multiple choice and translation features instead of
                 flashcards. */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="rounded-2xl bg-gray-50 border border-rose-100 p-4">
+                <div className="rounded-2xl bg-gray-50 dark:bg-white/5 border border-rose-100 dark:border-white/10 p-4">
                   <div className="flex">
                     <FaCheckCircle className="text-[#e30a5f] mt-1 flex-shrink-0 mr-1" />
-                    <p className="font-semibold text-slate-900 mb-2">
+                    <p className="font-semibold text-slate-900 dark:text-white mb-2">
                       Definitive Feedback
                     </p>
                   </div>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
                     Leveling is fully automated, no need to guess at how hard an
                     item felt to remember.
                   </p>
                 </div>
-                <div className="rounded-2xl bg-gray-50 border border-rose-100 p-4">
+                <div className="rounded-2xl bg-gray-50 dark:bg-white/5 border border-rose-100 dark:border-white/10 p-4">
                   <div className="flex">
                     <FaCheckCircle className="text-[#e30a5f] mt-1 flex-shrink-0 mr-1" />
-                    <p className="font-semibold text-slate-900 mb-2">
+                    <p className="font-semibold text-slate-900 dark:text-white mb-2">
                       Study Beyond SRS
                     </p>
                   </div>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
                     Items you add are not limited to SRS, they are accessible to
                     every feature on the platform.
                   </p>
                 </div>
-                <div className="rounded-2xl bg-gray-50 border border-rose-100 p-4">
+                <div className="rounded-2xl bg-gray-50 dark:bg-white/5 border border-rose-100 dark:border-white/10 p-4">
                   <div className="flex">
                     <FaCheckCircle className="text-[#e30a5f] mt-1 flex-shrink-0 mr-1" />
-                    <p className="font-semibold text-slate-900 mb-2">
+                    <p className="font-semibold text-slate-900 dark:text-white mb-2">
                       New Words Study Faster
                     </p>
                   </div>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
                     New words are gradually introduced through custom stages
                     that help memory.
                   </p>
                 </div>
-                <div className="rounded-2xl bg-gray-50 border border-rose-100 p-4">
+                <div className="rounded-2xl bg-gray-50 dark:bg-white/5 border border-rose-100 dark:border-white/10 p-4">
                   <div className="flex">
                     <FaCheckCircle className="text-[#e30a5f] mt-1 flex-shrink-0 mr-1" />
-                    <p className="font-semibold text-slate-900 mb-2">
+                    <p className="font-semibold text-slate-900 dark:text-white mb-2">
                       Forget Flashcards
                     </p>
                   </div>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
                     Reviews require typed responses that help engage the learner
                     and improve retention.
                   </p>
@@ -517,13 +519,13 @@ export default function WhatIsSrsPage() {
         >
           <div className="max-w-6xl mx-auto">
             <div className="max-w-3xl mb-12">
-              <p className="text-sm uppercase tracking-[0.2em] text-slate-500 mb-3">
+              <p className="text-sm uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-3">
                 Using it on ReBabel
               </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
                 How to use SRS on our platform
               </h2>
-              <p className="text-lg text-slate-600 leading-relaxed">
+              <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                 ReBabel follows the same memory principles as dedicated
                 flashcard tools, but with more automated study flows and a more
                 polished, comfortable practice experience.
@@ -537,29 +539,29 @@ export default function WhatIsSrsPage() {
                   className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
                 >
                   <div className={index % 2 === 1 ? 'lg:order-2' : ''}>
-                    <div className="inline-flex items-center gap-2 text-sm font-semibold text-[#b0104f] bg-[#fff1f6] px-3 py-1 rounded-full mb-4">
+                    <div className="inline-flex items-center gap-2 text-sm font-semibold text-[#b0104f] dark:text-rose-300 bg-[#fff1f6] dark:bg-rose-950/40 px-3 py-1 rounded-full mb-4">
                       Step 0{index + 1}
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
+                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">
                       {step.title}
                     </h3>
-                    <p className="text-lg text-slate-600 leading-relaxed mb-6">
+                    <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
                       {step.description}
                     </p>
-                    <div className="flex items-start gap-3 text-slate-700">
+                    <div className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
                       <FaTasks className="text-[#e30a5f] mt-1 flex-shrink-0" />
                       <p>{step.tip}</p>
                     </div>
                   </div>
                   <div className={index % 2 === 1 ? 'lg:order-1' : ''}>
-                    <div className="rounded-[2rem] bg-white border border-slate-200 p-4 shadow-sm">
+                    <div className="rounded-[2rem] bg-white dark:bg-[#1c2b35] border border-slate-200 dark:border-white/10 p-4 shadow-sm">
                       {step.video ? (
                         <video
                           autoPlay
                           muted
                           loop
                           playsInline
-                          className="w-full rounded-[1.5rem] border border-slate-100"
+                          className="w-full rounded-[1.5rem] border border-slate-100 dark:border-white/10"
                           aria-label={step.alt}
                         >
                           <source src={step.video} type="video/mp4" />
@@ -570,7 +572,7 @@ export default function WhatIsSrsPage() {
                           alt={step.alt}
                           width={1200}
                           height={900}
-                          className="w-full rounded-[1.5rem] border border-slate-100"
+                          className="w-full rounded-[1.5rem] border border-slate-100 dark:border-white/10"
                         />
                       )}
                     </div>
@@ -583,7 +585,7 @@ export default function WhatIsSrsPage() {
 
         <section className="w-full px-4 sm:px-6 lg:px-8 pb-16">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8">
-            <div className="bg-slate-900 text-white rounded-[2rem] p-8 md:p-10">
+            <div className="bg-slate-900 dark:bg-[#0f1a1f] text-white rounded-[2rem] p-8 md:p-10">
               <p className="text-sm uppercase tracking-[0.2em] text-rose-200 mb-3">
                 Best practices
               </p>
@@ -603,20 +605,20 @@ export default function WhatIsSrsPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 shadow-sm">
-              <p className="text-sm uppercase tracking-[0.2em] text-slate-500 mb-3">
+            <div className="bg-white dark:bg-[#1c2b35] rounded-[2rem] border border-slate-200 dark:border-white/10 p-8 shadow-sm">
+              <p className="text-sm uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-3">
                 Good to know
               </p>
-              <h2 className="text-3xl font-bold text-slate-900 mb-5">
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-5">
                 What to expect when starting
               </h2>
-              <div className="space-y-4 text-slate-600 leading-relaxed">
+              <div className="space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed">
                 <p>
                   SRS usually feels more active at the beginning because new
                   items return sooner. As recall improves, the gaps between
                   reviews get longer and the workload becomes easier to manage.
                 </p>
-                <div className="rounded-2xl bg-slate-50 border border-slate-200 p-4">
+                <div className="rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-4">
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-start gap-2">
                       <FaAngleRight className="text-rose-400 mt-[0.2rem] h-3.5 w-3.5 flex-shrink-0" />
@@ -656,7 +658,7 @@ export default function WhatIsSrsPage() {
         </section>
 
         <section className="w-full px-4 sm:px-6 lg:px-8 pb-20">
-          <div className="max-w-5xl mx-auto rounded-[2.25rem] bg-gradient-to-r from-[#e30a5f] to-[#f54b8b] text-white p-8 md:p-12 shadow-2xl shadow-rose-200/70">
+          <div className="max-w-5xl mx-auto rounded-[2.25rem] bg-gradient-to-r from-[#e30a5f] to-[#f54b8b] text-white p-8 md:p-12 shadow-2xl shadow-rose-200/70 dark:shadow-black/30">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 items-center">
               <div>
                 <p className="text-sm uppercase tracking-[0.2em] text-rose-100 mb-3">

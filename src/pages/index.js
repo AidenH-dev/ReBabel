@@ -9,9 +9,9 @@ import {
   FaGraduationCap,
   FaClock,
   FaShieldAlt,
-  FaBrain,
 } from 'react-icons/fa';
 import { FaArrowRightLong } from 'react-icons/fa6';
+import { TbRepeat } from 'react-icons/tb';
 
 export default function Home() {
   const animationsRef = useRef(null);
@@ -156,7 +156,7 @@ export default function Home() {
         </Head>
 
         {/* Hero Section */}
-        <section className="w-full px-4 sm:px-6 lg:px-8 pt-16 pb-12 md:pt-16 md:pb-18">
+        <section className="w-full px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 md:pb-18">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left Column - Text */}
@@ -243,7 +243,7 @@ export default function Home() {
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e30a5f] text-white">
                       <FaGraduationCap className="text-sm" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <p className="text-sm font-semibold text-gray-900">
                         Need printable kanji sheets?
                       </p>
@@ -251,7 +251,7 @@ export default function Home() {
                         Open the kanji writing practice PDF generator
                       </p>
                     </div>
-                    <FaArrowRightLong className="ml-1 text-[#e30a5f]" />
+                    <FaArrowRightLong className="ml-auto text-[#e30a5f] flex-shrink-0" />
                   </Link>
 
                   <Link
@@ -259,9 +259,9 @@ export default function Home() {
                     className="inline-flex items-center gap-3 rounded-2xl border border-[#667eea]/20 bg-[#f0f1ff] px-5 py-4 text-left shadow-sm transition hover:border-[#667eea]/40 hover:bg-white"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white">
-                      <FaBrain className="text-sm" />
+                      <TbRepeat className="text-sm" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <p className="text-sm font-semibold text-gray-900">
                         New to spaced repetition?
                       </p>
@@ -269,7 +269,7 @@ export default function Home() {
                         Read our guide on what SRS is and how to use it
                       </p>
                     </div>
-                    <FaArrowRightLong className="ml-1 text-[#667eea]" />
+                    <FaArrowRightLong className="ml-auto text-[#667eea] flex-shrink-0" />
                   </Link>
                 </div>
               </div>
@@ -545,7 +545,7 @@ export default function Home() {
 
               <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-lg flex items-center justify-center text-white mb-4">
-                  <FaBrain className="text-2xl" />
+                  <TbRepeat className="text-2xl" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
                   Spaced Repetition System
