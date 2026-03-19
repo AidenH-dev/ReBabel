@@ -119,6 +119,10 @@ export default function SetsSrsOverview({ active = true }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortByState] = useState('due');
   const hasFetchedRef = useRef(false);
+  const timezone = useMemo(
+    () => Intl.DateTimeFormat().resolvedOptions().timeZone,
+    []
+  );
 
   // Persist SRS sub-view and sort preference
   useEffect(() => {
@@ -145,7 +149,9 @@ export default function SetsSrsOverview({ active = true }) {
 
     const fetchData = async () => {
       try {
-        const res = await fetch('/api/database/v2/srs/aggregate-overview');
+        const res = await fetch(
+          `/api/database/v2/srs/aggregate-overview?timezone=${encodeURIComponent(timezone)}`
+        );
         const result = await res.json();
         if (result.success) {
           setData(result.data);
@@ -166,7 +172,9 @@ export default function SetsSrsOverview({ active = true }) {
     const handleVisibility = async () => {
       if (document.visibilityState === 'visible' && hasFetchedRef.current) {
         try {
-          const res = await fetch('/api/database/v2/srs/aggregate-overview');
+          const res = await fetch(
+            `/api/database/v2/srs/aggregate-overview?timezone=${encodeURIComponent(timezone)}`
+          );
           const result = await res.json();
           if (result.success) setData(result.data);
         } catch {}

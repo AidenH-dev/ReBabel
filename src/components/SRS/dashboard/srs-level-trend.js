@@ -11,7 +11,7 @@ export default function SrsLoadChart({ loadChart }) {
       return { bars: [], maxVal: 1, todayIdx: -1, avgPast: 0 };
     }
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = new Date().toLocaleDateString('en-CA');
     const tIdx = loadChart.findIndex((d) => d.date === today);
 
     const processed = loadChart.map((d, i) => {

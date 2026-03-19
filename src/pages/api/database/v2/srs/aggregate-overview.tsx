@@ -51,7 +51,20 @@ function isItemDue(item: Item): boolean {
   return (currentTime - lastReviewTime) >= SRS_TIME_FACTORS[srs_level];
 }
 
+function toDateString(date: Date, timeZone: string): string {
+  return date.toLocaleDateString('en-CA', { timeZone });
+}
+
 async function handleGET(req: NextApiRequest, res: NextApiResponse, userId: string) {
+  const rawTimezone = req.query.timezone;
+  let timezone = 'UTC';
+  if (rawTimezone !== undefined) {
+    if (typeof rawTimezone !== 'string' || rawTimezone.length === 0 || rawTimezone.length > 64) {
+      return res.status(400).json({ success: false, error: 'Invalid timezone' });
+    }
+    timezone = rawTimezone;
+  }
+
   try {
     const SUPABASE_URL = process.env.NEXT_SUPABASE_URL;
     const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -138,12 +151,12 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse, userId: stri
           if (item.srs?.time_created && level > 0) {
             const d = new Date(item.srs.time_created);
             if (!isNaN(d.getTime())) {
-              reviewDates.push(d.toISOString().slice(0, 10));
+              reviewDates.push(toDateString(d, timezone));
               // Compute next due date
               const timeFactor = SRS_TIME_FACTORS[level];
               if (timeFactor) {
                 const nextDue = new Date(d.getTime() + timeFactor);
-                futureDues.push({ date: nextDue.toISOString().slice(0, 10) });
+                futureDues.push({ date: toDateString(nextDue, timezone) });
               }
             }
           }
@@ -161,7 +174,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse, userId: stri
     }
 
     // Build SRS load chart data
-    const today = new Date().toISOString().slice(0, 10);
+    const today = toDateString(new Date(), timezone);
 
     // Past: reviews per day (last 30 days)
     const pastCounts: Record<string, number> = {};
@@ -180,10 +193,10 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse, userId: stri
     // Build 30-day windows: past 30 + today + future 30
     const loadChart: { date: string; reviewed: number; due: number }[] = [];
     const msPerDay = 24 * 60 * 60 * 1000;
-    const todayMs = new Date(today + 'T00:00:00').getTime();
+    const nowMs = Date.now();
 
     for (let offset = -30; offset <= 30; offset++) {
-      const d = new Date(todayMs + offset * msPerDay).toISOString().slice(0, 10);
+      const d = toDateString(new Date(nowMs + offset * msPerDay), timezone);
       loadChart.push({
         date: d,
         reviewed: pastCounts[d] || 0,
