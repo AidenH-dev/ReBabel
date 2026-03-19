@@ -418,12 +418,12 @@ export default function VocabularyDashboard() {
                       |
                     </span>
                     <StatPill
-                      value={`${recentsSets.filter((s) => s.set_type === 'vocab').length}V`}
+                      value={`${recentsSets.filter((s) => s.set_type === 'vocab').length} V`}
                       tooltip="Vocabulary sets"
                       className="ml-0.5 px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-500 font-bold"
                     />
                     <StatPill
-                      value={`${recentsSets.filter((s) => s.set_type === 'grammar').length}G`}
+                      value={`${recentsSets.filter((s) => s.set_type === 'grammar').length} G`}
                       tooltip="Grammar sets"
                       className="px-1.5 py-0.5 rounded bg-green-500/10 text-green-500 font-bold"
                     />

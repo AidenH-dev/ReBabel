@@ -26,9 +26,16 @@ export default function Home() {
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/ReBabelIcon.png"
+                alt="ReBabel"
+                width={32}
+                height={32}
+                className="rounded-lg"
+              />
               <span className="text-2xl font-bold text-[#e30a5f]">ReBabel</span>
-              <span className="ml-2 text-xs bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-2 py-1 rounded-full">
+              <span className="ml-1 text-xs bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-2 py-1 rounded-full">
                 BETA
               </span>
             </div>

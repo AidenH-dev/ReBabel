@@ -308,7 +308,7 @@ export default function Information() {
   );
 
   const Header = () => (
-    <div className="mb-6">
+    <div className="mb-6 sm:mt-6">
       <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -405,7 +405,7 @@ export default function Information() {
                 </section>*/}
 
         {/* SECTION 2: RECOMMENDED OUTSIDE RESOURCES */}
-        <section aria-labelledby="external-heading" className="mt-2">
+        <section aria-labelledby="external-heading" className="mt-2 ">
           <h2
             id="external-heading"
             className="text-lg font-semibold text-gray-900 dark:text-white mb-3"

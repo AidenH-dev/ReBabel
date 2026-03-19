@@ -31,7 +31,7 @@ import MasterItemsManagement from '@/components/pages/academy/sets/ViewSet/Items
 import PracticeOptions from '@/components/pages/academy/sets/ViewSet/PracticeOptions/MasterPracticeOptions';
 import MasterSetHeader from '@/components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader';
 import PageHeader from '@/components/ui/PageHeader';
-import { TbStack2, TbRepeat, TbRepeatOff } from 'react-icons/tb';
+import { TbStack2, TbRepeat, TbRepeatOff, TbShare2 } from 'react-icons/tb';
 import { FiEdit2, FiMoreVertical } from 'react-icons/fi';
 import { HiOutlineDownload } from 'react-icons/hi';
 
@@ -430,39 +430,48 @@ export default function ViewSet() {
           }
           actions={
             !isLoading && (
-              <div className="relative" ref={headerOptionsRef}>
+              <>
                 <button
-                  onClick={() => setShowHeaderOptions((v) => !v)}
+                  onClick={() => headerActionsRef.current?.openShareModal?.()}
                   className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
-                  title="More"
+                  title="Share Set"
                 >
-                  <FiMoreVertical className="w-4.5 h-4.5" />
+                  <TbShare2 className="w-4.5 h-4.5" />
                 </button>
-                {showHeaderOptions && (
-                  <div className="absolute right-0 dark:text-white mt-1 w-56 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
-                    <button
-                      onClick={() => {
-                        headerActionsRef.current?.openEdit?.();
-                        setShowHeaderOptions(false);
-                      }}
-                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
-                    >
-                      <FiEdit2 className="inline w-4 h-4" />
-                      Edit Set Details
-                    </button>
-                    <button
-                      onClick={() => {
-                        headerActionsRef.current?.exportCSV?.();
-                        setShowHeaderOptions(false);
-                      }}
-                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
-                    >
-                      <HiOutlineDownload className="inline w-4 h-4" />
-                      Export Set (CSV)
-                    </button>
-                  </div>
-                )}
-              </div>
+                <div className="relative" ref={headerOptionsRef}>
+                  <button
+                    onClick={() => setShowHeaderOptions((v) => !v)}
+                    className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+                    title="More"
+                  >
+                    <FiMoreVertical className="w-4.5 h-4.5" />
+                  </button>
+                  {showHeaderOptions && (
+                    <div className="absolute right-0 dark:text-white mt-1 w-56 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
+                      <button
+                        onClick={() => {
+                          headerActionsRef.current?.openEdit?.();
+                          setShowHeaderOptions(false);
+                        }}
+                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
+                      >
+                        <FiEdit2 className="inline w-4 h-4" />
+                        Edit Set Details
+                      </button>
+                      <button
+                        onClick={() => {
+                          headerActionsRef.current?.exportCSV?.();
+                          setShowHeaderOptions(false);
+                        }}
+                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
+                      >
+                        <HiOutlineDownload className="inline w-4 h-4" />
+                        Export Set (CSV)
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
             )
           }
         />

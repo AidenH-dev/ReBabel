@@ -1,9 +1,14 @@
 // components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader.jsx
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { FiEdit2, FiMoreVertical } from 'react-icons/fi';
+import { FiEdit2, FiMoreVertical, FiCopy, FiCheck } from 'react-icons/fi';
 import { HiOutlineDownload } from 'react-icons/hi';
-import { TbRepeat, TbRepeatOff } from 'react-icons/tb';
+import { TbRepeat, TbRepeatOff, TbShare2, TbLoader3 } from 'react-icons/tb';
+import dynamic from 'next/dynamic';
+const QRCode = dynamic(
+  () => import('react-qrcode-logo').then((mod) => mod.QRCode),
+  { ssr: false }
+);
 import {
   buildCSV,
   toSlug,
@@ -33,6 +38,15 @@ export default function MasterSetHeader({
   const [isDeletingSet, setIsDeletingSet] = useState(false);
   const [deleteSetError, setDeleteSetError] = useState(null);
 
+  // Share modal state
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [isGeneratingShare, setIsGeneratingShare] = useState(false);
+  const [shareUrl, setShareUrl] = useState(null);
+  const [shareToken, setShareToken] = useState(null);
+  const [shareError, setShareError] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const [isRevokingShare, setIsRevokingShare] = useState(false);
+
   // SRS settings modal state
   const [showSRSModal, setShowSRSModal] = useState(false);
   const [isSrsEnabled, setIsSrsEnabled] = useState(srsEnabled);
@@ -40,6 +54,86 @@ export default function MasterSetHeader({
   const [isSavingSRS, setIsSavingSRS] = useState(false);
   const [saveSRSError, setSaveSRSError] = useState(null);
   const [saveSRSSuccess, setSaveSRSSuccess] = useState(false);
+
+  const handleOpenShareModal = async () => {
+    setShowShareModal(true);
+    setShareError(null);
+    setCopied(false);
+    setIsGeneratingShare(true);
+
+    try {
+      const response = await fetch('/api/database/v2/sets/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ setId: setData.id, action: 'generate' }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to generate share link');
+      }
+
+      setShareUrl(result.shareUrl);
+      setShareToken(result.shareToken);
+    } catch (err) {
+      console.error('Error generating share link:', err);
+      setShareError(err.message);
+    } finally {
+      setIsGeneratingShare(false);
+    }
+  };
+
+  const handleCopyShareUrl = async () => {
+    if (!shareUrl) return;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = shareUrl;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleRevokeShare = async () => {
+    setIsRevokingShare(true);
+    setShareError(null);
+
+    try {
+      const response = await fetch('/api/database/v2/sets/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ setId: setData.id, action: 'revoke' }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to revoke share link');
+      }
+
+      setShareUrl(null);
+      setShareToken(null);
+      setShowShareModal(false);
+    } catch (err) {
+      console.error('Error revoking share link:', err);
+      setShareError(err.message);
+    } finally {
+      setIsRevokingShare(false);
+    }
+  };
+
+  const handleCloseShareModal = () => {
+    setShowShareModal(false);
+    setShareError(null);
+    setCopied(false);
+  };
 
   const handleEditSetDetails = () => {
     setEditingSet(true);
@@ -281,6 +375,7 @@ export default function MasterSetHeader({
       actionsRef.current = {
         openEdit: handleEditSetDetails,
         openSRSModal: handleOpenSRSModal,
+        openShareModal: handleOpenShareModal,
         toggleOptions: () => setShowOptions((v) => !v),
         exportCSV: handleExportCSV,
       };
@@ -366,6 +461,13 @@ export default function MasterSetHeader({
 
           {/* Action Buttons */}
           <div className="flex items-center gap-0.5 flex-shrink-0">
+            <button
+              onClick={handleOpenShareModal}
+              className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              title="Share Set"
+            >
+              <TbShare2 className="w-4 h-4" />
+            </button>
             <button
               onClick={handleEditSetDetails}
               className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -937,6 +1039,147 @@ export default function MasterSetHeader({
                   </>
                 )}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Share Set Modal */}
+      {showShareModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  <TbShare2 className="w-5 h-5 text-[#E30B5C]" />
+                  Share Set
+                </h2>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  Anyone with the link can preview and import this set
+                </p>
+              </div>
+              <button
+                onClick={handleCloseShareModal}
+                className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div className="px-6 py-5">
+              {isGeneratingShare ? (
+                <div className="flex flex-col items-center py-8 gap-4">
+                  {/* QR skeleton */}
+                  <div className="w-[160px] h-[160px] rounded-2xl bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
+                  {/* Text skeleton */}
+                  <div
+                    className="h-3 w-32 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                    style={{ animationDelay: '150ms' }}
+                  />
+                  {/* Link skeleton */}
+                  <div className="w-full flex gap-2 items-center">
+                    <div
+                      className="flex-1 h-7 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                      style={{ animationDelay: '300ms' }}
+                    />
+                    <div
+                      className="w-9 h-9 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                      style={{ animationDelay: '375ms' }}
+                    />
+                  </div>
+                </div>
+              ) : shareError ? (
+                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
+                  <strong>Error:</strong> {shareError}
+                </div>
+              ) : shareUrl ? (
+                <div className="space-y-5">
+                  {/* QR Code */}
+                  <div className="flex flex-col items-center">
+                    <div className="rounded-2xl overflow-hidden">
+                      <QRCode
+                        value={shareUrl}
+                        size={160}
+                        bgColor="transparent"
+                        fgColor={
+                          document.documentElement.classList.contains('dark')
+                            ? '#e5e7eb'
+                            : '#1f2937'
+                        }
+                        qrStyle="dots"
+                        eyeRadius={8}
+                        logoImage="/ReBabelIcon.png"
+                        logoWidth={34}
+                        logoHeight={29}
+                        logoPaddingStyle="circle"
+                        logoPadding={4}
+                        removeQrCodeBehindLogo
+                        quietZone={8}
+                      />
+                    </div>
+                    <p className="mt-2 text-xs text-gray-400 dark:text-gray-500 font-fredoka">
+                      Scan to preview this set
+                    </p>
+                  </div>
+
+                  {/* Link + copy */}
+                  <div>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        type="text"
+                        readOnly
+                        value={shareUrl}
+                        className="flex-1 px-2 py-1.5 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-[7px] leading-tight text-gray-900 dark:text-white font-mono break-all"
+                        onClick={(e) => e.target.select()}
+                      />
+                      <button
+                        onClick={handleCopyShareUrl}
+                        className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
+                          copied
+                            ? 'text-green-500 bg-green-50 dark:bg-green-900/20'
+                            : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+                        }`}
+                        title={copied ? 'Copied!' : 'Copy link'}
+                      >
+                        {copied ? (
+                          <FiCheck className="w-4.5 h-4.5" />
+                        ) : (
+                          <FiCopy className="w-4.5 h-4.5" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                    <button
+                      onClick={handleRevokeShare}
+                      disabled={isRevokingShare}
+                      className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors disabled:opacity-50 flex items-center gap-1.5"
+                    >
+                      {isRevokingShare ? (
+                        <>
+                          <TbLoader3 className="w-3.5 h-3.5 animate-spin" />
+                          Revoking...
+                        </>
+                      ) : (
+                        'Stop Sharing'
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
