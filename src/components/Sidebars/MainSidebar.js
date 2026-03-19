@@ -11,7 +11,6 @@ import {
   TbLayoutDashboard,
   TbCrown,
   TbChevronDown,
-  TbInfoSquareRounded,
 } from 'react-icons/tb';
 import Link from 'next/link';
 import { HiOutlineStar } from 'react-icons/hi2';
@@ -34,11 +33,10 @@ function MainSidebar() {
       path
     );
   const isCertificateActive = /^\/certificate/.test(path);
-  const isInformationActive = /^\/learn\/account\/information/.test(path);
+  const isResourcesActive = /^\/learn\/academy\/resources/.test(path);
   const isSubscriptionActive = /^\/learn\/account\/subscription/.test(path);
   const isSettingsActive = /^\/learn\/account\/settings/.test(path);
-  const isStudentMenuActive =
-    isInformationActive || isSubscriptionActive || isSettingsActive;
+  const isStudentMenuActive = isSubscriptionActive || isSettingsActive;
 
   // Auto-expand student menu when any child route is active
   useEffect(() => {
@@ -137,6 +135,27 @@ function MainSidebar() {
             </Link>
           </li>
 
+          <li>
+            <Link
+              href="/learn/academy/resources"
+              className={`${baseLink} ${
+                isResourcesActive
+                  ? activeLink
+                  : `${inactiveLinkLight} ${inactiveLinkDark}`
+              }`}
+              aria-current={isResourcesActive ? 'page' : undefined}
+            >
+              <TbBooks
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
+                  isResourcesActive
+                    ? 'text-[#e30a5f]'
+                    : `${inactiveIconLight} ${inactiveIconDark}`
+                }`}
+              />
+              <span className="ms-3">Resources</span>
+            </Link>
+          </li>
+
           {/*<li>
             <Link
               href="/certificate"
@@ -185,12 +204,6 @@ function MainSidebar() {
             {/* Submenu Items */}
             <ul className="mt-1 ml-4 space-y-1">
               {[
-                {
-                  href: '/learn/account/information',
-                  icon: TbInfoSquareRounded,
-                  active: isInformationActive,
-                  label: 'Information',
-                },
                 {
                   href: '/learn/account/subscription',
                   icon: BsBookmarkStar,
@@ -267,18 +280,18 @@ function MainSidebar() {
       label: 'Academy',
     },
     {
+      href: '/learn/academy/resources',
+      icon: TbBooks,
+      active: isResourcesActive,
+      label: 'Resources',
+    },
+    {
       id: 'student-menu',
       icon: FaRegUser,
       active: isStudentMenuActive,
       label: 'Account',
       isParent: true,
       children: [
-        {
-          href: '/learn/account/information',
-          icon: TbInfoSquareRounded,
-          active: isInformationActive,
-          label: 'Information',
-        },
         {
           href: '/learn/account/subscription',
           icon: BsBookmarkStar,

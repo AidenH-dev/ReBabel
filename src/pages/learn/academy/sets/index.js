@@ -11,7 +11,6 @@ import {
   FiList,
   FiPlay,
   FiEdit2,
-  FiExternalLink,
   FiClock,
   FiAlertCircle,
 } from 'react-icons/fi';
@@ -21,6 +20,7 @@ import {
   TbArrowsSort,
   TbArrowUp,
   TbArrowDown,
+  TbDownload,
 } from 'react-icons/tb';
 import PageHeader from '@/components/ui/PageHeader';
 import { MdAutorenew } from 'react-icons/md';
@@ -28,10 +28,12 @@ import { BeginnerPackPopup } from '@/components/popups/sets/newUserPopup';
 import CustomSelect from '@/components/ui/CustomSelect';
 import SetRow from '@/components/ui/SetRow';
 import { HiOutlineLightningBolt } from 'react-icons/hi';
+import { LuTextCursorInput } from 'react-icons/lu';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 import { TiChartPieOutline } from 'react-icons/ti';
 import { useUserPreferences } from '@/contexts/PreferencesContext';
 import SetsSrsOverview from '@/components/SRS/sets-srs-overview';
+import ImportByCodeModal from '@/components/sets/ImportByCodeModal';
 
 export default function VocabularyDashboard() {
   // Tabs: "srs" | "sets" | "groups"
@@ -113,6 +115,7 @@ export default function VocabularyDashboard() {
   const [isLoadingSets, setIsLoadingSets] = useState(true);
 
   const [showBeginnerPopup, setShowBeginnerPopup] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
 
   // Fast Review state
   const [totalDueItems, setTotalDueItems] = useState(0);
@@ -376,7 +379,27 @@ export default function VocabularyDashboard() {
       <main className="ml-auto flex-1 flex flex-col h-screen overflow-hidden bg-gray-50 dark:bg-[#141f25]">
         {/* Desktop sticky header with inline stats */}
         <PageHeader
-          title="Sets"
+          title={
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Sets
+              </h1>
+              <button
+                onClick={() => setShowImportModal(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:bg-white dark:hover:bg-[#0f1a1f] hover:text-[#e30a5f] hover:shadow-sm hover:border-black/15 dark:hover:border-white/15 active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-all"
+              >
+                <TbDownload className="text-base" />
+                <span>Import</span>
+              </button>
+              <Link
+                href="/learn/academy/sets/create"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:bg-white dark:hover:bg-[#0f1a1f] hover:text-[#e30a5f] hover:shadow-sm hover:border-black/15 dark:hover:border-white/15 active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-all"
+              >
+                <FaPlus className="text-xs" />
+                <span>Create</span>
+              </Link>
+            </div>
+          }
           meta={
             isLoadingStats ? (
               <div className="flex items-center gap-3 ml-1 pl-3 border-l border-gray-300 dark:border-gray-600">
@@ -448,11 +471,11 @@ export default function VocabularyDashboard() {
                 </button>
               )}
               <Link
-                href="/learn/academy/sets/create"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40 transition-all"
+                href="/learn/academy/practice"
+                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white transition-all"
               >
-                <FaPlus className="text-xs" />
-                <span>Create Set</span>
+                <LuTextCursorInput className="text-base" />
+                <span>Study Translating</span>
               </Link>
             </>
           }
@@ -467,6 +490,10 @@ export default function VocabularyDashboard() {
               window.location.reload();
             }}
             userProfile={userProfile}
+          />
+          <ImportByCodeModal
+            isOpen={showImportModal}
+            onClose={() => setShowImportModal(false)}
           />
 
           <Head>
@@ -550,7 +577,7 @@ export default function VocabularyDashboard() {
                 <div className="flex flex-col gap-4">
                   {/* Toolbar — desktop: single row / mobile: stats + search then controls */}
                   <div className="flex flex-col gap-2">
-                    {/* Mobile stats */}
+                    {/* Mobile stats + import/create actions */}
                     {!isLoadingStats && (
                       <div className="sm:hidden flex items-center gap-3 text-xs text-black/50 dark:text-white/50 pb-2.5 mb-0.5 border-b border-black/10 dark:border-white/10">
                         <span>
@@ -577,6 +604,23 @@ export default function VocabularyDashboard() {
                           </span>{' '}
                           SRS active
                         </span>
+                        <div className="flex-1" />
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => setShowImportModal(true)}
+                            className="p-2 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:text-[#e30a5f] transition"
+                            aria-label="Import by code"
+                          >
+                            <TbDownload className="w-3.5 h-3.5" />
+                          </button>
+                          <Link
+                            href="/learn/academy/sets/create"
+                            className="p-2 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:text-[#e30a5f] transition"
+                            aria-label="Create set"
+                          >
+                            <FaPlus className="w-3 h-3" />
+                          </Link>
+                        </div>
                       </div>
                     )}
 
@@ -613,7 +657,7 @@ export default function VocabularyDashboard() {
                         )}
                       </div>
 
-                      {/* Mobile view toggle — next to search */}
+                      {/* Mobile view toggle */}
                       <div className="flex sm:hidden items-center gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1 flex-shrink-0">
                         <button
                           onClick={() => setView('grid')}

@@ -7,6 +7,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { TbStack2 } from 'react-icons/tb';
 import { FiSearch } from 'react-icons/fi';
 import { createClient } from '@supabase/supabase-js';
+import { toSlug } from '@/lib/slug';
 
 const SENSITIVE_ITEM_FIELDS = [
   'owner',
@@ -25,7 +26,16 @@ function stripSensitiveFields(obj, fields) {
 }
 
 export async function getServerSideProps(context) {
-  const { token } = context.params;
+  const { params } = context.params;
+
+  if (!params || params.length === 0) {
+    return {
+      props: { error: 'Missing or invalid share token', token: '' },
+    };
+  }
+
+  const token = params[0];
+  const slug = params[1] || null;
 
   if (!token || token.trim().length === 0) {
     return {
@@ -64,12 +74,24 @@ export async function getServerSideProps(context) {
       stripSensitiveFields(item, SENSITIVE_ITEM_FIELDS)
     );
 
+    // Redirect to correct slug if missing or wrong
+    const correctSlug = toSlug(cleanSet.title || 'set');
+    if (slug !== correctSlug) {
+      return {
+        redirect: {
+          destination: `/shared/sets/${token}/${correctSlug}`,
+          permanent: true,
+        },
+      };
+    }
+
     return {
       props: {
         setData: cleanSet,
         items: cleanItems,
         itemCount: cleanItems.length,
         token,
+        slug: correctSlug,
         error: null,
       },
     };
@@ -84,6 +106,7 @@ export default function SharedSetPage({
   items: initialItems,
   itemCount: initialItemCount,
   token,
+  slug,
   error: serverError,
 }) {
   const router = useRouter();
@@ -101,7 +124,9 @@ export default function SharedSetPage({
   }, [user, isUserLoading, token, router]);
 
   const handleSignup = () => {
-    const returnTo = `/shared/sets/${token}`;
+    const returnTo = slug
+      ? `/shared/sets/${token}/${slug}`
+      : `/shared/sets/${token}`;
     router.push(`/api/auth/login?returnTo=${encodeURIComponent(returnTo)}`);
   };
 
@@ -129,7 +154,9 @@ export default function SharedSetPage({
     : setData
       ? `A Japanese ${setType === 'vocab' ? 'vocabulary' : setType === 'grammar' ? 'grammar' : 'study'} set with ${itemCount} items. Import free on ReBabel.`
       : 'A shared Japanese study set. Import it to your ReBabel account and start studying with SRS.';
-  const pageUrl = `https://www.rebabel.org/shared/sets/${token}`;
+  const pageUrl = slug
+    ? `https://www.rebabel.org/shared/sets/${token}/${slug}`
+    : `https://www.rebabel.org/shared/sets/${token}`;
   const ogImageUrl = 'https://www.rebabel.org/ReBabelLogo.png';
 
   return (

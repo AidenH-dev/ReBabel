@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import crypto from 'crypto';
+import { toSlug } from '@/lib/slug';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
@@ -14,6 +15,24 @@ const EXPIRY_OPTIONS: Record<string, number | null> = {
   '30d': 30,
   'never': null,
 };
+
+const SHORT_TOKEN_LENGTH = 7;
+const SHORT_TOKEN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
+const MAX_TOKEN_RETRIES = 5;
+
+export function generateShortToken(): string {
+  const bytes = crypto.randomBytes(SHORT_TOKEN_LENGTH);
+  let token = '';
+  for (let i = 0; i < SHORT_TOKEN_LENGTH; i++) {
+    token += SHORT_TOKEN_CHARS[bytes[i] % SHORT_TOKEN_CHARS.length];
+  }
+  return token;
+}
+
+function buildShareUrl(baseUrl: string, token: string, title?: string): string {
+  const slug = toSlug(title || 'set');
+  return `${baseUrl}/shared/sets/${token}/${slug}`;
+}
 
 interface ApiResponse {
   success: boolean;
@@ -88,6 +107,8 @@ export default withApiAuthRequired(async function handler(
       });
     }
 
+    const setTitle = parsed?.set?.title;
+
     if (action === 'revoke') {
       await supabase
         .schema('v1_kvs_rebabel')
@@ -120,13 +141,36 @@ export default withApiAuthRequired(async function handler(
       return res.status(200).json({
         success: true,
         shareToken: existingToken,
-        shareUrl: `${baseUrl}/shared/sets/${existingToken}`,
+        shareUrl: buildShareUrl(baseUrl, existingToken, setTitle),
         message: 'Existing share link returned'
       });
     }
 
-    // Generate new token
-    const shareToken = crypto.randomUUID();
+    // Generate new short token with collision check
+    let shareToken = '';
+    for (let attempt = 0; attempt < MAX_TOKEN_RETRIES; attempt++) {
+      const candidate = generateShortToken();
+      const { data: collision } = await supabase
+        .schema('v1_kvs_rebabel')
+        .rpc('get_set_by_share_token', { token: candidate });
+      if (!collision) {
+        shareToken = candidate;
+        break;
+      }
+      // If data came back as an empty/null parsed result, no collision
+      const collisionParsed = typeof collision === 'string' ? JSON.parse(collision) : collision;
+      if (!collisionParsed || !collisionParsed.set) {
+        shareToken = candidate;
+        break;
+      }
+    }
+
+    if (!shareToken) {
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to generate unique share token. Please try again.'
+      });
+    }
 
     // Compute expiration
     const expiryDays = EXPIRY_OPTIONS[expiresIn || 'never'];
@@ -159,7 +203,7 @@ export default withApiAuthRequired(async function handler(
     return res.status(200).json({
       success: true,
       shareToken,
-      shareUrl: `${baseUrl}/shared/sets/${shareToken}`,
+      shareUrl: buildShareUrl(baseUrl, shareToken, setTitle),
       expiresAt: expiresAtStr || null,
       message: 'Share link generated'
     });

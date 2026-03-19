@@ -13,7 +13,7 @@ import {
   FaCalendarAlt,
   FaPlus,
 } from 'react-icons/fa';
-import { TbCards, TbRepeat } from 'react-icons/tb';
+import { TbCards, TbRepeat, TbBooks } from 'react-icons/tb';
 import { FiPlay, FiChevronRight } from 'react-icons/fi';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 import { HiOutlineLightningBolt } from 'react-icons/hi';
@@ -705,11 +705,11 @@ export default function DashboardPage() {
                 </Link>
               )}
               <Link
-                href="/learn/academy/sets/create"
+                href="/learn/academy/resources"
                 className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40 transition-all"
               >
-                <FaPlus className="text-xs" />
-                <span>Create Set</span>
+                <TbBooks className="text-base" />
+                <span>Guide</span>
               </Link>
             </>
           }
