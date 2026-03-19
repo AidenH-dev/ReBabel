@@ -1017,7 +1017,7 @@ export default function DashboardPage() {
 
               {/* Quick Actions - Mobile only */}
               <div className="md:hidden flex gap-2">
-                {!dueLoading && totalDueItems > 0 && false ? (
+                {!dueLoading && totalDueItems > 0 ? (
                   <Link
                     href="/learn/academy/sets/fast-review"
                     className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white transition-all"
