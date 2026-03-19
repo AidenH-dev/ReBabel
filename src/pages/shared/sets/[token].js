@@ -4,19 +4,94 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { TbLoader3, TbStack2 } from 'react-icons/tb';
+import { TbStack2 } from 'react-icons/tb';
 import { FiSearch } from 'react-icons/fi';
+import { createClient } from '@supabase/supabase-js';
 
-export default function SharedSetPage() {
+const SENSITIVE_ITEM_FIELDS = [
+  'owner',
+  'srs_level',
+  'srs_reviewed_last',
+  'known_status',
+];
+const SENSITIVE_SET_FIELDS = ['owner'];
+
+function stripSensitiveFields(obj, fields) {
+  const clean = { ...obj };
+  for (const f of fields) {
+    delete clean[f];
+  }
+  return clean;
+}
+
+export async function getServerSideProps(context) {
+  const { token } = context.params;
+
+  if (!token || token.trim().length === 0) {
+    return {
+      props: { error: 'Missing or invalid share token', token: token || '' },
+    };
+  }
+
+  try {
+    const supabase = createClient(
+      process.env.NEXT_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+
+    const { data, error } = await supabase
+      .schema('v1_kvs_rebabel')
+      .rpc('get_set_by_share_token', { token: token.trim() });
+
+    if (error) {
+      console.error('RPC error:', error);
+      return { props: { error: 'Failed to load shared set', token } };
+    }
+
+    if (!data) {
+      return {
+        props: { error: 'This shared set link is no longer active.', token },
+      };
+    }
+
+    const parsed = typeof data === 'string' ? JSON.parse(data) : data;
+
+    const cleanSet = stripSensitiveFields(
+      parsed.set || {},
+      SENSITIVE_SET_FIELDS
+    );
+    const cleanItems = (parsed.items || []).map((item) =>
+      stripSensitiveFields(item, SENSITIVE_ITEM_FIELDS)
+    );
+
+    return {
+      props: {
+        setData: cleanSet,
+        items: cleanItems,
+        itemCount: cleanItems.length,
+        token,
+        error: null,
+      },
+    };
+  } catch (err) {
+    console.error('Shared set SSR error:', err);
+    return { props: { error: 'Failed to load shared set', token } };
+  }
+}
+
+export default function SharedSetPage({
+  setData,
+  items: initialItems,
+  itemCount: initialItemCount,
+  token,
+  error: serverError,
+}) {
   const router = useRouter();
-  const { token } = router.query;
   const { user, isLoading: isUserLoading } = useUser();
 
-  const [setData, setSetData] = useState(null);
-  const [items, setItems] = useState([]);
-  const [itemCount, setItemCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const items = initialItems || [];
+  const itemCount = initialItemCount || 0;
+  const error = serverError;
 
   // Redirect authenticated users to the in-app import page
   useEffect(() => {
@@ -24,45 +99,6 @@ export default function SharedSetPage() {
       router.replace(`/learn/academy/sets/import/${token}`);
     }
   }, [user, isUserLoading, token, router]);
-
-  useEffect(() => {
-    if (!token) return;
-
-    const fetchSharedSet = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await fetch(`/api/shared/sets/${token}`);
-
-        if (response.status === 404) {
-          setError('This shared set link is no longer active.');
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error('Failed to load shared set');
-        }
-
-        const result = await response.json();
-
-        if (!result.success || !result.data) {
-          throw new Error(result.error || 'Failed to load shared set');
-        }
-
-        setSetData(result.data.set);
-        setItems(result.data.items || []);
-        setItemCount(result.data.item_count || 0);
-      } catch (err) {
-        console.error('Error fetching shared set:', err);
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchSharedSet();
-  }, [token]);
 
   const handleSignup = () => {
     const returnTo = `/shared/sets/${token}`;
@@ -88,9 +124,13 @@ export default function SharedSetPage() {
   const pageTitle = setData
     ? `${setData.title} — Study on ReBabel`
     : 'Shared Study Set — ReBabel';
-  const pageDescription =
-    setData?.description ||
-    `A shared Japanese study set with ${itemCount} items. Import it to your ReBabel account and start studying with SRS.`;
+  const pageDescription = setData?.description
+    ? setData.description
+    : setData
+      ? `A Japanese ${setType === 'vocab' ? 'vocabulary' : setType === 'grammar' ? 'grammar' : 'study'} set with ${itemCount} items. Import free on ReBabel.`
+      : 'A shared Japanese study set. Import it to your ReBabel account and start studying with SRS.';
+  const pageUrl = `https://www.rebabel.org/shared/sets/${token}`;
+  const ogImageUrl = 'https://www.rebabel.org/ReBabelLogo.png';
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
@@ -100,10 +140,13 @@ export default function SharedSetPage() {
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://www.rebabel.org/og-image.png"
-        />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:site_name" content="ReBabel" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content={ogImageUrl} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -137,74 +180,7 @@ export default function SharedSetPage() {
       </nav>
 
       <main className="flex-1 min-h-0 flex flex-col bg-gradient-to-b from-white to-gray-50 mt-16">
-        {isLoading ? (
-          <div className="flex-1 min-h-0 flex flex-col px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto w-full flex-1 min-h-0 flex flex-col">
-              {/* Skeleton hero */}
-              <div className="pt-6 pb-2 flex-shrink-0">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="h-4 w-16 rounded-full bg-gray-200 animate-pulse" />
-                      <div
-                        className="h-4 w-20 rounded-full bg-gray-200 animate-pulse"
-                        style={{ animationDelay: '75ms' }}
-                      />
-                      <div
-                        className="h-4 w-14 rounded bg-gray-200 animate-pulse"
-                        style={{ animationDelay: '150ms' }}
-                      />
-                    </div>
-                    <div
-                      className="h-8 w-64 rounded bg-gray-200 animate-pulse"
-                      style={{ animationDelay: '200ms' }}
-                    />
-                  </div>
-                  <div
-                    className="h-9 w-36 rounded-lg bg-gray-200 animate-pulse flex-shrink-0"
-                    style={{ animationDelay: '250ms' }}
-                  />
-                </div>
-              </div>
-              {/* Skeleton search */}
-              <div className="flex items-center gap-3 mb-3 flex-shrink-0">
-                <div
-                  className="h-9 flex-1 rounded-lg bg-gray-100 animate-pulse"
-                  style={{ animationDelay: '300ms' }}
-                />
-                <div
-                  className="h-3 w-16 rounded bg-gray-100 animate-pulse"
-                  style={{ animationDelay: '350ms' }}
-                />
-              </div>
-              {/* Skeleton items */}
-              <div className="bg-white border border-gray-200 rounded-xl overflow-hidden flex-1 min-h-0">
-                <div className="p-2 space-y-1.5">
-                  {Array.from({ length: 10 }).map((_, i) => (
-                    <div key={i} className="bg-gray-50 rounded-lg p-2">
-                      <div className="w-full">
-                        <div
-                          className="h-4 rounded bg-gray-200 animate-pulse mb-1"
-                          style={{
-                            width: `${55 + ((i * 17) % 30)}%`,
-                            animationDelay: `${400 + i * 50}ms`,
-                          }}
-                        />
-                        <div
-                          className="h-3 rounded bg-gray-100 animate-pulse"
-                          style={{
-                            width: `${25 + ((i * 13) % 20)}%`,
-                            animationDelay: `${450 + i * 50}ms`,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : error ? (
+        {error ? (
           <div className="text-center px-4 flex-1 flex flex-col items-center justify-center">
             <TbStack2 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -218,7 +194,7 @@ export default function SharedSetPage() {
               Go to ReBabel
             </Link>
           </div>
-        ) : (
+        ) : setData ? (
           <>
             {/* Hero section — compact */}
             <section className="px-4 sm:px-6 lg:px-8 pt-6 pb-2 flex-shrink-0">
@@ -386,7 +362,7 @@ export default function SharedSetPage() {
               </div>
             </section>
           </>
-        )}
+        ) : null}
       </main>
 
       {/* Footer */}
