@@ -41,8 +41,11 @@ export default function MasterSetHeader({
   // Share modal state
   const [showShareModal, setShowShareModal] = useState(false);
   const [isGeneratingShare, setIsGeneratingShare] = useState(false);
+  const [showShareResult, setShowShareResult] = useState(false);
   const [shareUrl, setShareUrl] = useState(null);
   const [shareToken, setShareToken] = useState(null);
+  const [shareExpiresAt, setShareExpiresAt] = useState(null);
+  const [shareExpiry, setShareExpiry] = useState('7d');
   const [shareError, setShareError] = useState(null);
   const [copied, setCopied] = useState(false);
   const [isRevokingShare, setIsRevokingShare] = useState(false);
@@ -60,12 +63,18 @@ export default function MasterSetHeader({
     setShareError(null);
     setCopied(false);
     setIsGeneratingShare(true);
+    setShowShareResult(false);
 
     try {
+      const startTime = Date.now();
       const response = await fetch('/api/database/v2/sets/share', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ setId: setData.id, action: 'generate' }),
+        body: JSON.stringify({
+          setId: setData.id,
+          action: 'generate',
+          expiresIn: shareExpiry,
+        }),
       });
       const result = await response.json();
 
@@ -75,11 +84,68 @@ export default function MasterSetHeader({
 
       setShareUrl(result.shareUrl);
       setShareToken(result.shareToken);
+      setShareExpiresAt(result.expiresAt);
+
+      // Ensure animation plays for at least 2s
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, 2000 - elapsed);
+      await new Promise((r) => setTimeout(r, remaining));
     } catch (err) {
       console.error('Error generating share link:', err);
       setShareError(err.message);
     } finally {
       setIsGeneratingShare(false);
+      setShowShareResult(true);
+    }
+  };
+
+  const handleRegenerateWithExpiry = async (newExpiry) => {
+    setShareExpiry(newExpiry);
+    setShareError(null);
+    setIsGeneratingShare(true);
+    setShowShareResult(false);
+
+    try {
+      const startTime = Date.now();
+
+      // Revoke existing token first
+      await fetch('/api/database/v2/sets/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ setId: setData.id, action: 'revoke' }),
+      });
+
+      // Generate new one with the new expiry
+      const response = await fetch('/api/database/v2/sets/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          setId: setData.id,
+          action: 'generate',
+          expiresIn: newExpiry,
+        }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to regenerate share link');
+      }
+
+      setShareUrl(result.shareUrl);
+      setShareToken(result.shareToken);
+      setShareExpiresAt(result.expiresAt);
+      setCopied(false);
+
+      // Ensure animation plays for at least 2s
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, 2000 - elapsed);
+      await new Promise((r) => setTimeout(r, remaining));
+    } catch (err) {
+      console.error('Error regenerating share link:', err);
+      setShareError(err.message);
+    } finally {
+      setIsGeneratingShare(false);
+      setShowShareResult(true);
     }
   };
 
@@ -133,6 +199,7 @@ export default function MasterSetHeader({
     setShowShareModal(false);
     setShareError(null);
     setCopied(false);
+    setShareExpiresAt(null);
   };
 
   const handleEditSetDetails = () => {
@@ -1079,93 +1146,320 @@ export default function MasterSetHeader({
             </div>
 
             <div className="px-6 py-5">
-              {isGeneratingShare ? (
-                <div className="flex flex-col items-center py-8 gap-4">
-                  {/* QR skeleton */}
-                  <div className="w-[160px] h-[160px] rounded-2xl bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
-                  {/* Text skeleton */}
-                  <div
-                    className="h-3 w-32 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                    style={{ animationDelay: '150ms' }}
-                  />
-                  {/* Link skeleton */}
-                  <div className="w-full flex gap-2 items-center">
-                    <div
-                      className="flex-1 h-7 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                      style={{ animationDelay: '300ms' }}
-                    />
-                    <div
-                      className="w-9 h-9 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                      style={{ animationDelay: '375ms' }}
-                    />
-                  </div>
-                </div>
-              ) : shareError ? (
+              {!shareUrl && !isGeneratingShare && shareError ? (
                 <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
                   <strong>Error:</strong> {shareError}
                 </div>
-              ) : shareUrl ? (
+              ) : shareUrl || isGeneratingShare ? (
                 <div className="space-y-5">
-                  {/* QR Code */}
+                  {/* QR Code / generating animation */}
                   <div className="flex flex-col items-center">
-                    <div className="rounded-2xl overflow-hidden">
-                      <QRCode
-                        value={shareUrl}
-                        size={160}
-                        bgColor="transparent"
-                        fgColor={
-                          document.documentElement.classList.contains('dark')
-                            ? '#e5e7eb'
-                            : '#1f2937'
-                        }
-                        qrStyle="dots"
-                        eyeRadius={8}
-                        logoImage="/ReBabelIcon.png"
-                        logoWidth={34}
-                        logoHeight={29}
-                        logoPaddingStyle="circle"
-                        logoPadding={4}
-                        removeQrCodeBehindLogo
-                        quietZone={8}
-                      />
+                    <div className="w-[176px] h-[176px] rounded-2xl overflow-hidden relative flex items-center justify-center">
+                      {isGeneratingShare ? (
+                        <>
+                          <style
+                            dangerouslySetInnerHTML={{
+                              __html: `
+                            @keyframes dotFlux {
+                              0% { transform: scale(0); opacity: 0; }
+                              15% { transform: scale(1); opacity: 0.8; }
+                              30% { transform: scale(0.1); opacity: 0.05; }
+                              60% { transform: scale(0.7); opacity: 0.5; }
+                              80% { transform: scale(0); opacity: 0; }
+                              100% { transform: scale(0); opacity: 0; }
+                            }
+                            @keyframes shimmerSlide {
+                              0% { transform: translateX(-100%); }
+                              100% { transform: translateX(100%); }
+                            }
+                            @keyframes finderPulse {
+                              0%, 100% { opacity: 0.4; }
+                              50% { opacity: 0.8; }
+                            }
+                          `,
+                            }}
+                          />
+                          <div className="absolute inset-0">
+                            {/* Corner finder patterns */}
+                            {(() => {
+                              const isDark =
+                                document.documentElement.classList.contains(
+                                  'dark'
+                                );
+                              const finderColor = isDark
+                                ? 'rgba(255,255,255,0.25)'
+                                : 'rgba(0,0,0,0.18)';
+                              const finderStyle = {
+                                position: 'absolute',
+                                width: 30,
+                                height: 30,
+                                borderRadius: 6,
+                                border: `3px solid ${finderColor}`,
+                                animation:
+                                  'finderPulse 2s ease-in-out infinite',
+                              };
+                              const innerStyle = {
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 13,
+                                height: 13,
+                                borderRadius: 3,
+                                backgroundColor: finderColor,
+                              };
+                              return (
+                                <>
+                                  <div
+                                    style={{ ...finderStyle, top: 4, left: 4 }}
+                                  >
+                                    <div style={innerStyle} />
+                                  </div>
+                                  <div
+                                    style={{
+                                      ...finderStyle,
+                                      top: 4,
+                                      right: 4,
+                                      animationDelay: '0.3s',
+                                    }}
+                                  >
+                                    <div style={innerStyle} />
+                                  </div>
+                                  <div
+                                    style={{
+                                      ...finderStyle,
+                                      bottom: 4,
+                                      left: 4,
+                                      animationDelay: '0.6s',
+                                    }}
+                                  >
+                                    <div style={innerStyle} />
+                                  </div>
+                                </>
+                              );
+                            })()}
+                            {/* Center logo */}
+                            <div
+                              style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 42,
+                                height: 42,
+                                borderRadius: '50%',
+                                backgroundColor: 'transparent',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                zIndex: 2,
+                              }}
+                            >
+                              <img
+                                src="/ReBabelIcon.png"
+                                alt=""
+                                style={{
+                                  width: 30,
+                                  height: 25,
+                                  objectFit: 'contain',
+                                }}
+                              />
+                            </div>
+                            {/* Dot grid */}
+                            <div
+                              style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(23, 1fr)',
+                                gap: 1,
+                                width: '100%',
+                                height: '100%',
+                                padding: 4,
+                              }}
+                            >
+                              {Array.from({ length: 529 }).map((_, i) => {
+                                const row = Math.floor(i / 23);
+                                const col = i % 23;
+                                const inTopLeft = row < 5 && col < 5;
+                                const inTopRight = row < 5 && col > 17;
+                                const inBottomLeft = row > 17 && col < 5;
+                                // Skip dots behind center logo
+                                const inCenter =
+                                  row >= 9 &&
+                                  row <= 13 &&
+                                  col >= 9 &&
+                                  col <= 13;
+                                if (
+                                  inTopLeft ||
+                                  inTopRight ||
+                                  inBottomLeft ||
+                                  inCenter
+                                )
+                                  return <div key={i} />;
+                                const isDark =
+                                  document.documentElement.classList.contains(
+                                    'dark'
+                                  );
+                                const duration = 1.0 + Math.random() * 1.2;
+                                const delay = Math.random() * 2.0;
+                                return (
+                                  <div
+                                    key={i}
+                                    style={{
+                                      width: '100%',
+                                      aspectRatio: '1',
+                                      borderRadius: '50%',
+                                      backgroundColor: isDark
+                                        ? 'rgba(255,255,255,0.12)'
+                                        : 'rgba(0,0,0,0.08)',
+                                      animation: `dotFlux ${duration}s ease-in-out infinite`,
+                                      animationDelay: `${delay}s`,
+                                    }}
+                                  />
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </>
+                      ) : showShareResult && shareUrl ? (
+                        <QRCode
+                          value={shareUrl}
+                          size={160}
+                          bgColor="transparent"
+                          fgColor={
+                            document.documentElement.classList.contains('dark')
+                              ? '#e5e7eb'
+                              : '#1f2937'
+                          }
+                          qrStyle="dots"
+                          eyeRadius={8}
+                          logoImage="/ReBabelIcon.png"
+                          logoWidth={34}
+                          logoHeight={29}
+                          logoPaddingStyle="circle"
+                          logoPadding={4}
+                          removeQrCodeBehindLogo
+                          quietZone={8}
+                        />
+                      ) : null}
                     </div>
-                    <p className="mt-2 text-xs text-gray-400 dark:text-gray-500 font-fredoka">
-                      Scan to preview this set
+                    <p className="mt-2 text-xs font-fredoka h-4">
+                      {isGeneratingShare ? (
+                        <span className="text-[#E30B5C] dark:text-[#f41567]">
+                          Generating link...
+                        </span>
+                      ) : showShareResult ? (
+                        <span className="text-gray-400 dark:text-gray-500">
+                          Scan to preview this set
+                        </span>
+                      ) : null}
                     </p>
                   </div>
 
                   {/* Link + copy */}
-                  <div>
-                    <div className="flex gap-2 items-center">
-                      <input
-                        type="text"
-                        readOnly
-                        value={shareUrl}
-                        className="flex-1 px-2 py-1.5 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-[7px] leading-tight text-gray-900 dark:text-white font-mono break-all"
-                        onClick={(e) => e.target.select()}
-                      />
-                      <button
-                        onClick={handleCopyShareUrl}
-                        className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
-                          copied
-                            ? 'text-green-500 bg-green-50 dark:bg-green-900/20'
-                            : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
-                        }`}
-                        title={copied ? 'Copied!' : 'Copy link'}
+                  <div className="flex gap-2 items-center h-9">
+                    {isGeneratingShare ? (
+                      <div
+                        className="flex-1 h-full rounded-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden relative"
+                        style={{
+                          backgroundColor:
+                            document.documentElement.classList.contains('dark')
+                              ? 'rgba(255,255,255,0.02)'
+                              : 'rgba(0,0,0,0.02)',
+                        }}
                       >
-                        {copied ? (
-                          <FiCheck className="w-4.5 h-4.5" />
-                        ) : (
-                          <FiCopy className="w-4.5 h-4.5" />
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            background:
+                              document.documentElement.classList.contains(
+                                'dark'
+                              )
+                                ? 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)'
+                                : 'linear-gradient(90deg, transparent, rgba(0,0,0,0.04), transparent)',
+                            animation: 'shimmerSlide 1.5s ease-in-out infinite',
+                          }}
+                        />
+                      </div>
+                    ) : showShareResult ? (
+                      <>
+                        <input
+                          type="text"
+                          readOnly
+                          value={shareUrl}
+                          className="flex-1 h-full px-2 py-1.5 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-[7px] leading-tight text-gray-900 dark:text-white font-mono break-all"
+                          onClick={(e) => e.target.select()}
+                        />
+                        <button
+                          onClick={handleCopyShareUrl}
+                          className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
+                            copied
+                              ? 'text-green-500 bg-green-50 dark:bg-green-900/20'
+                              : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+                          }`}
+                          title={copied ? 'Copied!' : 'Copy link'}
+                        >
+                          {copied ? (
+                            <FiCheck className="w-4.5 h-4.5" />
+                          ) : (
+                            <FiCopy className="w-4.5 h-4.5" />
+                          )}
+                        </button>
+                      </>
+                    ) : null}
+                  </div>
+
+                  {/* Expiration — always visible */}
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-1.5">
+                      Link expires
+                      {shareExpiresAt && !isGeneratingShare && (
+                        <span className="ml-1 font-normal text-gray-400 dark:text-gray-500">
+                          —{' '}
+                          {new Date(shareExpiresAt).toLocaleDateString(
+                            undefined,
+                            { month: 'short', day: 'numeric', year: 'numeric' }
+                          )}
+                        </span>
+                      )}
+                      {!shareExpiresAt &&
+                        shareExpiry === 'never' &&
+                        !isGeneratingShare && (
+                          <span className="ml-1 font-normal text-gray-400 dark:text-gray-500">
+                            — never
+                          </span>
                         )}
-                      </button>
+                    </label>
+                    <div className="flex gap-1.5">
+                      {[
+                        { value: '1d', label: '1 day' },
+                        { value: '7d', label: '7 days' },
+                        { value: '30d', label: '30 days' },
+                        { value: 'never', label: 'Never' },
+                      ].map((opt) => (
+                        <button
+                          key={opt.value}
+                          onClick={() => {
+                            if (opt.value !== shareExpiry) {
+                              handleRegenerateWithExpiry(opt.value);
+                            }
+                          }}
+                          disabled={isGeneratingShare}
+                          className={`px-2.5 py-1 text-[10px] font-medium rounded-md transition-colors disabled:opacity-50 ${
+                            shareExpiry === opt.value
+                              ? 'bg-[#E30B5C] text-white'
+                              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
                     </div>
                   </div>
 
                   <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
                     <button
                       onClick={handleRevokeShare}
-                      disabled={isRevokingShare}
+                      disabled={isRevokingShare || isGeneratingShare}
                       className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors disabled:opacity-50 flex items-center gap-1.5"
                     >
                       {isRevokingShare ? (

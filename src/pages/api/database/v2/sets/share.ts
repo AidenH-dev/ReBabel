@@ -8,10 +8,18 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+const EXPIRY_OPTIONS: Record<string, number | null> = {
+  '1d': 1,
+  '7d': 7,
+  '30d': 30,
+  'never': null,
+};
+
 interface ApiResponse {
   success: boolean;
   shareToken?: string | null;
   shareUrl?: string | null;
+  expiresAt?: string | null;
   error?: string;
   message?: string;
 }
@@ -36,7 +44,7 @@ export default withApiAuthRequired(async function handler(
   }
 
   try {
-    const { setId, action } = req.body;
+    const { setId, action, expiresIn } = req.body;
 
     if (!setId || typeof setId !== 'string') {
       return res.status(400).json({
@@ -49,6 +57,14 @@ export default withApiAuthRequired(async function handler(
       return res.status(400).json({
         success: false,
         error: "action must be 'generate' or 'revoke'"
+      });
+    }
+
+    // Validate expiresIn if provided
+    if (expiresIn && !EXPIRY_OPTIONS.hasOwnProperty(expiresIn)) {
+      return res.status(400).json({
+        success: false,
+        error: "expiresIn must be '1d', '7d', '30d', or 'never'"
       });
     }
 
@@ -73,18 +89,18 @@ export default withApiAuthRequired(async function handler(
     }
 
     if (action === 'revoke') {
-      // Set share_token to empty string to effectively remove it
       await supabase
         .schema('v1_kvs_rebabel')
         .rpc('update_set_by_id', {
           entity_uuid: setId,
-          json_updates: JSON.stringify({ share_token: '' })
+          json_updates: JSON.stringify({ share_token: '', share_expires_at: '' })
         });
 
       return res.status(200).json({
         success: true,
         shareToken: null,
         shareUrl: null,
+        expiresAt: null,
         message: 'Share link revoked'
       });
     }
@@ -112,11 +128,23 @@ export default withApiAuthRequired(async function handler(
     // Generate new token
     const shareToken = crypto.randomUUID();
 
+    // Compute expiration
+    const expiryDays = EXPIRY_OPTIONS[expiresIn || 'never'];
+    let expiresAtStr = '';
+    if (expiryDays !== null && expiryDays !== undefined) {
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + expiryDays);
+      expiresAtStr = expiresAt.toISOString();
+    }
+
     const { error: updateError } = await supabase
       .schema('v1_kvs_rebabel')
       .rpc('update_set_by_id', {
         entity_uuid: setId,
-        json_updates: JSON.stringify({ share_token: shareToken })
+        json_updates: JSON.stringify({
+          share_token: shareToken,
+          share_expires_at: expiresAtStr
+        })
       });
 
     if (updateError) {
@@ -132,6 +160,7 @@ export default withApiAuthRequired(async function handler(
       success: true,
       shareToken,
       shareUrl: `${baseUrl}/shared/sets/${shareToken}`,
+      expiresAt: expiresAtStr || null,
       message: 'Share link generated'
     });
 
