@@ -50,8 +50,11 @@ export default function SetFlashcards() {
   const [cardConfidence, setCardConfidence] = useState({});
 
   // ============ ANALYTICS ============
-  const { start: startAnalyticsSession, finish: finishAnalyticsSession } =
-    useAnalyticsSession('flashcards');
+  const {
+    start: startAnalyticsSession,
+    finish: finishAnalyticsSession,
+    abort: abortAnalyticsSession,
+  } = useAnalyticsSession('flashcards');
   const currentIndexRef = useRef(0);
 
   const markSetStudied = async (setId) => {
@@ -237,6 +240,12 @@ export default function SetFlashcards() {
   }, [currentIndex, slideCard]);
 
   const handleExit = useCallback(() => {
+    abortAnalyticsSession();
+    router.push(`/learn/academy/sets/study/${id}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, id]);
+
+  const handleFinishSession = useCallback(() => {
     finishAnalyticsSession(currentIndexRef.current + 1);
     markSetStudied(id);
     router.push(`/learn/academy/sets/study/${id}`);
@@ -807,7 +816,7 @@ export default function SetFlashcards() {
                   </button>
                 ) : (
                   <button
-                    onClick={handleExit}
+                    onClick={handleFinishSession}
                     className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-all active:scale-95"
                   >
                     Finish Session
