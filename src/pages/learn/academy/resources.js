@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import MainSidebar from '@/components/Sidebars/MainSidebar';
 import PageHeader from '@/components/ui/PageHeader';
 import SRSGuideContent from '@/components/SRS/srs-guide-content';
@@ -17,7 +18,22 @@ import {
 } from 'react-icons/tb';
 
 export default function Resources() {
+  const router = useRouter();
   const [view, setView] = useState('resources');
+
+  useEffect(() => {
+    if (router.query.guide === 'srs') {
+      setView('srs-guide');
+    }
+  }, [router.query.guide]);
+
+  useEffect(() => {
+    const query = view === 'srs-guide' ? '?guide=srs' : '';
+    const path = router.pathname + query;
+    if (router.asPath !== path) {
+      router.replace(path, undefined, { shallow: true });
+    }
+  }, [view]);
 
   const ScaledFrame = ({ src, zoom = 0.8, height = 640 }) => (
     <div
