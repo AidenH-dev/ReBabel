@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { FaBell, FaTimes, FaClock } from 'react-icons/fa';
-import { TbSparkles } from 'react-icons/tb';
+import { FaTimes } from 'react-icons/fa';
+import { TbBell, TbLoader3, TbClock, TbFlame } from 'react-icons/tb';
 
 export function SRSNotificationPrompt({
   isOpen,
@@ -23,132 +23,101 @@ export function SRSNotificationPrompt({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={!isLoading ? onClose : undefined}
       />
 
-      <div className="relative w-full max-w-sm animate-slideUp">
-        <div className="relative bg-white dark:bg-[#1c2b35] rounded-2xl shadow-2xl overflow-hidden border border-black/5 dark:border-white/10">
-          {/* Decorative background */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-full blur-3xl" />
-            <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl from-[#667eea] to-[#764ba2] rounded-full blur-3xl" />
-          </div>
-
-          {/* Close button */}
-          {!isLoading && (
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-              aria-label="Close"
+      <div className="relative w-full sm:max-w-[400px] sm:mx-4">
+        <div className="bg-white dark:bg-[#1c2b35] sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden">
+          {/* Header */}
+          <div className="relative px-6 pt-6 pb-4">
+            {/* Faint bell watermark */}
+            <div
+              className="absolute top-3 right-5 select-none pointer-events-none"
+              aria-hidden="true"
             >
-              <FaTimes className="text-gray-600 dark:text-gray-400 w-4 h-4" />
-            </button>
-          )}
-
-          <div className="relative p-6">
-            {/* Icon */}
-            <div className="relative mx-auto w-16 h-16 mb-5">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-full blur-xl opacity-40" />
-              <div className="relative bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-full w-full h-full flex items-center justify-center shadow-lg">
-                <FaBell className="text-2xl text-white" />
-              </div>
-              <div className="absolute -top-1 -right-1">
-                <TbSparkles className="text-yellow-400 text-lg" />
-              </div>
+              <TbBell className="w-20 h-20 text-gray-100 dark:text-white/[0.03]" />
             </div>
 
-            {/* Title */}
-            <h2 className="text-xl font-bold text-center text-gray-900 dark:text-white mb-2">
-              Stay on Track with SRS
-            </h2>
-
-            {/* Description */}
-            <p className="text-center text-sm text-gray-600 dark:text-gray-400 mb-5 leading-relaxed">
-              You have{' '}
-              <span className="font-semibold text-[#667eea]">
-                {srsSetCount} {srsSetCount === 1 ? 'set' : 'sets'}
-              </span>{' '}
-              with spaced repetition enabled. Get notified when items are due
-              for review so you never miss a study session.
-            </p>
-
-            {/* Feature highlight */}
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-[#667eea]/10 border border-[#667eea]/20 mb-5">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#667eea]/20 flex items-center justify-center">
-                <FaClock className="text-[#667eea] text-sm" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-xs text-gray-600 dark:text-gray-400">
-                  We&apos;ll send a gentle reminder when your reviews are ready
-                </div>
-              </div>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex flex-col gap-2">
+            {!isLoading && (
               <button
-                onClick={handleEnableNotifications}
-                disabled={isLoading}
-                className="relative w-full py-3 px-4 rounded-xl font-semibold text-white bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden group"
+                onClick={onClose}
+                className="absolute top-4 right-4 z-10 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+                aria-label="Close"
               >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  {isLoading ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Enabling...
-                    </>
-                  ) : (
-                    <>
-                      <FaBell className="text-lg" />
-                      Enable Notifications
-                    </>
-                  )}
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-[#764ba2] to-[#667eea] opacity-0 group-hover:opacity-100 transition-opacity" />
+                <FaTimes className="w-4 h-4" />
               </button>
+            )}
 
-              {!isLoading && (
-                <button
-                  onClick={onClose}
-                  className="w-full py-2.5 px-4 rounded-xl font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
-                >
-                  Maybe Later
-                </button>
-              )}
+            <div className="relative">
+              <div className="w-11 h-11 rounded-xl bg-[#e30a5f]/10 dark:bg-[#e30a5f]/15 flex items-center justify-center mb-3">
+                <TbBell className="w-5.5 h-5.5 text-[#e30a5f]" />
+              </div>
+              <h2 className="text-[20px] font-bold text-gray-900 dark:text-white leading-tight mb-1">
+                Never miss a review
+              </h2>
+              <p className="text-[14px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                You have{' '}
+                <span className="font-semibold text-[#e30a5f]">
+                  {srsSetCount} {srsSetCount === 1 ? 'set' : 'sets'}
+                </span>{' '}
+                using spaced repetition. Get a nudge when items are ready for
+                review.
+              </p>
             </div>
           </div>
+
+          {/* Feature cards */}
+          <div className="px-6 space-y-2">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-[#e30a5f]/5 dark:bg-[#e30a5f]/8 border border-[#e30a5f]/10 dark:border-[#e30a5f]/15">
+              <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#e30a5f]/10 dark:bg-[#e30a5f]/15 flex items-center justify-center">
+                <TbClock className="w-4 h-4 text-[#e30a5f]" />
+              </div>
+              <p className="text-[13px] text-gray-600 dark:text-gray-400">
+                Reminders when your reviews are due
+              </p>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-orange-500/5 dark:bg-orange-500/8 border border-orange-500/10 dark:border-orange-500/15">
+              <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-orange-500/10 dark:bg-orange-500/15 flex items-center justify-center">
+                <TbFlame className="w-4 h-4 text-orange-500 dark:text-orange-400" />
+              </div>
+              <p className="text-[13px] text-gray-600 dark:text-gray-400">
+                Keep your streak alive with timely nudges
+              </p>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="px-6 pt-5 pb-6 space-y-2.5">
+            <button
+              onClick={handleEnableNotifications}
+              disabled={isLoading}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[14px] font-semibold text-white bg-gradient-to-r from-[#e30a5f] to-[#d10950] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-[#e30a5f]/20"
+            >
+              {isLoading ? (
+                <TbLoader3 className="w-4.5 h-4.5 animate-spin" />
+              ) : (
+                <TbBell className="w-4.5 h-4.5" />
+              )}
+              {isLoading ? 'Enabling...' : 'Enable Notifications'}
+            </button>
+
+            {!isLoading && (
+              <button
+                onClick={onClose}
+                className="w-full py-2.5 rounded-xl text-[13px] font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+              >
+                Not now
+              </button>
+            )}
+          </div>
+
+          {/* Bottom safe area for mobile */}
+          <div className="h-[env(safe-area-inset-bottom)]" />
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.2s ease-out;
-        }
-        .animate-slideUp {
-          animation: slideUp 0.3s ease-out;
-        }
-      `}</style>
     </div>
   );
 }
