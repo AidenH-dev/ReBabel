@@ -1,6 +1,7 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { tracedLLMCall } from '@/lib/langsmith';
 import { createRateLimiter } from '@/lib/rateLimit';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 export const config = {
   maxDuration: 60,
@@ -214,6 +215,11 @@ ${trimmedVocabPoolText}
   };
 
   try {
+    const rebabelUserId = await resolveUserId(
+      session.user.sub,
+      session.user.email
+    );
+
     const result = await tracedLLMCall({
       name: 'generate-sentences',
       provider,
@@ -222,7 +228,7 @@ ${trimmedVocabPoolText}
       metadata: {
         focalPointCount: focalPoints.length,
         sentenceCount: safeCount,
-        userId: session.user.sub,
+        userId: rebabelUserId,
         analyticsSessionId: analyticsSessionId || null,
         poolVocabIds: trimmedVocabPool.map((v) => v.id),
         poolGrammarIds: trimmedGrammarPool.map((g) => g.id),

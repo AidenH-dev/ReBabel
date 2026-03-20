@@ -76,6 +76,11 @@ export async function tracedLLMCall({
   const runId = randomUUID();
   const startTime = Date.now();
 
+  const tags = [];
+  if (metadata.analyticsSessionId)
+    tags.push(`session:${metadata.analyticsSessionId}`);
+  if (metadata.userId) tags.push(`user:${metadata.userId}`);
+
   try {
     // Create the run — tracing failures should not block the LLM call
     try {
@@ -89,14 +94,15 @@ export async function tracedLLMCall({
             ls_provider: provider,
             ls_model_name: model,
             ls_model_type: 'chat',
+            ...(metadata.userId && {
+              user_id: metadata.userId,
+            }),
             ...(metadata.analyticsSessionId && {
               analytics_session_id: metadata.analyticsSessionId,
             }),
           },
         },
-        ...(metadata.analyticsSessionId && {
-          tags: [`session:${metadata.analyticsSessionId}`],
-        }),
+        ...(tags.length > 0 && { tags }),
         start_time: startTime,
         project_name: projectName,
       });

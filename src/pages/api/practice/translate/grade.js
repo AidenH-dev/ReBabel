@@ -1,6 +1,7 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { tracedLLMCall } from '@/lib/langsmith';
 import { createRateLimiter } from '@/lib/rateLimit';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 30 });
 
@@ -131,6 +132,11 @@ Grade this translation.`;
   };
 
   try {
+    const rebabelUserId = await resolveUserId(
+      session.user.sub,
+      session.user.email
+    );
+
     const result = await tracedLLMCall({
       name: 'grade-translation',
       provider,
@@ -139,7 +145,7 @@ Grade this translation.`;
       metadata: {
         englishSentence,
         focalPointType: focalPoint?.type,
-        userId: session.user.sub,
+        userId: rebabelUserId,
         analyticsSessionId: analyticsSessionId || null,
       },
       fetchFn: async () => {
