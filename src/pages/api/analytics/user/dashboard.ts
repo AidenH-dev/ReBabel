@@ -3,6 +3,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 interface ApiResponse {
   message?: unknown;
@@ -18,6 +19,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
   if (!session?.user?.sub) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
+
+  const userId = await resolveUserId(session.user.sub);
 
   // Validate timezone param
   const rawTimezone = req.query.timezone;
@@ -38,7 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     const { data, error } = await supabase
       .schema('v1_kvs_rebabel')
       .rpc('get_user_dashboard_stats', {
-        p_owner: session.user.sub,
+        p_owner: userId,
         p_timezone: timezone,
       });
 

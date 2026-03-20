@@ -11,6 +11,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 interface ApiResponse {
   success: boolean;
@@ -44,11 +45,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     // UUID unguessability + RPC state check.
     const session = await getSession(req, res).catch(() => null);
     if (session?.user?.sub) {
+      const userId = await resolveUserId(session.user.sub);
       const { data: sessionData } = await supabase
         .schema('v1_kvs_rebabel')
         .rpc('get_user_stat_session', { p_entity_id: id });
 
-      if (sessionData && sessionData.owner !== session.user.sub) {
+      if (sessionData && sessionData.owner !== userId) {
         return res.status(403).json({ success: false, error: 'Forbidden' });
       }
     }

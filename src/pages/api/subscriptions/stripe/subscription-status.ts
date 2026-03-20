@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 interface SubscriptionData {
   owner?: string;
@@ -51,6 +52,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     });
   }
 
+  const userId = await resolveUserId(session.user.sub);
+
   try {
     const supabase = createClient(
       process.env.NEXT_SUPABASE_URL!,
@@ -59,7 +62,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
 
     const { data, error } = await supabase
       .schema('v1_kvs_rebabel')
-      .rpc('get_subscription_by_user', { user_id: session.user.sub });
+      .rpc('get_subscription_by_user', { user_id: userId });
 
     if (error) throw error;
 

@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -23,6 +24,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     return res.status(401).json({ success: false, error: 'Unauthorized' });
   }
 
+  const userId = await resolveUserId(session.user.sub);
+
   try {
     const supabase = createClient(
       process.env.NEXT_SUPABASE_URL!,
@@ -31,7 +34,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
 
     const { data: customerId } = await supabase
       .schema('v1_kvs_rebabel')
-      .rpc('get_customer_id_by_user', { user_id: session.user.sub });
+      .rpc('get_customer_id_by_user', { user_id: userId });
 
     if (!customerId) {
       return res.status(400).json({ success: false, error: 'No subscription found' });

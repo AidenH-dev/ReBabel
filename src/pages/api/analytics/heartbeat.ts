@@ -4,6 +4,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 interface ApiResponse {
   message?: unknown;
@@ -20,6 +21,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
+  const userId = await resolveUserId(session.user.sub);
+
   try {
     const supabase = createClient(
       process.env.NEXT_SUPABASE_URL!,
@@ -28,7 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
 
     const { data, error } = await supabase
       .schema('v1_kvs_rebabel')
-      .rpc('record_platform_event', { p_user_id: session.user.sub });
+      .rpc('record_platform_event', { p_user_id: userId });
 
     if (error) {
       console.error('Failed to record platform event:', error);

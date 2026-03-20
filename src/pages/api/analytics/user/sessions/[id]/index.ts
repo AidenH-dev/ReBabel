@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 interface ApiResponse {
   success: boolean;
@@ -17,6 +18,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
   if (!session?.user?.sub) {
     return res.status(401).json({ success: false, error: 'Unauthorized' });
   }
+
+  const userId = await resolveUserId(session.user.sub);
 
   const { id } = req.query;
   if (!id || typeof id !== 'string') {
@@ -43,7 +46,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     }
 
     // Verify the session belongs to this user
-    if (data.owner !== session.user.sub) {
+    if (data.owner !== userId) {
       return res.status(403).json({ success: false, error: 'Forbidden' });
     }
 

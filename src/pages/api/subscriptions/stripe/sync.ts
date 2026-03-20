@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -25,12 +26,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     return res.status(401).json({ success: false, error: 'Unauthorized' });
   }
 
-  const userId = session.user.sub;
+  const auth0UserId = session.user.sub;
+  const userId = await resolveUserId(session.user.sub);
 
   try {
     // Find customer by metadata
     const customers = await stripe.customers.search({
-      query: `metadata['auth0_user_id']:'${userId}'`,
+      query: `metadata['auth0_user_id']:'${auth0UserId}'`,
     });
 
     if (customers.data.length === 0) {

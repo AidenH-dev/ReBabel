@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 interface ApiResponse {
   success: boolean;
@@ -19,6 +20,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     return res.status(401).json({ success: false, error: 'Unauthorized' });
   }
 
+  const userId = await resolveUserId(session.user.sub);
+
   try {
     const { sessionType = 'translate' } = req.body || {};
 
@@ -30,7 +33,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     const { data, error } = await supabase
       .schema('v1_kvs_rebabel')
       .rpc('start_user_stat_session', {
-        p_owner: session.user.sub,
+        p_owner: userId,
         p_session_type: sessionType,
       });
 

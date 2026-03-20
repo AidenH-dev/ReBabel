@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -24,7 +25,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     return res.status(401).json({ success: false, error: 'Unauthorized' });
   }
 
-  const userId = session.user.sub;
+  const auth0UserId = session.user.sub;
+  const userId = await resolveUserId(session.user.sub);
   const userEmail = session.user.email;
 
   try {
@@ -44,7 +46,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     if (!customerId) {
       const customer = await stripe.customers.create({
         email: userEmail,
-        metadata: { auth0_user_id: userId },
+        metadata: { auth0_user_id: auth0UserId, rebabel_user_id: userId },
       });
       customerId = customer.id;
     }
@@ -63,9 +65,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       success_url: `${(req.headers['x-forwarded-proto'] as string) || 'https'}://${req.headers.host}/learn/account/subscription?success=true`,
       cancel_url: `${(req.headers['x-forwarded-proto'] as string) || 'https'}://${req.headers.host}/learn/account/subscription?canceled=true`,
       subscription_data: {
-        metadata: { auth0_user_id: userId },
+        metadata: { auth0_user_id: auth0UserId, rebabel_user_id: userId },
       },
-      metadata: { auth0_user_id: userId },
+      metadata: { auth0_user_id: auth0UserId, rebabel_user_id: userId },
     });
 
     return res.status(200).json({

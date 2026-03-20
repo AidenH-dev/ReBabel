@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 interface SrsData {
   scope: string;
@@ -81,6 +82,8 @@ export default withApiAuthRequired(async function handler(
     });
   }
 
+  const userId = await resolveUserId(session.user.sub);
+
   if (req.method !== 'GET') {
     return res.status(405).json({
       success: false,
@@ -88,5 +91,5 @@ export default withApiAuthRequired(async function handler(
     });
   }
 
-  return handleGET(req, res, session.user.sub);
+  return handleGET(req, res, userId);
 });

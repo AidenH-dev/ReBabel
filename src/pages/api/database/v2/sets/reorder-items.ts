@@ -3,6 +3,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
@@ -41,7 +42,7 @@ export default withApiAuthRequired(async function handler(
     }
 
     const { setId, itemIds } = body;
-    const userId = session.user.sub;
+    const userId = await resolveUserId(session.user.sub);
     const isAdmin = (session.user as any)['https://rebabel.org/app_metadata']?.isAdmin || false;
 
     // Ownership check — admins can reorder any set

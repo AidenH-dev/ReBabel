@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { notifyBugReport } from '@/lib/webhooks/peko';
 import { notifySlackBugReport } from '@/lib/webhooks/slack';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 interface BugReportRequest {
   browser_type?: string;
@@ -54,7 +55,7 @@ async function handlePOST(
       });
     }
 
-    const userId = session.user.sub;
+    const userId = await resolveUserId(session.user.sub);
     const userEmail = session.user.email;
 
     // Parse and validate request body

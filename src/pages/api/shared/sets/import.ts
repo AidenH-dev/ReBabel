@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
@@ -67,7 +68,7 @@ export default withApiAuthRequired(async function handler(
       });
     }
 
-    const userId = session.user.sub;
+    const userId = await resolveUserId(session.user.sub);
     const now = new Date().toISOString();
 
     // Check for duplicate import — has this user already imported this set?

@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { notifySubscription, notifyError } from '@/lib/webhooks/peko';
 import { notifySlackSubscription, notifySlackError } from '@/lib/webhooks/slack';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 function getRawBody(req: NextApiRequest): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -135,10 +136,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 async function handleSubscriptionUpdate(supabase: SupabaseClientAny, subscription: Stripe.Subscription, eventId: string) {
-  const ownerId = subscription.metadata.auth0_user_id;
+  // Resolve from rebabel_user_id (preferred) or auth0_user_id (legacy)
+  const rebabelUserId = subscription.metadata.rebabel_user_id;
+  const auth0UserId = subscription.metadata.auth0_user_id;
 
-  if (!ownerId) {
-    console.error('No auth0_user_id in subscription metadata');
+  let ownerId: string;
+  if (rebabelUserId) {
+    ownerId = rebabelUserId;
+  } else if (auth0UserId) {
+    ownerId = await resolveUserId(auth0UserId);
+  } else {
+    console.error('No user ID in subscription metadata');
     return;
   }
 
@@ -177,7 +185,9 @@ async function handleSubscriptionUpdate(supabase: SupabaseClientAny, subscriptio
 
 async function handleSubscriptionCanceled(supabase: SupabaseClientAny, subscription: Stripe.Subscription, eventId: string) {
   const sub = subscription as any;
-  const ownerId = subscription.metadata.auth0_user_id;
+  const rebabelUserId = subscription.metadata.rebabel_user_id;
+  const auth0UserId = subscription.metadata.auth0_user_id;
+  const ownerId = rebabelUserId || (auth0UserId ? await resolveUserId(auth0UserId) : null);
 
   const periodEnd = sub.current_period?.end || sub.current_period_end || 0;
 
@@ -207,7 +217,9 @@ async function handlePaymentFailed(supabase: SupabaseClientAny, invoice: Stripe.
   if (inv.subscription) {
     // Get subscription to find owner
     const subscription = await stripe.subscriptions.retrieve(inv.subscription as string);
-    const ownerId = subscription.metadata.auth0_user_id;
+    const rebabelUserId = subscription.metadata.rebabel_user_id;
+    const auth0UserId = subscription.metadata.auth0_user_id;
+    const ownerId = rebabelUserId || (auth0UserId ? await resolveUserId(auth0UserId) : null);
 
     const subscriptionData = {
       TYPE: 'subscription',

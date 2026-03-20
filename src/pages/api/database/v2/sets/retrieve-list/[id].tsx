@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 // Type definitions for the response structure
 interface SetMetadata {
@@ -194,6 +195,12 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
       success: false,
       error: 'Unauthorized - authentication required'
     });
+  }
+
+  // Resolve the Auth0 ID from the URL path to a ReBabel user ID
+  const rawUserId = req.query.id;
+  if (rawUserId && typeof rawUserId === 'string' && rawUserId.startsWith('auth0|')) {
+    req.query.id = await resolveUserId(rawUserId);
   }
 
   const { method } = req;

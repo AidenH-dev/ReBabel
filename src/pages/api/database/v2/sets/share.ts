@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import crypto from 'crypto';
 import { toSlug } from '@/lib/slug';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
@@ -55,6 +56,8 @@ export default withApiAuthRequired(async function handler(
     });
   }
 
+  const userId = await resolveUserId(session.user.sub);
+
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
@@ -100,7 +103,7 @@ export default withApiAuthRequired(async function handler(
     }
 
     const parsed = typeof setData === 'string' ? JSON.parse(setData) : setData;
-    if (parsed?.set?.owner !== session.user.sub) {
+    if (parsed?.set?.owner !== userId) {
       return res.status(403).json({
         success: false,
         error: 'You do not own this set'

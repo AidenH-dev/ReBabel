@@ -1,6 +1,7 @@
 // Implements SPEC-LLM-002
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 const VALID_SEVERITIES = ['cosmetic', 'broken', 'crash'];
 
@@ -165,7 +166,9 @@ export default withApiAuthRequired(async function handler(req, res) {
 
   // Implements SPEC-LLM-002: reject unauthenticated requests
   const session = await getSession(req, res);
-  const userId = session?.user?.sub;
+  const userId = session?.user?.sub
+    ? await resolveUserId(session.user.sub)
+    : null;
   if (!userId) {
     return res.status(401).json({ error: 'Not authenticated' });
   }
@@ -192,11 +195,9 @@ export default withApiAuthRequired(async function handler(req, res) {
       return res.status(400).json({ error: 'description is required' });
     }
     if (!severity || !VALID_SEVERITIES.includes(severity)) {
-      return res
-        .status(400)
-        .json({
-          error: `severity must be one of: ${VALID_SEVERITIES.join(', ')}`,
-        });
+      return res.status(400).json({
+        error: `severity must be one of: ${VALID_SEVERITIES.join(', ')}`,
+      });
     }
     if (!context || typeof context !== 'object') {
       return res.status(400).json({ error: 'context is required' });

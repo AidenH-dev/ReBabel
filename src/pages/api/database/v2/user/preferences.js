@@ -1,10 +1,11 @@
 // Implements SPEC-DB-010 — User Preferences API
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 export default withApiAuthRequired(async function handler(req, res) {
   const session = await getSession(req, res);
-  const userId = session.user.sub;
+  const userId = await resolveUserId(session.user.sub);
 
   if (req.method === 'GET') {
     try {

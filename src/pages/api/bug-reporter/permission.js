@@ -1,6 +1,7 @@
 // Implements SPEC-LLM-001
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 export default withApiAuthRequired(async function handler(req, res) {
   // Implements SPEC-LLM-001: only GET is accepted
@@ -10,7 +11,9 @@ export default withApiAuthRequired(async function handler(req, res) {
 
   // Implements SPEC-LLM-001: reject unauthenticated requests
   const session = await getSession(req, res);
-  const userId = session?.user?.sub;
+  const userId = session?.user?.sub
+    ? await resolveUserId(session.user.sub)
+    : null;
   if (!userId) {
     return res.status(401).json({ error: 'Not authenticated' });
   }

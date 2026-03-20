@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 interface ApiResponse {
   count?: number;
@@ -16,6 +17,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
   if (!session?.user?.sub) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
+
+  const userId = await resolveUserId(session.user.sub);
 
   try {
     const supabase = createClient(
@@ -35,7 +38,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       .from('user_stats')
       .select('entity')
       .eq('property', 'owner')
-      .eq('value', session.user.sub)
+      .eq('value', userId)
       .gte('ts', todayStart.toISOString())
       .lte('ts', todayEnd.toISOString());
 
