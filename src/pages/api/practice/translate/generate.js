@@ -1,14 +1,23 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { tracedLLMCall } from '@/lib/langsmith';
+import { createRateLimiter } from '@/lib/rateLimit';
 
 export const config = {
   maxDuration: 60,
 };
 
+const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
+
 export default withApiAuthRequired(async function handler(req, res) {
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
     return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  if (!limiter.check(session.user.sub)) {
+    return res
+      .status(429)
+      .json({ error: 'Too many requests. Please try again later.' });
   }
 
   if (req.method !== 'POST') {
@@ -23,6 +32,8 @@ export default withApiAuthRequired(async function handler(req, res) {
     provider = 'anthropic',
     analyticsSessionId,
   } = req.body;
+
+  const safeCount = Math.min(Math.max(1, Number(count) || 10), 20);
 
   // Validate inputs
   if (
@@ -150,7 +161,7 @@ ${trimmedVocabPoolText}
 </available_vocabulary>
 
 <requirements>
-1. Generate exactly ${count} UNIQUE practice sentences
+1. Generate exactly ${safeCount} UNIQUE practice sentences
 2. Each sentence MUST use at least 1 item from focal_grammar
 3. Each sentence MUST use at least 1 item from focal_vocabulary
 4. No single vocabulary word may appear in more than 2 sentences total
@@ -162,7 +173,7 @@ ${trimmedVocabPoolText}
 10. In items_used, list the exact id values of every vocabulary and grammar item you used in each sentence (from the id fields in available_vocabulary and available_grammar, or focal_grammar and focal_vocabulary)
 </requirements>`;
 
-  const userMessage = `Generate ${count} practice sentences.`;
+  const userMessage = `Generate ${safeCount} practice sentences.`;
 
   // Tool schema for structured output
   const generateTool = {
@@ -210,7 +221,7 @@ ${trimmedVocabPoolText}
       messages: [{ role: 'user', content: userMessage }],
       metadata: {
         focalPointCount: focalPoints.length,
-        sentenceCount: count,
+        sentenceCount: safeCount,
         userId: session.user.sub,
         analyticsSessionId: analyticsSessionId || null,
         poolVocabIds: trimmedVocabPool.map((v) => v.id),
@@ -276,7 +287,7 @@ ${trimmedVocabPoolText}
                 role: 'user',
                 content:
                   provider === 'deepseek'
-                    ? `Generate ${count} unique practice sentences using the focal points provided.\n\nReturn JSON in this exact format:\n{"sentences": [{"english_sentence": "...", "expected_japanese_translation": "...", "focal_point_index": 0, "items_used": {"vocabulary_ids": ["id1"], "grammar_ids": ["id2"]}}, ...]}`
+                    ? `Generate ${safeCount} unique practice sentences using the focal points provided.\n\nReturn JSON in this exact format:\n{"sentences": [{"english_sentence": "...", "expected_japanese_translation": "...", "focal_point_index": 0, "items_used": {"vocabulary_ids": ["id1"], "grammar_ids": ["id2"]}}, ...]}`
                     : userMessage,
               },
             ],

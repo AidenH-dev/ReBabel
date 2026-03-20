@@ -1,6 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { createRateLimiter } from '@/lib/rateLimit';
+import { resolveUserId } from '@/lib/resolveUserId';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+
+const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
 
 // Type definitions based on the cURL data structure
 interface ExampleSentence {
@@ -306,11 +311,30 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
     });
   }
 
+  if (!limiter.check(session.user.sub)) {
+    return res.status(429).json({
+      success: false,
+      error: 'Too many requests. Please try again later.'
+    });
+  }
+
   const { method } = req;
 
   switch (method) {
-    case 'POST':
+    case 'POST': {
+      // Enforce 1000-set account cap
+      const userId = await resolveUserId(session.user.sub);
+      const { data: setCount } = await supabaseAdmin
+        .schema('v1_kvs_rebabel')
+        .rpc('get_user_set_count', { p_user_id: userId });
+      if ((setCount ?? 0) >= 1000) {
+        return res.status(403).json({
+          success: false,
+          error: 'Account set limit reached (1000 sets maximum)'
+        });
+      }
       return handlePOST(req, res);
+    }
 
     case 'GET':
     case 'PUT':

@@ -1,5 +1,8 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { createRateLimiter } from '@/lib/rateLimit';
 import crypto from 'crypto';
+
+const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 5 });
 import http2 from 'http2';
 
 function createJWT(keyId, teamId, privateKey) {
@@ -95,8 +98,14 @@ async function handler(req, res) {
 
   try {
     const session = await getSession(req, res);
-    if (!session?.user) {
+    if (!session?.user?.sub) {
       return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    if (!limiter.check(session.user.sub)) {
+      return res
+        .status(429)
+        .json({ error: 'Too many requests. Please try again later.' });
     }
 
     const { deviceToken } = req.body;

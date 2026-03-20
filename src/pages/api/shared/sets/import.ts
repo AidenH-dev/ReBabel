@@ -2,6 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { createRateLimiter } from '@/lib/rateLimit';
+
+const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
@@ -24,6 +27,13 @@ export default withApiAuthRequired(async function handler(
     return res.status(401).json({
       success: false,
       error: 'Unauthorized - authentication required'
+    });
+  }
+
+  if (!limiter.check(session.user.sub)) {
+    return res.status(429).json({
+      success: false,
+      error: 'Too many requests. Please try again later.'
     });
   }
 
@@ -61,6 +71,13 @@ export default withApiAuthRequired(async function handler(
     const sourceItems = parsed.items || [];
     const sourceEntityId = parsed.entity_id;
 
+    if (sourceItems.length > 17000) {
+      return res.status(400).json({
+        success: false,
+        error: 'Import exceeds the maximum of 17000 items per set'
+      });
+    }
+
     if (!sourceSet) {
       return res.status(500).json({
         success: false,
@@ -69,6 +86,18 @@ export default withApiAuthRequired(async function handler(
     }
 
     const userId = await resolveUserId(session.user.sub);
+
+    // Enforce 1000-set account cap
+    const { data: setCount } = await supabase
+      .schema('v1_kvs_rebabel')
+      .rpc('get_user_set_count', { p_user_id: userId });
+    if ((setCount ?? 0) >= 1000) {
+      return res.status(403).json({
+        success: false,
+        error: 'Account set limit reached (1000 sets maximum)'
+      });
+    }
+
     const now = new Date().toISOString();
 
     // Check for duplicate import — has this user already imported this set?

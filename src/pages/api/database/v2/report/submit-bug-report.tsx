@@ -4,6 +4,9 @@ import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { notifyBugReport } from '@/lib/webhooks/peko';
 import { notifySlackBugReport } from '@/lib/webhooks/slack';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { createRateLimiter } from '@/lib/rateLimit';
+
+const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 5 });
 
 interface BugReportRequest {
   browser_type?: string;
@@ -160,6 +163,13 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
     return res.status(401).json({
       success: false,
       error: 'Unauthorized - authentication required'
+    });
+  }
+
+  if (!limiter.check(session.user.sub)) {
+    return res.status(429).json({
+      success: false,
+      error: 'Too many requests. Please try again later.'
     });
   }
 

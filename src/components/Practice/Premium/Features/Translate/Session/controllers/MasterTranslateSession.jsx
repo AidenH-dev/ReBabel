@@ -65,7 +65,10 @@ export default function MasterTranslateSession({
 
       const data = await response.json();
 
-      if (!data.success) {
+      if (!response.ok || !data.success) {
+        if (response.status === 429) {
+          throw new Error('rate_limited');
+        }
         throw new Error(data.error || 'Generation failed');
       }
 
@@ -74,7 +77,10 @@ export default function MasterTranslateSession({
       onGenerationSuccess?.();
     } catch (error) {
       console.error('Error generating questions:', error);
-      const message = 'Failed to generate questions. Please try again.';
+      const message =
+        error.message === 'rate_limited'
+          ? "You're sending requests too quickly. Please wait a moment and try again."
+          : 'Failed to generate questions. Please try again.';
       setError(message);
       onGenerationError?.(message);
     } finally {
@@ -108,7 +114,10 @@ export default function MasterTranslateSession({
 
       const data = await response.json();
 
-      if (!data.success) {
+      if (!response.ok || !data.success) {
+        if (response.status === 429) {
+          throw new Error('rate_limited');
+        }
         throw new Error(data.error || 'Grading failed');
       }
 
@@ -136,7 +145,11 @@ export default function MasterTranslateSession({
       });
     } catch (error) {
       console.error('Error grading answer:', error);
-      setError('Failed to grade answer. Please try again.');
+      setError(
+        error.message === 'rate_limited'
+          ? "You're sending requests too quickly. Please wait a moment and try again."
+          : 'Failed to grade answer. Please try again.'
+      );
     } finally {
       setIsGrading(false);
     }

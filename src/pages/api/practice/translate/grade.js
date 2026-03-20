@@ -1,10 +1,19 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { tracedLLMCall } from '@/lib/langsmith';
+import { createRateLimiter } from '@/lib/rateLimit';
+
+const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 30 });
 
 export default withApiAuthRequired(async function handler(req, res) {
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
     return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  if (!limiter.check(session.user.sub)) {
+    return res
+      .status(429)
+      .json({ error: 'Too many requests. Please try again later.' });
   }
 
   if (req.method !== 'POST') {
