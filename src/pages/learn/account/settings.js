@@ -285,7 +285,7 @@ export default function Settings() {
               {loading ? (
                 /* Skeleton loading state */
                 <>
-                  {[1, 2, 3, 4].map((i) => (
+                  {[1, 2, 3, 4, 5].map((i) => (
                     <div key={i} className="p-4">
                       <div className="flex items-center gap-3">
                         <div
@@ -302,14 +302,22 @@ export default function Settings() {
                             style={{ animationDelay: `${i * 75 + 50}ms` }}
                           />
                         </div>
-                        {i !== 3 && (
+                        {/* Username row: small icon placeholder; Theme row: no button; others: button */}
+                        {i === 2 ? (
                           <div
-                            className="h-9 w-24 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
+                            className="w-8 h-8 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
                             style={{ animationDelay: `${i * 75 + 75}ms` }}
                           />
+                        ) : (
+                          i !== 4 && (
+                            <div
+                              className="h-9 w-24 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
+                              style={{ animationDelay: `${i * 75 + 75}ms` }}
+                            />
+                          )
                         )}
                       </div>
-                      {i === 3 && (
+                      {i === 4 && (
                         <div className="mt-3 ml-13 flex flex-wrap gap-2">
                           {[1, 2, 3, 4, 5].map((j) => (
                             <div
