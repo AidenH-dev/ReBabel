@@ -518,14 +518,40 @@ export default function SetQuiz() {
 
         {/* Loading State */}
         {isLoading ? (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <div className="animate-pulse mb-4">
-                <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div className="w-full max-w-2xl space-y-6 px-4">
+              {/* Question card skeleton */}
+              <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1c2b35] shadow-sm p-8">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="h-3 w-20 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
+                  <div
+                    className="h-10 w-48 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                    style={{ animationDelay: '50ms' }}
+                  />
+                  <div
+                    className="h-5 w-36 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                    style={{ animationDelay: '100ms' }}
+                  />
+                </div>
               </div>
-              <p className="text-gray-600 dark:text-white/70">
-                Loading quiz...
-              </p>
+              {/* Option rows skeleton */}
+              <div className="space-y-3">
+                {[0, 1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="h-14 rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1c2b35] animate-pulse"
+                    style={{ animationDelay: `${150 + i * 60}ms` }}
+                  >
+                    <div className="flex items-center h-full px-4 gap-3">
+                      <div className="h-5 w-5 rounded-full bg-black/[0.06] dark:bg-white/[0.06]" />
+                      <div
+                        className="h-4 rounded bg-black/[0.06] dark:bg-white/[0.06]"
+                        style={{ width: `${60 - i * 8}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ) : !modeSelectionComplete ? (

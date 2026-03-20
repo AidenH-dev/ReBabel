@@ -689,7 +689,7 @@ export default function MasterItemsManagement({
               {canReorder && (
                 <button
                   onClick={() => setIsReorderMode((prev) => !prev)}
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-colors ${
                     isReorderMode
                       ? 'bg-[#e30a5f] text-white hover:bg-[#c00950]'
                       : 'bg-gray-100 dark:bg-[#0f1a1f] text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
@@ -926,44 +926,46 @@ export default function MasterItemsManagement({
       {showAddItemModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
-              <div className="flex items-center gap-3">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Add New Item
-                </h2>
-                <div className="flex bg-gray-100 dark:bg-[#0f1a1f] rounded-md p-0.5">
-                  {(!set_type || set_type === 'vocab') && (
-                    <button
-                      onClick={() => setAddItemType('vocabulary')}
-                      className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
-                        addItemType === 'vocabulary'
-                          ? 'bg-[#e30a5f] text-white'
-                          : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                      }`}
-                    >
-                      Vocabulary
-                    </button>
-                  )}
-                  {(!set_type || set_type === 'grammar') && (
-                    <button
-                      onClick={() => setAddItemType('grammar')}
-                      className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
-                        addItemType === 'grammar'
-                          ? 'bg-[#e30a5f] text-white'
-                          : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                      }`}
-                    >
-                      Grammar
-                    </button>
-                  )}
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-start justify-between gap-3 flex-shrink-0">
+              <div className="min-w-0">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                    Add New Item
+                  </h2>
+                  <div className="flex bg-gray-100 dark:bg-[#0f1a1f] rounded-md p-0.5">
+                    {(!set_type || set_type === 'vocab') && (
+                      <button
+                        onClick={() => setAddItemType('vocabulary')}
+                        className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
+                          addItemType === 'vocabulary'
+                            ? 'bg-[#e30a5f] text-white'
+                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                        }`}
+                      >
+                        Vocabulary
+                      </button>
+                    )}
+                    {(!set_type || set_type === 'grammar') && (
+                      <button
+                        onClick={() => setAddItemType('grammar')}
+                        className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
+                          addItemType === 'grammar'
+                            ? 'bg-[#e30a5f] text-white'
+                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                        }`}
+                      >
+                        Grammar
+                      </button>
+                    )}
+                  </div>
                 </div>
                 {set_type && (
-                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1.5">
                     {set_type === 'vocab' &&
                       'This set contains only vocabulary items'}
                     {set_type === 'grammar' &&
                       'This set contains only grammar items'}
-                  </div>
+                  </p>
                 )}
               </div>
               <button

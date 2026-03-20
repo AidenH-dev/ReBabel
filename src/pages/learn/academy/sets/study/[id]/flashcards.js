@@ -566,14 +566,50 @@ export default function SetFlashcards() {
 
         {/* Main Card Area */}
         {isLoading ? (
-          <div className="flex-1 flex items-center justify-center sm:mb-10">
-            <div className="text-center">
-              <div className="animate-pulse mb-4">
-                <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
+          <div className="flex-1 flex flex-col items-center justify-center sm:mb-10">
+            <div className="w-full max-w-3xl space-y-6">
+              {/* Stats bar skeleton */}
+              <div className="flex items-center justify-center gap-6">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div
+                      className="h-4 w-4 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                      style={{ animationDelay: `${i * 60}ms` }}
+                    />
+                    <div
+                      className="h-3 w-14 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                      style={{ animationDelay: `${i * 60 + 30}ms` }}
+                    />
+                  </div>
+                ))}
               </div>
-              <p className="text-gray-600 dark:text-white/70">
-                Loading flashcards...
-              </p>
+              {/* Card skeleton */}
+              <div className="w-full aspect-[3/2] max-w-xl mx-auto rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1c2b35] shadow-sm">
+                <div className="flex flex-col items-center justify-center h-full gap-4 p-8">
+                  <div
+                    className="h-8 w-32 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                    style={{ animationDelay: '100ms' }}
+                  />
+                  <div
+                    className="h-5 w-48 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                    style={{ animationDelay: '150ms' }}
+                  />
+                  <div
+                    className="h-4 w-24 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
+                    style={{ animationDelay: '200ms' }}
+                  />
+                </div>
+              </div>
+              {/* Nav dots skeleton */}
+              <div className="flex items-center justify-center gap-1.5">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className="h-2 w-2 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                    style={{ animationDelay: `${i * 40 + 250}ms` }}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         ) : cardsData.length > 0 ? (

@@ -865,14 +865,48 @@ export default function DueNow() {
         <main className="flex-1 flex flex-col p-3 sm:p-6 sm:mt-10">
           {/* Loading State */}
           {isLoading ? (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <div className="animate-pulse mb-4">
-                  <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
+            <div className="flex-1 flex flex-col items-center justify-center">
+              <div className="w-full max-w-2xl space-y-6 px-4">
+                {/* Session header skeleton */}
+                <div className="flex items-center justify-between">
+                  <div className="h-6 w-40 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+                  <div
+                    className="h-5 w-20 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                    style={{ animationDelay: '50ms' }}
+                  />
                 </div>
-                <p className="text-gray-600 dark:text-white/70">
-                  Loading set data...
-                </p>
+                {/* Progress bar skeleton */}
+                <div
+                  className="h-2.5 w-full rounded-full bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                  style={{ animationDelay: '100ms' }}
+                />
+                {/* Card skeleton */}
+                <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1c2b35] shadow-sm p-8">
+                  <div className="flex flex-col items-center gap-4">
+                    <div
+                      className="h-10 w-36 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                      style={{ animationDelay: '150ms' }}
+                    />
+                    <div
+                      className="h-5 w-48 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                      style={{ animationDelay: '200ms' }}
+                    />
+                    <div
+                      className="h-4 w-28 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
+                      style={{ animationDelay: '250ms' }}
+                    />
+                  </div>
+                </div>
+                {/* Action buttons skeleton */}
+                <div className="flex justify-center gap-3">
+                  {[0, 1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className="h-10 w-24 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse"
+                      style={{ animationDelay: `${300 + i * 50}ms` }}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           ) : (

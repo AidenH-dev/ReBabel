@@ -17,32 +17,32 @@ function SetCardSkeleton({ delay = 0 }) {
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="flex items-center gap-2 flex-1">
           <div
-            className="h-4 w-36 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"
+            className="h-4 w-36 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
             style={{ animationDelay: `${delay}ms` }}
           />
           <div
-            className="h-4 w-12 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"
+            className="h-4 w-12 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
             style={{ animationDelay: `${delay + 50}ms` }}
           />
         </div>
         <div
-          className="h-5 w-14 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"
+          className="h-5 w-14 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
           style={{ animationDelay: `${delay + 80}ms` }}
         />
       </div>
       <div className="mb-2">
         <div className="flex justify-between mb-1">
           <div
-            className="h-2.5 w-24 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"
+            className="h-2.5 w-24 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
             style={{ animationDelay: `${delay + 120}ms` }}
           />
           <div
-            className="h-2.5 w-8 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"
+            className="h-2.5 w-8 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
             style={{ animationDelay: `${delay + 150}ms` }}
           />
         </div>
         <div
-          className="h-[10px] rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse"
+          className="h-[10px] rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
           style={{ animationDelay: `${delay + 180}ms` }}
         />
       </div>
@@ -50,7 +50,7 @@ function SetCardSkeleton({ delay = 0 }) {
         {[0, 1, 2].map((j) => (
           <div
             key={j}
-            className="h-2 w-6 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"
+            className="h-2 w-6 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
             style={{ animationDelay: `${delay + 220 + j * 40}ms` }}
           />
         ))}
@@ -68,11 +68,11 @@ function StatsSkeleton() {
             {[0, 1, 2, 3, 4, 5].map((i) => (
               <div key={i} className="flex flex-col items-center gap-1">
                 <div
-                  className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"
+                  className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
                   style={{ animationDelay: `${i * 80}ms` }}
                 />
                 <div
-                  className="w-10 h-2 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"
+                  className="w-10 h-2 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
                   style={{ animationDelay: `${i * 80 + 40}ms` }}
                 />
               </div>
@@ -80,9 +80,9 @@ function StatsSkeleton() {
           </div>
         </div>
         <div className="sm:w-[28rem] flex-shrink-0">
-          <div className="h-[14px] rounded-xl bg-gray-200 dark:bg-gray-700 animate-pulse" />
+          <div className="h-[14px] rounded-xl bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
           <div
-            className="h-3 w-36 mt-1.5 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"
+            className="h-3 w-36 mt-1.5 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
             style={{ animationDelay: '100ms' }}
           />
         </div>
@@ -92,7 +92,7 @@ function StatsSkeleton() {
           {[0, 1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="h-5 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"
+              className="h-5 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
               style={{
                 width: `${80 - i * 10}%`,
                 animationDelay: `${i * 60}ms`,
@@ -101,7 +101,7 @@ function StatsSkeleton() {
           ))}
         </div>
         <div
-          className="lg:w-1/2 h-32 rounded bg-gray-200 dark:bg-gray-700 animate-pulse"
+          className="lg:w-1/2 h-32 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
           style={{ animationDelay: '200ms' }}
         />
       </div>
@@ -234,9 +234,9 @@ export default function SetsSrsOverview({ active = true }) {
       <div className="flex flex-col gap-4">
         {/* Header + view toggle skeleton */}
         <div className="flex items-center justify-between">
-          <div className="h-6 w-48 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+          <div className="h-6 w-48 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
           <div
-            className="h-8 w-32 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse"
+            className="h-8 w-32 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
             style={{ animationDelay: '50ms' }}
           />
         </div>

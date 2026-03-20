@@ -411,8 +411,14 @@ export default function VocabularyDashboard() {
                           ·
                         </span>
                       )}
-                      <div className="h-3.5 w-8 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
-                      <div className="h-3 w-10 rounded bg-gray-100 dark:bg-gray-700/50 animate-pulse" />
+                      <div
+                        className="h-3.5 w-8 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                        style={{ animationDelay: `${i * 80}ms` }}
+                      />
+                      <div
+                        className="h-3 w-10 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                        style={{ animationDelay: `${i * 80 + 40}ms` }}
+                      />
                     </div>
                   ))}
                 </div>
@@ -458,18 +464,24 @@ export default function VocabularyDashboard() {
           }
           actions={
             <>
-              {!isLoadingDueCount && totalDueItems > 0 && (
-                <button
-                  onClick={handleStartFastReview}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:brightness-110 hover:ring-2 hover:ring-[#667eea]/40 transition-all"
-                >
-                  <HiOutlineLightningBolt className="text-base" />
-                  <span>Fast Review</span>
-                  <span className="text-xs font-bold px-1.5 py-0.5 rounded-md bg-white/20 text-white min-w-[1.5rem] text-center">
-                    {totalDueItems}
-                  </span>
-                </button>
-              )}
+              <button
+                onClick={handleStartFastReview}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:brightness-110 hover:ring-2 hover:ring-[#667eea]/40 transition-all duration-200"
+                style={{
+                  opacity: !isLoadingDueCount && totalDueItems > 0 ? 1 : 0,
+                  pointerEvents:
+                    !isLoadingDueCount && totalDueItems > 0 ? 'auto' : 'none',
+                  maxHeight:
+                    !isLoadingDueCount && totalDueItems > 0 ? '3rem' : '0',
+                  overflow: 'hidden',
+                }}
+              >
+                <HiOutlineLightningBolt className="text-base" />
+                <span>Fast Review</span>
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded-md bg-white/20 text-white min-w-[1.5rem] text-center">
+                  {totalDueItems}
+                </span>
+              </button>
               <Link
                 href="/learn/academy/practice"
                 className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40 transition-all"
@@ -502,37 +514,44 @@ export default function VocabularyDashboard() {
           </Head>
           {/* Desktop stats are now in the PageHeader above */}
           {/* Fast Review Widget - Mobile */}
-          {!isLoadingDueCount && totalDueItems > 0 && (
-            <div className="mt-5 sm:hidden w-full max-w-6xl mx-auto mb-4">
-              <div className="bg-gradient-to-r from-[#667eea]/80 to-[#764ba2]/80 rounded-xl shadow-md px-4 py-4 text-white">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white/20 rounded-lg">
-                      <HiOutlineLightningBolt className="w-5 h-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <h2 className="text-sm font-bold truncate">
-                        Fast Review
-                      </h2>
-                      <p className="text-xs text-white/70 truncate">
-                        Review All SRS Item(s) Due
-                      </p>
-                    </div>
+          <div
+            className="mt-5 sm:hidden w-full max-w-6xl mx-auto mb-4 transition-all duration-200"
+            style={{
+              opacity: !isLoadingDueCount && totalDueItems > 0 ? 1 : 0,
+              maxHeight: !isLoadingDueCount && totalDueItems > 0 ? '6rem' : '0',
+              overflow: 'hidden',
+              marginBottom:
+                !isLoadingDueCount && totalDueItems > 0 ? undefined : '0',
+              marginTop:
+                !isLoadingDueCount && totalDueItems > 0 ? undefined : '0',
+            }}
+          >
+            <div className="bg-gradient-to-r from-[#667eea]/80 to-[#764ba2]/80 rounded-xl shadow-md px-4 py-4 text-white">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white/20 rounded-lg">
+                    <HiOutlineLightningBolt className="w-5 h-5" />
                   </div>
-                  <button
-                    onClick={handleStartFastReview}
-                    className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-white text-[#667eea] hover:bg-white/90"
-                  >
-                    <MdAutorenew className="text-base" />
-                    <span>
-                      Review{' '}
-                      <span className="text-sm font-md">{totalDueItems}</span>
-                    </span>
-                  </button>
+                  <div className="min-w-0">
+                    <h2 className="text-sm font-bold truncate">Fast Review</h2>
+                    <p className="text-xs text-white/70 truncate">
+                      Review All SRS Item(s) Due
+                    </p>
+                  </div>
                 </div>
+                <button
+                  onClick={handleStartFastReview}
+                  className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-white text-[#667eea] hover:bg-white/90"
+                >
+                  <MdAutorenew className="text-base" />
+                  <span>
+                    Review{' '}
+                    <span className="text-sm font-md">{totalDueItems}</span>
+                  </span>
+                </button>
               </div>
             </div>
-          )}
+          </div>
 
           {/* Top tabs */}
           <div className="w-full max-w-6xl mx-auto">
@@ -629,11 +648,12 @@ export default function VocabularyDashboard() {
                       {/* Title — hidden on mobile */}
                       <h2 className="hidden sm:block text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white flex-shrink-0">
                         My Sets
-                        {recentsSets.length > 0 && (
-                          <span className="ml-2 text-xs font-normal text-black/60 dark:text-white/60">
-                            {recentsSets.length}
-                          </span>
-                        )}
+                        <span
+                          className="ml-2 text-xs font-normal text-black/60 dark:text-white/60 transition-opacity duration-200"
+                          style={{ opacity: recentsSets.length > 0 ? 1 : 0 }}
+                        >
+                          {recentsSets.length}
+                        </span>
                       </h2>
 
                       {/* Search */}
@@ -1035,7 +1055,20 @@ export default function VocabularyDashboard() {
   );
 }
 
-function StatPill({ value, label, tooltip, className }) {
+function StatPill({ value, label, tooltip, className, isLoading }) {
+  if (isLoading) {
+    return (
+      <span className={`relative ${className || ''}`}>
+        <span className="inline-block h-3.5 w-8 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse align-middle" />
+        {label && (
+          <>
+            {' '}
+            <span className="inline-block h-3 w-10 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse align-middle" />
+          </>
+        )}
+      </span>
+    );
+  }
   return (
     <span className={`relative group/stat cursor-default ${className || ''}`}>
       {label ? (

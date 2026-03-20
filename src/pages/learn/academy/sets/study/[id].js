@@ -31,9 +31,15 @@ import MasterItemsManagement from '@/components/pages/academy/sets/ViewSet/Items
 import PracticeOptions from '@/components/pages/academy/sets/ViewSet/PracticeOptions/MasterPracticeOptions';
 import MasterSetHeader from '@/components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader';
 import PageHeader from '@/components/ui/PageHeader';
-import { TbStack2, TbRepeat, TbRepeatOff, TbShare2 } from 'react-icons/tb';
+import {
+  TbStack2,
+  TbRepeat,
+  TbRepeatOff,
+  TbShare2,
+  TbTrash,
+  TbArrowBackUp,
+} from 'react-icons/tb';
 import { FiEdit2, FiMoreVertical } from 'react-icons/fi';
-import { HiOutlineDownload } from 'react-icons/hi';
 
 // ============================================================================
 // MAIN COMPONENT
@@ -460,13 +466,34 @@ export default function ViewSet() {
                       </button>
                       <button
                         onClick={() => {
-                          headerActionsRef.current?.exportCSV?.();
+                          headerActionsRef.current?.openShareModal?.();
                           setShowHeaderOptions(false);
                         }}
                         className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
                       >
-                        <HiOutlineDownload className="inline w-4 h-4" />
-                        Export Set (CSV)
+                        <TbShare2 className="inline w-4 h-4" />
+                        Share Set
+                      </button>
+                      <button
+                        onClick={() => {
+                          headerActionsRef.current?.openSRSModal?.();
+                          setShowHeaderOptions(false);
+                        }}
+                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
+                      >
+                        <TbRepeat className="inline w-4 h-4" />
+                        SRS Settings
+                      </button>
+                      <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
+                      <button
+                        onClick={() => {
+                          headerActionsRef.current?.openDelete?.();
+                          setShowHeaderOptions(false);
+                        }}
+                        className="w-full px-4 py-2 text-left text-sm hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center gap-2"
+                      >
+                        <TbTrash className="inline w-4 h-4" />
+                        Delete Set
                       </button>
                     </div>
                   )}
@@ -488,11 +515,58 @@ export default function ViewSet() {
             actionsRef={headerActionsRef}
           />
           {/* Section 2: Practice Options - Quiz and flashcard buttons */}
-          <PracticeOptions
-            setId={id}
-            setData={setData}
-            enableSrsModule={setData.srsEnabled}
-          />
+          {isLoading ? (
+            <div className="grid gap-3 mb-3 pt-2 sm:pt-0 grid-cols-1 sm:grid-cols-2 sm:h-40">
+              {/* SRS module skeleton */}
+              <div className="rounded-lg border border-black/5 dark:border-white/10 bg-white dark:bg-[#1c2b35] p-3 flex flex-col justify-between">
+                <div className="flex gap-2 mb-2">
+                  <div className="flex-1 h-10 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse" />
+                </div>
+                <div className="flex gap-3 flex-1">
+                  <div className="grid grid-cols-2 gap-3 sm:w-1/2">
+                    <div
+                      className="h-full rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                      style={{ animationDelay: '50ms' }}
+                    />
+                    <div
+                      className="h-full rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                      style={{ animationDelay: '100ms' }}
+                    />
+                  </div>
+                  <div
+                    className="flex-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                    style={{ animationDelay: '150ms' }}
+                  />
+                </div>
+              </div>
+              {/* Quiz + Flashcards skeleton */}
+              <div className="grid gap-2 w-full grid-cols-2 sm:grid-cols-1 sm:h-40">
+                <div className="rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse p-3 sm:p-4 flex items-center gap-3">
+                  <div className="h-9 w-9 rounded-lg bg-black/[0.06] dark:bg-white/[0.06]" />
+                  <div className="flex-1 space-y-1.5">
+                    <div className="h-4 w-20 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
+                    <div className="h-3 w-36 rounded bg-black/[0.04] dark:bg-white/[0.04] hidden sm:block" />
+                  </div>
+                </div>
+                <div
+                  className="rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse p-3 sm:p-4 flex items-center gap-3"
+                  style={{ animationDelay: '50ms' }}
+                >
+                  <div className="h-9 w-9 rounded-lg bg-black/[0.06] dark:bg-white/[0.06]" />
+                  <div className="flex-1 space-y-1.5">
+                    <div className="h-4 w-24 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
+                    <div className="h-3 w-32 rounded bg-black/[0.04] dark:bg-white/[0.04] hidden sm:block" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <PracticeOptions
+              setId={id}
+              setData={setData}
+              enableSrsModule={setData.srsEnabled}
+            />
+          )}
 
           {/* Section 3: Items Management - Item list/grid, add/edit/delete */}
           <MasterItemsManagement
@@ -504,6 +578,14 @@ export default function ViewSet() {
           />
         </div>
       </main>
+
+      {/* Mobile floating back button — matches SRS dashboard style */}
+      <button
+        onClick={() => router.push('/learn/academy/sets')}
+        className="lg:hidden fixed bottom-6 left-6 z-[60] flex items-center justify-center w-15 h-15 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/60 hover:bg-gray-100/90 dark:hover:bg-gray-700/70 hover:border-gray-400 dark:hover:border-gray-500 transition-all shadow-lg"
+      >
+        <TbArrowBackUp className="w-6.5 h-6.5 text-gray-700 dark:text-gray-300" />
+      </button>
     </div>
   );
 }

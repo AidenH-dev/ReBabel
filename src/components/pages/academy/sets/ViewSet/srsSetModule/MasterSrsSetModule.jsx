@@ -6,6 +6,7 @@ import { LuRepeat } from 'react-icons/lu';
 import { PiClockClockwiseBold } from 'react-icons/pi';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { TbSettings } from 'react-icons/tb';
+import AnimatedCount from '@/components/ui/AnimatedCount';
 
 export default function SRSDashboard({ setId, setData }) {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function SRSDashboard({ setId, setData }) {
   const [loading, setLoading] = useState(true);
   const [loadingNewItems, setLoadingNewItems] = useState(true);
   const [loadingSetCompletion, setLoadingSetCompletion] = useState(true);
+
   const [error, setError] = useState(null);
   const [newItemsError, setNewItemsError] = useState(null);
   const [nextDueTime, setNextDueTime] = useState(null);
@@ -401,8 +403,14 @@ export default function SRSDashboard({ setId, setData }) {
           >
             <div className="hidden sm:inline font-medium text-sm">Due Now</div>
             <div className="text-2xl font-bold flex items-center">
-              {loading ? '-' : error ? '0' : stats.dueNow}
-              <LuRepeat className="ml-1.5 text-2xl opacity-70 transform-none" />
+              <AnimatedCount
+                value={error ? '0' : stats.dueNow}
+                isLoading={loading}
+                skeletonWidth="w-8"
+                minWidth="2rem"
+                className="text-white"
+              />
+              <LuRepeat className="ml-1.5 text-2xl opacity-70 transform-none flex-shrink-0" />
             </div>
             {error && <div className="text-xs opacity-75">Error loading</div>}
           </button>
@@ -415,8 +423,13 @@ export default function SRSDashboard({ setId, setData }) {
                 Learn New
               </div>
               <div className="text-2xl font-bold flex items-center">
-                {loadingNewItems ? '-' : stats.learnNew}
-                <FaPlus className="ml-1.5 text-xl opacity-70 transform-none" />
+                <AnimatedCount
+                  value={stats.learnNew}
+                  isLoading={loadingNewItems}
+                  skeletonWidth="w-8"
+                  minWidth="2rem"
+                />
+                <FaPlus className="ml-1.5 text-xl opacity-70 transform-none flex-shrink-0" />
               </div>
             </div>
           ) : (
@@ -432,8 +445,14 @@ export default function SRSDashboard({ setId, setData }) {
                 Learn New
               </div>
               <div className="text-2xl font-bold flex items-center">
-                {loadingNewItems ? '-' : stats.learnNew}
-                <FaPlus className="ml-1.5 text-xl opacity-70 transform-none" />
+                <AnimatedCount
+                  value={stats.learnNew}
+                  isLoading={loadingNewItems}
+                  skeletonWidth="w-8"
+                  minWidth="2rem"
+                  className="text-white"
+                />
+                <FaPlus className="ml-1.5 text-xl opacity-70 transform-none flex-shrink-0" />
               </div>
             </button>
           )}
@@ -448,31 +467,41 @@ export default function SRSDashboard({ setId, setData }) {
           {/* Progress Bar and Count - Inline */}
           <div className="flex-1 flex items-center gap-3">
             {/* Completion Text */}
-            <div className="flex-shrink-0">
-              <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                {stats.totalSetItems > 0
-                  ? `${stats.completedItems}/${stats.totalSetItems}`
-                  : '0/0'}
-              </span>
-              <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
-                (
-                {stats.totalSetItems > 0
-                  ? Math.round(
-                      (stats.completedItems / stats.totalSetItems) * 100
-                    )
-                  : 0}
-                %)
-              </span>
+            <div className="flex-shrink-0" style={{ minWidth: '5.5rem' }}>
+              {loadingSetCompletion ? (
+                <span className="inline-block h-4 w-16 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse align-middle" />
+              ) : (
+                <>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white transition-opacity duration-200">
+                    {stats.totalSetItems > 0
+                      ? `${stats.completedItems}/${stats.totalSetItems}`
+                      : '0/0'}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 ml-1 transition-opacity duration-200">
+                    (
+                    {stats.totalSetItems > 0
+                      ? Math.round(
+                          (stats.completedItems / stats.totalSetItems) * 100
+                        )
+                      : 0}
+                    %)
+                  </span>
+                </>
+              )}
             </div>
 
             {/* Progress Bar */}
             <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-              <div
-                className="bg-gradient-to-r from-[#e30a5f] to-[#c1084d] h-full rounded-full transition-all duration-300"
-                style={{
-                  width: `${stats.totalSetItems > 0 ? (stats.completedItems / stats.totalSetItems) * 100 : 0}%`,
-                }}
-              ></div>
+              {loadingSetCompletion ? (
+                <div className="h-full w-full rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+              ) : (
+                <div
+                  className="bg-gradient-to-r from-[#e30a5f] to-[#c1084d] h-full rounded-full transition-all duration-500 ease-out"
+                  style={{
+                    width: `${stats.totalSetItems > 0 ? (stats.completedItems / stats.totalSetItems) * 100 : 0}%`,
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -397,17 +397,32 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {/* Date skeleton */}
-                <div className="animate-pulse h-8 w-44 rounded-lg bg-black/5 dark:bg-white/5" />
+                <div className="animate-pulse h-8 w-44 rounded-lg bg-black/[0.06] dark:bg-white/[0.06]" />
                 <div className="w-px h-7 bg-gray-200 dark:bg-gray-700" />
                 {/* Greeting skeleton */}
-                <div className="animate-pulse h-8 w-36 rounded-lg bg-black/5 dark:bg-white/5" />
+                <div
+                  className="animate-pulse h-8 w-36 rounded-lg bg-black/[0.06] dark:bg-white/[0.06]"
+                  style={{ animationDelay: '50ms' }}
+                />
                 {/* Pill skeletons */}
-                <div className="animate-pulse h-6 w-24 rounded-full bg-black/5 dark:bg-white/5" />
-                <div className="animate-pulse h-6 w-16 rounded-full bg-black/5 dark:bg-white/5" />
+                <div
+                  className="animate-pulse h-6 w-24 rounded-full bg-black/[0.04] dark:bg-white/[0.04]"
+                  style={{ animationDelay: '100ms' }}
+                />
+                <div
+                  className="animate-pulse h-6 w-16 rounded-full bg-black/[0.04] dark:bg-white/[0.04]"
+                  style={{ animationDelay: '150ms' }}
+                />
               </div>
               <div className="flex items-center gap-2">
-                <div className="animate-pulse h-9 w-28 rounded-lg bg-black/5 dark:bg-white/5" />
-                <div className="animate-pulse h-9 w-28 rounded-lg bg-black/5 dark:bg-white/5" />
+                <div
+                  className="animate-pulse h-9 w-28 rounded-lg bg-black/[0.06] dark:bg-white/[0.06]"
+                  style={{ animationDelay: '75ms' }}
+                />
+                <div
+                  className="animate-pulse h-9 w-28 rounded-lg bg-black/[0.06] dark:bg-white/[0.06]"
+                  style={{ animationDelay: '125ms' }}
+                />
               </div>
             </div>
           </div>
@@ -417,8 +432,14 @@ export default function DashboardPage() {
               <div className="max-w-5xl mx-auto space-y-4">
                 {/* Tablet greeting skeleton */}
                 <div className="lg:hidden md:block hidden">
-                  <div className="animate-pulse h-7 w-48 rounded-lg bg-black/5 dark:bg-white/5 mb-2" />
-                  <div className="animate-pulse h-4 w-72 rounded bg-black/5 dark:bg-white/5" />
+                  <div
+                    className="animate-pulse h-7 w-48 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] mb-2"
+                    style={{ animationDelay: '50ms' }}
+                  />
+                  <div
+                    className="animate-pulse h-4 w-72 rounded bg-black/[0.04] dark:bg-white/[0.04]"
+                    style={{ animationDelay: '100ms' }}
+                  />
                 </div>
                 <div className="md:hidden h-2" aria-hidden="true" />
 
@@ -438,21 +459,48 @@ export default function DashboardPage() {
                   </div>
                   {/* Study Time skeleton */}
                   <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
-                    <div className="animate-pulse w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900/30 mb-1" />
-                    <div className="animate-pulse h-6 w-16 rounded bg-black/5 dark:bg-white/5 mt-1" />
-                    <div className="animate-pulse h-3 w-24 rounded bg-black/5 dark:bg-white/5 mt-2" />
+                    <div
+                      className="animate-pulse w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900/30 mb-1"
+                      style={{ animationDelay: '50ms' }}
+                    />
+                    <div
+                      className="animate-pulse h-6 w-16 rounded bg-black/[0.06] dark:bg-white/[0.06] mt-1"
+                      style={{ animationDelay: '100ms' }}
+                    />
+                    <div
+                      className="animate-pulse h-3 w-24 rounded bg-black/[0.04] dark:bg-white/[0.04] mt-2"
+                      style={{ animationDelay: '150ms' }}
+                    />
                   </div>
                   {/* Accuracy skeleton */}
                   <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
-                    <div className="animate-pulse w-6 h-6 rounded-md bg-green-100 dark:bg-green-900/30 mb-1" />
-                    <div className="animate-pulse h-6 w-14 rounded bg-black/5 dark:bg-white/5 mt-1" />
-                    <div className="animate-pulse h-3 w-20 rounded bg-black/5 dark:bg-white/5 mt-2" />
+                    <div
+                      className="animate-pulse w-6 h-6 rounded-md bg-green-100 dark:bg-green-900/30 mb-1"
+                      style={{ animationDelay: '100ms' }}
+                    />
+                    <div
+                      className="animate-pulse h-6 w-14 rounded bg-black/[0.06] dark:bg-white/[0.06] mt-1"
+                      style={{ animationDelay: '150ms' }}
+                    />
+                    <div
+                      className="animate-pulse h-3 w-20 rounded bg-black/[0.04] dark:bg-white/[0.04] mt-2"
+                      style={{ animationDelay: '200ms' }}
+                    />
                   </div>
                   {/* Items Reviewed skeleton */}
                   <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
-                    <div className="animate-pulse w-6 h-6 rounded-md bg-purple-100 dark:bg-purple-900/30 mb-1" />
-                    <div className="animate-pulse h-6 w-12 rounded bg-black/5 dark:bg-white/5 mt-1" />
-                    <div className="animate-pulse h-3 w-24 rounded bg-black/5 dark:bg-white/5 mt-2" />
+                    <div
+                      className="animate-pulse w-6 h-6 rounded-md bg-purple-100 dark:bg-purple-900/30 mb-1"
+                      style={{ animationDelay: '150ms' }}
+                    />
+                    <div
+                      className="animate-pulse h-6 w-12 rounded bg-black/[0.06] dark:bg-white/[0.06] mt-1"
+                      style={{ animationDelay: '200ms' }}
+                    />
+                    <div
+                      className="animate-pulse h-3 w-24 rounded bg-black/[0.04] dark:bg-white/[0.04] mt-2"
+                      style={{ animationDelay: '250ms' }}
+                    />
                   </div>
                 </div>
 
@@ -461,10 +509,10 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <FaCalendarAlt className="text-gray-400 dark:text-gray-600 text-sm" />
-                      <div className="animate-pulse h-4 w-14 rounded bg-black/5 dark:bg-white/5" />
+                      <div className="animate-pulse h-4 w-14 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <div className="animate-pulse h-3 w-8 rounded bg-black/5 dark:bg-white/5" />
+                      <div className="animate-pulse h-3 w-8 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
                       <div className="flex gap-0.5">
                         {Array.from({ length: 5 }).map((_, i) => (
                           <div
@@ -473,7 +521,7 @@ export default function DashboardPage() {
                           />
                         ))}
                       </div>
-                      <div className="animate-pulse h-3 w-8 rounded bg-black/5 dark:bg-white/5" />
+                      <div className="animate-pulse h-3 w-8 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
                     </div>
                   </div>
                   {/* Calendar grid skeleton */}
@@ -497,8 +545,14 @@ export default function DashboardPage() {
                   <div className="mt-3 grid grid-cols-4 gap-3">
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div key={i} className="text-center">
-                        <div className="animate-pulse h-5 w-10 rounded bg-black/5 dark:bg-white/5 mx-auto" />
-                        <div className="animate-pulse h-3 w-16 rounded bg-black/5 dark:bg-white/5 mx-auto mt-1" />
+                        <div
+                          className="animate-pulse h-5 w-10 rounded bg-black/[0.06] dark:bg-white/[0.06] mx-auto"
+                          style={{ animationDelay: `${i * 60}ms` }}
+                        />
+                        <div
+                          className="animate-pulse h-3 w-16 rounded bg-black/[0.04] dark:bg-white/[0.04] mx-auto mt-1"
+                          style={{ animationDelay: `${i * 60 + 30}ms` }}
+                        />
                       </div>
                     ))}
                   </div>
@@ -522,10 +576,23 @@ export default function DashboardPage() {
                         className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3"
                       >
                         <div className="flex items-center gap-2">
-                          <div className="animate-pulse h-4 w-4 rounded bg-black/5 dark:bg-white/5" />
+                          <div
+                            className="animate-pulse h-4 w-4 rounded bg-black/[0.06] dark:bg-white/[0.06]"
+                            style={{ animationDelay: `${(i + 1) * 60}ms` }}
+                          />
                           <div>
-                            <div className="animate-pulse h-5 w-10 rounded bg-black/5 dark:bg-white/5" />
-                            <div className="animate-pulse h-2.5 w-14 rounded bg-black/5 dark:bg-white/5 mt-1" />
+                            <div
+                              className="animate-pulse h-5 w-10 rounded bg-black/[0.06] dark:bg-white/[0.06]"
+                              style={{
+                                animationDelay: `${(i + 1) * 60 + 30}ms`,
+                              }}
+                            />
+                            <div
+                              className="animate-pulse h-2.5 w-14 rounded bg-black/[0.04] dark:bg-white/[0.04] mt-1"
+                              style={{
+                                animationDelay: `${(i + 1) * 60 + 60}ms`,
+                              }}
+                            />
                           </div>
                         </div>
                       </div>
@@ -537,8 +604,8 @@ export default function DashboardPage() {
                 <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-1">
-                      <div className="animate-pulse h-5 w-24 rounded bg-black/5 dark:bg-white/5" />
-                      <div className="animate-pulse h-4 w-4 rounded bg-black/5 dark:bg-white/5" />
+                      <div className="animate-pulse h-5 w-24 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
+                      <div className="animate-pulse h-4 w-4 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -547,14 +614,29 @@ export default function DashboardPage() {
                         key={i}
                         className="rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] p-3"
                       >
-                        <div className="animate-pulse h-4 w-3/4 rounded bg-black/5 dark:bg-white/5" />
+                        <div
+                          className="animate-pulse h-4 w-3/4 rounded bg-black/[0.06] dark:bg-white/[0.06]"
+                          style={{ animationDelay: `${i * 80}ms` }}
+                        />
                         <div className="mt-2 flex items-center justify-between">
-                          <div className="animate-pulse h-3 w-14 rounded bg-black/5 dark:bg-white/5" />
-                          <div className="animate-pulse h-5 w-12 rounded-full bg-black/5 dark:bg-white/5" />
+                          <div
+                            className="animate-pulse h-3 w-14 rounded bg-black/[0.04] dark:bg-white/[0.04]"
+                            style={{ animationDelay: `${i * 80 + 40}ms` }}
+                          />
+                          <div
+                            className="animate-pulse h-5 w-12 rounded-full bg-black/[0.04] dark:bg-white/[0.04]"
+                            style={{ animationDelay: `${i * 80 + 60}ms` }}
+                          />
                         </div>
                         <div className="mt-3 flex items-center gap-2">
-                          <div className="animate-pulse h-6 w-14 rounded-md bg-black/5 dark:bg-white/5" />
-                          <div className="animate-pulse h-6 w-14 rounded-md bg-black/5 dark:bg-white/5" />
+                          <div
+                            className="animate-pulse h-6 w-14 rounded-md bg-black/[0.06] dark:bg-white/[0.06]"
+                            style={{ animationDelay: `${i * 80 + 80}ms` }}
+                          />
+                          <div
+                            className="animate-pulse h-6 w-14 rounded-md bg-black/[0.06] dark:bg-white/[0.06]"
+                            style={{ animationDelay: `${i * 80 + 100}ms` }}
+                          />
                         </div>
                       </div>
                     ))}
@@ -681,29 +763,39 @@ export default function DashboardPage() {
                       <span>{userData.currentStreak} day streak</span>
                     </div>
                   )}
-                {!setsLoading && sets.length > 0 && (
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 text-xs font-medium">
-                    <TbCards className="text-xs" />
-                    <span>{sets.length} sets</span>
-                  </div>
-                )}
+                <div
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 text-xs font-medium transition-opacity duration-200"
+                  style={{
+                    opacity: !setsLoading && sets.length > 0 ? 1 : 0,
+                    pointerEvents:
+                      !setsLoading && sets.length > 0 ? 'auto' : 'none',
+                  }}
+                >
+                  <TbCards className="text-xs" />
+                  <span>{sets.length} sets</span>
+                </div>
               </div>
             </div>
           }
           actions={
             <>
-              {!dueLoading && totalDueItems > 0 && (
-                <Link
-                  href="/learn/academy/sets/fast-review"
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:brightness-110 hover:ring-2 hover:ring-[#667eea]/40 transition-all"
-                >
-                  <HiOutlineLightningBolt className="text-base" />
-                  <span>Review Due</span>
-                  <span className="text-xs font-bold px-1.5 py-0.5 rounded-md bg-white/20 text-white min-w-[1.5rem] text-center">
-                    {totalDueItems}
-                  </span>
-                </Link>
-              )}
+              <Link
+                href="/learn/academy/sets/fast-review"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:brightness-110 hover:ring-2 hover:ring-[#667eea]/40 transition-all duration-200"
+                style={{
+                  opacity: !dueLoading && totalDueItems > 0 ? 1 : 0,
+                  pointerEvents:
+                    !dueLoading && totalDueItems > 0 ? 'auto' : 'none',
+                  maxHeight: !dueLoading && totalDueItems > 0 ? '3rem' : '0',
+                  overflow: 'hidden',
+                }}
+              >
+                <HiOutlineLightningBolt className="text-base" />
+                <span>Review Due</span>
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded-md bg-white/20 text-white min-w-[1.5rem] text-center">
+                  {totalDueItems}
+                </span>
+              </Link>
               <Link
                 href="/learn/academy/resources"
                 className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40 transition-all"
@@ -717,7 +809,7 @@ export default function DashboardPage() {
 
         {/* Mobile header */}
         <div className="lg:hidden px-4 pt-[max(1rem,var(--cap-safe-top))] pb-4">
-          <div className="flex items-center gap-2.5 text-lg sm:text-xl md:text-2xl">
+          <div className="flex items-baseline gap-2.5 text-lg sm:text-xl md:text-2xl">
             <span
               className="relative text-gray-900 dark:text-white"
               style={{ fontFeatureSettings: '"palt"' }}
@@ -797,7 +889,7 @@ export default function DashboardPage() {
                 <rp>)</rp>
               </ruby>
             </span>
-            <div className="w-px h-5 bg-gray-300 dark:bg-gray-600" />
+            <span className="inline-block w-px h-[1.1em] bg-gray-300 dark:bg-gray-600 align-baseline translate-y-[0.15em]" />
             <span className="font-bold text-gray-900 dark:text-white">
               {greeting}
             </span>
@@ -1068,7 +1160,7 @@ export default function DashboardPage() {
                     {Array.from({ length: 3 }).map((_, i) => (
                       <div
                         key={i}
-                        className="animate-pulse rounded-lg bg-black/5 dark:bg-white/5 h-24"
+                        className="animate-pulse rounded-lg bg-black/[0.06] dark:bg-white/[0.06] h-24"
                       />
                     ))}
                   </div>

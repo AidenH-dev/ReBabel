@@ -3,7 +3,13 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { FiEdit2, FiMoreVertical, FiCopy, FiCheck } from 'react-icons/fi';
 import { HiOutlineDownload } from 'react-icons/hi';
-import { TbRepeat, TbRepeatOff, TbShare2, TbLoader3 } from 'react-icons/tb';
+import {
+  TbRepeat,
+  TbRepeatOff,
+  TbShare2,
+  TbLoader3,
+  TbTrash,
+} from 'react-icons/tb';
 import dynamic from 'next/dynamic';
 const QRCode = dynamic(
   () => import('react-qrcode-logo').then((mod) => mod.QRCode),
@@ -444,6 +450,7 @@ export default function MasterSetHeader({
         openEdit: handleEditSetDetails,
         openSRSModal: handleOpenSRSModal,
         openShareModal: handleOpenShareModal,
+        openDelete: () => setShowDeleteSetConfirm(true),
         toggleOptions: () => setShowOptions((v) => !v),
         exportCSV: handleExportCSV,
       };
@@ -554,11 +561,25 @@ export default function MasterSetHeader({
               {showOptions && (
                 <div className="absolute right-0 dark:text-white mt-1 w-56 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
                   <button
-                    onClick={handleExportCSV}
+                    onClick={() => {
+                      handleOpenSRSModal();
+                      setShowOptions(false);
+                    }}
                     className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
                   >
-                    <HiOutlineDownload className="inline" />
-                    Export Set (CSV)
+                    <TbRepeat className="inline w-4 h-4" />
+                    SRS Settings
+                  </button>
+                  <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
+                  <button
+                    onClick={() => {
+                      setShowDeleteSetConfirm(true);
+                      setShowOptions(false);
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center gap-2"
+                  >
+                    <TbTrash className="inline w-4 h-4" />
+                    Delete Set
                   </button>
                 </div>
               )}
