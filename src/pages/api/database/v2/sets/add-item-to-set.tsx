@@ -2,6 +2,8 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { resolveUserId } from '@/lib/resolveUserId';
+const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -64,6 +66,26 @@ export default withApiAuthRequired(async function handler(
     }
 
     const { set_id, item_type, item_data } = body;
+
+    // Resolve owner to usr_ ID
+    if (item_data.owner) {
+      item_data.owner = await resolveUserId(item_data.owner);
+    }
+
+    // Auto-categorize vocab items without a category
+    if (
+      item_type === 'vocab' &&
+      (!item_data.lexical_category || item_data.lexical_category.trim() === '')
+    ) {
+      try {
+        const result = await categorizeWord(item_data.kana, item_data.kanji);
+        if (result && result.lexical_category) {
+          item_data.lexical_category = result.lexical_category;
+        }
+      } catch (catError) {
+        console.error('Auto-categorization error:', catError);
+      }
+    }
 
     // Convert item_data to JSON string
     const itemJsonString = JSON.stringify(item_data);

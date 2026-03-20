@@ -4,6 +4,7 @@ import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createRateLimiter } from '@/lib/rateLimit';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
 
@@ -70,7 +71,7 @@ interface ApiResponse {
   message?: string;
 }
 
-async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>, resolvedUserId: string) {
   try {
     // Parse the request body
     const body: CreateSetRequest = req.body;
@@ -84,6 +85,12 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
     }
 
     const { set, items } = body;
+
+    // Override owner with resolved usr_ ID on set and all items
+    set.owner = resolvedUserId;
+    for (const item of items) {
+      item.owner = resolvedUserId;
+    }
 
     // Validate items array
     for (let i = 0; i < items.length; i++) {
@@ -262,6 +269,31 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
       });
     }
 
+    // Fire-and-forget: auto-categorize uncategorized vocab items after response
+    const uncategorizedVocab = vocabItems
+      .map((item, i) => ({ item, entityId: vocabEntityIds[i] }))
+      .filter(({ item, entityId }) => entityId && (!item.lexical_category || item.lexical_category.trim() === ''));
+
+    if (uncategorizedVocab.length > 0) {
+      (async () => {
+        try {
+          for (const { item, entityId } of uncategorizedVocab) {
+            const result = await categorizeWord(item.kana, item.kanji);
+            if (result && result.lexical_category) {
+              await supabase
+                .schema('v1_kvs_rebabel')
+                .rpc('update_vocab_entity_by_id', {
+                  entity_uuid: entityId,
+                  json_updates: JSON.stringify({ lexical_category: result.lexical_category }),
+                });
+            }
+          }
+        } catch (catError) {
+          console.error('Auto-categorization error:', catError);
+        }
+      })();
+    }
+
     return res.status(201).json({
       success: true,
       data: {
@@ -333,7 +365,7 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
           error: 'Account set limit reached (1000 sets maximum)'
         });
       }
-      return handlePOST(req, res);
+      return handlePOST(req, res, userId);
     }
 
     case 'GET':
