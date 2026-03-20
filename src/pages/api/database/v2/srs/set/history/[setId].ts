@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { resolveUserId } from '@/lib/resolveUserId';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
@@ -13,7 +14,7 @@ interface ApiResponse {
   error?: string;
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>, userId: string) {
   try {
     const { setId } = req.query;
 
@@ -21,6 +22,26 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
       return res.status(400).json({
         success: false,
         error: 'Invalid or missing setId parameter'
+      });
+    }
+
+    // Verify the authenticated user owns this set before returning its history
+    const { data: setData, error: setError } = await supabase
+      .schema('v1_kvs_rebabel')
+      .rpc('get_set_with_items_v2', { set_entity_id: setId });
+
+    if (setError || !setData) {
+      return res.status(404).json({
+        success: false,
+        error: 'Set not found'
+      });
+    }
+
+    const parsed = typeof setData === 'string' ? JSON.parse(setData) : setData;
+    if (parsed?.set?.owner !== userId) {
+      return res.status(403).json({
+        success: false,
+        error: 'Forbidden - you do not own this set'
       });
     }
 
@@ -61,6 +82,8 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
     });
   }
 
+  const userId = await resolveUserId(session.user.sub);
+
   if (req.method !== 'GET') {
     return res.status(405).json({
       success: false,
@@ -68,5 +91,5 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
     });
   }
 
-  return handleGET(req, res);
+  return handleGET(req, res, userId);
 });

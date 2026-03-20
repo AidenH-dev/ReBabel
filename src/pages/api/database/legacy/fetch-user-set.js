@@ -1,3 +1,11 @@
+// Legacy endpoint — disabled due to IDOR vulnerability (issue #38)
+export default function handler(req, res) {
+  return res
+    .status(410)
+    .json({ error: 'This endpoint has been retired. Use the v2 API.' });
+}
+
+/*
 // pages/api/database/fetch-user-set.js
 import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
@@ -12,7 +20,7 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default withApiAuthRequired(async function handler(req, res) {
+withApiAuthRequired(async function handler(req, res) {
   // Verify authentication
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
@@ -54,3 +62,4 @@ export default withApiAuthRequired(async function handler(req, res) {
     return res.status(500).json({ error: err.message });
   }
 })
+*/

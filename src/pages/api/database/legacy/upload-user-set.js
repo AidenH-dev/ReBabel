@@ -1,3 +1,11 @@
+// Legacy endpoint — disabled due to IDOR vulnerability (issue #38)
+export default function handler(req, res) {
+  return res
+    .status(410)
+    .json({ error: 'This endpoint has been retired. Use the v2 API.' });
+}
+
+/*
 // pages/api/uploadSet.js
 import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
@@ -8,7 +16,7 @@ const supabaseKey = process.env.NEXT_SUPABASE_ANON_KEY;
 //process.env.SUPABASE_SERVICE_ROLE_KEY ||
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default withApiAuthRequired(async function handler(req, res) {
+withApiAuthRequired(async function handler(req, res) {
   // Verify authentication
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
@@ -55,3 +63,4 @@ export default withApiAuthRequired(async function handler(req, res) {
   // Return a success response along with the inserted data.
   return res.status(200).json({ message: 'Set uploaded successfully', data });
 })
+*/
