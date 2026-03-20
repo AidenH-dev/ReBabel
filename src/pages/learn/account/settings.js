@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import {
   FiMail,
+  FiUser,
   FiKey,
   FiCreditCard,
   FiLogOut,
@@ -16,6 +17,7 @@ import {
   FiX,
   FiAlertCircle,
   FiBell,
+  FiEdit2,
 } from 'react-icons/fi';
 import { TbSunset2, TbCoffee } from 'react-icons/tb';
 import { useTheme } from '../../../contexts/ThemeContext';
@@ -32,6 +34,11 @@ export default function Settings() {
   const [showTerms, setShowTerms] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [username, setUsername] = useState('');
+  const [usernameInput, setUsernameInput] = useState('');
+  const [usernameEditing, setUsernameEditing] = useState(false);
+  const [usernameSaving, setUsernameSaving] = useState(false);
+  const [usernameError, setUsernameError] = useState(null);
   const [isNativeApp, setIsNativeApp] = useState(false);
   const [pushToken, setPushToken] = useState(null);
   const [pushLoading, setPushLoading] = useState(false);
@@ -77,8 +84,22 @@ export default function Settings() {
       }
     };
 
+    const fetchUsername = async () => {
+      try {
+        const res = await fetch('/api/database/v2/user/username');
+        const data = await res.json();
+        if (data.username) {
+          setUsername(data.username);
+          setUsernameInput(data.username);
+        }
+      } catch (error) {
+        console.error('Error fetching username:', error);
+      }
+    };
+
     fetchUserProfile();
     fetchSubscription();
+    fetchUsername();
 
     // Check if running in Capacitor native app
     const checkNativeApp = async () => {
@@ -93,6 +114,46 @@ export default function Settings() {
     };
     checkNativeApp();
   }, []);
+
+  const handleUsernameSave = async () => {
+    const trimmed = usernameInput.trim();
+    if (trimmed === username) {
+      setUsernameEditing(false);
+      return;
+    }
+
+    setUsernameSaving(true);
+    setUsernameError(null);
+
+    try {
+      const res = await fetch('/api/database/v2/user/username', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: trimmed }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        setUsernameError(data.error || 'Failed to update username');
+        return;
+      }
+
+      setUsername(data.username);
+      setUsernameInput(data.username);
+      setUsernameEditing(false);
+    } catch (error) {
+      console.error('Username update error:', error);
+      setUsernameError('Something went wrong. Please try again.');
+    } finally {
+      setUsernameSaving(false);
+    }
+  };
+
+  const handleUsernameCancel = () => {
+    setUsernameInput(username);
+    setUsernameEditing(false);
+    setUsernameError(null);
+  };
 
   const handleResetPassword = async () => {
     setResetLoading(true);
@@ -278,6 +339,80 @@ export default function Settings() {
                           {userProfile?.email || 'Not available'}
                         </p>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Username Section */}
+                  <div className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                        <FiUser className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                          Username
+                        </p>
+                        {usernameEditing ? (
+                          <input
+                            type="text"
+                            value={usernameInput}
+                            onChange={(e) => {
+                              setUsernameInput(e.target.value);
+                              setUsernameError(null);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleUsernameSave();
+                              if (e.key === 'Escape') handleUsernameCancel();
+                            }}
+                            placeholder="Enter a username"
+                            maxLength={15}
+                            autoFocus
+                            className="w-full h-6 p-0 bg-transparent text-base leading-6 text-gray-900 dark:text-white dusk:text-[#e8e0d8] border-b border-[#e30a5f] rounded-none focus:outline-none"
+                          />
+                        ) : (
+                          <p className="h-6 leading-6 text-gray-900 dark:text-white dusk:text-[#e8e0d8] truncate">
+                            {username || (
+                              <span className="text-gray-400 dark:text-gray-500 dusk:text-[#a8b2c1]/50">
+                                Not set
+                              </span>
+                            )}
+                          </p>
+                        )}
+                        {usernameError && (
+                          <p className="mt-1 text-xs text-red-500">
+                            {usernameError}
+                          </p>
+                        )}
+                      </div>
+                      {usernameEditing ? (
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                          <button
+                            onClick={handleUsernameCancel}
+                            disabled={usernameSaving}
+                            className="p-2 rounded-lg text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1] hover:bg-gray-100 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors disabled:opacity-50"
+                          >
+                            <FiX className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={handleUsernameSave}
+                            disabled={usernameSaving || !usernameInput.trim()}
+                            className="p-2 rounded-lg text-[#e30a5f] hover:bg-[#e30a5f]/10 transition-colors disabled:opacity-50"
+                          >
+                            {usernameSaving ? (
+                              <FiLoader className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <FiCheck className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setUsernameEditing(true)}
+                          className="p-2 rounded-lg text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1] hover:bg-gray-100 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors flex-shrink-0"
+                        >
+                          <FiEdit2 className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   </div>
 
