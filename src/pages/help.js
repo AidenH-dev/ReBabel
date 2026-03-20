@@ -72,7 +72,7 @@ export default function Help() {
   return (
     <>
       <Head>
-        <title>Help & FAQ - ReBabel</title>
+        <title>Japanese Learning FAQ – SRS, Study Sets & More | ReBabel</title>
         <meta charSet="utf-8" />
         <meta
           name="viewport"
@@ -80,11 +80,11 @@ export default function Help() {
         />
         <meta
           name="description"
-          content="Get help with ReBabel - answers to frequently asked questions about our Japanese learning platform, features, pricing, and support."
+          content="Answers to common questions about learning Japanese with ReBabel — how SRS works, creating custom study sets, grammar practice, pricing, and getting started."
         />
         <meta
           name="keywords"
-          content="help, faq, japanese learning, support, rebabel"
+          content="japanese learning faq, srs help, spaced repetition questions, study sets, rebabel help"
         />
         <meta name="author" content="ReBabel" />
         <meta name="theme-color" content="#e30a5f" />
@@ -95,21 +95,36 @@ export default function Help() {
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://rebabel.org/help" />
-        <meta property="og:title" content="Help & FAQ - ReBabel" />
+        <meta
+          property="og:title"
+          content="Japanese Learning FAQ – SRS, Study Sets & More | ReBabel"
+        />
         <meta
           property="og:description"
-          content="Get help with ReBabel - answers to frequently asked questions about our Japanese learning platform."
+          content="Answers to common questions about learning Japanese with ReBabel — how SRS works, creating custom study sets, grammar practice, pricing, and getting started."
         />
+        <meta
+          property="og:image"
+          content="https://www.rebabel.org/og-help.png"
+        />
+        <meta property="og:image:alt" content="ReBabel Help & FAQ" />
         <meta property="og:site_name" content="ReBabel" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter */}
-        <meta property="twitter:card" content="summary" />
+        <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://rebabel.org/help" />
-        <meta property="twitter:title" content="Help & FAQ - ReBabel" />
+        <meta
+          property="twitter:title"
+          content="Japanese Learning FAQ – SRS, Study Sets & More | ReBabel"
+        />
         <meta
           property="twitter:description"
-          content="Get help with ReBabel - answers to frequently asked questions about our Japanese learning platform."
+          content="Answers to common questions about learning Japanese with ReBabel — how SRS works, creating custom study sets, grammar practice, pricing, and getting started."
+        />
+        <meta
+          property="twitter:image"
+          content="https://www.rebabel.org/og-help.png"
         />
 
         {/* JSON-LD Structured Data for FAQ */}

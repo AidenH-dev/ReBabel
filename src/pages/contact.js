@@ -1,14 +1,14 @@
-import Head from "next/head";
-import Link from "next/link";
-import { useState } from "react";
-import { FiMail, FiCheck, FiCopy } from "react-icons/fi";
-import { FaInstagram, FaDiscord, FaGithub } from "react-icons/fa";
+import Head from 'next/head';
+import Link from 'next/link';
+import { useState } from 'react';
+import { FiMail, FiCheck, FiCopy } from 'react-icons/fi';
+import { FaInstagram, FaDiscord, FaGithub } from 'react-icons/fa';
 
 export default function Contact() {
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const copyEmail = async () => {
-    await navigator.clipboard.writeText("rebabel.development@gmail.com");
+    await navigator.clipboard.writeText('rebabel.development@gmail.com');
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
@@ -16,32 +16,32 @@ export default function Contact() {
   const contactMethods = [
     {
       icon: FiMail,
-      title: "Email",
-      description: "rebabel.development@gmail.com",
+      title: 'Email',
+      description: 'rebabel.development@gmail.com',
       action: copyEmail,
-      actionLabel: copiedEmail ? "Copied!" : "Copy Email",
+      actionLabel: copiedEmail ? 'Copied!' : 'Copy Email',
       actionIcon: copiedEmail ? FiCheck : FiCopy,
     },
     {
       icon: FaDiscord,
-      title: "Discord",
-      description: "Join our community for help and discussions",
-      href: "https://discord.gg/wYsuQrcY4a",
-      actionLabel: "Join Server",
+      title: 'Discord',
+      description: 'Join our community for help and discussions',
+      href: 'https://discord.gg/wYsuQrcY4a',
+      actionLabel: 'Join Server',
     },
     {
       icon: FaInstagram,
-      title: "Instagram",
-      description: "Follow us for updates and tips",
-      href: "https://www.instagram.com/rebabelofficial/",
-      actionLabel: "Follow",
+      title: 'Instagram',
+      description: 'Follow us for updates and tips',
+      href: 'https://www.instagram.com/rebabelofficial/',
+      actionLabel: 'Follow',
     },
     {
       icon: FaGithub,
-      title: "GitHub",
-      description: "Check out our open source projects",
-      href: "https://github.com/AidenH-dev",
-      actionLabel: "Visit",
+      title: 'GitHub',
+      description: 'Check out our open source projects',
+      href: 'https://github.com/AidenH-dev',
+      actionLabel: 'Visit',
     },
   ];
 
@@ -50,12 +50,18 @@ export default function Contact() {
       <Head>
         <title>Contact Us - ReBabel</title>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
         <meta
           name="description"
           content="Get in touch with the ReBabel team. Contact us via email, Discord, or social media for support, feedback, or questions about our Japanese learning platform."
         />
-        <meta name="keywords" content="contact, support, rebabel, japanese learning, help" />
+        <meta
+          name="keywords"
+          content="contact, support, rebabel, japanese learning, help"
+        />
         <meta name="author" content="ReBabel" />
         <meta name="theme-color" content="#e30a5f" />
 
@@ -68,15 +74,24 @@ export default function Contact() {
           property="og:description"
           content="Get in touch with the ReBabel team for support, feedback, or questions."
         />
+        <meta
+          property="og:image"
+          content="https://www.rebabel.org/og-contact.png"
+        />
+        <meta property="og:image:alt" content="Contact ReBabel" />
         <meta property="og:site_name" content="ReBabel" />
         <meta property="og:locale" content="en_US" />
 
-        <meta property="twitter:card" content="summary" />
+        <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://rebabel.org/contact" />
         <meta property="twitter:title" content="Contact Us - ReBabel" />
         <meta
           property="twitter:description"
           content="Get in touch with the ReBabel team for support, feedback, or questions."
+        />
+        <meta
+          property="twitter:image"
+          content="https://www.rebabel.org/og-contact.png"
         />
       </Head>
 
@@ -254,7 +269,10 @@ export default function Contact() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2025 ReBabel. All rights reserved. Currently in beta development.</p>
+            <p>
+              &copy; 2025 ReBabel. All rights reserved. Currently in beta
+              development.
+            </p>
           </div>
         </div>
       </footer>

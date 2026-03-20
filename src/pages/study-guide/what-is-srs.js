@@ -52,7 +52,11 @@ export default function WhatIsSrsPage() {
         />
         <meta
           property="og:image"
-          content="https://www.rebabel.org/og-image.png"
+          content="https://www.rebabel.org/og-srs-guide.png"
+        />
+        <meta
+          property="og:image:alt"
+          content="What Is SRS? A guide to spaced repetition for Japanese learners"
         />
         <meta property="og:site_name" content="ReBabel" />
         <meta property="og:locale" content="en_US" />
@@ -72,7 +76,7 @@ export default function WhatIsSrsPage() {
         />
         <meta
           property="twitter:image"
-          content="https://www.rebabel.org/og-image.png"
+          content="https://www.rebabel.org/og-srs-guide.png"
         />
 
         <script

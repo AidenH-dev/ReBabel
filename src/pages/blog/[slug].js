@@ -1,7 +1,11 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getAllPosts, getPostBySlug, getRelatedPosts } from '@/lib/blog/markdown';
+import {
+  getAllPosts,
+  getPostBySlug,
+  getRelatedPosts,
+} from '@/lib/blog/markdown';
 import BlogMarkdown from '@/components/blog/BlogMarkdown';
 import BlogCard from '@/components/blog/BlogCard';
 import { formatDate } from '@/lib/blog/date';
@@ -66,13 +70,23 @@ export default function BlogPost({ post, relatedPosts }) {
       <Head>
         <title>{title} - ReBabel Blog</title>
         <meta name="description" content={excerpt} />
-        <meta name="keywords" content={tags?.join(', ') || 'language learning, language tips'} />
+        <meta
+          name="keywords"
+          content={tags?.join(', ') || 'language learning, language tips'}
+        />
 
         {/* Open Graph / Facebook - using 'property' not 'name' */}
         <meta property="og:type" content="article" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={excerpt} />
-        {image && <meta property="og:image" content={image} />}
+        <meta
+          property="og:image"
+          content={image || 'https://www.rebabel.org/og-blog.png'}
+        />
+        <meta
+          property="og:image:alt"
+          content={image ? title : 'ReBabel Blog'}
+        />
         <meta property="og:url" content={`https://rebabel.org/blog/${slug}`} />
         <meta property="og:site_name" content="ReBabel Blog" />
 
@@ -88,7 +102,10 @@ export default function BlogPost({ post, relatedPosts }) {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={excerpt} />
-        {image && <meta name="twitter:image" content={image} />}
+        <meta
+          name="twitter:image"
+          content={image || 'https://www.rebabel.org/og-blog.png'}
+        />
 
         {/* Canonical URL */}
         <link rel="canonical" href={`https://www.rebabel.org/blog/${slug}`} />
@@ -107,14 +124,16 @@ export default function BlogPost({ post, relatedPosts }) {
               image: image || 'https://rebabel.org/og-image.png',
               datePublished: date,
               dateModified: date,
-              author: author ? {
-                '@type': 'Person',
-                name: author,
-              } : undefined,
+              author: author
+                ? {
+                    '@type': 'Person',
+                    name: author,
+                  }
+                : undefined,
               keywords: tags?.join(', '),
               articleBody: content,
               url: `https://rebabel.org/blog/${slug}`,
-            })
+            }),
           }}
         />
       </Head>
@@ -136,7 +155,10 @@ export default function BlogPost({ post, relatedPosts }) {
         {/* Back Button & Article Meta */}
         <div className="dark:bg-gray-900 dark:border-b dark:border-gray-800 bg-white border-b border-gray-200 sticky top-0 z-40">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link href="/blog" className="flex items-center gap-2 dark:text-gray-400 dark:hover:text-[#e30a5f] text-gray-600 hover:text-[#e30a5f] transition-colors font-fredoka font-medium">
+            <Link
+              href="/blog"
+              className="flex items-center gap-2 dark:text-gray-400 dark:hover:text-[#e30a5f] text-gray-600 hover:text-[#e30a5f] transition-colors font-fredoka font-medium"
+            >
               <FiArrowLeft size={20} />
               Back to Blog
             </Link>
@@ -147,7 +169,10 @@ export default function BlogPost({ post, relatedPosts }) {
                 className="relative p-2 dark:hover:bg-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
                 title="Copy link"
               >
-                <FiCopy className="dark:text-gray-400 dark:hover:text-[#e30a5f] text-gray-600 hover:text-[#e30a5f]" size={20} />
+                <FiCopy
+                  className="dark:text-gray-400 dark:hover:text-[#e30a5f] text-gray-600 hover:text-[#e30a5f]"
+                  size={20}
+                />
                 {copied && (
                   <span className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-gray-200 text-sm rounded whitespace-nowrap">
                     Copied!
@@ -168,7 +193,11 @@ export default function BlogPost({ post, relatedPosts }) {
 
             <div className="flex flex-wrap gap-2 mb-6">
               {tags?.map((tag) => (
-                <Link key={tag} href={`/blog?tag=${tag}`} className="px-3 py-1 bg-[#e30a5f] bg-opacity-20 text-white text-sm rounded-full hover:bg-opacity-30 transition-colors font-fredoka">
+                <Link
+                  key={tag}
+                  href={`/blog?tag=${tag}`}
+                  className="px-3 py-1 bg-[#e30a5f] bg-opacity-20 text-white text-sm rounded-full hover:bg-opacity-30 transition-colors font-fredoka"
+                >
                   {tag}
                 </Link>
               ))}
@@ -176,18 +205,28 @@ export default function BlogPost({ post, relatedPosts }) {
 
             <div className="flex flex-wrap gap-6 dark:text-gray-400 text-gray-600 pb-6 dark:border-b dark:border-gray-800 border-b border-gray-200">
               <div>
-                <span className="font-fredoka dark:text-gray-500 text-gray-600">Published</span>
-                <p className="dark:text-white text-gray-900">{formatDate(date)}</p>
+                <span className="font-fredoka dark:text-gray-500 text-gray-600">
+                  Published
+                </span>
+                <p className="dark:text-white text-gray-900">
+                  {formatDate(date)}
+                </p>
               </div>
               {author && (
                 <div>
-                  <span className="font-fredoka dark:text-gray-500 text-gray-600">Author</span>
+                  <span className="font-fredoka dark:text-gray-500 text-gray-600">
+                    Author
+                  </span>
                   <p className="dark:text-white text-gray-900">{author}</p>
                 </div>
               )}
               <div>
-                <span className="font-fredoka dark:text-gray-500 text-gray-600">Reading Time</span>
-                <p className="dark:text-white text-gray-900">~{Math.ceil(content.split(' ').length / 200)} min</p>
+                <span className="font-fredoka dark:text-gray-500 text-gray-600">
+                  Reading Time
+                </span>
+                <p className="dark:text-white text-gray-900">
+                  ~{Math.ceil(content.split(' ').length / 200)} min
+                </p>
               </div>
             </div>
           </header>
@@ -200,8 +239,12 @@ export default function BlogPost({ post, relatedPosts }) {
         {relatedPosts.length > 0 && (
           <section className="dark:bg-gray-900 bg-gray-50 dark:border-t dark:border-gray-800 border-t border-gray-200 py-16 px-4">
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold dark:text-white text-gray-900 mb-2 font-fredoka">Related Articles</h2>
-              <p className="dark:text-gray-400 text-gray-600 mb-8">Explore more on similar topics</p>
+              <h2 className="text-3xl font-bold dark:text-white text-gray-900 mb-2 font-fredoka">
+                Related Articles
+              </h2>
+              <p className="dark:text-gray-400 text-gray-600 mb-8">
+                Explore more on similar topics
+              </p>
 
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {relatedPosts.map((relatedPost) => (
@@ -223,9 +266,13 @@ export default function BlogPost({ post, relatedPosts }) {
               Ready to improve your language skills?
             </h3>
             <p className="dark:text-gray-300 text-gray-700 mb-6">
-              Start practicing with interactive lessons and spaced repetition today.
+              Start practicing with interactive lessons and spaced repetition
+              today.
             </p>
-            <Link href="/learn" className="inline-block px-8 py-3 bg-[#e30a5f] hover:bg-[#ff1f75] text-white rounded-lg font-fredoka font-medium transition-colors">
+            <Link
+              href="/learn"
+              className="inline-block px-8 py-3 bg-[#e30a5f] hover:bg-[#ff1f75] text-white rounded-lg font-fredoka font-medium transition-colors"
+            >
               Start Learning
             </Link>
           </div>

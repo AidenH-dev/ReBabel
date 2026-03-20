@@ -451,6 +451,14 @@ export default function KanjiPdfTestPage() {
           content="https://www.rebabel.org/kanji-practice"
         />
         <meta property="og:site_name" content="ReBabel" />
+        <meta
+          property="og:image"
+          content="https://www.rebabel.org/og-kanji-practice.png"
+        />
+        <meta
+          property="og:image:alt"
+          content="Kanji writing practice sheet generator with grid and guide lines"
+        />
         <meta property="twitter:card" content="summary_large_image" />
         <meta
           property="twitter:url"
@@ -463,6 +471,37 @@ export default function KanjiPdfTestPage() {
         <meta
           property="twitter:description"
           content="Build clean printable kanji practice PDFs with custom rows, guides, and readings."
+        />
+        <meta
+          property="twitter:image"
+          content="https://www.rebabel.org/og-kanji-practice.png"
+        />
+
+        {/* JSON-LD SoftwareApplication */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'SoftwareApplication',
+              name: 'Kanji Writing Practice Sheet Generator',
+              description:
+                'Create printable kanji writing practice sheets with custom readings, meanings, guide styles, and PDF export.',
+              url: 'https://www.rebabel.org/kanji-practice',
+              applicationCategory: 'EducationalApplication',
+              operatingSystem: 'Web',
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'USD',
+              },
+              author: {
+                '@type': 'Organization',
+                name: 'ReBabel',
+                url: 'https://www.rebabel.org',
+              },
+            }),
+          }}
         />
       </Head>
 

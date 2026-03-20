@@ -13,6 +13,13 @@ import {
 import { FaArrowRightLong } from 'react-icons/fa6';
 import { TbRepeat } from 'react-icons/tb';
 
+export async function getStaticProps() {
+  return {
+    props: {},
+    revalidate: 86400,
+  };
+}
+
 export default function Home() {
   const animationsRef = useRef(null);
   const router = useRouter();
@@ -142,6 +149,31 @@ export default function Home() {
                     '@type': 'EntryPoint',
                     urlTemplate: 'https://www.rebabel.org/api/auth/login',
                   },
+                },
+              }),
+            }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                name: 'ReBabel',
+                url: 'https://www.rebabel.org',
+                logo: 'https://www.rebabel.org/ReBabelIcon.png',
+                description:
+                  'Science-based Japanese language learning platform using spaced repetition, grammar SRS, and interactive practice.',
+                sameAs: [
+                  'https://discord.gg/2g6BHuaBtD',
+                  'https://www.instagram.com/rebabelofficial/',
+                  'https://github.com/AidenH-dev',
+                  'https://apps.apple.com/us/app/rebabel/id6758738478',
+                ],
+                contactPoint: {
+                  '@type': 'ContactPoint',
+                  email: 'rebabel.development@gmail.com',
+                  contactType: 'customer support',
                 },
               }),
             }}
