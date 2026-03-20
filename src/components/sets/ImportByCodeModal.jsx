@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { FiX, FiSearch } from 'react-icons/fi';
-import { TbStack2, TbDownload } from 'react-icons/tb';
+import { TbStack2, TbDownload, TbLoader3, TbEye } from 'react-icons/tb';
+import ImportProgressOverlay from '@/components/sets/ImportProgressOverlay';
 
 const CODE_PATTERN = /^[a-z0-9]{7}$/;
 const UUID_PATTERN =
@@ -13,6 +14,12 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Import state
+  const [isImporting, setIsImporting] = useState(false);
+  const [importProgress, setImportProgress] = useState(0);
+  const [importStage, setImportStage] = useState('set');
+  const [importError, setImportError] = useState(null);
 
   if (!isOpen) return null;
 
@@ -28,6 +35,7 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
 
     setIsLoading(true);
     setError('');
+    setImportError(null);
     setPreview(null);
 
     try {
@@ -42,12 +50,13 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
         setError('Something went wrong. Please try again.');
         return;
       }
-      const data = await res.json();
-      if (!data.set) {
+      const json = await res.json();
+      const payload = json.data || json;
+      if (!payload.set) {
         setError('No set found with that code.');
         return;
       }
-      setPreview(data);
+      setPreview(payload);
     } catch {
       setError(
         'Failed to look up the code. Check your connection and try again.'
@@ -57,14 +66,64 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
     }
   };
 
-  const handleImport = () => {
+  const handleImport = async () => {
+    const trimmed = code.trim().toLowerCase();
+    setIsImporting(true);
+    setImportError(null);
+    setImportStage('set');
+    setImportProgress(15);
+
+    try {
+      const progressTimer1 = setTimeout(() => setImportProgress(30), 300);
+
+      const response = await fetch('/api/shared/sets/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shareToken: trimmed }),
+      });
+
+      clearTimeout(progressTimer1);
+
+      setImportStage('items');
+      setImportProgress(50);
+      await new Promise((r) => setTimeout(r, 400));
+      setImportProgress(70);
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to import set');
+      }
+
+      setImportStage('linking');
+      setImportProgress(85);
+      await new Promise((r) => setTimeout(r, 400));
+      setImportProgress(95);
+      await new Promise((r) => setTimeout(r, 300));
+
+      setImportStage('done');
+      setImportProgress(100);
+      await new Promise((r) => setTimeout(r, 800));
+
+      router.push(`/learn/academy/sets/study/${result.setEntityId}`);
+      onClose();
+    } catch (err) {
+      console.error('Error importing set:', err);
+      setImportError(err.message);
+      setIsImporting(false);
+      setImportProgress(0);
+      setImportStage('set');
+    }
+  };
+
+  const handleViewSet = () => {
     const trimmed = code.trim().toLowerCase();
     router.push(`/learn/academy/sets/import/${trimmed}`);
     onClose();
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !isLoading) {
+    if (e.key === 'Enter' && !isLoading && !isImporting) {
       if (preview) {
         handleImport();
       } else {
@@ -74,15 +133,31 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
   };
 
   const handleClose = () => {
+    if (isImporting) return;
     setCode('');
     setPreview(null);
     setError('');
+    setImportError(null);
     onClose();
   };
 
+  const itemCount = preview?.items?.length || preview?.item_count || 0;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden">
+      <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden relative">
+        {/* Import progress overlay */}
+        {isImporting && (
+          <div className="absolute inset-0 z-10 bg-white/80 dark:bg-[#1c2b35]/80 backdrop-blur-sm flex items-center justify-center rounded-xl">
+            <ImportProgressOverlay
+              importStage={importStage}
+              importProgress={importProgress}
+              itemCount={itemCount}
+              variant="inline"
+            />
+          </div>
+        )}
+
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -90,7 +165,8 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
           </h2>
           <button
             onClick={handleClose}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            disabled={isImporting}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
           >
             <FiX className="w-5 h-5" />
           </button>
@@ -111,17 +187,19 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
               onChange={(e) => {
                 setCode(e.target.value);
                 setError('');
+                setImportError(null);
                 setPreview(null);
               }}
               onKeyDown={handleKeyDown}
               placeholder="e.g. a7f3b2k"
               maxLength={36}
               autoFocus
-              className="flex-1 px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]/30 focus:border-[#e30a5f] font-mono tracking-wider"
+              disabled={isImporting}
+              className="flex-1 px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]/30 focus:border-[#e30a5f] font-mono tracking-wider disabled:opacity-50"
             />
             <button
               onClick={handleLookup}
-              disabled={isLoading || !code.trim()}
+              disabled={isLoading || isImporting || !code.trim()}
               className="px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1.5"
             >
               <FiSearch className="w-4 h-4" />
@@ -130,9 +208,11 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
           </div>
 
           {/* Error */}
-          {error && (
+          {(error || importError) && (
             <div className="flex items-start gap-2 px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {error || importError}
+              </p>
             </div>
           )}
 
@@ -167,16 +247,31 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
               <div className="flex items-center gap-3 text-xs text-gray-400">
                 <span className="flex items-center gap-1">
                   <TbStack2 className="w-3.5 h-3.5" />
-                  {preview.items?.length || 0} items
+                  {itemCount} {itemCount === 1 ? 'item' : 'items'}
                 </span>
               </div>
-              <button
-                onClick={handleImport}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 transition-all"
-              >
-                <TbDownload className="w-4 h-4" />
-                Import This Set
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleImport}
+                  disabled={isImporting}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isImporting ? (
+                    <TbLoader3 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <TbDownload className="w-4 h-4" />
+                  )}
+                  {isImporting ? 'Importing...' : 'Import'}
+                </button>
+                <button
+                  onClick={handleViewSet}
+                  disabled={isImporting}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <TbEye className="w-4 h-4" />
+                  View Set
+                </button>
+              </div>
             </div>
           )}
         </div>

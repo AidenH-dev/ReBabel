@@ -47,6 +47,7 @@ export default function MasterSetHeader({
   const [shareExpiresAt, setShareExpiresAt] = useState(null);
   const [shareExpiry, setShareExpiry] = useState('7d');
   const [shareError, setShareError] = useState(null);
+  const [codeCopied, setCodeCopied] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isRevokingShare, setIsRevokingShare] = useState(false);
 
@@ -1415,6 +1416,52 @@ export default function MasterSetHeader({
                       </>
                     ) : null}
                   </div>
+
+                  {/* Import code */}
+                  {showShareResult && shareToken && (
+                    <div className="bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+                      <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-2">
+                        Import code
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <code className="flex-1 text-center text-2xl font-bold font-mono tracking-[0.3em] text-gray-900 dark:text-white select-all">
+                          {shareToken}
+                        </code>
+                        <button
+                          onClick={async () => {
+                            try {
+                              await navigator.clipboard.writeText(shareToken);
+                            } catch {
+                              const textarea =
+                                document.createElement('textarea');
+                              textarea.value = shareToken;
+                              document.body.appendChild(textarea);
+                              textarea.select();
+                              document.execCommand('copy');
+                              document.body.removeChild(textarea);
+                            }
+                            setCodeCopied(true);
+                            setTimeout(() => setCodeCopied(false), 2000);
+                          }}
+                          className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
+                            codeCopied
+                              ? 'text-green-500 bg-green-50 dark:bg-green-900/20'
+                              : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+                          }`}
+                          title={codeCopied ? 'Copied!' : 'Copy code'}
+                        >
+                          {codeCopied ? (
+                            <FiCheck className="w-4 h-4" />
+                          ) : (
+                            <FiCopy className="w-4 h-4" />
+                          )}
+                        </button>
+                      </div>
+                      <p className="text-[9px] text-gray-400 dark:text-gray-500 mt-1.5 text-center">
+                        Share this code for quick import
+                      </p>
+                    </div>
+                  )}
 
                   {/* Expiration — always visible */}
                   <div>
