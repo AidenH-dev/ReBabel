@@ -17,7 +17,14 @@ import {
 import KeyboardShortcutHint from '../../../../../../components/Set/Features/Field-Card-Session/shared/views/KeyboardShortcutHint';
 import { TbCards, TbX } from 'react-icons/tb';
 import { MdFlip } from 'react-icons/md';
+import { FiEdit2 } from 'react-icons/fi';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
+import ItemEditModal from '@/components/Set/Features/Field-Card-Session/shared/views/ItemEditModal.jsx';
+import {
+  buildEditableItem,
+  toUpdateRequest,
+  mergeIntoBaseItem,
+} from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
 
 export default function SetFlashcards() {
   const router = useRouter();
@@ -28,6 +35,11 @@ export default function SetFlashcards() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Item editing states
+  const [editingItem, setEditingItem] = useState(null);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [editError, setEditError] = useState(null);
 
   // Card states
   const [isFront, setIsFront] = useState(true);
@@ -76,18 +88,17 @@ export default function SetFlashcards() {
   // Study mode
   const [studyMode, setStudyMode] = useState('plain'); // plain, quiz, interval
 
-  const SLIDE_DURATION = 300;
+  const SLIDE_DURATION = 150;
 
   const transitionClasses = {
-    idle: 'transition-all duration-300 ease-out translate-x-0 opacity-100',
+    idle: 'transition-transform duration-150 ease-out translate-x-0',
     'slide-out-left':
-      'transition-all duration-300 ease-out -translate-x-full opacity-0',
-    'slide-in-right':
-      'transition-all duration-300 ease-out translate-x-full opacity-0',
+      'transition-transform duration-150 ease-out -translate-x-full',
     'slide-out-right':
-      'transition-all duration-300 ease-out translate-x-full opacity-0',
-    'slide-in-left':
-      'transition-all duration-300 ease-out -translate-x-full opacity-0',
+      'transition-transform duration-150 ease-out translate-x-full',
+    // Instant positioning (no transition) before sliding in
+    'enter-from-right': 'translate-x-full',
+    'enter-from-left': '-translate-x-full',
   };
 
   // Keep currentIndexRef in sync for use in analytics finish (avoids stale closure)
@@ -138,6 +149,7 @@ export default function SetFlashcards() {
                 if (item.type === 'vocab' || item.type === 'vocabulary') {
                   return {
                     id: index + 1,
+                    uuid: item.id,
                     type: 'vocabulary',
                     front: item.english || '',
                     back: `${item.kana || ''}${item.kanji ? ` (${item.kanji})` : ''}`,
@@ -157,6 +169,7 @@ export default function SetFlashcards() {
                 } else if (item.type === 'grammar') {
                   return {
                     id: index + 1,
+                    uuid: item.id,
                     type: 'grammar',
                     front: item.title || '',
                     back: item.description || '',
@@ -212,16 +225,23 @@ export default function SetFlashcards() {
   }, []);
 
   const slideCard = useCallback(
-    (outState, inState, newIndex) => {
-      setTransitionState(outState);
+    (outDir, newIndex) => {
+      // Phase 1: slide current card out
+      setTransitionState(
+        outDir === 'left' ? 'slide-out-left' : 'slide-out-right'
+      );
       setTimeout(() => {
+        // Phase 2: instantly reposition offscreen on opposite side, swap content
         setShouldAnimate(false);
         setIsFront(true);
         setCurrentIndex(newIndex);
-        setTransitionState(inState);
-        setTimeout(() => {
+        setTransitionState(
+          outDir === 'left' ? 'enter-from-right' : 'enter-from-left'
+        );
+        // Phase 3: slide in (next frame so browser registers the position)
+        requestAnimationFrame(() => {
           setTransitionState('idle');
-        }, SLIDE_DURATION);
+        });
       }, SLIDE_DURATION);
     },
     [SLIDE_DURATION]
@@ -229,15 +249,76 @@ export default function SetFlashcards() {
 
   const handleNext = useCallback(() => {
     if (currentIndex < cardsData.length - 1) {
-      slideCard('slide-out-left', 'slide-in-right', currentIndex + 1);
+      slideCard('left', currentIndex + 1);
     }
   }, [currentIndex, cardsData.length, slideCard]);
 
   const handlePrevious = useCallback(() => {
     if (currentIndex > 0) {
-      slideCard('slide-out-right', 'slide-in-left', currentIndex - 1);
+      slideCard('right', currentIndex - 1);
     }
   }, [currentIndex, slideCard]);
+
+  const handleOpenEditItem = useCallback(() => {
+    const currentCard = cardsData[currentIndex];
+    if (!currentCard) return;
+    const editable = buildEditableItem(currentCard);
+    if (!editable) {
+      setEditError('This item cannot be edited right now.');
+      return;
+    }
+    setEditError(null);
+    setEditingItem(editable);
+  }, [cardsData, currentIndex]);
+
+  const handleCloseEditItem = useCallback(() => {
+    if (isSavingEdit) return;
+    setEditingItem(null);
+    setEditError(null);
+  }, [isSavingEdit]);
+
+  const handleSaveEditedItem = useCallback(async (updatedItem) => {
+    setIsSavingEdit(true);
+    setEditError(null);
+    try {
+      const request = toUpdateRequest(updatedItem);
+      const response = await fetch(
+        '/api/database/v2/sets/update-from-full-set',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(request),
+        }
+      );
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to update item');
+      }
+      // Update cards data and recompute front/back
+      setCardsData((prev) =>
+        prev.map((card) => {
+          const merged = mergeIntoBaseItem(card, updatedItem);
+          if (merged !== card) {
+            // Recompute front/back from updated fields
+            if (merged.type === 'vocabulary') {
+              merged.front = merged.english || '';
+              merged.back = `${merged.kana || ''}${merged.kanji ? ` (${merged.kanji})` : ''}`;
+            } else if (merged.type === 'grammar') {
+              merged.front = merged.title || '';
+              merged.back = merged.description || '';
+            }
+          }
+          return merged;
+        })
+      );
+      setEditingItem(null);
+    } catch (err) {
+      console.error('Error updating flashcard item:', err);
+      setEditError(err.message || 'Failed to update item');
+    } finally {
+      setIsSavingEdit(false);
+    }
+  }, []);
 
   const handleExit = useCallback(() => {
     abortAnalyticsSession();
@@ -346,8 +427,7 @@ export default function SetFlashcards() {
     const capped = Math.max(-80, Math.min(80, diff));
 
     if (cardContainerRef.current) {
-      cardContainerRef.current.style.transform = `translateX(${capped}px) rotate(${capped * 0.05}deg)`;
-      cardContainerRef.current.style.opacity = `${1 - Math.abs(capped) / 250}`;
+      cardContainerRef.current.style.transform = `translateX(${capped}px) rotate(${capped * 0.02}deg)`;
       cardContainerRef.current.style.transition = 'none';
     }
   }, []);
@@ -360,7 +440,6 @@ export default function SetFlashcards() {
     // Reset visual state
     if (cardContainerRef.current) {
       cardContainerRef.current.style.transform = '';
-      cardContainerRef.current.style.opacity = '';
       cardContainerRef.current.style.transition = '';
     }
 
@@ -677,7 +756,7 @@ export default function SetFlashcards() {
                 <div
                   ref={cardContainerRef}
                   className={`absolute w-full h-full ${transitionClasses[transitionState]}`}
-                  style={{ willChange: 'transform, opacity' }}
+                  style={{ willChange: 'transform' }}
                 >
                   <div
                     style={flipCardStyles}
@@ -688,32 +767,45 @@ export default function SetFlashcards() {
                     <div
                       style={{
                         ...sideBaseStyles,
-                        background:
-                          'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
                       }}
-                      className="relative"
+                      className="relative bg-white dark:bg-white/10 border-2 border-blue-200 dark:border-blue-500/30 overflow-hidden"
                     >
+                      {/* Top accent strip */}
+                      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-400 to-indigo-500" />
+
+                      {/* Edit button */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenEditItem();
+                        }}
+                        className="absolute top-4 right-4 p-1.5 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/50 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-700 dark:hover:text-white/80 transition-colors z-10"
+                        title="Edit Item"
+                      >
+                        <FiEdit2 className="w-4 h-4" />
+                      </button>
+
                       {cardConfidence[currentIndex] && (
                         <div
-                          className={`absolute top-4 right-4 w-3 h-3 rounded-full ${getConfidenceColor(
+                          className={`absolute top-4 right-14 w-3 h-3 rounded-full ${getConfidenceColor(
                             cardConfidence[currentIndex]
                           )}`}
                         />
                       )}
 
-                      <p className="text-3xl md:text-4xl lg:text-5xl font-medium px-8 text-center text-white">
+                      <p className="text-3xl md:text-4xl lg:text-5xl font-medium px-8 text-center text-gray-900 dark:text-white">
                         {cardsData[currentIndex].front}
                       </p>
 
                       {cardsData[currentIndex].type === 'vocabulary' &&
                         cardsData[currentIndex].lexical_category && (
-                          <span className="mt-4 px-3 py-1 text-sm rounded-full bg-white/20 text-white/90">
+                          <span className="mt-4 px-3 py-1 text-sm rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
                             {cardsData[currentIndex].lexical_category}
                           </span>
                         )}
 
-                      <div className="absolute bottom-6 text-white/50 text-sm">
+                      <div className="absolute bottom-6 text-gray-400 dark:text-white/40 text-sm">
                         <span className="hidden sm:inline">
                           Click or press Space to flip
                         </span>
@@ -727,27 +819,40 @@ export default function SetFlashcards() {
                     <div
                       style={{
                         ...sideBaseStyles,
-                        background:
-                          'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)',
                         transform: 'rotateY(180deg)',
-                        boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
                       }}
-                      className="relative p-8"
+                      className="relative p-8 bg-white dark:bg-white/10 border-2 border-rose-200 dark:border-rose-500/30 overflow-hidden"
                     >
-                      <p className="text-3xl md:text-4xl lg:text-5xl font-medium text-center text-white mb-4">
+                      {/* Top accent strip */}
+                      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-rose-400 to-pink-500" />
+
+                      {/* Edit button */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenEditItem();
+                        }}
+                        className="absolute top-4 right-4 p-1.5 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/50 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-700 dark:hover:text-white/80 transition-colors z-10"
+                        title="Edit Item"
+                      >
+                        <FiEdit2 className="w-4 h-4" />
+                      </button>
+
+                      <p className="text-3xl md:text-4xl lg:text-5xl font-medium text-center text-gray-900 dark:text-white mb-4">
                         {cardsData[currentIndex].back}
                       </p>
 
                       {cardsData[currentIndex].example_sentences?.length >
                         0 && (
-                        <div className="mt-6 text-white/80 text-xs md:text-sm max-w-lg text-center italic">
+                        <div className="mt-6 text-gray-500 dark:text-white/60 text-xs md:text-sm max-w-lg text-center italic">
                           {cardsData[currentIndex].example_sentences[0]}
                         </div>
                       )}
 
                       {studyMode === 'interval' &&
                         cardsData[currentIndex].interval && (
-                          <div className="absolute bottom-6 text-white/50 text-xs">
+                          <div className="absolute bottom-6 text-gray-400 dark:text-white/40 text-xs">
                             Next review:{' '}
                             {Math.round(cardsData[currentIndex].interval)}{' '}
                             day(s)
@@ -876,6 +981,15 @@ export default function SetFlashcards() {
           </div>
         ) : null}
       </main>
+
+      <ItemEditModal
+        item={editingItem}
+        isOpen={Boolean(editingItem)}
+        isSaving={isSavingEdit}
+        error={editError}
+        onClose={handleCloseEditItem}
+        onSave={handleSaveEditedItem}
+      />
     </div>
   );
 }

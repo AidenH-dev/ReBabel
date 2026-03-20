@@ -18,14 +18,26 @@ export default function ReviewView({
   onNext,
   onPrevious,
 }) {
-  const [slideDir, setSlideDir] = useState(null); // 'left' | 'right' | null
   const [isAnimating, setIsAnimating] = useState(false);
+  const [slideState, setSlideState] = useState('idle'); // idle, slide-out-left, slide-out-right, enter-from-right, enter-from-left
   const cardRef = useRef(null);
 
   // Touch state
   const touchStart = useRef(null);
   const touchCurrent = useRef(null);
   const cardElement = useRef(null);
+
+  const SLIDE_DURATION = 150;
+
+  const slideClasses = {
+    idle: 'transition-transform duration-150 ease-out translate-x-0',
+    'slide-out-left':
+      'transition-transform duration-150 ease-out -translate-x-full',
+    'slide-out-right':
+      'transition-transform duration-150 ease-out translate-x-full',
+    'enter-from-right': 'translate-x-full',
+    'enter-from-left': '-translate-x-full',
+  };
 
   // Animated navigation
   const animateAndNavigate = useCallback(
@@ -34,14 +46,23 @@ export default function ReviewView({
       if (direction === 'right' && isFirstCard) return;
 
       setIsAnimating(true);
-      setSlideDir(direction === 'left' ? 'left' : 'right');
+      setSlideState(
+        direction === 'left' ? 'slide-out-left' : 'slide-out-right'
+      );
 
       setTimeout(() => {
         if (direction === 'left') onNext();
         else onPrevious();
-        setSlideDir(null);
-        setIsAnimating(false);
-      }, 200);
+        // Position offscreen on opposite side (no transition)
+        setSlideState(
+          direction === 'left' ? 'enter-from-right' : 'enter-from-left'
+        );
+        // Slide in on next frame
+        requestAnimationFrame(() => {
+          setSlideState('idle');
+          setTimeout(() => setIsAnimating(false), SLIDE_DURATION);
+        });
+      }, SLIDE_DURATION);
     },
     [isAnimating, isFirstCard, onNext, onPrevious]
   );
@@ -78,7 +99,6 @@ export default function ReviewView({
     const capped = Math.max(-100, Math.min(100, diff));
     if (cardElement.current) {
       cardElement.current.style.transform = `translateX(${capped}px)`;
-      cardElement.current.style.opacity = `${1 - Math.abs(capped) / 300}`;
       cardElement.current.style.transition = 'none';
     }
   };
@@ -92,7 +112,6 @@ export default function ReviewView({
     // Reset the live drag
     if (cardElement.current) {
       cardElement.current.style.transform = '';
-      cardElement.current.style.opacity = '';
       cardElement.current.style.transition = '';
     }
 
@@ -110,13 +129,6 @@ export default function ReviewView({
 
   if (!currentCard) return null;
 
-  const slideClass =
-    slideDir === 'left'
-      ? 'animate-slide-out-left'
-      : slideDir === 'right'
-        ? 'animate-slide-out-right'
-        : 'animate-slide-in';
-
   return (
     <div className="flex-1 flex flex-col items-center px-2 sm:px-4 min-h-0">
       <div className="w-full max-w-3xl flex flex-col min-h-0 flex-1 py-4">
@@ -126,8 +138,8 @@ export default function ReviewView({
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className={`bg-white dark:bg-white/10 rounded-2xl shadow-xl p-6 sm:p-8 mb-4 sm:mb-6 overflow-y-auto flex-1 min-h-0 touch-pan-y ${slideClass}`}
-          style={{ willChange: 'transform, opacity' }}
+          className={`bg-white dark:bg-white/10 rounded-2xl shadow-xl p-6 sm:p-8 mb-4 sm:mb-6 overflow-y-auto flex-1 min-h-0 touch-pan-y ${slideClasses[slideState]}`}
+          style={{ willChange: 'transform' }}
         >
           {currentCard.type === 'vocabulary' ? (
             /* Vocabulary Card */
