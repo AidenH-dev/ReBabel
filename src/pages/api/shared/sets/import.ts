@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
+const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
 
@@ -277,6 +278,33 @@ export default withApiAuthRequired(async function handler(
           success: false,
           error: 'Failed to link items to imported set'
         });
+      }
+    }
+
+    // Fire-and-forget: auto-categorize uncategorized vocab items after response
+    if (vocabItems.length > 0 && vocabEntityIds.length > 0) {
+      const uncategorized = vocabItems
+        .map((item: any, i: number) => ({ item, entityId: vocabEntityIds[i] }))
+        .filter(({ item, entityId }: any) => entityId && (!item.lexical_category || item.lexical_category.trim() === ''));
+
+      if (uncategorized.length > 0) {
+        (async () => {
+          try {
+            for (const { item, entityId } of uncategorized) {
+              const result = await categorizeWord(item.kana, item.kanji);
+              if (result && result.lexical_category) {
+                await supabase
+                  .schema('v1_kvs_rebabel')
+                  .rpc('update_vocab_entity_by_id', {
+                    entity_uuid: entityId,
+                    json_updates: JSON.stringify({ lexical_category: result.lexical_category }),
+                  });
+              }
+            }
+          } catch (catError) {
+            console.error('Auto-categorization error during import:', catError);
+          }
+        })();
       }
     }
 

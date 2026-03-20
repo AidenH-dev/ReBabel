@@ -1,7 +1,14 @@
 // /components/pages/academy/sets/ViewSet/ItemsManagement/MasterItemsManagement.jsx
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { FiGrid, FiList, FiEdit2, FiSearch, FiPlus } from 'react-icons/fi';
+import {
+  FiGrid,
+  FiList,
+  FiEdit2,
+  FiSearch,
+  FiPlus,
+  FiTag,
+} from 'react-icons/fi';
 import { MdDragHandle } from 'react-icons/md';
 import CustomSelect from '@/components/ui/CustomSelect';
 import { toKana } from 'wanakana';
@@ -164,6 +171,10 @@ export default function MasterItemsManagement({
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [addItemError, setAddItemError] = useState(null);
   const [addItemSuccess, setAddItemSuccess] = useState(false);
+
+  // Auto-categorize state
+  const [isAutoCategorizing, setIsAutoCategorizing] = useState(false);
+  const [autoCategorizeResult, setAutoCategorizeResult] = useState(null);
 
   // Drag-to-reorder state
   const [isReorderMode, setIsReorderMode] = useState(false);
@@ -617,6 +628,62 @@ export default function MasterItemsManagement({
     }
   };
 
+  // Auto-categorize
+  const hasUncategorizedVocab = items.some(
+    (item) =>
+      item.type === 'vocabulary' &&
+      (!item.lexical_category || item.lexical_category.trim() === '')
+  );
+
+  const handleAutoCategorize = async () => {
+    if (!setData?.id) return;
+
+    setIsAutoCategorizing(true);
+    setAutoCategorizeResult(null);
+
+    try {
+      const response = await fetch('/api/database/v2/sets/auto-categorize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ set_id: setData.id }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to auto-categorize');
+      }
+
+      // Update local items state with returned categories
+      if (result.results && result.results.length > 0) {
+        const categoryMap = {};
+        for (const r of result.results) {
+          categoryMap[r.entity_id] = r.lexical_category;
+        }
+
+        setItems((prevItems) =>
+          prevItems.map((item) =>
+            categoryMap[item.id]
+              ? { ...item, lexical_category: categoryMap[item.id] }
+              : item
+          )
+        );
+      }
+
+      setAutoCategorizeResult(
+        `Categorized ${result.categorized_count} item${result.categorized_count !== 1 ? 's' : ''}`
+      );
+
+      setTimeout(() => setAutoCategorizeResult(null), 3000);
+    } catch (err) {
+      console.error('Auto-categorize error:', err);
+      setAutoCategorizeResult(`Error: ${err.message}`);
+      setTimeout(() => setAutoCategorizeResult(null), 5000);
+    } finally {
+      setIsAutoCategorizing(false);
+    }
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'known':
@@ -701,6 +768,45 @@ export default function MasterItemsManagement({
                 </button>
               )}
 
+              {(set_type === 'vocab' || !set_type) && hasUncategorizedVocab && (
+                <button
+                  onClick={handleAutoCategorize}
+                  disabled={isAutoCategorizing}
+                  className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium bg-gray-100 dark:bg-[#0f1a1f] text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Auto-categorize uncategorized vocabulary items"
+                >
+                  {isAutoCategorizing ? (
+                    <>
+                      <svg
+                        className="animate-spin w-3.5 h-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      Categorizing...
+                    </>
+                  ) : (
+                    <>
+                      <FiTag className="w-3.5 h-3.5" />
+                      Auto-categorize
+                    </>
+                  )}
+                </button>
+              )}
+
               <button
                 onClick={handleOpenAddItemModal}
                 className="p-2 rounded-lg bg-[#e30a5f] text-white hover:bg-[#c00950] transition-colors"
@@ -711,6 +817,18 @@ export default function MasterItemsManagement({
             </div>
           </div>
         </div>
+
+        {autoCategorizeResult && (
+          <div
+            className={`mx-4 mt-2 px-3 py-2 rounded-lg text-xs ${
+              autoCategorizeResult.startsWith('Error')
+                ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'
+                : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
+            }`}
+          >
+            {autoCategorizeResult}
+          </div>
+        )}
 
         {/* Items List */}
         <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-4">
@@ -1090,10 +1208,15 @@ export default function MasterItemsManagement({
                           <option value="">Select category</option>
                           <option value="noun">Noun</option>
                           <option value="verb">Verb</option>
-                          <option value="adjective">Adjective</option>
+                          <option value="i-adjective">I-Adjective</option>
+                          <option value="na-adjective">Na-Adjective</option>
                           <option value="adverb">Adverb</option>
                           <option value="particle">Particle</option>
+                          <option value="counter">Counter</option>
+                          <option value="conjunction">Conjunction</option>
+                          <option value="pronoun">Pronoun</option>
                           <option value="expression">Expression</option>
+                          <option value="interjection">Interjection</option>
                         </select>
                       </div>
                     </div>
@@ -1434,15 +1557,26 @@ export default function MasterItemsManagement({
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Lexical Category
                       </label>
-                      <input
-                        type="text"
+                      <select
                         value={editFormData.lexical_category || ''}
                         onChange={(e) =>
                           handleFieldChange('lexical_category', e.target.value)
                         }
                         className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
-                        placeholder="e.g., noun, verb, adjective"
-                      />
+                      >
+                        <option value="">Uncategorized</option>
+                        <option value="noun">Noun</option>
+                        <option value="verb">Verb</option>
+                        <option value="i-adjective">I-Adjective</option>
+                        <option value="na-adjective">Na-Adjective</option>
+                        <option value="adverb">Adverb</option>
+                        <option value="particle">Particle</option>
+                        <option value="counter">Counter</option>
+                        <option value="conjunction">Conjunction</option>
+                        <option value="pronoun">Pronoun</option>
+                        <option value="expression">Expression</option>
+                        <option value="interjection">Interjection</option>
+                      </select>
                     </div>
                   </>
                 )}

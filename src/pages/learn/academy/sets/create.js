@@ -813,10 +813,27 @@ export default function CreateNewSet() {
                                 options={[
                                   { value: 'noun', label: 'Noun' },
                                   { value: 'verb', label: 'Verb' },
-                                  { value: 'adjective', label: 'Adjective' },
+                                  {
+                                    value: 'i-adjective',
+                                    label: 'I-Adjective',
+                                  },
+                                  {
+                                    value: 'na-adjective',
+                                    label: 'Na-Adjective',
+                                  },
                                   { value: 'adverb', label: 'Adverb' },
                                   { value: 'particle', label: 'Particle' },
+                                  { value: 'counter', label: 'Counter' },
+                                  {
+                                    value: 'conjunction',
+                                    label: 'Conjunction',
+                                  },
+                                  { value: 'pronoun', label: 'Pronoun' },
                                   { value: 'expression', label: 'Expression' },
+                                  {
+                                    value: 'interjection',
+                                    label: 'Interjection',
+                                  },
                                 ]}
                               />
                             </div>

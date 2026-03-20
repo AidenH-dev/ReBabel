@@ -117,15 +117,26 @@ export default function ItemEditModal({
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Lexical Category
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={formData.lexical_category || ''}
                     onChange={(e) =>
                       handleChange('lexical_category', e.target.value)
                     }
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
-                    placeholder="e.g., noun, verb, adjective"
-                  />
+                  >
+                    <option value="">Uncategorized</option>
+                    <option value="noun">Noun</option>
+                    <option value="verb">Verb</option>
+                    <option value="i-adjective">I-Adjective</option>
+                    <option value="na-adjective">Na-Adjective</option>
+                    <option value="adverb">Adverb</option>
+                    <option value="particle">Particle</option>
+                    <option value="counter">Counter</option>
+                    <option value="conjunction">Conjunction</option>
+                    <option value="pronoun">Pronoun</option>
+                    <option value="expression">Expression</option>
+                    <option value="interjection">Interjection</option>
+                  </select>
                 </div>
               </>
             ) : (
