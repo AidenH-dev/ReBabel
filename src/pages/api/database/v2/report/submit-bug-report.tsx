@@ -5,6 +5,7 @@ import { notifyBugReport } from '@/lib/webhooks/peko';
 import { notifySlackBugReport } from '@/lib/webhooks/slack';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
+import { withLogger } from '@/lib/withLogger';
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 5 });
 
@@ -45,7 +46,7 @@ function validateRequest(body: any): { isValid: boolean; error?: string } {
 }
 
 async function handlePOST(
-  req: NextApiRequest,
+  req: any,
   res: NextApiResponse<ApiResponse>
 ) {
   try {
@@ -88,7 +89,7 @@ async function handlePOST(
     const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      console.error('Missing Supabase environment variables');
+      req.log.error('config.missing', { error: 'Missing Supabase environment variables' });
       return res.status(500).json({
         success: false,
         error: 'Server configuration error'
@@ -106,7 +107,7 @@ async function handlePOST(
       });
 
     if (error) {
-      console.error('Failed to create bug report:', error);
+      req.log.error('rpc.failed', { fn: 'create_user_bug_report_v1', error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
         error: 'Failed to create bug report',
@@ -144,7 +145,7 @@ async function handlePOST(
     });
 
   } catch (error) {
-    console.error('API Error:', error);
+    req.log.error('bug_report.error', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
 
     return res.status(500).json({
       success: false,
@@ -156,7 +157,7 @@ async function handlePOST(
 
 // Default export function required by Pages Router
 // Protected with Auth0 - requires valid session
-export default withApiAuthRequired(async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+export default withApiAuthRequired(withLogger(async function handler(req, res: NextApiResponse<ApiResponse>) {
   // Verify authentication
   const session = await getSession(req, res);
   if (!session?.user?.sub || !session?.user?.email) {
@@ -193,4 +194,4 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
         error: `Method ${method} not allowed`
       });
   }
-})
+}))

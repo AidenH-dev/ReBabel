@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
 
 interface SetData {
   entity_id: string;
@@ -26,7 +27,7 @@ interface ApiResponse {
   error?: string;
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>, userId: string) {
+async function handleGET(req: any, res: NextApiResponse<ApiResponse>, userId: string) {
   try {
     const SUPABASE_URL = process.env.NEXT_SUPABASE_URL;
     const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -48,7 +49,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
       });
 
     if (setsError) {
-      console.error('Error fetching user sets:', setsError);
+      req.log.error('rpc.failed', { fn: 'get_user_sets', error: setsError.message, code: setsError.code });
       return res.status(500).json({
         success: false,
         error: `Database error: ${setsError.message}`
@@ -86,7 +87,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
         });
 
       if (setError) {
-        console.error(`Error fetching set ${setId}:`, setError);
+        req.log.error('rpc.failed', { fn: 'get_set_with_items_v2', error: setError.message, code: setError.code });
         continue;
       }
 
@@ -133,7 +134,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
     });
 
   } catch (error) {
-    console.error('API Error:', error);
+    req.log.error('dashboard.error', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error'
@@ -141,8 +142,8 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
   }
 }
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
+export default withApiAuthRequired(withLogger(async function handler(
+  req,
   res: NextApiResponse<ApiResponse>
 ) {
   const session = await getSession(req, res);
@@ -163,4 +164,4 @@ export default withApiAuthRequired(async function handler(
   }
 
   return handleGET(req, res, userId);
-});
+}));

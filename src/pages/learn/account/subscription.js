@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { TbCheck, TbLoader, TbExternalLink } from 'react-icons/tb';
 import { HiOutlineStar } from 'react-icons/hi2';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function Subscription() {
   const [subscription, setSubscription] = useState(null);
@@ -40,7 +41,9 @@ export default function Subscription() {
       const data = await res.json();
       setSubscription(data);
     } catch (error) {
-      console.error('Failed to fetch subscription:', error);
+      clientLog.error('subscription.fetch_failed', {
+        error: error?.message || String(error),
+      });
     } finally {
       setLoading(false);
     }
@@ -51,7 +54,9 @@ export default function Subscription() {
     try {
       await fetch('/api/subscriptions/stripe/sync', { method: 'POST' });
     } catch (error) {
-      console.error('Sync error:', error);
+      clientLog.error('subscription.sync_failed', {
+        error: error?.message || String(error),
+      });
     }
     await fetchSubscription();
   };
@@ -69,7 +74,9 @@ export default function Subscription() {
         setMessage({ type: 'error', text: 'Failed to start checkout.' });
       }
     } catch (error) {
-      console.error('Checkout error:', error);
+      clientLog.error('subscription.checkout_failed', {
+        error: error?.message || String(error),
+      });
       setMessage({ type: 'error', text: 'Failed to start checkout.' });
     } finally {
       setProcessing(false);
@@ -89,7 +96,9 @@ export default function Subscription() {
         setMessage({ type: 'error', text: 'Failed to open billing portal.' });
       }
     } catch (error) {
-      console.error('Portal error:', error);
+      clientLog.error('subscription.portal_failed', {
+        error: error?.message || String(error),
+      });
       setMessage({ type: 'error', text: 'Failed to open billing portal.' });
     } finally {
       setProcessing(false);

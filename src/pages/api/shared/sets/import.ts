@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
+import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
@@ -19,8 +20,8 @@ interface ApiResponse {
   message?: string;
 }
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
+export default withApiAuthRequired(withLogger(async function handler(
+  req,
   res: NextApiResponse<ApiResponse>
 ) {
   const session = await getSession(req, res);
@@ -147,7 +148,7 @@ export default withApiAuthRequired(async function handler(
       });
 
     if (setRpc.error) {
-      console.error('Failed to create imported set:', setRpc.error);
+      req.log.error('rpc.failed', { fn: 'insert_json_to_set', error: setRpc.error.message, code: setRpc.error.code });
       return res.status(500).json({
         success: false,
         error: 'Failed to create imported set'
@@ -216,7 +217,7 @@ export default withApiAuthRequired(async function handler(
         });
 
       if (vocabRpc.error) {
-        console.error('Failed to insert vocab:', vocabRpc.error);
+        req.log.error('rpc.failed', { fn: 'insert_json_to_kb_vocab', error: vocabRpc.error.message, code: vocabRpc.error.code });
         return res.status(500).json({
           success: false,
           error: 'Failed to import vocabulary items'
@@ -236,7 +237,7 @@ export default withApiAuthRequired(async function handler(
         });
 
       if (grammarRpc.error) {
-        console.error('Failed to insert grammar:', grammarRpc.error);
+        req.log.error('rpc.failed', { fn: 'insert_json_to_kb_grammar', error: grammarRpc.error.message, code: grammarRpc.error.code });
         return res.status(500).json({
           success: false,
           error: 'Failed to import grammar items'
@@ -273,7 +274,7 @@ export default withApiAuthRequired(async function handler(
         });
 
       if (relationRpc.error) {
-        console.error('Failed to create relations:', relationRpc.error);
+        req.log.error('rpc.failed', { fn: 'create_relations_from_set_group_v3', error: relationRpc.error.message, code: relationRpc.error.code });
         return res.status(500).json({
           success: false,
           error: 'Failed to link items to imported set'
@@ -309,11 +310,13 @@ export default withApiAuthRequired(async function handler(
                 json_updates: JSON.stringify({ auto_categorized: 'true' }),
               });
           } catch (catError) {
-            console.error('Auto-categorization error during import:', catError);
+            req.log.warn('import.autocategorize_failed', { error: catError instanceof Error ? catError.message : String(catError) });
           }
         })();
       }
     }
+
+    req.log.info('set.imported', { itemCount: relationsArray.length, vocabCount: vocabItems.length, grammarCount: grammarItems.length });
 
     return res.status(201).json({
       success: true,
@@ -322,10 +325,10 @@ export default withApiAuthRequired(async function handler(
     });
 
   } catch (error) {
-    console.error('Import API error:', error);
+    req.log.error('import.error', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({
       success: false,
       error: 'Internal server error'
     });
   }
-});
+}));

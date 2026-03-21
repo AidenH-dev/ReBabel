@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
+import { clientLog } from '@/lib/clientLogger';
 import { TbLanguageHiragana } from 'react-icons/tb';
 
 const PHASES = [
@@ -60,7 +61,9 @@ export default function ConjugationPracticeSession() {
         setConfig(loadedConfig);
         sessionStorage.removeItem('conjugation-practice-config');
       } catch (err) {
-        console.error('Failed to parse conjugation config:', err);
+        clientLog.error('conjugation.parse_config_failed', {
+          error: err?.message || String(err),
+        });
         router.push('/learn/academy/practice');
       }
     } else {
@@ -106,7 +109,9 @@ export default function ConjugationPracticeSession() {
         setQuestions(data.data.questions);
         await startAnalyticsSession();
       } catch (err) {
-        console.error('Generate error:', err);
+        clientLog.error('conjugation.generate_questions_failed', {
+          error: err?.message || String(err),
+        });
         setError('Failed to generate questions. Please try again.');
       } finally {
         setIsGenerating(false);

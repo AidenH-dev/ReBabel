@@ -4,6 +4,8 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { notifySubscription, notifyError } from '@/lib/webhooks/peko';
 import { notifySlackSubscription, notifySlackError } from '@/lib/webhooks/slack';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
+import { log } from '@/lib/logger';
 
 function getRawBody(req: NextApiRequest): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -25,7 +27,7 @@ export const config = {
   api: { bodyParser: false },
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default withLogger(async function handler(req, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -42,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err) {
-    console.error('Webhook signature verification failed:', err);
+    req.log.error('webhook.signature_failed', { error: err instanceof Error ? err.message : String(err), stack: err instanceof Error ? err.stack : undefined });
     return res.status(400).json({ error: 'Webhook signature verification failed' });
   }
 
@@ -58,6 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (session.mode === 'subscription' && session.subscription) {
           const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
           await handleSubscriptionUpdate(supabase, subscription, event.id);
+          req.log.info('subscription.state_change', { event: event.type, userId: subscription.metadata.rebabel_user_id || subscription.metadata.auth0_user_id });
           const subData = {
             userId: subscription.metadata.auth0_user_id,
             stripeCustomerId: subscription.customer as string,
@@ -76,6 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription;
         await handleSubscriptionUpdate(supabase, subscription, event.id);
+        req.log.info('subscription.state_change', { event: event.type, userId: subscription.metadata.rebabel_user_id || subscription.metadata.auth0_user_id });
         const notifyType = event.type === 'customer.subscription.created' ? 'created' : 'updated' as const;
         const subEventData = {
           userId: subscription.metadata.auth0_user_id,
@@ -93,6 +97,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
         await handleSubscriptionCanceled(supabase, subscription, event.id);
+        req.log.info('subscription.state_change', { event: event.type, userId: subscription.metadata.rebabel_user_id || subscription.metadata.auth0_user_id });
         const cancelData = {
           userId: subscription.metadata.auth0_user_id,
           stripeCustomerId: subscription.customer as string,
@@ -110,6 +115,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const inv = invoice as any;
         if (inv.subscription) {
           const sub = await stripe.subscriptions.retrieve(inv.subscription as string);
+          req.log.info('subscription.state_change', { event: event.type, userId: sub.metadata.rebabel_user_id || sub.metadata.auth0_user_id });
           const failData = {
             userId: sub.metadata.auth0_user_id,
             stripeSubscriptionId: inv.subscription as string,
@@ -126,14 +132,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return res.status(200).json({ received: true });
   } catch (error) {
-    console.error('Webhook handler error:', error);
+    req.log.error('webhook.handler_error', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     const err = error instanceof Error ? error : new Error(String(error));
     const errCtx = { context: 'stripe_webhook', endpoint: '/api/subscriptions/stripe/webhook' };
     notifyError(err, errCtx);
     notifySlackError(err, errCtx);
     return res.status(500).json({ error: 'Webhook handler failed' });
   }
-}
+});
 
 async function handleSubscriptionUpdate(supabase: SupabaseClientAny, subscription: Stripe.Subscription, eventId: string) {
   // Resolve from rebabel_user_id (preferred) or auth0_user_id (legacy)
@@ -146,7 +152,7 @@ async function handleSubscriptionUpdate(supabase: SupabaseClientAny, subscriptio
   } else if (auth0UserId) {
     ownerId = await resolveUserId(auth0UserId);
   } else {
-    console.error('No user ID in subscription metadata');
+    log.error('subscription.no_user_id', { subscriptionId: subscription.id });
     return;
   }
 
@@ -178,7 +184,7 @@ async function handleSubscriptionUpdate(supabase: SupabaseClientAny, subscriptio
     .rpc('upsert_subscription', { json_input: subscriptionData });
 
   if (error) {
-    console.error('Failed to upsert subscription:', error);
+    log.error('rpc.failed', { fn: 'upsert_subscription', error: error?.message || String(error) });
     throw error;
   }
 }
@@ -207,7 +213,7 @@ async function handleSubscriptionCanceled(supabase: SupabaseClientAny, subscript
     .rpc('upsert_subscription', { json_input: subscriptionData });
 
   if (error) {
-    console.error('Failed to update subscription status:', error);
+    log.error('rpc.failed', { fn: 'upsert_subscription', error: error?.message || String(error) });
     throw error;
   }
 }
@@ -235,7 +241,7 @@ async function handlePaymentFailed(supabase: SupabaseClientAny, invoice: Stripe.
       .rpc('upsert_subscription', { json_input: subscriptionData });
 
     if (error) {
-      console.error('Failed to update subscription status:', error);
+      log.error('rpc.failed', { fn: 'upsert_subscription', error: error?.message || String(error) });
       throw error;
     }
   }

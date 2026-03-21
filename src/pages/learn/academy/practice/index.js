@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
+import { clientLog } from '@/lib/clientLogger';
 import {
   FiSearch,
   FiGrid,
@@ -109,7 +110,9 @@ export default function VocabularyDashboard() {
         const profile = await response.json();
         setUserProfile(profile);
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        clientLog.error('practice.fetch_profile_failed', {
+          error: error?.message || String(error),
+        });
       }
     };
     fetchUserProfile();
@@ -148,7 +151,9 @@ export default function VocabularyDashboard() {
         formattedData.sort((a, b) => new Date(b.date) - new Date(a.date));
         setRecentsSets(formattedData);
       } catch (error) {
-        console.error('Error fetching user sets:', error);
+        clientLog.error('practice.fetch_sets_failed', {
+          error: error?.message || String(error),
+        });
         setRecentsSets([]);
       } finally {
         setIsLoadingSets(false);
@@ -229,7 +234,9 @@ export default function VocabularyDashboard() {
         }));
       }
     } catch (error) {
-      console.error('Error selecting set:', error);
+      clientLog.error('practice.select_set_failed', {
+        error: error?.message || String(error),
+      });
     }
   };
 
@@ -499,7 +506,9 @@ export default function VocabularyDashboard() {
         });
         setConjugationPoolItems(allItems);
       } catch (error) {
-        console.error('Error fetching conjugation items:', error);
+        clientLog.error('practice.fetch_conjugation_items_failed', {
+          error: error?.message || String(error),
+        });
       }
     };
     fetchConjugationItems();
@@ -549,7 +558,9 @@ export default function VocabularyDashboard() {
 
         setPoolItems({ grammar: grammarItems, vocab: vocabItems });
       } catch (error) {
-        console.error('Error fetching pool items:', error);
+        clientLog.error('practice.fetch_pool_items_failed', {
+          error: error?.message || String(error),
+        });
       }
     };
 
@@ -607,7 +618,9 @@ export default function VocabularyDashboard() {
         query: { sessionLength: config.sessionLength },
       });
     } catch (error) {
-      console.error('Error preparing session:', error);
+      clientLog.error('practice.prepare_session_failed', {
+        error: error?.message || String(error),
+      });
       alert('Failed to start practice session. Please try again.');
     } finally {
       setIsLoadingSets(false);

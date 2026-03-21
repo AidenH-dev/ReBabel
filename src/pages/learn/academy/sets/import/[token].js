@@ -6,6 +6,7 @@ import MainSidebar from '@/components/Sidebars/AcademySidebar';
 import PageHeader from '@/components/ui/PageHeader';
 import { TbStack2, TbLoader3 } from 'react-icons/tb';
 import ImportProgressOverlay from '@/components/sets/ImportProgressOverlay';
+import { clientLog } from '@/lib/clientLogger';
 import { FiSearch } from 'react-icons/fi';
 
 export default function ImportSharedSet() {
@@ -52,7 +53,9 @@ export default function ImportSharedSet() {
         setItems(result.data.items || []);
         setItemCount(result.data.item_count || 0);
       } catch (err) {
-        console.error('Error fetching shared set:', err);
+        clientLog.error('import_set.fetch_shared_set_failed', {
+          error: err?.message || String(err),
+        });
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -106,7 +109,9 @@ export default function ImportSharedSet() {
 
       router.push(`/learn/academy/sets/study/${result.setEntityId}`);
     } catch (err) {
-      console.error('Error importing set:', err);
+      clientLog.error('import_set.import_failed', {
+        error: err?.message || String(err),
+      });
       setImportError(err.message);
       setIsImporting(false);
       setImportProgress(0);

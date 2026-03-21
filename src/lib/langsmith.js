@@ -1,5 +1,6 @@
 import { Client } from 'langsmith';
 import { randomUUID } from 'crypto';
+import { log } from '@/lib/logger';
 
 const client = new Client();
 
@@ -107,10 +108,7 @@ export async function tracedLLMCall({
         project_name: projectName,
       });
     } catch (traceError) {
-      console.error(
-        'LangSmith createRun failed (non-blocking):',
-        traceError.message
-      );
+      log.warn('langsmith.create_run_failed', { error: traceError.message });
     }
 
     // Execute the actual LLM call
@@ -135,10 +133,7 @@ export async function tracedLLMCall({
         end_time: Date.now(),
       });
     } catch (traceError) {
-      console.error(
-        'LangSmith updateRun failed (non-blocking):',
-        traceError.message
-      );
+      log.warn('langsmith.update_run_failed', { error: traceError.message });
     }
 
     return { ...result, runId };
@@ -150,10 +145,7 @@ export async function tracedLLMCall({
         end_time: Date.now(),
       });
     } catch (traceError) {
-      console.error(
-        'LangSmith error updateRun failed (non-blocking):',
-        traceError.message
-      );
+      log.warn('langsmith.update_run_failed', { error: traceError.message });
     }
     throw error;
   }
@@ -187,10 +179,7 @@ export async function traced(name, metadata, fn) {
         project_name: projectName,
       });
     } catch (traceError) {
-      console.error(
-        'LangSmith createRun failed (non-blocking):',
-        traceError.message
-      );
+      log.warn('langsmith.create_run_failed', { error: traceError.message });
     }
 
     const result = await fn();
@@ -201,10 +190,7 @@ export async function traced(name, metadata, fn) {
         end_time: Date.now(),
       });
     } catch (traceError) {
-      console.error(
-        'LangSmith updateRun failed (non-blocking):',
-        traceError.message
-      );
+      log.warn('langsmith.update_run_failed', { error: traceError.message });
     }
 
     return result;
@@ -215,10 +201,7 @@ export async function traced(name, metadata, fn) {
         end_time: Date.now(),
       });
     } catch (traceError) {
-      console.error(
-        'LangSmith error updateRun failed (non-blocking):',
-        traceError.message
-      );
+      log.warn('langsmith.update_run_failed', { error: traceError.message });
     }
     throw error;
   }
@@ -242,7 +225,7 @@ export async function submitFeedback(runId, key, { score, comment = '' }) {
     await client.createFeedback(runId, key, { score, comment });
     return { success: true };
   } catch (error) {
-    console.error('LangSmith feedback error:', error);
+    log.warn('langsmith.feedback_failed', { error: error.message });
     return { success: false };
   }
 }

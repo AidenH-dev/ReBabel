@@ -66,14 +66,6 @@ export default function MasterQuestionCard({
       questionType: currentItem.questionType,
       answerType: currentItem.answerType,
     });
-
-    // Log to console
-    console.log(`Quiz Item: ${currentItem.id}`, {
-      question: currentItem.question,
-      correctAnswer: currentItem.answer,
-      userAnswer: userAnswer,
-      result: correct ? 'PASSED' : 'FAILED',
-    });
   }, [userAnswer, currentItem, onAnswerSubmitted]);
 
   // Handle next question

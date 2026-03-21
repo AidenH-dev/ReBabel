@@ -3,6 +3,7 @@ import AcademySidebar from '../../../components/Sidebars/AcademySidebar';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { clientLog } from '@/lib/clientLogger';
 import {
   FaBook,
   FaGraduationCap,
@@ -40,7 +41,9 @@ export default function AcademyHome() {
         const profile = await response.json();
         setUserProfile(profile);
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        clientLog.error('academy.fetch_profile_failed', {
+          error: error?.message || String(error),
+        });
       } finally {
         setIsLoading(false);
       }
@@ -90,7 +93,9 @@ export default function AcademyHome() {
       // Redirect to the quiz page for the selected set using entity_id
       router.push(`/learn/academy/sets/study/${randomSet.entity_id}/quiz`);
     } catch (error) {
-      console.error('Error during quick study:', error);
+      clientLog.error('academy.quick_study_failed', {
+        error: error?.message || String(error),
+      });
       alert('Failed to load study sets. Please try again.');
     } finally {
       setIsQuickStudyLoading(false);

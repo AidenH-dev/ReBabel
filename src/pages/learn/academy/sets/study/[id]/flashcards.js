@@ -25,6 +25,7 @@ import {
   toUpdateRequest,
   mergeIntoBaseItem,
 } from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function SetFlashcards() {
   const router = useRouter();
@@ -81,7 +82,9 @@ export default function SetFlashcards() {
         }),
       });
     } catch (err) {
-      console.error('Failed to mark set studied:', err);
+      clientLog.error('set.mark_studied_failed', {
+        error: err?.message || String(err),
+      });
     }
   };
 
@@ -201,7 +204,9 @@ export default function SetFlashcards() {
 
         setCardsData(transformedCards);
       } catch (err) {
-        console.error('Error fetching set:', err);
+        clientLog.error('flashcards.set_fetch_failed', {
+          error: err?.message || String(err),
+        });
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -313,7 +318,9 @@ export default function SetFlashcards() {
       );
       setEditingItem(null);
     } catch (err) {
-      console.error('Error updating flashcard item:', err);
+      clientLog.error('flashcards.item_update_failed', {
+        error: err?.message || String(err),
+      });
       setEditError(err.message || 'Failed to update item');
     } finally {
       setIsSavingEdit(false);

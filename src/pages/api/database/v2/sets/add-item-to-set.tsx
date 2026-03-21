@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 // Initialize Supabase client
@@ -32,9 +33,9 @@ interface AddItemResponse {
   message?: string;
 }
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<AddItemResponse>
+export default withApiAuthRequired(withLogger(async function handler(
+  req,
+  res
 ) {
   // Verify authentication
   const session = await getSession(req, res);
@@ -59,6 +60,7 @@ export default withApiAuthRequired(async function handler(
     // Validate request
     const validation = validateRequest(body);
     if (!validation.isValid) {
+      req.log.warn('validation.failed', { error: validation.error });
       return res.status(400).json({
         success: false,
         error: validation.error,
@@ -83,7 +85,7 @@ export default withApiAuthRequired(async function handler(
           item_data.lexical_category = result.lexical_category;
         }
       } catch (catError) {
-        console.error('Auto-categorization error:', catError);
+        req.log.error('autocategorize.failed', { error: catError instanceof Error ? catError.message : String(catError), stack: catError instanceof Error ? catError.stack : undefined });
       }
     }
 
@@ -100,7 +102,7 @@ export default withApiAuthRequired(async function handler(
       });
 
     if (error) {
-      console.error('Supabase RPC error:', error);
+      req.log.error('rpc.failed', { fn: 'add_item_to_set', error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
         error: `Database error: ${error.message}`,
@@ -125,13 +127,13 @@ export default withApiAuthRequired(async function handler(
     });
 
   } catch (error) {
-    console.error('Unexpected error:', error);
+    req.log.error('handler.failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
     });
   }
-})
+}))
 
 // Validation helper
 function validateRequest(body: any): { isValid: boolean; error?: string } {

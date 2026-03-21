@@ -3,6 +3,7 @@ import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -16,7 +17,7 @@ interface ApiResponse {
 
 // This endpoint syncs subscription data directly from Stripe
 // Use this as a fallback when webhooks aren't available
-async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+async function handler(req: any, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
@@ -54,8 +55,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
 
     const subscription = subscriptions.data[0] as any;
 
-    // Debug: log the subscription to see the actual structure
-    console.log('Stripe subscription:', JSON.stringify(subscription, null, 2));
+    req.log.info('subscription.synced', { status: subscription.status });
 
     const supabase = createClient(
       process.env.NEXT_SUPABASE_URL!,
@@ -90,15 +90,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       .rpc('upsert_subscription', { json_input: subscriptionData });
 
     if (error) {
-      console.error('Failed to sync subscription:', error);
+      req.log.error('rpc.failed', { fn: 'upsert_subscription', error: error.message, code: error.code });
       return res.status(500).json({ success: false, error: 'Failed to sync subscription' });
     }
 
     return res.status(200).json({ success: true, synced: true });
   } catch (error) {
-    console.error('Sync error:', error);
+    req.log.error('subscription.sync_failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({ success: false, error: 'Failed to sync subscription' });
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

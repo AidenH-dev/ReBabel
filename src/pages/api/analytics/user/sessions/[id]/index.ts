@@ -1,7 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
+import type { LoggedRequest } from '@/lib/withLogger';
 
 interface ApiResponse {
   success: boolean;
@@ -9,7 +11,7 @@ interface ApiResponse {
   error?: string;
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'GET') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
@@ -37,7 +39,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       .rpc('get_user_stat_session', { p_entity_id: id });
 
     if (error) {
-      console.error('Failed to get session:', error);
+      req.log.error('rpc.failed', { fn: 'get_user_stat_session', error: error.message, code: error.code });
       return res.status(500).json({ success: false, error: 'Failed to get session' });
     }
 
@@ -51,10 +53,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
     }
 
     return res.status(200).json({ success: true, session: data });
-  } catch (error) {
-    console.error('Get session error:', error);
+  } catch (error: any) {
+    req.log.error('session.get_failed', { error: error?.message || String(error), stack: error?.stack });
     return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

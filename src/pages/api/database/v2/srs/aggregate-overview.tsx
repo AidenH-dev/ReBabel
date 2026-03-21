@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger, type LoggedRequest } from '@/lib/withLogger';
 
 interface SetData {
   entity_id: string;
@@ -56,7 +57,7 @@ function toDateString(date: Date, timeZone: string): string {
   return date.toLocaleDateString('en-CA', { timeZone });
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse, userId: string) {
+async function handleGET(req: LoggedRequest, res: NextApiResponse, userId: string) {
   const rawTimezone = req.query.timezone;
   let timezone = 'UTC';
   if (rawTimezone !== undefined) {
@@ -82,7 +83,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse, userId: stri
       .rpc('get_user_sets', { user_id: userId.trim() });
 
     if (setsError) {
-      console.error('Error fetching user sets:', setsError);
+      req.log.error('rpc.failed', { fn: 'get_user_sets', error: setsError.message, code: setsError.code });
       return res.status(500).json({ success: false, error: `Database error: ${setsError.message}` });
     }
 
@@ -132,7 +133,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse, userId: stri
         .rpc('get_set_items_srs_status_full', { set_id: setId });
 
       if (setError) {
-        console.error(`Error fetching set ${setId}:`, setError);
+        req.log.error('rpc.failed', { fn: 'get_set_items_srs_status_full', error: setError.message, code: setError.code });
         continue;
       }
 
@@ -218,8 +219,8 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse, userId: stri
         loadChart,
       },
     });
-  } catch (error) {
-    console.error('API Error:', error);
+  } catch (error: any) {
+    req.log.error('handler.failed', { error: error?.message || String(error), stack: error?.stack });
     return res.status(500).json({
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -227,8 +228,8 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse, userId: stri
   }
 }
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
+export default withApiAuthRequired(withLogger(async function handler(
+  req: LoggedRequest,
   res: NextApiResponse
 ) {
   const session = await getSession(req, res);
@@ -243,4 +244,4 @@ export default withApiAuthRequired(async function handler(
   }
 
   return handleGET(req, res, userId);
-});
+}));

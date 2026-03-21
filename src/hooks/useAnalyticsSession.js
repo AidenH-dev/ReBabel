@@ -1,4 +1,5 @@
 import { useRef, useCallback, useEffect } from 'react';
+import { clientLog } from '@/lib/clientLogger';
 
 /**
  * Hook for managing analytics session lifecycle.
@@ -27,7 +28,9 @@ export default function useAnalyticsSession(sessionType) {
         sessionIdRef.current = data.entity_id;
       }
     } catch (err) {
-      console.error('Failed to start analytics session:', err);
+      clientLog.error('analytics_session.start_failed', {
+        error: err?.message || String(err),
+      });
     }
   }, [sessionType]);
 
@@ -42,7 +45,9 @@ export default function useAnalyticsSession(sessionType) {
         body: JSON.stringify({ itemsReviewed, itemsCorrect }),
       });
     } catch (err) {
-      console.error('Failed to finish analytics session:', err);
+      clientLog.error('analytics_session.finish_failed', {
+        error: err?.message || String(err),
+      });
     }
   }, []);
 

@@ -17,6 +17,7 @@ import { TbStack2, TbArrowBackUp } from 'react-icons/tb';
 import PageHeader from '@/components/ui/PageHeader';
 import { LuRepeat } from 'react-icons/lu';
 import { FaPlus } from 'react-icons/fa';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function SRSDashboard() {
   const router = useRouter();
@@ -164,7 +165,9 @@ export default function SRSDashboard() {
           }
         }
       } catch (err) {
-        console.error('Error fetching SRS items:', err);
+        clientLog.error('srs.dashboard_fetch_failed', {
+          error: err?.message || String(err),
+        });
         setError(err.message);
       } finally {
         setIsLoading(false);

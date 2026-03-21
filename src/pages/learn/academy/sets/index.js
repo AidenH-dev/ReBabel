@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
+import { clientLog } from '@/lib/clientLogger';
 import { FaPlus, FaFire, FaClock, FaChartLine } from 'react-icons/fa';
 import {
   FiSearch,
@@ -152,7 +153,9 @@ export default function VocabularyDashboard() {
         const profile = await response.json();
         setUserProfile(profile);
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        clientLog.error('sets.fetch_profile_failed', {
+          error: error?.message || String(error),
+        });
       }
     };
     fetchUserProfile();
@@ -190,7 +193,9 @@ export default function VocabularyDashboard() {
         formattedData.sort((a, b) => new Date(b.date) - new Date(a.date));
         setRecentsSets(formattedData);
       } catch (error) {
-        console.error('Error fetching user sets:', error);
+        clientLog.error('sets.fetch_user_sets_failed', {
+          error: error?.message || String(error),
+        });
         setRecentsSets([]);
       } finally {
         setIsLoadingSets(false);
@@ -221,7 +226,9 @@ export default function VocabularyDashboard() {
           setTotalDueItems(result.data.metadata.totalDueItems);
         }
       } catch (error) {
-        console.error('Error fetching due count:', error);
+        clientLog.error('sets.fetch_due_count_failed', {
+          error: error?.message || String(error),
+        });
       } finally {
         setIsLoadingDueCount(false);
       }
@@ -242,7 +249,9 @@ export default function VocabularyDashboard() {
           setDashboardStats(result.data);
         }
       } catch (error) {
-        console.error('Error fetching dashboard stats:', error);
+        clientLog.error('sets.fetch_dashboard_stats_failed', {
+          error: error?.message || String(error),
+        });
       } finally {
         setIsLoadingStats(false);
       }

@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 // Kuromoji dict loading + processing 600+ items needs more than 15s
@@ -23,9 +24,9 @@ interface AutoCategorizeResponse {
   error?: string;
 }
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<AutoCategorizeResponse>
+export default withApiAuthRequired(withLogger(async function handler(
+  req,
+  res
 ) {
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
@@ -58,7 +59,7 @@ export default withApiAuthRequired(async function handler(
       .rpc('get_set_with_items_v2', { set_entity_id: set_id });
 
     if (fetchError) {
-      console.error('Fetch set error:', fetchError);
+      req.log.error('rpc.failed', { fn: 'get_set_with_items_v2', error: fetchError.message, code: fetchError.code });
       return res.status(500).json({
         success: false,
         error: `Database error: ${fetchError.message}`,
@@ -126,10 +127,7 @@ export default withApiAuthRequired(async function handler(
             lexical_category: result.lexical_category,
           });
         } else {
-          console.error(
-            `Failed to update item ${item.id}:`,
-            updateError.message
-          );
+          req.log.error('rpc.failed', { fn: 'update_vocab_entity_by_id', error: updateError.message, code: updateError.code, entityId: item.id });
           skippedCount++;
         }
       } else {
@@ -162,10 +160,10 @@ export default withApiAuthRequired(async function handler(
       results,
     });
   } catch (error) {
-    console.error('Auto-categorize error:', error);
+    req.log.error('handler.failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
     });
   }
-});
+}));

@@ -2,6 +2,7 @@ import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
+import { withLogger } from '@/lib/withLogger';
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
 
@@ -44,15 +45,22 @@ async function handler(req, res) {
       });
 
     if (error) {
-      console.error('Error registering device token:', error);
+      req.log.error('rpc.failed', {
+        fn: 'register_device_token',
+        error: error.message,
+        code: error.code,
+      });
       return res.status(500).json({ error: 'Failed to register device token' });
     }
 
     return res.status(200).json({ success: true, id: data });
   } catch (error) {
-    console.error('Register token error:', error);
+    req.log.error('register_token.error', {
+      error: error?.message || String(error),
+      stack: error?.stack,
+    });
     return res.status(500).json({ error: 'Failed to register device token' });
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

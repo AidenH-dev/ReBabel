@@ -4,13 +4,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
+import { withLogger } from '@/lib/withLogger';
 
 interface ApiResponse {
   message?: unknown;
   error?: string;
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+async function handler(req: any, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -51,15 +52,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       });
 
     if (error) {
-      console.error('Failed to fetch platform metrics:', error);
+      req.log.error('rpc.failed', { fn: 'get_admin_platform_metrics', error: error.message, code: error.code });
       return res.status(500).json({ error: 'Failed to fetch platform metrics' });
     }
 
     return res.status(200).json({ message: data });
   } catch (error) {
-    console.error('Platform metrics error:', error);
+    req.log.error('platform_metrics.error', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({ error: 'Internal server error' });
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createRateLimiter } from '@/lib/rateLimit';
+import { withLogger } from '@/lib/withLogger';
 
 // Public endpoint — no withApiAuthRequired
 const supabase = createClient(
@@ -23,8 +24,8 @@ function stripSensitiveFields(obj: Record<string, any>, fields: string[]) {
   return clean;
 }
 
-export default async function handler(
-  req: NextApiRequest,
+export default withLogger(async function handler(
+  req,
   res: NextApiResponse
 ) {
   if (req.method !== 'GET') {
@@ -54,7 +55,7 @@ export default async function handler(
       .rpc('get_set_by_share_token', { token: token.trim() });
 
     if (error) {
-      console.error('RPC error:', error);
+      req.log.error('rpc.failed', { fn: 'get_set_by_share_token', error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
         error: 'Database error'
@@ -87,10 +88,10 @@ export default async function handler(
     });
 
   } catch (error) {
-    console.error('Shared set API error:', error);
+    req.log.error('shared_set.error', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({
       success: false,
       error: 'Internal server error'
     });
   }
-}
+});

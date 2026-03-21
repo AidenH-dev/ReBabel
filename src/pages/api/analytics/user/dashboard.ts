@@ -1,16 +1,18 @@
 // Implements SPEC-LLM-002
 // GET /api/analytics/user/dashboard?timezone=America/Los_Angeles
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
+import type { LoggedRequest } from '@/lib/withLogger';
 
 interface ApiResponse {
   message?: unknown;
   error?: string;
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -46,15 +48,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       });
 
     if (error) {
-      console.error('Failed to fetch dashboard stats:', error);
+      req.log.error('rpc.failed', { fn: 'get_user_dashboard_stats', error: error.message, code: error.code });
       return res.status(500).json({ error: 'Failed to fetch dashboard stats' });
     }
 
     return res.status(200).json({ message: data });
-  } catch (error) {
-    console.error('Dashboard stats error:', error);
+  } catch (error: any) {
+    req.log.error('dashboard.stats_failed', { error: error?.message || String(error), stack: error?.stack });
     return res.status(500).json({ error: 'Internal server error' });
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

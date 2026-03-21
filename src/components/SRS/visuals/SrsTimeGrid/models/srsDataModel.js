@@ -6,6 +6,7 @@
  */
 
 import { getIntervalForLevel } from './srsIntervals';
+import { clientLog } from '@/lib/clientLogger';
 
 /**
  * Calculate next review date based on SRS level and creation time
@@ -27,7 +28,7 @@ export function calculateNextReviewDate(timeCreated, srsLevel) {
 export function transformApiItem(item, formatTimeFunc) {
   // Validate SRS data exists
   if (!item.srs || !item.srs.time_created) {
-    console.warn('Item missing SRS data:', item);
+    clientLog.warn('srs.missing_data', { itemId: item?.id });
     return null;
   }
 
@@ -46,14 +47,6 @@ export function transformApiItem(item, formatTimeFunc) {
   } else {
     title = 'Review Item';
   }
-
-  console.log('Transformed item:', {
-    title,
-    srsLevel: item.srs.srs_level,
-    created: item.srs.time_created,
-    nextReview: reviewDate.toISOString(),
-    hour: reviewDate.getHours(),
-  });
 
   return {
     id: item.id,

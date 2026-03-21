@@ -1,7 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
+import type { LoggedRequest } from '@/lib/withLogger';
 
 interface ApiResponse {
   success: boolean;
@@ -9,7 +11,7 @@ interface ApiResponse {
   error?: string;
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
@@ -54,7 +56,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       });
 
     if (error) {
-      console.error('Failed to append tokens:', error);
+      req.log.error('rpc.failed', { fn: 'append_session_tokens', error: error.message, code: error.code });
       return res.status(500).json({ success: false, error: 'Failed to append tokens' });
     }
 
@@ -66,10 +68,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       success: true,
       tokens_used: data.tokens_used,
     });
-  } catch (error) {
-    console.error('Append tokens error:', error);
+  } catch (error: any) {
+    req.log.error('session.tokens_append_failed', { error: error?.message || String(error), stack: error?.stack });
     return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

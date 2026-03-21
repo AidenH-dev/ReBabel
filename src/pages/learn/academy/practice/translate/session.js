@@ -14,6 +14,7 @@ import { TbX } from 'react-icons/tb';
 import { FaDumbbell } from 'react-icons/fa';
 import { BiBook } from 'react-icons/bi';
 import { TbLanguage } from 'react-icons/tb';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function TranslatePracticeSession() {
   const router = useRouter();
@@ -47,7 +48,9 @@ export default function TranslatePracticeSession() {
             sessionStorage.removeItem('translate-practice-config'); // Clean up
             setIsLoading(false);
           } catch (err) {
-            console.error('Failed to parse config:', err);
+            clientLog.error('translate_session.config_parse_failed', {
+              error: err?.message || String(err),
+            });
             router.push('/learn/academy/practice');
           }
         } else {

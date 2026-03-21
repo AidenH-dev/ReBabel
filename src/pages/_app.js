@@ -15,6 +15,7 @@ import { PostHogProvider } from 'posthog-js/react';
 import { useEffect, useRef, useState } from 'react';
 import Script from 'next/script';
 import { SRSNotificationPrompt } from '@/components/popups/SRSNotificationPrompt';
+import { clientLog } from '@/lib/clientLogger';
 
 const IOS_VIEWPORT_CONTENT =
   'width=device-width, initial-scale=1, viewport-fit=cover';
@@ -62,23 +63,20 @@ if (typeof window !== 'undefined') {
       const { PushNotifications } =
         await import('@capacitor/push-notifications');
 
-      console.log('[Push] Early listener setup for cold start');
-
       PushNotifications.addListener(
         'pushNotificationActionPerformed',
         (notification) => {
-          console.log('[Push] Cold start notification action:', notification);
-
           const route =
             notification.notification?.data?.route ||
             '/learn/academy/sets/fast-review';
 
-          console.log('[Push] Navigating to:', route);
           window.location.href = route;
         }
       );
     } catch (e) {
-      console.error('[Push] Early listener setup error:', e);
+      clientLog.error('push.cold_start_failed', {
+        error: e?.message || String(e),
+      });
     }
   })();
 }
@@ -154,7 +152,7 @@ function PushNotificationBridge() {
           setShowPrompt(true);
         }
       } catch (e) {
-        // Not in Capacitor environment or API error
+        clientLog.warn('capacitor.not_available');
       }
     };
 
@@ -175,9 +173,8 @@ function PushNotificationBridge() {
       if (result.receive === 'granted') {
         // Add listener BEFORE calling register to avoid race condition
         PushNotifications.addListener('registration', async (token) => {
-          console.log('Push token received:', token.value);
           try {
-            const res = await fetch('/api/push/register-token', {
+            await fetch('/api/push/register-token', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -185,21 +182,25 @@ function PushNotificationBridge() {
                 platform: 'ios',
               }),
             });
-            const data = await res.json();
-            console.log('Token registration result:', data);
           } catch (err) {
-            console.error('Failed to register token:', err);
+            clientLog.error('push.register_failed', {
+              error: err?.message || String(err),
+            });
           }
         });
 
         PushNotifications.addListener('registrationError', (error) => {
-          console.error('Push registration error:', error);
+          clientLog.error('push.registration_error', {
+            error: error?.message || String(error),
+          });
         });
 
         await PushNotifications.register();
       }
     } catch (e) {
-      console.error('Failed to request push permissions:', e);
+      clientLog.error('push.permission_failed', {
+        error: e?.message || String(e),
+      });
     }
   };
 
@@ -232,7 +233,7 @@ export default function MyApp({ Component, pageProps }) {
         ensureNativeIOSViewportCover();
         applyCapacitorSafeArea();
       } catch (e) {
-        // Ignore if Capacitor is unavailable.
+        clientLog.warn('capacitor.not_available');
       }
     };
 
@@ -252,8 +253,6 @@ export default function MyApp({ Component, pageProps }) {
         },
       });
       setIsPosthogEnabled(true);
-    } else {
-      console.log('🔹 PostHog disabled in development');
     }
   }, []);
 

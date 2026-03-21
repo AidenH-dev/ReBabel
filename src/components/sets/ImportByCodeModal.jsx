@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { FiX, FiSearch } from 'react-icons/fi';
 import { TbStack2, TbDownload, TbLoader3, TbEye } from 'react-icons/tb';
 import ImportProgressOverlay from '@/components/sets/ImportProgressOverlay';
+import { clientLog } from '@/lib/clientLogger';
 
 const CODE_PATTERN = /^[a-z0-9]{7}$/;
 const UUID_PATTERN =
@@ -108,7 +109,9 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
       router.push(`/learn/academy/sets/study/${result.setEntityId}`);
       onClose();
     } catch (err) {
-      console.error('Error importing set:', err);
+      clientLog.error('set.import_by_code_failed', {
+        error: err?.message || String(err),
+      });
       setImportError(err.message);
       setIsImporting(false);
       setImportProgress(0);

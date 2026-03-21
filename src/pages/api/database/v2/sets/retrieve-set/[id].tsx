@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withLogger } from '@/lib/withLogger';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -123,7 +124,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
       });
 
     if (error) {
-      console.error('Supabase RPC error:', error);
+      (req as any).log?.error('rpc.failed', { fn: 'get_set_with_items_v2', error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
         error: `Database error: ${error.message}`,
@@ -146,7 +147,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
       try {
         responseData = JSON.parse(data);
       } catch (parseError) {
-        console.error('Failed to parse response data:', parseError);
+        (req as any).log?.error('parse.failed', { error: parseError instanceof Error ? parseError.message : String(parseError) });
         return res.status(500).json({
           success: false,
           error: 'Failed to parse database response'
@@ -195,7 +196,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
     });
 
   } catch (error) {
-    console.error('API Error:', error);
+    (req as any).log?.error('handler.failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
 
     // Generic error handler
     return res.status(500).json({
@@ -208,7 +209,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
 
 // Default export function required by Pages Router
 // Protected with Auth0 - requires valid session
-export default withApiAuthRequired(async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+export default withApiAuthRequired(withLogger(async function handler(req, res) {
   // Verify authentication
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
@@ -238,4 +239,4 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
         error: `Method ${method} not allowed`
       });
   }
-})
+}))

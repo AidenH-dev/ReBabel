@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
@@ -20,9 +21,9 @@ interface ReorderItemsResponse {
   error?: string;
 }
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ReorderItemsResponse>
+export default withApiAuthRequired(withLogger(async function handler(
+  req,
+  res
 ) {
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
@@ -38,6 +39,7 @@ export default withApiAuthRequired(async function handler(
 
     const validation = validateRequest(body);
     if (!validation.isValid) {
+      req.log.warn('validation.failed', { error: validation.error });
       return res.status(400).json({ success: false, error: validation.error });
     }
 
@@ -65,20 +67,20 @@ export default withApiAuthRequired(async function handler(
       .rpc('reorder_set_items', { set_id: setId, item_ids: itemIds });
 
     if (error) {
-      console.error('Supabase RPC error:', error);
+      req.log.error('rpc.failed', { fn: 'reorder_set_items', error: error.message, code: error.code });
       return res.status(500).json({ success: false, error: `Database error: ${error.message}` });
     }
 
     return res.status(200).json({ success: true });
 
   } catch (error) {
-    console.error('Unexpected error:', error);
+    req.log.error('handler.failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
     });
   }
-});
+}));
 
 function validateRequest(body: any): { isValid: boolean; error?: string } {
   if (!body.setId || typeof body.setId !== 'string') {

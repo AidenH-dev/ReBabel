@@ -20,6 +20,7 @@ import { HiOutlineLightningBolt } from 'react-icons/hi';
 import { LuTextCursorInput } from 'react-icons/lu';
 import PageHeader from '../../components/ui/PageHeader';
 import SetRow from '../../components/ui/SetRow';
+import { clientLog } from '@/lib/clientLogger';
 
 function ActivityCalendar({ activityData }) {
   const [tooltip, setTooltip] = useState(null);
@@ -253,7 +254,10 @@ export default function DashboardPage() {
           setUserData((prev) => ({ ...prev, name: profile.name }));
         }
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        clientLog.error('dashboard.fetch_failed', {
+          endpoint: '/api/auth/me',
+          error: error?.message || String(error),
+        });
       }
     };
     fetchUserProfile();
@@ -285,7 +289,10 @@ export default function DashboardPage() {
           setSets(formatted);
         }
       } catch (err) {
-        console.error('Failed to fetch sets:', err);
+        clientLog.error('dashboard.fetch_failed', {
+          endpoint: '/api/database/v2/sets/retrieve-list',
+          error: err?.message || String(err),
+        });
       } finally {
         setSetsLoading(false);
       }
@@ -304,7 +311,10 @@ export default function DashboardPage() {
           setTotalDueItems(result.data.metadata.totalDueItems);
         }
       } catch (err) {
-        console.error('Failed to fetch due count:', err);
+        clientLog.error('dashboard.fetch_failed', {
+          endpoint: '/api/database/v2/srs/all-due',
+          error: err?.message || String(err),
+        });
       } finally {
         setDueLoading(false);
       }
@@ -346,7 +356,10 @@ export default function DashboardPage() {
           }));
         }
       } catch (err) {
-        console.error('Failed to fetch dashboard stats:', err);
+        clientLog.error('dashboard.fetch_failed', {
+          endpoint: '/api/analytics/user/dashboard',
+          error: err?.message || String(err),
+        });
       } finally {
         setDashboardLoading(false);
       }

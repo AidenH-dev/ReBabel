@@ -3,6 +3,7 @@ import MainSidebar from '../../components/Sidebars/MainSidebar';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { clientLog } from '@/lib/clientLogger';
 import {
   FaBook,
   FaGraduationCap,
@@ -135,7 +136,9 @@ export default function Home() {
         const profile = await response.json();
         setUserProfile(profile);
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        clientLog.error('home.fetch_profile_failed', {
+          error: error?.message || String(error),
+        });
       } finally {
         setIsLoading(false);
       }
@@ -151,7 +154,9 @@ export default function Home() {
         const { learning_materials } = await resp.json();
         setAcademicLearning_materials(learning_materials || []);
       } catch (err) {
-        console.error('Error fetching learning_materials:', err);
+        clientLog.error('home.fetch_learning_materials_failed', {
+          error: err?.message || String(err),
+        });
         setAcademicLearning_materials([]); // keep UI stable
       }
     };

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withLogger } from '@/lib/withLogger';
 
 interface BugReportResponse {
   success: boolean;
@@ -11,7 +12,7 @@ interface BugReportResponse {
 }
 
 async function handleGET(
-  req: NextApiRequest,
+  req: any,
   res: NextApiResponse<BugReportResponse>
 ) {
   try {
@@ -38,7 +39,7 @@ async function handleGET(
     const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      console.error('Missing Supabase environment variables');
+      req.log.error('config.missing', { error: 'Missing Supabase environment variables' });
       return res.status(500).json({
         success: false,
         error: 'Server configuration error'
@@ -59,16 +60,14 @@ async function handleGET(
     };
 
     // Call the RPC function to retrieve bug reports
-    console.log('[BugReportList] RPC params:', JSON.stringify(rpcParams));
     const { data, error } = await supabase
       .schema('v1_kvs_rebabel')
       .rpc('get_admin_info_entities_by_time_range', {
         data: rpcParams
       });
-    console.log('[BugReportList] RPC response:', JSON.stringify({ data, error }));
 
     if (error) {
-      console.error('Failed to retrieve bug reports:', error);
+      req.log.error('rpc.failed', { fn: 'get_admin_info_entities_by_time_range', error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
         error: 'Failed to retrieve bug reports',
@@ -93,7 +92,7 @@ async function handleGET(
     });
 
   } catch (error) {
-    console.error('API Error:', error);
+    req.log.error('bug_report_list.error', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
 
     return res.status(500).json({
       success: false,
@@ -105,7 +104,7 @@ async function handleGET(
 
 // Default export function required by Pages Router
 // Protected with Auth0 - requires valid session
-export default withApiAuthRequired(async function handler(req: NextApiRequest, res: NextApiResponse<BugReportResponse>) {
+export default withApiAuthRequired(withLogger(async function handler(req, res: NextApiResponse<BugReportResponse>) {
   // Verify authentication
   const session = await getSession(req, res);
   if (!session?.user?.sub || !session?.user?.email) {
@@ -144,4 +143,4 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
         error: `Method ${method} not allowed`
       });
   }
-});
+}));

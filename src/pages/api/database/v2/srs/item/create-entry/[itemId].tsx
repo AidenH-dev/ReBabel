@@ -1,7 +1,8 @@
 // pages/api/database/v2/srs/item/create-entry/[itemId].ts
 import { createClient } from '@supabase/supabase-js';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withLogger, type LoggedRequest } from '@/lib/withLogger';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -26,7 +27,7 @@ interface CreateSrsEntryResponse {
 }
 
 async function handlePOST(
-  req: NextApiRequest,
+  req: LoggedRequest,
   res: NextApiResponse<CreateSrsEntryResponse>
 ) {
   try {
@@ -65,7 +66,7 @@ async function handlePOST(
       });
 
     if (error) {
-      console.error('Supabase RPC error:', error);
+      req.log.error('rpc.failed', { fn: 'create_item_srs_entry', error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
         error: `Database error: ${error.message}`,
@@ -87,8 +88,8 @@ async function handlePOST(
       data: data,
     });
 
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch (error: any) {
+    req.log.error('handler.failed', { error: error?.message || String(error), stack: error?.stack });
     return res.status(500).json({
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
@@ -96,8 +97,8 @@ async function handlePOST(
   }
 }
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
+export default withApiAuthRequired(withLogger(async function handler(
+  req: LoggedRequest,
   res: NextApiResponse<CreateSrsEntryResponse>
 ) {
   // Verify authentication
@@ -118,7 +119,7 @@ export default withApiAuthRequired(async function handler(
   }
 
   return handlePOST(req, res);
-})
+}))
 
 // Validation helper
 function validateRequest(body: any): { isValid: boolean; error?: string } {

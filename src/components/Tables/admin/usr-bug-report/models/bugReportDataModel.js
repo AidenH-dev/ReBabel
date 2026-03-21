@@ -1,10 +1,14 @@
+import { clientLog } from '@/lib/clientLogger';
+
 export const parseFormJson = (formJson) => {
   if (!formJson) return {};
   if (typeof formJson === 'string') {
     try {
       return JSON.parse(formJson);
     } catch (e) {
-      console.error('Failed to parse form_json:', e);
+      clientLog.error('bug_report.parse_form_json_failed', {
+        error: e?.message || String(e),
+      });
       return {};
     }
   }

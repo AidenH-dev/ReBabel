@@ -1,4 +1,5 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withLogger } from '@/lib/withLogger';
 
 async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -28,15 +29,20 @@ async function handler(req, res) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Auth0 password reset error:', errorText);
+      req.log.error('auth0.password_reset_failed', { error: errorText });
       return res.status(500).json({ error: 'Failed to send reset email' });
     }
 
-    return res.status(200).json({ success: true, message: 'Password reset email sent' });
+    return res
+      .status(200)
+      .json({ success: true, message: 'Password reset email sent' });
   } catch (error) {
-    console.error('Password reset error:', error);
+    req.log.error('password_reset.error', {
+      error: error?.message || String(error),
+      stack: error?.stack,
+    });
     return res.status(500).json({ error: 'Failed to send reset email' });
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

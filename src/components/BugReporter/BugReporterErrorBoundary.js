@@ -3,6 +3,7 @@ import {
   BugReporterProvider,
   useBugReporterContext,
 } from '@/contexts/BugReporterContext';
+import { clientLog } from '@/lib/clientLogger';
 
 // Wrapper to inject context into the class component via render prop
 function ErrorBoundaryWithContext({ children }) {
@@ -28,6 +29,11 @@ class BugReporterErrorBoundaryInner extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
+    clientLog.error('react.crash', {
+      message: error?.message,
+      stack: error?.stack,
+      componentStack: errorInfo?.componentStack,
+    });
     const { setErrorData } = this.props;
     setErrorData({
       error: error.message,

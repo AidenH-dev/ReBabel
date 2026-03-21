@@ -6,6 +6,7 @@ import {
   useCallback,
 } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { clientLog } from '@/lib/clientLogger';
 
 const PremiumContext = createContext({
   isPremium: false,
@@ -50,7 +51,9 @@ export function PremiumProvider({ children }) {
         setSubscription(data);
       }
     } catch (error) {
-      console.error('Failed to fetch subscription:', error);
+      clientLog.error('premium.subscription_fetch_failed', {
+        error: error?.message || String(error),
+      });
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +73,9 @@ export function PremiumProvider({ children }) {
         setSessionsUsedToday(data.count || 0);
       }
     } catch (error) {
-      console.error('Failed to fetch session count:', error);
+      clientLog.error('premium.session_count_fetch_failed', {
+        error: error?.message || String(error),
+      });
     }
   }, [user]);
 

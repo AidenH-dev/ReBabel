@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaTimes, FaCheckCircle } from 'react-icons/fa';
 import { TbDownload, TbLoader3 } from 'react-icons/tb';
+import { clientLog } from '@/lib/clientLogger';
 
 // Starter data for the three sets
 const COMMON_WORDS_DATA = [
@@ -334,7 +335,9 @@ export function BeginnerPackPopup({ isOpen, onClose, onImport, userProfile }) {
         onImport();
       }, 2000);
     } catch (error) {
-      console.error('Error creating sets:', error);
+      clientLog.error('starter_pack.create_failed', {
+        error: error?.message || String(error),
+      });
       setImportStatus((prev) => ({ ...prev, error: error.message }));
       setIsImporting(false);
     }

@@ -4,6 +4,7 @@ import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import crypto from 'crypto';
 import { toSlug } from '@/lib/slug';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
@@ -44,9 +45,9 @@ interface ApiResponse {
   message?: string;
 }
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ApiResponse>
+export default withApiAuthRequired(withLogger(async function handler(
+  req,
+  res
 ) {
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
@@ -195,7 +196,7 @@ export default withApiAuthRequired(async function handler(
       });
 
     if (updateError) {
-      console.error('Failed to save share token:', updateError);
+      req.log.error('rpc.failed', { fn: 'update_set_by_id', error: updateError.message, code: updateError.code });
       return res.status(500).json({
         success: false,
         error: 'Failed to generate share link'
@@ -212,10 +213,10 @@ export default withApiAuthRequired(async function handler(
     });
 
   } catch (error) {
-    console.error('Share API error:', error);
+    req.log.error('handler.failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({
       success: false,
       error: 'Internal server error'
     });
   }
-});
+}));

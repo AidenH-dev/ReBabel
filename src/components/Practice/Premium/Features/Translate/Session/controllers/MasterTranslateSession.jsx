@@ -4,6 +4,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { toKana } from 'wanakana';
 import GradeResultView from '../views/GradeResultView';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function MasterTranslateSession({
   pools, // { grammar: [...], vocab: [...] }
@@ -76,7 +77,9 @@ export default function MasterTranslateSession({
       setGenerateRunId(data.runId);
       onGenerationSuccess?.();
     } catch (error) {
-      console.error('Error generating questions:', error);
+      clientLog.error('translate.generate_failed', {
+        error: error?.message || String(error),
+      });
       const message =
         error.message === 'rate_limited'
           ? "You're sending requests too quickly. Please wait a moment and try again."
@@ -144,7 +147,9 @@ export default function MasterTranslateSession({
         isCorrect: isCorrect,
       });
     } catch (error) {
-      console.error('Error grading answer:', error);
+      clientLog.error('translate.grade_failed', {
+        error: error?.message || String(error),
+      });
       setError(
         error.message === 'rate_limited'
           ? "You're sending requests too quickly. Please wait a moment and try again."
@@ -251,7 +256,9 @@ export default function MasterTranslateSession({
         setGradingFeedback(feedbackType);
       }
     } catch (error) {
-      console.error('Feedback error:', error);
+      clientLog.error('translate.feedback_failed', {
+        error: error?.message || String(error),
+      });
     }
   };
 

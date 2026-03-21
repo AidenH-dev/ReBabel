@@ -1,5 +1,6 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createRateLimiter } from '@/lib/rateLimit';
+import { withLogger } from '@/lib/withLogger';
 import crypto from 'crypto';
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 5 });
@@ -121,7 +122,7 @@ async function handler(req, res) {
     const isProduction = process.env.APNS_PRODUCTION === 'true';
 
     if (!apnsKeyId || !apnsTeamId || !apnsKey) {
-      console.error('Missing APNs configuration');
+      req.log.error('config.missing', { error: 'Missing APNs configuration' });
       return res
         .status(500)
         .json({ error: 'Push notifications not configured' });
@@ -165,7 +166,10 @@ async function handler(req, res) {
         .status(200)
         .json({ success: true, message: 'Test notification sent!' });
     } else {
-      console.error('APNs error:', result);
+      req.log.error('apns.send_failed', {
+        error: result.error,
+        statusCode: result.statusCode,
+      });
       return res.status(500).json({
         error: 'Failed to send notification',
         details: result.error,
@@ -173,11 +177,14 @@ async function handler(req, res) {
       });
     }
   } catch (error) {
-    console.error('Push notification error:', error);
+    req.log.error('push.send_test_failed', {
+      error: error?.message || String(error),
+      stack: error?.stack,
+    });
     return res
       .status(500)
       .json({ error: 'Failed to send notification', details: error.message });
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

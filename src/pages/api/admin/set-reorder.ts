@@ -5,14 +5,15 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withLogger } from '@/lib/withLogger';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
+export default withApiAuthRequired(withLogger(async function handler(
+  req,
   res: NextApiResponse
 ) {
   const session = await getSession(req, res);
@@ -62,7 +63,7 @@ export default withApiAuthRequired(async function handler(
       .rpc('reorder_set_items', { set_id: setId, item_ids: itemIds });
 
     if (error) {
-      console.error('Supabase RPC error:', error);
+      req.log.error('rpc.failed', { fn: 'reorder_set_items', error: error.message, code: error.code });
       return res.status(500).json({ success: false, error: `Database error: ${error.message}` });
     }
 
@@ -70,4 +71,4 @@ export default withApiAuthRequired(async function handler(
   }
 
   return res.status(405).json({ success: false, error: 'Method not allowed' });
-});
+}));

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { FiAlertTriangle, FiX } from "react-icons/fi";
+import React, { useState, useEffect } from 'react';
+import { FiAlertTriangle, FiX } from 'react-icons/fi';
+import { clientLog } from '@/lib/clientLogger';
 
 function ReportIssueButton() {
   const [open, setOpen] = useState(false);
@@ -7,37 +8,36 @@ function ReportIssueButton() {
   // Allow opening the report modal from anywhere via custom event
   useEffect(() => {
     const handler = () => setOpen(true);
-    window.addEventListener("open-report-issue", handler);
-    return () => window.removeEventListener("open-report-issue", handler);
+    window.addEventListener('open-report-issue', handler);
+    return () => window.removeEventListener('open-report-issue', handler);
   }, []);
   const [formData, setFormData] = useState({
-    location: "",
-    feature: "",
-    description: "",
+    location: '',
+    feature: '',
+    description: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-
   const handleOpen = () => setOpen(true);
-  
+
   const handleClose = () => {
     setOpen(false);
     setFormData({
-      location: "",
-      feature: "",
-      description: "",
+      location: '',
+      feature: '',
+      description: '',
     });
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async () => {
     // Validation
     if (!formData.location || !formData.feature) {
-      alert("Please fill in all required fields");
+      alert('Please fill in all required fields');
       return;
     }
 
@@ -54,30 +54,39 @@ function ReportIssueButton() {
         form_json: {
           bug_location: formData.location,
           bugged_feature: formData.feature,
-          user_details: formData.description || ""
-        }
+          user_details: formData.description || '',
+        },
       };
 
       // Submit to the API endpoint
-      const response = await fetch("/api/database/v2/report/submit-bug-report", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        '/api/database/v2/report/submit-bug-report',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to submit bug report");
+        throw new Error(data.error || 'Failed to submit bug report');
       }
 
       handleClose();
-      alert("Thank you! Your issue report has been submitted.");
+      alert('Thank you! Your issue report has been submitted.');
     } catch (err) {
-      console.error("Failed to submit bug report:", err);
-      alert(err instanceof Error ? err.message : "Couldn't send your report right now. Please try again.");
+      clientLog.error('report_issue.submit_failed', {
+        error: err?.message || String(err),
+      });
+      alert(
+        err instanceof Error
+          ? err.message
+          : "Couldn't send your report right now. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -150,7 +159,8 @@ function ReportIssueButton() {
               {/* Location */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Where did you encounter this issue? <span className="text-[#e30a5f]">*</span>
+                  Where did you encounter this issue?{' '}
+                  <span className="text-[#e30a5f]">*</span>
                 </label>
                 <input
                   type="text"
@@ -168,7 +178,8 @@ function ReportIssueButton() {
               {/* Feature */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  What feature seems to be broken? <span className="text-[#e30a5f]">*</span>
+                  What feature seems to be broken?{' '}
+                  <span className="text-[#e30a5f]">*</span>
                 </label>
                 <input
                   type="text"
@@ -243,7 +254,7 @@ function ReportIssueButton() {
                       Submitting...
                     </span>
                   ) : (
-                    "Submit Report"
+                    'Submit Report'
                   )}
                 </button>
               </div>

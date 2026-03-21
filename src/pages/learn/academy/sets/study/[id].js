@@ -41,6 +41,7 @@ import {
   TbLanguageHiragana,
 } from 'react-icons/tb';
 import { FiEdit2, FiMoreVertical, FiTag } from 'react-icons/fi';
+import { clientLog } from '@/lib/clientLogger';
 
 // ============================================================================
 // MAIN COMPONENT
@@ -144,8 +145,6 @@ export default function ViewSet() {
           throw new Error(result.error || 'Failed to load set data');
         }
 
-        console.log('Set Result: ', result);
-
         // Extract data from API response
         const apiData = result.data;
         const setInfo = apiData.data?.set;
@@ -176,8 +175,6 @@ export default function ViewSet() {
             lastScore: 0,
           },
         });
-
-        console.log('SetData.set_type set to:', setInfo.set_type || null);
 
         // Transform API items into consistent format for UI
         const transformedItems = Array.isArray(setItemsAPI)
@@ -228,7 +225,9 @@ export default function ViewSet() {
 
         setItems(transformedItems);
       } catch (err) {
-        console.error('Error fetching set:', err);
+        clientLog.error('set.fetch_failed', {
+          error: err?.message || String(err),
+        });
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -249,7 +248,9 @@ export default function ViewSet() {
         const profile = await response.json();
         setUserProfile(profile);
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        clientLog.error('set.profile_fetch_failed', {
+          error: error?.message || String(error),
+        });
       }
     };
     fetchUserProfile();
@@ -366,7 +367,9 @@ export default function ViewSet() {
         handleSetDataUpdate({ title: trimmed });
       }
     } catch (err) {
-      console.error('Error saving title:', err);
+      clientLog.error('set.title_save_failed', {
+        error: err?.message || String(err),
+      });
     } finally {
       setIsSavingTitle(false);
       setIsEditingTitle(false);

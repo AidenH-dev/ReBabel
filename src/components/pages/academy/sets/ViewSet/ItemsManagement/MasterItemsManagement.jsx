@@ -12,6 +12,7 @@ import {
 import { MdDragHandle } from 'react-icons/md';
 import CustomSelect from '@/components/ui/CustomSelect';
 import { toKana } from 'wanakana';
+import { clientLog } from '@/lib/clientLogger';
 import {
   DndContext,
   closestCenter,
@@ -372,7 +373,10 @@ export default function MasterItemsManagement({
         setSaveSuccess(false);
       }, 1000);
     } catch (err) {
-      console.error('Error saving item:', err);
+      clientLog.error('set.item_operation_failed', {
+        operation: 'save',
+        error: err?.message || String(err),
+      });
       setSaveError(err.message);
     } finally {
       setIsSaving(false);
@@ -441,7 +445,10 @@ export default function MasterItemsManagement({
       setSaveSuccess(false);
       setSaveError(null);
     } catch (err) {
-      console.error('Error deleting item:', err);
+      clientLog.error('set.item_operation_failed', {
+        operation: 'delete',
+        error: err?.message || String(err),
+      });
       setDeleteError(err.message);
     } finally {
       setIsDeleting(false);
@@ -624,7 +631,10 @@ export default function MasterItemsManagement({
         router.reload();
       }, 1000);
     } catch (err) {
-      console.error('Error adding item:', err);
+      clientLog.error('set.item_operation_failed', {
+        operation: 'add',
+        error: err?.message || String(err),
+      });
       setAddItemError(err.message);
     } finally {
       setIsAddingItem(false);
@@ -703,7 +713,10 @@ export default function MasterItemsManagement({
         hasKanjiWarning ? 6000 : 2500
       );
     } catch (err) {
-      console.error('Auto-categorize error:', err);
+      clientLog.error('set.item_operation_failed', {
+        operation: 'categorize',
+        error: err?.message || String(err),
+      });
       setAutoCategorizeResult(`Error: ${err.message}`);
       setTimeout(() => setAutoCategorizeResult(null), 5000);
     } finally {

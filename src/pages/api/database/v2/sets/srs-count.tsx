@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
 
 interface ApiResponse {
   success: boolean;
@@ -15,7 +16,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
     const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      console.error('Missing Supabase environment variables');
+      (req as any).log?.error('config.missing', { error: 'Missing Supabase environment variables' });
       return res.status(500).json({
         success: false,
         error: 'Server configuration error'
@@ -32,7 +33,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
       });
 
     if (error) {
-      console.error('Supabase RPC error:', error);
+      (req as any).log?.error('rpc.failed', { fn: 'get_user_sets', error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
         error: `Database error: ${error.message}`
@@ -62,7 +63,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
       count: srsEnabledCount
     });
   } catch (error) {
-    console.error('API Error:', error);
+    (req as any).log?.error('handler.failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({
       success: false,
       error: 'Internal server error'
@@ -70,9 +71,9 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
   }
 }
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ApiResponse>
+export default withApiAuthRequired(withLogger(async function handler(
+  req,
+  res
 ) {
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
@@ -92,4 +93,4 @@ export default withApiAuthRequired(async function handler(
   }
 
   return handleGET(req, res, userId);
-});
+}));

@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
 
 // Type definitions for the response structure
 interface SetMetadata {
@@ -69,7 +70,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
     const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      console.error('Missing Supabase environment variables');
+      (req as any).log?.error('config.missing', { error: 'Missing Supabase environment variables' });
       return res.status(500).json({
         success: false,
         error: 'Server configuration error'
@@ -88,7 +89,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
 
     // Handle database errors
     if (error) {
-      console.error('Supabase RPC error:', error);
+      (req as any).log?.error('rpc.failed', { fn: 'get_user_sets', error: error.message, code: error.code });
 
       // Return 404 if no data found
       if (data === null || data === undefined) {
@@ -121,7 +122,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
       try {
         setsArray = JSON.parse(data);
       } catch (parseError) {
-        console.error('Failed to parse response data:', parseError);
+        (req as any).log?.error('parse.failed', { error: parseError instanceof Error ? parseError.message : String(parseError) });
         setsArray = Array.isArray(data) ? data : [];
       }
     } else if (Array.isArray(data)) {
@@ -174,7 +175,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
     });
 
   } catch (error) {
-    console.error('API Error:', error);
+    (req as any).log?.error('handler.failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
 
     // Generic error handler
     return res.status(500).json({
@@ -187,7 +188,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
 
 // Default export function required by Pages Router
 // Protected with Auth0 - requires valid session
-export default withApiAuthRequired(async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+export default withApiAuthRequired(withLogger(async function handler(req, res) {
   // Verify authentication
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
@@ -223,4 +224,4 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
         error: `Method ${method} not allowed`
       });
   }
-})
+}))

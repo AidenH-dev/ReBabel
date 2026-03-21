@@ -34,6 +34,7 @@ import {
   mergeIntoQuestionItem,
 } from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function DueNow() {
   const router = useRouter();
@@ -132,7 +133,9 @@ export default function DueNow() {
         }),
       });
     } catch (err) {
-      console.error('Failed to mark set studied:', err);
+      clientLog.error('set.mark_studied_failed', {
+        error: err?.message || String(err),
+      });
     }
   };
 
@@ -214,10 +217,9 @@ export default function DueNow() {
               }
             }
           } catch (error) {
-            console.warn(
-              'Failed to fetch full set for distractors, using session items:',
-              error
-            );
+            clientLog.warn('srs.distractor_fetch_failed', {
+              error: error?.message || String(error),
+            });
           }
         }
 
@@ -271,21 +273,10 @@ export default function DueNow() {
           initialPhase = 'translation';
         }
         setCurrentPhase(initialPhase);
-
-        // Console log all arrays for development
-        console.log('=== SET DATA LOADED ===');
-        console.log('Set Info:', setInfoData);
-        console.log('Set Type:', setInfoData.set_type);
-        console.log('Transformed Item Data:', transformedItemData);
-        console.log('Total Items:', transformedItemData.length);
-        console.log('\n=== MULTIPLE CHOICE ARRAY ===');
-        console.log('MC Questions:', multipleChoice);
-        console.log('Total MC Questions:', multipleChoice.length);
-        console.log('\n=== TRANSLATION ARRAY ===');
-        console.log('Translation Questions:', translation);
-        console.log('Total Translation Questions:', translation.length);
       } catch (err) {
-        console.error('Error fetching set:', err);
+        clientLog.error('srs.due_now_fetch_failed', {
+          error: err?.message || String(err),
+        });
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -536,10 +527,6 @@ export default function DueNow() {
       // Save the new SRS level to the database (pass UUID, not generated ID)
       saveSRSLevel(originalItem.uuid, newLevel);
 
-      console.log(
-        `SRS Level Update: ${originalId} - ${oldLevel} → ${newLevel} (mistakes: ${mistakes})`
-      );
-
       return true; // Level change was triggered
     }
 
@@ -566,12 +553,12 @@ export default function DueNow() {
       const result = await response.json();
 
       if (!result.success) {
-        console.error('Failed to save SRS level:', result.error);
-      } else {
-        console.log(`Successfully saved SRS level for ${uuid}: ${newLevel}`);
+        clientLog.error('srs.save_level_failed', { error: result.error });
       }
     } catch (error) {
-      console.error('Error saving SRS level:', error);
+      clientLog.error('srs.save_level_error', {
+        error: error?.message || String(error),
+      });
     }
   };
 
@@ -746,7 +733,9 @@ export default function DueNow() {
 
       setEditingItem(null);
     } catch (error) {
-      console.error('Error updating field card item:', error);
+      clientLog.error('srs.edit_item_failed', {
+        error: error?.message || String(error),
+      });
       setEditError(error.message || 'Failed to update item');
     } finally {
       setIsSavingEdit(false);

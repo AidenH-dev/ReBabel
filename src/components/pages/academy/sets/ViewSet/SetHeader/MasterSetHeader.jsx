@@ -20,6 +20,7 @@ import {
   toSlug,
   downloadCSV,
 } from '@/components/pages/academy/sets/ViewSet/utils/csvUtils.js';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function MasterSetHeader({
   setData,
@@ -98,7 +99,9 @@ export default function MasterSetHeader({
       const remaining = Math.max(0, 2000 - elapsed);
       await new Promise((r) => setTimeout(r, remaining));
     } catch (err) {
-      console.error('Error generating share link:', err);
+      clientLog.error('set.share_generate_failed', {
+        error: err?.message || String(err),
+      });
       setShareError(err.message);
     } finally {
       setIsGeneratingShare(false);
@@ -148,7 +151,9 @@ export default function MasterSetHeader({
       const remaining = Math.max(0, 2000 - elapsed);
       await new Promise((r) => setTimeout(r, remaining));
     } catch (err) {
-      console.error('Error regenerating share link:', err);
+      clientLog.error('set.share_regenerate_failed', {
+        error: err?.message || String(err),
+      });
       setShareError(err.message);
     } finally {
       setIsGeneratingShare(false);
@@ -195,7 +200,9 @@ export default function MasterSetHeader({
       setShareToken(null);
       setShowShareModal(false);
     } catch (err) {
-      console.error('Error revoking share link:', err);
+      clientLog.error('set.share_revoke_failed', {
+        error: err?.message || String(err),
+      });
       setShareError(err.message);
     } finally {
       setIsRevokingShare(false);
@@ -277,7 +284,9 @@ export default function MasterSetHeader({
         setSaveSetSuccess(false);
       }, 1000);
     } catch (err) {
-      console.error('Error saving set:', err);
+      clientLog.error('set.save_failed', {
+        error: err?.message || String(err),
+      });
       setSaveSetError(err.message);
     } finally {
       setIsSavingSet(false);
@@ -335,7 +344,9 @@ export default function MasterSetHeader({
       // Call parent's delete handler (which will redirect)
       onDeleteSet();
     } catch (err) {
-      console.error('Error deleting set:', err);
+      clientLog.error('set.delete_failed', {
+        error: err?.message || String(err),
+      });
       setDeleteSetError(err.message);
     } finally {
       setIsDeletingSet(false);
@@ -354,7 +365,9 @@ export default function MasterSetHeader({
       downloadCSV(csv, filename);
       setShowOptions(false);
     } catch (e) {
-      console.error('CSV export failed:', e);
+      clientLog.error('set.csv_export_failed', {
+        error: e?.message || String(e),
+      });
       alert('Failed to export CSV.');
     }
   };
@@ -436,7 +449,9 @@ export default function MasterSetHeader({
         setSaveSRSSuccess(false);
       }, 1000);
     } catch (err) {
-      console.error('Error saving SRS settings:', err);
+      clientLog.error('set.srs_settings_save_failed', {
+        error: err?.message || String(err),
+      });
       setSaveSRSError(err.message);
     } finally {
       setIsSavingSRS(false);

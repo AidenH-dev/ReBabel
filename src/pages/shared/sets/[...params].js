@@ -8,6 +8,7 @@ import { TbStack2 } from 'react-icons/tb';
 import { FiSearch } from 'react-icons/fi';
 import { createClient } from '@supabase/supabase-js';
 import { toSlug } from '@/lib/slug';
+import { log } from '@/lib/logger';
 
 const SENSITIVE_ITEM_FIELDS = [
   'owner',
@@ -54,7 +55,9 @@ export async function getServerSideProps(context) {
       .rpc('get_set_by_share_token', { token: token.trim() });
 
     if (error) {
-      console.error('RPC error:', error);
+      log.error('shared_set.rpc_failed', {
+        error: error?.message || String(error),
+      });
       return { props: { error: 'Failed to load shared set', token } };
     }
 
@@ -96,7 +99,7 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (err) {
-    console.error('Shared set SSR error:', err);
+    log.error('shared_set.ssr_failed', { error: err?.message || String(err) });
     return { props: { error: 'Failed to load shared set', token } };
   }
 }

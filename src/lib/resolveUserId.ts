@@ -1,4 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { log } from '@/lib/logger';
 
 /**
  * Resolves an Auth0 user ID to a ReBabel-owned user ID (usr_<uuid>).
@@ -15,12 +16,12 @@ export async function resolveUserId(auth0Sub: string, email?: string | null): Pr
     });
 
   if (error) {
-    console.error('Failed to resolve user identity:', error);
+    log.error('user.resolve_failed', { auth0Sub, error: error?.message || String(error) });
     throw new Error('Failed to resolve user identity');
   }
 
   if (data?.error) {
-    console.error('resolve_user_identity returned error:', data.error);
+    log.error('user.resolve_rpc_error', { auth0Sub, error: data.error });
     throw new Error(data.error);
   }
 

@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
 
 interface SubscriptionData {
   owner?: string;
@@ -28,7 +29,7 @@ interface ApiResponse {
   error?: string;
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+async function handler(req: any, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'GET') {
     return res.status(405).json({
       success: false,
@@ -84,7 +85,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       accessLevel: isPremium ? 'premium' : 'free',
     });
   } catch (error) {
-    console.error('Subscription status error:', error);
+    req.log.error('subscription.status_failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({
       success: false,
       subscription: null,
@@ -96,4 +97,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

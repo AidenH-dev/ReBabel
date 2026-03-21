@@ -3,6 +3,7 @@ import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -14,7 +15,7 @@ interface ApiResponse {
   error?: string;
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+async function handler(req: any, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
@@ -47,9 +48,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
 
     return res.status(200).json({ success: true, url: portalSession.url });
   } catch (error) {
-    console.error('Customer portal error:', error);
+    req.log.error('customer_portal.failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({ success: false, error: 'Failed to create portal session' });
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

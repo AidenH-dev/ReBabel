@@ -24,6 +24,7 @@ import {
   mergeIntoQuestionItem,
 } from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function SetQuiz() {
   const router = useRouter();
@@ -48,7 +49,10 @@ export default function SetQuiz() {
         }),
       });
     } catch (err) {
-      console.error('Failed to mark set studied:', err);
+      clientLog.error('set.mark_studied_failed', {
+        setId,
+        error: err?.message || String(err),
+      });
     }
   };
 
@@ -158,7 +162,9 @@ export default function SetQuiz() {
         });
         setItemStats(stats);
       } catch (err) {
-        console.error('Error fetching set:', err);
+        clientLog.error('quiz.set_fetch_failed', {
+          error: err?.message || String(err),
+        });
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -200,7 +206,6 @@ export default function SetQuiz() {
 
   // Handle mode selection
   const handleModeSelect = (mode) => {
-    console.log('Selected quiz mode:', mode);
     startAnalyticsSession();
 
     // For grammar sets, mode is the quizType
@@ -409,7 +414,9 @@ export default function SetQuiz() {
 
       setEditingItem(null);
     } catch (error) {
-      console.error('Error updating field card item:', error);
+      clientLog.error('quiz.item_update_failed', {
+        error: error?.message || String(error),
+      });
       setEditError(error.message || 'Failed to update item');
     } finally {
       setIsSavingEdit(false);
@@ -467,11 +474,6 @@ export default function SetQuiz() {
   // Handle exit
   const handleExit = () => {
     abortAnalyticsSession();
-    console.log('=== QUIZ SESSION ENDED ===');
-    console.log('Final Statistics:', {
-      sessionStats,
-      itemBreakdown: itemStats,
-    });
     router.push(`/learn/academy/sets/study/${id}`);
   };
 
@@ -632,11 +634,6 @@ export default function SetQuiz() {
                 onEditItem={handleOpenEditItem}
                 disableKeyboardShortcuts={Boolean(editingItem)}
                 onComplete={() => {
-                  console.log('=== QUIZ COMPLETED ===');
-                  console.log('Final Statistics:', {
-                    sessionStats,
-                    itemBreakdown: itemStats,
-                  });
                   setQuizCompleted(true);
                 }}
               />

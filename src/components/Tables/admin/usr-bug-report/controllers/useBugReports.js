@@ -4,6 +4,7 @@ import {
   calculateDateRange,
 } from '../models/bugReportDataModel';
 import { DEFAULT_TIME_RANGE } from '../models/bugReportConstants';
+import { clientLog } from '@/lib/clientLogger';
 
 export const useBugReports = () => {
   const [bugReports, setBugReports] = useState([]);
@@ -23,9 +24,7 @@ export const useBugReports = () => {
     setError(null);
     try {
       const dateRange = calculateDateRange(timeRangePreset, customDateRange);
-      console.log('[BugReports] Fetching with date range:', dateRange);
       const result = await fetchBugReports(dateRange);
-      console.log('[BugReports] API result:', result);
 
       if (result.success) {
         setBugReports(result.data);
@@ -34,7 +33,9 @@ export const useBugReports = () => {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
-      console.error('Error fetching bug reports:', err);
+      clientLog.error('admin.bug_reports_fetch_failed', {
+        error: err?.message || String(err),
+      });
     } finally {
       setLoading(false);
     }

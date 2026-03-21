@@ -9,6 +9,7 @@ import {
 } from 'react-icons/tb';
 import SrsItemHistoryChart from './srs-item-history-chart';
 import { calculateNextReviewDate } from '@/components/SRS/visuals/SrsTimeGrid/models/srsDataModel';
+import { clientLog } from '@/lib/clientLogger';
 
 const LEECH_THRESHOLD = 8;
 
@@ -67,7 +68,9 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
           setHistoryData(result.data);
         }
       } catch (err) {
-        console.error('Failed to fetch SRS history:', err);
+        clientLog.error('srs.history_fetch_failed', {
+          error: err?.message || String(err),
+        });
       } finally {
         setIsLoading(false);
       }

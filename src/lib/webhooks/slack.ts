@@ -3,6 +3,7 @@
  * Fire-and-forget notifications to Slack for monitoring
  */
 
+import { log } from '@/lib/logger';
 import type {
   PekoEventType,
   PekoEvent,
@@ -101,7 +102,7 @@ export function notifySlack(event: PekoEvent): void {
   const url = process.env.SLACK_WEBHOOK_URL;
 
   if (!url) {
-    console.warn('[Slack] Webhook not configured, skipping notification');
+    log.warn('slack.not_configured');
     return;
   }
 
@@ -114,11 +115,11 @@ export function notifySlack(event: PekoEvent): void {
   })
     .then((res) => {
       if (!res.ok) {
-        console.error(`[Slack] Webhook failed: ${res.status}`);
+        log.error('slack.webhook_failed', { status: res.status });
       }
     })
     .catch((err) => {
-      console.error('[Slack] Webhook error:', err);
+      log.error('slack.webhook_error', { error: err.message });
     });
 }
 
@@ -129,6 +130,7 @@ export function notifySlackError(error: Error, context?: ErrorContext): void {
   const signature = getErrorSignature(error);
 
   if (isRateLimited(signature)) {
+    log.debug('slack.rate_limited', { signature });
     return;
   }
 

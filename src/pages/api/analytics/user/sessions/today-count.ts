@@ -1,14 +1,16 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
+import type { LoggedRequest } from '@/lib/withLogger';
 
 interface ApiResponse {
   count?: number;
   error?: string;
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -43,7 +45,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       .lte('ts', todayEnd.toISOString());
 
     if (ownerError) {
-      console.error('Failed to fetch session count:', ownerError);
+      req.log.error('rpc.failed', { fn: 'user_stats.owner_query', error: ownerError.message, code: ownerError.code });
       return res.status(500).json({ error: 'Failed to fetch session count' });
     }
 
@@ -63,17 +65,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       .in('entity', candidateEntities);
 
     if (sessionError) {
-      console.error('Failed to filter translate sessions:', sessionError);
+      req.log.error('rpc.failed', { fn: 'user_stats.session_type_query', error: sessionError.message, code: sessionError.code });
       return res.status(500).json({ error: 'Failed to fetch session count' });
     }
 
     const sessionEntities = new Set(sessionRows?.map(row => row.entity) || []);
 
     return res.status(200).json({ count: sessionEntities.size });
-  } catch (error) {
-    console.error('Session count error:', error);
+  } catch (error: any) {
+    req.log.error('session.today_count_failed', { error: error?.message || String(error), stack: error?.stack });
     return res.status(500).json({ error: 'Internal server error' });
   }
 }
 
-export default withApiAuthRequired(handler);
+export default withApiAuthRequired(withLogger(handler));

@@ -7,6 +7,7 @@ import { PiClockClockwiseBold } from 'react-icons/pi';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { TbSettings } from 'react-icons/tb';
 import AnimatedCount from '@/components/ui/AnimatedCount';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function SRSDashboard({ setId, setData }) {
   const router = useRouter();
@@ -68,7 +69,10 @@ export default function SRSDashboard({ setId, setData }) {
           }));
         }
       } catch (err) {
-        console.error('Error fetching due count:', err);
+        clientLog.error('srs.due_count_fetch_failed', {
+          setId,
+          error: err?.message || String(err),
+        });
         setError(err.message);
       } finally {
         setLoading(false);
@@ -89,8 +93,6 @@ export default function SRSDashboard({ setId, setData }) {
       try {
         setLoadingNewItems(true);
         setNewItemsError(null);
-
-        console.log('SET TYPE RESPONSE:', setData.set_type);
 
         // First, check the daily learning limit
         const asOf = new Date().toISOString();
@@ -159,7 +161,10 @@ export default function SRSDashboard({ setId, setData }) {
           }
         }
       } catch (err) {
-        console.error('Error fetching new items count:', err);
+        clientLog.error('srs.new_items_fetch_failed', {
+          setId,
+          error: err?.message || String(err),
+        });
         setNewItemsError(err.message);
         setStats((prevStats) => ({
           ...prevStats,
@@ -225,7 +230,10 @@ export default function SRSDashboard({ setId, setData }) {
 
         setNextDueTime(earliestDueTime);
       } catch (err) {
-        console.error('Error calculating next due time:', err);
+        clientLog.error('srs.next_due_calc_failed', {
+          setId,
+          error: err?.message || String(err),
+        });
         setNextDueTime(null);
       }
     };
@@ -261,7 +269,6 @@ export default function SRSDashboard({ setId, setData }) {
           const completedItems = data.data.items.filter(
             (item) => item.srs
           ).length;
-          console.log('Set Completion:', completedItems, '/', totalItems);
           setStats((prevStats) => ({
             ...prevStats,
             totalSetItems: totalItems,
@@ -269,7 +276,10 @@ export default function SRSDashboard({ setId, setData }) {
           }));
         }
       } catch (err) {
-        console.error('Error fetching set completion data:', err);
+        clientLog.error('srs.completion_fetch_failed', {
+          setId,
+          error: err?.message || String(err),
+        });
       } finally {
         setLoadingSetCompletion(false);
       }
@@ -341,13 +351,10 @@ export default function SRSDashboard({ setId, setData }) {
   };
 
   const handleDashboardClick = () => {
-    console.log('Opening SRS Dashboard...');
-    // Open in new window or navigate
     router.push(`/learn/academy/sets/study/${setId}/srs/dashboard`);
   };
 
   const handleSettingsClick = () => {
-    console.log('Opening SRS Settings...');
     // TODO: Navigate to settings page
   };
 

@@ -10,6 +10,7 @@ import { FiUpload, FiPlus, FiX, FiCheck } from 'react-icons/fi';
 import { toKana } from 'wanakana';
 import CSVUpload from '../../../../components/pages/academy/sets/CreateSet/CSVUpload/CSVUpload';
 import CustomSelect from '@/components/ui/CustomSelect';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function CreateNewSet() {
   const router = useRouter();
@@ -21,10 +22,11 @@ export default function CreateNewSet() {
       try {
         const response = await fetch('/api/auth/me');
         const profile = await response.json();
-        console.log(profile);
         setUserProfile(profile);
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        clientLog.error('create_set.fetch_profile_failed', {
+          error: error?.message || String(error),
+        });
       }
     };
     fetchUserProfile();
@@ -302,7 +304,9 @@ export default function CreateNewSet() {
       setProposedItems((prev) => [...prev, ...validItems]);
       showStatus(`Added ${validItems.length} items from CSV!`, 'success');
     } catch (error) {
-      console.error('Error processing CSV:', error);
+      clientLog.error('create_set.csv_processing_failed', {
+        error: error?.message || String(error),
+      });
       showStatus('Error processing CSV data.', 'error');
     }
   };
@@ -464,7 +468,9 @@ export default function CreateNewSet() {
         );
       }
     } catch (error) {
-      console.error('Error creating set:', error);
+      clientLog.error('create_set.create_failed', {
+        error: error?.message || String(error),
+      });
       showStatus('Error uploading set: ' + error.message, 'error');
     } finally {
       setIsSubmitting(false);
@@ -891,7 +897,6 @@ export default function CreateNewSet() {
                   {activeTab === 'csv' && (
                     <CSVUpload
                       onUpload={(content) => {
-                        console.log('CSV uploaded:', content);
                         setCsvContent(content);
                       }}
                       itemType={itemType}

@@ -1,6 +1,8 @@
 import crypto from 'crypto';
 import http2 from 'http2';
 import { createClient } from '@supabase/supabase-js';
+import { withLogger } from '@/lib/withLogger';
+import { log } from '@/lib/logger';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL,
@@ -82,7 +84,10 @@ async function getNewlyDueCount(userId, lastNotifiedAt) {
 
     return newlyDueCount;
   } catch (e) {
-    console.error(`Error calculating newly due count for ${userId}:`, e);
+    log.error('srs.due_count_failed', {
+      userId,
+      error: e?.message || String(e),
+    });
     return 0;
   }
 }
@@ -173,7 +178,7 @@ function sendAPNsNotification(
   });
 }
 
-export default async function handler(req, res) {
+export default withLogger(async function handler(req, res) {
   // Verify request is from Vercel Cron or has valid secret
   const authHeader = req.headers.authorization;
   const cronSecret = process.env.CRON_SECRET;
@@ -201,7 +206,11 @@ export default async function handler(req, res) {
       .rpc('get_users_with_due_items');
 
     if (error) {
-      console.error('Error fetching users with due items:', error);
+      req.log.error('rpc.failed', {
+        fn: 'get_users_with_due_items',
+        error: error.message,
+        code: error.code,
+      });
       return res.status(500).json({ error: error.message });
     }
 
@@ -217,7 +226,7 @@ export default async function handler(req, res) {
     const isProduction = process.env.APNS_PRODUCTION === 'true';
 
     if (!apnsKeyId || !apnsTeamId || !apnsKey) {
-      console.error('Missing APNs configuration');
+      req.log.error('config.missing', { error: 'Missing APNs configuration' });
       return res
         .status(500)
         .json({ error: 'Push notifications not configured' });
@@ -304,7 +313,11 @@ export default async function handler(req, res) {
             .eq('user_id', user.user_id);
         }
       } catch (err) {
-        console.error(`Failed to send notification to ${user.user_id}:`, err);
+        req.log.error('apns.send_failed', {
+          userId: user.user_id,
+          error: err?.message || String(err),
+          stack: err?.stack,
+        });
         results.push({
           user_id: user.user_id,
           success: false,
@@ -314,12 +327,19 @@ export default async function handler(req, res) {
     }
 
     const successCount = results.filter((r) => r.success).length;
+    req.log.info('cron.notifications.complete', {
+      usersChecked: users.length,
+      notificationsSent: successCount,
+    });
     return res.json({
       message: `Sent ${successCount}/${results.length} notifications`,
       results,
     });
   } catch (error) {
-    console.error('Cron job error:', error);
+    req.log.error('cron.srs_notifications_error', {
+      error: error?.message || String(error),
+      stack: error?.stack,
+    });
     return res.status(500).json({ error: error.message });
   }
-}
+});

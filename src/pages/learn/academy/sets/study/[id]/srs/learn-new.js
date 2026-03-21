@@ -34,6 +34,7 @@ import {
   mergeIntoQuestionItem,
 } from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function LearnNew() {
   const router = useRouter();
@@ -127,7 +128,9 @@ export default function LearnNew() {
         }),
       });
     } catch (err) {
-      console.error('Failed to mark set studied:', err);
+      clientLog.error('set.mark_studied_failed', {
+        error: err?.message || String(err),
+      });
     }
   };
 
@@ -208,10 +211,9 @@ export default function LearnNew() {
               }
             }
           } catch (error) {
-            console.warn(
-              'Failed to fetch full set for distractors, using session items:',
-              error
-            );
+            clientLog.warn('srs.distractor_fetch_failed', {
+              error: error?.message || String(error),
+            });
           }
         }
 
@@ -249,23 +251,10 @@ export default function LearnNew() {
         // Shuffle the translation array so questions appear in random order
         const shuffledTranslation = shuffleArray(translation);
         setTranslationArray(shuffledTranslation);
-
-        // Console log all arrays for development
-        console.log('=== SET DATA LOADED ===');
-        console.log('Set Info:', setInfoData);
-        console.log('Transformed Item Data:', transformedItemData);
-        console.log('Total Items:', transformedItemData.length);
-        console.log('\n=== REVIEW ARRAY ===');
-        console.log('Review Items:', review);
-        console.log('Total Review Items:', review.length);
-        console.log('\n=== MULTIPLE CHOICE ARRAY ===');
-        console.log('Multiple Choice Questions:', multipleChoice);
-        console.log('Total Multiple Choice Questions:', multipleChoice.length);
-        console.log('\n=== TRANSLATION ARRAY ===');
-        console.log('Translation Questions:', translation);
-        console.log('Total Translation Questions:', translation.length);
       } catch (err) {
-        console.error('Error fetching set:', err);
+        clientLog.error('srs.learn_new_fetch_failed', {
+          error: err?.message || String(err),
+        });
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -622,7 +611,9 @@ export default function LearnNew() {
 
       setEditingItem(null);
     } catch (error) {
-      console.error('Error updating field card item:', error);
+      clientLog.error('srs.item_update_failed', {
+        error: error?.message || String(error),
+      });
       setEditError(error.message || 'Failed to update item');
     } finally {
       setIsSavingEdit(false);
@@ -647,7 +638,7 @@ export default function LearnNew() {
     // Get unique UUIDs from reviewArray (one entry per item)
     for (const item of reviewArray) {
       if (!item.uuid) {
-        console.warn(`Item ${item.id} has no UUID, skipping SRS save`);
+        clientLog.warn('srs.item_missing_uuid', { itemId: item.id });
         continue;
       }
 

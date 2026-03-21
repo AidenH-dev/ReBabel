@@ -3,6 +3,7 @@ import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
+import { withLogger } from '@/lib/withLogger';
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 3 });
 
@@ -161,110 +162,115 @@ async function uploadScreenshot(base64Data, githubToken, repo) {
   return uploadJson.content.html_url;
 }
 
-export default withApiAuthRequired(async function handler(req, res) {
-  // Implements SPEC-LLM-002: only POST is accepted
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  // Implements SPEC-LLM-002: reject unauthenticated requests
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({ error: 'Not authenticated' });
-  }
-
-  if (!limiter.check(session.user.sub)) {
-    return res
-      .status(429)
-      .json({ error: 'Too many requests. Please try again later.' });
-  }
-
-  const userId = await resolveUserId(session.user.sub);
-  if (!userId) {
-    return res.status(401).json({ error: 'Not authenticated' });
-  }
-
-  try {
-    // Implements SPEC-LLM-002: check bug reporter permission before proceeding
-    const { data: allowed, error: permError } = await supabaseAdmin
-      .schema('v1_kvs_rebabel')
-      .rpc('check_bug_reporter_permission', { p_user_id: userId });
-
-    if (permError) throw permError;
-
-    if (!allowed) {
-      return res.status(403).json({ error: 'Not a bug reporter' });
+export default withApiAuthRequired(
+  withLogger(async function handler(req, res) {
+    // Implements SPEC-LLM-002: only POST is accepted
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    // Implements SPEC-LLM-002: validate required fields
-    const { title, description, severity, screenshot, context } = req.body;
-
-    if (!title || typeof title !== 'string') {
-      return res.status(400).json({ error: 'title is required' });
-    }
-    if (!description || typeof description !== 'string') {
-      return res.status(400).json({ error: 'description is required' });
-    }
-    if (!severity || !VALID_SEVERITIES.includes(severity)) {
-      return res.status(400).json({
-        error: `severity must be one of: ${VALID_SEVERITIES.join(', ')}`,
-      });
-    }
-    if (!context || typeof context !== 'object') {
-      return res.status(400).json({ error: 'context is required' });
+    // Implements SPEC-LLM-002: reject unauthenticated requests
+    const session = await getSession(req, res);
+    if (!session?.user?.sub) {
+      return res.status(401).json({ error: 'Not authenticated' });
     }
 
-    const githubToken = process.env.GITHUB_PAT;
-    const repo = process.env.GITHUB_REPO;
-    const reporterEmail = session?.user?.email || userId;
-
-    // Implements SPEC-LLM-002: upload screenshot if provided
-    let screenshotUrl = null;
-    if (screenshot && typeof screenshot === 'string') {
-      screenshotUrl = await uploadScreenshot(screenshot, githubToken, repo);
+    if (!limiter.check(session.user.sub)) {
+      return res
+        .status(429)
+        .json({ error: 'Too many requests. Please try again later.' });
     }
 
-    // Implements SPEC-LLM-002: format issue body with all context sections
-    const issueBody = buildIssueBody({
-      title,
-      description,
-      severity,
-      screenshot,
-      context,
-      reporterEmail,
-      screenshotUrl,
-    });
+    const userId = await resolveUserId(session.user.sub);
+    if (!userId) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
 
-    // Implements SPEC-LLM-002: create GitHub issue with bug and severity labels
-    const issueRes = await fetch(
-      `https://api.github.com/repos/${repo}/issues`,
-      {
-        method: 'POST',
-        headers: githubHeaders(githubToken),
-        body: JSON.stringify({
-          title,
-          body: issueBody,
-          labels: ['bug', `severity:${severity}`],
-        }),
+    try {
+      // Implements SPEC-LLM-002: check bug reporter permission before proceeding
+      const { data: allowed, error: permError } = await supabaseAdmin
+        .schema('v1_kvs_rebabel')
+        .rpc('check_bug_reporter_permission', { p_user_id: userId });
+
+      if (permError) throw permError;
+
+      if (!allowed) {
+        return res.status(403).json({ error: 'Not a bug reporter' });
       }
-    );
 
-    if (!issueRes.ok) {
-      const errBody = await issueRes.json();
-      throw new Error(
-        `GitHub API error: ${errBody.message || issueRes.status}`
+      // Implements SPEC-LLM-002: validate required fields
+      const { title, description, severity, screenshot, context } = req.body;
+
+      if (!title || typeof title !== 'string') {
+        return res.status(400).json({ error: 'title is required' });
+      }
+      if (!description || typeof description !== 'string') {
+        return res.status(400).json({ error: 'description is required' });
+      }
+      if (!severity || !VALID_SEVERITIES.includes(severity)) {
+        return res.status(400).json({
+          error: `severity must be one of: ${VALID_SEVERITIES.join(', ')}`,
+        });
+      }
+      if (!context || typeof context !== 'object') {
+        return res.status(400).json({ error: 'context is required' });
+      }
+
+      const githubToken = process.env.GITHUB_PAT;
+      const repo = process.env.GITHUB_REPO;
+      const reporterEmail = session?.user?.email || userId;
+
+      // Implements SPEC-LLM-002: upload screenshot if provided
+      let screenshotUrl = null;
+      if (screenshot && typeof screenshot === 'string') {
+        screenshotUrl = await uploadScreenshot(screenshot, githubToken, repo);
+      }
+
+      // Implements SPEC-LLM-002: format issue body with all context sections
+      const issueBody = buildIssueBody({
+        title,
+        description,
+        severity,
+        screenshot,
+        context,
+        reporterEmail,
+        screenshotUrl,
+      });
+
+      // Implements SPEC-LLM-002: create GitHub issue with bug and severity labels
+      const issueRes = await fetch(
+        `https://api.github.com/repos/${repo}/issues`,
+        {
+          method: 'POST',
+          headers: githubHeaders(githubToken),
+          body: JSON.stringify({
+            title,
+            body: issueBody,
+            labels: ['bug', `severity:${severity}`],
+          }),
+        }
       );
+
+      if (!issueRes.ok) {
+        const errBody = await issueRes.json();
+        throw new Error(
+          `GitHub API error: ${errBody.message || issueRes.status}`
+        );
+      }
+
+      const issue = await issueRes.json();
+
+      return res.status(200).json({
+        success: true,
+        issueUrl: issue.html_url,
+        issueNumber: issue.number,
+      });
+    } catch (e) {
+      req.log.error('bug_reporter.report_failed', {
+        error: e?.message || String(e),
+        stack: e?.stack,
+      });
+      return res.status(500).json({ error: 'Failed to create bug report' });
     }
-
-    const issue = await issueRes.json();
-
-    return res.status(200).json({
-      success: true,
-      issueUrl: issue.html_url,
-      issueNumber: issue.number,
-    });
-  } catch (e) {
-    console.error('bug-reporter/report error:', e);
-    return res.status(500).json({ error: 'Failed to create bug report' });
-  }
-});
+  })
+);

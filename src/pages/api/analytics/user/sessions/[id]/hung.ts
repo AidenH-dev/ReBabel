@@ -8,17 +8,19 @@
 // (unguessable), and we confirm the session exists and is still
 // in 'initiated' state before marking it hung. The RPC itself
 // rejects any session not in 'initiated' state.
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { getSession } from '@auth0/nextjs-auth0';
 import { createClient } from '@supabase/supabase-js';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger } from '@/lib/withLogger';
+import type { LoggedRequest } from '@/lib/withLogger';
 
 interface ApiResponse {
   success: boolean;
   error?: string;
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+export default withLogger(async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
@@ -60,7 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       .rpc('mark_session_hung', { p_entity_id: id });
 
     if (error) {
-      console.error('Failed to mark session hung:', error);
+      req.log.error('rpc.failed', { fn: 'mark_session_hung', error: error.message, code: error.code });
       return res.status(500).json({ success: false, error: 'Failed to mark session hung' });
     }
 
@@ -70,8 +72,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     return res.status(200).json({ success: true });
-  } catch (error) {
-    console.error('Mark session hung error:', error);
+  } catch (error: any) {
+    req.log.error('session.hung_failed', { error: error?.message || String(error), stack: error?.stack });
     return res.status(500).json({ success: false, error: 'Internal server error' });
   }
-}
+});

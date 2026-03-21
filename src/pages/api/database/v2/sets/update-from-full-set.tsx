@@ -2,6 +2,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withLogger } from '@/lib/withLogger';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -36,9 +37,9 @@ const FUNCTION_MAP: Record<EntityType, string> = {
   vocab: 'update_vocab_entity_by_id',
 };
 
-export default withApiAuthRequired(async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<UpdateEntityResponse>
+export default withApiAuthRequired(withLogger(async function handler(
+  req,
+  res
 ) {
   // Verify authentication
   const session = await getSession(req, res);
@@ -64,6 +65,7 @@ export default withApiAuthRequired(async function handler(
     // Validate request
     const validation = validateRequest(body);
     if (!validation.isValid) {
+      req.log.warn('validation.failed', { error: validation.error });
       return res.status(400).json({
         success: false,
         error: validation.error,
@@ -87,7 +89,7 @@ export default withApiAuthRequired(async function handler(
       });
 
     if (error) {
-      console.error('Supabase RPC error:', error);
+      req.log.error('rpc.failed', { fn: functionName, error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
         error: `Database error: ${error.message}`,
@@ -100,13 +102,13 @@ export default withApiAuthRequired(async function handler(
       data: data[0], // RPC returns an array with one result
     });
   } catch (error) {
-    console.error('Unexpected error:', error);
+    req.log.error('handler.failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     return res.status(500).json({
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
     });
   }
-})
+}))
 
 // Validation helper
 function validateRequest(body: any): { isValid: boolean; error?: string } {

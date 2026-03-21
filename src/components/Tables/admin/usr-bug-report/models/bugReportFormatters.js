@@ -1,9 +1,13 @@
+import { clientLog } from '@/lib/clientLogger';
+
 export const formatDate = (dateString) => {
   if (!dateString) return 'Unknown';
   try {
     return new Date(dateString).toLocaleDateString();
   } catch (e) {
-    console.error('Error formatting date:', e);
+    clientLog.error('bug_report.format_date_failed', {
+      error: e?.message || String(e),
+    });
     return 'Unknown';
   }
 };
@@ -13,7 +17,9 @@ export const formatDateTime = (dateString) => {
   try {
     return new Date(dateString).toLocaleString();
   } catch (e) {
-    console.error('Error formatting datetime:', e);
+    clientLog.error('bug_report.format_datetime_failed', {
+      error: e?.message || String(e),
+    });
     return 'Unknown';
   }
 };

@@ -3,6 +3,8 @@
  * Fire-and-forget notifications to OpenClaw gateway for monitoring
  */
 
+import { log } from '@/lib/logger';
+
 // Types
 export type PekoEventType =
   | 'error'
@@ -94,7 +96,7 @@ export function notifyPeko(event: PekoEvent): void {
   const token = process.env.PEKO_WEBHOOK_TOKEN;
 
   if (!url || !token) {
-    console.warn('[Peko] Webhook not configured, skipping notification');
+    log.warn('peko.not_configured');
     return;
   }
 
@@ -116,11 +118,11 @@ export function notifyPeko(event: PekoEvent): void {
   })
     .then((res) => {
       if (!res.ok) {
-        console.error(`[Peko] Webhook failed: ${res.status}`);
+        log.error('peko.webhook_failed', { status: res.status });
       }
     })
     .catch((err) => {
-      console.error('[Peko] Webhook error:', err);
+      log.error('peko.webhook_error', { error: err.message });
     });
 }
 
@@ -131,6 +133,7 @@ export function notifyError(error: Error, context?: ErrorContext): void {
   const signature = getErrorSignature(error);
 
   if (isRateLimited(signature)) {
+    log.debug('peko.rate_limited', { signature });
     return;
   }
 

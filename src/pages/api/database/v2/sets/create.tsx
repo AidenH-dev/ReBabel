@@ -4,6 +4,7 @@ import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createRateLimiter } from '@/lib/rateLimit';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
@@ -119,7 +120,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
     const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      console.error('Missing Supabase environment variables');
+      (req as any).log?.error('config.missing', { error: 'Missing Supabase environment variables' });
       return res.status(500).json({
         success: false,
         error: 'Server configuration error'
@@ -137,7 +138,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
       });
 
     if (setRpc.error) {
-      console.error('Failed to insert set:', setRpc.error);
+      (req as any).log?.error('rpc.failed', { fn: 'insert_json_to_set', error: setRpc.error.message, code: setRpc.error.code });
       return res.status(500).json({
         success: false,
         error: 'Failed to insert set',
@@ -183,7 +184,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
         });
 
       if (vocabRpc.error) {
-        console.error('Failed to insert vocabulary:', vocabRpc.error);
+        (req as any).log?.error('rpc.failed', { fn: 'insert_json_to_kb_vocab', error: vocabRpc.error.message, code: vocabRpc.error.code });
         return res.status(500).json({
           success: false,
           error: 'Failed to insert vocabulary',
@@ -212,7 +213,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
         });
 
       if (grammarRpc.error) {
-        console.error('Failed to insert grammar:', grammarRpc.error);
+        (req as any).log?.error('rpc.failed', { fn: 'insert_json_to_kb_grammar', error: grammarRpc.error.message, code: grammarRpc.error.code });
         return res.status(500).json({
           success: false,
           error: 'Failed to insert grammar',
@@ -261,7 +262,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
       });
 
     if (relationRpc.error) {
-      console.error('Failed to create relations:', relationRpc.error);
+      (req as any).log?.error('rpc.failed', { fn: 'create_relations_from_set_group_v3', error: relationRpc.error.message, code: relationRpc.error.code });
       return res.status(500).json({
         success: false,
         error: 'Failed to create relations',
@@ -296,7 +297,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
               json_updates: JSON.stringify({ auto_categorized: 'true' }),
             });
         } catch (catError) {
-          console.error('Auto-categorization error:', catError);
+          (req as any).log?.error('autocategorize.failed', { error: catError instanceof Error ? catError.message : String(catError), stack: catError instanceof Error ? catError.stack : undefined });
         }
       })();
     }
@@ -327,7 +328,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
     });
 
   } catch (error) {
-    console.error('API Error:', error);
+    (req as any).log?.error('handler.failed', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
 
     // Generic error handler
     return res.status(500).json({
@@ -340,7 +341,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
 
 // Default export function required by Pages Router
 // Protected with Auth0 - requires valid session
-export default withApiAuthRequired(async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+export default withApiAuthRequired(withLogger(async function handler(req, res) {
   // Verify authentication
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
@@ -389,4 +390,4 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
         error: `Method ${method} not allowed`
       });
   }
-})
+}))

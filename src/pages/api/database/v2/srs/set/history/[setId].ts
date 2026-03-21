@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { withLogger, type LoggedRequest } from '@/lib/withLogger';
 
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
@@ -14,7 +15,7 @@ interface ApiResponse {
   error?: string;
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>, userId: string) {
+async function handleGET(req: LoggedRequest, res: NextApiResponse<ApiResponse>, userId: string) {
   try {
     const { setId } = req.query;
 
@@ -52,7 +53,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
       });
 
     if (error) {
-      console.error('Supabase RPC error:', error);
+      req.log.error('rpc.failed', { fn: 'get_set_srs_activity_log', error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
         error: error.message
@@ -64,8 +65,8 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
       data: data || []
     });
 
-  } catch (error) {
-    console.error('API Error:', error);
+  } catch (error: any) {
+    req.log.error('handler.failed', { error: error?.message || String(error), stack: error?.stack });
     return res.status(500).json({
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error'
@@ -73,7 +74,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
   }
 }
 
-export default withApiAuthRequired(async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+export default withApiAuthRequired(withLogger(async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
   const session = await getSession(req, res);
   if (!session?.user?.sub) {
     return res.status(401).json({
@@ -92,4 +93,4 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest, r
   }
 
   return handleGET(req, res, userId);
-});
+}));

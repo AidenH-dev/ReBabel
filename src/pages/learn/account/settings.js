@@ -21,6 +21,7 @@ import {
 } from 'react-icons/fi';
 import { TbSunset2, TbCoffee } from 'react-icons/tb';
 import { useTheme } from '../../../contexts/ThemeContext';
+import { clientLog } from '@/lib/clientLogger';
 
 export default function Settings() {
   const { theme, setTheme } = useTheme();
@@ -66,7 +67,9 @@ export default function Settings() {
         const profile = await response.json();
         setUserProfile(profile);
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        clientLog.error('settings.profile_fetch_failed', {
+          error: error?.message || String(error),
+        });
       } finally {
         setLoading(false);
       }
@@ -80,7 +83,9 @@ export default function Settings() {
         const data = await res.json();
         setSubscription(data);
       } catch (error) {
-        console.error('Error fetching subscription:', error);
+        clientLog.error('settings.subscription_fetch_failed', {
+          error: error?.message || String(error),
+        });
       }
     };
 
@@ -93,7 +98,9 @@ export default function Settings() {
           setUsernameInput(data.username);
         }
       } catch (error) {
-        console.error('Error fetching username:', error);
+        clientLog.error('settings.username_fetch_failed', {
+          error: error?.message || String(error),
+        });
       }
     };
 
@@ -142,7 +149,9 @@ export default function Settings() {
       setUsernameInput(data.username);
       setUsernameEditing(false);
     } catch (error) {
-      console.error('Username update error:', error);
+      clientLog.error('settings.username_update_failed', {
+        error: error?.message || String(error),
+      });
       setUsernameError('Something went wrong. Please try again.');
     } finally {
       setUsernameSaving(false);
@@ -165,7 +174,9 @@ export default function Settings() {
         setResetSent(true);
       }
     } catch (error) {
-      console.error('Reset password error:', error);
+      clientLog.error('settings.reset_password_failed', {
+        error: error?.message || String(error),
+      });
     } finally {
       setResetLoading(false);
     }
@@ -182,7 +193,9 @@ export default function Settings() {
         window.location.href = data.url;
       }
     } catch (error) {
-      console.error('Portal error:', error);
+      clientLog.error('settings.portal_failed', {
+        error: error?.message || String(error),
+      });
     } finally {
       setPortalLoading(false);
     }
@@ -250,14 +263,18 @@ export default function Settings() {
             body: JSON.stringify({ deviceToken: token, platform: 'ios' }),
           });
         } catch (regError) {
-          console.error('Failed to register token:', regError);
+          clientLog.error('settings.push_register_failed', {
+            error: regError?.message || String(regError),
+          });
         }
       } else {
         setPushStatus('error');
         setPushError(data.error || 'Failed to send notification');
       }
     } catch (error) {
-      console.error('Push test error:', error);
+      clientLog.error('settings.push_test_failed', {
+        error: error?.message || String(error),
+      });
       setPushStatus('error');
       setPushError(error.message || 'Failed to test push notifications');
     } finally {
