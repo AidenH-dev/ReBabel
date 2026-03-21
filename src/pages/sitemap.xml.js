@@ -33,6 +33,42 @@ function generateSiteMap(posts) {
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
       </url>
+      <url>
+        <loc>https://www.rebabel.org/japanese-conjugation-practice</loc>
+        <lastmod>2026-03-21</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+      </url>
+      <url>
+        <loc>https://www.rebabel.org/japanese-conjugation-practice/n5</loc>
+        <lastmod>2026-03-21</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+      <url>
+        <loc>https://www.rebabel.org/japanese-conjugation-practice/n4</loc>
+        <lastmod>2026-03-21</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+      <url>
+        <loc>https://www.rebabel.org/japanese-conjugation-practice/n3</loc>
+        <lastmod>2026-03-21</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+      <url>
+        <loc>https://www.rebabel.org/japanese-conjugation-practice/n2</loc>
+        <lastmod>2026-03-21</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+      <url>
+        <loc>https://www.rebabel.org/japanese-conjugation-practice/n1</loc>
+        <lastmod>2026-03-21</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
       ${posts
         .map(({ slug, frontmatter }) => {
           return `

@@ -195,7 +195,8 @@ export default function ConjugationConfigPanel({
             setSearchResults.length > 0 && (
               <div
                 ref={setDropdownRef}
-                className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1c2b35] border border-black/10 dark:border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1c2b35] border border-black/10 dark:border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto overscroll-contain"
+                style={{ WebkitOverflowScrolling: 'touch' }}
               >
                 {setSearchResults.map((set) => (
                   <button
@@ -293,9 +294,10 @@ export default function ConjugationConfigPanel({
                 {showItemSuggestions && itemSearchResults.length > 0 && (
                   <div
                     ref={itemDropdownRef}
-                    className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1c2b35] border border-black/10 dark:border-white/10 rounded-lg shadow-lg max-h-48 overflow-y-auto"
+                    className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1c2b35] border border-black/10 dark:border-white/10 rounded-lg shadow-lg max-h-48 overflow-y-auto overscroll-contain"
+                    style={{ WebkitOverflowScrolling: 'touch' }}
                   >
-                    {itemSearchResults.slice(0, 20).map((item) => (
+                    {itemSearchResults.map((item) => (
                       <button
                         key={item.id}
                         onClick={() => handleSelectFocalItem(item)}

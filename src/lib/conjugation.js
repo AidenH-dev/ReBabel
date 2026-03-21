@@ -72,7 +72,17 @@ const HONORIFIC_ARU_VERBS = new Set([
 
 // ─── Verb conjugation ────────────────────────────────────────────
 function conjugateVerb(kana, verbGroup, form) {
-  // Handle する compounds
+  // If verb_group is explicitly godan or ichidan, use those rules directly.
+  // This prevents mismatches like 刷る (する, godan) being treated as irregular する.
+  if (verbGroup === 'godan') {
+    return conjugateGodan(kana, form);
+  }
+
+  if (verbGroup === 'ichidan') {
+    return conjugateIchidan(kana, form);
+  }
+
+  // Handle する compounds (only when not explicitly godan/ichidan)
   if (kana.endsWith('する')) {
     return conjugateSuru(kana, form);
   }
@@ -88,10 +98,17 @@ function conjugateVerb(kana, verbGroup, form) {
     return conjugateSuru(kana + 'する', form);
   }
 
-  if (verbGroup === 'ichidan') {
+  // Fallback: infer from kana ending
+  if (kana.endsWith('する')) {
+    return conjugateSuru(kana, form);
+  }
+  if (kana === 'くる') {
+    return conjugateKuru(kana, form);
+  }
+  if (kana.endsWith('る')) {
+    // Without explicit group, guess ichidan for る-ending
     return conjugateIchidan(kana, form);
   }
-
   return conjugateGodan(kana, form);
 }
 

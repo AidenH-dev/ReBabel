@@ -560,6 +560,47 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Free Conjugation Practice Banner */}
+        <section className="w-full py-12 sm:py-16 bg-gradient-to-r from-[#e30a5f]/5 to-[#f41567]/5">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
+              <div className="flex-1">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#e30a5f]/10 text-[#e30a5f] text-xs font-medium mb-3">
+                  Free Tool -- No Account Required
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+                  Japanese Conjugation Practice
+                </h2>
+                <p className="text-gray-600 mb-4 text-sm sm:text-base">
+                  Master verb and adjective conjugation for JLPT N5 through N1.
+                  Practice 3,700+ words across 19 verb forms and 6 adjective
+                  forms with instant feedback. Type in romaji and watch it
+                  convert to kana automatically.
+                </p>
+                <Link
+                  href="/japanese-conjugation-practice"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium rounded-lg transition-colors text-sm"
+                >
+                  Try It Free
+                  <FaArrowRightLong size={14} />
+                </Link>
+              </div>
+              <div className="flex gap-3 flex-wrap justify-center md:justify-end">
+                {['N5', 'N4', 'N3', 'N2', 'N1'].map((n) => (
+                  <Link
+                    key={n}
+                    href={`/japanese-conjugation-practice/${n.toLowerCase()}`}
+                    className="w-14 h-14 rounded-xl bg-white shadow-sm border border-black/5 flex items-center justify-center text-sm font-bold text-gray-700 hover:text-[#e30a5f] hover:border-[#e30a5f]/30 transition-all"
+                  >
+                    {n}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Features Section
         <section className="w-full py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">

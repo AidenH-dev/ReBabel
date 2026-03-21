@@ -1,0 +1,733 @@
+[
+  { "k": "あう", "j": "会う", "e": "to meet", "c": "verb", "g": "godan" },
+  { "k": "あおい", "j": "青い", "e": "blue", "c": "i-adjective" },
+  { "k": "あかい", "j": "赤い", "e": "red", "c": "i-adjective" },
+  { "k": "あかるい", "j": "明るい", "e": "light", "c": "i-adjective" },
+  {
+    "k": "あく",
+    "j": "開く",
+    "e": "to open (e.g. doors)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "あける",
+    "j": "開ける",
+    "e": "to open (a door, etc.)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "あげる",
+    "j": "上げる",
+    "e": "to raise",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "あそぶ",
+    "j": "遊ぶ",
+    "e": "to play (games, sports)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "あたたかい", "j": "暖かい", "e": "warm", "c": "i-adjective" },
+  { "k": "あたらしい", "j": "新しい", "e": "new", "c": "i-adjective" },
+  { "k": "あつい", "j": "暑い", "e": "hot", "c": "i-adjective" },
+  { "k": "あつい", "j": "熱い", "e": "hot (to the touch)", "c": "i-adjective" },
+  { "k": "あつい", "j": "厚い", "e": "thick", "c": "i-adjective" },
+  {
+    "k": "あびる",
+    "j": "浴びる",
+    "e": "to dash over oneself (e.g. water)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "あぶない", "j": "危ない", "e": "dangerous", "c": "i-adjective" },
+  { "k": "あまい", "j": "甘い", "e": "sweet-tasting", "c": "i-adjective" },
+  { "k": "あまり", "j": "余り", "e": "remainder", "c": "na-adjective" },
+  { "k": "あらう", "j": "洗う", "e": "to wash", "c": "verb", "g": "godan" },
+  { "k": "ある", "j": "有る", "e": "to be", "c": "verb", "g": "godan" },
+  { "k": "あるく", "j": "歩く", "e": "to walk", "c": "verb", "g": "godan" },
+  { "k": "いう", "j": "言う", "e": "to say", "c": "verb", "g": "godan" },
+  { "k": "いかが", "j": "如何", "e": "how", "c": "na-adjective" },
+  { "k": "いく", "j": "行く", "e": "to go", "c": "verb", "g": "godan" },
+  { "k": "いそがしい", "j": "忙しい", "e": "busy", "c": "i-adjective" },
+  { "k": "いたい", "j": "痛い", "e": "painful", "c": "i-adjective" },
+  {
+    "k": "いみする",
+    "j": "意味",
+    "e": "meaning",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "いや", "j": "嫌", "e": "disliking", "c": "na-adjective" },
+  {
+    "k": "いる",
+    "j": "居る",
+    "e": "to be (of animate objects)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "いる", "j": "要る", "e": "to be needed", "c": "verb", "g": "godan" },
+  {
+    "k": "いれる",
+    "j": "入れる",
+    "e": "to put in",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "いろいろ", "j": "色々", "e": "various", "c": "na-adjective" },
+  {
+    "k": "うすい",
+    "j": "薄い",
+    "e": "thin (of an object)",
+    "c": "i-adjective"
+  },
+  { "k": "うたう", "j": "歌う", "e": "to sing", "c": "verb", "g": "godan" },
+  {
+    "k": "うまれる",
+    "j": "生まれる",
+    "e": "to be born",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "うる", "j": "売る", "e": "to sell", "c": "verb", "g": "godan" },
+  { "k": "うるさい", "j": "煩い", "e": "noisy", "c": "i-adjective" },
+  {
+    "k": "おいしい",
+    "j": "美味しい",
+    "e": "good(-tasting)",
+    "c": "i-adjective"
+  },
+  { "k": "おおい", "j": "多い", "e": "many", "c": "i-adjective" },
+  { "k": "おおきい", "j": "大きい", "e": "big", "c": "i-adjective" },
+  {
+    "k": "おきる",
+    "j": "起きる",
+    "e": "to get up",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "おく", "j": "置く", "e": "to put", "c": "verb", "g": "godan" },
+  {
+    "k": "おしえる",
+    "j": "教える",
+    "e": "to teach",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "おす", "j": "押す", "e": "to push", "c": "verb", "g": "godan" },
+  { "k": "おそい", "j": "遅い", "e": "slow", "c": "i-adjective" },
+  {
+    "k": "おちゃする",
+    "j": "お茶",
+    "e": "tea (esp. green or barley)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "おとな", "j": "大人", "e": "adult", "c": "na-adjective" },
+  { "k": "おなじ", "j": "同じ", "e": "same", "c": "na-adjective" },
+  {
+    "k": "おぼえる",
+    "j": "覚える",
+    "e": "to memorize",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "おもい", "j": "重い", "e": "heavy", "c": "i-adjective" },
+  { "k": "おもしろい", "j": "面白い", "e": "interesting", "c": "i-adjective" },
+  { "k": "およぐ", "j": "泳ぐ", "e": "to swim", "c": "verb", "g": "godan" },
+  {
+    "k": "おりる",
+    "j": "降りる",
+    "e": "to descend (e.g. a mountain)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "おわる", "j": "終わる", "e": "to end", "c": "verb", "g": "godan" },
+  {
+    "k": "かいものする",
+    "j": "買い物",
+    "e": "shopping",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "かう", "j": "買う", "e": "to buy", "c": "verb", "g": "godan" },
+  {
+    "k": "かえす",
+    "j": "返す",
+    "e": "to return (something)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "かえる", "j": "帰る", "e": "to return", "c": "verb", "g": "godan" },
+  {
+    "k": "かかる",
+    "j": "掛かる",
+    "e": "to take (a resource, e.g. time or money)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "かく", "j": "書く", "e": "to write", "c": "verb", "g": "godan" },
+  {
+    "k": "かける",
+    "j": "掛ける",
+    "e": "to hang up (e.g. a coat, a picture on the wall)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "かす", "j": "貸す", "e": "to lend", "c": "verb", "g": "godan" },
+  { "k": "からい", "j": "辛い", "e": "spicy", "c": "i-adjective" },
+  {
+    "k": "かりる",
+    "j": "借りる",
+    "e": "to borrow",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "かるい",
+    "j": "軽い",
+    "e": "light (i.e. not heavy)",
+    "c": "i-adjective"
+  },
+  { "k": "かわいい", "j": "可愛い", "e": "cute", "c": "i-adjective" },
+  { "k": "きいろ", "j": "黄色", "e": "yellow", "c": "na-adjective" },
+  { "k": "きいろい", "j": "黄色い", "e": "yellow", "c": "i-adjective" },
+  {
+    "k": "きえる",
+    "j": "消える",
+    "e": "to disappear",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "きく", "j": "聞く", "e": "to hear", "c": "verb", "g": "godan" },
+  { "k": "きたない", "j": "汚い", "e": "dirty", "c": "i-adjective" },
+  { "k": "きらい", "j": "嫌い", "e": "disliked", "c": "na-adjective" },
+  { "k": "きる", "j": "切る", "e": "to cut", "c": "verb", "g": "godan" },
+  {
+    "k": "きる",
+    "j": "着る",
+    "e": "to wear (from the shoulders down)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "きれい", "j": "綺麗", "e": "pretty", "c": "na-adjective" },
+  {
+    "k": "くもる",
+    "j": "曇る",
+    "e": "to get cloudy",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "くらい", "j": "暗い", "e": "dark", "c": "i-adjective" },
+  {
+    "k": "くる",
+    "j": "来る",
+    "e": "to come (spatially or temporally)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "くろい", "j": "黒い", "e": "black", "c": "i-adjective" },
+  { "k": "けす", "j": "消す", "e": "to erase", "c": "verb", "g": "godan" },
+  { "k": "けっこう", "j": "結構", "e": "splendid", "c": "na-adjective" },
+  {
+    "k": "けっこんする",
+    "j": "結婚",
+    "e": "marriage",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "げんき", "j": "元気", "e": "lively", "c": "na-adjective" },
+  {
+    "k": "こたえる",
+    "j": "答える",
+    "e": "to answer",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "こまる",
+    "j": "困る",
+    "e": "to be troubled",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "さく", "j": "咲く", "e": "to bloom", "c": "verb", "g": "godan" },
+  {
+    "k": "さくぶんする",
+    "j": "作文",
+    "e": "writing (an essay, prose, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "さす", "j": "差す", "e": "to shine", "c": "verb", "g": "godan" },
+  {
+    "k": "さむい",
+    "j": "寒い",
+    "e": "cold (e.g. weather)",
+    "c": "i-adjective"
+  },
+  {
+    "k": "さんぽする",
+    "j": "散歩",
+    "e": "walk",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しごとする",
+    "j": "仕事",
+    "e": "work",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "しずか", "j": "静か", "e": "quiet", "c": "na-adjective" },
+  {
+    "k": "しつもんする",
+    "j": "質問",
+    "e": "question",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "しぬ", "j": "死ぬ", "e": "to die", "c": "verb", "g": "godan" },
+  {
+    "k": "しまる",
+    "j": "閉まる",
+    "e": "to be shut",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "しめる",
+    "j": "閉める",
+    "e": "to close",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "しめる", "j": "締める", "e": "to tie", "c": "verb", "g": "ichidan" },
+  {
+    "k": "じゅぎょうする",
+    "j": "授業",
+    "e": "lesson",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "じょうず", "j": "上手", "e": "skillful", "c": "na-adjective" },
+  { "k": "じょうぶ", "j": "丈夫", "e": "healthy", "c": "na-adjective" },
+  { "k": "しる", "j": "知る", "e": "to know", "c": "verb", "g": "godan" },
+  { "k": "しろい", "j": "白い", "e": "white", "c": "i-adjective" },
+  { "k": "すう", "j": "吸う", "e": "to breathe in", "c": "verb", "g": "godan" },
+  { "k": "すき", "j": "好き", "e": "liking", "c": "na-adjective" },
+  { "k": "すくない", "j": "少ない", "e": "few", "c": "i-adjective" },
+  { "k": "すずしい", "j": "涼しい", "e": "cool", "c": "i-adjective" },
+  {
+    "k": "すむ",
+    "j": "住む",
+    "e": "to live (of humans)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "する", "j": "刷る", "e": "to print", "c": "verb", "g": "godan" },
+  {
+    "k": "すわる",
+    "j": "座る",
+    "e": "to sit (down)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "せまい", "j": "狭い", "e": "narrow", "c": "i-adjective" },
+  {
+    "k": "せんたくする",
+    "j": "洗濯",
+    "e": "washing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "そうじする",
+    "j": "掃除",
+    "e": "cleaning",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "だいじょうぶ", "j": "大丈夫", "e": "safe", "c": "na-adjective" },
+  {
+    "k": "だいすき",
+    "j": "大好き",
+    "e": "liking very much",
+    "c": "na-adjective"
+  },
+  { "k": "たいせつ", "j": "大切", "e": "important", "c": "na-adjective" },
+  { "k": "たいへん", "j": "大変", "e": "very", "c": "na-adjective" },
+  { "k": "たいへん", "j": "大変", "e": "very", "c": "na-adjective" },
+  { "k": "たかい", "j": "高い", "e": "high", "c": "i-adjective" },
+  { "k": "たくさん", "j": "沢山", "e": "a lot", "c": "na-adjective" },
+  { "k": "だす", "j": "出す", "e": "to take out", "c": "verb", "g": "godan" },
+  { "k": "たつ", "j": "立つ", "e": "to stand (up)", "c": "verb", "g": "godan" },
+  { "k": "たのしい", "j": "楽しい", "e": "enjoyable", "c": "i-adjective" },
+  { "k": "たのむ", "j": "頼む", "e": "to request", "c": "verb", "g": "godan" },
+  { "k": "たぶん", "j": "多分", "e": "probably", "c": "na-adjective" },
+  { "k": "たべる", "j": "食べる", "e": "to eat", "c": "verb", "g": "ichidan" },
+  { "k": "ちいさい", "j": "小さい", "e": "small", "c": "i-adjective" },
+  { "k": "ちかい", "j": "近い", "e": "near", "c": "i-adjective" },
+  {
+    "k": "ちがう",
+    "j": "違う",
+    "e": "to differ (from)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "つかう",
+    "j": "使う",
+    "e": "to use (a tool, method, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "つかれる",
+    "j": "疲れる",
+    "e": "to get tired",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "つく", "j": "着く", "e": "to arrive at", "c": "verb", "g": "godan" },
+  { "k": "つくる", "j": "作る", "e": "to make", "c": "verb", "g": "godan" },
+  {
+    "k": "つける",
+    "j": "漬ける",
+    "e": "to soak (in)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "つとめる",
+    "j": "勤める",
+    "e": "to work (for)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "つまらない", "j": "詰らない", "e": "dull", "c": "i-adjective" },
+  {
+    "k": "つめたい",
+    "j": "冷たい",
+    "e": "cold (to the touch)",
+    "c": "i-adjective"
+  },
+  { "k": "つよい", "j": "強い", "e": "strong", "c": "i-adjective" },
+  {
+    "k": "でかける",
+    "j": "出かける",
+    "e": "to go out (e.g. on an excursion or outing)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "できる",
+    "j": "出来る",
+    "e": "to be able to do",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "テストする",
+    "j": null,
+    "e": "test (of ability, knowledge, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "でる", "j": "出る", "e": "to leave", "c": "verb", "g": "ichidan" },
+  {
+    "k": "でんわする",
+    "j": "電話",
+    "e": "telephone call",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "どうぞする",
+    "j": null,
+    "e": "please",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "とおい", "j": "遠い", "e": "far", "c": "i-adjective" },
+  { "k": "とぶ", "j": "飛ぶ", "e": "to fly", "c": "verb", "g": "godan" },
+  {
+    "k": "とまる",
+    "j": "止まる",
+    "e": "to stop (moving)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "とる", "j": "取る", "e": "to take", "c": "verb", "g": "godan" },
+  {
+    "k": "とる",
+    "j": "撮る",
+    "e": "to take (a photograph)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ながい",
+    "j": "長い",
+    "e": "long (distance, length)",
+    "c": "i-adjective"
+  },
+  {
+    "k": "なく",
+    "j": "鳴く",
+    "e": "to make sound (of an animal)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "なくす",
+    "j": "無くす",
+    "e": "to lose (something)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ならう",
+    "j": "習う",
+    "e": "to take lessons in",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ならぶ", "j": "並ぶ", "e": "to line up", "c": "verb", "g": "godan" },
+  {
+    "k": "ならべる",
+    "j": "並べる",
+    "e": "to line up",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "にぎやか", "j": "賑やか", "e": "bustling", "c": "na-adjective" },
+  {
+    "k": "ぬぐ",
+    "j": "脱ぐ",
+    "e": "to take off (clothes, shoes, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ぬるい", "j": "温い", "e": "lukewarm", "c": "i-adjective" },
+  {
+    "k": "ねる",
+    "j": "寝る",
+    "e": "to sleep (lying down)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ノートする",
+    "j": null,
+    "e": "notebook",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "のぼる", "j": "上る", "e": "to ascend", "c": "verb", "g": "godan" },
+  { "k": "のむ", "j": "飲む", "e": "to drink", "c": "verb", "g": "godan" },
+  {
+    "k": "のる",
+    "j": "乗る",
+    "e": "to get on (train, plane, bus, ship, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "はいる", "j": "入る", "e": "to enter", "c": "verb", "g": "godan" },
+  { "k": "はく", "j": "掃く", "e": "to sweep", "c": "verb", "g": "godan" },
+  {
+    "k": "はじまる",
+    "j": "始まる",
+    "e": "to begin",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "はしる", "j": "走る", "e": "to run", "c": "verb", "g": "godan" },
+  { "k": "はたらく", "j": "働く", "e": "to work", "c": "verb", "g": "godan" },
+  { "k": "はなす", "j": "話す", "e": "to talk", "c": "verb", "g": "godan" },
+  { "k": "はやい", "j": "早い", "e": "fast", "c": "i-adjective" },
+  { "k": "はやい", "j": "早い", "e": "fast", "c": "i-adjective" },
+  { "k": "はる", "j": "張る", "e": "to stick", "c": "verb", "g": "godan" },
+  {
+    "k": "はれる",
+    "j": "晴れる",
+    "e": "to clear up",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "ひく", "j": "引く", "e": "to pull", "c": "verb", "g": "godan" },
+  {
+    "k": "ひく",
+    "j": "弾く",
+    "e": "to play (a stringed or keyboard instrument)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ひくい",
+    "j": "低い",
+    "e": "low (rank, degree, value, content, quality, etc.)",
+    "c": "i-adjective"
+  },
+  { "k": "ひま", "j": "暇", "e": "spare time", "c": "na-adjective" },
+  { "k": "ひろい", "j": "広い", "e": "spacious", "c": "i-adjective" },
+  {
+    "k": "プールする",
+    "j": null,
+    "e": "(swimming) pool",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ふく",
+    "j": "吹く",
+    "e": "to blow (of the wind)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ふとい", "j": "太い", "e": "fat", "c": "i-adjective" },
+  {
+    "k": "ふる",
+    "j": "降る",
+    "e": "to fall (of rain, snow, ash, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ふるい", "j": "古い", "e": "old", "c": "i-adjective" },
+  { "k": "へた", "j": "下手", "e": "unskillful", "c": "na-adjective" },
+  {
+    "k": "べんきょうする",
+    "j": "勉強",
+    "e": "study",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "べんり", "j": "便利", "e": "convenient", "c": "na-adjective" },
+  {
+    "k": "ほしい",
+    "j": "欲しい",
+    "e": "wanting (to have)",
+    "c": "i-adjective"
+  },
+  {
+    "k": "ポストする",
+    "j": null,
+    "e": "postbox",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ほそい", "j": "細い", "e": "thin", "c": "i-adjective" },
+  { "k": "まがる", "j": "曲がる", "e": "to bend", "c": "verb", "g": "godan" },
+  { "k": "まずい", "j": "不味い", "e": "bad(-tasting)", "c": "i-adjective" },
+  { "k": "まだ", "j": "未だ", "e": "still", "c": "na-adjective" },
+  { "k": "まつ", "j": "待つ", "e": "to wait", "c": "verb", "g": "godan" },
+  {
+    "k": "まっすぐ",
+    "j": "真っ直ぐ",
+    "e": "straight (ahead)",
+    "c": "na-adjective"
+  },
+  {
+    "k": "マッチする",
+    "j": null,
+    "e": "match (contest)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "まるい", "j": "丸い", "e": "round", "c": "i-adjective" },
+  { "k": "みがく", "j": "磨く", "e": "to polish", "c": "verb", "g": "godan" },
+  { "k": "みじかい", "j": "短い", "e": "short", "c": "i-adjective" },
+  { "k": "みせる", "j": "見せる", "e": "to show", "c": "verb", "g": "ichidan" },
+  {
+    "k": "みる",
+    "j": "看る",
+    "e": "to look after (often medically)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "むずかしい", "j": "難しい", "e": "difficult", "c": "i-adjective" },
+  {
+    "k": "もつ",
+    "j": "持つ",
+    "e": "to hold (in one's hand)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "やさしい", "j": "易しい", "e": "easy", "c": "i-adjective" },
+  { "k": "やすい", "j": "安い", "e": "cheap", "c": "i-adjective" },
+  {
+    "k": "やすむ",
+    "j": "休む",
+    "e": "to be absent",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "やる", "j": "遣る", "e": "to do", "c": "verb", "g": "godan" },
+  { "k": "ゆうめい", "j": "有名", "e": "famous", "c": "na-adjective" },
+  { "k": "いく", "j": "行く", "e": "to go", "c": "verb", "g": "godan" },
+  {
+    "k": "よぶ",
+    "j": "呼ぶ",
+    "e": "to call out (to)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "よむ", "j": "読む", "e": "to read", "c": "verb", "g": "godan" },
+  { "k": "よわい", "j": "弱い", "e": "weak", "c": "i-adjective" },
+  { "k": "りっぱ", "j": "立派", "e": "splendid", "c": "na-adjective" },
+  {
+    "k": "りょうりする",
+    "j": "料理",
+    "e": "cooking",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "りょこうする",
+    "j": "旅行",
+    "e": "travel",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "れんしゅうする",
+    "j": "練習",
+    "e": "practice",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "わかい", "j": "若い", "e": "young", "c": "i-adjective" },
+  {
+    "k": "わかる",
+    "j": "分かる",
+    "e": "to understand",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "わすれる",
+    "j": "忘れる",
+    "e": "to forget",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "わたす",
+    "j": "渡す",
+    "e": "to ferry across (e.g. a river)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "わたる",
+    "j": "渡る",
+    "e": "to cross over",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "わるい", "j": "悪い", "e": "bad", "c": "i-adjective" }
+]

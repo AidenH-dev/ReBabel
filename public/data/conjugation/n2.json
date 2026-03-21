@@ -1,0 +1,4212 @@
+[
+  { "k": "あいまい", "j": "曖昧", "e": "vague", "c": "na-adjective" },
+  { "k": "あう", "j": "会う", "e": "to meet", "c": "verb", "g": "godan" },
+  { "k": "あおぐ", "j": "扇ぐ", "e": "to fan", "c": "verb", "g": "godan" },
+  { "k": "あおじろい", "j": "青白い", "e": "pale", "c": "i-adjective" },
+  {
+    "k": "あきれる",
+    "j": "呆れる",
+    "e": "to be amazed",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "あくびする",
+    "j": "欠伸",
+    "e": "yawn",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "あげる",
+    "j": "揚げる",
+    "e": "to deep-fry",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "あげる",
+    "j": "挙げる",
+    "e": "to give (an example)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "あこがれる",
+    "j": "憧れる",
+    "e": "to long for",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "あじわう",
+    "j": "味わう",
+    "e": "to taste",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "あずかる",
+    "j": "預かる",
+    "e": "to look after",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "あたたまる",
+    "j": "温まる",
+    "e": "to warm oneself",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "あたためる",
+    "j": "温める",
+    "e": "to warm (up)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "あたりまえ", "j": "当たり前", "e": "natural", "c": "na-adjective" },
+  {
+    "k": "あちこちする",
+    "j": "彼方此方",
+    "e": "here and there",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "あつかましい",
+    "j": "厚かましい",
+    "e": "impudent",
+    "c": "i-adjective"
+  },
+  {
+    "k": "あっしゅくする",
+    "j": "圧縮",
+    "e": "compression",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "あてはまる",
+    "j": "当てはまる",
+    "e": "to apply (of a rule)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "あてはめる",
+    "j": "当てはめる",
+    "e": "to apply",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "あばれる",
+    "j": "暴れる",
+    "e": "to act violently",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "あぶる",
+    "j": "炙る",
+    "e": "to warm (e.g. one's hands over a fire)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "あふれる",
+    "j": "溢れる",
+    "e": "to overflow",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "あまやかす",
+    "j": "甘やかす",
+    "e": "to pamper",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "あまる", "j": "余る", "e": "to remain", "c": "verb", "g": "godan" },
+  { "k": "あむ", "j": "編む", "e": "to knit", "c": "verb", "g": "godan" },
+  { "k": "あやうい", "j": "危うい", "e": "dangerous", "c": "i-adjective" },
+  { "k": "あやしい", "j": "怪しい", "e": "suspicious", "c": "i-adjective" },
+  { "k": "あらい", "j": "荒い", "e": "rough", "c": "i-adjective" },
+  { "k": "あらい", "j": "粗い", "e": "coarse", "c": "i-adjective" },
+  {
+    "k": "あらそう",
+    "j": "争う",
+    "e": "to compete",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "あらためる",
+    "j": "改める",
+    "e": "to change",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "あらわす", "j": "著す", "e": "to write", "c": "verb", "g": "godan" },
+  { "k": "ありがたい", "j": "有難い", "e": "grateful", "c": "i-adjective" },
+  { "k": "ある", "j": "有る", "e": "to be", "c": "verb", "g": "godan" },
+  { "k": "あわただしい", "j": "慌ただしい", "e": "busy", "c": "i-adjective" },
+  {
+    "k": "あわてる",
+    "j": "慌てる",
+    "e": "to become confused (disconcerted, disorganized, disorgani...",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "あんい", "j": "安易", "e": "easy", "c": "na-adjective" },
+  { "k": "あんがい", "j": "案外", "e": "unexpectedly", "c": "na-adjective" },
+  {
+    "k": "いいだす",
+    "j": "言い出す",
+    "e": "to begin to say",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "いいつける",
+    "j": "言いつける",
+    "e": "to tell (to do)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "いきいきする",
+    "j": "生き生き",
+    "e": "in a lively way",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "いくじする",
+    "j": "育児",
+    "e": "childcare",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "イコール", "j": null, "e": "equal", "c": "na-adjective" },
+  { "k": "いさましい", "j": "勇ましい", "e": "brave", "c": "i-adjective" },
+  { "k": "いじわる", "j": "意地悪", "e": "malicious", "c": "na-adjective" },
+  {
+    "k": "いっていする",
+    "j": "一定",
+    "e": "to fix",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "いてんする",
+    "j": "移転",
+    "e": "moving",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "いばる",
+    "j": "威張る",
+    "e": "to put on airs",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "いやがる",
+    "j": "嫌がる",
+    "e": "to appear uncomfortable (with)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "いる", "j": "炒る", "e": "to roast", "c": "verb", "g": "godan" },
+  {
+    "k": "インタビューする",
+    "j": null,
+    "e": "interview (on television, in a newspaper, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "うえる",
+    "j": "飢える",
+    "e": "to starve",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "うかぶ", "j": "浮かぶ", "e": "to float", "c": "verb", "g": "godan" },
+  {
+    "k": "うかべる",
+    "j": "浮かべる",
+    "e": "to float",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "うく", "j": "浮く", "e": "to float", "c": "verb", "g": "godan" },
+  {
+    "k": "うけたまわる",
+    "j": "承る",
+    "e": "to hear",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "うけもつ",
+    "j": "受け持つ",
+    "e": "to take (be in) charge of",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "うすぐらい", "j": "薄暗い", "e": "dim", "c": "i-adjective" },
+  {
+    "k": "うすめる",
+    "j": "薄める",
+    "e": "to dilute",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "うちあわせする",
+    "j": "打ち合わせ",
+    "e": "(preparatory) meeting",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "うちけす",
+    "j": "打ち消す",
+    "e": "to deny",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "うつ", "j": "討つ", "e": "to attack", "c": "verb", "g": "godan" },
+  {
+    "k": "うっかりする",
+    "j": null,
+    "e": "carelessly",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "うつす", "j": "映す", "e": "to project", "c": "verb", "g": "godan" },
+  {
+    "k": "うつる",
+    "j": "写る",
+    "e": "to be photographed",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "うつる",
+    "j": "映る",
+    "e": "to be reflected",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "うめる",
+    "j": "埋める",
+    "e": "to bury (e.g. in the ground)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "うやまう",
+    "j": "敬う",
+    "e": "to show respect for",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "うらがえす",
+    "j": "裏返す",
+    "e": "to turn inside out",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "うらなう",
+    "j": "占う",
+    "e": "to tell someone's fortune",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "うらむ",
+    "j": "恨む",
+    "e": "to bear a grudge against",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "うらやましい", "j": "羨ましい", "e": "envious", "c": "i-adjective" },
+  { "k": "うらやむ", "j": "羨む", "e": "to envy", "c": "verb", "g": "godan" },
+  {
+    "k": "うりきれる",
+    "j": "売り切れる",
+    "e": "to be sold out",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "うろうろする",
+    "j": null,
+    "e": "restlessly",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "えらい", "j": "偉い", "e": "great", "c": "i-adjective" },
+  {
+    "k": "えんそくする",
+    "j": "遠足",
+    "e": "school trip",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "えんちょうする",
+    "j": "延長",
+    "e": "extension",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "おいかける",
+    "j": "追いかける",
+    "e": "to chase",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "おいこす",
+    "j": "追い越す",
+    "e": "to pass (e.g. car)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "おうえんする",
+    "j": "応援",
+    "e": "aid",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "おうせつする",
+    "j": "応接",
+    "e": "reception (e.g. of visitors)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "おうたいする",
+    "j": "応対",
+    "e": "dealing with (people, customers, complaints, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "おうふくする",
+    "j": "往復",
+    "e": "making a round trip",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "おうようする",
+    "j": "応用",
+    "e": "(practical) application",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "おおざっぱ",
+    "j": "大雑把",
+    "e": "rough (estimate, summary, etc.)",
+    "c": "na-adjective"
+  },
+  {
+    "k": "おがむ",
+    "j": "拝む",
+    "e": "to assume the posture of praying",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "おかわりする",
+    "j": "お代わり",
+    "e": "another helping",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "おぎなう",
+    "j": "補う",
+    "e": "to supplement",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "おこたる",
+    "j": "怠る",
+    "e": "to neglect",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "おさえる",
+    "j": "押さえる",
+    "e": "to pin down",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "おさめる",
+    "j": "収める",
+    "e": "to put (into)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "おさめる",
+    "j": "治める",
+    "e": "to rule",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "おしい", "j": "惜しい", "e": "regrettable", "c": "i-adjective" },
+  {
+    "k": "おじぎする",
+    "j": "お辞儀",
+    "e": "bow",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "おしゃれ", "j": "お洒落", "e": "stylish", "c": "na-adjective" },
+  {
+    "k": "おそわる",
+    "j": "教わる",
+    "e": "to be taught",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "おちつく",
+    "j": "落ち着く",
+    "e": "to calm down",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "おどかす",
+    "j": "脅かす",
+    "e": "to threaten",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "おとなしい", "j": "大人しい", "e": "gentle", "c": "i-adjective" },
+  {
+    "k": "おどろかす",
+    "j": "驚かす",
+    "e": "to surprise",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "おまいりする",
+    "j": "お参り",
+    "e": "visit (to a shrine, grave, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "おめでたい",
+    "j": "お目出度い",
+    "e": "(matter) for congratulations",
+    "c": "i-adjective"
+  },
+  {
+    "k": "おもいがけない",
+    "j": "思いがけない",
+    "e": "unexpected",
+    "c": "i-adjective"
+  },
+  {
+    "k": "おもいこむ",
+    "j": "思い込む",
+    "e": "to be convinced (that)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "おもいつく",
+    "j": "思いつく",
+    "e": "to think of",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "おもたい", "j": "重たい", "e": "heavy", "c": "i-adjective" },
+  {
+    "k": "おろす",
+    "j": "卸す",
+    "e": "to sell wholesale",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "カーブする", "j": null, "e": "curve", "c": "verb", "g": "irregular" },
+  {
+    "k": "かいかいする",
+    "j": "開会",
+    "e": "opening of a meeting",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいさつする",
+    "j": "改札",
+    "e": "examination of tickets",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいさんする",
+    "j": "解散",
+    "e": "breaking up (a meeting, gathering, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいせいする",
+    "j": "改正",
+    "e": "revision",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいせつする",
+    "j": "解説",
+    "e": "explanation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいぞうする",
+    "j": "改造",
+    "e": "remodeling",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいつうする",
+    "j": "開通",
+    "e": "opening (of a new road, railway, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいてんする",
+    "j": "回転",
+    "e": "rotation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいとうする",
+    "j": "解答",
+    "e": "answer",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいとうする",
+    "j": "回答",
+    "e": "reply",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいほうする",
+    "j": "解放",
+    "e": "release",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かいほうする",
+    "j": "開放",
+    "e": "opening (a door, window, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "がいろんする",
+    "j": "概論",
+    "e": "introduction",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かえす",
+    "j": "帰す",
+    "e": "to send (someone) back",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "かえる",
+    "j": "替える",
+    "e": "to replace",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "かえる", "j": "返る", "e": "to return", "c": "verb", "g": "godan" },
+  {
+    "k": "かかわる",
+    "j": "関わる",
+    "e": "to be involved (in)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "かく", "j": "掻く", "e": "to scratch", "c": "verb", "g": "godan" },
+  { "k": "かぐ", "j": "嗅ぐ", "e": "to sniff", "c": "verb", "g": "godan" },
+  {
+    "k": "かくじゅうする",
+    "j": "拡充",
+    "e": "expansion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かくちょうする",
+    "j": "拡張",
+    "e": "expansion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "かくべつ", "j": "格別", "e": "particular", "c": "na-adjective" },
+  {
+    "k": "かけつする",
+    "j": "可決",
+    "e": "approval",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かこうする",
+    "j": "下降",
+    "e": "descent",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かさなる",
+    "j": "重なる",
+    "e": "to be piled up",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "かさねる",
+    "j": "重ねる",
+    "e": "to pile up",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "かしだしする",
+    "j": "貸出",
+    "e": "lending",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "かじょう", "j": "過剰", "e": "excess", "c": "na-adjective" },
+  { "k": "かじる", "j": "齧る", "e": "to gnaw", "c": "verb", "g": "godan" },
+  {
+    "k": "かぜいする",
+    "j": "課税",
+    "e": "taxation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かそくする",
+    "j": "加速",
+    "e": "acceleration",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "かたい", "j": "硬い", "e": "hard", "c": "i-adjective" },
+  { "k": "かたい", "j": "硬い", "e": "hard", "c": "i-adjective" },
+  {
+    "k": "かたづく",
+    "j": "片付く",
+    "e": "to be put in order",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "かたまる",
+    "j": "固まる",
+    "e": "to harden",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "かたむく",
+    "j": "傾く",
+    "e": "to incline toward",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "かたよる",
+    "j": "偏る",
+    "e": "to lean (to one side)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "かつぐ", "j": "担ぐ", "e": "to shoulder", "c": "verb", "g": "godan" },
+  {
+    "k": "かっこする",
+    "j": "括弧",
+    "e": "brackets",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かつやくする",
+    "j": "活躍",
+    "e": "activity (esp. energetic or successful)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かていする",
+    "j": "仮定",
+    "e": "assumption",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かねつする",
+    "j": "加熱",
+    "e": "heating",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かねる",
+    "j": "兼ねる",
+    "e": "to be unable to",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "カバーする", "j": null, "e": "cover", "c": "verb", "g": "irregular" },
+  {
+    "k": "かぶせる",
+    "j": "被せる",
+    "e": "to cover (with something)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "かゆい", "j": "痒い", "e": "itchy", "c": "i-adjective" },
+  { "k": "カラーする", "j": null, "e": "color", "c": "verb", "g": "irregular" },
+  {
+    "k": "からかう",
+    "j": "揶揄う",
+    "e": "to tease",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "からっぽ", "j": "空っぽ", "e": "empty", "c": "na-adjective" },
+  {
+    "k": "かれる",
+    "j": "枯れる",
+    "e": "to wither (of a plant)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "かわいがる",
+    "j": "可愛がる",
+    "e": "to be affectionate to",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "かわかす",
+    "j": "乾かす",
+    "e": "to dry (clothes, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "かわく",
+    "j": "渇く",
+    "e": "to be thirsty",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "かわる",
+    "j": "替わる",
+    "e": "to succeed",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "かんきする",
+    "j": "換気",
+    "e": "ventilation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かんげきする",
+    "j": "感激",
+    "e": "deep emotion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かんしょうする",
+    "j": "鑑賞",
+    "e": "appreciation (of art, music, poetry, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かんそうする",
+    "j": "乾燥",
+    "e": "dryness",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かんそくする",
+    "j": "観測",
+    "e": "observation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かんちがいする",
+    "j": "勘違い",
+    "e": "misunderstanding",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かんねんする",
+    "j": "観念",
+    "e": "idea",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かんぱいする",
+    "j": "乾杯",
+    "e": "cheers",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "かんびょうする",
+    "j": "看病",
+    "e": "nursing (a patient)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "きがえする",
+    "j": "着替え",
+    "e": "changing clothes",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "きざむ", "j": "刻む", "e": "to mince", "c": "verb", "g": "godan" },
+  {
+    "k": "きしょうする",
+    "j": "起床",
+    "e": "rising (from one's bed)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "きせる",
+    "j": "着せる",
+    "e": "to put clothes on (someone)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "きゅうぎょうする",
+    "j": "休業",
+    "e": "suspension of business",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "きゅうこうする",
+    "j": "休講",
+    "e": "cancellation (of a lecture, class, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "きゅうそくする",
+    "j": "休息",
+    "e": "rest",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "きゅうよする",
+    "j": "給与",
+    "e": "pay",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "きゅうようする",
+    "j": "休養",
+    "e": "rest",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "きよい", "j": "清い", "e": "clean", "c": "i-adjective" },
+  {
+    "k": "きょうかする",
+    "j": "強化",
+    "e": "strengthening",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "きょうしゅくする",
+    "j": "恐縮",
+    "e": "feeling (much) obliged",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ぎょうれつする",
+    "j": "行列",
+    "e": "line",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "きる",
+    "j": "斬る",
+    "e": "to kill (a human) using a blade (sword, machete, knife, e...",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "きをつける",
+    "j": "気をつける",
+    "e": "to be careful",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "くうそうする",
+    "j": "空想",
+    "e": "daydream",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "くぎる", "j": "区切る", "e": "to divide", "c": "verb", "g": "godan" },
+  {
+    "k": "くしゃみする",
+    "j": "嚏",
+    "e": "sneeze",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "くしんする",
+    "j": "苦心",
+    "e": "pains",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "くずす", "j": "崩す", "e": "to destroy", "c": "verb", "g": "godan" },
+  {
+    "k": "くずれる",
+    "j": "崩れる",
+    "e": "to collapse",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "くだく",
+    "j": "砕く",
+    "e": "to break (into pieces)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "くだける",
+    "j": "砕ける",
+    "e": "to break (into pieces)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "くたびれる",
+    "j": "草臥れる",
+    "e": "to get tired",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "くだらない", "j": "下らない", "e": "trivial", "c": "i-adjective" },
+  { "k": "くだる", "j": "下る", "e": "to descend", "c": "verb", "g": "godan" },
+  {
+    "k": "くっつく",
+    "j": "くっ付く",
+    "e": "to adhere to",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "くっつける",
+    "j": "くっ付ける",
+    "e": "to attach",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "くどい", "j": "諄い", "e": "repetitious", "c": "i-adjective" },
+  {
+    "k": "くばる",
+    "j": "配る",
+    "e": "to distribute",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "くふうする",
+    "j": "工夫",
+    "e": "devising (a way)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "くぶんする",
+    "j": "区分",
+    "e": "division",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "くみたてる",
+    "j": "組み立てる",
+    "e": "to assemble",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "くむ",
+    "j": "汲む",
+    "e": "to draw (water)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "くむ",
+    "j": "酌む",
+    "e": "to pour (sake)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "くやしい",
+    "j": "悔しい",
+    "e": "frustrated (over a failure, humiliation or injustice)",
+    "c": "i-adjective"
+  },
+  { "k": "くやむ", "j": "悔やむ", "e": "to mourn", "c": "verb", "g": "godan" },
+  {
+    "k": "クリーニングする",
+    "j": null,
+    "e": "cleaning",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "くるむ",
+    "j": "包む",
+    "e": "to wrap up (in)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "けいこする",
+    "j": "稽古",
+    "e": "practice",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "けいぞくする",
+    "j": "継続",
+    "e": "continuation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "けいびする",
+    "j": "警備",
+    "e": "defense",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "げきぞうする",
+    "j": "激増",
+    "e": "sharp increase",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "げしゃする",
+    "j": "下車",
+    "e": "alighting (from a train, bus, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "けずる",
+    "j": "削る",
+    "e": "to shave (wood, leather, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "けっさく", "j": "傑作", "e": "masterpiece", "c": "na-adjective" },
+  { "k": "げひん", "j": "下品", "e": "vulgar", "c": "na-adjective" },
+  { "k": "けむい", "j": "煙い", "e": "smoky", "c": "i-adjective" },
+  { "k": "ける", "j": "蹴る", "e": "to kick", "c": "verb", "g": "godan" },
+  { "k": "けわしい", "j": "険しい", "e": "precipitous", "c": "i-adjective" },
+  {
+    "k": "けんがくする",
+    "j": "見学",
+    "e": "inspection",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "けんきょ", "j": "謙虚", "e": "modest", "c": "na-adjective" },
+  {
+    "k": "けんしゅうする",
+    "j": "研修",
+    "e": "training (esp. in-service)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "げんじゅう", "j": "厳重", "e": "strict", "c": "na-adjective" },
+  {
+    "k": "けんそんする",
+    "j": "謙遜",
+    "e": "modesty",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "こいしい", "j": "恋しい", "e": "yearned for", "c": "i-adjective" },
+  { "k": "こう", "j": "乞う", "e": "to beg", "c": "verb", "g": "godan" },
+  { "k": "ごういん", "j": "強引", "e": "overbearing", "c": "na-adjective" },
+  { "k": "こうきゅう", "j": "高級", "e": "high-class", "c": "na-adjective" },
+  {
+    "k": "こうこうする",
+    "j": "孝行",
+    "e": "filial piety",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "こうさする",
+    "j": "交差",
+    "e": "crossing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "こうじする",
+    "j": "工事",
+    "e": "construction work",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "こうせい", "j": "公正", "e": "justice", "c": "na-adjective" },
+  {
+    "k": "こうたいする",
+    "j": "交代",
+    "e": "change",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "こうていする",
+    "j": "肯定",
+    "e": "affirmation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "こうど", "j": "高度", "e": "altitude", "c": "na-adjective" },
+  { "k": "こうとう", "j": "高等", "e": "high class", "c": "na-adjective" },
+  {
+    "k": "ごうどうする",
+    "j": "合同",
+    "e": "combination",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "こうひょうする",
+    "j": "公表",
+    "e": "official announcement",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "こうようする",
+    "j": "紅葉",
+    "e": "leaves turning red (in autumn)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "こうりゅうする",
+    "j": "交流",
+    "e": "exchange (e.g. cultural)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ごうりゅうする",
+    "j": "合流",
+    "e": "confluence (of rivers)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "こえる",
+    "j": "越える",
+    "e": "to cross over",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "こがす", "j": "焦がす", "e": "to burn", "c": "verb", "g": "godan" },
+  {
+    "k": "ごくろうさま",
+    "j": "ご苦労様",
+    "e": "thank you (for your hard work)",
+    "c": "na-adjective"
+  },
+  { "k": "こげる", "j": "焦げる", "e": "to burn", "c": "verb", "g": "ichidan" },
+  {
+    "k": "こごえる",
+    "j": "凍える",
+    "e": "to freeze (of one's body)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "こころえる",
+    "j": "心得る",
+    "e": "to know",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "こしかける",
+    "j": "腰掛ける",
+    "e": "to sit (down)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "こしらえる",
+    "j": "拵える",
+    "e": "to make",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "こす",
+    "j": "越す",
+    "e": "to cross over (e.g. mountain)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "こする", "j": "擦る", "e": "to rub", "c": "verb", "g": "godan" },
+  {
+    "k": "ごちそうする",
+    "j": "ご馳走",
+    "e": "treat (esp. food and drink)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ことづける",
+    "j": "言付ける",
+    "e": "to have someone send (a message, parcel, etc.)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ごぶさたする",
+    "j": "ご無沙汰",
+    "e": "not writing or contacting for a while",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "こぼす", "j": "零す", "e": "to spill", "c": "verb", "g": "godan" },
+  {
+    "k": "こぼれる",
+    "j": "零れる",
+    "e": "to spill",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "こらえる",
+    "j": "堪える",
+    "e": "to bear",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ごらくする",
+    "j": "娯楽",
+    "e": "amusement",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "コレクションする",
+    "j": null,
+    "e": "collection (of art, stamps, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ころがす", "j": "転がす", "e": "to roll", "c": "verb", "g": "godan" },
+  { "k": "ころがる", "j": "転がる", "e": "to roll", "c": "verb", "g": "godan" },
+  {
+    "k": "こんごうする",
+    "j": "混合",
+    "e": "mixing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ざいがくする",
+    "j": "在学",
+    "e": "attending (school, college, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "さいそくする",
+    "j": "催促",
+    "e": "pressing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "さいてんする",
+    "j": "採点",
+    "e": "marking",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "さいほうする",
+    "j": "裁縫",
+    "e": "sewing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "さかさ", "j": "逆さ", "e": "inverted", "c": "na-adjective" },
+  { "k": "さかさま", "j": "逆さま", "e": "inverted", "c": "na-adjective" },
+  {
+    "k": "さがす",
+    "j": "探す",
+    "e": "to search for",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "さかのぼる",
+    "j": "遡る",
+    "e": "to go upstream",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "さく", "j": "裂く", "e": "to tear", "c": "verb", "g": "godan" },
+  {
+    "k": "さくじょする",
+    "j": "削除",
+    "e": "deletion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "さくせいする",
+    "j": "作成",
+    "e": "making (a report, plan, contract, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "さくせいする",
+    "j": "作製",
+    "e": "manufacture",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "さぐる",
+    "j": "探る",
+    "e": "to feel around for",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ささやく",
+    "j": "囁く",
+    "e": "to whisper",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ささる",
+    "j": "刺さる",
+    "e": "to stick into (of something with a sharp point)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "さしひきする",
+    "j": "差し引き",
+    "e": "deduction",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "さす", "j": "刺す", "e": "to pierce", "c": "verb", "g": "godan" },
+  { "k": "さす", "j": "挿す", "e": "to insert", "c": "verb", "g": "godan" },
+  { "k": "さす", "j": "注す", "e": "to pour", "c": "verb", "g": "godan" },
+  { "k": "さす", "j": "射す", "e": "to shine", "c": "verb", "g": "godan" },
+  {
+    "k": "さすが",
+    "j": "流石",
+    "e": "as one would expect",
+    "c": "na-adjective"
+  },
+  {
+    "k": "さつえいする",
+    "j": "撮影",
+    "e": "photography (still or motion)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "さびる", "j": "錆びる", "e": "to rust", "c": "verb", "g": "ichidan" },
+  {
+    "k": "さます",
+    "j": "冷ます",
+    "e": "to cool (e.g. from a high temperature to room temperature)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "さまたげる",
+    "j": "妨げる",
+    "e": "to disturb",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "さめる",
+    "j": "冷める",
+    "e": "to cool down",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "さわがしい", "j": "騒がしい", "e": "noisy", "c": "i-adjective" },
+  { "k": "さわやか", "j": "爽やか", "e": "fresh", "c": "na-adjective" },
+  {
+    "k": "しあがる",
+    "j": "仕上がる",
+    "e": "to be finished",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "じえいする",
+    "j": "自衛",
+    "e": "self-defense",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しおからい",
+    "j": "塩辛い",
+    "e": "salty (taste)",
+    "c": "i-adjective"
+  },
+  {
+    "k": "しかいする",
+    "j": "司会",
+    "e": "leading a meeting",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "しかく", "j": "四角", "e": "quadrilateral", "c": "na-adjective" },
+  { "k": "しかくい", "j": "四角い", "e": "square", "c": "i-adjective" },
+  {
+    "k": "しく",
+    "j": "敷く",
+    "e": "to spread out (e.g. a futon)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "しげる",
+    "j": "茂る",
+    "e": "to grow thickly",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "じさんする",
+    "j": "持参",
+    "e": "bringing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ししゃごにゅうする",
+    "j": "四捨五入",
+    "e": "rounding (off; a number)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "じしゅうする",
+    "j": "自習",
+    "e": "self-study",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しずまる",
+    "j": "静まる",
+    "e": "to become quiet",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "したがきする",
+    "j": "下書き",
+    "e": "draft",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "じっかんする",
+    "j": "実感",
+    "e": "real feeling",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "しつこい", "j": "執拗い", "e": "insistent", "c": "i-adjective" },
+  {
+    "k": "じっしゅうする",
+    "j": "実習",
+    "e": "practice (in the field)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しっぴつする",
+    "j": "執筆",
+    "e": "writing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しつれんする",
+    "j": "失恋",
+    "e": "disappointed love",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "していする",
+    "j": "指定",
+    "e": "designation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "しばる", "j": "縛る", "e": "to tie", "c": "verb", "g": "godan" },
+  {
+    "k": "しびれる",
+    "j": "痺れる",
+    "e": "to become numb",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "しぼむ",
+    "j": "萎む",
+    "e": "to wither (of flowers, dreams, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "しぼる",
+    "j": "絞る",
+    "e": "to wring (towel, rag)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "じみ", "j": "地味", "e": "plain", "c": "na-adjective" },
+  {
+    "k": "しめきる",
+    "j": "締め切る",
+    "e": "to close up",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "しめる",
+    "j": "湿る",
+    "e": "to become damp",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "しゃがむ", "j": null, "e": "to squat", "c": "verb", "g": "godan" },
+  {
+    "k": "しゃせいする",
+    "j": "写生",
+    "e": "sketching",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しゃっくりする",
+    "j": "吃逆",
+    "e": "hiccup",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "しゃぶる", "j": null, "e": "to suck", "c": "verb", "g": "godan" },
+  { "k": "しゃれ", "j": "洒落", "e": "joke", "c": "na-adjective" },
+  {
+    "k": "じゃんけんする",
+    "j": "じゃん拳",
+    "e": "rock-paper-scissors (game)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しゅうかいする",
+    "j": "集会",
+    "e": "meeting",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "じゅうきょする",
+    "j": "住居",
+    "e": "dwelling",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しゅうきんする",
+    "j": "集金",
+    "e": "money collection",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しゅうごうする",
+    "j": "集合",
+    "e": "meeting up",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しゅうぜんする",
+    "j": "修繕",
+    "e": "repair",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しゅうにんする",
+    "j": "就任",
+    "e": "assumption (of office)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しゅうりょうする",
+    "j": "終了",
+    "e": "end",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しゅくしょうする",
+    "j": "縮小",
+    "e": "reduction",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "じゅけんする",
+    "j": "受験",
+    "e": "taking an examination (esp. for entrance to a school or u...",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しゅっきんする",
+    "j": "出勤",
+    "e": "going to work",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しゅっちょうする",
+    "j": "出張",
+    "e": "business trip",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "じゅんかんする",
+    "j": "循環",
+    "e": "circulation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "じゅんじょう", "j": "純情", "e": "pure heart", "c": "na-adjective" },
+  { "k": "じゅんすい", "j": "純粋", "e": "pure", "c": "na-adjective" },
+  {
+    "k": "しょうかする",
+    "j": "消化",
+    "e": "digestion (of food)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しょうきょくてき",
+    "j": "消極的",
+    "e": "negative",
+    "c": "na-adjective"
+  },
+  {
+    "k": "じょうげする",
+    "j": "上下",
+    "e": "top and bottom",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "じょうしゃする",
+    "j": "乗車",
+    "e": "boarding (a train, bus, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しょうどくする",
+    "j": "消毒",
+    "e": "disinfection",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "じょうはつする",
+    "j": "蒸発",
+    "e": "evaporation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しょうぶする",
+    "j": "勝負",
+    "e": "victory or defeat",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しょうべんする",
+    "j": "小便",
+    "e": "urine",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しょうもうする",
+    "j": "消耗",
+    "e": "exhaustion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しょうりゃくする",
+    "j": "省略",
+    "e": "omission",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しんせいする",
+    "j": "申請",
+    "e": "application",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しんだんする",
+    "j": "診断",
+    "e": "diagnosis",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "しんにゅうする",
+    "j": "侵入",
+    "e": "invasion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "すいじする",
+    "j": "炊事",
+    "e": "cooking",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "すいちょく", "j": "垂直", "e": "vertical", "c": "na-adjective" },
+  {
+    "k": "すいていする",
+    "j": "推定",
+    "e": "presumption",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "すいへい", "j": "水平", "e": "horizontal", "c": "na-adjective" },
+  { "k": "ずうずうしい", "j": "図々しい", "e": "impudent", "c": "i-adjective" },
+  {
+    "k": "すきとおる",
+    "j": "透き通る",
+    "e": "to be transparent",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "すずむ",
+    "j": "涼む",
+    "e": "to cool oneself",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "スタートする",
+    "j": null,
+    "e": "start",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "すっきりする",
+    "j": null,
+    "e": "refreshingly",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "すっぱい", "j": "酸っぱい", "e": "sour", "c": "i-adjective" },
+  {
+    "k": "ストップする",
+    "j": null,
+    "e": "stop",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "すなお", "j": "素直", "e": "obedient", "c": "na-adjective" },
+  {
+    "k": "スマート",
+    "j": null,
+    "e": "smart (clothing, etc.)",
+    "c": "na-adjective"
+  },
+  { "k": "すまない", "j": "済まない", "e": "inexcusable", "c": "i-adjective" },
+  {
+    "k": "すむ",
+    "j": "澄む",
+    "e": "to become clear (water, air, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "スライドする",
+    "j": null,
+    "e": "slide (for projection)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ずらす", "j": null, "e": "to shift", "c": "verb", "g": "godan" },
+  { "k": "する", "j": "刷る", "e": "to print", "c": "verb", "g": "godan" },
+  { "k": "ずるい", "j": "狡い", "e": "sly", "c": "i-adjective" },
+  {
+    "k": "すれちがう",
+    "j": "すれ違う",
+    "e": "to pass (by) each other",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "せいさくする",
+    "j": "製作",
+    "e": "manufacture",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せいさくする",
+    "j": "制作",
+    "e": "work (film, book)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せいしょする",
+    "j": "清書",
+    "e": "fair copy",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せいそうする",
+    "j": "清掃",
+    "e": "cleaning",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せいぞんする",
+    "j": "生存",
+    "e": "existence",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せいちょうする",
+    "j": "生長",
+    "e": "growth (of a plant)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せいびする",
+    "j": "整備",
+    "e": "maintenance",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せいりつする",
+    "j": "成立",
+    "e": "formation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せおう",
+    "j": "背負う",
+    "e": "to carry on one's back",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "せっきんする",
+    "j": "接近",
+    "e": "getting closer",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せっする",
+    "j": "接する",
+    "e": "to touch",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せつぞくする",
+    "j": "接続",
+    "e": "connection",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "せまる", "j": "迫る", "e": "to approach", "c": "verb", "g": "godan" },
+  {
+    "k": "せめる",
+    "j": "攻める",
+    "e": "to attack",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ぜんごする",
+    "j": "前後",
+    "e": "front and rear",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "せんせいする",
+    "j": "専制",
+    "e": "despotism",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "センチ", "j": null, "e": "centimeter", "c": "na-adjective" },
+  {
+    "k": "せんでんする",
+    "j": "宣伝",
+    "e": "publicity",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "そういする",
+    "j": "相違",
+    "e": "difference",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ぞうげんする",
+    "j": "増減",
+    "e": "increase and decrease",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "そうさくする",
+    "j": "創作",
+    "e": "creation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ぞうせんする",
+    "j": "造船",
+    "e": "shipbuilding",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "そうぞうしい", "j": "騒々しい", "e": "noisy", "c": "i-adjective" },
+  {
+    "k": "ぞうだいする",
+    "j": "増大",
+    "e": "enlargement",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "そうべつする",
+    "j": "送別",
+    "e": "farewell",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ぞくする",
+    "j": "属する",
+    "e": "to belong to",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "そくたつする",
+    "j": "速達",
+    "e": "express",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "そくていする",
+    "j": "測定",
+    "e": "measurement",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "そくりょうする",
+    "j": "測量",
+    "e": "measurement",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "そそっかしい", "j": null, "e": "careless", "c": "i-adjective" },
+  { "k": "そっちょく", "j": "率直", "e": "frank", "c": "na-adjective" },
+  {
+    "k": "そなえる",
+    "j": "備える",
+    "e": "to furnish with",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "そる", "j": "剃る", "e": "to shave", "c": "verb", "g": "godan" },
+  {
+    "k": "それる",
+    "j": "逸れる",
+    "e": "to turn away",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "そろう",
+    "j": "揃う",
+    "e": "to be complete",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "そろえる",
+    "j": "揃える",
+    "e": "to collect",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ぞんじる",
+    "j": "存じる",
+    "e": "to know",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "たいいんする",
+    "j": "退院",
+    "e": "leaving hospital",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "たいしょうする",
+    "j": "対照",
+    "e": "contrast",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "たいそう", "j": "大層", "e": "very", "c": "na-adjective" },
+  {
+    "k": "たいそうする",
+    "j": "体操",
+    "e": "gymnastics",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ダイヤルする",
+    "j": null,
+    "e": "dial (e.g. telephone, radio, clock, gauge)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "たいりつする",
+    "j": "対立",
+    "e": "confrontation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "たかめる",
+    "j": "高める",
+    "e": "to raise",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "たがやす", "j": "耕す", "e": "to till", "c": "verb", "g": "godan" },
+  {
+    "k": "たく",
+    "j": "炊く",
+    "e": "to cook (grains, e.g. rice)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "たく", "j": "焚く", "e": "to burn", "c": "verb", "g": "godan" },
+  {
+    "k": "たくわえる",
+    "j": "蓄える",
+    "e": "to store",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "たすかる",
+    "j": "助かる",
+    "e": "to be saved",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "たたむ",
+    "j": "畳む",
+    "e": "to fold (clothes, umbrella)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "たちどまる",
+    "j": "立ち止まる",
+    "e": "to stop (in one's tracks)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "たつ", "j": "建つ", "e": "to be erected", "c": "verb", "g": "godan" },
+  {
+    "k": "たつ",
+    "j": "発つ",
+    "e": "to depart (on a journey, trip, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "だっせんする",
+    "j": "脱線",
+    "e": "derailment",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "だとう", "j": "妥当", "e": "valid", "c": "na-adjective" },
+  {
+    "k": "たとえる",
+    "j": "例える",
+    "e": "to compare (something) to",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "たのもしい", "j": "頼もしい", "e": "reliable", "c": "i-adjective" },
+  { "k": "だます", "j": "騙す", "e": "to trick", "c": "verb", "g": "godan" },
+  {
+    "k": "たまる",
+    "j": "溜まる",
+    "e": "to collect",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ためらう",
+    "j": "躊躇う",
+    "e": "to hesitate",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ためる",
+    "j": "溜める",
+    "e": "to amass",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "だらしない",
+    "j": "だらし無い",
+    "e": "slovenly (appearance, work, etc.)",
+    "c": "i-adjective"
+  },
+  {
+    "k": "たる",
+    "j": "足る",
+    "e": "to be sufficient",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "だんすいする",
+    "j": "断水",
+    "e": "suspension of water supply",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "だんていする",
+    "j": "断定",
+    "e": "conclusion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ちかう", "j": "誓う", "e": "to swear", "c": "verb", "g": "godan" },
+  {
+    "k": "ちかづける",
+    "j": "近づける",
+    "e": "to bring near",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ちかよる",
+    "j": "近寄る",
+    "e": "to approach",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ちからづよい", "j": "力強い", "e": "powerful", "c": "i-adjective" },
+  {
+    "k": "ちぎる",
+    "j": "千切る",
+    "e": "to tear to pieces",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ちぢむ", "j": "縮む", "e": "to shrink", "c": "verb", "g": "godan" },
+  {
+    "k": "ちぢめる",
+    "j": "縮める",
+    "e": "to shorten",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ちぢれる",
+    "j": "縮れる",
+    "e": "to be wavy",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ちゅうしょうする",
+    "j": "抽象",
+    "e": "abstraction",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ちょうかする",
+    "j": "超過",
+    "e": "excess",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ちょうこくする",
+    "j": "彫刻",
+    "e": "carving",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ちょうせいする",
+    "j": "調整",
+    "e": "adjustment",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ちょうせつする",
+    "j": "調節",
+    "e": "regulation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ちょくつうする",
+    "j": "直通",
+    "e": "direct line",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ちょぞうする",
+    "j": "貯蔵",
+    "e": "storage",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ちょっかく", "j": "直角", "e": "right angle", "c": "na-adjective" },
+  {
+    "k": "ちらかす",
+    "j": "散らかす",
+    "e": "to scatter around",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ちらかる",
+    "j": "散らかる",
+    "e": "to be in disorder",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ちらす",
+    "j": "散らす",
+    "e": "to scatter",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ちる",
+    "j": "散る",
+    "e": "to fall (e.g. blossoms, leaves)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ついかする",
+    "j": "追加",
+    "e": "addition",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "つうきんする",
+    "j": "通勤",
+    "e": "commuting to work",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "つうちする",
+    "j": "通知",
+    "e": "notice",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "つうやくする",
+    "j": "通訳",
+    "e": "interpretation (i.e. oral translation)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "つうようする",
+    "j": "通用",
+    "e": "(common) use (of a language, currency, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "つきあう",
+    "j": "付き合う",
+    "e": "to associate with",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "つきあたる",
+    "j": "突き当たる",
+    "e": "to run into",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "つく",
+    "j": "点く",
+    "e": "to be lit (of a lamp, burner, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "つく", "j": "突く", "e": "to prick", "c": "verb", "g": "godan" },
+  { "k": "つぐ", "j": "次ぐ", "e": "to follow", "c": "verb", "g": "godan" },
+  { "k": "つくる", "j": "作る", "e": "to make", "c": "verb", "g": "godan" },
+  {
+    "k": "つける",
+    "j": "付ける",
+    "e": "to attach",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "つける",
+    "j": "点ける",
+    "e": "to turn on",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "つける",
+    "j": "漬ける",
+    "e": "to soak (in)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "つたわる",
+    "j": "伝わる",
+    "e": "to spread (of a rumour, news, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "つっこむ",
+    "j": "突っ込む",
+    "e": "to thrust (something) into (something)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "つとめる",
+    "j": "勤める",
+    "e": "to work (for)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "つとめる",
+    "j": "努める",
+    "e": "to endeavor (to do)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "つながる",
+    "j": "繋がる",
+    "e": "to be tied together",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "つなげる",
+    "j": "繋げる",
+    "e": "to connect",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "つぶす", "j": "潰す", "e": "to smash", "c": "verb", "g": "godan" },
+  {
+    "k": "つぶれる",
+    "j": "潰れる",
+    "e": "to be crushed",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "つまずく",
+    "j": "躓く",
+    "e": "to trip (over)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "つまる",
+    "j": "詰まる",
+    "e": "to be packed (with)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "つむ", "j": "積む", "e": "to pile up", "c": "verb", "g": "godan" },
+  { "k": "つよき", "j": "強気", "e": "confident", "c": "na-adjective" },
+  {
+    "k": "つりあう",
+    "j": "釣り合う",
+    "e": "to balance",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "つる", "j": "吊る", "e": "to hang", "c": "verb", "g": "godan" },
+  { "k": "つるす", "j": "吊るす", "e": "to hang", "c": "verb", "g": "godan" },
+  {
+    "k": "ていかする",
+    "j": "低下",
+    "e": "fall",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ていしする",
+    "j": "停止",
+    "e": "stoppage",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ていしゃする",
+    "j": "停車",
+    "e": "stopping (of a train, car, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ていでんする",
+    "j": "停電",
+    "e": "power outage",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "でいりする",
+    "j": "出入り",
+    "e": "going in and out",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ていれする",
+    "j": "手入れ",
+    "e": "care",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "でかける",
+    "j": "出かける",
+    "e": "to go out (e.g. on an excursion or outing)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "できあがる",
+    "j": "出来上がる",
+    "e": "to be completed",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "てきかく", "j": "的確", "e": "accurate", "c": "na-adjective" },
+  { "k": "てきかく", "j": "的確", "e": "accurate", "c": "na-adjective" },
+  { "k": "でこぼこ", "j": "凸凹", "e": "unevenness", "c": "na-adjective" },
+  { "k": "てごろ", "j": "手ごろ", "e": "handy", "c": "na-adjective" },
+  { "k": "でたらめ", "j": "出鱈目", "e": "nonsense", "c": "na-adjective" },
+  {
+    "k": "でむかえる",
+    "j": "出迎える",
+    "e": "to meet",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "てらす",
+    "j": "照らす",
+    "e": "to shine on",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "てる", "j": "照る", "e": "to shine", "c": "verb", "g": "godan" },
+  {
+    "k": "てんかいする",
+    "j": "展開",
+    "e": "development",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "でんせんする",
+    "j": "伝染",
+    "e": "contagion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "でんぱ", "j": "電波", "e": "radio wave", "c": "na-adjective" },
+  {
+    "k": "とういつする",
+    "j": "統一",
+    "e": "unity",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "どうかく", "j": "同格", "e": "the same rank", "c": "na-adjective" },
+  {
+    "k": "とうけいする",
+    "j": "統計",
+    "e": "statistics",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "どうさする",
+    "j": "動作",
+    "e": "movement (of the body)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "とうしょする",
+    "j": "投書",
+    "e": "letter (e.g. of complaint)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "とうじょうする",
+    "j": "登場",
+    "e": "entrance (on the stage)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "とうぶんする",
+    "j": "等分",
+    "e": "division into equal parts",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "とうめい", "j": "透明", "e": "transparent", "c": "na-adjective" },
+  {
+    "k": "とおりかかる",
+    "j": "通りかかる",
+    "e": "to happen to pass by",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "とかす", "j": "溶かす", "e": "to melt", "c": "verb", "g": "godan" },
+  {
+    "k": "とがる",
+    "j": "尖る",
+    "e": "to taper to a point",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ドキドキする",
+    "j": null,
+    "e": "thump-thump",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "とく",
+    "j": "溶く",
+    "e": "to dissolve (paint)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "どく", "j": "退く", "e": "to step aside", "c": "verb", "g": "godan" },
+  { "k": "とくしゅ", "j": "特殊", "e": "special", "c": "na-adjective" },
+  {
+    "k": "とくていする",
+    "j": "特定",
+    "e": "specific",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "とくばいする",
+    "j": "特売",
+    "e": "special sale",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "とけこむ",
+    "j": "溶け込む",
+    "e": "to melt into",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "とける", "j": "溶ける", "e": "to melt", "c": "verb", "g": "ichidan" },
+  {
+    "k": "どける",
+    "j": "退ける",
+    "e": "to put something out of the way",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ととのう",
+    "j": "整う",
+    "e": "to be ready",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "とどまる",
+    "j": "止まる",
+    "e": "to remain",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "どなる",
+    "j": "怒鳴る",
+    "e": "to shout (in anger)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "とびこむ",
+    "j": "飛び込む",
+    "e": "to jump in",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "とぶ", "j": "飛ぶ", "e": "to fly", "c": "verb", "g": "godan" },
+  {
+    "k": "とまる",
+    "j": "止まる",
+    "e": "to stop (moving)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "とめる",
+    "j": "泊める",
+    "e": "to give shelter to",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "とらえる",
+    "j": "捉える",
+    "e": "to catch",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "とりいれる",
+    "j": "取り入れる",
+    "e": "to take in",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "とりけす",
+    "j": "取り消す",
+    "e": "to cancel",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "とりだす",
+    "j": "取り出す",
+    "e": "to take out",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "とる",
+    "j": "採る",
+    "e": "to adopt (a method, proposal, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "とる",
+    "j": "捕る",
+    "e": "to catch (a wild animal, fish, insect, baseball, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "トレーニングする",
+    "j": null,
+    "e": "training (for a skill, job, sport, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "なおす", "j": "治す", "e": "to cure", "c": "verb", "g": "godan" },
+  {
+    "k": "ながい",
+    "j": "長い",
+    "e": "long (distance, length)",
+    "c": "i-adjective"
+  },
+  {
+    "k": "なかなおりする",
+    "j": "仲直り",
+    "e": "reconciliation",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ながびく",
+    "j": "長引く",
+    "e": "to be prolonged",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "なかよしする",
+    "j": "仲良し",
+    "e": "close friendship",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "なぐさめる",
+    "j": "慰める",
+    "e": "to comfort",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "なくす",
+    "j": "亡くす",
+    "e": "to lose (through death; e.g. a wife, child)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "なぐる", "j": "殴る", "e": "to strike", "c": "verb", "g": "godan" },
+  { "k": "なす", "j": "為す", "e": "to do", "c": "verb", "g": "godan" },
+  { "k": "なつかしい", "j": "懐かしい", "e": "dear (old)", "c": "i-adjective" },
+  {
+    "k": "なでる",
+    "j": "撫でる",
+    "e": "to stroke",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "ななめ", "j": "斜め", "e": "slanting", "c": "na-adjective" },
+  { "k": "なまいき", "j": "生意気", "e": "impertinent", "c": "na-adjective" },
+  { "k": "ならう", "j": "倣う", "e": "to imitate", "c": "verb", "g": "godan" },
+  { "k": "ならす", "j": "鳴らす", "e": "to ring", "c": "verb", "g": "godan" },
+  { "k": "なる", "j": "生る", "e": "to bear fruit", "c": "verb", "g": "godan" },
+  {
+    "k": "なれる",
+    "j": "慣れる",
+    "e": "to get used to",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "にえる",
+    "j": "煮える",
+    "e": "to be boiled",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "におう",
+    "j": "匂う",
+    "e": "to be fragrant",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "にがす",
+    "j": "逃がす",
+    "e": "to set free",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "にくい", "j": "憎い", "e": "hateful", "c": "i-adjective" },
+  { "k": "にくむ", "j": "憎む", "e": "to hate", "c": "verb", "g": "godan" },
+  { "k": "にくらしい", "j": "憎らしい", "e": "odious", "c": "i-adjective" },
+  {
+    "k": "にごる",
+    "j": "濁る",
+    "e": "to become muddy",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "にぶい",
+    "j": "鈍い",
+    "e": "dull (e.g. a knife)",
+    "c": "i-adjective"
+  },
+  {
+    "k": "にゅうしゃする",
+    "j": "入社",
+    "e": "joining a company",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "にらむ", "j": "睨む", "e": "to glare at", "c": "verb", "g": "godan" },
+  { "k": "にる", "j": "煮る", "e": "to boil", "c": "verb", "g": "ichidan" },
+  { "k": "にわか", "j": "俄", "e": "sudden", "c": "na-adjective" },
+  { "k": "ぬう", "j": "縫う", "e": "to sew", "c": "verb", "g": "godan" },
+  { "k": "ぬらす", "j": "濡らす", "e": "to wet", "c": "verb", "g": "godan" },
+  { "k": "ねじる", "j": "捩る", "e": "to twist", "c": "verb", "g": "godan" },
+  {
+    "k": "ねっする",
+    "j": "熱する",
+    "e": "to heat",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ねらう",
+    "j": "狙う",
+    "e": "to aim at (with a weapon, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "のせる",
+    "j": "乗せる",
+    "e": "to place on (something)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "のぞく",
+    "j": "覗く",
+    "e": "to peek (through a keyhole, gap, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "のばす",
+    "j": "伸ばす",
+    "e": "to grow long (e.g. hair, nails)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "のびる",
+    "j": "伸びる",
+    "e": "to stretch",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "のぼる", "j": "上る", "e": "to ascend", "c": "verb", "g": "godan" },
+  {
+    "k": "のりかえする",
+    "j": "乗り換え",
+    "e": "transfer (trains, buses, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "のる",
+    "j": "載る",
+    "e": "to be placed on",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "のろい", "j": "鈍い", "e": "thickheaded", "c": "i-adjective" },
+  {
+    "k": "のろのろする",
+    "j": null,
+    "e": "slowly",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "のんき", "j": "呑気", "e": "easy", "c": "na-adjective" },
+  {
+    "k": "はいけんする",
+    "j": "拝見",
+    "e": "seeing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ばいばいする",
+    "j": "売買",
+    "e": "trade",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "はう", "j": "這う", "e": "to crawl", "c": "verb", "g": "godan" },
+  { "k": "はえる", "j": "生える", "e": "to grow", "c": "verb", "g": "ichidan" },
+  {
+    "k": "はがす",
+    "j": "剥がす",
+    "e": "to tear off",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ばからしい", "j": "馬鹿らしい", "e": "absurd", "c": "i-adjective" },
+  { "k": "はかる", "j": "計る", "e": "to measure", "c": "verb", "g": "godan" },
+  { "k": "はかる", "j": "計る", "e": "to measure", "c": "verb", "g": "godan" },
+  {
+    "k": "はきはきする",
+    "j": null,
+    "e": "briskly",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "はく", "j": "掃く", "e": "to sweep", "c": "verb", "g": "godan" },
+  {
+    "k": "はさまる",
+    "j": "挟まる",
+    "e": "to get between",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "はさむ",
+    "j": "挟む",
+    "e": "to hold between (e.g. one's fingers, chopsticks)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "はしごする",
+    "j": "梯子",
+    "e": "ladder",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "はずれる",
+    "j": "外れる",
+    "e": "to be disconnected",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "はっきする",
+    "j": "発揮",
+    "e": "show (of power, ability, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "バックする", "j": null, "e": "back", "c": "verb", "g": "irregular" },
+  {
+    "k": "はっしゃする",
+    "j": "発射",
+    "e": "firing (esp. a rocket or missile)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "はっそうする",
+    "j": "発想",
+    "e": "idea",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "はつでんする",
+    "j": "発電",
+    "e": "generation of electricity",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "はつばいする",
+    "j": "発売",
+    "e": "sale",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "はで", "j": "派手", "e": "showy", "c": "na-adjective" },
+  {
+    "k": "はなしあいする",
+    "j": "話し合い",
+    "e": "discussion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "はなしかける",
+    "j": "話しかける",
+    "e": "to address (someone)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "はなはだしい", "j": "甚だしい", "e": "extreme", "c": "i-adjective" },
+  {
+    "k": "はなれる",
+    "j": "放れる",
+    "e": "to get free (from)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "はねる", "j": "跳ねる", "e": "to jump", "c": "verb", "g": "ichidan" },
+  {
+    "k": "はみがきする",
+    "j": "歯磨き",
+    "e": "dental brushing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "はめる",
+    "j": "嵌める",
+    "e": "to fit (e.g. a pane into a frame)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "はやる",
+    "j": "流行る",
+    "e": "to be popular",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "はらいこむ",
+    "j": "払い込む",
+    "e": "to deposit",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "はらいもどす",
+    "j": "払い戻す",
+    "e": "to repay",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "バランスする",
+    "j": null,
+    "e": "balance",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "はりきる",
+    "j": "張り切る",
+    "e": "to be in high spirits",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "はんえいする",
+    "j": "反映",
+    "e": "reflection (of light)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ばんざいする",
+    "j": "万歳",
+    "e": "banzai",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "はんせいする",
+    "j": "反省",
+    "e": "reflection",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ひがえりする",
+    "j": "日帰り",
+    "e": "day trip",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ピカピカ", "j": null, "e": "with a glitter", "c": "na-adjective" },
+  {
+    "k": "ひきうける",
+    "j": "引き受ける",
+    "e": "to take on",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ひきかえす",
+    "j": "引き返す",
+    "e": "to turn back",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ひきざんする",
+    "j": "引き算",
+    "e": "subtraction",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ひきだす",
+    "j": "引き出す",
+    "e": "to pull out",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ひきとめる",
+    "j": "引き止める",
+    "e": "to detain",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "ひきょう", "j": "卑怯", "e": "cowardly", "c": "na-adjective" },
+  {
+    "k": "ひっかかる",
+    "j": "引っかかる",
+    "e": "to be caught in",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ひっきする",
+    "j": "筆記",
+    "e": "(taking) notes",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ひっくりかえす",
+    "j": "ひっくり返す",
+    "e": "to turn over",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ひっくりかえる",
+    "j": "ひっくり返る",
+    "e": "to be overturned",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ひっこしする",
+    "j": "引っ越し",
+    "e": "moving (dwelling, office, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ひっこむ",
+    "j": "引っ込む",
+    "e": "to draw back",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ひとやすみする",
+    "j": "一休み",
+    "e": "(short) rest",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ひにく", "j": "皮肉", "e": "irony", "c": "na-adjective" },
+  { "k": "ひねる", "j": "捻る", "e": "to twist", "c": "verb", "g": "godan" },
+  { "k": "ひびく", "j": "響く", "e": "to resound", "c": "verb", "g": "godan" },
+  { "k": "ひやす", "j": "冷やす", "e": "to cool", "c": "verb", "g": "godan" },
+  {
+    "k": "ひょうしする",
+    "j": "表紙",
+    "e": "cover (of a book, magazine, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ひょうろんする",
+    "j": "評論",
+    "e": "criticism",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ひるねする",
+    "j": "昼寝",
+    "e": "(afternoon) nap",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ひろげる",
+    "j": "広げる",
+    "e": "to spread",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ひろびろする",
+    "j": "広々",
+    "e": "extensive",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ひろめる",
+    "j": "広める",
+    "e": "to spread",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "びんづめする",
+    "j": "瓶詰め",
+    "e": "bottling",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ふうん", "j": "不運", "e": "misfortune", "c": "na-adjective" },
+  {
+    "k": "ふえる",
+    "j": "増える",
+    "e": "to increase",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ふかまる",
+    "j": "深まる",
+    "e": "to deepen",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ふきそく", "j": "不規則", "e": "irregular", "c": "na-adjective" },
+  {
+    "k": "ふきゅうする",
+    "j": "普及",
+    "e": "diffusion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ふく", "j": "拭く", "e": "to wipe", "c": "verb", "g": "godan" },
+  {
+    "k": "ふくしゃする",
+    "j": "複写",
+    "e": "copying",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ふくめる",
+    "j": "含める",
+    "e": "to include (in a group or scope)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ふくらます",
+    "j": "膨らます",
+    "e": "to swell",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ふくらむ",
+    "j": "膨らむ",
+    "e": "to expand",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ふけつ", "j": "不潔", "e": "unclean", "c": "na-adjective" },
+  {
+    "k": "ふける",
+    "j": "更ける",
+    "e": "to get late",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ふさがる",
+    "j": "塞がる",
+    "e": "to be closed",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ふさぐ", "j": "塞ぐ", "e": "to stop up", "c": "verb", "g": "godan" },
+  {
+    "k": "ふざける",
+    "j": "巫山戯る",
+    "e": "to joke",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "ぶさたする",
+    "j": "無沙汰",
+    "e": "not writing or contacting for a while",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ふぞくする",
+    "j": "付属",
+    "e": "being attached (to)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ぶつかる",
+    "j": null,
+    "e": "to bump into",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ぶつける",
+    "j": "打付ける",
+    "e": "to hit (e.g. one's head)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "ぶっそう", "j": "物騒", "e": "dangerous", "c": "na-adjective" },
+  {
+    "k": "ふやす",
+    "j": "増やす",
+    "e": "to increase",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ふやす",
+    "j": "増やす",
+    "e": "to increase",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "ぶらさげる",
+    "j": "ぶら下げる",
+    "e": "to hang",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "フリー",
+    "j": null,
+    "e": "free (of restraint, controls, etc.)",
+    "c": "na-adjective"
+  },
+  {
+    "k": "プリントする",
+    "j": null,
+    "e": "print",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ふるまう",
+    "j": "振舞う",
+    "e": "to behave",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "プログラムする",
+    "j": null,
+    "e": "program (of events, music, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ふわふわ",
+    "j": null,
+    "e": "lightly (floating, drifting, etc.)",
+    "c": "na-adjective"
+  },
+  {
+    "k": "ふんかする",
+    "j": "噴火",
+    "e": "eruption",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ぶんかいする",
+    "j": "分解",
+    "e": "disassembly",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ぶんぷする",
+    "j": "分布",
+    "e": "distribution",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ぶんりょうする",
+    "j": "分量",
+    "e": "amount",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ぶんるいする",
+    "j": "分類",
+    "e": "classification",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "へいかいする",
+    "j": "閉会",
+    "e": "closure (of a ceremony, event, meeting, etc.)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "へいき", "j": "平気", "e": "cool", "c": "na-adjective" },
+  {
+    "k": "へいこうする",
+    "j": "並行",
+    "e": "going side-by-side",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "へいぼん", "j": "平凡", "e": "ordinary", "c": "na-adjective" },
+  {
+    "k": "へこむ",
+    "j": "凹む",
+    "e": "to be dented",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "へだてる",
+    "j": "隔てる",
+    "e": "to separate (by distance, time, etc.)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "べつべつ", "j": "別々", "e": "separate", "c": "na-adjective" },
+  { "k": "へる", "j": "経る", "e": "to pass", "c": "verb", "g": "ichidan" },
+  {
+    "k": "へんしゅうする",
+    "j": "編集",
+    "e": "editing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ぼうしする",
+    "j": "防止",
+    "e": "prevention",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ほうそうする",
+    "j": "包装",
+    "e": "packing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ほうたいする",
+    "j": "包帯",
+    "e": "bandage",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ぼうだい", "j": "膨大", "e": "huge", "c": "na-adjective" },
+  { "k": "ほうる", "j": "放る", "e": "to throw", "c": "verb", "g": "godan" },
+  { "k": "ほがらか", "j": "朗らか", "e": "cheerful", "c": "na-adjective" },
+  {
+    "k": "ぼしゅうする",
+    "j": "募集",
+    "e": "recruitment",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "ほす", "j": "干す", "e": "to air", "c": "verb", "g": "godan" },
+  { "k": "ほどく", "j": "解く", "e": "to undo", "c": "verb", "g": "godan" },
+  { "k": "ほる", "j": "掘る", "e": "to dig", "c": "verb", "g": "godan" },
+  { "k": "ほる", "j": "彫る", "e": "to carve", "c": "verb", "g": "godan" },
+  { "k": "まあまあ", "j": null, "e": "so-so", "c": "na-adjective" },
+  {
+    "k": "マイナスする",
+    "j": null,
+    "e": "minus",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "まく", "j": "巻く", "e": "to wind", "c": "verb", "g": "godan" },
+  { "k": "まく", "j": "蒔く", "e": "to sow", "c": "verb", "g": "godan" },
+  { "k": "まく", "j": "撒く", "e": "to scatter", "c": "verb", "g": "godan" },
+  { "k": "まげる", "j": "曲げる", "e": "to bend", "c": "verb", "g": "ichidan" },
+  {
+    "k": "まごまごする",
+    "j": null,
+    "e": "confused",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "まさつする",
+    "j": "摩擦",
+    "e": "friction",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "まざる",
+    "j": "混ざる",
+    "e": "to be mixed",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "まざる",
+    "j": "混ざる",
+    "e": "to be mixed",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "まじる",
+    "j": "混じる",
+    "e": "to be mixed",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "まじる",
+    "j": "混じる",
+    "e": "to be mixed",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "まぜる", "j": "混ぜる", "e": "to mix", "c": "verb", "g": "ichidan" },
+  { "k": "まぜる", "j": "混ぜる", "e": "to mix", "c": "verb", "g": "ichidan" },
+  {
+    "k": "またぐ",
+    "j": "跨ぐ",
+    "e": "to step over",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "まちあわせる",
+    "j": "待ち合わせる",
+    "e": "to rendezvous",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "まっくら", "j": "真っ暗", "e": "pitch-dark", "c": "na-adjective" },
+  { "k": "まっくろ", "j": "真っ黒", "e": "pitch black", "c": "na-adjective" },
+  { "k": "まっさお", "j": "真っ青", "e": "deep blue", "c": "na-adjective" },
+  { "k": "まっしろ", "j": "真っ白", "e": "pure white", "c": "na-adjective" },
+  { "k": "まつる", "j": "祭る", "e": "to deify", "c": "verb", "g": "godan" },
+  {
+    "k": "まとまる",
+    "j": "纏まる",
+    "e": "to find resolution",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "まとめる",
+    "j": "纏める",
+    "e": "to collect",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "まねる",
+    "j": "真似る",
+    "e": "to mimic",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "まぶしい", "j": "眩しい", "e": "dazzling", "c": "i-adjective" },
+  { "k": "まるい", "j": "丸い", "e": "round", "c": "i-adjective" },
+  { "k": "まれ", "j": "稀", "e": "rare", "c": "na-adjective" },
+  {
+    "k": "まわりみちする",
+    "j": "回り道",
+    "e": "detour",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "みおくる",
+    "j": "見送る",
+    "e": "to see (someone) off",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "みおろす",
+    "j": "見下ろす",
+    "e": "to overlook",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "みじめ", "j": "惨め", "e": "miserable", "c": "na-adjective" },
+  {
+    "k": "みつかる",
+    "j": "見つかる",
+    "e": "to be found",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "みつける",
+    "j": "見つける",
+    "e": "to find",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "みっともない",
+    "j": "見っともない",
+    "e": "shameful",
+    "c": "i-adjective"
+  },
+  {
+    "k": "みなおす",
+    "j": "見直す",
+    "e": "to look at again",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "みなれる",
+    "j": "見慣れる",
+    "e": "to get used to seeing",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "みにくい", "j": "醜い", "e": "ugly", "c": "i-adjective" },
+  {
+    "k": "みのる",
+    "j": "実る",
+    "e": "to bear fruit",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "みまう",
+    "j": "見舞う",
+    "e": "to visit and comfort or console",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "みる",
+    "j": "診る",
+    "e": "to examine (medically)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "むかう", "j": "向かう", "e": "to face", "c": "verb", "g": "godan" },
+  { "k": "むく", "j": "剥く", "e": "to peel", "c": "verb", "g": "godan" },
+  { "k": "むげん", "j": "無限", "e": "infinity", "c": "na-adjective" },
+  { "k": "むしあつい", "j": "蒸し暑い", "e": "humid", "c": "i-adjective" },
+  {
+    "k": "むじゅんする",
+    "j": "矛盾",
+    "e": "contradiction",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "むす",
+    "j": "蒸す",
+    "e": "to steam (food, towel, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "むすう", "j": "無数", "e": "innumerable", "c": "na-adjective" },
+  {
+    "k": "めぐまれる",
+    "j": "恵まれる",
+    "e": "to be blessed with",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "めぐる",
+    "j": "巡る",
+    "e": "to go around",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "めざす",
+    "j": "目指す",
+    "e": "to aim at (for, to do, to become)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "めだつ",
+    "j": "目立つ",
+    "e": "to be conspicuous",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "めちゃくちゃ", "j": "滅茶苦茶", "e": "absurd", "c": "na-adjective" },
+  { "k": "めでたい", "j": "目出度い", "e": "happy", "c": "i-adjective" },
+  {
+    "k": "めんぜいする",
+    "j": "免税",
+    "e": "tax exemption",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "めんせつする",
+    "j": "面接",
+    "e": "interview (e.g. for a job)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "めんどくさい",
+    "j": "面倒くさい",
+    "e": "bothersome",
+    "c": "i-adjective"
+  },
+  {
+    "k": "もうかる",
+    "j": "儲かる",
+    "e": "to be profitable",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "もうける",
+    "j": "儲ける",
+    "e": "to profit",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "もうしわけない",
+    "j": "申し訳ない",
+    "e": "I'm sorry",
+    "c": "i-adjective"
+  },
+  {
+    "k": "もぐる",
+    "j": "潜る",
+    "e": "to dive (into or under water)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "もたれる",
+    "j": "凭れる",
+    "e": "to lean against",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "モダン", "j": null, "e": "modern", "c": "na-adjective" },
+  { "k": "もったいない", "j": "勿体ない", "e": "wasteful", "c": "i-adjective" },
+  { "k": "もともと", "j": "元々", "e": "originally", "c": "na-adjective" },
+  {
+    "k": "ものがたる",
+    "j": "物語る",
+    "e": "to tell (a story)",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "ものすごい", "j": "物凄い", "e": "terrific", "c": "i-adjective" },
+  {
+    "k": "もみじする",
+    "j": "紅葉",
+    "e": "maple (tree)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "もむ", "j": "揉む", "e": "to rub", "c": "verb", "g": "godan" },
+  { "k": "もやす", "j": "燃やす", "e": "to burn", "c": "verb", "g": "godan" },
+  {
+    "k": "もる",
+    "j": "盛る",
+    "e": "to serve (in a bowl, on a plate, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "もんどうする",
+    "j": "問答",
+    "e": "questions and answers",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "やかましい", "j": "喧しい", "e": "noisy", "c": "i-adjective" },
+  {
+    "k": "やくす",
+    "j": "訳す",
+    "e": "to translate",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "やけどする",
+    "j": "火傷",
+    "e": "burn",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "やこうする",
+    "j": "夜行",
+    "e": "night travel",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "やっつける",
+    "j": "遣っ付ける",
+    "e": "to beat",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "やぶれる",
+    "j": "破れる",
+    "e": "to get torn",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "やむをえない",
+    "j": "やむを得ない",
+    "e": "cannot be helped",
+    "c": "i-adjective"
+  },
+  { "k": "やわらかい", "j": "柔らかい", "e": "soft", "c": "i-adjective" },
+  {
+    "k": "ゆうそうする",
+    "j": "郵送",
+    "e": "mailing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ゆけつする",
+    "j": "輸血",
+    "e": "blood transfusion",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ゆそうする",
+    "j": "輸送",
+    "e": "transport",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ゆだんする",
+    "j": "油断",
+    "e": "negligence",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ゆでる",
+    "j": "茹でる",
+    "e": "to boil (something in hot water)",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "ゆるい", "j": "緩い", "e": "loose", "c": "i-adjective" },
+  { "k": "ようち", "j": "幼稚", "e": "infancy", "c": "na-adjective" },
+  { "k": "よくばり", "j": "欲張り", "e": "greed", "c": "na-adjective" },
+  { "k": "よけい", "j": "余計", "e": "extra", "c": "na-adjective" },
+  { "k": "よこす", "j": "寄越す", "e": "to send", "c": "verb", "g": "godan" },
+  { "k": "よごす", "j": "汚す", "e": "to pollute", "c": "verb", "g": "godan" },
+  {
+    "k": "よせる",
+    "j": "寄せる",
+    "e": "to come near",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "よびかける",
+    "j": "呼びかける",
+    "e": "to call out to",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "よびだす",
+    "j": "呼び出す",
+    "e": "to call (someone) to (the door, phone, etc.)",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "よみがえる",
+    "j": "蘇る",
+    "e": "to be resurrected",
+    "c": "verb",
+    "g": "godan"
+  },
+  { "k": "よる", "j": "依る", "e": "to be due to", "c": "verb", "g": "godan" },
+  {
+    "k": "らいにちする",
+    "j": "来日",
+    "e": "coming to Japan",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "らくだいする",
+    "j": "落第",
+    "e": "failure (in an examination)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  { "k": "らんぼう", "j": "乱暴", "e": "violence", "c": "na-adjective" },
+  {
+    "k": "りゃくす",
+    "j": "略す",
+    "e": "to abbreviate",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "りょうしゅうする",
+    "j": "領収",
+    "e": "receipt (of money)",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "るすばんする",
+    "j": "留守番",
+    "e": "care-taking",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "れいとうする",
+    "j": "冷凍",
+    "e": "freezing",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "レポートする",
+    "j": null,
+    "e": "report",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "れんごうする",
+    "j": "連合",
+    "e": "union",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "ろくおんする",
+    "j": "録音",
+    "e": "(audio) recording",
+    "c": "verb",
+    "g": "irregular"
+  },
+  {
+    "k": "わかる",
+    "j": "分かる",
+    "e": "to understand",
+    "c": "verb",
+    "g": "godan"
+  },
+  {
+    "k": "わかれる",
+    "j": "分かれる",
+    "e": "to branch",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  { "k": "わかわかしい", "j": "若々しい", "e": "youthful", "c": "i-adjective" },
+  { "k": "わく", "j": "湧く", "e": "to well (up)", "c": "verb", "g": "godan" },
+  {
+    "k": "わびる",
+    "j": "詫びる",
+    "e": "to apologize",
+    "c": "verb",
+    "g": "ichidan"
+  },
+  {
+    "k": "わりざんする",
+    "j": "割り算",
+    "e": "division",
+    "c": "verb",
+    "g": "irregular"
+  }
+]
