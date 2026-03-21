@@ -53,8 +53,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       return res.status(200).json({ count: 0 });
     }
 
-    // Filter to only 'translate' session types
-    const { data: translateRows, error: translateError } = await supabase
+    // Filter to only 'translate' session types (conjugation is unlimited)
+    const { data: sessionRows, error: sessionError } = await supabase
       .schema('v1_kvs_rebabel')
       .from('user_stats')
       .select('entity')
@@ -62,14 +62,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
       .eq('value', 'translate')
       .in('entity', candidateEntities);
 
-    if (translateError) {
-      console.error('Failed to filter translate sessions:', translateError);
+    if (sessionError) {
+      console.error('Failed to filter translate sessions:', sessionError);
       return res.status(500).json({ error: 'Failed to fetch session count' });
     }
 
-    const translateEntities = new Set(translateRows?.map(row => row.entity) || []);
+    const sessionEntities = new Set(sessionRows?.map(row => row.entity) || []);
 
-    return res.status(200).json({ count: translateEntities.size });
+    return res.status(200).json({ count: sessionEntities.size });
   } catch (error) {
     console.error('Session count error:', error);
     return res.status(500).json({ error: 'Internal server error' });

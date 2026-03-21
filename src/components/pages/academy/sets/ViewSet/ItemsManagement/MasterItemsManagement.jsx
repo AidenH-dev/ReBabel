@@ -137,8 +137,10 @@ export default function MasterItemsManagement({
   items,
   setItems,
   setData,
+  setSetData,
   set_type,
   userProfile,
+  onOpenAutoCategorizeModal,
 }) {
   const router = useRouter();
 
@@ -175,6 +177,7 @@ export default function MasterItemsManagement({
   // Auto-categorize state
   const [isAutoCategorizing, setIsAutoCategorizing] = useState(false);
   const [autoCategorizeResult, setAutoCategorizeResult] = useState(null);
+  const [autoCategorizeDismissed, setAutoCategorizeDismissed] = useState(false);
 
   // Drag-to-reorder state
   const [isReorderMode, setIsReorderMode] = useState(false);
@@ -670,11 +673,35 @@ export default function MasterItemsManagement({
         );
       }
 
-      setAutoCategorizeResult(
-        `Categorized ${result.categorized_count} item${result.categorized_count !== 1 ? 's' : ''}`
-      );
+      // Build result message with optional kanji warning
+      let resultMsg = `Categorized ${result.categorized_count} item${result.categorized_count !== 1 ? 's' : ''}`;
+      const hasKanjiWarning = result.missing_kanji_count > 0;
+      if (hasKanjiWarning) {
+        resultMsg += `. ${result.missing_kanji_count} item${result.missing_kanji_count !== 1 ? 's' : ''} missing kanji -- adding kanji improves accuracy for conjugation practice.`;
+      }
+      setAutoCategorizeResult(resultMsg);
 
-      setTimeout(() => setAutoCategorizeResult(null), 3000);
+      // Persist auto_categorized flag on the set and update local state
+      fetch('/api/database/v2/sets/update-from-full-set', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          entityType: 'set',
+          entityId: setData.id,
+          updates: { auto_categorized: 'true' },
+        }),
+      }).catch(() => {});
+
+      // Update local setData so banner condition re-evaluates
+      if (setSetData) {
+        setSetData((prev) => ({ ...prev, auto_categorized: true }));
+      }
+
+      // Keep the banner visible longer when there's a kanji warning
+      setTimeout(
+        () => setAutoCategorizeDismissed(true),
+        hasKanjiWarning ? 6000 : 2500
+      );
     } catch (err) {
       console.error('Auto-categorize error:', err);
       setAutoCategorizeResult(`Error: ${err.message}`);
@@ -768,45 +795,6 @@ export default function MasterItemsManagement({
                 </button>
               )}
 
-              {(set_type === 'vocab' || !set_type) && hasUncategorizedVocab && (
-                <button
-                  onClick={handleAutoCategorize}
-                  disabled={isAutoCategorizing}
-                  className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium bg-gray-100 dark:bg-[#0f1a1f] text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  title="Auto-categorize uncategorized vocabulary items"
-                >
-                  {isAutoCategorizing ? (
-                    <>
-                      <svg
-                        className="animate-spin w-3.5 h-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        />
-                      </svg>
-                      Categorizing...
-                    </>
-                  ) : (
-                    <>
-                      <FiTag className="w-3.5 h-3.5" />
-                      Auto-categorize
-                    </>
-                  )}
-                </button>
-              )}
-
               <button
                 onClick={handleOpenAddItemModal}
                 className="p-2 rounded-lg bg-[#e30a5f] text-white hover:bg-[#c00950] transition-colors"
@@ -818,17 +806,52 @@ export default function MasterItemsManagement({
           </div>
         </div>
 
-        {autoCategorizeResult && (
-          <div
-            className={`mx-4 mt-2 px-3 py-2 rounded-lg text-xs ${
-              autoCategorizeResult.startsWith('Error')
-                ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'
-                : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
-            }`}
-          >
-            {autoCategorizeResult}
-          </div>
-        )}
+        {(set_type === 'vocab' || !set_type) &&
+          items.length > 0 &&
+          !autoCategorizeDismissed &&
+          !setData?.auto_categorized && (
+            <div className="mx-2 sm:mx-4 mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[#e30a5f]/10 dark:bg-[#e30a5f]/15 border border-[#e30a5f]/20">
+              <FiTag className="w-4 h-4 text-[#e30a5f] flex-shrink-0" />
+              <p className="flex-1 min-w-0 text-xs text-gray-700 dark:text-gray-300">
+                <span className="sm:hidden">
+                  Items need categorization for practice.
+                </span>
+                <span className="hidden sm:inline">
+                  {isAutoCategorizing
+                    ? 'Categorizing items...'
+                    : autoCategorizeResult ||
+                      'Some items are missing categories. Items with kanji are categorized more accurately.'}
+                </span>
+              </p>
+              {!isAutoCategorizing && !autoCategorizeResult && (
+                <button
+                  onClick={onOpenAutoCategorizeModal}
+                  className="px-2.5 py-1 text-xs font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-md transition-colors flex-shrink-0 whitespace-nowrap"
+                >
+                  Auto-categorize
+                </button>
+              )}
+              <button
+                onClick={() => setAutoCategorizeDismissed(true)}
+                disabled={isAutoCategorizing}
+                className="p-0.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0 disabled:opacity-50"
+              >
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
 
         {/* Items List */}
         <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-4">
@@ -1191,34 +1214,6 @@ export default function MasterItemsManagement({
                           className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] font-japanese"
                         />
                       </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          Category
-                        </label>
-                        <select
-                          value={vocabForm.lexical_category}
-                          onChange={(e) =>
-                            handleVocabFormChange(
-                              'lexical_category',
-                              e.target.value
-                            )
-                          }
-                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
-                        >
-                          <option value="">Select category</option>
-                          <option value="noun">Noun</option>
-                          <option value="verb">Verb</option>
-                          <option value="i-adjective">I-Adjective</option>
-                          <option value="na-adjective">Na-Adjective</option>
-                          <option value="adverb">Adverb</option>
-                          <option value="particle">Particle</option>
-                          <option value="counter">Counter</option>
-                          <option value="conjunction">Conjunction</option>
-                          <option value="pronoun">Pronoun</option>
-                          <option value="expression">Expression</option>
-                          <option value="interjection">Interjection</option>
-                        </select>
-                      </div>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -1557,26 +1552,26 @@ export default function MasterItemsManagement({
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Lexical Category
                       </label>
-                      <select
+                      <CustomSelect
                         value={editFormData.lexical_category || ''}
-                        onChange={(e) =>
-                          handleFieldChange('lexical_category', e.target.value)
+                        onChange={(val) =>
+                          handleFieldChange('lexical_category', val)
                         }
-                        className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
-                      >
-                        <option value="">Uncategorized</option>
-                        <option value="noun">Noun</option>
-                        <option value="verb">Verb</option>
-                        <option value="i-adjective">I-Adjective</option>
-                        <option value="na-adjective">Na-Adjective</option>
-                        <option value="adverb">Adverb</option>
-                        <option value="particle">Particle</option>
-                        <option value="counter">Counter</option>
-                        <option value="conjunction">Conjunction</option>
-                        <option value="pronoun">Pronoun</option>
-                        <option value="expression">Expression</option>
-                        <option value="interjection">Interjection</option>
-                      </select>
+                        options={[
+                          { value: '', label: 'Uncategorized' },
+                          { value: 'noun', label: 'Noun' },
+                          { value: 'verb', label: 'Verb' },
+                          { value: 'i-adjective', label: 'I-Adjective' },
+                          { value: 'na-adjective', label: 'Na-Adjective' },
+                          { value: 'adverb', label: 'Adverb' },
+                          { value: 'particle', label: 'Particle' },
+                          { value: 'counter', label: 'Counter' },
+                          { value: 'conjunction', label: 'Conjunction' },
+                          { value: 'pronoun', label: 'Pronoun' },
+                          { value: 'expression', label: 'Expression' },
+                          { value: 'interjection', label: 'Interjection' },
+                        ]}
+                      />
                     </div>
                   </>
                 )}

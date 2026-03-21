@@ -796,46 +796,10 @@ export default function CreateNewSet() {
                                 placeholder="kanji → かんじ"
                                 className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] font-japanese"
                               />
-                            </div>
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Category
-                              </label>
-                              <CustomSelect
-                                value={singleForm.lexical_category}
-                                onChange={(val) =>
-                                  handleSingleFormChange(
-                                    'lexical_category',
-                                    val
-                                  )
-                                }
-                                placeholder="Select category"
-                                options={[
-                                  { value: 'noun', label: 'Noun' },
-                                  { value: 'verb', label: 'Verb' },
-                                  {
-                                    value: 'i-adjective',
-                                    label: 'I-Adjective',
-                                  },
-                                  {
-                                    value: 'na-adjective',
-                                    label: 'Na-Adjective',
-                                  },
-                                  { value: 'adverb', label: 'Adverb' },
-                                  { value: 'particle', label: 'Particle' },
-                                  { value: 'counter', label: 'Counter' },
-                                  {
-                                    value: 'conjunction',
-                                    label: 'Conjunction',
-                                  },
-                                  { value: 'pronoun', label: 'Pronoun' },
-                                  { value: 'expression', label: 'Expression' },
-                                  {
-                                    value: 'interjection',
-                                    label: 'Interjection',
-                                  },
-                                ]}
-                              />
+                              <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
+                                Filling in kanji improves auto-categorization
+                                accuracy and is needed for conjugation practice.
+                              </p>
                             </div>
                           </div>
                           <div className="grid grid-cols-1 gap-3 mb-3">
@@ -1236,6 +1200,23 @@ export default function CreateNewSet() {
                     No items added yet
                   </div>
                 )}
+
+                {/* Kanji warning */}
+                {proposedItems.length > 0 &&
+                  itemType === 'vocabulary' &&
+                  proposedItems.some(
+                    (item) =>
+                      item.type === 'vocabulary' &&
+                      (!item.kanji || item.kanji.trim() === '')
+                  ) && (
+                    <div className="mt-3 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/15 border border-amber-200/50 dark:border-amber-700/30">
+                      <p className="text-[11px] text-amber-700 dark:text-amber-300/80 leading-relaxed">
+                        Some items are missing kanji. Adding kanji to each word
+                        improves auto-categorization accuracy and is needed for
+                        conjugation practice to work correctly.
+                      </p>
+                    </div>
+                  )}
 
                 {/* Action Buttons */}
                 <div className="mt-4 pt-4 border-t border-black/5 dark:border-white/10 flex items-center justify-left flex-shrink-0">

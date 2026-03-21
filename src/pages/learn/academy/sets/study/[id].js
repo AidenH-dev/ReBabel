@@ -38,8 +38,9 @@ import {
   TbShare2,
   TbTrash,
   TbArrowBackUp,
+  TbLanguageHiragana,
 } from 'react-icons/tb';
-import { FiEdit2, FiMoreVertical } from 'react-icons/fi';
+import { FiEdit2, FiMoreVertical, FiTag } from 'react-icons/fi';
 
 // ============================================================================
 // MAIN COMPONENT
@@ -61,6 +62,11 @@ export default function ViewSet() {
   const headerActionsRef = useRef({});
   const [showHeaderOptions, setShowHeaderOptions] = useState(false);
   const headerOptionsRef = useRef(null);
+
+  // Auto-categorize state (triggered from three-dots menu)
+  const [showAutoCategorizeModal, setShowAutoCategorizeModal] = useState(false);
+  const [isAutoCategorizing, setIsAutoCategorizing] = useState(false);
+  const [autoCategorizeResult, setAutoCategorizeResult] = useState(null);
 
   useEffect(() => {
     if (!showHeaderOptions) return;
@@ -93,6 +99,7 @@ export default function ViewSet() {
     lastStudied: '',
     srsEnabled: false, // SRS status from database
     set_type: null, // 'vocab', 'grammar', or null for legacy sets
+    auto_categorized: false,
     tags: [],
     itemCount: 0,
     studyStats: {
@@ -149,9 +156,6 @@ export default function ViewSet() {
           throw new Error('Invalid set data structure received from API');
         }
 
-        //console.log("Set Info from API:", setInfo);
-        //console.log("Set Type from API:", setInfo.set_type);
-
         // Populate set metadata
         setSetData({
           id: apiData.set_id,
@@ -160,8 +164,9 @@ export default function ViewSet() {
           owner: setInfo.owner || '',
           dateCreated: setInfo.date_created || '',
           lastStudied: setInfo.last_studied || '',
-          srsEnabled: setInfo.srs_enabled === 'true', // Convert string to boolean
-          set_type: setInfo.set_type || null, // 'vocab', 'grammar', or null for legacy sets
+          srsEnabled: setInfo.srs_enabled === 'true',
+          set_type: setInfo.set_type || null,
+          auto_categorized: setInfo.auto_categorized === 'true',
           tags: Array.isArray(setInfo.tags) ? setInfo.tags : [],
           itemCount: metadata?.total_items || 0,
           studyStats: {
@@ -276,6 +281,58 @@ export default function ViewSet() {
    */
   const handleDeleteSet = () => {
     router.push('/learn/academy/sets');
+  };
+
+  const handleRunAutoCategorize = async () => {
+    if (!setData?.id) return;
+    setIsAutoCategorizing(true);
+    setAutoCategorizeResult(null);
+    try {
+      const response = await fetch('/api/database/v2/sets/auto-categorize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ set_id: setData.id }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to auto-categorize');
+      }
+      // Update local items
+      if (result.results && result.results.length > 0) {
+        const categoryMap = {};
+        for (const r of result.results) {
+          categoryMap[r.entity_id] = r.lexical_category;
+        }
+        setItems((prev) =>
+          prev.map((item) =>
+            categoryMap[item.id]
+              ? { ...item, lexical_category: categoryMap[item.id] }
+              : item
+          )
+        );
+      }
+      let msg = `Categorized ${result.categorized_count} item${result.categorized_count !== 1 ? 's' : ''}`;
+      if (result.missing_kanji_count > 0) {
+        msg += `. ${result.missing_kanji_count} item${result.missing_kanji_count !== 1 ? 's' : ''} missing kanji.`;
+      }
+      setAutoCategorizeResult(msg);
+      setSetData((prev) => ({ ...prev, auto_categorized: true }));
+      // Also persist via the update API (auto-categorize endpoint already does this,
+      // but ensure it's set in case it was cleared)
+      fetch('/api/database/v2/sets/update-from-full-set', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          entityType: 'set',
+          entityId: setData.id,
+          updates: { auto_categorized: 'true' },
+        }),
+      }).catch(() => {});
+    } catch (err) {
+      setAutoCategorizeResult(`Error: ${err.message}`);
+    } finally {
+      setIsAutoCategorizing(false);
+    }
   };
 
   const startEditingTitle = () => {
@@ -484,6 +541,18 @@ export default function ViewSet() {
                         <TbRepeat className="inline w-4 h-4" />
                         SRS Settings
                       </button>
+                      {(setData.set_type === 'vocab' || !setData.set_type) && (
+                        <button
+                          onClick={() => {
+                            setShowHeaderOptions(false);
+                            setShowAutoCategorizeModal(true);
+                          }}
+                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
+                        >
+                          <FiTag className="inline w-4 h-4" />
+                          Auto-categorize
+                        </button>
+                      )}
                       <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
                       <button
                         onClick={() => {
@@ -573,8 +642,10 @@ export default function ViewSet() {
             items={items}
             setItems={setItems}
             setData={setData}
+            setSetData={setSetData}
             set_type={setData.set_type}
             userProfile={userProfile}
+            onOpenAutoCategorizeModal={() => setShowAutoCategorizeModal(true)}
           />
         </div>
       </main>
@@ -586,6 +657,101 @@ export default function ViewSet() {
       >
         <TbArrowBackUp className="w-6.5 h-6.5 text-gray-700 dark:text-gray-300" />
       </button>
+
+      {/* Auto-categorize modal */}
+      {showAutoCategorizeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-xl w-full max-w-md">
+            <div className="px-5 py-4 border-b border-gray-200 dark:border-white/10">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                Auto-categorize Items
+              </h3>
+            </div>
+            <div className="px-5 py-4 space-y-3">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#e30a5f]/8 dark:bg-[#e30a5f]/10">
+                <TbLanguageHiragana className="w-5 h-5 text-[#e30a5f] flex-shrink-0" />
+                <p className="text-sm font-medium text-[#e30a5f]">
+                  Categories are required for the Conjugation Practice feature
+                </p>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Labels each item as a verb, adjective, noun, etc. so conjugation
+                practice knows which words to include and how to generate
+                questions.
+              </p>
+              <ul className="text-xs text-gray-500 dark:text-gray-400 space-y-1.5">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#e30a5f] mt-0.5">&#x2022;</span>
+                  Items with kanji are categorized more accurately
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#e30a5f] mt-0.5">&#x2022;</span>
+                  Miscategorized items can be corrected during practice
+                </li>
+              </ul>
+              {autoCategorizeResult && (
+                <div
+                  className={`text-sm px-3 py-2 rounded-lg ${
+                    autoCategorizeResult.startsWith('Error')
+                      ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'
+                      : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
+                  }`}
+                >
+                  {autoCategorizeResult}
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-gray-200 dark:border-white/10">
+              <button
+                onClick={() => {
+                  setShowAutoCategorizeModal(false);
+                  setAutoCategorizeResult(null);
+                }}
+                className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+              >
+                {autoCategorizeResult ? 'Done' : 'Cancel'}
+              </button>
+              {!autoCategorizeResult && (
+                <button
+                  onClick={handleRunAutoCategorize}
+                  disabled={isAutoCategorizing}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-[#e30a5f] hover:bg-[#c00950] text-white transition-colors disabled:opacity-50"
+                >
+                  {isAutoCategorizing ? (
+                    <>
+                      <svg
+                        className="animate-spin w-4 h-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      Categorizing...
+                    </>
+                  ) : (
+                    <>
+                      <FiTag className="w-4 h-4" />
+                      Run Auto-categorize
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

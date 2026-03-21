@@ -12,6 +12,8 @@ interface AutoCategorizeResponse {
   success: boolean;
   categorized_count?: number;
   skipped_count?: number;
+  missing_kanji_count?: number;
+  low_confidence_count?: number;
   results?: Array<{ entity_id: string; lexical_category: string }>;
   error?: string;
 }
@@ -86,11 +88,22 @@ export default withApiAuthRequired(async function handler(
 
     const results: Array<{ entity_id: string; lexical_category: string }> = [];
     let skippedCount = 0;
+    let missingKanjiCount = 0;
+    let lowConfidenceCount = 0;
 
     for (const item of uncategorized) {
+      // Track items missing kanji (categorization may be less accurate)
+      if (!item.kanji || item.kanji.trim() === '') {
+        missingKanjiCount++;
+      }
+
       const result = await categorizeWord(item.kana, item.kanji);
 
       if (result && result.lexical_category) {
+        if (result.confidence === 'low') {
+          lowConfidenceCount++;
+        }
+
         // Update the item's lexical_category via RPC
         const { error: updateError } = await supabase
           .schema('v1_kvs_rebabel')
@@ -98,6 +111,7 @@ export default withApiAuthRequired(async function handler(
             entity_uuid: item.id,
             json_updates: JSON.stringify({
               lexical_category: result.lexical_category,
+              ...(result.verb_group && { verb_group: result.verb_group }),
             }),
           });
 
@@ -126,10 +140,20 @@ export default withApiAuthRequired(async function handler(
         i.lexical_category.trim() !== ''
     ).length;
 
+    // Mark set as auto-categorized
+    await supabase
+      .schema('v1_kvs_rebabel')
+      .rpc('update_set_by_id', {
+        entity_uuid: set_id,
+        json_updates: JSON.stringify({ auto_categorized: 'true' }),
+      });
+
     return res.status(200).json({
       success: true,
       categorized_count: results.length,
       skipped_count: skippedCount + alreadyCategorized,
+      missing_kanji_count: missingKanjiCount,
+      low_confidence_count: lowConfidenceCount,
       results,
     });
   } catch (error) {

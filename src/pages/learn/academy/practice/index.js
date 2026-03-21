@@ -12,10 +12,17 @@ import {
   FiExternalLink,
 } from 'react-icons/fi';
 import { LuTextCursorInput } from 'react-icons/lu';
+import { TbLanguageHiragana } from 'react-icons/tb';
 import { BeginnerPackPopup } from '@/components/popups/sets/newUserPopup';
 import { LuAlarmClock } from 'react-icons/lu';
 import ConfigPanelView from '@/components/Practice/Premium/Features/Translate/Configuration/views/ConfigPanelView';
 import CardSwapCustomItemModal from '@/components/Practice/Premium/Features/Translate/Configuration/views/CardSwapCustomItemModal';
+import ConjugationConfigPanel from '@/components/Practice/Premium/Features/Conjugation/Configuration/views/ConjugationConfigPanel';
+import {
+  createInitialVerbOptions,
+  createInitialAdjectiveOptions,
+  filterConjugatableItems,
+} from '@/components/Practice/Premium/Features/Conjugation/Configuration/models/conjugationConfig';
 import { usePremium } from '@/contexts/PremiumContext';
 
 export default function VocabularyDashboard() {
@@ -66,6 +73,18 @@ export default function VocabularyDashboard() {
     vocabulary: false,
     grammar: false,
   });
+
+  // Conjugation tab state
+  const [conjugationSelectedSets, setConjugationSelectedSets] = useState([]);
+  const [verbOptions, setVerbOptions] = useState(createInitialVerbOptions());
+  const [adjectiveOptions, setAdjectiveOptions] = useState(
+    createInitialAdjectiveOptions()
+  );
+  const [conjugationSelectAll, setConjugationSelectAll] = useState(false);
+  const [conjugationRandomMode, setConjugationRandomMode] = useState(false);
+  const [conjugationPoolItems, setConjugationPoolItems] = useState([]);
+  const [conjugationQuestionCount, setConjugationQuestionCount] = useState(10);
+  const [conjugationFocalItems, setConjugationFocalItems] = useState([]);
 
   const router = useRouter();
   const searchRef = useRef(null);
@@ -123,6 +142,7 @@ export default function VocabularyDashboard() {
           date: record.data.date_created || record.data.updated_at,
           path: `/learn/academy/set/study/${record.entity_id}`,
           set_type: record.data.set_type || null,
+          auto_categorized: record.data.auto_categorized === 'true',
         }));
 
         formattedData.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -339,6 +359,152 @@ export default function VocabularyDashboard() {
     setVocabFocalPoints([]);
   };
 
+  // Conjugation: start practice session (no session limit for conjugation)
+  const handleStartConjugationPractice = () => {
+    if (conjugationPoolItems.length === 0) {
+      alert('No conjugatable items in the selected sets.');
+      return;
+    }
+
+    if (!conjugationRandomMode) {
+      const hasVerbForms = Object.values(verbOptions).some(Boolean);
+      const hasAdjForms = Object.values(adjectiveOptions).some(Boolean);
+      if (!hasVerbForms && !hasAdjForms) {
+        alert('Select at least one conjugation form, or enable Random Mode.');
+        return;
+      }
+    }
+
+    // Build selected form keys
+    const selectedVerbForms = conjugationRandomMode
+      ? null
+      : Object.entries(verbOptions)
+          .filter(([, v]) => v)
+          .map(([k]) => k);
+    const selectedAdjForms = conjugationRandomMode
+      ? null
+      : Object.entries(adjectiveOptions)
+          .filter(([, v]) => v)
+          .map(([k]) => k);
+
+    const itemsToUse =
+      conjugationFocalItems.length > 0
+        ? conjugationFocalItems
+        : conjugationPoolItems;
+
+    const config = {
+      poolItems: itemsToUse,
+      selectedVerbForms,
+      selectedAdjForms,
+      randomMode: conjugationRandomMode,
+      count:
+        conjugationFocalItems.length > 0
+          ? 9999
+          : conjugationQuestionCount === 'all'
+            ? 9999
+            : conjugationQuestionCount,
+    };
+
+    sessionStorage.setItem(
+      'conjugation-practice-config',
+      JSON.stringify(config)
+    );
+    router.push('/learn/academy/practice/conjugation/session');
+  };
+
+  // Conjugation handlers
+  const handleConjugationSelectSet = (setId) => {
+    const selectedSet = recentsSets.find((s) => s.id === setId);
+    if (!selectedSet) return;
+    setConjugationSelectedSets((prev) => [...prev, selectedSet]);
+  };
+
+  const handleConjugationRemoveSet = (setId) => {
+    setConjugationSelectedSets((prev) => prev.filter((s) => s.id !== setId));
+  };
+
+  const handleToggleVerb = (key) => {
+    if (conjugationRandomMode) return;
+    setVerbOptions((prev) => {
+      const newState = { ...prev, [key]: !prev[key] };
+      const allVerbs = Object.values(newState).every(Boolean);
+      const allAdj = Object.values(adjectiveOptions).every(Boolean);
+      setConjugationSelectAll(allVerbs && allAdj);
+      return newState;
+    });
+  };
+
+  const handleToggleAdjective = (key) => {
+    if (conjugationRandomMode) return;
+    setAdjectiveOptions((prev) => {
+      const newState = { ...prev, [key]: !prev[key] };
+      const allVerbs = Object.values(verbOptions).every(Boolean);
+      const allAdj = Object.values(newState).every(Boolean);
+      setConjugationSelectAll(allVerbs && allAdj);
+      return newState;
+    });
+  };
+
+  const handleToggleConjugationSelectAll = () => {
+    if (conjugationSelectAll) {
+      setVerbOptions(createInitialVerbOptions());
+      setAdjectiveOptions(createInitialAdjectiveOptions());
+      setConjugationSelectAll(false);
+    } else {
+      setVerbOptions(
+        Object.keys(verbOptions).reduce((acc, k) => ({ ...acc, [k]: true }), {})
+      );
+      setAdjectiveOptions(
+        Object.keys(adjectiveOptions).reduce(
+          (acc, k) => ({ ...acc, [k]: true }),
+          {}
+        )
+      );
+      setConjugationSelectAll(true);
+      setConjugationRandomMode(false);
+    }
+  };
+
+  const handleToggleConjugationRandomMode = () => {
+    if (conjugationRandomMode) {
+      setConjugationRandomMode(false);
+    } else {
+      setConjugationRandomMode(true);
+      setConjugationSelectAll(false);
+      setVerbOptions(createInitialVerbOptions());
+      setAdjectiveOptions(createInitialAdjectiveOptions());
+    }
+  };
+
+  // Fetch conjugatable items when sets change
+  useEffect(() => {
+    const fetchConjugationItems = async () => {
+      if (conjugationSelectedSets.length === 0) {
+        setConjugationPoolItems([]);
+        return;
+      }
+      try {
+        const promises = conjugationSelectedSets.map((set) =>
+          fetch(`/api/database/v2/sets/retrieve-set/${set.id}`).then((r) =>
+            r.json()
+          )
+        );
+        const results = await Promise.all(promises);
+        const allItems = [];
+        results.forEach((result) => {
+          if (result.success) {
+            const items = result.data.data.items || [];
+            allItems.push(...filterConjugatableItems(items));
+          }
+        });
+        setConjugationPoolItems(allItems);
+      } catch (error) {
+        console.error('Error fetching conjugation items:', error);
+      }
+    };
+    fetchConjugationItems();
+  }, [conjugationSelectedSets]);
+
   // Helper: Get all pool items (need to fetch from sets)
   const [poolItems, setPoolItems] = useState({ grammar: [], vocab: [] });
 
@@ -490,6 +656,20 @@ export default function VocabularyDashboard() {
                       Translate
                     </span>
                   </button>
+                  <button
+                    onClick={() => setActiveTab('conjugation')}
+                    className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
+                                            ${
+                                              activeTab === 'conjugation'
+                                                ? 'text-[#e30a5f] border-[#e30a5f]'
+                                                : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-[#e30a5f]'
+                                            }`}
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      <TbLanguageHiragana className="text-xl" />
+                      Conjugation
+                    </span>
+                  </button>
                   {/* TODO: Unhide when QuickTime feature is ready */}
                   {/* <button
                                         onClick={() => setActiveTab("QuickTime")}
@@ -512,6 +692,45 @@ export default function VocabularyDashboard() {
             <div className="w-full">
               <section className="mt-3 rounded-2xl shadow-sm bg-white dark:bg-[#1c2b35] border border-black/5 dark:border-white/5 p-4 sm:p-6">
                 {/* Translate (formerly Sets) */}
+                {activeTab === 'conjugation' && (
+                  <div className="flex flex-col gap-4">
+                    <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white">
+                      Conjugation Practice
+                    </h2>
+                    <ConjugationConfigPanel
+                      availableSets={recentsSets}
+                      selectedSets={conjugationSelectedSets}
+                      onSelectSet={handleConjugationSelectSet}
+                      onRemoveSet={handleConjugationRemoveSet}
+                      verbOptions={verbOptions}
+                      adjectiveOptions={adjectiveOptions}
+                      isSelectAll={conjugationSelectAll}
+                      isRandomMode={conjugationRandomMode}
+                      onToggleVerb={handleToggleVerb}
+                      onToggleAdjective={handleToggleAdjective}
+                      onToggleSelectAll={handleToggleConjugationSelectAll}
+                      onToggleRandomMode={handleToggleConjugationRandomMode}
+                      poolItems={conjugationPoolItems}
+                      onStartPractice={handleStartConjugationPractice}
+                      questionCount={conjugationQuestionCount}
+                      onQuestionCountChange={setConjugationQuestionCount}
+                      focalItems={conjugationFocalItems}
+                      onAddFocalItem={(item) => {
+                        setConjugationFocalItems((prev) =>
+                          prev.some((f) => f.id === item.id)
+                            ? prev
+                            : [...prev, item]
+                        );
+                      }}
+                      onRemoveFocalItem={(itemId) => {
+                        setConjugationFocalItems((prev) =>
+                          prev.filter((f) => f.id !== itemId)
+                        );
+                      }}
+                    />
+                  </div>
+                )}
+
                 {activeTab === 'translate' && (
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">

@@ -51,6 +51,8 @@ export default function TypedResponseView({
   onRetry,
   onEditItem,
   disableKeyboardShortcuts = false,
+  questionDisplay,
+  onSkipItem,
 }) {
   // Auto-focus input when component loads or question changes
   useEffect(() => {
@@ -121,13 +123,19 @@ export default function TypedResponseView({
             </button>
           )}
 
-          <div className="mb-2 text-xs sm:text-sm text-gray-500 dark:text-white/50">
-            {currentItem.questionType} → {currentItem.answerType}
-          </div>
+          {questionDisplay ? (
+            questionDisplay
+          ) : (
+            <>
+              <div className="mb-2 text-xs sm:text-sm text-gray-500 dark:text-white/50">
+                {currentItem.questionType} → {currentItem.answerType}
+              </div>
 
-          <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-8 text-gray-900 dark:text-white break-words">
-            {currentItem.question}
-          </div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-8 text-gray-900 dark:text-white break-words">
+                {currentItem.question}
+              </div>
+            </>
+          )}
 
           {showHint && currentItem.hint && (
             <div className="text-center text-sm sm:text-base text-gray-600 dark:text-white/60 mb-3 sm:mb-4">
@@ -180,54 +188,95 @@ export default function TypedResponseView({
             )}
           </div>
 
-          {/* Result Feedback */}
-          <div className="min-h-[80px] sm:min-h-[96px]">
-            {showResult && (
-              <div
-                className={`p-3 sm:p-4 rounded-lg text-sm sm:text-base ${
-                  isCorrect
+          {/* Result Feedback -- always renders incorrect-sized content for stable height */}
+          <div className="relative">
+            {/* Invisible incorrect layout always present to hold height */}
+            <div
+              className="p-3 sm:p-4 text-sm sm:text-base invisible"
+              aria-hidden="true"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <FaTimes />
+                <span className="font-semibold">Incorrect</span>
+              </div>
+              <div className="text-xs sm:text-sm">
+                The correct answer is:{' '}
+                <span className="font-bold">{currentItem.answer}</span>
+              </div>
+            </div>
+            {/* Visible feedback positioned on top */}
+            <div
+              className={`absolute top-0 left-0 right-0 p-3 sm:p-4 rounded-lg text-sm sm:text-base ${
+                !showResult
+                  ? 'opacity-0'
+                  : isCorrect
                     ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
                     : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
-                }`}
-              >
-                {isCorrect ? (
-                  <div className="flex items-center gap-2">
-                    <FaCheck />
-                    <span className="font-semibold">Correct!</span>
+              }`}
+            >
+              {isCorrect ? (
+                <div className="flex items-center gap-2">
+                  <FaCheck />
+                  <span className="font-semibold">Correct!</span>
+                </div>
+              ) : (
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <FaTimes />
+                    <span className="font-semibold">Incorrect</span>
                   </div>
-                ) : (
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <FaTimes />
-                      <span className="font-semibold">Incorrect</span>
-                    </div>
-                    <div className="text-xs sm:text-sm">
-                      The correct answer is:{' '}
-                      <span className="font-bold">{currentItem.answer}</span>
-                    </div>
+                  <div className="text-xs sm:text-sm">
+                    The correct answer is:{' '}
+                    <span className="font-bold">{currentItem.answer}</span>
                   </div>
-                )}
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-end gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-end gap-3 sm:gap-4 min-h-[48px] sm:min-h-[52px]">
           {!showResult ? (
-            <button
-              onClick={onCheckAnswer}
-              disabled={!userAnswer.trim()}
-              className={`w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
-                userAnswer.trim()
-                  ? 'bg-[#e30a5f] hover:bg-[#f41567] text-white active:scale-95'
-                  : 'bg-gray-200 dark:bg-white/10 text-gray-400 dark:text-white/30 cursor-not-allowed'
-              }`}
-            >
-              Check Answer
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+              {onSkipItem && (
+                <button
+                  onClick={onSkipItem}
+                  className="w-full sm:w-auto text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors active:scale-95
+                    border-2 border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900
+                    dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700/60 dark:hover:text-white
+                    focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2
+                    focus:ring-offset-white dark:focus:ring-pink-400 dark:focus:ring-offset-gray-900"
+                >
+                  Not a valid card
+                </button>
+              )}
+              <button
+                onClick={onCheckAnswer}
+                disabled={!userAnswer.trim()}
+                className={`w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
+                  userAnswer.trim()
+                    ? 'bg-[#e30a5f] hover:bg-[#f41567] text-white active:scale-95'
+                    : 'bg-gray-200 dark:bg-white/10 text-gray-400 dark:text-white/30 cursor-not-allowed'
+                }`}
+              >
+                Check Answer
+              </button>
+            </div>
           ) : (
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+              {onSkipItem && (
+                <button
+                  onClick={onSkipItem}
+                  className="w-full sm:w-auto text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors active:scale-95
+                    border-2 border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900
+                    dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700/60 dark:hover:text-white
+                    focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2
+                    focus:ring-offset-white dark:focus:ring-pink-400 dark:focus:ring-offset-gray-900"
+                >
+                  Not a valid card
+                </button>
+              )}
               {!isCorrect && (
                 <button
                   onClick={onRetry}
