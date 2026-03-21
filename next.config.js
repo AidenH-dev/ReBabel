@@ -1,5 +1,11 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Include kuromoji dictionary files in serverless function output
+  outputFileTracingIncludes: {
+    '/api/**': ['./node_modules/kuromoji/dict/**'],
+  },
   webpack: (config, { isServer }) => {
     config.experiments = {
       ...config.experiments,
@@ -9,11 +15,12 @@ const nextConfig = {
 
     config.module.rules.push({
       test: /\.wasm$/,
-      type: "webassembly/async",
+      type: 'webassembly/async',
     });
 
-    config.output.webassemblyModuleFilename =
-      isServer ? "../static/wasm/[modulehash].wasm" : "static/wasm/[modulehash].wasm";
+    config.output.webassemblyModuleFilename = isServer
+      ? '../static/wasm/[modulehash].wasm'
+      : 'static/wasm/[modulehash].wasm';
 
     // Handle Node.js modules that might be imported but not available in browser
     if (!isServer) {
