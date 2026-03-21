@@ -5,12 +5,16 @@ let tokenizerPromise = null;
 
 function getTokenizer() {
   if (!tokenizerPromise) {
-    // Resolve dict path relative to the kuromoji module itself (works in both local dev and Vercel)
-    const kuromojiDir = path.dirname(require.resolve('kuromoji/package.json'));
+    const dictPath = path.join(
+      process.cwd(),
+      'node_modules',
+      'kuromoji',
+      'dict'
+    );
     tokenizerPromise = new Promise((resolve, reject) => {
       kuromoji
         .builder({
-          dicPath: path.join(kuromojiDir, 'dict'),
+          dicPath: dictPath,
         })
         .build((err, tokenizer) => {
           if (err) {
