@@ -1,16 +1,12 @@
-const path = require('path');
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Include kuromoji dictionary files in serverless function output
   experimental: {
     outputFileTracingIncludes: {
       '/api/database/v2/sets/auto-categorize': [
-        path.join(__dirname, 'node_modules/kuromoji/dict/**/*'),
+        'node_modules/kuromoji/dict/**',
       ],
-      '/api/practice/conjugation/generate': [
-        path.join(__dirname, 'node_modules/kuromoji/dict/**/*'),
-      ],
+      '/api/practice/conjugation/generate': ['node_modules/kuromoji/dict/**'],
     },
   },
   webpack: (config, { isServer }) => {
