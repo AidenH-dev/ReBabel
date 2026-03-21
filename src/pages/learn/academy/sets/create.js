@@ -5,17 +5,8 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import {
-  FaPlus,
-  FaTimes,
-  FaCheck,
-  FaTrash,
-  FaSearch,
-  FaFileImport,
-  FaKeyboard,
-  FaListUl,
-} from 'react-icons/fa';
-import { FiSearch, FiUpload, FiPlus, FiX, FiCheck } from 'react-icons/fi';
+import { FaPlus, FaTimes, FaCheck, FaTrash, FaKeyboard } from 'react-icons/fa';
+import { FiUpload, FiPlus, FiX, FiCheck } from 'react-icons/fi';
 import { toKana } from 'wanakana';
 import CSVUpload from '../../../../components/pages/academy/sets/CreateSet/CSVUpload/CSVUpload';
 import CustomSelect from '@/components/ui/CustomSelect';
@@ -62,71 +53,6 @@ export default function CreateNewSet() {
       setShowBorderHighlight(false);
     }, 3000);
   }, []);
-
-  // ----- Import (Genki) -----
-  const [genkiLesson, setGenkiLesson] = useState('');
-  const [importChunk, setImportChunk] = useState([]);
-
-  const handleImportChunk = useCallback(
-    async (lessonNumber) => {
-      if (!lessonNumber) {
-        setImportChunk([]);
-        return;
-      }
-      try {
-        const res = await fetch(`/api/fetch-vocabulary?lesson=${lessonNumber}`);
-        if (!res.ok) throw new Error('Failed to fetch Genki vocabulary.');
-        const data = await res.json();
-        setImportChunk(data || []);
-        showStatus(
-          `Loaded ${data.length} items from Genki Lesson ${lessonNumber}`,
-          'success'
-        );
-      } catch (error) {
-        console.error('Error fetching Genki chunk:', error);
-        showStatus('Error fetching Genki vocabulary.', 'error');
-      }
-    },
-    [showStatus]
-  );
-
-  useEffect(() => {
-    if (genkiLesson) handleImportChunk(genkiLesson);
-  }, [genkiLesson, handleImportChunk]);
-
-  const handleRemoveFromChunk = (index) => {
-    setImportChunk((prev) => {
-      const next = [...prev];
-      next.splice(index, 1);
-      return next;
-    });
-  };
-
-  const handleAddChunkToProposed = () => {
-    if (!importChunk.length) {
-      showStatus('No items to add from the imported chunk.', 'error');
-      return;
-    }
-    const itemsToAdd = importChunk.map((item) => ({
-      type: 'vocabulary',
-      english: item.English || '',
-      kana:
-        item['Japanese(Hiragana/Katakana)'] ||
-        item['Japanese (Hiragana/Katakana)'] ||
-        item.Japanese ||
-        '',
-      kanji: '',
-      lexical_category: '',
-      example_sentences: '',
-      tags: '',
-      audio: '',
-    }));
-    const valid = itemsToAdd.filter((x) => x.english?.trim() && x.kana?.trim());
-    setProposedItems((prev) => [...prev, ...valid]);
-    setImportChunk([]);
-    setGenkiLesson('');
-    showStatus(`Added ${valid.length} items to your set!`, 'success');
-  };
 
   // ----- Single -----
   const [singleForm, setSingleForm] = useState({
@@ -284,50 +210,6 @@ export default function CreateNewSet() {
     setProposedItems((prev) => [...prev, ...items]);
     setBulkInput('');
     showStatus(`Added ${items.length} items to set!`, 'success');
-  };
-
-  // ----- Search -----
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
-
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) {
-      showStatus('Please enter a search query.', 'error');
-      return;
-    }
-    setIsSearching(true);
-    try {
-      const res = await fetch(
-        `/api/search-vocabulary?query=${encodeURIComponent(searchQuery)}`
-      );
-      if (!res.ok) throw new Error('Failed to fetch search results.');
-      const data = await res.json();
-      setSearchResults(data);
-      if (data.length === 0) {
-        showStatus('No results found for your search.', 'info');
-      }
-    } catch (error) {
-      console.error('Error searching vocabulary:', error);
-      showStatus('Error searching vocabulary.', 'error');
-    } finally {
-      setIsSearching(false);
-    }
-  };
-
-  const addSearchResultToProposed = (item) => {
-    const vocab = {
-      type: 'vocabulary',
-      english: item.English || '',
-      kana: item['Japanese(Hiragana/Katakana)'] || item.Japanese || '',
-      kanji: '',
-      lexical_category: '',
-      example_sentences: '',
-      tags: '',
-      audio: '',
-    };
-    setProposedItems((prev) => [...prev, vocab]);
-    showStatus(`Added "${item.English}" to set!`, 'success');
   };
 
   // ----- CSV Column Mapping -----
@@ -712,8 +594,6 @@ export default function CreateNewSet() {
                           label: 'CSV Upload',
                           icon: <FiUpload className="w-3 h-3" />,
                         },
-                        //{ key: "bulk", label: "Bulk", icon: <FaListUl className="w-3 h-3" /> },
-                        //{ key: "search", label: "Search", icon: <FiSearch className="w-3 h-3" /> },
                       ].map(({ key, label, icon }) => (
                         <button
                           key={key}
@@ -1017,73 +897,6 @@ export default function CreateNewSet() {
                       itemType={itemType}
                       onColumnsMapped={handleCSVColumnsMapped}
                     />
-                  )}
-
-                  {/* Search Tab */}
-                  {activeTab === 'search' && (
-                    <div>
-                      <div className="flex gap-2 mb-4">
-                        <input
-                          type="text"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          onKeyPress={(e) =>
-                            e.key === 'Enter' && handleSearch()
-                          }
-                          placeholder="Search vocabulary..."
-                          className="flex-1 bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
-                        />
-                        <button
-                          onClick={handleSearch}
-                          disabled={isSearching}
-                          className="px-3 py-1.5 rounded text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 transition-opacity disabled:opacity-50"
-                        >
-                          {isSearching ? '...' : 'Search'}
-                        </button>
-                      </div>
-
-                      {searchResults.length > 0 ? (
-                        <div className="border border-black/5 dark:border-white/10 rounded overflow-hidden max-h-48 overflow-y-auto">
-                          {searchResults.map((item, index) => {
-                            const jp =
-                              item['Japanese(Hiragana/Katakana)'] ||
-                              item.Japanese ||
-                              '';
-                            return (
-                              <div
-                                key={index}
-                                className="flex items-center justify-between px-3 py-2 border-b border-black/5 dark:border-white/10 last:border-b-0 hover:bg-gray-50 dark:hover:bg-[#1d2a32]"
-                              >
-                                <div className="flex-1 min-w-0">
-                                  <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                                    {item.English}
-                                  </div>
-                                  <div className="text-xs text-gray-600 dark:text-gray-400 font-japanese">
-                                    {jp}
-                                  </div>
-                                </div>
-                                <button
-                                  onClick={() =>
-                                    addSearchResultToProposed(item)
-                                  }
-                                  className="ml-2 px-2 py-1 rounded text-xs font-medium bg-green-600 text-white hover:bg-green-700 transition-colors"
-                                >
-                                  Add
-                                </button>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      ) : searchQuery && !isSearching ? (
-                        <div className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">
-                          No results for &quot;{searchQuery}&quot;
-                        </div>
-                      ) : (
-                        <div className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">
-                          Search our vocabulary library
-                        </div>
-                      )}
-                    </div>
                   )}
                 </div>
               </div>
