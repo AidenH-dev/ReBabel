@@ -3,6 +3,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
+// Kuromoji dict loading + processing 600+ items needs more than 15s
+export const config = {
+  maxDuration: 60,
+};
+
 const supabase = createClient(
   process.env.NEXT_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!

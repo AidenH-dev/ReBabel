@@ -3,6 +3,11 @@ import { createRateLimiter } from '@/lib/rateLimit';
 import { generateQuestions } from '@/lib/conjugation';
 import { categorizeWord } from '@/lib/kuromoji-categorize';
 
+// Kuromoji dict loading on cold start needs more than 15s
+export const config = {
+  maxDuration: 30,
+};
+
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 20 });
 
 export default withApiAuthRequired(async function handler(req, res) {
@@ -19,11 +24,9 @@ export default withApiAuthRequired(async function handler(req, res) {
   const ip =
     req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
   if (!limiter.check(ip)) {
-    return res
-      .status(429)
-      .json({
-        error: "You're sending requests too quickly. Please wait a moment.",
-      });
+    return res.status(429).json({
+      error: "You're sending requests too quickly. Please wait a moment.",
+    });
   }
 
   try {
@@ -80,12 +83,10 @@ export default withApiAuthRequired(async function handler(req, res) {
     }
 
     if (enrichedItems.length === 0) {
-      return res
-        .status(400)
-        .json({
-          error:
-            'No valid items after processing. Could not determine verb groups.',
-        });
+      return res.status(400).json({
+        error:
+          'No valid items after processing. Could not determine verb groups.',
+      });
     }
 
     const questions = generateQuestions(
@@ -97,12 +98,10 @@ export default withApiAuthRequired(async function handler(req, res) {
     );
 
     if (questions.length === 0) {
-      return res
-        .status(400)
-        .json({
-          error:
-            'No questions could be generated from the selected items and forms.',
-        });
+      return res.status(400).json({
+        error:
+          'No questions could be generated from the selected items and forms.',
+      });
     }
 
     return res.status(200).json({
