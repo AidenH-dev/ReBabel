@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { log } from '@/lib/logger';
 
 /**
@@ -7,8 +7,7 @@ import { log } from '@/lib/logger';
  * Called on every authenticated request before passing user ID to RPC functions.
  */
 export async function resolveUserId(auth0Sub: string, email?: string | null): Promise<string> {
-  const { data, error } = await supabaseAdmin
-    .schema('v1_kvs_rebabel')
+  const { data, error } = await supabaseKvs
     .rpc('resolve_user_identity', {
       p_auth_provider_id: auth0Sub,
       p_auth_provider: 'auth0',

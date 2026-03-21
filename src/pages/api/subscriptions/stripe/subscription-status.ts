@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { withLogger } from '@/lib/withLogger';
 
@@ -56,13 +56,7 @@ async function handler(req: any, res: NextApiResponse<ApiResponse>) {
   const userId = await resolveUserId(session.user.sub);
 
   try {
-    const supabase = createClient(
-      process.env.NEXT_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('get_subscription_by_user', { user_id: userId });
 
     if (error) throw error;

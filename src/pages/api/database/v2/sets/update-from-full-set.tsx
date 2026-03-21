@@ -1,14 +1,8 @@
 // pages/api/database/v2/sets/update-from-full-set.ts
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 // Types
 type EntityType = 'set' | 'grammar' | 'vocab';
@@ -81,8 +75,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     const updatesJson = JSON.stringify(updates);
 
     // Call the appropriate Supabase function WITH SCHEMA SPECIFIED
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')  // ← ADDED THIS LINE
+    const { data, error } = await supabaseKvs
       .rpc(functionName, {
         entity_uuid: entityId,
         json_updates: updatesJson,

@@ -1,16 +1,10 @@
 // pages/api/database/v2/sets/add-item-to-set.ts
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface AddItemRequest {
   set_id: string;
@@ -93,8 +87,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     const itemJsonString = JSON.stringify(item_data);
 
     // Call the PostgreSQL function directly via RPC
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('add_item_to_set', {
         set_uuid: set_id,
         item_type: item_type,

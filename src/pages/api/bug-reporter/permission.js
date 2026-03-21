@@ -1,6 +1,6 @@
 // Implements SPEC-LLM-001
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { withLogger } from '@/lib/withLogger';
 
@@ -22,9 +22,10 @@ export default withApiAuthRequired(
 
     try {
       // Implements SPEC-LLM-001: call check_bug_reporter_permission RPC
-      const { data, error } = await supabaseAdmin
-        .schema('v1_kvs_rebabel')
-        .rpc('check_bug_reporter_permission', { p_user_id: userId });
+      const { data, error } = await supabaseKvs.rpc(
+        'check_bug_reporter_permission',
+        { p_user_id: userId }
+      );
 
       if (error) throw error;
 

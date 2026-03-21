@@ -1,6 +1,6 @@
 import { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { withLogger } from '@/lib/withLogger';
 import type { LoggedRequest } from '@/lib/withLogger';
@@ -34,22 +34,15 @@ async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
   }
 
   try {
-    const supabase = createClient(
-      process.env.NEXT_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-
     // First verify the session belongs to this user
-    const { data: sessionData } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: sessionData } = await supabaseKvs
       .rpc('get_user_stat_session', { p_entity_id: id });
 
     if (!sessionData || sessionData.owner !== userId) {
       return res.status(403).json({ success: false, error: 'Forbidden' });
     }
 
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('append_session_tokens', {
         p_entity_id: id,
         p_tokens_to_add: tokens,

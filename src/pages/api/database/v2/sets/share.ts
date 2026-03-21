@@ -1,15 +1,10 @@
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import crypto from 'crypto';
 import { toSlug } from '@/lib/slug';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
-
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 const EXPIRY_OPTIONS: Record<string, number | null> = {
   '1d': 1,
@@ -92,8 +87,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     }
 
     // Verify the user owns this set
-    const { data: setData, error: setError } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: setData, error: setError } = await supabaseKvs
       .rpc('get_set_with_items_v2', { set_entity_id: setId });
 
     if (setError || !setData) {
@@ -114,8 +108,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     const setTitle = parsed?.set?.title;
 
     if (action === 'revoke') {
-      await supabase
-        .schema('v1_kvs_rebabel')
+      await supabaseKvs
         .rpc('update_set_by_id', {
           entity_uuid: setId,
           json_updates: JSON.stringify({ share_token: '', share_expires_at: '' })
@@ -132,8 +125,7 @@ export default withApiAuthRequired(withLogger(async function handler(
 
     // action === 'generate'
     // Check if a share_token already exists for this set (via RPC, not direct table query)
-    const { data: tokenData } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: tokenData } = await supabaseKvs
       .rpc('get_share_token_for_set', { set_entity_id: setId });
 
     const tokenResult = typeof tokenData === 'string' ? JSON.parse(tokenData) : tokenData;
@@ -154,8 +146,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     let shareToken = '';
     for (let attempt = 0; attempt < MAX_TOKEN_RETRIES; attempt++) {
       const candidate = generateShortToken();
-      const { data: collision } = await supabase
-        .schema('v1_kvs_rebabel')
+      const { data: collision } = await supabaseKvs
         .rpc('get_set_by_share_token', { token: candidate });
       if (!collision) {
         shareToken = candidate;
@@ -185,8 +176,7 @@ export default withApiAuthRequired(withLogger(async function handler(
       expiresAtStr = expiresAt.toISOString();
     }
 
-    const { error: updateError } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { error: updateError } = await supabaseKvs
       .rpc('update_set_by_id', {
         entity_uuid: setId,
         json_updates: JSON.stringify({

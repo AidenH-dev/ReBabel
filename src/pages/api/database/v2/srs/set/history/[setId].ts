@@ -1,13 +1,8 @@
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger, type LoggedRequest } from '@/lib/withLogger';
-
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface ApiResponse {
   success: boolean;
@@ -27,8 +22,7 @@ async function handleGET(req: LoggedRequest, res: NextApiResponse<ApiResponse>, 
     }
 
     // Verify the authenticated user owns this set before returning its history
-    const { data: setData, error: setError } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: setData, error: setError } = await supabaseKvs
       .rpc('get_set_with_items_v2', { set_entity_id: setId });
 
     if (setError || !setData) {
@@ -46,8 +40,7 @@ async function handleGET(req: LoggedRequest, res: NextApiResponse<ApiResponse>, 
       });
     }
 
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('get_set_srs_activity_log', {
         set_id: setId
       });

@@ -1,6 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
@@ -8,11 +8,6 @@ const { categorizeWord } = require('@/lib/kuromoji-categorize');
 export const config = {
   maxDuration: 60,
 };
-
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface AutoCategorizeResponse {
   success: boolean;
@@ -54,8 +49,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     }
 
     // Fetch the full set with items
-    const { data: setData, error: fetchError } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: setData, error: fetchError } = await supabaseKvs
       .rpc('get_set_with_items_v2', { set_entity_id: set_id });
 
     if (fetchError) {
@@ -111,8 +105,7 @@ export default withApiAuthRequired(withLogger(async function handler(
         }
 
         // Update the item's lexical_category via RPC
-        const { error: updateError } = await supabase
-          .schema('v1_kvs_rebabel')
+        const { error: updateError } = await supabaseKvs
           .rpc('update_vocab_entity_by_id', {
             entity_uuid: item.id,
             json_updates: JSON.stringify({
@@ -144,8 +137,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     ).length;
 
     // Mark set as auto-categorized
-    await supabase
-      .schema('v1_kvs_rebabel')
+    await supabaseKvs
       .rpc('update_set_by_id', {
         entity_uuid: set_id,
         json_updates: JSON.stringify({ auto_categorized: 'true' }),

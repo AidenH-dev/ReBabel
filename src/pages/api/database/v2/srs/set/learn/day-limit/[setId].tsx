@@ -1,12 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger, type LoggedRequest } from '@/lib/withLogger';
-
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface DayLimitResponse {
   set_eid: string;
@@ -78,8 +73,7 @@ async function handleGET(req: LoggedRequest, res: NextApiResponse<ApiResponse>) 
     const timezone = (as_of_timezone as string) || 'UTC';
 
     // Call the Supabase RPC function
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('get_set_items_left_count', {
         args: {
           set_eid: setId,

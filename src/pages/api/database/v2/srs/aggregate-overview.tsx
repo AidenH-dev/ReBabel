@@ -1,7 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger, type LoggedRequest } from '@/lib/withLogger';
 
 interface SetData {
@@ -68,18 +68,8 @@ async function handleGET(req: LoggedRequest, res: NextApiResponse, userId: strin
   }
 
   try {
-    const SUPABASE_URL = process.env.NEXT_SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      return res.status(500).json({ success: false, error: 'Server configuration error' });
-    }
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
     // Get all user sets
-    const { data: setsData, error: setsError } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: setsData, error: setsError } = await supabaseKvs
       .rpc('get_user_sets', { user_id: userId.trim() });
 
     if (setsError) {
@@ -128,8 +118,7 @@ async function handleGET(req: LoggedRequest, res: NextApiResponse, userId: strin
       const setTitle = set.data?.title || 'Untitled Set';
       const setType = set.data?.set_type || null;
 
-      const { data: setData, error: setError } = await supabase
-        .schema('v1_kvs_rebabel')
+      const { data: setData, error: setError } = await supabaseKvs
         .rpc('get_set_items_srs_status_full', { set_id: setId });
 
       if (setError) {

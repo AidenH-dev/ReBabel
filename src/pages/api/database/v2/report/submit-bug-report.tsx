@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { notifyBugReport } from '@/lib/webhooks/peko';
 import { notifySlackBugReport } from '@/lib/webhooks/slack';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 5 });
@@ -84,24 +84,8 @@ async function handlePOST(
       form_json: body.form_json
     };
 
-    // Environment variables for configuration
-    const SUPABASE_URL = process.env.NEXT_SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      req.log.error('config.missing', { error: 'Missing Supabase environment variables' });
-      return res.status(500).json({
-        success: false,
-        error: 'Server configuration error'
-      });
-    }
-
-    // Initialize Supabase client with service role key
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
     // Call the RPC function to create bug report
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('create_user_bug_report_v1', {
         data: bugReportData
       });

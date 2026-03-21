@@ -1,6 +1,6 @@
 // Implements SPEC-LLM-002
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
 import { withLogger } from '@/lib/withLogger';
@@ -188,9 +188,10 @@ export default withApiAuthRequired(
 
     try {
       // Implements SPEC-LLM-002: check bug reporter permission before proceeding
-      const { data: allowed, error: permError } = await supabaseAdmin
-        .schema('v1_kvs_rebabel')
-        .rpc('check_bug_reporter_permission', { p_user_id: userId });
+      const { data: allowed, error: permError } = await supabaseKvs.rpc(
+        'check_bug_reporter_permission',
+        { p_user_id: userId }
+      );
 
       if (permError) throw permError;
 

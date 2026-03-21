@@ -1,15 +1,10 @@
 // Implements SPEC-LLM-006 (Set Item Reordering — user-facing API route)
 // pages/api/database/v2/sets/reorder-items.ts
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
-
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface ReorderItemsRequest {
   setId: string;
@@ -49,8 +44,7 @@ export default withApiAuthRequired(withLogger(async function handler(
 
     // Ownership check — admins can reorder any set
     if (!isAdmin) {
-      const { data: setData, error: setError } = await supabase
-        .schema('v1_kvs_rebabel')
+      const { data: setData, error: setError } = await supabaseKvs
         .rpc('get_set_with_items_v2', { set_entity_id: setId });
 
       if (setError || !setData) {
@@ -62,8 +56,7 @@ export default withApiAuthRequired(withLogger(async function handler(
       }
     }
 
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('reorder_set_items', { set_id: setId, item_ids: itemIds });
 
     if (error) {

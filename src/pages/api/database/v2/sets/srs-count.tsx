@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
 
 interface ApiResponse {
@@ -12,22 +12,8 @@ interface ApiResponse {
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>, userId: string) {
   try {
-    const SUPABASE_URL = process.env.NEXT_SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      (req as any).log?.error('config.missing', { error: 'Missing Supabase environment variables' });
-      return res.status(500).json({
-        success: false,
-        error: 'Server configuration error'
-      });
-    }
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
     // Get user sets and count those with srs_enabled = 'true'
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('get_user_sets', {
         user_id: userId.trim()
       });

@@ -1,6 +1,6 @@
 import { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { withLogger } from '@/lib/withLogger';
 import type { LoggedRequest } from '@/lib/withLogger';
@@ -23,11 +23,6 @@ async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
   const userId = await resolveUserId(session.user.sub);
 
   try {
-    const supabase = createClient(
-      process.env.NEXT_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-
     // Get today's date boundaries in UTC
     const todayStart = new Date();
     todayStart.setUTCHours(0, 0, 0, 0);
@@ -35,8 +30,7 @@ async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
     todayEnd.setUTCHours(23, 59, 59, 999);
 
     // Find all session entities owned by this user that were created today
-    const { data: ownerRows, error: ownerError } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: ownerRows, error: ownerError } = await supabaseKvs
       .from('user_stats')
       .select('entity')
       .eq('property', 'owner')
@@ -56,8 +50,7 @@ async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
     }
 
     // Filter to only 'translate' session types (conjugation is unlimited)
-    const { data: sessionRows, error: sessionError } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: sessionRows, error: sessionError } = await supabaseKvs
       .from('user_stats')
       .select('entity')
       .eq('property', 'session_type')

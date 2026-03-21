@@ -1,14 +1,8 @@
 // pages/api/database/v2/srs/item/create-entry/[itemId].ts
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger, type LoggedRequest } from '@/lib/withLogger';
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface CreateSrsEntryRequest {
   srs_level: number;
@@ -55,8 +49,7 @@ async function handlePOST(
     const { srs_level, scope } = body;
 
     // Call the PostgreSQL function via RPC
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('create_item_srs_entry', {
         item_id: itemId,
         data: {

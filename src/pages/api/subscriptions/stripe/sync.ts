@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { withLogger } from '@/lib/withLogger';
 
@@ -57,11 +57,6 @@ async function handler(req: any, res: NextApiResponse<ApiResponse>) {
 
     req.log.info('subscription.synced', { status: subscription.status });
 
-    const supabase = createClient(
-      process.env.NEXT_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-
     // Handle both old format (current_period_start) and new format (current_period.start)
     const periodStart = subscription.current_period?.start
       || subscription.current_period_start
@@ -85,8 +80,7 @@ async function handler(req: any, res: NextApiResponse<ApiResponse>) {
     };
 
 
-    const { error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { error } = await supabaseKvs
       .rpc('upsert_subscription', { json_input: subscriptionData });
 
     if (error) {

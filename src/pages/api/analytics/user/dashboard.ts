@@ -2,7 +2,7 @@
 // GET /api/analytics/user/dashboard?timezone=America/Los_Angeles
 import { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { withLogger } from '@/lib/withLogger';
 import type { LoggedRequest } from '@/lib/withLogger';
@@ -35,13 +35,7 @@ async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
   }
 
   try {
-    const supabase = createClient(
-      process.env.NEXT_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('get_user_dashboard_stats', {
         p_owner: userId,
         p_timezone: timezone,

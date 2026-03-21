@@ -1,15 +1,10 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
 import { withLogger } from '@/lib/withLogger';
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
-
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
 
 async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -36,13 +31,11 @@ async function handler(req, res) {
       return res.status(400).json({ error: 'Device token is required' });
     }
 
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
-      .rpc('register_device_token', {
-        p_user_id: userId,
-        p_token: deviceToken,
-        p_platform: platform,
-      });
+    const { data, error } = await supabaseKvs.rpc('register_device_token', {
+      p_user_id: userId,
+      p_token: deviceToken,
+      p_platform: platform,
+    });
 
     if (error) {
       req.log.error('rpc.failed', {

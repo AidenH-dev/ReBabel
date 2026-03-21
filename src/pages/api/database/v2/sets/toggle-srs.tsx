@@ -1,13 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface ToggleSrsRequest {
   setId: string;
@@ -73,8 +67,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     }
 
     // Call the PostgreSQL function via RPC
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('toggle_set_srs_enabled', {
         set_uuid: setId,
         enabled: srsEnabled

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { notifySubscription, notifyError } from '@/lib/webhooks/peko';
 import { notifySlackSubscription, notifySlackError } from '@/lib/webhooks/slack';
 import { resolveUserId } from '@/lib/resolveUserId';
@@ -15,8 +15,6 @@ function getRawBody(req: NextApiRequest): Promise<Buffer> {
     req.on('error', reject);
   });
 }
-
-type SupabaseClientAny = SupabaseClient<any, any, any>;
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -48,18 +46,13 @@ export default withLogger(async function handler(req, res: NextApiResponse) {
     return res.status(400).json({ error: 'Webhook signature verification failed' });
   }
 
-  const supabase = createClient(
-    process.env.NEXT_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
         if (session.mode === 'subscription' && session.subscription) {
           const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
-          await handleSubscriptionUpdate(supabase, subscription, event.id);
+          await handleSubscriptionUpdate(subscription, event.id);
           req.log.info('subscription.state_change', { event: event.type, userId: subscription.metadata.rebabel_user_id || subscription.metadata.auth0_user_id });
           const subData = {
             userId: subscription.metadata.auth0_user_id,
@@ -78,7 +71,7 @@ export default withLogger(async function handler(req, res: NextApiResponse) {
       case 'customer.subscription.created':
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription;
-        await handleSubscriptionUpdate(supabase, subscription, event.id);
+        await handleSubscriptionUpdate(subscription, event.id);
         req.log.info('subscription.state_change', { event: event.type, userId: subscription.metadata.rebabel_user_id || subscription.metadata.auth0_user_id });
         const notifyType = event.type === 'customer.subscription.created' ? 'created' : 'updated' as const;
         const subEventData = {
@@ -96,7 +89,7 @@ export default withLogger(async function handler(req, res: NextApiResponse) {
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
-        await handleSubscriptionCanceled(supabase, subscription, event.id);
+        await handleSubscriptionCanceled(subscription, event.id);
         req.log.info('subscription.state_change', { event: event.type, userId: subscription.metadata.rebabel_user_id || subscription.metadata.auth0_user_id });
         const cancelData = {
           userId: subscription.metadata.auth0_user_id,
@@ -125,7 +118,7 @@ export default withLogger(async function handler(req, res: NextApiResponse) {
           notifySubscription('payment_failed', failData);
           notifySlackSubscription('payment_failed', failData);
         }
-        await handlePaymentFailed(supabase, invoice, event.id);
+        await handlePaymentFailed(invoice, event.id);
         break;
       }
     }
@@ -141,7 +134,7 @@ export default withLogger(async function handler(req, res: NextApiResponse) {
   }
 });
 
-async function handleSubscriptionUpdate(supabase: SupabaseClientAny, subscription: Stripe.Subscription, eventId: string) {
+async function handleSubscriptionUpdate(subscription: Stripe.Subscription, eventId: string) {
   // Resolve from rebabel_user_id (preferred) or auth0_user_id (legacy)
   const rebabelUserId = subscription.metadata.rebabel_user_id;
   const auth0UserId = subscription.metadata.auth0_user_id;
@@ -179,8 +172,7 @@ async function handleSubscriptionUpdate(supabase: SupabaseClientAny, subscriptio
     updated_at: new Date().toISOString(),
   };
 
-  const { error } = await supabase
-    .schema('v1_kvs_rebabel')
+  const { error } = await supabaseKvs
     .rpc('upsert_subscription', { json_input: subscriptionData });
 
   if (error) {
@@ -189,7 +181,7 @@ async function handleSubscriptionUpdate(supabase: SupabaseClientAny, subscriptio
   }
 }
 
-async function handleSubscriptionCanceled(supabase: SupabaseClientAny, subscription: Stripe.Subscription, eventId: string) {
+async function handleSubscriptionCanceled(subscription: Stripe.Subscription, eventId: string) {
   const sub = subscription as any;
   const rebabelUserId = subscription.metadata.rebabel_user_id;
   const auth0UserId = subscription.metadata.auth0_user_id;
@@ -208,8 +200,7 @@ async function handleSubscriptionCanceled(supabase: SupabaseClientAny, subscript
     updated_at: new Date().toISOString(),
   };
 
-  const { error } = await supabase
-    .schema('v1_kvs_rebabel')
+  const { error } = await supabaseKvs
     .rpc('upsert_subscription', { json_input: subscriptionData });
 
   if (error) {
@@ -218,7 +209,7 @@ async function handleSubscriptionCanceled(supabase: SupabaseClientAny, subscript
   }
 }
 
-async function handlePaymentFailed(supabase: SupabaseClientAny, invoice: Stripe.Invoice, eventId: string) {
+async function handlePaymentFailed(invoice: Stripe.Invoice, eventId: string) {
   const inv = invoice as any;
   if (inv.subscription) {
     // Get subscription to find owner
@@ -236,8 +227,7 @@ async function handlePaymentFailed(supabase: SupabaseClientAny, invoice: Stripe.
       updated_at: new Date().toISOString(),
     };
 
-    const { error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { error } = await supabaseKvs
       .rpc('upsert_subscription', { json_input: subscriptionData });
 
     if (error) {

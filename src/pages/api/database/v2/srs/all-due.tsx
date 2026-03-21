@@ -1,7 +1,7 @@
 import type { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger, type LoggedRequest } from '@/lib/withLogger';
 
 interface SrsData {
@@ -39,8 +39,7 @@ async function handleGET(req: LoggedRequest, res: NextApiResponse<ApiResponse>, 
   try {
     const { countOnly } = req.query;
 
-    const { data, error } = await supabaseAdmin
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('get_all_due_items', {
         p_owner: userId.trim(),
         p_count_only: countOnly === 'true'

@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { createRateLimiter } from '@/lib/rateLimit';
 import { resolveUserId } from '@/lib/resolveUserId';
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
@@ -115,24 +114,8 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
       set_type: setType
     };
 
-    // Environment variables for configuration
-    const SUPABASE_URL = process.env.NEXT_SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      (req as any).log?.error('config.missing', { error: 'Missing Supabase environment variables' });
-      return res.status(500).json({
-        success: false,
-        error: 'Server configuration error'
-      });
-    }
-
-    // Initialize Supabase client with service role key
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
     // 1) Insert set
-    const setRpc = await supabase
-      .schema('v1_kvs_rebabel')
+    const setRpc = await supabaseKvs
       .rpc('insert_json_to_set', {
         json_array_input: JSON.stringify([updatedSet])
       });
@@ -177,8 +160,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
     // 3) Insert vocabulary items if any
     let vocabEntityIds: string[] = [];
     if (vocabItems.length > 0) {
-      const vocabRpc = await supabase
-        .schema('v1_kvs_rebabel')
+      const vocabRpc = await supabaseKvs
         .rpc('insert_json_to_kb_vocab', {
           json_array_input: JSON.stringify(vocabItems)
         });
@@ -206,8 +188,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
     // 4) Insert grammar items if any
     let grammarEntityIds: string[] = [];
     if (grammarItems.length > 0) {
-      const grammarRpc = await supabase
-        .schema('v1_kvs_rebabel')
+      const grammarRpc = await supabaseKvs
         .rpc('insert_json_to_kb_grammar', {
           json_array_input: JSON.stringify(grammarItems)
         });
@@ -254,8 +235,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
     }
 
     // 6) Create relations using the v3 function
-    const relationRpc = await supabase
-      .schema('v1_kvs_rebabel')
+    const relationRpc = await supabaseKvs
       .rpc('create_relations_from_set_group_v3', {
         eid_set: setEntityId,
         items: relationsArray
@@ -281,8 +261,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
           for (const { item, entityId } of uncategorizedVocab) {
             const result = await categorizeWord(item.kana, item.kanji);
             if (result && result.lexical_category) {
-              await supabase
-                .schema('v1_kvs_rebabel')
+              await supabaseKvs
                 .rpc('update_vocab_entity_by_id', {
                   entity_uuid: entityId,
                   json_updates: JSON.stringify({ lexical_category: result.lexical_category }),
@@ -290,8 +269,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
             }
           }
           // Mark set as auto-categorized
-          await supabase
-            .schema('v1_kvs_rebabel')
+          await supabaseKvs
             .rpc('update_set_by_id', {
               entity_uuid: setEntityId,
               json_updates: JSON.stringify({ auto_categorized: 'true' }),
@@ -364,8 +342,7 @@ export default withApiAuthRequired(withLogger(async function handler(req, res) {
     case 'POST': {
       // Enforce 1000-set account cap
       const userId = await resolveUserId(session.user.sub);
-      const { data: setCount } = await supabaseAdmin
-        .schema('v1_kvs_rebabel')
+      const { data: setCount } = await supabaseKvs
         .rpc('get_user_set_count', { p_user_id: userId });
       if ((setCount ?? 0) >= 1000) {
         return res.status(403).json({

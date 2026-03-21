@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createClient } from '@supabase/supabase-js';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
 
 interface BugReportResponse {
@@ -34,21 +34,6 @@ async function handleGET(
       });
     }
 
-    // Environment variables for configuration
-    const SUPABASE_URL = process.env.NEXT_SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      req.log.error('config.missing', { error: 'Missing Supabase environment variables' });
-      return res.status(500).json({
-        success: false,
-        error: 'Server configuration error'
-      });
-    }
-
-    // Initialize Supabase client with service role key
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
     // Get query parameters for filtering
     const { start_time, end_time } = req.query;
 
@@ -60,8 +45,7 @@ async function handleGET(
     };
 
     // Call the RPC function to retrieve bug reports
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('get_admin_info_entities_by_time_range', {
         data: rpcParams
       });

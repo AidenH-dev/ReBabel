@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { withLogger } from '@/lib/withLogger';
 
@@ -31,14 +31,8 @@ async function handler(req: any, res: NextApiResponse<ApiResponse>) {
   const userEmail = session.user.email;
 
   try {
-    const supabase = createClient(
-      process.env.NEXT_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-
     // Check if customer already exists
-    const { data: existingCustomerId } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: existingCustomerId } = await supabaseKvs
       .rpc('get_customer_id_by_user', { user_id: userId });
 
     let customerId = existingCustomerId;

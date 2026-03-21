@@ -1,7 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { resolveUserId } from '@/lib/resolveUserId';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
 
 interface SetData {
@@ -29,21 +29,8 @@ interface ApiResponse {
 
 async function handleGET(req: any, res: NextApiResponse<ApiResponse>, userId: string) {
   try {
-    const SUPABASE_URL = process.env.NEXT_SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      return res.status(500).json({
-        success: false,
-        error: 'Server configuration error'
-      });
-    }
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
     // Get all user sets
-    const { data: setsData, error: setsError } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: setsData, error: setsError } = await supabaseKvs
       .rpc('get_user_sets', {
         user_id: userId.trim()
       });
@@ -80,8 +67,7 @@ async function handleGET(req: any, res: NextApiResponse<ApiResponse>, userId: st
       const isSrsEnabled = set.data?.srs_enabled === 'true';
 
       // Use get_set_with_items_v2 to get all items in the set
-      const { data: setData, error: setError } = await supabase
-        .schema('v1_kvs_rebabel')
+      const { data: setData, error: setError } = await supabaseKvs
         .rpc('get_set_with_items_v2', {
           set_entity_id: setId
         });
@@ -108,8 +94,7 @@ async function handleGET(req: any, res: NextApiResponse<ApiResponse>, userId: st
         // Count active SRS items only for SRS-enabled sets
         if (isSrsEnabled) {
           // Fetch SRS status for this set
-          const { data: srsData, error: srsError } = await supabase
-            .schema('v1_kvs_rebabel')
+          const { data: srsData, error: srsError } = await supabaseKvs
             .rpc('get_set_items_srs_status_full', {
               set_id: setId
             });

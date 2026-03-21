@@ -10,7 +10,7 @@
 // rejects any session not in 'initiated' state.
 import { NextApiResponse } from 'next';
 import { getSession } from '@auth0/nextjs-auth0';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { withLogger } from '@/lib/withLogger';
 import type { LoggedRequest } from '@/lib/withLogger';
@@ -37,19 +37,13 @@ export default withLogger(async function handler(req: LoggedRequest, res: NextAp
   }
 
   try {
-    const supabase = createClient(
-      process.env.NEXT_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-
     // Attempt auth check — if session cookie is present, verify ownership.
     // If cookie is missing (sendBeacon teardown), skip auth and rely on
     // UUID unguessability + RPC state check.
     const session = await getSession(req, res).catch(() => null);
     if (session?.user?.sub) {
       const userId = await resolveUserId(session.user.sub);
-      const { data: sessionData } = await supabase
-        .schema('v1_kvs_rebabel')
+      const { data: sessionData } = await supabaseKvs
         .rpc('get_user_stat_session', { p_entity_id: id });
 
       if (sessionData && sessionData.owner !== userId) {
@@ -57,8 +51,7 @@ export default withLogger(async function handler(req: LoggedRequest, res: NextAp
       }
     }
 
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('mark_session_hung', { p_entity_id: id });
 
     if (error) {

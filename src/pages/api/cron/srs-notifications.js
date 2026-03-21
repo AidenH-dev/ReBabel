@@ -1,13 +1,8 @@
 import crypto from 'crypto';
 import http2 from 'http2';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
 import { log } from '@/lib/logger';
-
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
 
 // SRS level time factors in milliseconds
 const SRS_TIME_FACTORS = {
@@ -41,9 +36,10 @@ function isItemNewlyDue(item, lastNotifiedAt) {
 async function getNewlyDueCount(userId, lastNotifiedAt) {
   try {
     // Get user's sets
-    const { data: setsData, error: setsError } = await supabase
-      .schema('v1_kvs_rebabel')
-      .rpc('get_user_sets', { user_id: userId.trim() });
+    const { data: setsData, error: setsError } = await supabaseKvs.rpc(
+      'get_user_sets',
+      { user_id: userId.trim() }
+    );
 
     if (setsError || !setsData) return 0;
 
@@ -70,9 +66,10 @@ async function getNewlyDueCount(userId, lastNotifiedAt) {
 
     // Check each set for newly due items
     for (const set of srsEnabledSets) {
-      const { data: setData, error: setError } = await supabase
-        .schema('v1_kvs_rebabel')
-        .rpc('get_set_items_srs_status_full', { set_id: set.entity_id });
+      const { data: setData, error: setError } = await supabaseKvs.rpc(
+        'get_set_items_srs_status_full',
+        { set_id: set.entity_id }
+      );
 
       if (setError || !setData?.items) continue;
 
@@ -201,9 +198,9 @@ export default withLogger(async function handler(req, res) {
 
   try {
     // Get users with due items from Supabase
-    const { data: users, error } = await supabase
-      .schema('v1_kvs_rebabel')
-      .rpc('get_users_with_due_items');
+    const { data: users, error } = await supabaseKvs.rpc(
+      'get_users_with_due_items'
+    );
 
     if (error) {
       req.log.error('rpc.failed', {
@@ -247,8 +244,7 @@ export default withLogger(async function handler(req, res) {
       // Get last_notified_at if not included in RPC response
       let lastNotifiedAt = user.last_notified_at;
       if (!lastNotifiedAt) {
-        const { data: prefData } = await supabase
-          .schema('v1_kvs_rebabel')
+        const { data: prefData } = await supabaseKvs
           .from('notification_preferences')
           .select('last_notified_at')
           .eq('user_id', user.user_id)
@@ -306,8 +302,7 @@ export default withLogger(async function handler(req, res) {
 
         // Update last_notified_at for this user
         if (result.success) {
-          await supabase
-            .schema('v1_kvs_rebabel')
+          await supabaseKvs
             .from('notification_preferences')
             .update({ last_notified_at: new Date().toISOString() })
             .eq('user_id', user.user_id);

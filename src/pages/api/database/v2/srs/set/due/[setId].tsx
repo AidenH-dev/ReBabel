@@ -1,12 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger, type LoggedRequest } from '@/lib/withLogger';
-
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface SrsData {
   scope: string;
@@ -107,8 +102,7 @@ async function handleGET(req: LoggedRequest, res: NextApiResponse<ApiResponse>) 
       });
     }
 
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('get_set_items_srs_status_full', {
         set_id: setId
       });

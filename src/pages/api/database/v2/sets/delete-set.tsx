@@ -1,14 +1,8 @@
 // pages/api/database/v2/sets/delete-set.ts
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface DeleteSetRequest {
   set_id: string;
@@ -69,8 +63,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     const { set_id, also_delete_items = false } = body;
 
     // Call the PostgreSQL function directly via RPC
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('delete_set_completely', {
         set_uuid: set_id,
         also_delete_items: also_delete_items,

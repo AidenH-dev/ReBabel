@@ -1,13 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 // Type definitions for the response structure
 interface ExampleSentence {
@@ -117,8 +111,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
     }
 
     // Call the PostgreSQL function via RPC
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('get_set_with_items_v2', {
         set_entity_id: setId.trim()
       });

@@ -1,13 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { createRateLimiter } from '@/lib/rateLimit';
 import { withLogger } from '@/lib/withLogger';
-
-// Public endpoint — no withApiAuthRequired
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 // Rate limit: 30 requests per minute per IP
 const limiter = createRateLimiter({ windowMs: 60 * 1000, maxRequests: 30 });
@@ -50,8 +44,7 @@ export default withLogger(async function handler(
       });
     }
 
-    const { data, error } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error } = await supabaseKvs
       .rpc('get_set_by_share_token', { token: token.trim() });
 
     if (error) {

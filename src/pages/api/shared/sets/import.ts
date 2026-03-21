@@ -1,17 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { supabaseKvs } from '@/lib/supabaseKvs';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
 import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
-
-const supabase = createClient(
-  process.env.NEXT_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface ApiResponse {
   success: boolean;
@@ -57,8 +52,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     }
 
     // Fetch the shared set
-    const { data, error: fetchError } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data, error: fetchError } = await supabaseKvs
       .rpc('get_set_by_share_token', { token: shareToken.trim() });
 
     if (fetchError || !data) {
@@ -90,8 +84,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     const userId = await resolveUserId(session.user.sub);
 
     // Enforce 1000-set account cap
-    const { data: setCount } = await supabase
-      .schema('v1_kvs_rebabel')
+    const { data: setCount } = await supabaseKvs
       .rpc('get_user_set_count', { p_user_id: userId });
     if ((setCount ?? 0) >= 1000) {
       return res.status(403).json({
@@ -104,8 +97,7 @@ export default withApiAuthRequired(withLogger(async function handler(
 
     // Check for duplicate import — has this user already imported this set?
     if (sourceEntityId) {
-      const { data: dupData } = await supabase
-        .schema('v1_kvs_rebabel')
+      const { data: dupData } = await supabaseKvs
         .rpc('check_duplicate_import', {
           p_user_id: userId,
           p_source_entity_id: sourceEntityId
@@ -141,8 +133,7 @@ export default withApiAuthRequired(withLogger(async function handler(
       newSet.imported_from = sourceEntityId;
     }
 
-    const setRpc = await supabase
-      .schema('v1_kvs_rebabel')
+    const setRpc = await supabaseKvs
       .rpc('insert_json_to_set', {
         json_array_input: JSON.stringify([newSet])
       });
@@ -210,8 +201,7 @@ export default withApiAuthRequired(withLogger(async function handler(
 
     let vocabEntityIds: string[] = [];
     if (vocabItems.length > 0) {
-      const vocabRpc = await supabase
-        .schema('v1_kvs_rebabel')
+      const vocabRpc = await supabaseKvs
         .rpc('insert_json_to_kb_vocab', {
           json_array_input: JSON.stringify(vocabItems)
         });
@@ -230,8 +220,7 @@ export default withApiAuthRequired(withLogger(async function handler(
 
     let grammarEntityIds: string[] = [];
     if (grammarItems.length > 0) {
-      const grammarRpc = await supabase
-        .schema('v1_kvs_rebabel')
+      const grammarRpc = await supabaseKvs
         .rpc('insert_json_to_kb_grammar', {
           json_array_input: JSON.stringify(grammarItems)
         });
@@ -266,8 +255,7 @@ export default withApiAuthRequired(withLogger(async function handler(
     }
 
     if (relationsArray.length > 0) {
-      const relationRpc = await supabase
-        .schema('v1_kvs_rebabel')
+      const relationRpc = await supabaseKvs
         .rpc('create_relations_from_set_group_v3', {
           eid_set: newSetEntityId,
           items: relationsArray
@@ -294,8 +282,7 @@ export default withApiAuthRequired(withLogger(async function handler(
             for (const { item, entityId } of uncategorized) {
               const result = await categorizeWord(item.kana, item.kanji);
               if (result && result.lexical_category) {
-                await supabase
-                  .schema('v1_kvs_rebabel')
+                await supabaseKvs
                   .rpc('update_vocab_entity_by_id', {
                     entity_uuid: entityId,
                     json_updates: JSON.stringify({ lexical_category: result.lexical_category }),
@@ -303,8 +290,7 @@ export default withApiAuthRequired(withLogger(async function handler(
               }
             }
             // Mark set as auto-categorized
-            await supabase
-              .schema('v1_kvs_rebabel')
+            await supabaseKvs
               .rpc('update_set_by_id', {
                 entity_uuid: newSetEntityId,
                 json_updates: JSON.stringify({ auto_categorized: 'true' }),
