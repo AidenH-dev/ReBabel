@@ -59,6 +59,17 @@ function godanStem(kana, stemType) {
   return base + map[stemType];
 }
 
+// ─── Special godan verb exceptions ──────────────────────────────
+// Honorific ある-verbs: masu-form uses い-stem instead of り-stem
+// e.g., いらっしゃる → いらっしゃいます (not いらっしゃります)
+const HONORIFIC_ARU_VERBS = new Set([
+  'いらっしゃる',
+  'おっしゃる',
+  'くださる',
+  'なさる',
+  'ござる',
+]);
+
 // ─── Verb conjugation ────────────────────────────────────────────
 function conjugateVerb(kana, verbGroup, form) {
   // Handle する compounds
@@ -89,6 +100,11 @@ function conjugateGodan(kana, form) {
   const ending = kana.slice(-1);
   const base = kana.slice(0, -1);
   const isIku = kana === 'いく' || kana === 'ゆく';
+  const isAru = kana === 'ある';
+  const isHonorificAru = HONORIFIC_ARU_VERBS.has(kana);
+
+  // Honorific ある-verbs use い-stem for masu/tai forms instead of り-stem
+  const iStem = isHonorificAru ? base + 'い' : godanStem(kana, 'i');
 
   // Helper: get ta-form for tara conditional
   const taForm = () => {
@@ -102,30 +118,33 @@ function conjugateGodan(kana, form) {
 
     // Plain forms
     case 'nai':
+      // ある → ない (not あらない)
+      if (isAru) return simple('ない');
       return simple(godanStem(kana, 'a') + 'ない');
     case 'ta':
       return simple(taForm());
     case 'nakatta':
+      if (isAru) return simple('なかった');
       return simple(godanStem(kana, 'a') + 'なかった');
     case 'te':
       if (isIku) return simple('いって');
       return simple(base + (GODAN_TE_MAP[ending] || 'て'));
 
-    // Polite forms
+    // Polite forms (use iStem for honorific ある-verbs)
     case 'masu':
-      return simple(godanStem(kana, 'i') + 'ます');
+      return simple(iStem + 'ます');
     case 'masen':
-      return simple(godanStem(kana, 'i') + 'ません');
+      return simple(iStem + 'ません');
     case 'mashita':
-      return simple(godanStem(kana, 'i') + 'ました');
+      return simple(iStem + 'ました');
     case 'masendeshita':
-      return simple(godanStem(kana, 'i') + 'ませんでした');
+      return simple(iStem + 'ませんでした');
 
     // Desire
     case 'tai':
-      return simple(godanStem(kana, 'i') + 'たい');
+      return simple(iStem + 'たい');
     case 'takunai':
-      return simple(godanStem(kana, 'i') + 'たくない');
+      return simple(iStem + 'たくない');
 
     // Advanced
     case 'potential':
@@ -189,9 +208,15 @@ function conjugateIchidan(kana, form) {
       return simple(stem + 'たくない');
 
     // Advanced
-    case 'potential':
-      return simple(stem + 'られる');
+    case 'potential': {
+      // Accept both full (られる) and short (れる) potential forms
+      const full = stem + 'られる';
+      const short = stem + 'れる';
+      return { answer: full, acceptableAnswers: [full, short] };
+    }
     case 'imperative':
+      // くれる → くれ (not くれろ) -- the only ichidan verb with this exception
+      if (kana === 'くれる') return simple('くれ');
       return simple(stem + 'ろ');
     case 'volitional':
       return simple(stem + 'よう');
