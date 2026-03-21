@@ -301,6 +301,13 @@ export default withApiAuthRequired(async function handler(
                   });
               }
             }
+            // Mark set as auto-categorized
+            await supabase
+              .schema('v1_kvs_rebabel')
+              .rpc('update_set_by_id', {
+                entity_uuid: newSetEntityId,
+                json_updates: JSON.stringify({ auto_categorized: 'true' }),
+              });
           } catch (catError) {
             console.error('Auto-categorization error during import:', catError);
           }
