@@ -31,11 +31,6 @@ export default function CSVColumnMapper({
       optional: [
         { key: 'kanji', label: 'Kanji', description: 'Kanji characters' },
         {
-          key: 'lexical_category',
-          label: 'Category',
-          description: 'Part of speech (noun, verb, etc.)',
-        },
-        {
           key: 'example_sentences',
           label: 'Example Sentences',
           description: 'Usage examples',

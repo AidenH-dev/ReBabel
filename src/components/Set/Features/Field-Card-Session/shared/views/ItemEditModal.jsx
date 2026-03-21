@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import CustomSelect from '@/components/ui/CustomSelect';
 
 export default function ItemEditModal({
   item,
@@ -117,26 +118,24 @@ export default function ItemEditModal({
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Lexical Category
                   </label>
-                  <select
+                  <CustomSelect
                     value={formData.lexical_category || ''}
-                    onChange={(e) =>
-                      handleChange('lexical_category', e.target.value)
-                    }
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
-                  >
-                    <option value="">Uncategorized</option>
-                    <option value="noun">Noun</option>
-                    <option value="verb">Verb</option>
-                    <option value="i-adjective">I-Adjective</option>
-                    <option value="na-adjective">Na-Adjective</option>
-                    <option value="adverb">Adverb</option>
-                    <option value="particle">Particle</option>
-                    <option value="counter">Counter</option>
-                    <option value="conjunction">Conjunction</option>
-                    <option value="pronoun">Pronoun</option>
-                    <option value="expression">Expression</option>
-                    <option value="interjection">Interjection</option>
-                  </select>
+                    onChange={(val) => handleChange('lexical_category', val)}
+                    options={[
+                      { value: '', label: 'Uncategorized' },
+                      { value: 'noun', label: 'Noun' },
+                      { value: 'verb', label: 'Verb' },
+                      { value: 'i-adjective', label: 'I-Adjective' },
+                      { value: 'na-adjective', label: 'Na-Adjective' },
+                      { value: 'adverb', label: 'Adverb' },
+                      { value: 'particle', label: 'Particle' },
+                      { value: 'counter', label: 'Counter' },
+                      { value: 'conjunction', label: 'Conjunction' },
+                      { value: 'pronoun', label: 'Pronoun' },
+                      { value: 'expression', label: 'Expression' },
+                      { value: 'interjection', label: 'Interjection' },
+                    ]}
+                  />
                 </div>
               </>
             ) : (
