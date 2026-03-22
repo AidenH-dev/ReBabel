@@ -124,7 +124,6 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
       return res.status(500).json({
         success: false,
         error: 'Failed to insert set',
-        message: setRpc.error.message
       });
     }
 
@@ -169,7 +168,6 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
         return res.status(500).json({
           success: false,
           error: 'Failed to insert vocabulary',
-          message: vocabRpc.error.message
         });
       }
 
@@ -197,7 +195,6 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
         return res.status(500).json({
           success: false,
           error: 'Failed to insert grammar',
-          message: grammarRpc.error.message
         });
       }
 
@@ -245,7 +242,6 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
       return res.status(500).json({
         success: false,
         error: 'Failed to create relations',
-        message: relationRpc.error.message
       });
     }
 
@@ -311,7 +307,6 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }

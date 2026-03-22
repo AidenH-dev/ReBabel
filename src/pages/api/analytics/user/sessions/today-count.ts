@@ -4,13 +4,14 @@ import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
 
 interface ApiResponse {
+  success: boolean;
   count?: number;
   error?: string;
 }
 
 async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
   const userId = req.userId;
@@ -33,13 +34,13 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
 
     if (ownerError) {
       req.log.error('rpc.failed', { fn: 'user_stats.owner_query', error: ownerError.message, code: ownerError.code });
-      return res.status(500).json({ error: 'Failed to fetch session count' });
+      return res.status(500).json({ success: false, error: 'Failed to fetch session count' });
     }
 
     const candidateEntities = Array.from(new Set(ownerRows?.map(row => row.entity) || []));
 
     if (candidateEntities.length === 0) {
-      return res.status(200).json({ count: 0 });
+      return res.status(200).json({ success: true, count: 0 });
     }
 
     // Filter to only 'translate' session types (conjugation is unlimited)
@@ -52,15 +53,15 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
 
     if (sessionError) {
       req.log.error('rpc.failed', { fn: 'user_stats.session_type_query', error: sessionError.message, code: sessionError.code });
-      return res.status(500).json({ error: 'Failed to fetch session count' });
+      return res.status(500).json({ success: false, error: 'Failed to fetch session count' });
     }
 
     const sessionEntities = new Set(sessionRows?.map(row => row.entity) || []);
 
-    return res.status(200).json({ count: sessionEntities.size });
+    return res.status(200).json({ success: true, count: sessionEntities.size });
   } catch (error: any) {
     req.log.error('session.today_count_failed', { error: error?.message || String(error), stack: error?.stack });
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 }
 

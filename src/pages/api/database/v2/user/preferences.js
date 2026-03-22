@@ -9,7 +9,10 @@ export default withAuth(async function handler(req, res) {
   if (!limiter.check(req.auth0Sub)) {
     return res
       .status(429)
-      .json({ error: 'Too many requests. Please try again later.' });
+      .json({
+        success: false,
+        error: 'Too many requests. Please try again later.',
+      });
   }
 
   const userId = req.userId;
@@ -28,7 +31,7 @@ export default withAuth(async function handler(req, res) {
         error: err?.message || String(err),
         stack: err?.stack,
       });
-      return res.status(500).json({ error: err.message });
+      return res.status(500).json({ success: false, error: err.message });
     }
   }
 
@@ -40,7 +43,9 @@ export default withAuth(async function handler(req, res) {
       typeof preferences !== 'object' ||
       Object.keys(preferences).length === 0
     ) {
-      return res.status(400).json({ error: 'preferences object is required' });
+      return res
+        .status(400)
+        .json({ success: false, error: 'preferences object is required' });
     }
 
     try {
@@ -59,9 +64,9 @@ export default withAuth(async function handler(req, res) {
         error: err?.message || String(err),
         stack: err?.stack,
       });
-      return res.status(500).json({ error: err.message });
+      return res.status(500).json({ success: false, error: err.message });
     }
   }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+  return res.status(405).json({ success: false, error: 'Method not allowed' });
 });

@@ -22,7 +22,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
   // Rate limit by IP
@@ -32,18 +32,18 @@ export default async function handler(
     'unknown';
 
   if (!limiter.check(ip)) {
-    return res.status(429).json({ error: 'Too many requests' });
+    return res.status(429).json({ success: false, error: 'Too many requests' });
   }
 
   // Validate payload size
   const raw = JSON.stringify(req.body);
   if (raw.length > MAX_BODY_SIZE) {
-    return res.status(413).json({ error: 'Payload too large' });
+    return res.status(413).json({ success: false, error: 'Payload too large' });
   }
 
   const { logs } = req.body || {};
   if (!Array.isArray(logs) || logs.length === 0) {
-    return res.status(400).json({ error: 'Invalid payload: expected { logs: [...] }' });
+    return res.status(400).json({ success: false, error: 'Invalid payload: expected { logs: [...] }' });
   }
 
   const entries = logs.slice(0, MAX_ENTRIES);
@@ -71,5 +71,5 @@ export default async function handler(
     }
   }
 
-  return res.status(200).json({ ok: true });
+  return res.status(200).json({ success: true });
 }

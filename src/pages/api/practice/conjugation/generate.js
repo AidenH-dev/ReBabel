@@ -12,7 +12,9 @@ const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 20 });
 
 async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
   }
 
   // Rate limit
@@ -20,6 +22,7 @@ async function handler(req, res) {
     req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
   if (!limiter.check(ip)) {
     return res.status(429).json({
+      success: false,
       error: "You're sending requests too quickly. Please wait a moment.",
     });
   }
@@ -35,7 +38,9 @@ async function handler(req, res) {
 
     // Validate inputs
     if (!Array.isArray(poolItems) || poolItems.length === 0) {
-      return res.status(400).json({ error: 'No pool items provided' });
+      return res
+        .status(400)
+        .json({ success: false, error: 'No pool items provided' });
     }
 
     if (
@@ -43,7 +48,9 @@ async function handler(req, res) {
       (!selectedVerbForms || selectedVerbForms.length === 0) &&
       (!selectedAdjForms || selectedAdjForms.length === 0)
     ) {
-      return res.status(400).json({ error: 'No conjugation forms selected' });
+      return res
+        .status(400)
+        .json({ success: false, error: 'No conjugation forms selected' });
     }
 
     const questionCount = Math.min(Math.max(count || 10, 1), 9999);
@@ -80,6 +87,7 @@ async function handler(req, res) {
 
     if (enrichedItems.length === 0) {
       return res.status(400).json({
+        success: false,
         error:
           'No valid items after processing. Could not determine verb groups.',
       });
@@ -95,6 +103,7 @@ async function handler(req, res) {
 
     if (questions.length === 0) {
       return res.status(400).json({
+        success: false,
         error:
           'No questions could be generated from the selected items and forms.',
       });
@@ -114,7 +123,10 @@ async function handler(req, res) {
     });
     return res
       .status(500)
-      .json({ error: 'Failed to generate conjugation questions' });
+      .json({
+        success: false,
+        error: 'Failed to generate conjugation questions',
+      });
   }
 }
 

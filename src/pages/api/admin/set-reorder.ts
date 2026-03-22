@@ -25,7 +25,7 @@ export default withAuth(async function handler(
       return res.status(404).json({ success: false, error: 'Set not found' });
     }
 
-    return res.status(200).json({ success: true, message: data });
+    return res.status(200).json({ success: true, data });
   }
 
   // POST — apply reorder

@@ -84,7 +84,6 @@ async function handlePOST(
       return res.status(500).json({
         success: false,
         error: 'Failed to create bug report',
-        message: error.message
       });
     }
 
@@ -93,7 +92,6 @@ async function handlePOST(
       return res.status(400).json({
         success: false,
         error: data?.error || 'Failed to create bug report',
-        message: data?.message
       });
     }
 
@@ -123,7 +121,6 @@ async function handlePOST(
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }

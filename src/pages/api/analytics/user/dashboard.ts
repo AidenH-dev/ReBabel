@@ -6,13 +6,14 @@ import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
 
 interface ApiResponse {
-  message?: unknown;
+  success: boolean;
+  data?: unknown;
   error?: string;
 }
 
 async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
   const userId = req.userId;
@@ -22,7 +23,7 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
   let timezone = 'UTC';
   if (rawTimezone !== undefined) {
     if (typeof rawTimezone !== 'string' || rawTimezone.length === 0 || rawTimezone.length > 64) {
-      return res.status(400).json({ error: 'timezone must be a non-empty string of at most 64 characters' });
+      return res.status(400).json({ success: false, error: 'timezone must be a non-empty string of at most 64 characters' });
     }
     timezone = rawTimezone;
   }
@@ -36,13 +37,13 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
 
     if (error) {
       req.log.error('rpc.failed', { fn: 'get_user_dashboard_stats', error: error.message, code: error.code });
-      return res.status(500).json({ error: 'Failed to fetch dashboard stats' });
+      return res.status(500).json({ success: false, error: 'Failed to fetch dashboard stats' });
     }
 
-    return res.status(200).json({ message: data });
+    return res.status(200).json({ success: true, data });
   } catch (error: any) {
     req.log.error('dashboard.stats_failed', { error: error?.message || String(error), stack: error?.stack });
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 }
 

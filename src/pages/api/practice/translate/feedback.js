@@ -8,11 +8,16 @@ async function handler(req, res) {
   if (!limiter.check(req.auth0Sub)) {
     return res
       .status(429)
-      .json({ error: 'Too many requests. Please try again later.' });
+      .json({
+        success: false,
+        error: 'Too many requests. Please try again later.',
+      });
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
   }
 
   const { runId, feedbackType, context, sentenceIndex, sentenceContent } =
@@ -23,7 +28,9 @@ async function handler(req, res) {
   // sentenceContent: (optional) the sentence text
 
   if (!runId || !feedbackType) {
-    return res.status(400).json({ error: 'Missing runId or feedbackType' });
+    return res
+      .status(400)
+      .json({ success: false, error: 'Missing runId or feedbackType' });
   }
 
   const scoreMap = { good: 1, bad: 0, incorrect: -1 };

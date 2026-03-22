@@ -63,7 +63,9 @@ async function upsertGrammar(ownerId, g) {
 
 export default withAuth(async function handler(req, res) {
   if (req.method !== 'POST')
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
 
   const ownerId = req.auth0Sub;
 
@@ -121,15 +123,17 @@ export default withAuth(async function handler(req, res) {
       }
     }
 
-    res.status(200).json({ learning_materialId: learning_material.id });
+    res
+      .status(200)
+      .json({ success: true, learning_materialId: learning_material.id });
   } catch (e) {
     req.log.error('learning_material.create_failed', {
       error: e?.message || String(e),
       stack: e?.stack,
     });
     res.status(500).json({
+      success: false,
       error: 'Failed to create learning_material',
-      details: String(e?.message || e),
     });
   }
 });

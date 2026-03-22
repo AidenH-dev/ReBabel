@@ -13,11 +13,16 @@ async function handler(req, res) {
   if (!limiter.check(req.auth0Sub)) {
     return res
       .status(429)
-      .json({ error: 'Too many requests. Please try again later.' });
+      .json({
+        success: false,
+        error: 'Too many requests. Please try again later.',
+      });
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
   }
 
   const {
@@ -39,6 +44,7 @@ async function handler(req, res) {
     !Array.isArray(focalPoints)
   ) {
     return res.status(400).json({
+      success: false,
       error:
         'Missing required fields: grammarPool, vocabPool, focalPoints (array)',
     });
@@ -48,7 +54,10 @@ async function handler(req, res) {
   if (!providerConfig.key) {
     return res
       .status(500)
-      .json({ error: `API key not configured for provider: ${provider}` });
+      .json({
+        success: false,
+        error: `API key not configured for provider: ${provider}`,
+      });
   }
 
   // Randomly select subset of pools to reduce token usage
@@ -415,7 +424,6 @@ ${trimmedVocabPoolText}
     return res.status(500).json({
       success: false,
       error: 'Failed to generate sentences',
-      details: error.message,
     });
   }
 }

@@ -73,7 +73,9 @@ export default withAuth(async function handler(req, res) {
       .single();
 
     if (cErr || !learning_material) {
-      return res.status(404).json({ error: 'Learning_material not found' });
+      return res
+        .status(404)
+        .json({ success: false, error: 'Learning_material not found' });
     }
 
     if (req.method === 'GET') {
@@ -125,7 +127,9 @@ export default withAuth(async function handler(req, res) {
         })
       );
 
-      return res.status(200).json({ sections: sectionsWithContent });
+      return res
+        .status(200)
+        .json({ success: true, sections: sectionsWithContent });
     }
 
     if (req.method === 'PUT') {
@@ -133,7 +137,9 @@ export default withAuth(async function handler(req, res) {
       const { sections: newSections } = req.body;
 
       if (!Array.isArray(newSections)) {
-        return res.status(400).json({ error: 'Invalid sections data' });
+        return res
+          .status(400)
+          .json({ success: false, error: 'Invalid sections data' });
       }
 
       // Get existing sections
@@ -367,15 +373,17 @@ export default withAuth(async function handler(req, res) {
       }
     }
 
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
   } catch (err) {
     req.log.error('sections.error', {
       error: err?.message || String(err),
       stack: err?.stack,
     });
     return res.status(500).json({
+      success: false,
       error: 'Request failed',
-      details: String(err?.message || err),
     });
   }
 });

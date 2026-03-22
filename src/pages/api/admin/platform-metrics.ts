@@ -7,23 +7,24 @@ import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
 
 interface ApiResponse {
-  message?: unknown;
+  success: boolean;
+  data?: unknown;
   error?: string;
 }
 
 async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
   // Validate required query params
   const { start_date, end_date } = req.query;
 
   if (!start_date || typeof start_date !== 'string') {
-    return res.status(400).json({ error: 'start_date is required (YYYY-MM-DD)' });
+    return res.status(400).json({ success: false, error: 'start_date is required (YYYY-MM-DD)' });
   }
   if (!end_date || typeof end_date !== 'string') {
-    return res.status(400).json({ error: 'end_date is required (YYYY-MM-DD)' });
+    return res.status(400).json({ success: false, error: 'end_date is required (YYYY-MM-DD)' });
   }
 
   try {
@@ -35,13 +36,13 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
 
     if (error) {
       req.log.error('rpc.failed', { fn: 'get_admin_platform_metrics', error: error.message, code: error.code });
-      return res.status(500).json({ error: 'Failed to fetch platform metrics' });
+      return res.status(500).json({ success: false, error: 'Failed to fetch platform metrics' });
     }
 
-    return res.status(200).json({ message: data });
+    return res.status(200).json({ success: true, data });
   } catch (error) {
     req.log.error('platform_metrics.error', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 }
 

@@ -2,13 +2,17 @@ import { withAuth } from '@/lib/withAuth';
 
 async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
   }
 
   try {
     const userEmail = req.auth0Email;
     if (!userEmail) {
-      return res.status(401).json({ error: 'Email not available in session' });
+      return res
+        .status(401)
+        .json({ success: false, error: 'Email not available in session' });
     }
 
     const response = await fetch(
@@ -29,7 +33,9 @@ async function handler(req, res) {
     if (!response.ok) {
       const errorText = await response.text();
       req.log.error('auth0.password_reset_failed', { error: errorText });
-      return res.status(500).json({ error: 'Failed to send reset email' });
+      return res
+        .status(500)
+        .json({ success: false, error: 'Failed to send reset email' });
     }
 
     return res
@@ -40,7 +46,9 @@ async function handler(req, res) {
       error: error?.message || String(error),
       stack: error?.stack,
     });
-    return res.status(500).json({ error: 'Failed to send reset email' });
+    return res
+      .status(500)
+      .json({ success: false, error: 'Failed to send reset email' });
   }
 }
 

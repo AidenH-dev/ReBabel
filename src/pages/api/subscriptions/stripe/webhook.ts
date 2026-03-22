@@ -27,7 +27,7 @@ export const config = {
 
 export default withLogger(async function handler(req, res: NextApiResponse) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
   const buf = await getRawBody(req);
@@ -43,7 +43,7 @@ export default withLogger(async function handler(req, res: NextApiResponse) {
     );
   } catch (err) {
     req.log.error('webhook.signature_failed', { error: err instanceof Error ? err.message : String(err), stack: err instanceof Error ? err.stack : undefined });
-    return res.status(400).json({ error: 'Webhook signature verification failed' });
+    return res.status(400).json({ success: false, error: 'Webhook signature verification failed' });
   }
 
   try {
@@ -123,14 +123,14 @@ export default withLogger(async function handler(req, res: NextApiResponse) {
       }
     }
 
-    return res.status(200).json({ received: true });
+    return res.status(200).json({ success: true });
   } catch (error) {
     req.log.error('webhook.handler_error', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
     const err = error instanceof Error ? error : new Error(String(error));
     const errCtx = { context: 'stripe_webhook', endpoint: '/api/subscriptions/stripe/webhook' };
     notifyError(err, errCtx);
     notifySlackError(err, errCtx);
-    return res.status(500).json({ error: 'Webhook handler failed' });
+    return res.status(500).json({ success: false, error: 'Webhook handler failed' });
   }
 });
 

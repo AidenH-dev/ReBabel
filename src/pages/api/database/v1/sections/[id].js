@@ -26,7 +26,9 @@ export default withAuth(async function handler(req, res) {
         .single();
 
       if (sErr || !section) {
-        return res.status(404).json({ error: 'Section not found' });
+        return res
+          .status(404)
+          .json({ success: false, error: 'Section not found' });
       }
 
       // Fetch grammar points for this section
@@ -86,18 +88,20 @@ export default withAuth(async function handler(req, res) {
         })),
       };
 
-      return res.status(200).json({ section: formattedSection });
+      return res.status(200).json({ success: true, section: formattedSection });
     }
 
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
   } catch (err) {
     req.log.error('sections.error', {
       error: err?.message || String(err),
       stack: err?.stack,
     });
     return res.status(500).json({
+      success: false,
       error: 'Request failed',
-      details: String(err?.message || err),
     });
   }
 });

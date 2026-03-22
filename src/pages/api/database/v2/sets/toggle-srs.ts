@@ -33,7 +33,6 @@ export default withAuth(async function handler(
     return res.status(405).json({
       success: false,
       error: 'Method not allowed',
-      message: 'Only POST requests are allowed'
     });
   }
 
@@ -44,16 +43,14 @@ export default withAuth(async function handler(
     if (!setId || typeof setId !== 'string') {
       return res.status(400).json({
         success: false,
-        error: 'Missing or invalid required field',
-        message: 'setId must be a valid string'
+        error: 'setId must be a valid string',
       });
     }
 
     if (typeof srsEnabled !== 'boolean') {
       return res.status(400).json({
         success: false,
-        error: 'Invalid field type',
-        message: 'srsEnabled must be a boolean'
+        error: 'srsEnabled must be a boolean',
       });
     }
 
@@ -68,8 +65,7 @@ export default withAuth(async function handler(
       req.log.error('rpc.failed', { fn: 'toggle_set_srs_enabled', error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
-        error: `Database error: ${error.message}`,
-        message: error.hint || error.details || 'Failed to toggle SRS status'
+        error: 'Failed to toggle SRS status',
       });
     }
 
@@ -80,7 +76,6 @@ export default withAuth(async function handler(
       return res.status(500).json({
         success: false,
         error: 'No data returned from database',
-        message: 'The operation completed but no result was returned'
       });
     }
 
@@ -95,7 +90,6 @@ export default withAuth(async function handler(
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error instanceof Error ? error.message : 'An unexpected error occurred'
     });
   }
 })

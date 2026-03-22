@@ -106,7 +106,6 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
       return res.status(400).json({
         success: false,
         error: 'Invalid set ID format',
-        message: 'ID must be a valid UUID'
       });
     }
 
@@ -120,8 +119,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
       (req as any).log?.error('rpc.failed', { fn: 'get_set_with_items_v2', error: error.message, code: error.code });
       return res.status(500).json({
         success: false,
-        error: `Database error: ${error.message}`,
-        message: error.hint || error.details || 'Failed to retrieve set'
+        error: 'Failed to retrieve set',
       });
     }
 
@@ -130,7 +128,6 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
       return res.status(404).json({
         success: false,
         error: 'Set not found',
-        message: `Set ID: ${setId}`
       });
     }
 
@@ -195,7 +192,6 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }

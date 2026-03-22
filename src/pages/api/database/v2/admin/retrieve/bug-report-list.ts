@@ -37,7 +37,6 @@ async function handleGET(
       return res.status(500).json({
         success: false,
         error: 'Failed to retrieve bug reports',
-        message: error.message
       });
     }
 
@@ -46,7 +45,6 @@ async function handleGET(
       return res.status(400).json({
         success: false,
         error: data?.error || 'Failed to retrieve bug reports',
-        message: data?.message
       });
     }
 
@@ -63,7 +61,6 @@ async function handleGET(
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }

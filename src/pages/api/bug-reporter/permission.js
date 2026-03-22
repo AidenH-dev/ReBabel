@@ -5,7 +5,9 @@ import { supabaseKvs } from '@/lib/supabaseKvs';
 async function handler(req, res) {
   // Implements SPEC-LLM-001: only GET is accepted
   if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
   }
 
   const userId = req.userId;
@@ -19,13 +21,15 @@ async function handler(req, res) {
 
     if (error) throw error;
 
-    return res.status(200).json({ allowed: Boolean(data) });
+    return res.status(200).json({ success: true, allowed: Boolean(data) });
   } catch (e) {
     req.log.error('bug_reporter.permission_failed', {
       error: e?.message || String(e),
       stack: e?.stack,
     });
-    return res.status(500).json({ error: 'Failed to check permission' });
+    return res
+      .status(500)
+      .json({ success: false, error: 'Failed to check permission' });
   }
 }
 

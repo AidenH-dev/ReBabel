@@ -26,7 +26,9 @@ function mapLearning_materialForUI(c) {
 
 export default withAuth(async function handler(req, res) {
   if (req.method !== 'GET')
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
 
   const ownerId = req.auth0Sub;
 
@@ -44,7 +46,7 @@ export default withAuth(async function handler(req, res) {
     if (cErr) throw cErr;
 
     if (!learning_materials?.length)
-      return res.status(200).json({ learning_materials: [] });
+      return res.status(200).json({ success: true, learning_materials: [] });
 
     // 2) Fetch sections for all learning_materials in one go
     const learning_materialIds = learning_materials.map((c) => c.id);
@@ -66,15 +68,15 @@ export default withAuth(async function handler(req, res) {
     const payload = Array.from(byLearning_material.values()).map(
       mapLearning_materialForUI
     );
-    return res.status(200).json({ learning_materials: payload });
+    return res.status(200).json({ success: true, learning_materials: payload });
   } catch (e) {
     req.log.error('learning_materials.list_failed', {
       error: e?.message || String(e),
       stack: e?.stack,
     });
     return res.status(500).json({
+      success: false,
       error: 'Failed to list learning_materials',
-      details: String(e?.message || e),
     });
   }
 });

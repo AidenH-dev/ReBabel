@@ -7,13 +7,14 @@ import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
 
 interface ApiResponse {
-  message?: unknown;
+  success: boolean;
+  data?: unknown;
   error?: string;
 }
 
 async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
   const userId = req.userId;
@@ -24,13 +25,13 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
 
     if (error) {
       req.log.error('rpc.failed', { fn: 'record_platform_event', error: error.message, code: error.code });
-      return res.status(500).json({ error: 'Failed to record platform event' });
+      return res.status(500).json({ success: false, error: 'Failed to record platform event' });
     }
 
-    return res.status(200).json({ message: data });
+    return res.status(200).json({ success: true, data });
   } catch (error: any) {
     req.log.error('heartbeat.failed', { error: error?.message || String(error), stack: error?.stack });
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 }
 

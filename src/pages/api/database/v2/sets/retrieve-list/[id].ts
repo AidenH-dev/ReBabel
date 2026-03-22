@@ -80,14 +80,12 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
         return res.status(404).json({
           success: false,
           error: 'No sets found for the specified user',
-          message: `User ID: ${userId}`
         });
       }
 
       return res.status(500).json({
         success: false,
-        error: `Database error: ${error.message}`,
-        details: error.details
+        error: 'Database error',
       });
     }
 
@@ -96,7 +94,6 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
       return res.status(404).json({
         success: false,
         error: 'No sets found for the specified user',
-        message: `User ID: ${userId}`
       });
     }
 
@@ -165,7 +162,6 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }

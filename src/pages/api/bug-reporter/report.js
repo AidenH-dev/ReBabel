@@ -163,13 +163,18 @@ async function uploadScreenshot(base64Data, githubToken, repo) {
 async function handler(req, res) {
   // Implements SPEC-LLM-002: only POST is accepted
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
   }
 
   if (!limiter.check(req.auth0Sub)) {
     return res
       .status(429)
-      .json({ error: 'Too many requests. Please try again later.' });
+      .json({
+        success: false,
+        error: 'Too many requests. Please try again later.',
+      });
   }
 
   const userId = req.userId;
@@ -184,25 +189,34 @@ async function handler(req, res) {
     if (permError) throw permError;
 
     if (!allowed) {
-      return res.status(403).json({ error: 'Not a bug reporter' });
+      return res
+        .status(403)
+        .json({ success: false, error: 'Not a bug reporter' });
     }
 
     // Implements SPEC-LLM-002: validate required fields
     const { title, description, severity, screenshot, context } = req.body;
 
     if (!title || typeof title !== 'string') {
-      return res.status(400).json({ error: 'title is required' });
+      return res
+        .status(400)
+        .json({ success: false, error: 'title is required' });
     }
     if (!description || typeof description !== 'string') {
-      return res.status(400).json({ error: 'description is required' });
+      return res
+        .status(400)
+        .json({ success: false, error: 'description is required' });
     }
     if (!severity || !VALID_SEVERITIES.includes(severity)) {
       return res.status(400).json({
+        success: false,
         error: `severity must be one of: ${VALID_SEVERITIES.join(', ')}`,
       });
     }
     if (!context || typeof context !== 'object') {
-      return res.status(400).json({ error: 'context is required' });
+      return res
+        .status(400)
+        .json({ success: false, error: 'context is required' });
     }
 
     const githubToken = process.env.GITHUB_PAT;
@@ -259,7 +273,9 @@ async function handler(req, res) {
       error: e?.message || String(e),
       stack: e?.stack,
     });
-    return res.status(500).json({ error: 'Failed to create bug report' });
+    return res
+      .status(500)
+      .json({ success: false, error: 'Failed to create bug report' });
   }
 }
 

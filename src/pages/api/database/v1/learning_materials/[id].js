@@ -19,7 +19,9 @@ export default withAuth(async function handler(req, res) {
         .single();
 
       if (cErr || !learning_material)
-        return res.status(404).json({ error: 'Learning_material not found' });
+        return res
+          .status(404)
+          .json({ success: false, error: 'Learning_material not found' });
 
       // Fetch sections with their content
       const { data: sections, error: sErr } = await supabaseAdmin
@@ -102,6 +104,7 @@ export default withAuth(async function handler(req, res) {
       );
 
       return res.status(200).json({
+        success: true,
         learning_material,
         sections: sectionsWithContent,
       });
@@ -134,7 +137,9 @@ export default withAuth(async function handler(req, res) {
         .eq('owner_id', ownerId)
         .single();
       if (eErr || !existing)
-        return res.status(404).json({ error: 'Learning_material not found' });
+        return res
+          .status(404)
+          .json({ success: false, error: 'Learning_material not found' });
 
       const { data, error } = await supabaseAdmin
         .from('learning_materials')
@@ -144,7 +149,7 @@ export default withAuth(async function handler(req, res) {
         .single();
       if (error) throw error;
 
-      return res.status(200).json({ learning_material: data });
+      return res.status(200).json({ success: true, learning_material: data });
     }
 
     if (req.method === 'DELETE') {
@@ -156,7 +161,9 @@ export default withAuth(async function handler(req, res) {
         .eq('owner_id', ownerId)
         .single();
       if (eErr || !existing)
-        return res.status(404).json({ error: 'Learning_material not found' });
+        return res
+          .status(404)
+          .json({ success: false, error: 'Learning_material not found' });
 
       // ON DELETE CASCADE will remove sections & link rows
       const { error: dErr } = await supabaseAdmin
@@ -168,15 +175,17 @@ export default withAuth(async function handler(req, res) {
       return res.status(204).end();
     }
 
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed' });
   } catch (err) {
     req.log.error('learning_material.error', {
       error: err?.message || String(err),
       stack: err?.stack,
     });
     return res.status(500).json({
+      success: false,
       error: 'Request failed',
-      details: String(err?.message || err),
     });
   }
 });
