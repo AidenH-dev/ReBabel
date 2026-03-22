@@ -23,6 +23,7 @@ import BaseModal from '@/components/ui/BaseModal';
 import Button from '@/components/ui/Button';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { clientLog } from '@/lib/clientLogger';
+import { InlineError, ActionError } from '@/components/ui/errors';
 
 export default function Settings() {
   const { theme, setTheme } = useTheme();
@@ -46,6 +47,11 @@ export default function Settings() {
   const [pushLoading, setPushLoading] = useState(false);
   const [pushStatus, setPushStatus] = useState(null); // 'success' | 'error' | null
   const [pushError, setPushError] = useState(null);
+  const [profileError, setProfileError] = useState(null);
+  const [subscriptionError, setSubscriptionError] = useState(null);
+  const [usernameLoadError, setUsernameLoadError] = useState(null);
+  const [resetError, setResetError] = useState(null);
+  const [portalError, setPortalError] = useState(null);
 
   const copyEmail = async () => {
     await navigator.clipboard.writeText('rebabel.development@gmail.com');
@@ -64,6 +70,7 @@ export default function Settings() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        setProfileError(null);
         const response = await fetch('/api/auth/me');
         const profile = await response.json();
         setUserProfile(profile);
@@ -71,6 +78,7 @@ export default function Settings() {
         clientLog.error('settings.profile_fetch_failed', {
           error: error?.message || String(error),
         });
+        setProfileError('Failed to load your profile.');
       } finally {
         setLoading(false);
       }
@@ -78,6 +86,7 @@ export default function Settings() {
 
     const fetchSubscription = async () => {
       try {
+        setSubscriptionError(null);
         const res = await fetch(
           '/api/subscriptions/stripe/subscription-status'
         );
@@ -87,11 +96,13 @@ export default function Settings() {
         clientLog.error('settings.subscription_fetch_failed', {
           error: error?.message || String(error),
         });
+        setSubscriptionError('Failed to load subscription info.');
       }
     };
 
     const fetchUsername = async () => {
       try {
+        setUsernameLoadError(null);
         const res = await fetch('/api/database/v2/user/username');
         const data = await res.json();
         if (data.username) {
@@ -102,6 +113,7 @@ export default function Settings() {
         clientLog.error('settings.username_fetch_failed', {
           error: error?.message || String(error),
         });
+        setUsernameLoadError('Failed to load username.');
       }
     };
 
@@ -167,17 +179,21 @@ export default function Settings() {
 
   const handleResetPassword = async () => {
     setResetLoading(true);
+    setResetError(null);
     try {
       const res = await fetch('/api/auth/reset-password', {
         method: 'POST',
       });
       if (res.ok) {
         setResetSent(true);
+      } else {
+        setResetError('Failed to send password reset email. Please try again.');
       }
     } catch (error) {
       clientLog.error('settings.reset_password_failed', {
         error: error?.message || String(error),
       });
+      setResetError('Failed to send password reset email. Please try again.');
     } finally {
       setResetLoading(false);
     }
@@ -185,6 +201,7 @@ export default function Settings() {
 
   const handleManageSubscription = async () => {
     setPortalLoading(true);
+    setPortalError(null);
     try {
       const res = await fetch('/api/subscriptions/stripe/customer-portal', {
         method: 'POST',
@@ -192,11 +209,14 @@ export default function Settings() {
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+      } else {
+        setPortalError('Failed to open billing portal. Please try again.');
       }
     } catch (error) {
       clientLog.error('settings.portal_failed', {
         error: error?.message || String(error),
       });
+      setPortalError('Failed to open billing portal. Please try again.');
     } finally {
       setPortalLoading(false);
     }
@@ -294,6 +314,28 @@ export default function Settings() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-6">
             Settings
           </h1>
+
+          {profileError && (
+            <InlineError
+              message={profileError}
+              onRetry={() => window.location.reload()}
+              className="mb-4"
+            />
+          )}
+          {subscriptionError && (
+            <InlineError
+              message={subscriptionError}
+              onRetry={() => window.location.reload()}
+              className="mb-4"
+            />
+          )}
+          {usernameLoadError && (
+            <InlineError
+              message={usernameLoadError}
+              onRetry={() => window.location.reload()}
+              className="mb-4"
+            />
+          )}
 
           <div className="bg-white dark:bg-surface-card dusk:bg-[#2a3444] rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 dusk:border-[#3a4556] divide-y divide-gray-200 dark:divide-gray-700 dusk:divide-[#3a4556]">
             {loading ? (
@@ -473,6 +515,13 @@ export default function Settings() {
                       {resetSent ? 'Email Sent' : 'Reset Password'}
                     </button>
                   </div>
+                  {resetError && (
+                    <ActionError
+                      message={resetError}
+                      onDismiss={() => setResetError(null)}
+                      className="mt-2"
+                    />
+                  )}
                 </div>
 
                 {/* Subscription Section - Only show for premium users */}
@@ -503,6 +552,13 @@ export default function Settings() {
                         Manage
                       </button>
                     </div>
+                    {portalError && (
+                      <ActionError
+                        message={portalError}
+                        onDismiss={() => setPortalError(null)}
+                        className="mt-2"
+                      />
+                    )}
                   </div>
                 )}
 

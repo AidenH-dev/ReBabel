@@ -21,6 +21,7 @@ import PageHeader from '../../components/ui/PageHeader';
 import SetRow from '../../components/ui/SetRow';
 import Button from '@/components/ui/Button';
 import { clientLog } from '@/lib/clientLogger';
+import { InlineError } from '@/components/ui/errors';
 
 function ActivityCalendar({ activityData }) {
   const [tooltip, setTooltip] = useState(null);
@@ -210,16 +211,20 @@ export default function DashboardPage() {
   const router = useRouter();
   const jpDate = useJapaneseDate();
   const [userProfile, setUserProfile] = useState(null);
+  const [profileError, setProfileError] = useState(null);
   const [greeting, setGreeting] = useState('Hello');
   const [mounted, setMounted] = useState(false);
 
   const [dashboardLoading, setDashboardLoading] = useState(true);
+  const [statsError, setStatsError] = useState(null);
 
   // Sets state
   const [sets, setSets] = useState([]);
   const [setsLoading, setSetsLoading] = useState(true);
+  const [setsError, setSetsError] = useState(null);
   const [totalDueItems, setTotalDueItems] = useState(0);
   const [dueLoading, setDueLoading] = useState(true);
+  const [dueError, setDueError] = useState(null);
   const setsCardRef = useRef(null);
   const [visibleSetCount, setVisibleSetCount] = useState(3);
 
@@ -247,6 +252,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        setProfileError(null);
         const response = await fetch('/api/auth/me');
         const profile = await response.json();
         setUserProfile(profile);
@@ -258,6 +264,7 @@ export default function DashboardPage() {
           endpoint: '/api/auth/me',
           error: error?.message || String(error),
         });
+        setProfileError('Failed to load your profile. Please try again.');
       }
     };
     fetchUserProfile();
@@ -269,6 +276,7 @@ export default function DashboardPage() {
     const fetchSets = async () => {
       setSetsLoading(true);
       try {
+        setSetsError(null);
         const res = await fetch(
           `/api/database/v2/sets/retrieve-list/${encodeURIComponent(userProfile.sub)}`
         );
@@ -293,6 +301,7 @@ export default function DashboardPage() {
           endpoint: '/api/database/v2/sets/retrieve-list',
           error: err?.message || String(err),
         });
+        setSetsError('Failed to load your sets.');
       } finally {
         setSetsLoading(false);
       }
@@ -305,6 +314,7 @@ export default function DashboardPage() {
     if (!userProfile?.sub) return;
     const fetchDueCount = async () => {
       try {
+        setDueError(null);
         const res = await fetch('/api/database/v2/srs/all-due?countOnly=true');
         const result = await res.json();
         if (result.success && result.data) {
@@ -315,6 +325,7 @@ export default function DashboardPage() {
           endpoint: '/api/database/v2/srs/all-due',
           error: err?.message || String(err),
         });
+        setDueError('Failed to load due items count.');
       } finally {
         setDueLoading(false);
       }
@@ -333,6 +344,7 @@ export default function DashboardPage() {
 
     const fetchDashboard = async () => {
       try {
+        setStatsError(null);
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const res = await fetch(
           `/api/analytics/user/dashboard?timezone=${encodeURIComponent(timezone)}`
@@ -360,6 +372,7 @@ export default function DashboardPage() {
           endpoint: '/api/analytics/user/dashboard',
           error: err?.message || String(err),
         });
+        setStatsError('Failed to load dashboard stats.');
       } finally {
         setDashboardLoading(false);
       }
@@ -897,6 +910,18 @@ export default function DashboardPage() {
       <div className="flex-1 overflow-y-auto lg:pt-4">
         <div className="px-4 md:p-4 lg:mx-auto lg:w-full lg:max-w-5xl">
           <div className="max-w-5xl mx-auto space-y-4">
+            {profileError && (
+              <InlineError
+                message={profileError}
+                onRetry={() => window.location.reload()}
+              />
+            )}
+            {statsError && (
+              <InlineError
+                message={statsError}
+                onRetry={() => window.location.reload()}
+              />
+            )}
             {/* Tablet-only greeting (hidden on mobile where header handles it, hidden on desktop where PageHeader handles it) */}
             <div className="hidden md:block lg:hidden">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
@@ -1159,6 +1184,11 @@ export default function DashboardPage() {
                     />
                   ))}
                 </div>
+              ) : setsError ? (
+                <InlineError
+                  message={setsError}
+                  onRetry={() => window.location.reload()}
+                />
               ) : sets.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-black/10 dark:border-white/10 p-8 text-center text-sm text-black/70 dark:text-white/70">
                   <p className="mb-3">You don&apos;t have any sets yet.</p>

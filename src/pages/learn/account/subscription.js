@@ -5,12 +5,14 @@ import { TbCheck, TbLoader, TbExternalLink } from 'react-icons/tb';
 import { HiOutlineStar } from 'react-icons/hi2';
 import { clientLog } from '@/lib/clientLogger';
 import Button from '@/components/ui/Button';
+import { InlineError } from '@/components/ui/errors';
 
 export default function Subscription() {
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [message, setMessage] = useState(null);
+  const [fetchError, setFetchError] = useState(null);
 
   useEffect(() => {
     // Check URL params for success/cancel messages
@@ -34,6 +36,7 @@ export default function Subscription() {
 
   const fetchSubscription = async () => {
     try {
+      setFetchError(null);
       const res = await fetch(`/api/subscriptions/stripe/subscription-status`, {
         cache: 'no-store',
         headers: { 'Cache-Control': 'no-cache' },
@@ -44,6 +47,7 @@ export default function Subscription() {
       clientLog.error('subscription.fetch_failed', {
         error: error?.message || String(error),
       });
+      setFetchError('Failed to load subscription status. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -152,6 +156,14 @@ export default function Subscription() {
               Loading...
             </div>
           </div>
+        ) : fetchError ? (
+          <InlineError
+            message={fetchError}
+            onRetry={() => {
+              setLoading(true);
+              fetchSubscription();
+            }}
+          />
         ) : isPremium ? (
           /* Premium User View */
           <div className="bg-white dark:bg-surface-card p-6 rounded-lg shadow-md border border-brand-pink/20">

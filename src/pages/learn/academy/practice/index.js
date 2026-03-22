@@ -24,6 +24,7 @@ import {
   filterConjugatableItems,
 } from '@/components/Practice/Premium/Features/Conjugation/Configuration/models/conjugationConfig';
 import { usePremium } from '@/contexts/PremiumContext';
+import { InlineError } from '@/components/ui/errors';
 
 export default function VocabularyDashboard() {
   // Premium context for session gating
@@ -47,8 +48,10 @@ export default function VocabularyDashboard() {
   const [showAll, setShowAll] = useState(false);
 
   const [userProfile, setUserProfile] = useState(null);
+  const [profileError, setProfileError] = useState(null);
   const [recentsSets, setRecentsSets] = useState([]);
   const [isLoadingSets, setIsLoadingSets] = useState(true);
+  const [setsError, setSetsError] = useState(null);
 
   const [showBeginnerPopup, setShowBeginnerPopup] = useState(false);
 
@@ -85,6 +88,8 @@ export default function VocabularyDashboard() {
   const [conjugationPoolItems, setConjugationPoolItems] = useState([]);
   const [conjugationQuestionCount, setConjugationQuestionCount] = useState(10);
   const [conjugationFocalItems, setConjugationFocalItems] = useState([]);
+  const [conjugationItemsError, setConjugationItemsError] = useState(null);
+  const [poolItemsError, setPoolItemsError] = useState(null);
 
   const router = useRouter();
   const searchRef = useRef(null);
@@ -105,6 +110,7 @@ export default function VocabularyDashboard() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        setProfileError(null);
         const response = await fetch('/api/auth/me');
         const profile = await response.json();
         setUserProfile(profile);
@@ -112,6 +118,7 @@ export default function VocabularyDashboard() {
         clientLog.error('practice.fetch_profile_failed', {
           error: error?.message || String(error),
         });
+        setProfileError('Failed to load your profile. Please try again.');
       }
     };
     fetchUserProfile();
@@ -123,6 +130,7 @@ export default function VocabularyDashboard() {
       if (!(userProfile && userProfile.sub)) return;
       setIsLoadingSets(true);
       try {
+        setSetsError(null);
         const response = await fetch(
           `/api/database/v2/sets/retrieve-list/${encodeURIComponent(userProfile.sub)}`
         );
@@ -153,6 +161,7 @@ export default function VocabularyDashboard() {
         clientLog.error('practice.fetch_sets_failed', {
           error: error?.message || String(error),
         });
+        setSetsError('Failed to load your sets. Please try again.');
         setRecentsSets([]);
       } finally {
         setIsLoadingSets(false);
@@ -162,10 +171,15 @@ export default function VocabularyDashboard() {
   }, [userProfile]);
 
   useEffect(() => {
-    if (!isLoadingSets && recentsSets.length === 0 && userProfile) {
+    if (
+      !isLoadingSets &&
+      recentsSets.length === 0 &&
+      userProfile &&
+      !setsError
+    ) {
       setShowBeginnerPopup(true);
     }
-  }, [isLoadingSets, recentsSets, userProfile]);
+  }, [isLoadingSets, recentsSets, userProfile, setsError]);
 
   // Helpers
   const fixDateString = (dateString) => {
@@ -490,6 +504,7 @@ export default function VocabularyDashboard() {
         return;
       }
       try {
+        setConjugationItemsError(null);
         const promises = conjugationSelectedSets.map((set) =>
           fetch(`/api/database/v2/sets/retrieve-set/${set.id}`).then((r) =>
             r.json()
@@ -508,6 +523,9 @@ export default function VocabularyDashboard() {
         clientLog.error('practice.fetch_conjugation_items_failed', {
           error: error?.message || String(error),
         });
+        setConjugationItemsError(
+          'Failed to load conjugation items. Please try again.'
+        );
       }
     };
     fetchConjugationItems();
@@ -519,6 +537,7 @@ export default function VocabularyDashboard() {
   useEffect(() => {
     const fetchPoolItems = async () => {
       try {
+        setPoolItemsError(null);
         // Fetch grammar pool items
         const grammarSetPromises = grammarPool.sets.map((set) =>
           fetch(`/api/database/v2/sets/retrieve-set/${set.id}`).then((r) =>
@@ -560,6 +579,7 @@ export default function VocabularyDashboard() {
         clientLog.error('practice.fetch_pool_items_failed', {
           error: error?.message || String(error),
         });
+        setPoolItemsError('Failed to load pool items. Please try again.');
       }
     };
 
@@ -636,6 +656,26 @@ export default function VocabularyDashboard() {
     >
       <div className="w-full flex min-h-full mx-2">
         <div className="w-full max-w-6xl mx-auto py-8">
+          {profileError && (
+            <InlineError
+              message={profileError}
+              onRetry={() => window.location.reload()}
+              className="mb-4"
+            />
+          )}
+          {setsError && (
+            <InlineError
+              message={setsError}
+              onRetry={() => window.location.reload()}
+              className="mb-4"
+            />
+          )}
+          {poolItemsError && (
+            <InlineError message={poolItemsError} className="mb-4" />
+          )}
+          {conjugationItemsError && (
+            <InlineError message={conjugationItemsError} className="mb-4" />
+          )}
           <BeginnerPackPopup
             isOpen={showBeginnerPopup}
             onClose={() => setShowBeginnerPopup(false)}

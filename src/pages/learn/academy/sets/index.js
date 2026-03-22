@@ -34,6 +34,7 @@ import { TiChartPieOutline } from 'react-icons/ti';
 import { useUserPreferences } from '@/contexts/PreferencesContext';
 import SetsSrsOverview from '@/components/SRS/sets-srs-overview';
 import ImportByCodeModal from '@/components/sets/ImportByCodeModal';
+import { InlineError } from '@/components/ui/errors';
 
 export default function VocabularyDashboard() {
   // Tabs: "srs" | "sets" | "groups"
@@ -111,8 +112,10 @@ export default function VocabularyDashboard() {
   };
 
   const [userProfile, setUserProfile] = useState(null);
+  const [profileError, setProfileError] = useState(null);
   const [recentsSets, setRecentsSets] = useState([]);
   const [isLoadingSets, setIsLoadingSets] = useState(true);
+  const [setsError, setSetsError] = useState(null);
 
   const [showBeginnerPopup, setShowBeginnerPopup] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
@@ -120,6 +123,7 @@ export default function VocabularyDashboard() {
   // Fast Review state
   const [totalDueItems, setTotalDueItems] = useState(0);
   const [isLoadingDueCount, setIsLoadingDueCount] = useState(true);
+  const [dueError, setDueError] = useState(null);
 
   // Dashboard stats state
   const [dashboardStats, setDashboardStats] = useState({
@@ -128,6 +132,7 @@ export default function VocabularyDashboard() {
     activeSrsItems: 0,
   });
   const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [statsError, setStatsError] = useState(null);
 
   const router = useRouter();
   const searchRef = useRef(null);
@@ -148,6 +153,7 @@ export default function VocabularyDashboard() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        setProfileError(null);
         const response = await fetch('/api/auth/me');
         const profile = await response.json();
         setUserProfile(profile);
@@ -155,6 +161,7 @@ export default function VocabularyDashboard() {
         clientLog.error('sets.fetch_profile_failed', {
           error: error?.message || String(error),
         });
+        setProfileError('Failed to load your profile. Please try again.');
       }
     };
     fetchUserProfile();
@@ -166,6 +173,7 @@ export default function VocabularyDashboard() {
       if (!(userProfile && userProfile.sub)) return;
       setIsLoadingSets(true);
       try {
+        setSetsError(null);
         const response = await fetch(
           `/api/database/v2/sets/retrieve-list/${encodeURIComponent(userProfile.sub)}`
         );
@@ -195,6 +203,7 @@ export default function VocabularyDashboard() {
         clientLog.error('sets.fetch_user_sets_failed', {
           error: error?.message || String(error),
         });
+        setSetsError('Failed to load your sets. Please try again.');
         setRecentsSets([]);
       } finally {
         setIsLoadingSets(false);
@@ -204,10 +213,15 @@ export default function VocabularyDashboard() {
   }, [userProfile]);
 
   useEffect(() => {
-    if (!isLoadingSets && recentsSets.length === 0 && userProfile) {
+    if (
+      !isLoadingSets &&
+      recentsSets.length === 0 &&
+      userProfile &&
+      !setsError
+    ) {
       setShowBeginnerPopup(true);
     }
-  }, [isLoadingSets, recentsSets, userProfile]);
+  }, [isLoadingSets, recentsSets, userProfile, setsError]);
 
   // Fetch Fast Review due count — once only
   const dueCountFetched = useRef(false);
@@ -217,6 +231,7 @@ export default function VocabularyDashboard() {
 
     const fetchDueCount = async () => {
       try {
+        setDueError(null);
         const response = await fetch(
           '/api/database/v2/srs/all-due?countOnly=true'
         );
@@ -228,6 +243,7 @@ export default function VocabularyDashboard() {
         clientLog.error('sets.fetch_due_count_failed', {
           error: error?.message || String(error),
         });
+        setDueError('Failed to load due items count.');
       } finally {
         setIsLoadingDueCount(false);
       }
@@ -242,6 +258,7 @@ export default function VocabularyDashboard() {
       if (!userProfile) return;
 
       try {
+        setStatsError(null);
         const response = await fetch('/api/database/v2/stats/dashboard');
         const result = await response.json();
         if (result.success && result.data) {
@@ -251,6 +268,7 @@ export default function VocabularyDashboard() {
         clientLog.error('sets.fetch_dashboard_stats_failed', {
           error: error?.message || String(error),
         });
+        setStatsError('Failed to load stats.');
       } finally {
         setIsLoadingStats(false);
       }
@@ -503,6 +521,14 @@ export default function VocabularyDashboard() {
       />
 
       <div className="flex-1 overflow-y-auto px-6 sm:px-10 py-8 lg:py-4 pt-[max(2rem,var(--cap-safe-top))] lg:pt-4">
+        {profileError && (
+          <div className="w-full max-w-6xl mx-auto mb-4">
+            <InlineError
+              message={profileError}
+              onRetry={() => window.location.reload()}
+            />
+          </div>
+        )}
         <BeginnerPackPopup
           isOpen={showBeginnerPopup}
           onClose={() => setShowBeginnerPopup(false)}
@@ -895,8 +921,17 @@ export default function VocabularyDashboard() {
 
                 {/* Results */}
                 <div className="mt-1">
+                  {/* Sets fetch error */}
+                  {setsError && (
+                    <InlineError
+                      message={setsError}
+                      onRetry={() => window.location.reload()}
+                      className="mb-3"
+                    />
+                  )}
+
                   {/* Empty state */}
-                  {!isLoadingSets && recentsSets.length === 0 && (
+                  {!isLoadingSets && recentsSets.length === 0 && !setsError && (
                     <div className="rounded-xl border border-dashed border-black/10 dark:border-white/10 p-8 text-center text-sm text-black/70 dark:text-white/70">
                       <p className="mb-3">You don&apos;t have any sets yet.</p>
                       <button

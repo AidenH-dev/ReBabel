@@ -36,6 +36,7 @@ import {
 } from 'react-icons/fa6';
 import { MdTranslate, MdSchool, MdLibraryBooks } from 'react-icons/md';
 import { TbCards, TbCertificate } from 'react-icons/tb';
+import { InlineError } from '@/components/ui/errors';
 import { Line, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -64,6 +65,8 @@ ChartJS.register(
 export default function Home() {
   const router = useRouter();
   const [userProfile, setUserProfile] = useState(null);
+  const [profileError, setProfileError] = useState(null);
+  const [materialsError, setMaterialsError] = useState(null);
   const [activeTab, setActiveTab] = useState('academic'); // 'academic' or 'certificate'
   const [isLoading, setIsLoading] = useState(true);
 
@@ -131,6 +134,7 @@ export default function Home() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        setProfileError(null);
         const response = await fetch('/api/auth/me');
         const profile = await response.json();
         setUserProfile(profile);
@@ -138,6 +142,7 @@ export default function Home() {
         clientLog.error('home.fetch_profile_failed', {
           error: error?.message || String(error),
         });
+        setProfileError('Failed to load your profile. Please try again.');
       } finally {
         setIsLoading(false);
       }
@@ -148,6 +153,7 @@ export default function Home() {
   useEffect(() => {
     const fetchLearning_materials = async () => {
       try {
+        setMaterialsError(null);
         const resp = await fetch('/api/database/v1/learning_materials/list');
         if (!resp.ok) throw new Error('Failed to load learning_materials');
         const { learning_materials } = await resp.json();
@@ -156,11 +162,12 @@ export default function Home() {
         clientLog.error('home.fetch_learning_materials_failed', {
           error: err?.message || String(err),
         });
+        setMaterialsError('Failed to load learning materials.');
         setAcademicLearning_materials([]); // keep UI stable
       }
     };
 
-    // only fetch when userProfile has been loaded (or if you don’t care, call unconditionally)
+    // only fetch when userProfile has been loaded (or if you don't care, call unconditionally)
     if (userProfile !== null) fetchLearning_materials();
   }, [userProfile]);
 
@@ -187,6 +194,22 @@ export default function Home() {
       title="Learning Dashboard • ReBabel"
       mainClassName="max-h-screen overflow-scroll px-8 py-6"
     >
+      {/* Error banners */}
+      {profileError && (
+        <InlineError
+          message={profileError}
+          onRetry={() => window.location.reload()}
+          className="mb-4"
+        />
+      )}
+      {materialsError && (
+        <InlineError
+          message={materialsError}
+          onRetry={() => window.location.reload()}
+          className="mb-4"
+        />
+      )}
+
       {/* Header with User Info and Stats */}
       <div className="mb-6">
         <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6">

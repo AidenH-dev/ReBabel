@@ -25,10 +25,12 @@ import { MdConstruction } from 'react-icons/md';
 import { LuAlarmClockCheck } from 'react-icons/lu';
 import { TbBolt } from 'react-icons/tb';
 import BaseModal from '@/components/ui/BaseModal';
+import { InlineError } from '@/components/ui/errors';
 
 export default function AcademyHome() {
   const router = useRouter();
   const [userProfile, setUserProfile] = useState(null);
+  const [profileError, setProfileError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [isQuickStudyLoading, setIsQuickStudyLoading] = useState(false);
@@ -37,6 +39,7 @@ export default function AcademyHome() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        setProfileError(null);
         const response = await fetch('/api/auth/me');
         const profile = await response.json();
         setUserProfile(profile);
@@ -44,6 +47,9 @@ export default function AcademyHome() {
         clientLog.error('academy.fetch_profile_failed', {
           error: error?.message || String(error),
         });
+        setProfileError(
+          'Failed to load your profile. Please refresh the page.'
+        );
       } finally {
         setIsLoading(false);
       }
@@ -195,6 +201,13 @@ export default function AcademyHome() {
     >
       {/* Header Section */}
       <div className="mb-3">
+        {profileError && (
+          <InlineError
+            message={profileError}
+            onRetry={() => window.location.reload()}
+            className="mb-4"
+          />
+        )}
         <div className="mb-2">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
             Academy

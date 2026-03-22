@@ -11,15 +11,18 @@ import CSVUpload from '../../../../components/pages/academy/sets/CreateSet/CSVUp
 import CustomSelect from '@/components/ui/CustomSelect';
 import Button from '@/components/ui/Button';
 import { clientLog } from '@/lib/clientLogger';
+import { InlineError } from '@/components/ui/errors';
 
 export default function CreateNewSet() {
   const router = useRouter();
 
   // ----- User Profile -----
   const [userProfile, setUserProfile] = useState(null);
+  const [profileError, setProfileError] = useState(null);
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        setProfileError(null);
         const response = await fetch('/api/auth/me');
         const profile = await response.json();
         setUserProfile(profile);
@@ -27,6 +30,9 @@ export default function CreateNewSet() {
         clientLog.error('create_set.fetch_profile_failed', {
           error: error?.message || String(error),
         });
+        setProfileError(
+          'Failed to load your profile. Set creation may not work.'
+        );
       }
     };
     fetchUserProfile();
@@ -492,6 +498,13 @@ export default function CreateNewSet() {
       mainClassName="px-4 sm:px-6 py-4"
     >
       <div className="w-full max-w-6xl mx-auto relative">
+        {profileError && (
+          <InlineError
+            message={profileError}
+            onRetry={() => window.location.reload()}
+            className="mb-4"
+          />
+        )}
         {/* Header */}
         <div className="mb-3 ">
           <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
