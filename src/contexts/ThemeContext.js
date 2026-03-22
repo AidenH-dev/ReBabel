@@ -12,11 +12,16 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
   const [theme, setThemeState] = useState('system');
   const [mounted, setMounted] = useState(false);
+  const [serverResolved, setServerResolved] = useState(false);
 
   const { savePreference } = useUserPreferences((serverPrefs) => {
+    // Server prefs are the source of truth for logged-in users.
+    // This overrides whatever localStorage had.
     if (serverPrefs.theme) {
       setThemeState(serverPrefs.theme);
+      localStorage.setItem('theme', serverPrefs.theme);
     }
+    setServerResolved(true);
   });
 
   const setTheme = useCallback(
@@ -28,7 +33,7 @@ export function ThemeProvider({ children }) {
     [savePreference]
   );
 
-  // Load saved theme on mount
+  // Load localStorage theme on mount as instant cache (before server responds)
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'system';
     setThemeState(savedTheme);
@@ -71,7 +76,7 @@ export function ThemeProvider({ children }) {
   }, [theme, mounted]);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, serverResolved }}>
       {children}
     </ThemeContext.Provider>
   );

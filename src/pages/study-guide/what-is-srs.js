@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import SRSGuideContent from '@/components/SRS/srs-guide-content';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function WhatIsSrsPage() {
   const router = useRouter();
@@ -243,11 +244,14 @@ export default function WhatIsSrsPage() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>
-              &copy; 2025 ReBabel. All rights reserved. Currently in beta
-              development.
-            </p>
+          <div className="border-t border-gray-800 pt-8 text-sm text-gray-400">
+            <div className="flex items-center justify-between">
+              <p>
+                &copy; 2025 ReBabel. All rights reserved. Currently in beta
+                development.
+              </p>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </footer>

@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa';
 import { FaArrowRightLong } from 'react-icons/fa6';
 import { TbRepeat } from 'react-icons/tb';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export async function getStaticProps() {
   return {
@@ -996,11 +997,14 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>
-              &copy; 2025 ReBabel. All rights reserved. Currently in beta
-              development.
-            </p>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-sm text-gray-400">
+            <div className="flex items-center justify-between">
+              <p>
+                &copy; 2025 ReBabel. All rights reserved. Currently in beta
+                development.
+              </p>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </footer>
