@@ -1,6 +1,7 @@
 import { withAuth } from '@/lib/withAuth';
 import { tracedLLMCall } from '@/lib/langsmith';
 import { createRateLimiter } from '@/lib/rateLimit';
+import { getProviderConfig } from '@/lib/llmProviders';
 
 export const config = {
   maxDuration: 60,
@@ -43,26 +44,7 @@ async function handler(req, res) {
     });
   }
 
-  // Provider configuration
-  const providers = {
-    openai: {
-      url: 'https://api.openai.com/v1/chat/completions',
-      key: process.env.OPENAI_KEY,
-      model: 'gpt-4o-mini',
-    },
-    deepseek: {
-      url: 'https://api.deepseek.com/v1/chat/completions',
-      key: process.env.DEEPSEEK_KEY,
-      model: 'deepseek-chat',
-    },
-    anthropic: {
-      url: 'https://api.anthropic.com/v1/messages',
-      key: process.env.CLAUDE_KEY,
-      model: 'claude-haiku-4-5-20251001',
-    },
-  };
-
-  const providerConfig = providers[provider] || providers.anthropic;
+  const providerConfig = getProviderConfig(provider);
   if (!providerConfig.key) {
     return res
       .status(500)

@@ -1,21 +1,8 @@
-import crypto from 'crypto';
-import http2 from 'http2';
 import { supabaseKvs } from '@/lib/supabaseKvs';
 import { withLogger } from '@/lib/withLogger';
 import { log } from '@/lib/logger';
-
-// SRS level time factors in milliseconds
-const SRS_TIME_FACTORS = {
-  1: 10 * 60 * 1000, // 10 minutes
-  2: 1 * 24 * 60 * 60 * 1000, // 1 day
-  3: 3 * 24 * 60 * 60 * 1000, // 3 days
-  4: 7 * 24 * 60 * 60 * 1000, // 7 days
-  5: 14 * 24 * 60 * 60 * 1000, // 14 days
-  6: 30 * 24 * 60 * 60 * 1000, // 30 days
-  7: 60 * 24 * 60 * 60 * 1000, // 60 days
-  8: 120 * 24 * 60 * 60 * 1000, // 120 days
-  9: 180 * 24 * 60 * 60 * 1000, // 180 days (6 months)
-};
+import { SRS_INTERVALS } from '@/lib/srs/constants';
+import { createAPNsJWT, sendAPNsNotification, getAPNsConfig } from '@/lib/apns';
 
 function isItemNewlyDue(item, lastNotifiedAt) {
   if (!item.srs?.srs_level || !item.srs?.time_created) return false;
@@ -24,7 +11,7 @@ function isItemNewlyDue(item, lastNotifiedAt) {
   if (srsLevel < 1 || srsLevel > 9) return false;
 
   const timeCreated = new Date(item.srs.time_created).getTime();
-  const interval = SRS_TIME_FACTORS[srsLevel];
+  const interval = SRS_INTERVALS[srsLevel];
   const dueTime = timeCreated + interval;
   const now = Date.now();
   const lastNotified = lastNotifiedAt ? new Date(lastNotifiedAt).getTime() : 0;
@@ -89,92 +76,6 @@ async function getNewlyDueCount(userId, lastNotifiedAt) {
   }
 }
 
-function createJWT(keyId, teamId, privateKey) {
-  const header = {
-    alg: 'ES256',
-    kid: keyId,
-  };
-
-  const payload = {
-    iss: teamId,
-    iat: Math.floor(Date.now() / 1000),
-  };
-
-  const base64Header = Buffer.from(JSON.stringify(header)).toString(
-    'base64url'
-  );
-  const base64Payload = Buffer.from(JSON.stringify(payload)).toString(
-    'base64url'
-  );
-  const signatureInput = `${base64Header}.${base64Payload}`;
-
-  const sign = crypto.createSign('SHA256');
-  sign.update(signatureInput);
-  const signature = sign.sign(privateKey, 'base64url');
-
-  return `${signatureInput}.${signature}`;
-}
-
-function sendAPNsNotification(
-  deviceToken,
-  payload,
-  jwt,
-  bundleId,
-  isProduction = false
-) {
-  return new Promise((resolve, reject) => {
-    const host = isProduction
-      ? 'api.push.apple.com'
-      : 'api.sandbox.push.apple.com';
-
-    const client = http2.connect(`https://${host}`);
-
-    client.on('error', (err) => {
-      reject(err);
-    });
-
-    const headers = {
-      ':method': 'POST',
-      ':path': `/3/device/${deviceToken}`,
-      authorization: `bearer ${jwt}`,
-      'apns-topic': bundleId,
-      'apns-push-type': 'alert',
-      'apns-priority': '10',
-      'content-type': 'application/json',
-    };
-
-    const req = client.request(headers);
-
-    let responseData = '';
-    let statusCode;
-
-    req.on('response', (headers) => {
-      statusCode = headers[':status'];
-    });
-
-    req.on('data', (chunk) => {
-      responseData += chunk;
-    });
-
-    req.on('end', () => {
-      client.close();
-      if (statusCode === 200) {
-        resolve({ success: true, statusCode });
-      } else {
-        resolve({ success: false, statusCode, error: responseData });
-      }
-    });
-
-    req.on('error', (err) => {
-      client.close();
-      reject(err);
-    });
-
-    req.write(JSON.stringify(payload));
-    req.end();
-  });
-}
-
 export default withLogger(async function handler(req, res) {
   // Verify request is from Vercel Cron or has valid secret
   const authHeader = req.headers.authorization;
@@ -184,7 +85,7 @@ export default withLogger(async function handler(req, res) {
   // Otherwise, check for Vercel's cron user-agent or allow in development
   if (cronSecret) {
     if (authHeader !== `Bearer ${cronSecret}`) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
   } else {
     // For Hobby plans: verify it's coming from Vercel's cron system
@@ -192,7 +93,7 @@ export default withLogger(async function handler(req, res) {
     const isLocalDev = process.env.NODE_ENV !== 'production';
 
     if (!isVercelCron && !isLocalDev) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
   }
 
@@ -208,35 +109,34 @@ export default withLogger(async function handler(req, res) {
         error: error.message,
         code: error.code,
       });
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ success: false, error: error.message });
     }
 
     if (!users || users.length === 0) {
-      return res.json({ message: 'No users to notify', count: 0 });
+      return res.json({
+        success: true,
+        message: 'No users to notify',
+        count: 0,
+      });
     }
 
     // Setup APNs
-    const apnsKeyId = process.env.APNS_KEY_ID;
-    const apnsTeamId = process.env.APNS_TEAM_ID;
-    const apnsKey = process.env.APNS_KEY;
-    const bundleId = process.env.APNS_BUNDLE_ID || 'org.rebabel.app';
-    const isProduction = process.env.APNS_PRODUCTION === 'true';
-
-    if (!apnsKeyId || !apnsTeamId || !apnsKey) {
+    const apnsConfig = getAPNsConfig();
+    if (!apnsConfig) {
       req.log.error('config.missing', { error: 'Missing APNs configuration' });
       return res
         .status(500)
-        .json({ error: 'Push notifications not configured' });
+        .json({ success: false, error: 'Push notifications not configured' });
     }
 
-    let privateKey;
-    if (apnsKey.includes('BEGIN PRIVATE KEY')) {
-      privateKey = apnsKey.replace(/\\n/g, '\n');
-    } else {
-      privateKey = Buffer.from(apnsKey, 'base64').toString('utf-8');
-    }
-
-    const jwt = createJWT(apnsKeyId, apnsTeamId, privateKey);
+    const {
+      keyId: apnsKeyId,
+      teamId: apnsTeamId,
+      bundleId,
+      isProduction,
+      privateKey,
+    } = apnsConfig;
+    const jwt = createAPNsJWT(apnsKeyId, apnsTeamId, privateKey);
 
     // Send notifications to each user
     const results = [];
@@ -327,6 +227,7 @@ export default withLogger(async function handler(req, res) {
       notificationsSent: successCount,
     });
     return res.json({
+      success: true,
       message: `Sent ${successCount}/${results.length} notifications`,
       results,
     });
@@ -335,6 +236,6 @@ export default withLogger(async function handler(req, res) {
       error: error?.message || String(error),
       stack: error?.stack,
     });
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ success: false, error: error.message });
   }
 });

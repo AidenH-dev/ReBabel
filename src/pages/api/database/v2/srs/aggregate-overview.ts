@@ -2,6 +2,7 @@ import type { NextApiResponse } from 'next';
 import { withAuth } from '@/lib/withAuth';
 import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
+import { SRS_INTERVALS } from '@/lib/srs/constants';
 
 interface SetData {
   entity_id: string;
@@ -26,19 +27,6 @@ interface Item {
   [key: string]: any;
 }
 
-// SRS level time factors in milliseconds
-const SRS_TIME_FACTORS: Record<number, number> = {
-  1: 10 * 60 * 1000,
-  2: 1 * 24 * 60 * 60 * 1000,
-  3: 3 * 24 * 60 * 60 * 1000,
-  4: 7 * 24 * 60 * 60 * 1000,
-  5: 14 * 24 * 60 * 60 * 1000,
-  6: 30 * 24 * 60 * 60 * 1000,
-  7: 60 * 24 * 60 * 60 * 1000,
-  8: 120 * 24 * 60 * 60 * 1000,
-  9: 180 * 24 * 60 * 60 * 1000,
-};
-
 function isItemDue(item: Item): boolean {
   if (!item.srs) return false;
   const { srs_level, time_created } = item.srs;
@@ -49,7 +37,7 @@ function isItemDue(item: Item): boolean {
   const lastReviewTime = new Date(time_created).getTime();
   if (lastReviewTime > currentTime) return false;
 
-  return (currentTime - lastReviewTime) >= SRS_TIME_FACTORS[srs_level];
+  return (currentTime - lastReviewTime) >= SRS_INTERVALS[srs_level];
 }
 
 function toDateString(date: Date, timeZone: string): string {
@@ -143,7 +131,7 @@ async function handleGET(req: AuthedRequest, res: NextApiResponse, userId: strin
             if (!isNaN(d.getTime())) {
               reviewDates.push(toDateString(d, timezone));
               // Compute next due date
-              const timeFactor = SRS_TIME_FACTORS[level];
+              const timeFactor = SRS_INTERVALS[level];
               if (timeFactor) {
                 const nextDue = new Date(d.getTime() + timeFactor);
                 futureDues.push({ date: toDateString(nextDue, timezone) });

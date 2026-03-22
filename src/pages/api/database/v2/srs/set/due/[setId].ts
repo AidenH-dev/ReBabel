@@ -2,6 +2,7 @@ import type { NextApiResponse } from 'next';
 import { withAuth } from '@/lib/withAuth';
 import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
+import { SRS_INTERVALS } from '@/lib/srs/constants';
 
 interface SrsData {
   scope: string;
@@ -37,19 +38,6 @@ interface ApiResponse {
   error?: string;
 }
 
-// SRS level time factors in milliseconds
-const SRS_TIME_FACTORS: Record<number, number> = {
-  1: 10 * 60 * 1000,        // 10 minutes
-  2: 1 * 24 * 60 * 60 * 1000,   // 1 day
-  3: 3 * 24 * 60 * 60 * 1000,   // 3 days
-  4: 7 * 24 * 60 * 60 * 1000,   // 7 days
-  5: 14 * 24 * 60 * 60 * 1000,  // 14 days
-  6: 30 * 24 * 60 * 60 * 1000,  // 30 days
-  7: 60 * 24 * 60 * 60 * 1000,  // 60 days
-  8: 120 * 24 * 60 * 60 * 1000, // 120 days
-  9: 180 * 24 * 60 * 60 * 1000, // 180 days (6 months)
-};
-
 /**
  * Determines if an item is due for review based on its SRS level and time since last review
  * @param item - The item to check
@@ -84,11 +72,11 @@ function isItemDue(item: Item): boolean {
 
   const elapsedTime = currentTime - lastReviewTime;
 
-  // Get the time factor for this SRS level
-  const timeFactor = SRS_TIME_FACTORS[srs_level];
+  // Get the interval for this SRS level
+  const interval = SRS_INTERVALS[srs_level];
 
-  // Item is due if elapsed time is greater than or equal to the time factor
-  return elapsedTime >= timeFactor;
+  // Item is due if elapsed time is greater than or equal to the interval
+  return elapsedTime >= interval;
 }
 
 async function handleGET(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
