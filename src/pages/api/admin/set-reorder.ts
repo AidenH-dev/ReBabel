@@ -2,25 +2,15 @@
 // GET  /api/admin/set-reorder?setId=xxx  — load set + items for display
 // POST /api/admin/set-reorder             — apply new item order
 // pages/api/admin/set-reorder.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import type { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 
-export default withApiAuthRequired(withLogger(async function handler(
-  req,
+export default withAuth(async function handler(
+  req: AuthedRequest,
   res: NextApiResponse
 ) {
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({ success: false, error: 'Unauthorized' });
-  }
-
-  const isAdmin = (session.user as any)['https://rebabel.org/app_metadata']?.isAdmin || false;
-  if (!isAdmin) {
-    return res.status(403).json({ success: false, error: 'Forbidden - admin access required' });
-  }
-
   // GET — load set data for display
   if (req.method === 'GET') {
     const { setId } = req.query;
@@ -64,4 +54,4 @@ export default withApiAuthRequired(withLogger(async function handler(
   }
 
   return res.status(405).json({ success: false, error: 'Method not allowed' });
-}));
+}, { requireAdmin: true });

@@ -1,10 +1,9 @@
 // Implements SPEC-LLM-006 (Set Item Reordering — user-facing API route)
 // pages/api/database/v2/sets/reorder-items.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { resolveUserId } from '@/lib/resolveUserId';
+import type { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 
 interface ReorderItemsRequest {
   setId: string;
@@ -16,15 +15,10 @@ interface ReorderItemsResponse {
   error?: string;
 }
 
-export default withApiAuthRequired(withLogger(async function handler(
-  req,
-  res
+export default withAuth(async function handler(
+  req: AuthedRequest,
+  res: NextApiResponse
 ) {
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({ success: false, error: 'Unauthorized - authentication required' });
-  }
-
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed. Use POST.' });
   }
@@ -39,11 +33,10 @@ export default withApiAuthRequired(withLogger(async function handler(
     }
 
     const { setId, itemIds } = body;
-    const userId = await resolveUserId(session.user.sub);
-    const isAdmin = (session.user as any)['https://rebabel.org/app_metadata']?.isAdmin || false;
+    const userId = req.userId;
 
     // Ownership check — admins can reorder any set
-    if (!isAdmin) {
+    if (!req.isAdmin) {
       const { data: setData, error: setError } = await supabaseKvs
         .rpc('get_set_with_items_v2', { set_entity_id: setId });
 
@@ -73,7 +66,7 @@ export default withApiAuthRequired(withLogger(async function handler(
       error: error instanceof Error ? error.message : 'Unknown error occurred',
     });
   }
-}));
+});
 
 function validateRequest(body: any): { isValid: boolean; error?: string } {
   if (!body.setId || typeof body.setId !== 'string') {

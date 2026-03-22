@@ -1,11 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { notifyBugReport } from '@/lib/webhooks/peko';
 import { notifySlackBugReport } from '@/lib/webhooks/slack';
-import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 5 });
 
@@ -46,22 +45,12 @@ function validateRequest(body: any): { isValid: boolean; error?: string } {
 }
 
 async function handlePOST(
-  req: any,
-  res: NextApiResponse<ApiResponse>
+  req: AuthedRequest,
+  res: NextApiResponse<ApiResponse>,
+  userId: string,
+  userEmail: string
 ) {
   try {
-    // Get Auth0 session and extract user credentials
-    const session = await getSession(req, res);
-    if (!session?.user?.sub || !session?.user?.email) {
-      return res.status(401).json({
-        success: false,
-        error: 'Unauthorized - authentication required'
-      });
-    }
-
-    const userId = await resolveUserId(session.user.sub);
-    const userEmail = session.user.email;
-
     // Parse and validate request body
     const body: BugReportRequest = req.body;
     const validation = validateRequest(body);
@@ -140,18 +129,9 @@ async function handlePOST(
 }
 
 // Default export function required by Pages Router
-// Protected with Auth0 - requires valid session
-export default withApiAuthRequired(withLogger(async function handler(req, res: NextApiResponse<ApiResponse>) {
-  // Verify authentication
-  const session = await getSession(req, res);
-  if (!session?.user?.sub || !session?.user?.email) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required'
-    });
-  }
-
-  if (!limiter.check(session.user.sub)) {
+// Protected with withAuth — requires valid session
+export default withAuth(async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
+  if (!limiter.check(req.auth0Sub)) {
     return res.status(429).json({
       success: false,
       error: 'Too many requests. Please try again later.'
@@ -162,7 +142,7 @@ export default withApiAuthRequired(withLogger(async function handler(req, res: N
 
   switch (method) {
     case 'POST':
-      return handlePOST(req, res);
+      return handlePOST(req, res, req.userId, req.auth0Email);
 
     case 'GET':
     case 'PUT':
@@ -178,4 +158,4 @@ export default withApiAuthRequired(withLogger(async function handler(req, res: N
         error: `Method ${method} not allowed`
       });
   }
-}))
+})

@@ -1,5 +1,4 @@
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { withLogger } from '@/lib/withLogger';
+import { withAuth } from '@/lib/withAuth';
 
 async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -7,9 +6,9 @@ async function handler(req, res) {
   }
 
   try {
-    const session = await getSession(req, res);
-    if (!session?.user?.email) {
-      return res.status(401).json({ error: 'Unauthorized' });
+    const userEmail = req.auth0Email;
+    if (!userEmail) {
+      return res.status(401).json({ error: 'Email not available in session' });
     }
 
     const response = await fetch(
@@ -21,7 +20,7 @@ async function handler(req, res) {
         },
         body: JSON.stringify({
           client_id: process.env.AUTH0_CLIENT_ID,
-          email: session.user.email,
+          email: userEmail,
           connection: 'Username-Password-Authentication',
         }),
       }
@@ -45,4 +44,4 @@ async function handler(req, res) {
   }
 }
 
-export default withApiAuthRequired(withLogger(handler));
+export default withAuth(handler);

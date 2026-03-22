@@ -1,8 +1,7 @@
 import type { NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { resolveUserId } from '@/lib/resolveUserId';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger, type LoggedRequest } from '@/lib/withLogger';
 
 interface SrsData {
   scope: string;
@@ -35,7 +34,7 @@ interface ApiResponse {
   error?: string;
 }
 
-async function handleGET(req: LoggedRequest, res: NextApiResponse<ApiResponse>, userId: string) {
+async function handleGET(req: AuthedRequest, res: NextApiResponse<ApiResponse>, userId: string) {
   try {
     const { countOnly } = req.query;
 
@@ -70,19 +69,11 @@ async function handleGET(req: LoggedRequest, res: NextApiResponse<ApiResponse>, 
   }
 }
 
-export default withApiAuthRequired(withLogger(async function handler(
-  req: LoggedRequest,
+export default withAuth(async function handler(
+  req: AuthedRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required'
-    });
-  }
-
-  const userId = await resolveUserId(session.user.sub);
+  const userId = req.userId;
 
   if (req.method !== 'GET') {
     return res.status(405).json({
@@ -92,4 +83,4 @@ export default withApiAuthRequired(withLogger(async function handler(
   }
 
   return handleGET(req, res, userId);
-}));
+});

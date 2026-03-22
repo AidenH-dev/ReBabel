@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { resolveUserId } from '@/lib/resolveUserId';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 
 // Type definitions for the response structure
 interface SetMetadata {
@@ -171,17 +171,8 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>)
 }
 
 // Default export function required by Pages Router
-// Protected with Auth0 - requires valid session
-export default withApiAuthRequired(withLogger(async function handler(req, res) {
-  // Verify authentication
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required'
-    });
-  }
-
+// Protected with withAuth — requires valid session
+export default withAuth(async function handler(req: AuthedRequest, res: NextApiResponse) {
   // Resolve the Auth0 ID from the URL path to a ReBabel user ID
   const rawUserId = req.query.id;
   if (rawUserId && typeof rawUserId === 'string' && rawUserId.startsWith('auth0|')) {
@@ -208,4 +199,4 @@ export default withApiAuthRequired(withLogger(async function handler(req, res) {
         error: `Method ${method} not allowed`
       });
   }
-}))
+})

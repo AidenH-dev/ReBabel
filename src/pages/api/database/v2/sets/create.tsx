@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { createRateLimiter } from '@/lib/rateLimit';
-import { resolveUserId } from '@/lib/resolveUserId';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
@@ -318,18 +317,9 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<ApiResponse>
 }
 
 // Default export function required by Pages Router
-// Protected with Auth0 - requires valid session
-export default withApiAuthRequired(withLogger(async function handler(req, res) {
-  // Verify authentication
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required'
-    });
-  }
-
-  if (!limiter.check(session.user.sub)) {
+// Protected with withAuth — requires valid session
+export default withAuth(async function handler(req: AuthedRequest, res: NextApiResponse) {
+  if (!limiter.check(req.auth0Sub)) {
     return res.status(429).json({
       success: false,
       error: 'Too many requests. Please try again later.'
@@ -341,7 +331,7 @@ export default withApiAuthRequired(withLogger(async function handler(req, res) {
   switch (method) {
     case 'POST': {
       // Enforce 1000-set account cap
-      const userId = await resolveUserId(session.user.sub);
+      const userId = req.userId;
       const { data: setCount } = await supabaseKvs
         .rpc('get_user_set_count', { p_user_id: userId });
       if ((setCount ?? 0) >= 1000) {
@@ -367,4 +357,4 @@ export default withApiAuthRequired(withLogger(async function handler(req, res) {
         error: `Method ${method} not allowed`
       });
   }
-}))
+})

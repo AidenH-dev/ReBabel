@@ -2,28 +2,21 @@
 // POST /api/analytics/heartbeat
 // Called once per app load from _app.js to record a platform visit event.
 import { NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { resolveUserId } from '@/lib/resolveUserId';
-import { withLogger } from '@/lib/withLogger';
-import type { LoggedRequest } from '@/lib/withLogger';
 
 interface ApiResponse {
   message?: unknown;
   error?: string;
 }
 
-async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
+async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  const userId = await resolveUserId(session.user.sub);
+  const userId = req.userId;
 
   try {
     const { data, error } = await supabaseKvs
@@ -41,4 +34,4 @@ async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
   }
 }
 
-export default withApiAuthRequired(withLogger(handler));
+export default withAuth(handler);

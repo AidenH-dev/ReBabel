@@ -1,8 +1,8 @@
 // pages/api/database/v2/sets/delete-set.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import type { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 
 interface DeleteSetRequest {
   set_id: string;
@@ -26,19 +26,10 @@ interface DeleteSetResponse {
   message?: string;
 }
 
-export default withApiAuthRequired(withLogger(async function handler(
-  req,
-  res
+export default withAuth(async function handler(
+  req: AuthedRequest,
+  res: NextApiResponse
 ) {
-  // Verify authentication
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required'
-    });
-  }
-
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({
@@ -101,7 +92,7 @@ export default withApiAuthRequired(withLogger(async function handler(
       error: error instanceof Error ? error.message : 'Unknown error occurred',
     });
   }
-}))
+})
 
 // Validation helper
 function validateRequest(body: any): { isValid: boolean; error?: string } {

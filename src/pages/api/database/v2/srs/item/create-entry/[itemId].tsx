@@ -1,8 +1,8 @@
 // pages/api/database/v2/srs/item/create-entry/[itemId].ts
 import type { NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger, type LoggedRequest } from '@/lib/withLogger';
 
 interface CreateSrsEntryRequest {
   srs_level: number;
@@ -21,7 +21,7 @@ interface CreateSrsEntryResponse {
 }
 
 async function handlePOST(
-  req: LoggedRequest,
+  req: AuthedRequest,
   res: NextApiResponse<CreateSrsEntryResponse>
 ) {
   try {
@@ -90,19 +90,10 @@ async function handlePOST(
   }
 }
 
-export default withApiAuthRequired(withLogger(async function handler(
-  req: LoggedRequest,
+export default withAuth(async function handler(
+  req: AuthedRequest,
   res: NextApiResponse<CreateSrsEntryResponse>
 ) {
-  // Verify authentication
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required'
-    });
-  }
-
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({
@@ -112,7 +103,7 @@ export default withApiAuthRequired(withLogger(async function handler(
   }
 
   return handlePOST(req, res);
-}))
+})
 
 // Validation helper
 function validateRequest(body: any): { isValid: boolean; error?: string } {

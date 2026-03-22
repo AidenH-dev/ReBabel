@@ -1,78 +1,69 @@
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withAuth } from '@/lib/withAuth';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import { resolveUserId } from '@/lib/resolveUserId';
 import { checkUsername } from '@/lib/usernameFilter';
-import { withLogger } from '@/lib/withLogger';
 
-export default withApiAuthRequired(
-  withLogger(async function handler(req, res) {
-    const session = await getSession(req, res);
-    if (!session?.user?.sub) {
-      return res.status(401).json({ error: 'Unauthorized' });
+export default withAuth(async function handler(req, res) {
+  const userId = req.userId;
+
+  if (req.method === 'GET') {
+    try {
+      const { data, error } = await supabaseAdmin
+        .schema('v1_kvs_rebabel')
+        .rpc('get_user_identity', { p_user_id: userId });
+
+      if (error) throw error;
+
+      return res.status(200).json({
+        success: true,
+        username: data?.username || null,
+      });
+    } catch (err) {
+      req.log.error('username.fetch_failed', {
+        error: err?.message || String(err),
+        stack: err?.stack,
+      });
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
+  if (req.method === 'POST') {
+    const { username } = req.body;
+
+    if (!username || typeof username !== 'string') {
+      return res.status(400).json({ error: 'username is required' });
     }
 
-    const userId = await resolveUserId(session.user.sub, session.user.email);
+    const trimmed = username.trim();
 
-    if (req.method === 'GET') {
-      try {
-        const { data, error } = await supabaseAdmin
-          .schema('v1_kvs_rebabel')
-          .rpc('get_user_identity', { p_user_id: userId });
-
-        if (error) throw error;
-
-        return res.status(200).json({
-          success: true,
-          username: data?.username || null,
-        });
-      } catch (err) {
-        req.log.error('username.fetch_failed', {
-          error: err?.message || String(err),
-          stack: err?.stack,
-        });
-        return res.status(500).json({ error: err.message });
-      }
+    // Content filter before hitting the DB
+    const filterError = checkUsername(trimmed);
+    if (filterError) {
+      return res.status(400).json({ error: filterError });
     }
 
-    if (req.method === 'POST') {
-      const { username } = req.body;
-
-      if (!username || typeof username !== 'string') {
-        return res.status(400).json({ error: 'username is required' });
-      }
-
-      const trimmed = username.trim();
-
-      // Content filter before hitting the DB
-      const filterError = checkUsername(trimmed);
-      if (filterError) {
-        return res.status(400).json({ error: filterError });
-      }
-
-      try {
-        const { data, error } = await supabaseAdmin
-          .schema('v1_kvs_rebabel')
-          .rpc('update_username', {
-            p_user_id: userId,
-            p_username: trimmed,
-          });
-
-        if (error) throw error;
-
-        if (data?.error) {
-          return res.status(400).json({ error: data.error });
-        }
-
-        return res.status(200).json({ success: true, username: data.username });
-      } catch (err) {
-        req.log.error('username.update_failed', {
-          error: err?.message || String(err),
-          stack: err?.stack,
+    try {
+      const { data, error } = await supabaseAdmin
+        .schema('v1_kvs_rebabel')
+        .rpc('update_username', {
+          p_user_id: userId,
+          p_username: trimmed,
         });
-        return res.status(500).json({ error: err.message });
-      }
-    }
 
-    return res.status(405).json({ error: 'Method not allowed' });
-  })
-);
+      if (error) throw error;
+
+      if (data?.error) {
+        return res.status(400).json({ error: data.error });
+      }
+
+      return res.status(200).json({ success: true, username: data.username });
+    } catch (err) {
+      req.log.error('username.update_failed', {
+        error: err?.message || String(err),
+        stack: err?.stack,
+      });
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
+  return res.status(405).json({ error: 'Method not allowed' });
+});

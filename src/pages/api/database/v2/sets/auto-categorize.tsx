@@ -1,7 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import type { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 // Kuromoji dict loading + processing 600+ items needs more than 15s
@@ -19,18 +19,10 @@ interface AutoCategorizeResponse {
   error?: string;
 }
 
-export default withApiAuthRequired(withLogger(async function handler(
-  req,
-  res
+export default withAuth(async function handler(
+  req: AuthedRequest,
+  res: NextApiResponse
 ) {
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required',
-    });
-  }
-
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
@@ -158,4 +150,4 @@ export default withApiAuthRequired(withLogger(async function handler(
       error: 'Internal server error',
     });
   }
-}));
+});

@@ -1,8 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { resolveUserId } from '@/lib/resolveUserId';
+import { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 
 interface ApiResponse {
   success: boolean;
@@ -10,7 +9,7 @@ interface ApiResponse {
   error?: string;
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>, userId: string) {
+async function handleGET(req: AuthedRequest, res: NextApiResponse<ApiResponse>, userId: string) {
   try {
     // Get user sets and count those with srs_enabled = 'true'
     const { data, error } = await supabaseKvs
@@ -57,19 +56,11 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<ApiResponse>,
   }
 }
 
-export default withApiAuthRequired(withLogger(async function handler(
-  req,
-  res
+export default withAuth(async function handler(
+  req: AuthedRequest,
+  res: NextApiResponse
 ) {
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized'
-    });
-  }
-
-  const userId = await resolveUserId(session.user.sub);
+  const userId = req.userId;
 
   if (req.method !== 'GET') {
     return res.status(405).json({
@@ -79,4 +70,4 @@ export default withApiAuthRequired(withLogger(async function handler(
   }
 
   return handleGET(req, res, userId);
-}));
+});

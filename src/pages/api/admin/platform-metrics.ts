@@ -1,31 +1,19 @@
 // Implements SPEC-DB-004 (API layer)
 // GET /api/admin/platform-metrics?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD
 // Admin-only endpoint returning aggregated platform metrics for a date range.
-import { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 
 interface ApiResponse {
   message?: unknown;
   error?: string;
 }
 
-async function handler(req: any, res: NextApiResponse<ApiResponse>) {
+async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  // Admin privilege check
-  const isAdmin =
-    session.user?.['https://rebabel.org/app_metadata']?.isAdmin || false;
-  if (!isAdmin) {
-    return res.status(403).json({ error: 'Forbidden' });
   }
 
   // Validate required query params
@@ -57,4 +45,4 @@ async function handler(req: any, res: NextApiResponse<ApiResponse>) {
   }
 }
 
-export default withApiAuthRequired(withLogger(handler));
+export default withAuth(handler, { requireAdmin: true });

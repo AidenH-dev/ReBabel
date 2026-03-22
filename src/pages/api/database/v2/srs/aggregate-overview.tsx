@@ -1,8 +1,7 @@
 import type { NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { resolveUserId } from '@/lib/resolveUserId';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger, type LoggedRequest } from '@/lib/withLogger';
 
 interface SetData {
   entity_id: string;
@@ -57,7 +56,7 @@ function toDateString(date: Date, timeZone: string): string {
   return date.toLocaleDateString('en-CA', { timeZone });
 }
 
-async function handleGET(req: LoggedRequest, res: NextApiResponse, userId: string) {
+async function handleGET(req: AuthedRequest, res: NextApiResponse, userId: string) {
   const rawTimezone = req.query.timezone;
   let timezone = 'UTC';
   if (rawTimezone !== undefined) {
@@ -217,20 +216,15 @@ async function handleGET(req: LoggedRequest, res: NextApiResponse, userId: strin
   }
 }
 
-export default withApiAuthRequired(withLogger(async function handler(
-  req: LoggedRequest,
+export default withAuth(async function handler(
+  req: AuthedRequest,
   res: NextApiResponse
 ) {
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({ success: false, error: 'Unauthorized - authentication required' });
-  }
-
-  const userId = await resolveUserId(session.user.sub);
+  const userId = req.userId;
 
   if (req.method !== 'GET') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
   return handleGET(req, res, userId);
-}));
+});

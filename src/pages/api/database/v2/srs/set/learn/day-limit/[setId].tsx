@@ -1,7 +1,7 @@
 import type { NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger, type LoggedRequest } from '@/lib/withLogger';
 
 interface DayLimitResponse {
   set_eid: string;
@@ -16,7 +16,7 @@ interface ApiResponse {
   error?: string;
 }
 
-async function handleGET(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
+async function handleGET(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
   try {
     const { setId } = req.query;
     const { limit, vocab_or_grammer, as_of, as_of_timezone } = req.query;
@@ -113,16 +113,7 @@ async function handleGET(req: LoggedRequest, res: NextApiResponse<ApiResponse>) 
   }
 }
 
-export default withApiAuthRequired(withLogger(async function handler(req: LoggedRequest, res: NextApiResponse<ApiResponse>) {
-  // Verify authentication
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required'
-    });
-  }
-
+export default withAuth(async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'GET') {
     return res.status(405).json({
       success: false,
@@ -131,4 +122,4 @@ export default withApiAuthRequired(withLogger(async function handler(req: Logged
   }
 
   return handleGET(req, res);
-}))
+})

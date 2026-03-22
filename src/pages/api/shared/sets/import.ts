@@ -1,9 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import type { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { resolveUserId } from '@/lib/resolveUserId';
 import { createRateLimiter } from '@/lib/rateLimit';
-import { withLogger } from '@/lib/withLogger';
 const { categorizeWord } = require('@/lib/kuromoji-categorize');
 
 const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
@@ -15,19 +14,11 @@ interface ApiResponse {
   message?: string;
 }
 
-export default withApiAuthRequired(withLogger(async function handler(
-  req,
+async function handler(
+  req: AuthedRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required'
-    });
-  }
-
-  if (!limiter.check(session.user.sub)) {
+  if (!limiter.check(req.auth0Sub)) {
     return res.status(429).json({
       success: false,
       error: 'Too many requests. Please try again later.'
@@ -81,7 +72,7 @@ export default withApiAuthRequired(withLogger(async function handler(
       });
     }
 
-    const userId = await resolveUserId(session.user.sub);
+    const userId = req.userId;
 
     // Enforce 1000-set account cap
     const { data: setCount } = await supabaseKvs
@@ -317,4 +308,6 @@ export default withApiAuthRequired(withLogger(async function handler(
       error: 'Internal server error'
     });
   }
-}));
+}
+
+export default withAuth(handler);

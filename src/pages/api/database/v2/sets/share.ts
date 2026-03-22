@@ -1,10 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import type { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import crypto from 'crypto';
 import { toSlug } from '@/lib/slug';
-import { resolveUserId } from '@/lib/resolveUserId';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 
 const EXPIRY_OPTIONS: Record<string, number | null> = {
   '1d': 1,
@@ -40,19 +39,11 @@ interface ApiResponse {
   message?: string;
 }
 
-export default withApiAuthRequired(withLogger(async function handler(
-  req,
-  res
+export default withAuth(async function handler(
+  req: AuthedRequest,
+  res: NextApiResponse
 ) {
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required'
-    });
-  }
-
-  const userId = await resolveUserId(session.user.sub);
+  const userId = req.userId;
 
   if (req.method !== 'POST') {
     return res.status(405).json({
@@ -209,4 +200,4 @@ export default withApiAuthRequired(withLogger(async function handler(
       error: 'Internal server error'
     });
   }
-}));
+});

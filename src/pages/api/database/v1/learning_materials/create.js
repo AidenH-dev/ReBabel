@@ -1,7 +1,6 @@
 // pages/api/database/v1/learning_materials/create.js
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { withAuth } from '@/lib/withAuth';
 import { supabaseAdmin } from '../../../../../lib/supabaseAdmin';
-import { withLogger } from '@/lib/withLogger';
 
 const norm = (s = '') => s.normalize('NFKC').toLowerCase().trim();
 const slug = (s = '') => norm(s).replace(/\s+/g, '-');
@@ -62,81 +61,75 @@ async function upsertGrammar(ownerId, g) {
   return data.id;
 }
 
-export default withApiAuthRequired(
-  withLogger(async function handler(req, res) {
-    if (req.method !== 'POST')
-      return res.status(405).json({ error: 'Method not allowed' });
+export default withAuth(async function handler(req, res) {
+  if (req.method !== 'POST')
+    return res.status(405).json({ error: 'Method not allowed' });
 
-    const session = await getSession(req, res);
-    const ownerId = session?.user?.sub; // Auth0 user id (string)
-    if (!ownerId) return res.status(401).json({ error: 'Not authenticated' });
+  const ownerId = req.auth0Sub;
 
-    const p = req.body; // payload from your Create Learning_material page
+  const p = req.body; // payload from your Create Learning_material page
 
-    try {
-      // 1) Learning_material
-      const { data: learning_material, error: cErr } = await supabaseAdmin
-        .from('learning_materials')
+  try {
+    // 1) Learning_material
+    const { data: learning_material, error: cErr } = await supabaseAdmin
+      .from('learning_materials')
+      .insert({
+        owner_id: ownerId,
+        title: p.title,
+        learning_materials: p.learningMaterials || null,
+        institution: p.institution || null,
+        description: p.description || null,
+        study_goal: p.studyGoal || null,
+        start_date: p.startDate || null,
+        end_date: p.endDate || null,
+        created_at: p.createdAt || new Date().toISOString(),
+      })
+      .select('*')
+      .single();
+    if (cErr) throw cErr;
+
+    // 2) Sections + links
+    for (let i = 0; i < (p.sections || []).length; i++) {
+      const s = p.sections[i];
+
+      const { data: section, error: sErr } = await supabaseAdmin
+        .from('sections')
         .insert({
-          owner_id: ownerId,
-          title: p.title,
-          learning_materials: p.learningMaterials || null,
-          institution: p.institution || null,
-          description: p.description || null,
-          study_goal: p.studyGoal || null,
-          start_date: p.startDate || null,
-          end_date: p.endDate || null,
-          created_at: p.createdAt || new Date().toISOString(),
+          learning_material_id: learning_material.id,
+          title: s.title,
+          description: s.description || null,
+          order: i,
         })
         .select('*')
         .single();
-      if (cErr) throw cErr;
+      if (sErr) throw sErr;
 
-      // 2) Sections + links
-      for (let i = 0; i < (p.sections || []).length; i++) {
-        const s = p.sections[i];
-
-        const { data: section, error: sErr } = await supabaseAdmin
-          .from('sections')
-          .insert({
-            learning_material_id: learning_material.id,
-            title: s.title,
-            description: s.description || null,
-            order: i,
-          })
-          .select('*')
-          .single();
-        if (sErr) throw sErr;
-
-        for (let j = 0; j < (s.vocabulary || []).length; j++) {
-          const vId = await upsertVocab(ownerId, s.vocabulary[j]);
-          const { error: linkErr } = await supabaseAdmin
-            .from('section_vocab')
-            .insert({ section_id: section.id, vocab_id: vId, position: j });
-          if (linkErr) throw linkErr;
-        }
-
-        for (let k = 0; k < (s.grammar || []).length; k++) {
-          const gId = await upsertGrammar(ownerId, s.grammar[k]);
-          const { error: linkErr } = await supabaseAdmin
-            .from('section_grammar')
-            .insert({ section_id: section.id, grammar_id: gId, position: k });
-          if (linkErr) throw linkErr;
-        }
+      for (let j = 0; j < (s.vocabulary || []).length; j++) {
+        const vId = await upsertVocab(ownerId, s.vocabulary[j]);
+        const { error: linkErr } = await supabaseAdmin
+          .from('section_vocab')
+          .insert({ section_id: section.id, vocab_id: vId, position: j });
+        if (linkErr) throw linkErr;
       }
 
-      res.status(200).json({ learning_materialId: learning_material.id });
-    } catch (e) {
-      req.log.error('learning_material.create_failed', {
-        error: e?.message || String(e),
-        stack: e?.stack,
-      });
-      res
-        .status(500)
-        .json({
-          error: 'Failed to create learning_material',
-          details: String(e?.message || e),
-        });
+      for (let k = 0; k < (s.grammar || []).length; k++) {
+        const gId = await upsertGrammar(ownerId, s.grammar[k]);
+        const { error: linkErr } = await supabaseAdmin
+          .from('section_grammar')
+          .insert({ section_id: section.id, grammar_id: gId, position: k });
+        if (linkErr) throw linkErr;
+      }
     }
-  })
-);
+
+    res.status(200).json({ learning_materialId: learning_material.id });
+  } catch (e) {
+    req.log.error('learning_material.create_failed', {
+      error: e?.message || String(e),
+      stack: e?.stack,
+    });
+    res.status(500).json({
+      error: 'Failed to create learning_material',
+      details: String(e?.message || e),
+    });
+  }
+});

@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { withLogger } from '@/lib/withLogger';
 
 interface BugReportResponse {
   success: boolean;
@@ -12,28 +12,10 @@ interface BugReportResponse {
 }
 
 async function handleGET(
-  req: any,
+  req: AuthedRequest,
   res: NextApiResponse<BugReportResponse>
 ) {
   try {
-    // Get Auth0 session and extract user credentials
-    const session = await getSession(req, res);
-    if (!session?.user?.sub || !session?.user?.email) {
-      return res.status(401).json({
-        success: false,
-        error: 'Unauthorized - authentication required'
-      });
-    }
-
-    // Check if user is admin
-    const isAdmin = session.user['https://rebabel.org/app_metadata']?.isAdmin || false;
-    if (!isAdmin) {
-      return res.status(403).json({
-        success: false,
-        error: 'Forbidden - admin access required'
-      });
-    }
-
     // Get query parameters for filtering
     const { start_time, end_time } = req.query;
 
@@ -87,26 +69,8 @@ async function handleGET(
 }
 
 // Default export function required by Pages Router
-// Protected with Auth0 - requires valid session
-export default withApiAuthRequired(withLogger(async function handler(req, res: NextApiResponse<BugReportResponse>) {
-  // Verify authentication
-  const session = await getSession(req, res);
-  if (!session?.user?.sub || !session?.user?.email) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized - authentication required'
-    });
-  }
-
-  // Check if user is admin
-  const isAdmin = session.user['https://rebabel.org/app_metadata']?.isAdmin || false;
-  if (!isAdmin) {
-    return res.status(403).json({
-      success: false,
-      error: 'Forbidden - admin access required'
-    });
-  }
-
+// Protected with withAuth — requires valid session + admin
+export default withAuth(async function handler(req: AuthedRequest, res: NextApiResponse<BugReportResponse>) {
   const { method } = req;
 
   switch (method) {
@@ -127,4 +91,4 @@ export default withApiAuthRequired(withLogger(async function handler(req, res: N
         error: `Method ${method} not allowed`
       });
   }
-}));
+}, { requireAdmin: true });

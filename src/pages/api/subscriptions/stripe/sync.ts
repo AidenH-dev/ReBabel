@@ -1,9 +1,8 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { NextApiResponse } from 'next';
+import { withAuth } from '@/lib/withAuth';
+import type { AuthedRequest } from '@/lib/withAuth';
 import Stripe from 'stripe';
 import { supabaseKvs } from '@/lib/supabaseKvs';
-import { resolveUserId } from '@/lib/resolveUserId';
-import { withLogger } from '@/lib/withLogger';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -17,18 +16,13 @@ interface ApiResponse {
 
 // This endpoint syncs subscription data directly from Stripe
 // Use this as a fallback when webhooks aren't available
-async function handler(req: any, res: NextApiResponse<ApiResponse>) {
+async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  const session = await getSession(req, res);
-  if (!session?.user?.sub) {
-    return res.status(401).json({ success: false, error: 'Unauthorized' });
-  }
-
-  const auth0UserId = session.user.sub;
-  const userId = await resolveUserId(session.user.sub);
+  const auth0UserId = req.auth0Sub;
+  const userId = req.userId;
 
   try {
     // Find customer by metadata
@@ -95,4 +89,4 @@ async function handler(req: any, res: NextApiResponse<ApiResponse>) {
   }
 }
 
-export default withApiAuthRequired(withLogger(handler));
+export default withAuth(handler);
