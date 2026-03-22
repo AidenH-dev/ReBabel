@@ -299,7 +299,7 @@ function AcademySidebar({ hideMobileMenu = false }) {
       </div>
 
       {/* Desktop Sidebar - Hidden on small screens */}
-      <div className="hidden lg:block w-64 h-screen p-4 bg-white dark:bg-surface-elevated border-r-2 border-gray-300 dark:border-gray-600">
+      <div className="hidden lg:block w-64 h-screen p-4 bg-white dark:bg-surface-elevated dusk:bg-[#2a3444] border-r-2 border-gray-300 dark:border-gray-600 dusk:border-[#4a5568]">
         <NavigationContent />
       </div>
     </>
