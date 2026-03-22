@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
+import Button from '@/components/ui/Button';
 import { FaChevronDown } from 'react-icons/fa';
 import { FiAlertTriangle } from 'react-icons/fi';
 
@@ -205,9 +206,9 @@ export default function Help() {
                 </button>
               </Link>
               <Link href="/api/auth/login">
-                <button className="px-4 py-2 text-sm bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors">
+                <Button variant="primary" size="md">
                   Join
-                </button>
+                </Button>
               </Link>
             </div>
           </div>
@@ -288,9 +289,9 @@ export default function Help() {
               </span>
             </p>
             <Link href="/">
-              <button className="px-8 py-3 bg-white text-brand-pink font-semibold rounded-lg hover:bg-gray-100 transition-colors">
+              <Button variant="white-solid" size="lg">
                 Back to Home
-              </button>
+              </Button>
             </Link>
           </div>
         </section>

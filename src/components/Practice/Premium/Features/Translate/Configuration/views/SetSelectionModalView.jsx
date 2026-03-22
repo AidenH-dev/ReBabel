@@ -4,6 +4,7 @@
 import { FiSearch } from 'react-icons/fi';
 import { useState } from 'react';
 import BaseModal from '@/components/ui/BaseModal';
+import Button from '@/components/ui/Button';
 
 export default function SetSelectionModalView({
   isOpen,
@@ -67,13 +68,14 @@ export default function SetSelectionModalView({
         >
           Cancel
         </button>
-        <button
+        <Button
+          variant="primary-subtle"
+          size="md"
           onClick={handleConfirm}
           disabled={selectedSetIds.length === 0}
-          className="px-4 py-2 text-sm rounded-lg bg-brand-pink text-white hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Add Sets
-        </button>
+        </Button>
       </div>
     </div>
   );

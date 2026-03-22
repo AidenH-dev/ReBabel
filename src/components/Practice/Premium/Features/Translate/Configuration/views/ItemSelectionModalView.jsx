@@ -5,6 +5,7 @@ import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
 import { useState, useMemo } from 'react';
 import BaseModal from '@/components/ui/BaseModal';
+import Button from '@/components/ui/Button';
 
 export default function ItemSelectionModalView({
   isOpen,
@@ -123,13 +124,14 @@ export default function ItemSelectionModalView({
         >
           Cancel
         </button>
-        <button
+        <Button
+          variant="primary-subtle"
+          size="md"
           onClick={handleConfirm}
           disabled={selectedItemIds.length === 0}
-          className="px-4 py-2 text-sm rounded-lg bg-brand-pink text-white hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Add Items
-        </button>
+        </Button>
       </div>
     </div>
   );

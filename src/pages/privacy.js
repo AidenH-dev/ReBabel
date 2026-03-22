@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import Button from '@/components/ui/Button';
 
 export default function Privacy() {
   return (
@@ -59,9 +60,9 @@ export default function Privacy() {
                 </button>
               </Link>
               <Link href="/api/auth/login">
-                <button className="px-4 py-2 text-sm bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors">
+                <Button variant="primary" size="md">
                   Join
-                </button>
+                </Button>
               </Link>
             </div>
           </div>

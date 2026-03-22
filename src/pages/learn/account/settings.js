@@ -21,6 +21,7 @@ import {
 } from 'react-icons/fi';
 import { TbSunset2, TbCoffee } from 'react-icons/tb';
 import BaseModal from '@/components/ui/BaseModal';
+import Button from '@/components/ui/Button';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { clientLog } from '@/lib/clientLogger';
 
@@ -604,15 +605,17 @@ export default function Settings() {
                           Log out of your account
                         </p>
                       </div>
-                      <button
+                      <Button
                         onClick={() =>
                           (window.location.href = '/api/auth/logout')
                         }
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-red-500 hover:bg-red-600 text-white transition-colors"
+                        variant="danger"
+                        size="md"
+                        className="gap-2"
                       >
                         <FiLogOut className="text-sm" />
                         Sign Out
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </>

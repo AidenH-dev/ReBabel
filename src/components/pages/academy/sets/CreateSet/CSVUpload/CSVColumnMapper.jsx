@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 import CustomSelect from '@/components/ui/CustomSelect';
 import BaseModal from '@/components/ui/BaseModal';
+import Button from '@/components/ui/Button';
 
 export default function CSVColumnMapper({
   isOpen,
@@ -138,18 +139,12 @@ export default function CSVColumnMapper({
 
   const footerContent = (
     <div className="flex items-center justify-end gap-3">
-      <button
-        onClick={onClose}
-        className="px-4 py-2 rounded text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-surface-elevated transition-colors"
-      >
+      <Button variant="outline" size="md" onClick={onClose}>
         Cancel
-      </button>
-      <button
-        onClick={handleMapColumns}
-        className="px-4 py-2 rounded text-sm font-medium bg-brand-pink text-white hover:opacity-95 transition-opacity"
-      >
+      </Button>
+      <Button variant="primary-subtle" size="md" onClick={handleMapColumns}>
         Map Columns & Insert
-      </button>
+      </Button>
     </div>
   );
 

@@ -5,6 +5,7 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { TbCheck, TbLoader, TbExternalLink } from 'react-icons/tb';
 import { HiOutlineStar } from 'react-icons/hi2';
 import { clientLog } from '@/lib/clientLogger';
+import Button from '@/components/ui/Button';
 
 export default function Subscription() {
   const [subscription, setSubscription] = useState(null);
@@ -277,10 +278,12 @@ export default function Subscription() {
                   </li>
                 </ul>
 
-                <button
+                <Button
                   onClick={handleUpgrade}
                   disabled={processing}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-brand-pink hover:bg-brand-pink-hover text-white font-semibold transition-all disabled:opacity-50"
+                  variant="primary"
+                  size="lg"
+                  className="w-full gap-2 font-semibold"
                 >
                   {processing ? (
                     <TbLoader className="w-4 h-4 animate-spin" />
@@ -288,7 +291,7 @@ export default function Subscription() {
                     <HiOutlineStar className="w-4 h-4" />
                   )}
                   Get Founder Pricing
-                </button>
+                </Button>
 
                 <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-3">
                   Free tier always available — 1 session per day

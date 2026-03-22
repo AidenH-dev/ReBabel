@@ -20,6 +20,7 @@ import { HiOutlineLightningBolt } from 'react-icons/hi';
 import { LuTextCursorInput } from 'react-icons/lu';
 import PageHeader from '../../components/ui/PageHeader';
 import SetRow from '../../components/ui/SetRow';
+import Button from '@/components/ui/Button';
 import { clientLog } from '@/lib/clientLogger';
 
 function ActivityCalendar({ activityData }) {
@@ -1180,12 +1181,14 @@ export default function DashboardPage() {
                 ) : sets.length === 0 ? (
                   <div className="rounded-xl border border-dashed border-black/10 dark:border-white/10 p-8 text-center text-sm text-black/70 dark:text-white/70">
                     <p className="mb-3">You don&apos;t have any sets yet.</p>
-                    <button
+                    <Button
                       onClick={() => router.push('/learn/academy/sets/create')}
-                      className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-brand-pink text-white hover:opacity-95"
+                      variant="primary-subtle"
+                      size="sm"
+                      className="gap-2"
                     >
                       <FaPlus /> Create your first set
-                    </button>
+                    </Button>
                   </div>
                 ) : (
                   <>

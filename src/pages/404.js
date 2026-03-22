@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import Button from '@/components/ui/Button';
 
 export default function Custom404() {
   const router = useRouter();
@@ -28,12 +29,14 @@ export default function Custom404() {
             moved.
           </p>
 
-          <button
+          <Button
             onClick={() => router.back()}
-            className="mt-8 px-6 py-3 bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors cursor-pointer"
+            variant="primary"
+            size="lg"
+            className="mt-8 cursor-pointer"
           >
             Go Back
-          </button>
+          </Button>
         </div>
       </main>
     </>

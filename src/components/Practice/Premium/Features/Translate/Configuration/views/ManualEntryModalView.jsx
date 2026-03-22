@@ -3,6 +3,7 @@
 
 import { useState } from 'react';
 import BaseModal from '@/components/ui/BaseModal';
+import Button from '@/components/ui/Button';
 
 export default function ManualEntryModalView({
   isOpen,
@@ -61,13 +62,14 @@ export default function ManualEntryModalView({
           >
             Cancel
           </button>
-          <button
+          <Button
+            variant="primary-subtle"
+            size="md"
             onClick={handleConfirm}
             disabled={!entries.trim()}
-            className="px-4 py-2 text-sm rounded-lg bg-brand-pink text-white hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Add Items
-          </button>
+          </Button>
         </div>
       }
     >

@@ -10,6 +10,7 @@ import { FiUpload, FiPlus, FiX, FiCheck } from 'react-icons/fi';
 import { toKana } from 'wanakana';
 import CSVUpload from '../../../../components/pages/academy/sets/CreateSet/CSVUpload/CSVUpload';
 import CustomSelect from '@/components/ui/CustomSelect';
+import Button from '@/components/ui/Button';
 import { clientLog } from '@/lib/clientLogger';
 
 export default function CreateNewSet() {
@@ -723,12 +724,14 @@ export default function CreateNewSet() {
                               />
                             </div>
                             <div>
-                              <button
+                              <Button
                                 type="submit"
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium bg-brand-pink text-white hover:opacity-95 transition-opacity"
+                                variant="primary-subtle"
+                                size="sm"
+                                className="gap-1.5 rounded"
                               >
                                 <FiPlus className="w-3 h-3" /> Add to Set
-                              </button>
+                              </Button>
                             </div>
                           </div>
                         </>
@@ -1044,14 +1047,16 @@ export default function CreateNewSet() {
                   >
                     Cancel
                   </Link>
-                  <button
+                  <Button
                     onClick={handleSubmitAll}
                     disabled={
                       !newSetName.trim() ||
                       proposedItems.length === 0 ||
                       isSubmitting
                     }
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium bg-brand-pink text-white hover:opacity-95 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                    variant="primary-subtle"
+                    size="md"
+                    className="gap-2 rounded"
                   >
                     {isSubmitting ? (
                       <>
@@ -1063,7 +1068,7 @@ export default function CreateNewSet() {
                         <FiCheck className="w-4 h-4" /> Create Set
                       </>
                     )}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
