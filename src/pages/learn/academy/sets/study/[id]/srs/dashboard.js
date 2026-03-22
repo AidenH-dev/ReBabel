@@ -1,6 +1,5 @@
-import Head from 'next/head';
 import Link from 'next/link';
-import MainSidebar from '@/components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import {
   TimeGridWeek,
   useSrsTimeGrid,
@@ -183,183 +182,184 @@ export default function SRSDashboard() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
-        <MainSidebar hideMobileMenu />
-        <main className="ml-auto flex-1 flex flex-col min-h-0 overflow-hidden">
-          {/* Desktop header skeleton */}
-          <div className="hidden lg:block flex-shrink-0 bg-white dark:bg-surface-elevated border-b border-gray-300 dark:border-gray-700 px-6 py-5">
+      <AuthenticatedLayout
+        sidebar="academy"
+        title="SRS Dashboard"
+        variant="fixed"
+        mainClassName="min-h-0 overflow-hidden"
+      >
+        {/* Desktop header skeleton */}
+        <div className="hidden lg:block flex-shrink-0 bg-white dark:bg-surface-elevated border-b border-gray-300 dark:border-gray-700 px-6 py-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-9 w-36 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+              <div className="h-7 w-44 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-9 w-28 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+              <div className="h-9 w-28 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          {/* Mobile header skeleton */}
+          <div className="lg:hidden px-4 pt-[max(1rem,var(--cap-safe-top))] pb-2 space-y-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-36 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
-                <div className="h-7 w-44 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
-              </div>
               <div className="flex items-center gap-2">
-                <div className="h-9 w-28 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
-                <div className="h-9 w-28 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+                <div className="h-6 w-32 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+                <div
+                  className="h-4 w-24 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                  style={{ animationDelay: '75ms' }}
+                />
               </div>
+            </div>
+            <div className="flex gap-2">
+              <div
+                className="flex-1 h-12 rounded-xl bg-black/[0.05] dark:bg-white/[0.05] animate-pulse"
+                style={{ animationDelay: '100ms' }}
+              />
+              <div
+                className="flex-1 h-12 rounded-xl bg-black/[0.05] dark:bg-white/[0.05] animate-pulse"
+                style={{ animationDelay: '150ms' }}
+              />
             </div>
           </div>
 
-          <div className="flex-1 min-h-0 overflow-y-auto">
-            {/* Mobile header skeleton */}
-            <div className="lg:hidden px-4 pt-[max(1rem,var(--cap-safe-top))] pb-2 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="h-6 w-32 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
-                  <div
-                    className="h-4 w-24 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                    style={{ animationDelay: '75ms' }}
-                  />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <div
-                  className="flex-1 h-12 rounded-xl bg-black/[0.05] dark:bg-white/[0.05] animate-pulse"
-                  style={{ animationDelay: '100ms' }}
-                />
-                <div
-                  className="flex-1 h-12 rounded-xl bg-black/[0.05] dark:bg-white/[0.05] animate-pulse"
-                  style={{ animationDelay: '150ms' }}
-                />
+          {/* Progress section skeleton: pipeline + mastery */}
+          <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-4 sm:gap-6 sm:items-start">
+            <div className="order-2 sm:order-1 flex-1 min-w-0 sm:pt-[21px]">
+              {/* Pipeline skeleton */}
+              <div className="flex items-center justify-between gap-2">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="flex flex-col items-center gap-1">
+                    <div
+                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                      style={{ animationDelay: `${i * 50}ms` }}
+                    />
+                    <div
+                      className="h-2 w-10 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                      style={{ animationDelay: `${i * 50 + 25}ms` }}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
+            <div className="order-1 sm:order-2 sm:w-[28rem] flex-shrink-0">
+              {/* Mastery bar skeleton */}
+              <div className="flex items-baseline justify-between mb-2">
+                <div className="h-4 w-28 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+                <div className="h-4 w-10 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
+              </div>
+              <div
+                className="h-[14px] rounded-xl bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                style={{ animationDelay: '100ms' }}
+              />
+              <div
+                className="h-3 w-36 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse mt-1.5"
+                style={{ animationDelay: '150ms' }}
+              />
+            </div>
+          </div>
 
-            {/* Progress section skeleton: pipeline + mastery */}
-            <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-4 sm:gap-6 sm:items-start">
-              <div className="order-2 sm:order-1 flex-1 min-w-0 sm:pt-[21px]">
-                {/* Pipeline skeleton */}
-                <div className="flex items-center justify-between gap-2">
-                  {[1, 2, 3, 4, 5, 6].map((i) => (
-                    <div key={i} className="flex flex-col items-center gap-1">
+          {/* Main content skeleton: time grid + level dist / tabbed panel */}
+          <div className="px-4 sm:px-6 pt-2 pb-3 flex flex-col lg:flex-row gap-4">
+            {/* Left column */}
+            <div className="lg:w-3/5 min-w-0 space-y-5">
+              {/* Time grid skeleton */}
+              <div>
+                <div className="flex items-baseline justify-between mb-2">
+                  <div className="h-4 w-32 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+                  <div className="h-3 w-16 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
+                </div>
+                <div className="h-48 sm:h-56 lg:h-64 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-surface-page overflow-hidden">
+                  <div className="h-8 bg-black/[0.03] dark:bg-white/[0.03] border-b border-gray-300 dark:border-gray-600 animate-pulse" />
+                  <div className="space-y-0">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                       <div
-                        className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                        style={{ animationDelay: `${i * 50}ms` }}
+                        key={i}
+                        className="h-6 border-b border-gray-200 dark:border-gray-700 animate-pulse bg-black/[0.01] dark:bg-white/[0.01]"
+                        style={{ animationDelay: `${i * 40}ms` }}
                       />
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {/* Level distribution skeleton */}
+              <div>
+                <div className="h-4 w-32 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse mb-3" />
+                <div className="space-y-2">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <div className="w-20 sm:w-24 flex-shrink-0 flex items-center gap-1.5">
+                        <div
+                          className="h-3 w-5 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                          style={{ animationDelay: `${i * 30}ms` }}
+                        />
+                        <div
+                          className="h-2.5 w-10 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
+                          style={{ animationDelay: `${i * 30 + 15}ms` }}
+                        />
+                      </div>
+                      <div className="flex-1 h-5 bg-gray-100 dark:bg-gray-800 rounded overflow-hidden">
+                        <div
+                          className="h-full rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                          style={{
+                            width: `${Math.max(10, 90 - i * 8)}%`,
+                            animationDelay: `${i * 30 + 30}ms`,
+                          }}
+                        />
+                      </div>
                       <div
-                        className="h-2 w-10 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                        style={{ animationDelay: `${i * 50 + 25}ms` }}
+                        className="h-3 w-6 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                        style={{ animationDelay: `${i * 30 + 45}ms` }}
                       />
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="order-1 sm:order-2 sm:w-[28rem] flex-shrink-0">
-                {/* Mastery bar skeleton */}
-                <div className="flex items-baseline justify-between mb-2">
-                  <div className="h-4 w-28 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
-                  <div className="h-4 w-10 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
-                </div>
-                <div
-                  className="h-[14px] rounded-xl bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                  style={{ animationDelay: '100ms' }}
-                />
-                <div
-                  className="h-3 w-36 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse mt-1.5"
-                  style={{ animationDelay: '150ms' }}
-                />
-              </div>
             </div>
-
-            {/* Main content skeleton: time grid + level dist / tabbed panel */}
-            <div className="px-4 sm:px-6 pt-2 pb-3 flex flex-col lg:flex-row gap-4">
-              {/* Left column */}
-              <div className="lg:w-3/5 min-w-0 space-y-5">
-                {/* Time grid skeleton */}
-                <div>
-                  <div className="flex items-baseline justify-between mb-2">
-                    <div className="h-4 w-32 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
-                    <div className="h-3 w-16 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
-                  </div>
-                  <div className="h-48 sm:h-56 lg:h-64 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-surface-page overflow-hidden">
-                    <div className="h-8 bg-black/[0.03] dark:bg-white/[0.03] border-b border-gray-300 dark:border-gray-600 animate-pulse" />
-                    <div className="space-y-0">
-                      {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                        <div
-                          key={i}
-                          className="h-6 border-b border-gray-200 dark:border-gray-700 animate-pulse bg-black/[0.01] dark:bg-white/[0.01]"
-                          style={{ animationDelay: `${i * 40}ms` }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                {/* Level distribution skeleton */}
-                <div>
-                  <div className="h-4 w-32 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse mb-3" />
-                  <div className="space-y-2">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="w-20 sm:w-24 flex-shrink-0 flex items-center gap-1.5">
-                          <div
-                            className="h-3 w-5 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                            style={{ animationDelay: `${i * 30}ms` }}
-                          />
-                          <div
-                            className="h-2.5 w-10 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
-                            style={{ animationDelay: `${i * 30 + 15}ms` }}
-                          />
-                        </div>
-                        <div className="flex-1 h-5 bg-gray-100 dark:bg-gray-800 rounded overflow-hidden">
-                          <div
-                            className="h-full rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                            style={{
-                              width: `${Math.max(10, 90 - i * 8)}%`,
-                              animationDelay: `${i * 30 + 30}ms`,
-                            }}
-                          />
-                        </div>
-                        <div
-                          className="h-3 w-6 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                          style={{ animationDelay: `${i * 30 + 45}ms` }}
-                        />
-                      </div>
-                    ))}
-                  </div>
+            {/* Right column — tabbed panel skeleton */}
+            <div className="lg:w-2/5 min-w-0">
+              <div className="border-b border-black/5 dark:border-white/10 mb-3">
+                <div className="flex items-end gap-6 h-10">
+                  <div className="h-4 w-20 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse mb-2" />
+                  <div className="h-4 w-24 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse mb-2" />
+                  <div className="h-4 w-16 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse mb-2" />
                 </div>
               </div>
-              {/* Right column — tabbed panel skeleton */}
-              <div className="lg:w-2/5 min-w-0">
-                <div className="border-b border-black/5 dark:border-white/10 mb-3">
-                  <div className="flex items-end gap-6 h-10">
-                    <div className="h-4 w-20 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse mb-2" />
-                    <div className="h-4 w-24 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse mb-2" />
-                    <div className="h-4 w-16 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse mb-2" />
-                  </div>
-                </div>
-                <div className="rounded-xl border border-gray-200 dark:border-white/10 p-3 sm:p-4">
-                  <div className="space-y-2">
-                    {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+              <div className="rounded-xl border border-gray-200 dark:border-white/10 p-3 sm:p-4">
+                <div className="space-y-2">
+                  {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 px-2.5 py-2 rounded-md border border-black/[0.03] dark:border-white/[0.03]"
+                    >
                       <div
-                        key={i}
-                        className="flex items-center gap-3 px-2.5 py-2 rounded-md border border-black/[0.03] dark:border-white/[0.03]"
-                      >
+                        className="h-3.5 w-3.5 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                        style={{ animationDelay: `${i * 50}ms` }}
+                      />
+                      <div className="flex-1 space-y-1.5">
                         <div
-                          className="h-3.5 w-3.5 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                          style={{ animationDelay: `${i * 50}ms` }}
+                          className="h-3.5 w-2/3 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                          style={{ animationDelay: `${i * 50 + 25}ms` }}
                         />
-                        <div className="flex-1 space-y-1.5">
-                          <div
-                            className="h-3.5 w-2/3 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                            style={{ animationDelay: `${i * 50 + 25}ms` }}
-                          />
-                          <div
-                            className="h-2.5 w-1/3 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
-                            style={{ animationDelay: `${i * 50 + 50}ms` }}
-                          />
-                        </div>
                         <div
-                          className="h-5 w-8 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                          style={{ animationDelay: `${i * 50 + 75}ms` }}
+                          className="h-2.5 w-1/3 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
+                          style={{ animationDelay: `${i * 50 + 50}ms` }}
                         />
                       </div>
-                    ))}
-                  </div>
+                      <div
+                        className="h-5 w-8 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                        style={{ animationDelay: `${i * 50 + 75}ms` }}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
-        </main>
-
+        </div>
         {/* Mobile floating back button */}
         <button
           onClick={() => router.push(`/learn/academy/sets/study/${id}`)}
@@ -367,29 +367,31 @@ export default function SRSDashboard() {
         >
           <TbArrowBackUp className="w-6.5 h-6.5 text-gray-700 dark:text-gray-300" />
         </button>
-      </div>
+      </AuthenticatedLayout>
     );
   }
 
   if (error) {
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
-        <MainSidebar hideMobileMenu />
-        <main className="ml-auto flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-red-600 dark:text-red-400 font-semibold mb-2">
-              Error Loading SRS Dashboard
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
-            <button
-              onClick={() => router.push(`/learn/academy/sets/study/${id}`)}
-              className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
-            >
-              Back to Set
-            </button>
+      <AuthenticatedLayout
+        sidebar="academy"
+        title="SRS Dashboard"
+        variant="fixed"
+        mainClassName="flex items-center justify-center"
+      >
+        <div className="text-center">
+          <div className="text-red-600 dark:text-red-400 font-semibold mb-2">
+            Error Loading SRS Dashboard
           </div>
-        </main>
-      </div>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+          <button
+            onClick={() => router.push(`/learn/academy/sets/study/${id}`)}
+            className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
+          >
+            Back to Set
+          </button>
+        </div>
+      </AuthenticatedLayout>
     );
   }
 
@@ -398,168 +400,163 @@ export default function SRSDashboard() {
   // ========================================================================
 
   return (
-    <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
-      <MainSidebar hideMobileMenu />
-
-      <main className="ml-auto flex-1 flex flex-col min-h-0 overflow-hidden">
-        <Head>
-          <title>{setTitle} - SRS Dashboard</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        {/* Desktop sticky header */}
-        <PageHeader
-          title="SRS Dashboard"
-          backHref={`/learn/academy/sets/study/${id}`}
-          backLabel={setTitle}
-          backIcon={
-            <TbStack2 className="text-gray-700 dark:text-gray-200 text-lg" />
-          }
-          actions={
-            <>
-              <Link
-                href={`/learn/academy/sets/study/${id}/srs/due-now`}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+    <AuthenticatedLayout
+      sidebar="academy"
+      title={`${setTitle} - SRS Dashboard`}
+      variant="fixed"
+      mainClassName="min-h-0 overflow-hidden"
+    >
+      {/* Desktop sticky header */}
+      <PageHeader
+        title="SRS Dashboard"
+        backHref={`/learn/academy/sets/study/${id}`}
+        backLabel={setTitle}
+        backIcon={
+          <TbStack2 className="text-gray-700 dark:text-gray-200 text-lg" />
+        }
+        actions={
+          <>
+            <Link
+              href={`/learn/academy/sets/study/${id}/srs/due-now`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                stats.dueNow > 0
+                  ? 'bg-gradient-to-r from-brand-pink to-brand-pink-dark text-white hover:brightness-110 hover:ring-2 hover:ring-brand-pink/40'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
+              }`}
+            >
+              <LuRepeat className="text-lg opacity-80" />
+              <span>Due Now</span>
+              <span
+                className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
                   stats.dueNow > 0
-                    ? 'bg-gradient-to-r from-brand-pink to-brand-pink-dark text-white hover:brightness-110 hover:ring-2 hover:ring-brand-pink/40'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
+                    ? 'bg-white/20 text-white'
+                    : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
                 }`}
               >
-                <LuRepeat className="text-lg opacity-80" />
-                <span>Due Now</span>
-                <span
-                  className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
-                    stats.dueNow > 0
-                      ? 'bg-white/20 text-white'
-                      : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
-                  }`}
-                >
-                  {stats.dueNow}
-                </span>
-              </Link>
-              <Link
-                href={`/learn/academy/sets/study/${id}/srs/learn-new`}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                {stats.dueNow}
+              </span>
+            </Link>
+            <Link
+              href={`/learn/academy/sets/study/${id}/srs/learn-new`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                learnNewLeft > 0
+                  ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:brightness-110 hover:ring-2 hover:ring-[#667eea]/40'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
+              }`}
+            >
+              <FaPlus className="text-sm opacity-80" />
+              <span>Learn New</span>
+              <span
+                className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
                   learnNewLeft > 0
-                    ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:brightness-110 hover:ring-2 hover:ring-[#667eea]/40'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
+                    ? 'bg-white/20 text-white'
+                    : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
                 }`}
               >
-                <FaPlus className="text-sm opacity-80" />
-                <span>Learn New</span>
-                <span
-                  className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
-                    learnNewLeft > 0
-                      ? 'bg-white/20 text-white'
-                      : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
-                  }`}
-                >
-                  {learnNewLeft}
-                </span>
-              </Link>
-            </>
-          }
-        />
+                {learnNewLeft}
+              </span>
+            </Link>
+          </>
+        }
+      />
 
-        {/* Scrollable content area */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
-          {/* Mobile inline action banners — visible only below lg */}
-          <div className="lg:hidden px-4 pt-[max(1rem,var(--cap-safe-top))] pb-2 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 min-w-0">
-                <h1 className="text-lg font-bold text-gray-900 dark:text-white flex-shrink-0">
-                  SRS Dashboard
-                </h1>
-                <span className="text-sm text-gray-400 dark:text-gray-500 truncate">
-                  {setTitle}
-                </span>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <Link
-                href={`/learn/academy/sets/study/${id}/srs/due-now`}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-semibold transition-all ${
-                  stats.dueNow > 0
-                    ? 'bg-gradient-to-r from-brand-pink to-brand-pink-dark text-white shadow-lg shadow-brand-pink/20'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
-                }`}
-              >
-                <LuRepeat className="text-lg opacity-80" />
-                <span>Due Now</span>
-                <span
-                  className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
-                    stats.dueNow > 0
-                      ? 'bg-white/20 text-white'
-                      : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
-                  }`}
-                >
-                  {stats.dueNow}
-                </span>
-              </Link>
-              <Link
-                href={`/learn/academy/sets/study/${id}/srs/learn-new`}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-semibold transition-all ${
-                  learnNewLeft > 0
-                    ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-lg shadow-[#667eea]/20'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
-                }`}
-              >
-                <FaPlus className="text-sm opacity-80" />
-                <span>Learn New</span>
-                <span
-                  className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
-                    learnNewLeft > 0
-                      ? 'bg-white/20 text-white'
-                      : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
-                  }`}
-                >
-                  {learnNewLeft}
-                </span>
-              </Link>
+      {/* Scrollable content area */}
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        {/* Mobile inline action banners — visible only below lg */}
+        <div className="lg:hidden px-4 pt-[max(1rem,var(--cap-safe-top))] pb-2 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 min-w-0">
+              <h1 className="text-lg font-bold text-gray-900 dark:text-white flex-shrink-0">
+                SRS Dashboard
+              </h1>
+              <span className="text-sm text-gray-400 dark:text-gray-500 truncate">
+                {setTitle}
+              </span>
             </div>
           </div>
-          {/* Progress section: pipeline + mastery bar */}
-          <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-4 sm:gap-6 sm:items-start">
-            <div className="order-2 sm:order-1 flex-1 min-w-0 sm:pt-[21px]">
-              <SrsProgressPipeline stages={stats.pipelineStages} />
-            </div>
-            <div className="order-1 sm:order-2 sm:w-[28rem] flex-shrink-0">
-              <SrsMasteryBar
-                stages={stats.pipelineStages}
-                totalItems={stats.total}
-              />
-            </div>
-          </div>
-
-          {/* Left column (time grid + level dist) / Right column (tabbed panel) */}
-          <div className="px-4 sm:px-6 pt-2 pb-3 flex flex-col lg:flex-row gap-4">
-            <div className="lg:w-3/5 min-w-0 space-y-5">
-              <div>
-                <div className="flex items-baseline justify-between mb-2">
-                  <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
-                    Upcoming Reviews
-                  </h2>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    Next 7 days
-                  </span>
-                </div>
-                <div className="h-48 sm:h-56 lg:h-64">
-                  <TimeGridWeek
-                    items={items}
-                    currentTime={currentTime}
-                    weekDays={weekDays}
-                  />
-                </div>
-              </div>
-              <SrsLevelDistribution levelCounts={stats.levelCounts} />
-            </div>
-            <div className="lg:w-2/5 min-w-0">
-              <SrsTabbedPanel setId={id} rawItems={rawItems} />
-            </div>
+          <div className="flex gap-2">
+            <Link
+              href={`/learn/academy/sets/study/${id}/srs/due-now`}
+              className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-semibold transition-all ${
+                stats.dueNow > 0
+                  ? 'bg-gradient-to-r from-brand-pink to-brand-pink-dark text-white shadow-lg shadow-brand-pink/20'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
+              }`}
+            >
+              <LuRepeat className="text-lg opacity-80" />
+              <span>Due Now</span>
+              <span
+                className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
+                  stats.dueNow > 0
+                    ? 'bg-white/20 text-white'
+                    : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
+                }`}
+              >
+                {stats.dueNow}
+              </span>
+            </Link>
+            <Link
+              href={`/learn/academy/sets/study/${id}/srs/learn-new`}
+              className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-semibold transition-all ${
+                learnNewLeft > 0
+                  ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-lg shadow-[#667eea]/20'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
+              }`}
+            >
+              <FaPlus className="text-sm opacity-80" />
+              <span>Learn New</span>
+              <span
+                className={`text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[1.5rem] text-center ${
+                  learnNewLeft > 0
+                    ? 'bg-white/20 text-white'
+                    : 'bg-gray-300 dark:bg-gray-600 text-gray-400 dark:text-gray-500'
+                }`}
+              >
+                {learnNewLeft}
+              </span>
+            </Link>
           </div>
         </div>
-      </main>
+        {/* Progress section: pipeline + mastery bar */}
+        <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-4 sm:gap-6 sm:items-start">
+          <div className="order-2 sm:order-1 flex-1 min-w-0 sm:pt-[21px]">
+            <SrsProgressPipeline stages={stats.pipelineStages} />
+          </div>
+          <div className="order-1 sm:order-2 sm:w-[28rem] flex-shrink-0">
+            <SrsMasteryBar
+              stages={stats.pipelineStages}
+              totalItems={stats.total}
+            />
+          </div>
+        </div>
 
+        {/* Left column (time grid + level dist) / Right column (tabbed panel) */}
+        <div className="px-4 sm:px-6 pt-2 pb-3 flex flex-col lg:flex-row gap-4">
+          <div className="lg:w-3/5 min-w-0 space-y-5">
+            <div>
+              <div className="flex items-baseline justify-between mb-2">
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+                  Upcoming Reviews
+                </h2>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Next 7 days
+                </span>
+              </div>
+              <div className="h-48 sm:h-56 lg:h-64">
+                <TimeGridWeek
+                  items={items}
+                  currentTime={currentTime}
+                  weekDays={weekDays}
+                />
+              </div>
+            </div>
+            <SrsLevelDistribution levelCounts={stats.levelCounts} />
+          </div>
+          <div className="lg:w-2/5 min-w-0">
+            <SrsTabbedPanel setId={id} rawItems={rawItems} />
+          </div>
+        </div>
+      </div>
       {/* Mobile floating back button — replaces sidebar bubble menu */}
       <button
         onClick={() => router.push(`/learn/academy/sets/study/${id}`)}
@@ -567,7 +564,7 @@ export default function SRSDashboard() {
       >
         <TbArrowBackUp className="w-6.5 h-6.5 text-gray-700 dark:text-gray-300" />
       </button>
-    </div>
+    </AuthenticatedLayout>
   );
 }
 

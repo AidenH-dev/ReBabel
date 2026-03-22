@@ -1,6 +1,5 @@
 // pages/learn/vocabulary/create-new-set.js
-import Head from 'next/head';
-import MainSidebar from '../../../../components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
@@ -487,275 +486,266 @@ export default function CreateNewSet() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
-      <MainSidebar />
-
-      <main className="ml-auto flex-1 px-4 sm:px-6 py-4">
-        <Head>
-          <title>Create New Set</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        <div className="w-full max-w-6xl mx-auto relative">
-          {/* Header */}
-          <div className="mb-3 ">
-            <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
-              <Link
-                href="/learn/academy/sets"
-                className="hover:text-brand-pink transition-colors"
-              >
-                Set
-              </Link>
-              <span>/</span>
-              <span className="text-gray-900 dark:text-white">
-                Create New Set
-              </span>
-            </div>
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+    <AuthenticatedLayout
+      sidebar="academy"
+      title="Create New Set"
+      mainClassName="px-4 sm:px-6 py-4"
+    >
+      <div className="w-full max-w-6xl mx-auto relative">
+        {/* Header */}
+        <div className="mb-3 ">
+          <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
+            <Link
+              href="/learn/academy/sets"
+              className="hover:text-brand-pink transition-colors"
+            >
+              Set
+            </Link>
+            <span>/</span>
+            <span className="text-gray-900 dark:text-white">
               Create New Set
-            </h1>
+            </span>
           </div>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+            Create New Set
+          </h1>
+        </div>
 
-          {/* Set Name & Counter */}
-          <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10 p-3 mb-3">
-            <div className="flex gap-3 items-center">
-              <div className="flex-1">
-                <input
-                  type="text"
-                  value={newSetName}
-                  onChange={handleSetNameChange}
-                  placeholder="Set name (e.g., 'JLPT N5 Vocabulary')"
-                  className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-3 py-2 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-500 dark:placeholder-gray-400"
-                />
-              </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-                {proposedItems.length} items
-              </div>
+        {/* Set Name & Counter */}
+        <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10 p-3 mb-3">
+          <div className="flex gap-3 items-center">
+            <div className="flex-1">
+              <input
+                type="text"
+                value={newSetName}
+                onChange={handleSetNameChange}
+                placeholder="Set name (e.g., 'JLPT N5 Vocabulary')"
+                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-3 py-2 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-500 dark:placeholder-gray-400"
+              />
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+              {proposedItems.length} items
             </div>
           </div>
+        </div>
 
-          {/* Type & Description Bar */}
-          <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10 p-3 mb-4">
-            <div className="flex gap-3 items-center">
-              {/* Type Toggle */}
-              <div className="flex items-center gap-2">
-                <div className="flex bg-gray-200 dark:bg-surface-deep rounded-md p-1">
-                  <button
-                    onClick={() => setItemType('vocabulary')}
-                    disabled={
-                      proposedItems.length > 0 && itemType !== 'vocabulary'
-                    }
-                    className={`px-3 py-2 mr-0.5 text-xs font-medium rounded transition-colors ${
-                      itemType === 'vocabulary'
-                        ? 'bg-brand-pink text-white'
-                        : 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
-                    } ${proposedItems.length > 0 && itemType !== 'vocabulary' ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    Vocabulary
-                  </button>
-                  <button
-                    onClick={() => setItemType('grammar')}
-                    disabled={
-                      proposedItems.length > 0 && itemType !== 'grammar'
-                    }
-                    className={`px-3 py-2 text-xs font-medium rounded transition-colors ${
-                      itemType === 'grammar'
-                        ? 'bg-brand-pink text-white'
-                        : 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
-                    } ${proposedItems.length > 0 && itemType !== 'grammar' ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    Grammar
-                  </button>
-                </div>
-              </div>
-
-              {/* Description Field */}
-              <div className="flex-1">
-                <input
-                  type="text"
-                  value={setDescription}
-                  onChange={(e) => setSetDescription(e.target.value)}
-                  placeholder="Set description (optional)"
-                  className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-3 py-2 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-500 dark:placeholder-gray-400"
-                />
+        {/* Type & Description Bar */}
+        <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10 p-3 mb-4">
+          <div className="flex gap-3 items-center">
+            {/* Type Toggle */}
+            <div className="flex items-center gap-2">
+              <div className="flex bg-gray-200 dark:bg-surface-deep rounded-md p-1">
+                <button
+                  onClick={() => setItemType('vocabulary')}
+                  disabled={
+                    proposedItems.length > 0 && itemType !== 'vocabulary'
+                  }
+                  className={`px-3 py-2 mr-0.5 text-xs font-medium rounded transition-colors ${
+                    itemType === 'vocabulary'
+                      ? 'bg-brand-pink text-white'
+                      : 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
+                  } ${proposedItems.length > 0 && itemType !== 'vocabulary' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  Vocabulary
+                </button>
+                <button
+                  onClick={() => setItemType('grammar')}
+                  disabled={proposedItems.length > 0 && itemType !== 'grammar'}
+                  className={`px-3 py-2 text-xs font-medium rounded transition-colors ${
+                    itemType === 'grammar'
+                      ? 'bg-brand-pink text-white'
+                      : 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
+                  } ${proposedItems.length > 0 && itemType !== 'grammar' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  Grammar
+                </button>
               </div>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Left Column - Input Methods */}
-            <div className="lg:col-span-2">
-              <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10">
-                {/* Tab Navigation */}
-                <div className="border-b border-black/5 dark:border-white/10 px-4 mt-2">
-                  <div className="flex items-center">
-                    <div className="flex gap-4 -mb-px h-10">
-                      {[
-                        {
-                          key: 'single',
-                          label: 'Add Single',
-                          icon: <FiPlus className="w-3 h-3" />,
-                        },
-                        {
-                          key: 'csv',
-                          label: 'CSV Upload',
-                          icon: <FiUpload className="w-3 h-3" />,
-                        },
-                      ].map(({ key, label, icon }) => (
-                        <button
-                          key={key}
-                          onClick={() => setActiveTab(key)}
-                          className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors flex items-center gap-1.5
+            {/* Description Field */}
+            <div className="flex-1">
+              <input
+                type="text"
+                value={setDescription}
+                onChange={(e) => setSetDescription(e.target.value)}
+                placeholder="Set description (optional)"
+                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-3 py-2 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-500 dark:placeholder-gray-400"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Left Column - Input Methods */}
+          <div className="lg:col-span-2">
+            <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10">
+              {/* Tab Navigation */}
+              <div className="border-b border-black/5 dark:border-white/10 px-4 mt-2">
+                <div className="flex items-center">
+                  <div className="flex gap-4 -mb-px h-10">
+                    {[
+                      {
+                        key: 'single',
+                        label: 'Add Single',
+                        icon: <FiPlus className="w-3 h-3" />,
+                      },
+                      {
+                        key: 'csv',
+                        label: 'CSV Upload',
+                        icon: <FiUpload className="w-3 h-3" />,
+                      },
+                    ].map(({ key, label, icon }) => (
+                      <button
+                        key={key}
+                        onClick={() => setActiveTab(key)}
+                        className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors flex items-center gap-1.5
                                                        ${
                                                          activeTab === key
                                                            ? 'text-brand-pink border-brand-pink'
                                                            : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-gray-900 dark:hover:text-white'
                                                        }`}
-                        >
-                          {icon}
-                          {label}
-                        </button>
-                      ))}
-                    </div>
+                      >
+                        {icon}
+                        {label}
+                      </button>
+                    ))}
                   </div>
                 </div>
+              </div>
 
-                {/* Tab Content */}
-                <div className="p-4">
-                  {/* Single Tab */}
-                  {activeTab === 'single' && (
-                    <form onSubmit={handleAddSingleToProposed}>
-                      {itemType === 'vocabulary' ? (
-                        <>
-                          <div className="grid grid-cols-2 gap-3 mb-3">
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                English
-                              </label>
-                              <input
-                                type="text"
-                                value={singleForm.english}
-                                onChange={(e) =>
-                                  handleSingleFormChange(
-                                    'english',
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="English term"
-                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Kana{' '}
-                                <span className="text-gray-500 dark:text-gray-400">
-                                  (type in romaji)
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                value={singleForm.kana}
-                                onChange={(e) =>
-                                  handleSingleFormChange('kana', e.target.value)
-                                }
-                                placeholder="ka → か, shi → し"
-                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Kanji{' '}
-                                <span className="hidden sm:inline text-gray-500 dark:text-gray-400">
-                                  (Please Paste The Entry)
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                inputMode="text"
-                                lang="ja"
-                                value={singleForm.kanji}
-                                onChange={(e) =>
-                                  handleSingleFormChange(
-                                    'kanji',
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="kanji → かんじ"
-                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
-                              />
-                              <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
-                                Filling in kanji improves auto-categorization
-                                accuracy and is needed for conjugation practice.
-                              </p>
-                            </div>
+              {/* Tab Content */}
+              <div className="p-4">
+                {/* Single Tab */}
+                {activeTab === 'single' && (
+                  <form onSubmit={handleAddSingleToProposed}>
+                    {itemType === 'vocabulary' ? (
+                      <>
+                        <div className="grid grid-cols-2 gap-3 mb-3">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              English
+                            </label>
+                            <input
+                              type="text"
+                              value={singleForm.english}
+                              onChange={(e) =>
+                                handleSingleFormChange(
+                                  'english',
+                                  e.target.value
+                                )
+                              }
+                              placeholder="English term"
+                              className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
+                            />
                           </div>
-                          <div className="grid grid-cols-1 gap-3 mb-3">
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Example Sentences
-                              </label>
-                              <textarea
-                                rows={2}
-                                value={singleForm.example_sentences}
-                                onChange={(e) =>
-                                  handleSingleFormChange(
-                                    'example_sentences',
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="Example sentences (one per line)"
-                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
-                              />
-                            </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Kana{' '}
+                              <span className="text-gray-500 dark:text-gray-400">
+                                (type in romaji)
+                              </span>
+                            </label>
+                            <input
+                              type="text"
+                              value={singleForm.kana}
+                              onChange={(e) =>
+                                handleSingleFormChange('kana', e.target.value)
+                              }
+                              placeholder="ka → か, shi → し"
+                              className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
+                            />
                           </div>
-                          <div className="grid grid-cols-2 gap-3 mb-3 items-end">
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Tags
-                              </label>
-                              <input
-                                type="text"
-                                value={singleForm.tags}
-                                onChange={(e) =>
-                                  handleSingleFormChange('tags', e.target.value)
-                                }
-                                placeholder="tag1, tag2, tag3"
-                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
-                              />
-                            </div>
-                            <div>
-                              <Button
-                                type="submit"
-                                variant="primary-subtle"
-                                size="sm"
-                                className="gap-1.5 rounded"
-                              >
-                                <FiPlus className="w-3 h-3" /> Add to Set
-                              </Button>
-                            </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Kanji{' '}
+                              <span className="hidden sm:inline text-gray-500 dark:text-gray-400">
+                                (Please Paste The Entry)
+                              </span>
+                            </label>
+                            <input
+                              type="text"
+                              inputMode="text"
+                              lang="ja"
+                              value={singleForm.kanji}
+                              onChange={(e) =>
+                                handleSingleFormChange('kanji', e.target.value)
+                              }
+                              placeholder="kanji → かんじ"
+                              className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
+                            />
+                            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
+                              Filling in kanji improves auto-categorization
+                              accuracy and is needed for conjugation practice.
+                            </p>
                           </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="grid grid-cols-2 gap-3 mb-3">
-                            <div>
-                              <label className=" text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center justify-between">
-                                <span>
-                                  Title *{' '}
-                                  <span className="hidden sm:inline">
-                                    (enter only in jp or eng)
-                                  </span>{' '}
-                                  {grammarForm.title && (
-                                    <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-1">
-                                      (
-                                      {grammarTitleInputType === 'kana'
-                                        ? 'Kana'
-                                        : 'English'}
-                                      )
-                                    </span>
-                                  )}
-                                </span>
-                                {/**<div className="flex gap-0.5">
+                        </div>
+                        <div className="grid grid-cols-1 gap-3 mb-3">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Example Sentences
+                            </label>
+                            <textarea
+                              rows={2}
+                              value={singleForm.example_sentences}
+                              onChange={(e) =>
+                                handleSingleFormChange(
+                                  'example_sentences',
+                                  e.target.value
+                                )
+                              }
+                              placeholder="Example sentences (one per line)"
+                              className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 mb-3 items-end">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Tags
+                            </label>
+                            <input
+                              type="text"
+                              value={singleForm.tags}
+                              onChange={(e) =>
+                                handleSingleFormChange('tags', e.target.value)
+                              }
+                              placeholder="tag1, tag2, tag3"
+                              className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
+                            />
+                          </div>
+                          <div>
+                            <Button
+                              type="submit"
+                              variant="primary-subtle"
+                              size="sm"
+                              className="gap-1.5 rounded"
+                            >
+                              <FiPlus className="w-3 h-3" /> Add to Set
+                            </Button>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="grid grid-cols-2 gap-3 mb-3">
+                          <div>
+                            <label className=" text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center justify-between">
+                              <span>
+                                Title *{' '}
+                                <span className="hidden sm:inline">
+                                  (enter only in jp or eng)
+                                </span>{' '}
+                                {grammarForm.title && (
+                                  <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-1">
+                                    (
+                                    {grammarTitleInputType === 'kana'
+                                      ? 'Kana'
+                                      : 'English'}
+                                    )
+                                  </span>
+                                )}
+                              </span>
+                              {/**<div className="flex gap-0.5">
                                                                     <button
                                                                         type="button"
                                                                         onClick={() => handleGrammarTitleTypeSwitch("english")}
@@ -777,304 +767,291 @@ export default function CreateNewSet() {
                                                                         あ
                                                                     </button>
                                                                 </div> */}
-                              </label>
-                              <input
-                                type="text"
-                                value={grammarForm.title}
-                                onChange={(e) =>
-                                  handleGrammarFormChange(
-                                    'title',
-                                    e.target.value
-                                  )
-                                }
-                                placeholder={
-                                  grammarTitleInputType === 'kana'
-                                    ? 'Type in romaji: ka → か, shi → し'
-                                    : 'Grammar pattern name'
-                                }
-                                className={`w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink ${
-                                  grammarTitleInputType === 'kana'
-                                    ? 'font-japanese'
-                                    : ''
-                                }`}
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Topic
-                              </label>
-                              <input
-                                type="text"
-                                value={grammarForm.topic}
-                                onChange={(e) =>
-                                  handleGrammarFormChange(
-                                    'topic',
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="e.g., N5, JLPT, Particles"
-                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
-                              />
-                            </div>
+                            </label>
+                            <input
+                              type="text"
+                              value={grammarForm.title}
+                              onChange={(e) =>
+                                handleGrammarFormChange('title', e.target.value)
+                              }
+                              placeholder={
+                                grammarTitleInputType === 'kana'
+                                  ? 'Type in romaji: ka → か, shi → し'
+                                  : 'Grammar pattern name'
+                              }
+                              className={`w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink ${
+                                grammarTitleInputType === 'kana'
+                                  ? 'font-japanese'
+                                  : ''
+                              }`}
+                            />
                           </div>
-                          <div className="grid grid-cols-1 gap-3 ">
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Description
-                              </label>
-                              <textarea
-                                rows={2}
-                                value={grammarForm.description}
-                                onChange={(e) =>
-                                  handleGrammarFormChange(
-                                    'description',
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="Brief explanation of the grammar pattern"
-                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
-                              />
-                            </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Topic
+                            </label>
+                            <input
+                              type="text"
+                              value={grammarForm.topic}
+                              onChange={(e) =>
+                                handleGrammarFormChange('topic', e.target.value)
+                              }
+                              placeholder="e.g., N5, JLPT, Particles"
+                              className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
+                            />
                           </div>
-                          <div className="grid grid-cols-2 gap-3 mb-2">
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Notes
-                              </label>
-                              <input
-                                type="text"
-                                value={grammarForm.notes}
-                                onChange={(e) =>
-                                  handleGrammarFormChange(
-                                    'notes',
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="Additional notes, usage tips, etc."
-                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Tags
-                              </label>
-                              <input
-                                type="text"
-                                value={grammarForm.tags}
-                                onChange={(e) =>
-                                  handleGrammarFormChange(
-                                    'tags',
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="tag1, tag2, tag3"
-                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
-                              />
-                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 gap-3 ">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Description
+                            </label>
+                            <textarea
+                              rows={2}
+                              value={grammarForm.description}
+                              onChange={(e) =>
+                                handleGrammarFormChange(
+                                  'description',
+                                  e.target.value
+                                )
+                              }
+                              placeholder="Brief explanation of the grammar pattern"
+                              className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
+                            />
                           </div>
-                          <div className="grid grid-cols-1 gap-3 mb-3">
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Example Sentences
-                              </label>
-                              <textarea
-                                rows={2}
-                                value={grammarForm.example_sentences}
-                                onChange={(e) =>
-                                  handleGrammarFormChange(
-                                    'example_sentences',
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="Example sentences (one per line)"
-                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
-                              />
-                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 mb-2">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Notes
+                            </label>
+                            <input
+                              type="text"
+                              value={grammarForm.notes}
+                              onChange={(e) =>
+                                handleGrammarFormChange('notes', e.target.value)
+                              }
+                              placeholder="Additional notes, usage tips, etc."
+                              className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
+                            />
                           </div>
-                        </>
-                      )}
-                    </form>
-                  )}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Tags
+                            </label>
+                            <input
+                              type="text"
+                              value={grammarForm.tags}
+                              onChange={(e) =>
+                                handleGrammarFormChange('tags', e.target.value)
+                              }
+                              placeholder="tag1, tag2, tag3"
+                              className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 gap-3 mb-3">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Example Sentences
+                            </label>
+                            <textarea
+                              rows={2}
+                              value={grammarForm.example_sentences}
+                              onChange={(e) =>
+                                handleGrammarFormChange(
+                                  'example_sentences',
+                                  e.target.value
+                                )
+                              }
+                              placeholder="Example sentences (one per line)"
+                              className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </form>
+                )}
 
-                  {/* CSV Upload Tab */}
-                  {activeTab === 'csv' && (
-                    <CSVUpload
-                      onUpload={(content) => {
-                        setCsvContent(content);
-                      }}
-                      itemType={itemType}
-                      onColumnsMapped={handleCSVColumnsMapped}
-                    />
-                  )}
-                </div>
+                {/* CSV Upload Tab */}
+                {activeTab === 'csv' && (
+                  <CSVUpload
+                    onUpload={(content) => {
+                      setCsvContent(content);
+                    }}
+                    itemType={itemType}
+                    onColumnsMapped={handleCSVColumnsMapped}
+                  />
+                )}
               </div>
             </div>
+          </div>
 
-            {/* Right Column - Preview */}
-            <div className="lg:col-span-1 flex">
-              <div
-                className={`bg-white dark:bg-surface-card rounded-lg shadow-sm p-4 transition-all duration-300 flex flex-col w-full h-fit sticky top-4 max-h-[calc(60vh-2rem)] ${showBorderHighlight ? 'border border-red-500' : 'border border-black/5 dark:border-white/10'}`}
-                onClick={() => setShowBorderHighlight(false)}
-              >
-                <div className="flex items-center justify-between mb-3 flex-shrink-0">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-                      Preview ({proposedItems.length})
-                    </h3>
-                    {statusMessage && (
-                      <div
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                          statusType === 'success'
-                            ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
-                            : statusType === 'error'
-                              ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300'
-                              : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
-                        }`}
-                      >
-                        {statusMessage}
-                      </div>
-                    )}
-                  </div>
-                  {proposedItems.length > 0 && (
-                    <button
-                      onClick={() => setProposedItems([])}
-                      className="text-xs text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+          {/* Right Column - Preview */}
+          <div className="lg:col-span-1 flex">
+            <div
+              className={`bg-white dark:bg-surface-card rounded-lg shadow-sm p-4 transition-all duration-300 flex flex-col w-full h-fit sticky top-4 max-h-[calc(60vh-2rem)] ${showBorderHighlight ? 'border border-red-500' : 'border border-black/5 dark:border-white/10'}`}
+              onClick={() => setShowBorderHighlight(false)}
+            >
+              <div className="flex items-center justify-between mb-3 flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                    Preview ({proposedItems.length})
+                  </h3>
+                  {statusMessage && (
+                    <div
+                      className={`px-2 py-1 rounded text-xs font-medium ${
+                        statusType === 'success'
+                          ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
+                          : statusType === 'error'
+                            ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300'
+                            : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
+                      }`}
                     >
-                      Clear
-                    </button>
+                      {statusMessage}
+                    </div>
                   )}
                 </div>
+                {proposedItems.length > 0 && (
+                  <button
+                    onClick={() => setProposedItems([])}
+                    className="text-xs text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
 
-                {proposedItems.length > 0 ? (
-                  <div className="space-y-2 flex-1 overflow-y-auto min-h-0">
-                    {proposedItems.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-gray-50 dark:bg-surface-elevated rounded p-2 text-xs"
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span
-                                className={`inline-block w-2 h-2 rounded-full ${
-                                  item.type === 'vocabulary'
-                                    ? 'bg-blue-500'
-                                    : 'bg-green-500'
-                                }`}
-                              ></span>
-                              <span className="text-xs text-gray-500 dark:text-gray-400 uppercase">
-                                {item.type}
-                              </span>
-                            </div>
-
-                            {item.type === 'vocabulary' ? (
-                              <>
-                                <div className="font-medium text-gray-900 dark:text-white truncate">
-                                  {item.english || item.kana}
-                                </div>
-                                {item.kana && item.english && (
-                                  <div className="text-gray-600 dark:text-gray-400 font-japanese truncate">
-                                    {item.kana}
-                                  </div>
-                                )}
-                                {item.kanji && (
-                                  <div className="text-gray-600 dark:text-gray-400 font-japanese truncate">
-                                    {item.kanji}
-                                  </div>
-                                )}
-                                {item.lexical_category && (
-                                  <div className="text-gray-500 dark:text-gray-500 truncate">
-                                    {item.lexical_category}
-                                  </div>
-                                )}
-                              </>
-                            ) : (
-                              <>
-                                <div className="font-medium text-gray-900 dark:text-white truncate">
-                                  {item.title}
-                                </div>
-                                {item.description && (
-                                  <div className="text-gray-600 dark:text-gray-400 truncate">
-                                    {item.description}
-                                  </div>
-                                )}
-                                {item.topic && (
-                                  <div className="text-gray-500 dark:text-gray-500 truncate">
-                                    {item.topic}
-                                  </div>
-                                )}
-                              </>
-                            )}
+              {proposedItems.length > 0 ? (
+                <div className="space-y-2 flex-1 overflow-y-auto min-h-0">
+                  {proposedItems.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-gray-50 dark:bg-surface-elevated rounded p-2 text-xs"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span
+                              className={`inline-block w-2 h-2 rounded-full ${
+                                item.type === 'vocabulary'
+                                  ? 'bg-blue-500'
+                                  : 'bg-green-500'
+                              }`}
+                            ></span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400 uppercase">
+                              {item.type}
+                            </span>
                           </div>
-                          <button
-                            onClick={() => handleRemoveProposedItem(idx)}
-                            className="ml-2 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                          >
-                            <FiX className="w-3 h-3" />
-                          </button>
+
+                          {item.type === 'vocabulary' ? (
+                            <>
+                              <div className="font-medium text-gray-900 dark:text-white truncate">
+                                {item.english || item.kana}
+                              </div>
+                              {item.kana && item.english && (
+                                <div className="text-gray-600 dark:text-gray-400 font-japanese truncate">
+                                  {item.kana}
+                                </div>
+                              )}
+                              {item.kanji && (
+                                <div className="text-gray-600 dark:text-gray-400 font-japanese truncate">
+                                  {item.kanji}
+                                </div>
+                              )}
+                              {item.lexical_category && (
+                                <div className="text-gray-500 dark:text-gray-500 truncate">
+                                  {item.lexical_category}
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <div className="font-medium text-gray-900 dark:text-white truncate">
+                                {item.title}
+                              </div>
+                              {item.description && (
+                                <div className="text-gray-600 dark:text-gray-400 truncate">
+                                  {item.description}
+                                </div>
+                              )}
+                              {item.topic && (
+                                <div className="text-gray-500 dark:text-gray-500 truncate">
+                                  {item.topic}
+                                </div>
+                              )}
+                            </>
+                          )}
                         </div>
+                        <button
+                          onClick={() => handleRemoveProposedItem(idx)}
+                          className="ml-2 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        >
+                          <FiX className="w-3 h-3" />
+                        </button>
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400 text-sm">
-                    No items added yet
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400 text-sm">
+                  No items added yet
+                </div>
+              )}
+
+              {/* Kanji warning */}
+              {proposedItems.length > 0 &&
+                itemType === 'vocabulary' &&
+                proposedItems.some(
+                  (item) =>
+                    item.type === 'vocabulary' &&
+                    (!item.kanji || item.kanji.trim() === '')
+                ) && (
+                  <div className="mt-3 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/15 border border-amber-200/50 dark:border-amber-700/30">
+                    <p className="text-[11px] text-amber-700 dark:text-amber-300/80 leading-relaxed">
+                      Some items are missing kanji. Adding kanji to each word
+                      improves auto-categorization accuracy and is needed for
+                      conjugation practice to work correctly.
+                    </p>
                   </div>
                 )}
 
-                {/* Kanji warning */}
-                {proposedItems.length > 0 &&
-                  itemType === 'vocabulary' &&
-                  proposedItems.some(
-                    (item) =>
-                      item.type === 'vocabulary' &&
-                      (!item.kanji || item.kanji.trim() === '')
-                  ) && (
-                    <div className="mt-3 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/15 border border-amber-200/50 dark:border-amber-700/30">
-                      <p className="text-[11px] text-amber-700 dark:text-amber-300/80 leading-relaxed">
-                        Some items are missing kanji. Adding kanji to each word
-                        improves auto-categorization accuracy and is needed for
-                        conjugation practice to work correctly.
-                      </p>
-                    </div>
+              {/* Action Buttons */}
+              <div className="mt-4 pt-4 border-t border-black/5 dark:border-white/10 flex items-center justify-left flex-shrink-0">
+                <Link
+                  href="/learn/academy/sets"
+                  className="inline-flex items-center mr-4 gap-2 px-3 py-2 rounded text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-surface-elevated transition-colors"
+                >
+                  Cancel
+                </Link>
+                <Button
+                  onClick={handleSubmitAll}
+                  disabled={
+                    !newSetName.trim() ||
+                    proposedItems.length === 0 ||
+                    isSubmitting
+                  }
+                  variant="primary-subtle"
+                  size="md"
+                  className="gap-2 rounded"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <span className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-white"></span>
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <FiCheck className="w-4 h-4" /> Create Set
+                    </>
                   )}
-
-                {/* Action Buttons */}
-                <div className="mt-4 pt-4 border-t border-black/5 dark:border-white/10 flex items-center justify-left flex-shrink-0">
-                  <Link
-                    href="/learn/academy/sets"
-                    className="inline-flex items-center mr-4 gap-2 px-3 py-2 rounded text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-surface-elevated transition-colors"
-                  >
-                    Cancel
-                  </Link>
-                  <Button
-                    onClick={handleSubmitAll}
-                    disabled={
-                      !newSetName.trim() ||
-                      proposedItems.length === 0 ||
-                      isSubmitting
-                    }
-                    variant="primary-subtle"
-                    size="md"
-                    className="gap-2 rounded"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <span className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-white"></span>
-                        Creating...
-                      </>
-                    ) : (
-                      <>
-                        <FiCheck className="w-4 h-4" /> Create Set
-                      </>
-                    )}
-                  </Button>
-                </div>
+                </Button>
               </div>
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </AuthenticatedLayout>
   );
 }

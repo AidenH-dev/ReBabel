@@ -1,6 +1,5 @@
 // pages/learn/edit-learning_material/[id].js
-import Head from 'next/head';
-import MainSidebar from '../../../../components/Sidebars/MainSidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -495,153 +494,149 @@ export default function EditLearning_materialPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
-        <MainSidebar />
-        <main className="ml-auto flex-1 px-8 py-6 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-12 h-12 border-4 border-brand-pink border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-400">
-              Loading learning material...
-            </p>
-          </div>
-        </main>
-      </div>
+      <AuthenticatedLayout
+        sidebar="main"
+        title="Edit Learning Material • ReBabel"
+        mainClassName="px-8 py-6 flex items-center justify-center"
+      >
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-brand-pink border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading learning material...
+          </p>
+        </div>
+      </AuthenticatedLayout>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
-      <MainSidebar />
+    <AuthenticatedLayout
+      sidebar="main"
+      title="Edit Learning Material • ReBabel"
+      mainClassName="max-h-screen overflow-scroll px-8 py-6"
+    >
+      {/* Header */}
+      <div className="mb-6">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 mb-4 transition-colors"
+        >
+          <FaArrowLeft />
+          <span>Back to Dashboard</span>
+        </button>
 
-      <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6">
-        <Head>
-          <title>Edit Learning_material • ReBabel</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        {/* Header */}
-        <div className="mb-6">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 mb-4 transition-colors"
-          >
-            <FaArrowLeft />
-            <span>Back to Dashboard</span>
-          </button>
-
-          <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700/50">
-            <div className="flex items-start justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                  Edit Learning Material
-                </h1>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Update learning material information and manage sections
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleSaveChanges}
-                  disabled={saving}
-                  className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white font-medium disabled:opacity-60 hover:shadow-lg transition-all"
-                >
-                  <FaSave />
-                  {saving ? 'Saving...' : 'Save All Changes'}
-                </button>
-                <button
-                  onClick={handleDeleteLearning_material}
-                  disabled={deleting}
-                  className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 font-medium disabled:opacity-60 hover:bg-red-200 dark:hover:bg-red-900/30 transition-all"
-                >
-                  <FaTrash />
-                  {deleting ? 'Deleting...' : 'Delete Learning Material'}
-                </button>
-              </div>
+        <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700/50">
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                Edit Learning Material
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400">
+                Update learning material information and manage sections
+              </p>
             </div>
-
-            {/* Success/Error Messages */}
-            {successMessage && (
-              <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg text-green-700 dark:text-green-400 text-sm flex items-center gap-2 border border-green-200 dark:border-green-800/50">
-                <FaCheck />
-                {successMessage}
-              </div>
-            )}
-            {error && (
-              <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg text-red-700 dark:text-red-400 text-sm flex items-center gap-2 border border-red-200 dark:border-red-800/50">
-                <FaTimes />
-                {error}
-              </div>
-            )}
-
-            {/* Tab Navigation */}
-            <div className="flex gap-1 mt-6 p-1 bg-gray-100 dark:bg-gray-800/50 rounded-lg">
+            <div className="flex items-center gap-3">
               <button
-                onClick={() => setActiveTab('info')}
-                className={`flex-1 px-4 py-2 rounded-md font-medium transition-all flex items-center justify-center gap-2 ${
-                  activeTab === 'info'
-                    ? 'bg-white dark:bg-surface-elevated text-brand-pink shadow-sm border border-gray-200 dark:border-gray-600/50'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-                }`}
+                onClick={handleSaveChanges}
+                disabled={saving}
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white font-medium disabled:opacity-60 hover:shadow-lg transition-all"
               >
-                <FaInfoCircle />
-                Learning Material Information
+                <FaSave />
+                {saving ? 'Saving...' : 'Save All Changes'}
               </button>
               <button
-                onClick={() => setActiveTab('content')}
-                className={`flex-1 px-4 py-2 rounded-md font-medium transition-all flex items-center justify-center gap-2 ${
-                  activeTab === 'content'
-                    ? 'bg-white dark:bg-surface-elevated text-brand-pink shadow-sm border border-gray-200 dark:border-gray-600/50'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-                }`}
+                onClick={handleDeleteLearning_material}
+                disabled={deleting}
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 font-medium disabled:opacity-60 hover:bg-red-200 dark:hover:bg-red-900/30 transition-all"
               >
-                <FaClipboardList />
-                Sections & Content ({sections.length})
+                <FaTrash />
+                {deleting ? 'Deleting...' : 'Delete Learning Material'}
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Tab Content */}
-        {activeTab === 'info' ? (
-          <Learning_materialInfoTab
-            learning_materialInfo={learning_materialInfo}
-            onChange={handleLearning_materialInfoChange}
-            sections={sections}
-          />
-        ) : (
-          <SectionsTab
-            sections={sections}
-            currentSection={currentSection}
-            setCurrentSection={setCurrentSection}
-            editingSectionId={editingSectionId}
-            showGrammarForm={showGrammarForm}
-            setShowGrammarForm={setShowGrammarForm}
-            showVocabForm={showVocabForm}
-            setShowVocabForm={setShowVocabForm}
-            currentGrammar={currentGrammar}
-            setCurrentGrammar={setCurrentGrammar}
-            currentVocab={currentVocab}
-            setCurrentVocab={setCurrentVocab}
-            actions={{
-              startEditingSection,
-              cancelEditing,
-              addGrammarPoint,
-              addVocabulary,
-              addExample,
-              updateExample,
-              removeExample,
-              saveSection,
-              removeSection,
-              removeGrammarFromSection,
-              removeVocabFromSection,
-              toggleSectionExpansion,
-              deleteGrammarPoint,
-              deleteVocabulary,
-            }}
-          />
-        )}
-      </main>
-    </div>
+          {/* Success/Error Messages */}
+          {successMessage && (
+            <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg text-green-700 dark:text-green-400 text-sm flex items-center gap-2 border border-green-200 dark:border-green-800/50">
+              <FaCheck />
+              {successMessage}
+            </div>
+          )}
+          {error && (
+            <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg text-red-700 dark:text-red-400 text-sm flex items-center gap-2 border border-red-200 dark:border-red-800/50">
+              <FaTimes />
+              {error}
+            </div>
+          )}
+
+          {/* Tab Navigation */}
+          <div className="flex gap-1 mt-6 p-1 bg-gray-100 dark:bg-gray-800/50 rounded-lg">
+            <button
+              onClick={() => setActiveTab('info')}
+              className={`flex-1 px-4 py-2 rounded-md font-medium transition-all flex items-center justify-center gap-2 ${
+                activeTab === 'info'
+                  ? 'bg-white dark:bg-surface-elevated text-brand-pink shadow-sm border border-gray-200 dark:border-gray-600/50'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              }`}
+            >
+              <FaInfoCircle />
+              Learning Material Information
+            </button>
+            <button
+              onClick={() => setActiveTab('content')}
+              className={`flex-1 px-4 py-2 rounded-md font-medium transition-all flex items-center justify-center gap-2 ${
+                activeTab === 'content'
+                  ? 'bg-white dark:bg-surface-elevated text-brand-pink shadow-sm border border-gray-200 dark:border-gray-600/50'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              }`}
+            >
+              <FaClipboardList />
+              Sections & Content ({sections.length})
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'info' ? (
+        <Learning_materialInfoTab
+          learning_materialInfo={learning_materialInfo}
+          onChange={handleLearning_materialInfoChange}
+          sections={sections}
+        />
+      ) : (
+        <SectionsTab
+          sections={sections}
+          currentSection={currentSection}
+          setCurrentSection={setCurrentSection}
+          editingSectionId={editingSectionId}
+          showGrammarForm={showGrammarForm}
+          setShowGrammarForm={setShowGrammarForm}
+          showVocabForm={showVocabForm}
+          setShowVocabForm={setShowVocabForm}
+          currentGrammar={currentGrammar}
+          setCurrentGrammar={setCurrentGrammar}
+          currentVocab={currentVocab}
+          setCurrentVocab={setCurrentVocab}
+          actions={{
+            startEditingSection,
+            cancelEditing,
+            addGrammarPoint,
+            addVocabulary,
+            addExample,
+            updateExample,
+            removeExample,
+            saveSection,
+            removeSection,
+            removeGrammarFromSection,
+            removeVocabFromSection,
+            toggleSectionExpansion,
+            deleteGrammarPoint,
+            deleteVocabulary,
+          }}
+        />
+      )}
+    </AuthenticatedLayout>
   );
 }
 

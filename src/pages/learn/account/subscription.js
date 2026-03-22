@@ -1,5 +1,4 @@
-import Head from 'next/head';
-import MainSidebar from '../../../components/Sidebars/MainSidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { useEffect, useState } from 'react';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { TbCheck, TbLoader, TbExternalLink } from 'react-icons/tb';
@@ -109,207 +108,201 @@ export default function Subscription() {
   const isPremium = !!subscription?.isPremium;
 
   return (
-    <div className="flex flex-row h-screen overflow-hidden bg-surface-page text-[#4e4a4a] dark:text-white">
-      <MainSidebar />
+    <AuthenticatedLayout
+      sidebar="main"
+      title="Subscription - ReBabel"
+      variant="fixed"
+      wrapperClassName="text-[#4e4a4a] dark:text-white"
+      mainClassName="items-center justify-center p-10"
+    >
+      <div className="w-full max-w-md">
+        <h1 className="text-3xl font-semibold mb-2 flex items-center gap-3">
+          <HiOutlineStar className="text-brand-pink" />
+          Subscription
+        </h1>
+        {isPremium ? (
+          <p className="text-gray-600 dark:text-gray-400 mb-8">
+            ありがとうございました! Your support means the world!
+          </p>
+        ) : (
+          <p className="text-gray-600 dark:text-gray-400 mb-8">
+            Unlock premium features with ReBabel Premium
+          </p>
+        )}
 
-      <main className="ml-auto flex-1 flex flex-col items-center justify-center h-screen overflow-y-auto bg-surface-page p-10">
-        <Head>
-          <title>Subscription - ReBabel</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+        {/* Message Banner */}
+        {message && (
+          <div
+            className={`mb-6 p-4 rounded-lg ${
+              message.type === 'success'
+                ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+                : message.type === 'error'
+                  ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+                  : 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300'
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
 
-        <div className="w-full max-w-md">
-          <h1 className="text-3xl font-semibold mb-2 flex items-center gap-3">
-            <HiOutlineStar className="text-brand-pink" />
-            Subscription
-          </h1>
-          {isPremium ? (
-            <p className="text-gray-600 dark:text-gray-400 mb-8">
-              ありがとうございました! Your support means the world!
-            </p>
-          ) : (
-            <p className="text-gray-600 dark:text-gray-400 mb-8">
-              Unlock premium features with ReBabel Premium
-            </p>
-          )}
+        {loading ? (
+          <div className="bg-white dark:bg-surface-card p-8 rounded-lg shadow-md">
+            <div className="flex items-center justify-center gap-2">
+              <TbLoader className="w-5 h-5 animate-spin" />
+              Loading...
+            </div>
+          </div>
+        ) : isPremium ? (
+          /* Premium User View */
+          <div className="bg-white dark:bg-surface-card p-6 rounded-lg shadow-md border border-brand-pink/20">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-pink text-white font-medium">
+                <HiOutlineStar className="w-5 h-5 text-amber-300" />
+                Premium Active
+              </span>
+            </div>
 
-          {/* Message Banner */}
-          {message && (
-            <div
-              className={`mb-6 p-4 rounded-lg ${
-                message.type === 'success'
-                  ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
-                  : message.type === 'error'
-                    ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
-                    : 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300'
-              }`}
+            <div className="text-gray-600 dark:text-gray-400 mb-6">
+              <p className="mb-2">Your premium subscription is active.</p>
+              {subscription?.subscription?.current_period_end && (
+                <p>
+                  {subscription.subscription.cancel_at_period_end === 'true'
+                    ? `Access until: ${new Date(
+                        subscription.subscription.current_period_end
+                      ).toLocaleDateString()}`
+                    : `Next billing date: ${new Date(
+                        subscription.subscription.current_period_end
+                      ).toLocaleDateString()}`}
+                </p>
+              )}
+            </div>
+
+            <div className="bg-brand-pink/5 dark:bg-brand-pink/10 rounded-lg p-4 mb-6 border border-brand-pink/10">
+              <h3 className="font-medium mb-3">Premium Benefits:</h3>
+              <ul className="space-y-2 text-gray-600 dark:text-gray-400 text-sm">
+                <li className="flex items-center gap-2">
+                  <TbCheck className="text-amber-500" /> 5 translation practice
+                  sessions per day
+                </li>
+                <li className="flex items-center gap-2">
+                  <TbCheck className="text-amber-500" /> AI-powered grammar
+                  feedback
+                </li>
+                <li className="flex items-center gap-2">
+                  <TbCheck className="text-amber-500" /> Advanced practice modes
+                </li>
+                <li className="flex items-center gap-2">
+                  <TbCheck className="text-amber-500" /> Priority support
+                </li>
+              </ul>
+            </div>
+
+            <button
+              onClick={handleManageBilling}
+              disabled={processing}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-brand-pink/30 hover:border-brand-pink/50 hover:bg-brand-pink/5 transition-colors disabled:opacity-50"
             >
-              {message.text}
-            </div>
-          )}
-
-          {loading ? (
-            <div className="bg-white dark:bg-surface-card p-8 rounded-lg shadow-md">
-              <div className="flex items-center justify-center gap-2">
-                <TbLoader className="w-5 h-5 animate-spin" />
-                Loading...
-              </div>
-            </div>
-          ) : isPremium ? (
-            /* Premium User View */
-            <div className="bg-white dark:bg-surface-card p-6 rounded-lg shadow-md border border-brand-pink/20">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-pink text-white font-medium">
-                  <HiOutlineStar className="w-5 h-5 text-amber-300" />
-                  Premium Active
+              {processing ? (
+                <TbLoader className="w-4 h-4 animate-spin" />
+              ) : (
+                <TbExternalLink className="w-4 h-4" />
+              )}
+              Manage Billing
+            </button>
+          </div>
+        ) : (
+          /* Free User View */
+          <div className="relative overflow-hidden bg-white dark:bg-surface-card rounded-lg shadow-md border border-brand-pink/20">
+            {/* Founder Banner */}
+            <div className="bg-brand-pink px-6 py-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                    <HiOutlineStar className="w-3 h-3 text-white" />
+                  </div>
+                  <span className="text-white text-sm font-semibold tracking-wide">
+                    Founder Pricing
+                  </span>
+                </div>
+                <span className="text-white/80 text-xs font-medium">
+                  Early access — locks in for life
                 </span>
               </div>
+            </div>
 
-              <div className="text-gray-600 dark:text-gray-400 mb-6">
-                <p className="mb-2">Your premium subscription is active.</p>
-                {subscription?.subscription?.current_period_end && (
-                  <p>
-                    {subscription.subscription.cancel_at_period_end === 'true'
-                      ? `Access until: ${new Date(
-                          subscription.subscription.current_period_end
-                        ).toLocaleDateString()}`
-                      : `Next billing date: ${new Date(
-                          subscription.subscription.current_period_end
-                        ).toLocaleDateString()}`}
-                  </p>
-                )}
+            <div className="p-6">
+              {/* Pricing */}
+              <div className="text-center mb-5">
+                <h2 className="text-lg font-semibold mb-3">ReBabel Premium</h2>
+                <div className="flex items-baseline justify-center gap-2">
+                  <span className="text-gray-400 dark:text-gray-500 text-lg line-through">
+                    $8
+                  </span>
+                  <span className="text-4xl font-bold text-brand-pink">
+                    $5.50
+                  </span>
+                  <span className="text-gray-500 dark:text-gray-400 text-sm">
+                    /mo
+                  </span>
+                </div>
+                <p className="text-xs text-brand-pink font-medium mt-1">
+                  Save 31% as a founding member
+                </p>
               </div>
 
-              <div className="bg-brand-pink/5 dark:bg-brand-pink/10 rounded-lg p-4 mb-6 border border-brand-pink/10">
-                <h3 className="font-medium mb-3">Premium Benefits:</h3>
-                <ul className="space-y-2 text-gray-600 dark:text-gray-400 text-sm">
-                  <li className="flex items-center gap-2">
-                    <TbCheck className="text-amber-500" /> 5 translation
-                    practice sessions per day
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <TbCheck className="text-amber-500" /> AI-powered grammar
-                    feedback
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <TbCheck className="text-amber-500" /> Advanced practice
-                    modes
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <TbCheck className="text-amber-500" /> Priority support
-                  </li>
-                </ul>
-              </div>
+              {/* Divider */}
+              <div className="border-t border-gray-200 dark:border-gray-700 mb-4" />
 
-              <button
-                onClick={handleManageBilling}
+              <ul className="space-y-2.5 mb-5 text-sm">
+                <li className="flex items-center gap-2.5">
+                  <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
+                  <span>5 translation practice sessions per day</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
+                  <span>Automatic grading & feedback</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
+                  <span>Advanced practice modes</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
+                  <span>Priority support</span>
+                </li>
+              </ul>
+
+              <Button
+                onClick={handleUpgrade}
                 disabled={processing}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-brand-pink/30 hover:border-brand-pink/50 hover:bg-brand-pink/5 transition-colors disabled:opacity-50"
+                variant="primary"
+                size="lg"
+                className="w-full gap-2 font-semibold"
               >
                 {processing ? (
                   <TbLoader className="w-4 h-4 animate-spin" />
                 ) : (
-                  <TbExternalLink className="w-4 h-4" />
+                  <HiOutlineStar className="w-4 h-4" />
                 )}
-                Manage Billing
+                Get Founder Pricing
+              </Button>
+
+              <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-3">
+                Free tier always available — 1 session per day
+              </p>
+
+              <button
+                onClick={syncAndFetch}
+                disabled={processing || loading}
+                className="w-full mt-2 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors disabled:opacity-50"
+              >
+                Already purchased? Restore subscription
               </button>
             </div>
-          ) : (
-            /* Free User View */
-            <div className="relative overflow-hidden bg-white dark:bg-surface-card rounded-lg shadow-md border border-brand-pink/20">
-              {/* Founder Banner */}
-              <div className="bg-brand-pink px-6 py-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
-                      <HiOutlineStar className="w-3 h-3 text-white" />
-                    </div>
-                    <span className="text-white text-sm font-semibold tracking-wide">
-                      Founder Pricing
-                    </span>
-                  </div>
-                  <span className="text-white/80 text-xs font-medium">
-                    Early access — locks in for life
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-6">
-                {/* Pricing */}
-                <div className="text-center mb-5">
-                  <h2 className="text-lg font-semibold mb-3">
-                    ReBabel Premium
-                  </h2>
-                  <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-gray-400 dark:text-gray-500 text-lg line-through">
-                      $8
-                    </span>
-                    <span className="text-4xl font-bold text-brand-pink">
-                      $5.50
-                    </span>
-                    <span className="text-gray-500 dark:text-gray-400 text-sm">
-                      /mo
-                    </span>
-                  </div>
-                  <p className="text-xs text-brand-pink font-medium mt-1">
-                    Save 31% as a founding member
-                  </p>
-                </div>
-
-                {/* Divider */}
-                <div className="border-t border-gray-200 dark:border-gray-700 mb-4" />
-
-                <ul className="space-y-2.5 mb-5 text-sm">
-                  <li className="flex items-center gap-2.5">
-                    <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
-                    <span>5 translation practice sessions per day</span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
-                    <span>Automatic grading & feedback</span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
-                    <span>Advanced practice modes</span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
-                    <span>Priority support</span>
-                  </li>
-                </ul>
-
-                <Button
-                  onClick={handleUpgrade}
-                  disabled={processing}
-                  variant="primary"
-                  size="lg"
-                  className="w-full gap-2 font-semibold"
-                >
-                  {processing ? (
-                    <TbLoader className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <HiOutlineStar className="w-4 h-4" />
-                  )}
-                  Get Founder Pricing
-                </Button>
-
-                <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-3">
-                  Free tier always available — 1 session per day
-                </p>
-
-                <button
-                  onClick={syncAndFetch}
-                  disabled={processing || loading}
-                  className="w-full mt-2 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors disabled:opacity-50"
-                >
-                  Already purchased? Restore subscription
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
+          </div>
+        )}
+      </div>
+    </AuthenticatedLayout>
   );
 }
 

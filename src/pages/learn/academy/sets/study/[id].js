@@ -20,8 +20,7 @@
 // IMPORTS
 // ============================================================================
 
-import Head from 'next/head';
-import MainSidebar from '@/components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
@@ -383,23 +382,25 @@ export default function ViewSet() {
 
   if (error) {
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
-        <MainSidebar />
-        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
-              Error Loading Set
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
-            <button
-              onClick={() => router.push('/learn/academy/sets')}
-              className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
-            >
-              Back to Sets
-            </button>
+      <AuthenticatedLayout
+        sidebar="academy"
+        title="Error Loading Set"
+        variant="fixed"
+        mainClassName="px-4 sm:px-6 py-4 flex items-center justify-center"
+      >
+        <div className="text-center">
+          <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
+            Error Loading Set
           </div>
-        </main>
-      </div>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+          <button
+            onClick={() => router.push('/learn/academy/sets')}
+            className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
+          >
+            Back to Sets
+          </button>
+        </div>
+      </AuthenticatedLayout>
     );
   }
 
@@ -408,252 +409,244 @@ export default function ViewSet() {
   // ============================================================================
 
   return (
-    <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
-      {/* Left sidebar navigation */}
-      <MainSidebar />
-
-      {/* Main content area */}
-      <main className="ml-auto flex-1 flex flex-col min-h-0 sm:overflow-hidden">
-        {/* Page metadata */}
-        <Head>
-          <title>{setData.title} - View Set</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        {/* Desktop sticky header */}
-        <PageHeader
-          title={
-            isLoading ? (
-              <div className="h-7 w-48 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
-            ) : (
-              <span className="flex items-center gap-2">
-                <span className="relative inline-grid">
-                  {/* Hidden sizer — keeps width consistent between text and input */}
-                  <span className="invisible col-start-1 row-start-1 text-2xl font-bold whitespace-pre px-px">
-                    {isEditingTitle ? editTitle || ' ' : setData.title}
-                  </span>
-                  {isEditingTitle ? (
-                    <input
-                      ref={titleInputRef}
-                      value={editTitle}
-                      onChange={(e) => setEditTitle(e.target.value)}
-                      onBlur={saveTitle}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') saveTitle();
-                        if (e.key === 'Escape') setIsEditingTitle(false);
-                      }}
-                      disabled={isSavingTitle}
-                      className="col-start-1 row-start-1 text-2xl font-bold text-gray-900 dark:text-white bg-transparent border-b border-brand-pink/50 outline-none m-0 p-0 px-px leading-normal w-full"
-                    />
-                  ) : (
-                    <span
-                      className="col-start-1 row-start-1 text-2xl font-bold text-gray-900 dark:text-white cursor-pointer px-px"
-                      onClick={startEditingTitle}
-                    >
-                      {setData.title}
-                    </span>
-                  )}
+    <AuthenticatedLayout
+      sidebar="academy"
+      title={`${setData.title} - View Set`}
+      variant="fixed"
+      mainClassName="min-h-0 sm:overflow-hidden"
+    >
+      {/* Desktop sticky header */}
+      <PageHeader
+        title={
+          isLoading ? (
+            <div className="h-7 w-48 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+          ) : (
+            <span className="flex items-center gap-2">
+              <span className="relative inline-grid">
+                {/* Hidden sizer — keeps width consistent between text and input */}
+                <span className="invisible col-start-1 row-start-1 text-2xl font-bold whitespace-pre px-px">
+                  {isEditingTitle ? editTitle || ' ' : setData.title}
                 </span>
-                <FiEdit2
-                  className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex-shrink-0 cursor-pointer"
-                  onClick={isEditingTitle ? undefined : startEditingTitle}
-                />
-              </span>
-            )
-          }
-          backHref="/learn/academy/sets"
-          backLabel="Sets"
-          backIcon={
-            <TbStack2 className="text-gray-700 dark:text-gray-200 text-lg" />
-          }
-          meta={
-            !isLoading && (
-              <button
-                onClick={() => headerActionsRef.current?.openSRSModal?.()}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border relative overflow-hidden transition-all hover:scale-105 cursor-pointer ${
-                  setData.srsEnabled
-                    ? 'bg-green-300/20 border-green-400 dark:border-green-400 hover:bg-green-300/30'
-                    : 'bg-gray-100/60 dark:bg-gray-800/60 border-gray-300 dark:border-gray-600 hover:bg-gray-200/60 dark:hover:bg-gray-700/60'
-                }`}
-                title="Click to configure SRS settings"
-              >
-                {setData.srsEnabled ? (
-                  <>
-                    <TbRepeat className="w-4 h-4 text-purple-600 dark:text-purple-300" />
-                    <span className="text-xs font-semibold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-300 bg-clip-text text-transparent">
-                      SRS Enabled
-                    </span>
-                  </>
+                {isEditingTitle ? (
+                  <input
+                    ref={titleInputRef}
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    onBlur={saveTitle}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') saveTitle();
+                      if (e.key === 'Escape') setIsEditingTitle(false);
+                    }}
+                    disabled={isSavingTitle}
+                    className="col-start-1 row-start-1 text-2xl font-bold text-gray-900 dark:text-white bg-transparent border-b border-brand-pink/50 outline-none m-0 p-0 px-px leading-normal w-full"
+                  />
                 ) : (
-                  <>
-                    <TbRepeatOff className="w-4 h-4 text-gray-500 dark:text-gray-500" />
-                    <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
-                      SRS Disabled
-                    </span>
-                  </>
-                )}
-              </button>
-            )
-          }
-          actions={
-            !isLoading && (
-              <>
-                <button
-                  onClick={() => headerActionsRef.current?.openShareModal?.()}
-                  className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
-                  title="Share Set"
-                >
-                  <TbShare2 className="w-4.5 h-4.5" />
-                </button>
-                <div className="relative" ref={headerOptionsRef}>
-                  <button
-                    onClick={() => setShowHeaderOptions((v) => !v)}
-                    className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
-                    title="More"
+                  <span
+                    className="col-start-1 row-start-1 text-2xl font-bold text-gray-900 dark:text-white cursor-pointer px-px"
+                    onClick={startEditingTitle}
                   >
-                    <FiMoreVertical className="w-4.5 h-4.5" />
-                  </button>
-                  {showHeaderOptions && (
-                    <div className="absolute right-0 dark:text-white mt-1 w-56 bg-white dark:bg-surface-card rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
+                    {setData.title}
+                  </span>
+                )}
+              </span>
+              <FiEdit2
+                className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex-shrink-0 cursor-pointer"
+                onClick={isEditingTitle ? undefined : startEditingTitle}
+              />
+            </span>
+          )
+        }
+        backHref="/learn/academy/sets"
+        backLabel="Sets"
+        backIcon={
+          <TbStack2 className="text-gray-700 dark:text-gray-200 text-lg" />
+        }
+        meta={
+          !isLoading && (
+            <button
+              onClick={() => headerActionsRef.current?.openSRSModal?.()}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border relative overflow-hidden transition-all hover:scale-105 cursor-pointer ${
+                setData.srsEnabled
+                  ? 'bg-green-300/20 border-green-400 dark:border-green-400 hover:bg-green-300/30'
+                  : 'bg-gray-100/60 dark:bg-gray-800/60 border-gray-300 dark:border-gray-600 hover:bg-gray-200/60 dark:hover:bg-gray-700/60'
+              }`}
+              title="Click to configure SRS settings"
+            >
+              {setData.srsEnabled ? (
+                <>
+                  <TbRepeat className="w-4 h-4 text-purple-600 dark:text-purple-300" />
+                  <span className="text-xs font-semibold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-300 bg-clip-text text-transparent">
+                    SRS Enabled
+                  </span>
+                </>
+              ) : (
+                <>
+                  <TbRepeatOff className="w-4 h-4 text-gray-500 dark:text-gray-500" />
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+                    SRS Disabled
+                  </span>
+                </>
+              )}
+            </button>
+          )
+        }
+        actions={
+          !isLoading && (
+            <>
+              <button
+                onClick={() => headerActionsRef.current?.openShareModal?.()}
+                className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+                title="Share Set"
+              >
+                <TbShare2 className="w-4.5 h-4.5" />
+              </button>
+              <div className="relative" ref={headerOptionsRef}>
+                <button
+                  onClick={() => setShowHeaderOptions((v) => !v)}
+                  className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+                  title="More"
+                >
+                  <FiMoreVertical className="w-4.5 h-4.5" />
+                </button>
+                {showHeaderOptions && (
+                  <div className="absolute right-0 dark:text-white mt-1 w-56 bg-white dark:bg-surface-card rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
+                    <button
+                      onClick={() => {
+                        headerActionsRef.current?.openEdit?.();
+                        setShowHeaderOptions(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
+                    >
+                      <FiEdit2 className="inline w-4 h-4" />
+                      Edit Set Details
+                    </button>
+                    <button
+                      onClick={() => {
+                        headerActionsRef.current?.openShareModal?.();
+                        setShowHeaderOptions(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
+                    >
+                      <TbShare2 className="inline w-4 h-4" />
+                      Share Set
+                    </button>
+                    <button
+                      onClick={() => {
+                        headerActionsRef.current?.openSRSModal?.();
+                        setShowHeaderOptions(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
+                    >
+                      <TbRepeat className="inline w-4 h-4" />
+                      SRS Settings
+                    </button>
+                    {(setData.set_type === 'vocab' || !setData.set_type) && (
                       <button
                         onClick={() => {
-                          headerActionsRef.current?.openEdit?.();
                           setShowHeaderOptions(false);
+                          setShowAutoCategorizeModal(true);
                         }}
                         className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
                       >
-                        <FiEdit2 className="inline w-4 h-4" />
-                        Edit Set Details
+                        <FiTag className="inline w-4 h-4" />
+                        Auto-categorize
                       </button>
-                      <button
-                        onClick={() => {
-                          headerActionsRef.current?.openShareModal?.();
-                          setShowHeaderOptions(false);
-                        }}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
-                      >
-                        <TbShare2 className="inline w-4 h-4" />
-                        Share Set
-                      </button>
-                      <button
-                        onClick={() => {
-                          headerActionsRef.current?.openSRSModal?.();
-                          setShowHeaderOptions(false);
-                        }}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
-                      >
-                        <TbRepeat className="inline w-4 h-4" />
-                        SRS Settings
-                      </button>
-                      {(setData.set_type === 'vocab' || !setData.set_type) && (
-                        <button
-                          onClick={() => {
-                            setShowHeaderOptions(false);
-                            setShowAutoCategorizeModal(true);
-                          }}
-                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
-                        >
-                          <FiTag className="inline w-4 h-4" />
-                          Auto-categorize
-                        </button>
-                      )}
-                      <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
-                      <button
-                        onClick={() => {
-                          headerActionsRef.current?.openDelete?.();
-                          setShowHeaderOptions(false);
-                        }}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center gap-2"
-                      >
-                        <TbTrash className="inline w-4 h-4" />
-                        Delete Set
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </>
-            )
-          }
-        />
-
-        {/* Content container with max width */}
-        <div className="w-full max-w-6xl mx-auto flex-1 min-h-0 flex flex-col px-4 sm:px-6 py-6 lg:py-4">
-          {/* Section 1: Set Header - Breadcrumbs, title, edit, export (mobile + inline details) */}
-          <MasterSetHeader
-            setData={setData}
-            items={items}
-            onSetDataUpdate={handleSetDataUpdate}
-            onDeleteSet={handleDeleteSet}
-            srsEnabled={setData.srsEnabled}
-            actionsRef={headerActionsRef}
-          />
-          {/* Section 2: Practice Options - Quiz and flashcard buttons */}
-          {isLoading ? (
-            <div className="grid gap-3 mb-3 pt-2 sm:pt-0 grid-cols-1 sm:grid-cols-2 sm:h-40">
-              {/* SRS module skeleton */}
-              <div className="rounded-lg border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card p-3 flex flex-col justify-between">
-                <div className="flex gap-2 mb-2">
-                  <div className="flex-1 h-10 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse" />
-                </div>
-                <div className="flex gap-3 flex-1">
-                  <div className="grid grid-cols-2 gap-3 sm:w-1/2">
-                    <div
-                      className="h-full rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                      style={{ animationDelay: '50ms' }}
-                    />
-                    <div
-                      className="h-full rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                      style={{ animationDelay: '100ms' }}
-                    />
+                    )}
+                    <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
+                    <button
+                      onClick={() => {
+                        headerActionsRef.current?.openDelete?.();
+                        setShowHeaderOptions(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center gap-2"
+                    >
+                      <TbTrash className="inline w-4 h-4" />
+                      Delete Set
+                    </button>
                   </div>
+                )}
+              </div>
+            </>
+          )
+        }
+      />
+
+      {/* Content container with max width */}
+      <div className="w-full max-w-6xl mx-auto flex-1 min-h-0 flex flex-col px-4 sm:px-6 py-6 lg:py-4">
+        {/* Section 1: Set Header - Breadcrumbs, title, edit, export (mobile + inline details) */}
+        <MasterSetHeader
+          setData={setData}
+          items={items}
+          onSetDataUpdate={handleSetDataUpdate}
+          onDeleteSet={handleDeleteSet}
+          srsEnabled={setData.srsEnabled}
+          actionsRef={headerActionsRef}
+        />
+        {/* Section 2: Practice Options - Quiz and flashcard buttons */}
+        {isLoading ? (
+          <div className="grid gap-3 mb-3 pt-2 sm:pt-0 grid-cols-1 sm:grid-cols-2 sm:h-40">
+            {/* SRS module skeleton */}
+            <div className="rounded-lg border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card p-3 flex flex-col justify-between">
+              <div className="flex gap-2 mb-2">
+                <div className="flex-1 h-10 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse" />
+              </div>
+              <div className="flex gap-3 flex-1">
+                <div className="grid grid-cols-2 gap-3 sm:w-1/2">
                   <div
-                    className="flex-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                    style={{ animationDelay: '150ms' }}
+                    className="h-full rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                    style={{ animationDelay: '50ms' }}
+                  />
+                  <div
+                    className="h-full rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                    style={{ animationDelay: '100ms' }}
                   />
                 </div>
-              </div>
-              {/* Quiz + Flashcards skeleton */}
-              <div className="grid gap-2 w-full grid-cols-2 sm:grid-cols-1 sm:h-40">
-                <div className="rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse p-3 sm:p-4 flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-lg bg-black/[0.06] dark:bg-white/[0.06]" />
-                  <div className="flex-1 space-y-1.5">
-                    <div className="h-4 w-20 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
-                    <div className="h-3 w-36 rounded bg-black/[0.04] dark:bg-white/[0.04] hidden sm:block" />
-                  </div>
-                </div>
                 <div
-                  className="rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse p-3 sm:p-4 flex items-center gap-3"
-                  style={{ animationDelay: '50ms' }}
-                >
-                  <div className="h-9 w-9 rounded-lg bg-black/[0.06] dark:bg-white/[0.06]" />
-                  <div className="flex-1 space-y-1.5">
-                    <div className="h-4 w-24 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
-                    <div className="h-3 w-32 rounded bg-black/[0.04] dark:bg-white/[0.04] hidden sm:block" />
-                  </div>
+                  className="flex-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                  style={{ animationDelay: '150ms' }}
+                />
+              </div>
+            </div>
+            {/* Quiz + Flashcards skeleton */}
+            <div className="grid gap-2 w-full grid-cols-2 sm:grid-cols-1 sm:h-40">
+              <div className="rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse p-3 sm:p-4 flex items-center gap-3">
+                <div className="h-9 w-9 rounded-lg bg-black/[0.06] dark:bg-white/[0.06]" />
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-4 w-20 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
+                  <div className="h-3 w-36 rounded bg-black/[0.04] dark:bg-white/[0.04] hidden sm:block" />
+                </div>
+              </div>
+              <div
+                className="rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse p-3 sm:p-4 flex items-center gap-3"
+                style={{ animationDelay: '50ms' }}
+              >
+                <div className="h-9 w-9 rounded-lg bg-black/[0.06] dark:bg-white/[0.06]" />
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-4 w-24 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
+                  <div className="h-3 w-32 rounded bg-black/[0.04] dark:bg-white/[0.04] hidden sm:block" />
                 </div>
               </div>
             </div>
-          ) : (
-            <PracticeOptions
-              setId={id}
-              setData={setData}
-              enableSrsModule={setData.srsEnabled}
-            />
-          )}
-
-          {/* Section 3: Items Management - Item list/grid, add/edit/delete */}
-          <MasterItemsManagement
-            items={items}
-            setItems={setItems}
+          </div>
+        ) : (
+          <PracticeOptions
+            setId={id}
             setData={setData}
-            setSetData={setSetData}
-            set_type={setData.set_type}
-            userProfile={userProfile}
-            onOpenAutoCategorizeModal={() => setShowAutoCategorizeModal(true)}
+            enableSrsModule={setData.srsEnabled}
           />
-        </div>
-      </main>
+        )}
 
+        {/* Section 3: Items Management - Item list/grid, add/edit/delete */}
+        <MasterItemsManagement
+          items={items}
+          setItems={setItems}
+          setData={setData}
+          setSetData={setSetData}
+          set_type={setData.set_type}
+          userProfile={userProfile}
+          onOpenAutoCategorizeModal={() => setShowAutoCategorizeModal(true)}
+        />
+      </div>
       {/* Mobile floating back button — matches SRS dashboard style */}
       <button
         onClick={() => router.push('/learn/academy/sets')}
@@ -762,7 +755,7 @@ export default function ViewSet() {
           )}
         </div>
       </BaseModal>
-    </div>
+    </AuthenticatedLayout>
   );
 }
 

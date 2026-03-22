@@ -1,9 +1,8 @@
 // pages/learn/academy/sets/fast-review.js
-import Head from 'next/head';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import AcademySidebar from '@/components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 
 // Import icons for phase indicators
 import { FaDumbbell } from 'react-icons/fa';
@@ -713,9 +712,12 @@ export default function FastReview() {
   // Show error state
   if (error) {
     return (
-      <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-        <AcademySidebar />
-        <main className="flex-1 flex items-center justify-center px-4 sm:px-6">
+      <AuthenticatedLayout
+        sidebar="academy"
+        title="Fast Review"
+        variant="fixed"
+      >
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
               {error === 'No items due for review'
@@ -734,142 +736,126 @@ export default function FastReview() {
               Back to Sets
             </button>
           </div>
-        </main>
-      </div>
+        </div>
+      </AuthenticatedLayout>
     );
   }
 
   return (
-    <>
-      <Head>
-        <title>Fast Review</title>
-        <meta
-          name="description"
-          content="Review all due items across your sets"
-        />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card">
-        {/* Only show sidebar during complete phase (summary) */}
-        {currentPhase === 'complete' && <AcademySidebar />}v
-        <main className="flex-1 flex flex-col p-3 sm:p-6 md:mt-10">
-          {/* Loading State */}
-          {isLoading ? (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <div className="animate-pulse mb-4">
-                  <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
-                </div>
-                <p className="text-gray-600 dark:text-white/70">
-                  Loading due items...
-                </p>
-              </div>
+    <AuthenticatedLayout
+      sidebar="academy"
+      title="Fast Review"
+      variant="gradient"
+      mainClassName="p-3 sm:p-6 md:mt-10"
+    >
+      {/* Loading State */}
+      {isLoading ? (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-pulse mb-4">
+              <div className="w-64 h-32 bg-gray-200 dark:bg-white/10 rounded-lg mx-auto"></div>
             </div>
-          ) : (
-            <>
-              {/* Show completion summary */}
-              {currentPhase === 'complete' && (
-                <SummaryView
-                  sessionStats={sessionStats}
-                  answeredItems={answeredItems}
-                  animateAccuracy={animateAccuracy}
-                  onBackToSet={handleExit}
-                  completionTitle="Fast Review Complete!"
-                  setBreakdown={setBreakdown}
+            <p className="text-gray-600 dark:text-white/70">
+              Loading due items...
+            </p>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Show completion summary */}
+          {currentPhase === 'complete' && (
+            <SummaryView
+              sessionStats={sessionStats}
+              answeredItems={answeredItems}
+              animateAccuracy={animateAccuracy}
+              onBackToSet={handleExit}
+              completionTitle="Fast Review Complete!"
+              setBreakdown={setBreakdown}
+            />
+          )}
+
+          {/* Show active phase components */}
+          {currentPhase !== 'complete' && (
+            <div className="relative flex-1">
+              {showLevelChange && currentLevelChange && (
+                <LevelChangeView
+                  item={currentLevelChange.item}
+                  oldLevel={currentLevelChange.oldLevel}
+                  newLevel={currentLevelChange.newLevel}
+                  onComplete={handleLevelChangeComplete}
                 />
               )}
 
-              {/* Show active phase components */}
-              {currentPhase !== 'complete' && (
-                <div className="relative flex-1">
-                  {showLevelChange && currentLevelChange && (
-                    <LevelChangeView
-                      item={currentLevelChange.item}
-                      oldLevel={currentLevelChange.oldLevel}
-                      newLevel={currentLevelChange.newLevel}
-                      onComplete={handleLevelChangeComplete}
-                    />
-                  )}
+              {/* Quiz Header */}
+              <SessionStatHeaderView
+                setTitle="Fast Review"
+                sessionStats={sessionStats}
+                currentIndex={currentIndex}
+                totalQuestions={getCurrentArray().length}
+                currentPhase={currentPhase}
+                completedPhases={completedPhases}
+                phases={phases}
+                currentPhaseIndex={currentPhaseIndex}
+                currentPhaseConfig={currentPhaseConfig}
+                CurrentPhaseIcon={CurrentPhaseIcon}
+                progressInPhase={calculateProgressPercentage()}
+                completedCount={getCompletedCount()}
+                totalUniqueItems={getTotalUniqueItems()}
+                displayMode={'completion-count'}
+                onExit={handleExit}
+              />
 
-                  {/* Quiz Header */}
-                  <SessionStatHeaderView
-                    setTitle="Fast Review"
-                    sessionStats={sessionStats}
-                    currentIndex={currentIndex}
-                    totalQuestions={getCurrentArray().length}
-                    currentPhase={currentPhase}
-                    completedPhases={completedPhases}
-                    phases={phases}
-                    currentPhaseIndex={currentPhaseIndex}
-                    currentPhaseConfig={currentPhaseConfig}
-                    CurrentPhaseIcon={CurrentPhaseIcon}
-                    progressInPhase={calculateProgressPercentage()}
-                    completedCount={getCompletedCount()}
-                    totalUniqueItems={getTotalUniqueItems()}
-                    displayMode={'completion-count'}
-                    onExit={handleExit}
+              {/* Multiple Choice Phase */}
+              {currentPhase === 'multiple-choice' &&
+                activeMCArray.length > 0 && (
+                  <MultipleChoiceView
+                    currentItem={activeMCArray[currentIndex]}
+                    uniqueOptions={currentShuffledOptions}
+                    selectedOption={selectedOption}
+                    showResult={showResult}
+                    isCorrect={isCorrect}
+                    isTransitioning={false}
+                    isLastQuestion={currentIndex === activeMCArray.length - 1}
+                    onOptionSelect={handleMCOptionSelect}
+                    onNext={handleNext}
                   />
+                )}
 
-                  {/* Multiple Choice Phase */}
-                  {currentPhase === 'multiple-choice' &&
-                    activeMCArray.length > 0 && (
-                      <MultipleChoiceView
-                        currentItem={activeMCArray[currentIndex]}
-                        uniqueOptions={currentShuffledOptions}
-                        selectedOption={selectedOption}
-                        showResult={showResult}
-                        isCorrect={isCorrect}
-                        isTransitioning={false}
-                        isLastQuestion={
-                          currentIndex === activeMCArray.length - 1
-                        }
-                        onOptionSelect={handleMCOptionSelect}
-                        onNext={handleNext}
-                      />
-                    )}
-
-                  {/* Translation Phase */}
-                  {currentPhase === 'translation' &&
-                    activeTranslationArray.length > 0 && (
-                      <TypedResponseView
-                        currentItem={activeTranslationArray[currentIndex]}
-                        userAnswer={userAnswer}
-                        showResult={showResult}
-                        isCorrect={isCorrect}
-                        showHint={false}
-                        isLastQuestion={
-                          currentIndex === activeTranslationArray.length - 1
-                        }
-                        inputRef={translationInputRef}
-                        onInputChange={(e) => setUserAnswer(e.target.value)}
-                        onCheckAnswer={handleTranslationCheck}
-                        onNext={handleNext}
-                        onRetry={handleTranslationRetry}
-                        onEditItem={handleOpenEditItem}
-                        disableKeyboardShortcuts={Boolean(editingItem)}
-                      />
-                    )}
-                </div>
-              )}
-            </>
+              {/* Translation Phase */}
+              {currentPhase === 'translation' &&
+                activeTranslationArray.length > 0 && (
+                  <TypedResponseView
+                    currentItem={activeTranslationArray[currentIndex]}
+                    userAnswer={userAnswer}
+                    showResult={showResult}
+                    isCorrect={isCorrect}
+                    showHint={false}
+                    isLastQuestion={
+                      currentIndex === activeTranslationArray.length - 1
+                    }
+                    inputRef={translationInputRef}
+                    onInputChange={(e) => setUserAnswer(e.target.value)}
+                    onCheckAnswer={handleTranslationCheck}
+                    onNext={handleNext}
+                    onRetry={handleTranslationRetry}
+                    onEditItem={handleOpenEditItem}
+                    disableKeyboardShortcuts={Boolean(editingItem)}
+                  />
+                )}
+            </div>
           )}
+        </>
+      )}
 
-          <ItemEditModal
-            item={editingItem}
-            isOpen={Boolean(editingItem)}
-            isSaving={isSavingEdit}
-            error={editError}
-            onClose={handleCloseEditItem}
-            onSave={handleSaveEditedItem}
-          />
-        </main>
-      </div>
-    </>
+      <ItemEditModal
+        item={editingItem}
+        isOpen={Boolean(editingItem)}
+        isSaving={isSavingEdit}
+        error={editError}
+        onClose={handleCloseEditItem}
+        onSave={handleSaveEditedItem}
+      />
+    </AuthenticatedLayout>
   );
 }
 

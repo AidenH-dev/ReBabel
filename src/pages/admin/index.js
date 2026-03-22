@@ -1,6 +1,5 @@
 // Implements SPEC-DB-004 (UI layer — Platform Metrics admin dashboard)
-import Head from 'next/head';
-import AdminSidebar from '@/components/Sidebars/AdminSidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useCallback, useMemo } from 'react';
@@ -266,161 +265,156 @@ function AdminPage() {
     : `${startDate} — ${endDate}`;
 
   return (
-    <>
-      <Head>
-        <title>Admin - ReBabel</title>
-      </Head>
-      <div className="flex flex-row min-h-screen bg-white dark:bg-surface-elevated text-[#4e4a4a] dark:text-white">
-        <AdminSidebar />
-        <main className="flex-1 overflow-auto">
-          <div className="max-w-5xl mx-auto p-6 md:p-8">
-            {/* ── Header ── */}
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-2">
-                <FaShieldAlt className="text-xl text-brand-pink" />
-                <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-              </div>
-              <p className="text-gray-600 dark:text-gray-400">
-                System administration and monitoring
+    <AuthenticatedLayout
+      sidebar="admin"
+      title="Admin - ReBabel"
+      wrapperClassName="text-[#4e4a4a] dark:text-white"
+      mainClassName="overflow-auto bg-white dark:bg-surface-elevated"
+    >
+      <div className="max-w-5xl mx-auto p-6 md:p-8">
+        {/* ── Header ── */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <FaShieldAlt className="text-xl text-brand-pink" />
+            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          </div>
+          <p className="text-gray-600 dark:text-gray-400">
+            System administration and monitoring
+          </p>
+        </div>
+
+        {/* ── Headline Stat Cards ── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white dark:bg-surface-card rounded-lg p-6 border border-gray-200 dark:border-gray-800">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+              Total Users
+            </p>
+            {metricsLoading ? (
+              <TbLoader3 className="text-2xl text-brand-pink animate-spin" />
+            ) : (
+              <p className="text-2xl font-bold text-brand-pink">
+                {totalUsers !== null ? totalUsers.toLocaleString() : '—'}
               </p>
+            )}
+          </div>
+          <div className="bg-white dark:bg-surface-card rounded-lg p-6 border border-gray-200 dark:border-gray-800">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+              New Signups ({rangeLabel})
+            </p>
+            {metricsLoading ? (
+              <TbLoader3 className="text-2xl text-blue-500 animate-spin" />
+            ) : (
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                {newSignups.toLocaleString()}
+              </p>
+            )}
+          </div>
+          <div className="bg-white dark:bg-surface-card rounded-lg p-6 border border-gray-200 dark:border-gray-800">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+              Avg DAU — Study ({rangeLabel})
+            </p>
+            {metricsLoading ? (
+              <TbLoader3 className="text-2xl text-green-500 animate-spin" />
+            ) : (
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                {avgDauStudy !== null ? avgDauStudy.toLocaleString() : '—'}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* ── Platform Metrics Section ── */}
+        <div className="bg-white dark:bg-surface-card rounded-lg border border-gray-200 dark:border-gray-800">
+          {/* Header with date controls */}
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+              <h2 className="text-lg font-semibold">Platform Metrics</h2>
+
+              {/* Quick presets */}
+              <div className="flex items-center gap-2">
+                {DATE_PRESETS.map(({ label, days }) => (
+                  <button
+                    key={label}
+                    onClick={() => handlePreset(days)}
+                    className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink ${
+                      activePreset === days
+                        ? 'bg-brand-pink text-white'
+                        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* ── Headline Stat Cards ── */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white dark:bg-surface-card rounded-lg p-6 border border-gray-200 dark:border-gray-800">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                  Total Users
-                </p>
-                {metricsLoading ? (
-                  <TbLoader3 className="text-2xl text-brand-pink animate-spin" />
-                ) : (
-                  <p className="text-2xl font-bold text-brand-pink">
-                    {totalUsers !== null ? totalUsers.toLocaleString() : '—'}
-                  </p>
-                )}
-              </div>
-              <div className="bg-white dark:bg-surface-card rounded-lg p-6 border border-gray-200 dark:border-gray-800">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                  New Signups ({rangeLabel})
-                </p>
-                {metricsLoading ? (
-                  <TbLoader3 className="text-2xl text-blue-500 animate-spin" />
-                ) : (
-                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {newSignups.toLocaleString()}
-                  </p>
-                )}
-              </div>
-              <div className="bg-white dark:bg-surface-card rounded-lg p-6 border border-gray-200 dark:border-gray-800">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                  Avg DAU — Study ({rangeLabel})
-                </p>
-                {metricsLoading ? (
-                  <TbLoader3 className="text-2xl text-green-500 animate-spin" />
-                ) : (
-                  <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {avgDauStudy !== null ? avgDauStudy.toLocaleString() : '—'}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* ── Platform Metrics Section ── */}
-            <div className="bg-white dark:bg-surface-card rounded-lg border border-gray-200 dark:border-gray-800">
-              {/* Header with date controls */}
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
-                  <h2 className="text-lg font-semibold">Platform Metrics</h2>
-
-                  {/* Quick presets */}
-                  <div className="flex items-center gap-2">
-                    {DATE_PRESETS.map(({ label, days }) => (
-                      <button
-                        key={label}
-                        onClick={() => handlePreset(days)}
-                        className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink ${
-                          activePreset === days
-                            ? 'bg-brand-pink text-white'
-                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Date range inputs */}
-                <div className="flex flex-wrap items-center gap-3 text-sm">
-                  <label className="text-gray-500 dark:text-gray-400">
-                    From
-                  </label>
-                  <input
-                    type="date"
-                    value={startDate}
-                    onChange={handleStartChange}
-                    max={endDate}
-                    className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-surface-elevated text-gray-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink"
-                  />
-                  <label className="text-gray-500 dark:text-gray-400">to</label>
-                  <input
-                    type="date"
-                    value={endDate}
-                    onChange={handleEndChange}
-                    min={startDate}
-                    max={utcDateString(0)}
-                    className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-surface-elevated text-gray-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink"
-                  />
-                </div>
-              </div>
-
-              {/* Error banner */}
-              {metricsError && (
-                <div className="mx-6 mt-4 px-4 py-3 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
-                  {metricsError}
-                </div>
-              )}
-
-              {/* Loading */}
-              {metricsLoading && (
-                <div className="flex items-center justify-center py-16">
-                  <TbLoader3 className="text-3xl text-brand-pink animate-spin mr-2" />
-                  <span className="text-gray-600 dark:text-gray-400 text-sm">
-                    Loading metrics...
-                  </span>
-                </div>
-              )}
-
-              {/* Line chart */}
-              {!metricsLoading && !metricsError && chartData && (
-                <div className="px-6 py-6">
-                  <div className="h-80">
-                    <Line data={chartData} options={chartOptions} />
-                  </div>
-                </div>
-              )}
-
-              {/* Empty state */}
-              {!metricsLoading &&
-                !metricsError &&
-                !chartData &&
-                metrics !== null && (
-                  <div className="py-16 text-center text-gray-400 dark:text-gray-600 text-sm">
-                    No data available for this date range.
-                  </div>
-                )}
-
-              {/* Initial state */}
-              {!metricsLoading && !metricsError && metrics === null && (
-                <div className="py-16 text-center text-gray-400 dark:text-gray-600 text-sm">
-                  No metrics loaded.
-                </div>
-              )}
+            {/* Date range inputs */}
+            <div className="flex flex-wrap items-center gap-3 text-sm">
+              <label className="text-gray-500 dark:text-gray-400">From</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={handleStartChange}
+                max={endDate}
+                className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-surface-elevated text-gray-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink"
+              />
+              <label className="text-gray-500 dark:text-gray-400">to</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={handleEndChange}
+                min={startDate}
+                max={utcDateString(0)}
+                className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-surface-elevated text-gray-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink"
+              />
             </div>
           </div>
-        </main>
+
+          {/* Error banner */}
+          {metricsError && (
+            <div className="mx-6 mt-4 px-4 py-3 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
+              {metricsError}
+            </div>
+          )}
+
+          {/* Loading */}
+          {metricsLoading && (
+            <div className="flex items-center justify-center py-16">
+              <TbLoader3 className="text-3xl text-brand-pink animate-spin mr-2" />
+              <span className="text-gray-600 dark:text-gray-400 text-sm">
+                Loading metrics...
+              </span>
+            </div>
+          )}
+
+          {/* Line chart */}
+          {!metricsLoading && !metricsError && chartData && (
+            <div className="px-6 py-6">
+              <div className="h-80">
+                <Line data={chartData} options={chartOptions} />
+              </div>
+            </div>
+          )}
+
+          {/* Empty state */}
+          {!metricsLoading &&
+            !metricsError &&
+            !chartData &&
+            metrics !== null && (
+              <div className="py-16 text-center text-gray-400 dark:text-gray-600 text-sm">
+                No data available for this date range.
+              </div>
+            )}
+
+          {/* Initial state */}
+          {!metricsLoading && !metricsError && metrics === null && (
+            <div className="py-16 text-center text-gray-400 dark:text-gray-600 text-sm">
+              No metrics loaded.
+            </div>
+          )}
+        </div>
       </div>
-    </>
+    </AuthenticatedLayout>
   );
 }
 

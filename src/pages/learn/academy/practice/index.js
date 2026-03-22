@@ -1,5 +1,4 @@
-import Head from 'next/head';
-import AcademySidebar from '@/components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
@@ -628,63 +627,59 @@ export default function VocabularyDashboard() {
   };
 
   return (
-    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-surface-page text-[#222] dark:text-white">
-      {/* Sidebar */}
-      <AcademySidebar />
+    <AuthenticatedLayout
+      sidebar="academy"
+      title="Practice"
+      variant="fixed"
+      wrapperClassName="text-[#222] dark:text-white"
+      mainClassName="overflow-y-auto bg-gray-50 dark:bg-surface-page px-3 sm:px-10 sm:mt-0"
+    >
+      <div className="w-full flex min-h-full mx-2">
+        <div className="w-full max-w-6xl mx-auto py-8">
+          <BeginnerPackPopup
+            isOpen={showBeginnerPopup}
+            onClose={() => setShowBeginnerPopup(false)}
+            onImport={() => {
+              // After successful import, reload to show the new sets
+              window.location.reload();
+            }}
+            userProfile={userProfile}
+          />
 
-      {/* Main */}
-      <main className="ml-auto flex-1 flex h-screen overflow-y-auto bg-gray-50 dark:bg-surface-page px-3 sm:px-10 sm:mt-0">
-        <div className="w-full flex min-h-full mx-2">
-          <div className="w-full max-w-6xl mx-auto py-8">
-            <BeginnerPackPopup
-              isOpen={showBeginnerPopup}
-              onClose={() => setShowBeginnerPopup(false)}
-              onImport={() => {
-                // After successful import, reload to show the new sets
-                window.location.reload();
-              }}
-              userProfile={userProfile}
-            />
-
-            <Head>
-              <title>Sets</title>
-              <link rel="icon" href="/favicon.ico" />
-            </Head>
-
-            {/* Top tabs */}
-            <div className="w-full">
-              <div className="border-b border-black/5 dark:border-white/10">
-                <div className="flex items-end gap-6 -mb-px h-10">
-                  <button
-                    onClick={() => setActiveTab('translate')}
-                    className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
+          {/* Top tabs */}
+          <div className="w-full">
+            <div className="border-b border-black/5 dark:border-white/10">
+              <div className="flex items-end gap-6 -mb-px h-10">
+                <button
+                  onClick={() => setActiveTab('translate')}
+                  className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
                                             ${
                                               activeTab === 'translate'
                                                 ? 'text-brand-pink border-brand-pink'
                                                 : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-brand-pink'
                                             }`}
-                  >
-                    <span className="inline-flex items-center gap-2">
-                      <LuTextCursorInput className="text-xl" />
-                      Translate
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('conjugation')}
-                    className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <LuTextCursorInput className="text-xl" />
+                    Translate
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('conjugation')}
+                  className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
                                             ${
                                               activeTab === 'conjugation'
                                                 ? 'text-brand-pink border-brand-pink'
                                                 : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-brand-pink'
                                             }`}
-                  >
-                    <span className="inline-flex items-center gap-2">
-                      <TbLanguageHiragana className="text-xl" />
-                      Conjugation
-                    </span>
-                  </button>
-                  {/* TODO: Unhide when QuickTime feature is ready */}
-                  {/* <button
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <TbLanguageHiragana className="text-xl" />
+                    Conjugation
+                  </span>
+                </button>
+                {/* TODO: Unhide when QuickTime feature is ready */}
+                {/* <button
                                         onClick={() => setActiveTab("QuickTime")}
                                         className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
                                             ${activeTab === "QuickTime"
@@ -697,127 +692,124 @@ export default function VocabularyDashboard() {
                                             QuickTime
                                         </span>
                                     </button> */}
-                </div>
               </div>
             </div>
+          </div>
 
-            {/* Content panel */}
-            <div className="w-full">
-              <section className="mt-3 rounded-2xl shadow-sm bg-white dark:bg-surface-card border border-black/5 dark:border-white/5 p-4 sm:p-6">
-                {/* Translate (formerly Sets) */}
-                {activeTab === 'conjugation' && (
-                  <div className="flex flex-col gap-4">
-                    <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
-                      Conjugation Practice
+          {/* Content panel */}
+          <div className="w-full">
+            <section className="mt-3 rounded-2xl shadow-sm bg-white dark:bg-surface-card border border-black/5 dark:border-white/5 p-4 sm:p-6">
+              {/* Translate (formerly Sets) */}
+              {activeTab === 'conjugation' && (
+                <div className="flex flex-col gap-4">
+                  <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
+                    Conjugation Practice
+                  </h2>
+                  <ConjugationConfigPanel
+                    availableSets={recentsSets}
+                    selectedSets={conjugationSelectedSets}
+                    onSelectSet={handleConjugationSelectSet}
+                    onRemoveSet={handleConjugationRemoveSet}
+                    verbOptions={verbOptions}
+                    adjectiveOptions={adjectiveOptions}
+                    isSelectAll={conjugationSelectAll}
+                    isRandomMode={conjugationRandomMode}
+                    onToggleVerb={handleToggleVerb}
+                    onToggleAdjective={handleToggleAdjective}
+                    onToggleSelectAll={handleToggleConjugationSelectAll}
+                    onToggleRandomMode={handleToggleConjugationRandomMode}
+                    poolItems={conjugationPoolItems}
+                    onStartPractice={handleStartConjugationPractice}
+                    questionCount={conjugationQuestionCount}
+                    onQuestionCountChange={setConjugationQuestionCount}
+                    focalItems={conjugationFocalItems}
+                    onAddFocalItem={(item) => {
+                      setConjugationFocalItems((prev) =>
+                        prev.some((f) => f.id === item.id)
+                          ? prev
+                          : [...prev, item]
+                      );
+                    }}
+                    onRemoveFocalItem={(itemId) => {
+                      setConjugationFocalItems((prev) =>
+                        prev.filter((f) => f.id !== itemId)
+                      );
+                    }}
+                  />
+                </div>
+              )}
+
+              {activeTab === 'translate' && (
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white flex-1">
+                      Practice Scope
                     </h2>
-                    <ConjugationConfigPanel
-                      availableSets={recentsSets}
-                      selectedSets={conjugationSelectedSets}
-                      onSelectSet={handleConjugationSelectSet}
-                      onRemoveSet={handleConjugationRemoveSet}
-                      verbOptions={verbOptions}
-                      adjectiveOptions={adjectiveOptions}
-                      isSelectAll={conjugationSelectAll}
-                      isRandomMode={conjugationRandomMode}
-                      onToggleVerb={handleToggleVerb}
-                      onToggleAdjective={handleToggleAdjective}
-                      onToggleSelectAll={handleToggleConjugationSelectAll}
-                      onToggleRandomMode={handleToggleConjugationRandomMode}
-                      poolItems={conjugationPoolItems}
-                      onStartPractice={handleStartConjugationPractice}
-                      questionCount={conjugationQuestionCount}
-                      onQuestionCountChange={setConjugationQuestionCount}
-                      focalItems={conjugationFocalItems}
-                      onAddFocalItem={(item) => {
-                        setConjugationFocalItems((prev) =>
-                          prev.some((f) => f.id === item.id)
-                            ? prev
-                            : [...prev, item]
-                        );
-                      }}
-                      onRemoveFocalItem={(itemId) => {
-                        setConjugationFocalItems((prev) =>
-                          prev.filter((f) => f.id !== itemId)
-                        );
-                      }}
-                    />
+                    {!isPremiumLoading &&
+                      (isPremium ? (
+                        <div
+                          className={`text-xs px-3 py-1.5 rounded-full ${sessionsRemaining > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'}`}
+                        >
+                          {sessionsRemaining}/{dailyLimit} sessions left today
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            router.push('/learn/account/subscription')
+                          }
+                          className={`text-xs px-3 py-1.5 rounded-full cursor-pointer hover:opacity-80 transition-opacity ${sessionsRemaining > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'}`}
+                        >
+                          {sessionsRemaining}/{dailyLimit} sessions left today ·{' '}
+                          <span className="font-medium underline">
+                            Free Tier
+                          </span>
+                        </button>
+                      ))}
                   </div>
-                )}
-
-                {activeTab === 'translate' && (
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white flex-1">
-                        Practice Scope
-                      </h2>
-                      {!isPremiumLoading &&
-                        (isPremium ? (
-                          <div
-                            className={`text-xs px-3 py-1.5 rounded-full ${sessionsRemaining > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'}`}
-                          >
-                            {sessionsRemaining}/{dailyLimit} sessions left today
-                          </div>
-                        ) : (
-                          <button
-                            onClick={() =>
-                              router.push('/learn/account/subscription')
-                            }
-                            className={`text-xs px-3 py-1.5 rounded-full cursor-pointer hover:opacity-80 transition-opacity ${sessionsRemaining > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'}`}
-                          >
-                            {sessionsRemaining}/{dailyLimit} sessions left today
-                            ·{' '}
-                            <span className="font-medium underline">
-                              Free Tier
-                            </span>
-                          </button>
-                        ))}
-                    </div>
-                    {/* Configuration Panel */}
-                    <ConfigPanelView
-                      grammarPool={grammarPool}
-                      vocabPool={vocabPool}
-                      grammarFocalPoints={grammarFocalPoints}
-                      vocabFocalPoints={vocabFocalPoints}
-                      poolItems={poolItems}
-                      canStart={
-                        (grammarPool.sets.length > 0 ||
-                          grammarPool.items.length > 0) &&
-                        (vocabPool.sets.length > 0 ||
-                          vocabPool.items.length > 0) &&
-                        (grammarFocalPoints.length > 0 ||
-                          vocabFocalPoints.length > 0)
-                      }
-                      validationMessage={
-                        grammarPool.sets.length === 0 &&
-                        grammarPool.items.length === 0
-                          ? 'Please add grammar sets or items'
-                          : vocabPool.sets.length === 0 &&
-                              vocabPool.items.length === 0
-                            ? 'Please add vocabulary sets or items'
-                            : grammarFocalPoints.length === 0 &&
-                                vocabFocalPoints.length === 0
-                              ? 'Select at least one focal point to practice'
-                              : null
-                      }
-                      onOpenAddModal={handleOpenAddModal}
-                      onRemoveSet={handleRemoveSet}
-                      onRemoveItem={handleRemoveItem}
-                      onAddFocalPoint={handleAddFocalPoint}
-                      onRemoveFocalPoint={handleRemoveFocalPoint}
-                      onShuffle={handleShuffleFocalPoints}
-                      onClearAll={handleClearAll}
-                      onStartPractice={handleStartPractice}
-                      availableSets={recentsSets}
-                      onSelectSet={handleSelectSet}
-                    />
-                  </div>
-                )}
-              </section>
-            </div>
+                  {/* Configuration Panel */}
+                  <ConfigPanelView
+                    grammarPool={grammarPool}
+                    vocabPool={vocabPool}
+                    grammarFocalPoints={grammarFocalPoints}
+                    vocabFocalPoints={vocabFocalPoints}
+                    poolItems={poolItems}
+                    canStart={
+                      (grammarPool.sets.length > 0 ||
+                        grammarPool.items.length > 0) &&
+                      (vocabPool.sets.length > 0 ||
+                        vocabPool.items.length > 0) &&
+                      (grammarFocalPoints.length > 0 ||
+                        vocabFocalPoints.length > 0)
+                    }
+                    validationMessage={
+                      grammarPool.sets.length === 0 &&
+                      grammarPool.items.length === 0
+                        ? 'Please add grammar sets or items'
+                        : vocabPool.sets.length === 0 &&
+                            vocabPool.items.length === 0
+                          ? 'Please add vocabulary sets or items'
+                          : grammarFocalPoints.length === 0 &&
+                              vocabFocalPoints.length === 0
+                            ? 'Select at least one focal point to practice'
+                            : null
+                    }
+                    onOpenAddModal={handleOpenAddModal}
+                    onRemoveSet={handleRemoveSet}
+                    onRemoveItem={handleRemoveItem}
+                    onAddFocalPoint={handleAddFocalPoint}
+                    onRemoveFocalPoint={handleRemoveFocalPoint}
+                    onShuffle={handleShuffleFocalPoints}
+                    onClearAll={handleClearAll}
+                    onStartPractice={handleStartPractice}
+                    availableSets={recentsSets}
+                    onSelectSet={handleSelectSet}
+                  />
+                </div>
+              )}
+            </section>
           </div>
         </div>
-      </main>
-
+      </div>
       {/* Custom Item Card Swap Modals - Fixed Overlay */}
       {showCustomItemModal.vocabulary && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
@@ -859,7 +851,7 @@ export default function VocabularyDashboard() {
           </div>
         </div>
       )}
-    </div>
+    </AuthenticatedLayout>
   );
 }
 

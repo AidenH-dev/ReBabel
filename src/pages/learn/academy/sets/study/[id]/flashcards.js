@@ -1,6 +1,5 @@
 // pages/learn/academy/sets/study/[id]/flashcards.js
-import Head from 'next/head';
-import MainSidebar from '../../../../../../components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
@@ -550,67 +549,68 @@ export default function SetFlashcards() {
   // Show error state
   if (error) {
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
-        <MainSidebar />
-        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
-              Error Loading Flashcards
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
-            <button
-              onClick={() => router.push('/learn/academy/sets')}
-              className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
-            >
-              Back to Sets
-            </button>
+      <AuthenticatedLayout
+        sidebar="academy"
+        title="Error Loading Flashcards"
+        variant="fixed"
+        mainClassName="px-4 sm:px-6 py-4 flex items-center justify-center"
+      >
+        <div className="text-center">
+          <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
+            Error Loading Flashcards
           </div>
-        </main>
-      </div>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+          <button
+            onClick={() => router.push('/learn/academy/sets')}
+            className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
+          >
+            Back to Sets
+          </button>
+        </div>
+      </AuthenticatedLayout>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card overflow-x-hidden  sm:mt-10">
-      <main className="ml-auto flex-1 flex flex-col p-6 overflow-x-hidden">
-        <Head>
-          <title>Flashcards • {setInfo?.title || 'Study Set'}</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+    <AuthenticatedLayout
+      sidebar="academy"
+      title={`Flashcards • ${setInfo?.title || 'Study Set'}`}
+      variant="gradient"
+      mainClassName="p-6 overflow-x-hidden sm:mt-10"
+    >
+      {/* Header */}
+      <div className="w-full max-w-5xl mx-auto mb-6 sm:mb-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleExit}
+              className="p-2 rounded-lg bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 transition-colors"
+              aria-label="Exit"
+            >
+              <TbX className="w-6 h-6 text-gray-700 dark:text-white" />
+            </button>
 
-        {/* Header */}
-        <div className="w-full max-w-5xl mx-auto mb-6 sm:mb-0">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={handleExit}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 transition-colors"
-                aria-label="Exit"
-              >
-                <TbX className="w-6 h-6 text-gray-700 dark:text-white" />
-              </button>
-
-              <div className="flex items-center gap-2">
-                <TbCards className="text-brand-pink text-xl" />
-                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  {setInfo?.title || 'Flashcards'}
-                </h1>
-              </div>
+            <div className="flex items-center gap-2">
+              <TbCards className="text-brand-pink text-xl" />
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+                {setInfo?.title || 'Flashcards'}
+              </h1>
             </div>
+          </div>
 
-            {/* Study Mode Selector */}
-            <div className="hidden md:flex items-center gap-2 bg-gray-200 dark:bg-white/10 rounded-lg p-1 px-1">
-              <button
-                onClick={() => setStudyMode('plain')}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  studyMode === 'plain'
-                    ? 'bg-brand-pink text-white'
-                    : 'text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
-                }`}
-              >
-                Plain Cards
-              </button>
-              {/*<button
+          {/* Study Mode Selector */}
+          <div className="hidden md:flex items-center gap-2 bg-gray-200 dark:bg-white/10 rounded-lg p-1 px-1">
+            <button
+              onClick={() => setStudyMode('plain')}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                studyMode === 'plain'
+                  ? 'bg-brand-pink text-white'
+                  : 'text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              Plain Cards
+            </button>
+            {/*<button
                 onClick={() => setStudyMode('quiz')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   studyMode === 'quiz' 
@@ -620,7 +620,7 @@ export default function SetFlashcards() {
               >
                 Quiz
               </button>*/}
-              {/*<button
+            {/*<button
                 onClick={() => setStudyMode('interval')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   studyMode === 'interval' 
@@ -630,365 +630,361 @@ export default function SetFlashcards() {
               >
                 Interval
               </button>*/}
-            </div>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="mt-4">
-            <div className="flex items-center justify-between text-sm text-gray-600 dark:text-white/70 mb-2">
-              <span>
-                Card {currentIndex + 1} of {cardsData.length}
-              </span>
-              <span>{Math.round(progress)}% Complete</span>
-            </div>
-            <div className="w-full bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-brand-pink to-brand-pink-hover transition-all duration-500 ease-out rounded-full"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
           </div>
         </div>
 
-        {/* Main Card Area */}
-        {isLoading ? (
-          <div className="flex-1 flex flex-col items-center justify-center sm:mb-10">
-            <div className="w-full max-w-3xl space-y-6">
-              {/* Stats bar skeleton */}
-              <div className="flex items-center justify-center gap-6">
-                {[0, 1, 2].map((i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div
-                      className="h-4 w-4 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                      style={{ animationDelay: `${i * 60}ms` }}
-                    />
-                    <div
-                      className="h-3 w-14 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                      style={{ animationDelay: `${i * 60 + 30}ms` }}
-                    />
-                  </div>
-                ))}
-              </div>
-              {/* Card skeleton */}
-              <div className="w-full aspect-[3/2] max-w-xl mx-auto rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card shadow-sm">
-                <div className="flex flex-col items-center justify-center h-full gap-4 p-8">
+        {/* Progress Bar */}
+        <div className="mt-4">
+          <div className="flex items-center justify-between text-sm text-gray-600 dark:text-white/70 mb-2">
+            <span>
+              Card {currentIndex + 1} of {cardsData.length}
+            </span>
+            <span>{Math.round(progress)}% Complete</span>
+          </div>
+          <div className="w-full bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-brand-pink to-brand-pink-hover transition-all duration-500 ease-out rounded-full"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Main Card Area */}
+      {isLoading ? (
+        <div className="flex-1 flex flex-col items-center justify-center sm:mb-10">
+          <div className="w-full max-w-3xl space-y-6">
+            {/* Stats bar skeleton */}
+            <div className="flex items-center justify-center gap-6">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="flex items-center gap-2">
                   <div
-                    className="h-8 w-32 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                    style={{ animationDelay: '100ms' }}
+                    className="h-4 w-4 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                    style={{ animationDelay: `${i * 60}ms` }}
                   />
                   <div
-                    className="h-5 w-48 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                    style={{ animationDelay: '150ms' }}
-                  />
-                  <div
-                    className="h-4 w-24 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
-                    style={{ animationDelay: '200ms' }}
+                    className="h-3 w-14 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                    style={{ animationDelay: `${i * 60 + 30}ms` }}
                   />
                 </div>
-              </div>
-              {/* Nav dots skeleton */}
-              <div className="flex items-center justify-center gap-1.5">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="h-2 w-2 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                    style={{ animationDelay: `${i * 40 + 250}ms` }}
-                  />
-                ))}
+              ))}
+            </div>
+            {/* Card skeleton */}
+            <div className="w-full aspect-[3/2] max-w-xl mx-auto rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card shadow-sm">
+              <div className="flex flex-col items-center justify-center h-full gap-4 p-8">
+                <div
+                  className="h-8 w-32 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                  style={{ animationDelay: '100ms' }}
+                />
+                <div
+                  className="h-5 w-48 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                  style={{ animationDelay: '150ms' }}
+                />
+                <div
+                  className="h-4 w-24 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
+                  style={{ animationDelay: '200ms' }}
+                />
               </div>
             </div>
+            {/* Nav dots skeleton */}
+            <div className="flex items-center justify-center gap-1.5">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="h-2 w-2 rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                  style={{ animationDelay: `${i * 40 + 250}ms` }}
+                />
+              ))}
+            </div>
           </div>
-        ) : cardsData.length > 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="w-full max-w-3xl">
-              {/* Stats Bar */}
-              <div className="flex items-center justify-center gap-6 mb-6">
-                {studyMode === 'quiz' ? (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <FaCheckCircle className="text-green-500" />
-                      <span className="text-gray-600 dark:text-white/70 text-sm">
-                        Known: {sessionStats.correct}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <FaTimesCircle className="text-red-500" />
-                      <span className="text-gray-600 dark:text-white/70 text-sm">
-                        Learning: {sessionStats.incorrect}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <FaRedo className="text-yellow-500" />
-                      <span className="text-gray-600 dark:text-white/70 text-sm">
-                        Skipped: {sessionStats.skipped}
-                      </span>
-                    </div>
-                  </>
-                ) : studyMode === 'interval' ? (
-                  <>
-                    <div className="flex items-center gap-2 px-3 py-1 bg-red-100 dark:bg-red-900/20 rounded-lg">
-                      <span className="text-xs font-medium text-red-700 dark:text-red-400">
-                        Again: {sessionStats.again}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 px-3 py-1 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
-                      <span className="text-xs font-medium text-orange-700 dark:text-orange-400">
-                        Hard: {sessionStats.hard}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                      <span className="text-xs font-medium text-blue-700 dark:text-blue-400">
-                        Good: {sessionStats.good}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                      <span className="text-xs font-medium text-green-700 dark:text-green-400">
-                        Easy: {sessionStats.easy}
-                      </span>
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-gray-600 dark:text-white/70 text-sm"></div>
-                )}
-              </div>
+        </div>
+      ) : cardsData.length > 0 ? (
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="w-full max-w-3xl">
+            {/* Stats Bar */}
+            <div className="flex items-center justify-center gap-6 mb-6">
+              {studyMode === 'quiz' ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <FaCheckCircle className="text-green-500" />
+                    <span className="text-gray-600 dark:text-white/70 text-sm">
+                      Known: {sessionStats.correct}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FaTimesCircle className="text-red-500" />
+                    <span className="text-gray-600 dark:text-white/70 text-sm">
+                      Learning: {sessionStats.incorrect}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FaRedo className="text-yellow-500" />
+                    <span className="text-gray-600 dark:text-white/70 text-sm">
+                      Skipped: {sessionStats.skipped}
+                    </span>
+                  </div>
+                </>
+              ) : studyMode === 'interval' ? (
+                <>
+                  <div className="flex items-center gap-2 px-3 py-1 bg-red-100 dark:bg-red-900/20 rounded-lg">
+                    <span className="text-xs font-medium text-red-700 dark:text-red-400">
+                      Again: {sessionStats.again}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-1 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
+                    <span className="text-xs font-medium text-orange-700 dark:text-orange-400">
+                      Hard: {sessionStats.hard}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                    <span className="text-xs font-medium text-blue-700 dark:text-blue-400">
+                      Good: {sessionStats.good}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                    <span className="text-xs font-medium text-green-700 dark:text-green-400">
+                      Easy: {sessionStats.easy}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <div className="text-gray-600 dark:text-white/70 text-sm"></div>
+              )}
+            </div>
 
-              {/* Card Container — swipeable */}
+            {/* Card Container — swipeable */}
+            <div
+              className="relative w-full h-96 mb-8 touch-pan-y"
+              style={container3DStyles}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
               <div
-                className="relative w-full h-96 mb-8 touch-pan-y"
-                style={container3DStyles}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
+                ref={cardContainerRef}
+                className={`absolute w-full h-full ${transitionClasses[transitionState]}`}
+                style={{ willChange: 'transform' }}
               >
                 <div
-                  ref={cardContainerRef}
-                  className={`absolute w-full h-full ${transitionClasses[transitionState]}`}
-                  style={{ willChange: 'transform' }}
+                  style={flipCardStyles}
+                  onClick={handleFlip}
+                  className="cursor-pointer"
                 >
+                  {/* Front Side */}
                   <div
-                    style={flipCardStyles}
-                    onClick={handleFlip}
-                    className="cursor-pointer"
+                    style={{
+                      ...sideBaseStyles,
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+                    }}
+                    className="relative bg-white dark:bg-white/10 border-2 border-blue-200 dark:border-blue-500/30 overflow-hidden"
                   >
-                    {/* Front Side */}
-                    <div
-                      style={{
-                        ...sideBaseStyles,
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+                    {/* Top accent strip */}
+                    <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-400 to-indigo-500" />
+
+                    {/* Edit button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenEditItem();
                       }}
-                      className="relative bg-white dark:bg-white/10 border-2 border-blue-200 dark:border-blue-500/30 overflow-hidden"
+                      className="absolute top-4 right-4 p-1.5 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/50 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-700 dark:hover:text-white/80 transition-colors z-10"
+                      title="Edit Item"
                     >
-                      {/* Top accent strip */}
-                      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-400 to-indigo-500" />
+                      <FiEdit2 className="w-4 h-4" />
+                    </button>
 
-                      {/* Edit button */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleOpenEditItem();
-                        }}
-                        className="absolute top-4 right-4 p-1.5 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/50 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-700 dark:hover:text-white/80 transition-colors z-10"
-                        title="Edit Item"
-                      >
-                        <FiEdit2 className="w-4 h-4" />
-                      </button>
+                    {cardConfidence[currentIndex] && (
+                      <div
+                        className={`absolute top-4 right-14 w-3 h-3 rounded-full ${getConfidenceColor(
+                          cardConfidence[currentIndex]
+                        )}`}
+                      />
+                    )}
 
-                      {cardConfidence[currentIndex] && (
-                        <div
-                          className={`absolute top-4 right-14 w-3 h-3 rounded-full ${getConfidenceColor(
-                            cardConfidence[currentIndex]
-                          )}`}
-                        />
+                    <p className="text-3xl md:text-4xl lg:text-5xl font-medium px-8 text-center text-gray-900 dark:text-white">
+                      {cardsData[currentIndex].front}
+                    </p>
+
+                    {cardsData[currentIndex].type === 'vocabulary' &&
+                      cardsData[currentIndex].lexical_category && (
+                        <span className="mt-4 px-3 py-1 text-sm rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                          {cardsData[currentIndex].lexical_category}
+                        </span>
                       )}
 
-                      <p className="text-3xl md:text-4xl lg:text-5xl font-medium px-8 text-center text-gray-900 dark:text-white">
-                        {cardsData[currentIndex].front}
-                      </p>
-
-                      {cardsData[currentIndex].type === 'vocabulary' &&
-                        cardsData[currentIndex].lexical_category && (
-                          <span className="mt-4 px-3 py-1 text-sm rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
-                            {cardsData[currentIndex].lexical_category}
-                          </span>
-                        )}
-
-                      <div className="absolute bottom-6 text-gray-400 dark:text-white/40 text-sm">
-                        <span className="hidden sm:inline">
-                          Click or press Space to flip
-                        </span>
-                        <span className="sm:hidden">
-                          Tap to flip · Swipe to navigate
-                        </span>
-                      </div>
+                    <div className="absolute bottom-6 text-gray-400 dark:text-white/40 text-sm">
+                      <span className="hidden sm:inline">
+                        Click or press Space to flip
+                      </span>
+                      <span className="sm:hidden">
+                        Tap to flip · Swipe to navigate
+                      </span>
                     </div>
+                  </div>
 
-                    {/* Back Side */}
-                    <div
-                      style={{
-                        ...sideBaseStyles,
-                        transform: 'rotateY(180deg)',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+                  {/* Back Side */}
+                  <div
+                    style={{
+                      ...sideBaseStyles,
+                      transform: 'rotateY(180deg)',
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+                    }}
+                    className="relative p-8 bg-white dark:bg-white/10 border-2 border-rose-200 dark:border-rose-500/30 overflow-hidden"
+                  >
+                    {/* Top accent strip */}
+                    <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-rose-400 to-pink-500" />
+
+                    {/* Edit button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenEditItem();
                       }}
-                      className="relative p-8 bg-white dark:bg-white/10 border-2 border-rose-200 dark:border-rose-500/30 overflow-hidden"
+                      className="absolute top-4 right-4 p-1.5 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/50 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-700 dark:hover:text-white/80 transition-colors z-10"
+                      title="Edit Item"
                     >
-                      {/* Top accent strip */}
-                      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-rose-400 to-pink-500" />
+                      <FiEdit2 className="w-4 h-4" />
+                    </button>
 
-                      {/* Edit button */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleOpenEditItem();
-                        }}
-                        className="absolute top-4 right-4 p-1.5 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/50 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-700 dark:hover:text-white/80 transition-colors z-10"
-                        title="Edit Item"
-                      >
-                        <FiEdit2 className="w-4 h-4" />
-                      </button>
+                    <p className="text-3xl md:text-4xl lg:text-5xl font-medium text-center text-gray-900 dark:text-white mb-4">
+                      {cardsData[currentIndex].back}
+                    </p>
 
-                      <p className="text-3xl md:text-4xl lg:text-5xl font-medium text-center text-gray-900 dark:text-white mb-4">
-                        {cardsData[currentIndex].back}
-                      </p>
+                    {cardsData[currentIndex].example_sentences?.length > 0 && (
+                      <div className="mt-6 text-gray-500 dark:text-white/60 text-xs md:text-sm max-w-lg text-center italic">
+                        {cardsData[currentIndex].example_sentences[0]}
+                      </div>
+                    )}
 
-                      {cardsData[currentIndex].example_sentences?.length >
-                        0 && (
-                        <div className="mt-6 text-gray-500 dark:text-white/60 text-xs md:text-sm max-w-lg text-center italic">
-                          {cardsData[currentIndex].example_sentences[0]}
+                    {studyMode === 'interval' &&
+                      cardsData[currentIndex].interval && (
+                        <div className="absolute bottom-6 text-gray-400 dark:text-white/40 text-xs">
+                          Next review:{' '}
+                          {Math.round(cardsData[currentIndex].interval)} day(s)
                         </div>
                       )}
-
-                      {studyMode === 'interval' &&
-                        cardsData[currentIndex].interval && (
-                          <div className="absolute bottom-6 text-gray-400 dark:text-white/40 text-xs">
-                            Next review:{' '}
-                            {Math.round(cardsData[currentIndex].interval)}{' '}
-                            day(s)
-                          </div>
-                        )}
-                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center justify-between gap-4">
-                <button
-                  onClick={handlePrevious}
-                  disabled={currentIndex === 0}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-                    currentIndex === 0
-                      ? 'bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-white/30 cursor-not-allowed'
-                      : 'bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20 active:scale-95'
-                  }`}
-                >
-                  <FaArrowLeft /> Previous
-                </button>
+            {/* Action Buttons */}
+            <div className="flex items-center justify-between gap-4">
+              <button
+                onClick={handlePrevious}
+                disabled={currentIndex === 0}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                  currentIndex === 0
+                    ? 'bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-white/30 cursor-not-allowed'
+                    : 'bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20 active:scale-95'
+                }`}
+              >
+                <FaArrowLeft /> Previous
+              </button>
 
-                {/* Center Actions */}
-                <div className="flex items-center gap-2">
-                  {studyMode === 'quiz' && (
-                    <>
-                      <button
-                        onClick={() => markCard('unknown')}
-                        className="px-4 py-2 bg-red-100 dark:bg-red-500/20 hover:bg-red-200 dark:hover:bg-red-500/30 text-red-600 dark:text-red-400 rounded-lg font-medium transition-colors active:scale-95"
-                      >
-                        Still Learning
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSessionStats((prev) => ({
-                            ...prev,
-                            skipped: prev.skipped + 1,
-                          }));
-                          handleNext();
-                        }}
-                        className="px-4 py-2 bg-yellow-100 dark:bg-yellow-500/20 hover:bg-yellow-200 dark:hover:bg-yellow-500/30 text-yellow-700 dark:text-yellow-400 rounded-lg font-medium transition-colors active:scale-95"
-                      >
-                        Skip
-                      </button>
-                      <button
-                        onClick={() => markCard('known')}
-                        className="px-4 py-2 bg-green-100 dark:bg-green-500/20 hover:bg-green-200 dark:hover:bg-green-500/30 text-green-700 dark:text-green-400 rounded-lg font-medium transition-colors active:scale-95"
-                      >
-                        Got it!
-                      </button>
-                    </>
-                  )}
+              {/* Center Actions */}
+              <div className="flex items-center gap-2">
+                {studyMode === 'quiz' && (
+                  <>
+                    <button
+                      onClick={() => markCard('unknown')}
+                      className="px-4 py-2 bg-red-100 dark:bg-red-500/20 hover:bg-red-200 dark:hover:bg-red-500/30 text-red-600 dark:text-red-400 rounded-lg font-medium transition-colors active:scale-95"
+                    >
+                      Still Learning
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSessionStats((prev) => ({
+                          ...prev,
+                          skipped: prev.skipped + 1,
+                        }));
+                        handleNext();
+                      }}
+                      className="px-4 py-2 bg-yellow-100 dark:bg-yellow-500/20 hover:bg-yellow-200 dark:hover:bg-yellow-500/30 text-yellow-700 dark:text-yellow-400 rounded-lg font-medium transition-colors active:scale-95"
+                    >
+                      Skip
+                    </button>
+                    <button
+                      onClick={() => markCard('known')}
+                      className="px-4 py-2 bg-green-100 dark:bg-green-500/20 hover:bg-green-200 dark:hover:bg-green-500/30 text-green-700 dark:text-green-400 rounded-lg font-medium transition-colors active:scale-95"
+                    >
+                      Got it!
+                    </button>
+                  </>
+                )}
 
-                  {studyMode === 'interval' && !isFront && (
-                    <>
-                      <button
-                        onClick={() => handleIntervalResponse('again')}
-                        className="px-3 py-2 bg-red-100 dark:bg-red-500/20 hover:bg-red-200 dark:hover:bg-red-500/30 text-red-600 dark:text-red-400 rounded-lg font-medium transition-colors active:scale-95 text-sm"
-                      >
-                        <div className="text-xs opacity-70">1</div>
-                        Again
-                      </button>
-                      <button
-                        onClick={() => handleIntervalResponse('hard')}
-                        className="px-3 py-2 bg-orange-100 dark:bg-orange-500/20 hover:bg-orange-200 dark:hover:bg-orange-500/30 text-orange-600 dark:text-orange-400 rounded-lg font-medium transition-colors active:scale-95 text-sm"
-                      >
-                        <div className="text-xs opacity-70">2</div>
-                        Hard
-                      </button>
-                      <button
-                        onClick={() => handleIntervalResponse('good')}
-                        className="px-3 py-2 bg-blue-100 dark:bg-blue-500/20 hover:bg-blue-200 dark:hover:bg-blue-500/30 text-blue-600 dark:text-blue-400 rounded-lg font-medium transition-colors active:scale-95 text-sm"
-                      >
-                        <div className="text-xs opacity-70">3</div>
-                        Good
-                      </button>
-                      <button
-                        onClick={() => handleIntervalResponse('easy')}
-                        className="px-3 py-2 bg-green-100 dark:bg-green-500/20 hover:bg-green-200 dark:hover:bg-green-500/30 text-green-600 dark:text-green-400 rounded-lg font-medium transition-colors active:scale-95 text-sm"
-                      >
-                        <div className="text-xs opacity-70">4</div>
-                        Easy
-                      </button>
-                    </>
-                  )}
+                {studyMode === 'interval' && !isFront && (
+                  <>
+                    <button
+                      onClick={() => handleIntervalResponse('again')}
+                      className="px-3 py-2 bg-red-100 dark:bg-red-500/20 hover:bg-red-200 dark:hover:bg-red-500/30 text-red-600 dark:text-red-400 rounded-lg font-medium transition-colors active:scale-95 text-sm"
+                    >
+                      <div className="text-xs opacity-70">1</div>
+                      Again
+                    </button>
+                    <button
+                      onClick={() => handleIntervalResponse('hard')}
+                      className="px-3 py-2 bg-orange-100 dark:bg-orange-500/20 hover:bg-orange-200 dark:hover:bg-orange-500/30 text-orange-600 dark:text-orange-400 rounded-lg font-medium transition-colors active:scale-95 text-sm"
+                    >
+                      <div className="text-xs opacity-70">2</div>
+                      Hard
+                    </button>
+                    <button
+                      onClick={() => handleIntervalResponse('good')}
+                      className="px-3 py-2 bg-blue-100 dark:bg-blue-500/20 hover:bg-blue-200 dark:hover:bg-blue-500/30 text-blue-600 dark:text-blue-400 rounded-lg font-medium transition-colors active:scale-95 text-sm"
+                    >
+                      <div className="text-xs opacity-70">3</div>
+                      Good
+                    </button>
+                    <button
+                      onClick={() => handleIntervalResponse('easy')}
+                      className="px-3 py-2 bg-green-100 dark:bg-green-500/20 hover:bg-green-200 dark:hover:bg-green-500/30 text-green-600 dark:text-green-400 rounded-lg font-medium transition-colors active:scale-95 text-sm"
+                    >
+                      <div className="text-xs opacity-70">4</div>
+                      Easy
+                    </button>
+                  </>
+                )}
 
-                  {studyMode === 'interval' && isFront && (
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      Flip the card to rate difficulty
-                    </div>
-                  )}
-                </div>
-
-                {!isLastCard ? (
-                  <button
-                    onClick={handleNext}
-                    className="flex items-center gap-2 px-4 py-2 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-medium transition-all active:scale-95"
-                  >
-                    Next <FaArrowRight />
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleFinishSession}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-all active:scale-95"
-                  >
-                    Finish Session
-                  </button>
+                {studyMode === 'interval' && isFront && (
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    Flip the card to rate difficulty
+                  </div>
                 )}
               </div>
 
-              {/* Keyboard Shortcuts */}
-              <KeyboardShortcutHint
-                className="mt-8"
-                shortcuts={[
-                  { key: 'Space', label: 'Flip' },
-                  { key: '←/→', label: 'Navigate' },
-                  { key: 'Enter', label: 'Next' },
-                  ...(studyMode === 'interval'
-                    ? [{ key: '1-4', label: 'Rate difficulty' }]
-                    : []),
-                ]}
-              />
+              {!isLastCard ? (
+                <button
+                  onClick={handleNext}
+                  className="flex items-center gap-2 px-4 py-2 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-medium transition-all active:scale-95"
+                >
+                  Next <FaArrowRight />
+                </button>
+              ) : (
+                <button
+                  onClick={handleFinishSession}
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-all active:scale-95"
+                >
+                  Finish Session
+                </button>
+              )}
             </div>
-          </div>
-        ) : null}
-      </main>
 
+            {/* Keyboard Shortcuts */}
+            <KeyboardShortcutHint
+              className="mt-8"
+              shortcuts={[
+                { key: 'Space', label: 'Flip' },
+                { key: '←/→', label: 'Navigate' },
+                { key: 'Enter', label: 'Next' },
+                ...(studyMode === 'interval'
+                  ? [{ key: '1-4', label: 'Rate difficulty' }]
+                  : []),
+              ]}
+            />
+          </div>
+        </div>
+      ) : null}
       <ItemEditModal
         item={editingItem}
         isOpen={Boolean(editingItem)}
@@ -997,7 +993,7 @@ export default function SetFlashcards() {
         onClose={handleCloseEditItem}
         onSave={handleSaveEditedItem}
       />
-    </div>
+    </AuthenticatedLayout>
   );
 }
 

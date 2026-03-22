@@ -1,9 +1,8 @@
 // pages/learn/academy/sets/study/[id]/srs/learn-new.js
-import Head from 'next/head';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import AcademySidebar from '@/components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import BaseModal from '@/components/ui/BaseModal';
 
 // Import icons for phase indicators
@@ -776,9 +775,8 @@ export default function LearnNew() {
   // Show error state
   if (error) {
     return (
-      <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-        <AcademySidebar />
-        <main className="flex-1 flex items-center justify-center px-4 sm:px-6">
+      <AuthenticatedLayout sidebar="academy" title="Learn New" variant="fixed">
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
               Error Loading Set
@@ -791,260 +789,243 @@ export default function LearnNew() {
               Back to Study Set
             </button>
           </div>
-        </main>
-      </div>
+        </div>
+      </AuthenticatedLayout>
     );
   }
 
   return (
-    <>
-      <Head>
-        <title>Learn New - {setInfo?.title || 'Study Set'}</title>
-        <meta name="description" content="Learn new cards in your study set" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card">
-        {/* Only show sidebar during complete phase (summary) */}
-        {currentPhase === 'complete' && <AcademySidebar />}
-
-        <main className="flex-1 flex flex-col p-3 sm:p-6 sm:mt-10">
-          {/* Loading State */}
-          {isLoading ? (
-            <div className="flex-1 flex flex-col items-center justify-center">
-              <div className="w-full max-w-2xl space-y-6 px-4">
-                {/* Session header skeleton */}
-                <div className="flex items-center justify-between">
-                  <div className="h-6 w-40 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
-                  <div
-                    className="h-5 w-20 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                    style={{ animationDelay: '50ms' }}
-                  />
-                </div>
-                {/* Progress bar skeleton */}
+    <AuthenticatedLayout
+      sidebar="academy"
+      title={`Learn New - ${setInfo?.title || 'Study Set'}`}
+      variant="gradient"
+      mainClassName="p-3 sm:p-6 sm:mt-10"
+    >
+      {/* Loading State */}
+      {isLoading ? (
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="w-full max-w-2xl space-y-6 px-4">
+            {/* Session header skeleton */}
+            <div className="flex items-center justify-between">
+              <div className="h-6 w-40 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+              <div
+                className="h-5 w-20 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                style={{ animationDelay: '50ms' }}
+              />
+            </div>
+            {/* Progress bar skeleton */}
+            <div
+              className="h-2.5 w-full rounded-full bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+              style={{ animationDelay: '100ms' }}
+            />
+            {/* Card skeleton */}
+            <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card shadow-sm p-8">
+              <div className="flex flex-col items-center gap-4">
                 <div
-                  className="h-2.5 w-full rounded-full bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                  style={{ animationDelay: '100ms' }}
+                  className="h-10 w-36 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                  style={{ animationDelay: '150ms' }}
                 />
-                {/* Card skeleton */}
-                <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card shadow-sm p-8">
-                  <div className="flex flex-col items-center gap-4">
-                    <div
-                      className="h-10 w-36 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                      style={{ animationDelay: '150ms' }}
-                    />
-                    <div
-                      className="h-5 w-48 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                      style={{ animationDelay: '200ms' }}
-                    />
-                    <div
-                      className="h-4 w-28 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
-                      style={{ animationDelay: '250ms' }}
-                    />
-                  </div>
-                </div>
-                {/* Action buttons skeleton */}
-                <div className="flex justify-center gap-3">
-                  {[0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className="h-10 w-24 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse"
-                      style={{ animationDelay: `${300 + i * 50}ms` }}
-                    />
-                  ))}
-                </div>
+                <div
+                  className="h-5 w-48 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                  style={{ animationDelay: '200ms' }}
+                />
+                <div
+                  className="h-4 w-28 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
+                  style={{ animationDelay: '250ms' }}
+                />
               </div>
             </div>
-          ) : (
+            {/* Action buttons skeleton */}
+            <div className="flex justify-center gap-3">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="h-10 w-24 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse"
+                  style={{ animationDelay: `${300 + i * 50}ms` }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Show completion summary */}
+          {currentPhase === 'complete' && (
+            <SummaryView
+              sessionStats={sessionStats}
+              answeredItems={answeredItems}
+              animateAccuracy={animateAccuracy}
+              onBackToSet={handleExit}
+              completionTitle="Lesson Complete!"
+            />
+          )}
+
+          {/* Show active phase components */}
+          {currentPhase !== 'complete' && (
             <>
-              {/* Show completion summary */}
-              {currentPhase === 'complete' && (
-                <SummaryView
-                  sessionStats={sessionStats}
-                  answeredItems={answeredItems}
-                  animateAccuracy={animateAccuracy}
-                  onBackToSet={handleExit}
-                  completionTitle="Lesson Complete!"
+              {/* Quiz Header */}
+              <SessionStatHeaderView
+                setTitle={setInfo?.title}
+                sessionStats={sessionStats}
+                currentIndex={currentIndex}
+                totalQuestions={getCurrentArray().length}
+                currentPhase={currentPhase}
+                completedPhases={completedPhases}
+                phases={phases}
+                currentPhaseIndex={currentPhaseIndex}
+                currentPhaseConfig={currentPhaseConfig}
+                CurrentPhaseIcon={CurrentPhaseIcon}
+                progressInPhase={calculateProgressPercentage()}
+                completedCount={getCompletedCount()}
+                totalUniqueItems={getTotalUniqueItems()}
+                displayMode={
+                  currentPhase === 'review'
+                    ? 'question-count'
+                    : 'completion-count'
+                }
+                onExit={handleExit}
+              />
+
+              {/* Review Phase */}
+              {currentPhase === 'review' && activeReviewArray.length > 0 && (
+                <ReviewView
+                  currentCard={activeReviewArray[currentIndex]}
+                  isLastCard={currentIndex === activeReviewArray.length - 1}
+                  isFirstCard={currentIndex === 0}
+                  onNext={handleReviewNext}
+                  onPrevious={handleReviewPrevious}
                 />
               )}
 
-              {/* Show active phase components */}
-              {currentPhase !== 'complete' && (
-                <>
-                  {/* Quiz Header */}
-                  <SessionStatHeaderView
-                    setTitle={setInfo?.title}
-                    sessionStats={sessionStats}
-                    currentIndex={currentIndex}
-                    totalQuestions={getCurrentArray().length}
-                    currentPhase={currentPhase}
-                    completedPhases={completedPhases}
-                    phases={phases}
-                    currentPhaseIndex={currentPhaseIndex}
-                    currentPhaseConfig={currentPhaseConfig}
-                    CurrentPhaseIcon={CurrentPhaseIcon}
-                    progressInPhase={calculateProgressPercentage()}
-                    completedCount={getCompletedCount()}
-                    totalUniqueItems={getTotalUniqueItems()}
-                    displayMode={
-                      currentPhase === 'review'
-                        ? 'question-count'
-                        : 'completion-count'
-                    }
-                    onExit={handleExit}
+              {/* Multiple Choice Phase */}
+              {currentPhase === 'multiple-choice' &&
+                activeMCArray.length > 0 && (
+                  <MultipleChoiceView
+                    currentItem={activeMCArray[currentIndex]}
+                    uniqueOptions={currentShuffledOptions}
+                    selectedOption={selectedOption}
+                    showResult={showResult}
+                    isCorrect={isCorrect}
+                    isTransitioning={false}
+                    isLastQuestion={currentIndex === activeMCArray.length - 1}
+                    onOptionSelect={handleMCOptionSelect}
+                    onNext={handleNext}
                   />
+                )}
 
-                  {/* Review Phase */}
-                  {currentPhase === 'review' &&
-                    activeReviewArray.length > 0 && (
-                      <ReviewView
-                        currentCard={activeReviewArray[currentIndex]}
-                        isLastCard={
-                          currentIndex === activeReviewArray.length - 1
-                        }
-                        isFirstCard={currentIndex === 0}
-                        onNext={handleReviewNext}
-                        onPrevious={handleReviewPrevious}
-                      />
-                    )}
-
-                  {/* Multiple Choice Phase */}
-                  {currentPhase === 'multiple-choice' &&
-                    activeMCArray.length > 0 && (
-                      <MultipleChoiceView
-                        currentItem={activeMCArray[currentIndex]}
-                        uniqueOptions={currentShuffledOptions}
-                        selectedOption={selectedOption}
-                        showResult={showResult}
-                        isCorrect={isCorrect}
-                        isTransitioning={false}
-                        isLastQuestion={
-                          currentIndex === activeMCArray.length - 1
-                        }
-                        onOptionSelect={handleMCOptionSelect}
-                        onNext={handleNext}
-                      />
-                    )}
-
-                  {/* Translation Phase - Only for vocabulary sets */}
-                  {currentPhase === 'translation' &&
-                    setType !== 'grammar' &&
-                    activeTranslationArray.length > 0 &&
-                    !isSavingSRS && (
-                      <div className="relative flex-1">
-                        <TypedResponseView
-                          currentItem={activeTranslationArray[currentIndex]}
-                          userAnswer={userAnswer}
-                          showResult={showResult}
-                          isCorrect={isCorrect}
-                          showHint={false}
-                          isLastQuestion={
-                            currentIndex === activeTranslationArray.length - 1
-                          }
-                          inputRef={translationInputRef}
-                          onInputChange={(e) => setUserAnswer(e.target.value)}
-                          onCheckAnswer={handleTranslationCheck}
-                          onNext={handleNext}
-                          onRetry={handleTranslationRetry}
-                          onEditItem={handleOpenEditItem}
-                          disableKeyboardShortcuts={Boolean(editingItem)}
-                        />
-                      </div>
-                    )}
-
-                  {/* SRS Saving Loading Screen */}
-                  {isSavingSRS && (
-                    <div className="flex-1 flex items-center justify-center">
-                      <div className="text-center space-y-4">
-                        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-500 mx-auto"></div>
-                        <p className="text-xl font-semibold text-gray-700 dark:text-white">
-                          Saving your progress to SRS...
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-white/70">
-                          Please wait while we save your items
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* SRS Error Popup */}
-              <BaseModal
-                isOpen={!!srsError}
-                onClose={() => setSrsError(null)}
-                size="md"
-                blur={false}
-                closeOnBackdrop={false}
-                footer={
-                  <div className="flex space-x-3">
-                    <button
-                      onClick={async () => {
-                        setSrsError(null);
-                        const success = await saveAllItemsToSRS();
-                        if (success) {
-                          setCurrentPhase('complete');
-                          setTimeout(() => setAnimateAccuracy(true), 100);
-                        }
-                      }}
-                      className="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-                    >
-                      Retry
-                    </button>
-                    <button
-                      onClick={() => setSrsError(null)}
-                      className="flex-1 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-700 dark:text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-                    >
-                      Cancel
-                    </button>
+              {/* Translation Phase - Only for vocabulary sets */}
+              {currentPhase === 'translation' &&
+                setType !== 'grammar' &&
+                activeTranslationArray.length > 0 &&
+                !isSavingSRS && (
+                  <div className="relative flex-1">
+                    <TypedResponseView
+                      currentItem={activeTranslationArray[currentIndex]}
+                      userAnswer={userAnswer}
+                      showResult={showResult}
+                      isCorrect={isCorrect}
+                      showHint={false}
+                      isLastQuestion={
+                        currentIndex === activeTranslationArray.length - 1
+                      }
+                      inputRef={translationInputRef}
+                      onInputChange={(e) => setUserAnswer(e.target.value)}
+                      onCheckAnswer={handleTranslationCheck}
+                      onNext={handleNext}
+                      onRetry={handleTranslationRetry}
+                      onEditItem={handleOpenEditItem}
+                      disableKeyboardShortcuts={Boolean(editingItem)}
+                    />
                   </div>
-                }
-              >
-                <div className="p-6 space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                      <svg
-                        className="w-6 h-6 text-red-600 dark:text-red-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        Failed to Save Progress
-                      </h3>
-                    </div>
-                  </div>
+                )}
 
-                  <p className="text-gray-600 dark:text-white/70">{srsError}</p>
+              {/* SRS Saving Loading Screen */}
+              {isSavingSRS && (
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="text-center space-y-4">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-500 mx-auto"></div>
+                    <p className="text-xl font-semibold text-gray-700 dark:text-white">
+                      Saving your progress to SRS...
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-white/70">
+                      Please wait while we save your items
+                    </p>
+                  </div>
                 </div>
-              </BaseModal>
-
-              <ItemEditModal
-                item={editingItem}
-                isOpen={Boolean(editingItem)}
-                isSaving={isSavingEdit}
-                error={editError}
-                onClose={handleCloseEditItem}
-                onSave={handleSaveEditedItem}
-              />
+              )}
             </>
           )}
-        </main>
-      </div>
-    </>
+
+          {/* SRS Error Popup */}
+          <BaseModal
+            isOpen={!!srsError}
+            onClose={() => setSrsError(null)}
+            size="md"
+            blur={false}
+            closeOnBackdrop={false}
+            footer={
+              <div className="flex space-x-3">
+                <button
+                  onClick={async () => {
+                    setSrsError(null);
+                    const success = await saveAllItemsToSRS();
+                    if (success) {
+                      setCurrentPhase('complete');
+                      setTimeout(() => setAnimateAccuracy(true), 100);
+                    }
+                  }}
+                  className="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                >
+                  Retry
+                </button>
+                <button
+                  onClick={() => setSrsError(null)}
+                  className="flex-1 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-700 dark:text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            }
+          >
+            <div className="p-6 space-y-4">
+              <div className="flex items-center space-x-3">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                  <svg
+                    className="w-6 h-6 text-red-600 dark:text-red-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    Failed to Save Progress
+                  </h3>
+                </div>
+              </div>
+
+              <p className="text-gray-600 dark:text-white/70">{srsError}</p>
+            </div>
+          </BaseModal>
+
+          <ItemEditModal
+            item={editingItem}
+            isOpen={Boolean(editingItem)}
+            isSaving={isSavingEdit}
+            error={editError}
+            onClose={handleCloseEditItem}
+            onSave={handleSaveEditedItem}
+          />
+        </>
+      )}
+    </AuthenticatedLayout>
   );
 }
 

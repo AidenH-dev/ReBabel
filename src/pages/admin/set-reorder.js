@@ -1,7 +1,6 @@
 // Admin: Set Item Reordering (CSV bulk reorder)
 // Load a set by ID, download current order as CSV, re-upload to reorder.
-import Head from 'next/head';
-import AdminSidebar from '@/components/Sidebars/AdminSidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
@@ -249,159 +248,154 @@ function SetReorderPage() {
   }
 
   return (
-    <>
-      <Head>
-        <title>Set Reorder - Admin - ReBabel</title>
-      </Head>
-      <div className="flex flex-row min-h-screen bg-white dark:bg-surface-elevated text-[#4e4a4a] dark:text-white">
-        <AdminSidebar />
-        <main className="flex-1 overflow-auto">
-          <div className="max-w-3xl mx-auto p-6 md:p-8">
-            <h1 className="text-2xl font-bold mb-1">Set Item Reorder</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-              Load a set by ID, download the current order as CSV, edit
-              positions, and re-upload to apply.
-            </p>
+    <AuthenticatedLayout
+      sidebar="admin"
+      title="Set Reorder - Admin - ReBabel"
+      wrapperClassName="text-[#4e4a4a] dark:text-white"
+      mainClassName="overflow-auto bg-white dark:bg-surface-elevated"
+    >
+      <div className="max-w-3xl mx-auto p-6 md:p-8">
+        <h1 className="text-2xl font-bold mb-1">Set Item Reorder</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+          Load a set by ID, download the current order as CSV, edit positions,
+          and re-upload to apply.
+        </p>
 
-            {/* Set ID loader */}
-            <div className="flex gap-2 mb-6">
-              <input
-                type="text"
-                placeholder="Set entity UUID"
-                value={setIdInput}
-                onChange={(e) => setSetIdInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleLoadSet()}
-                className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-elevated text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
-              />
-              <button
-                onClick={handleLoadSet}
-                disabled={isLoadingSet || !setIdInput.trim()}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-pink text-white text-sm font-medium hover:bg-[#c00950] disabled:opacity-50 transition-colors"
-              >
-                {isLoadingSet ? (
-                  <TbLoader3 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <FiSearch className="w-4 h-4" />
-                )}
-                Load Set
-              </button>
+        {/* Set ID loader */}
+        <div className="flex gap-2 mb-6">
+          <input
+            type="text"
+            placeholder="Set entity UUID"
+            value={setIdInput}
+            onChange={(e) => setSetIdInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleLoadSet()}
+            className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-elevated text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
+          />
+          <button
+            onClick={handleLoadSet}
+            disabled={isLoadingSet || !setIdInput.trim()}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-pink text-white text-sm font-medium hover:bg-[#c00950] disabled:opacity-50 transition-colors"
+          >
+            {isLoadingSet ? (
+              <TbLoader3 className="w-4 h-4 animate-spin" />
+            ) : (
+              <FiSearch className="w-4 h-4" />
+            )}
+            Load Set
+          </button>
+        </div>
+
+        {loadError && (
+          <div className="mb-4 px-4 py-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
+            {loadError}
+          </div>
+        )}
+
+        {items.length > 0 && (
+          <>
+            {/* Set header */}
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold">{setTitle}</h2>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {items.length} items
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleDownload}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <FiDownload className="w-4 h-4" />
+                  Download CSV
+                </button>
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-pink text-white text-sm font-medium hover:bg-[#c00950] disabled:opacity-50 transition-colors"
+                >
+                  {isUploading ? (
+                    <TbLoader3 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <FiUpload className="w-4 h-4" />
+                  )}
+                  Upload CSV
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </div>
             </div>
 
-            {loadError && (
+            {/* CSV format hint */}
+            <div className="mb-4 px-3 py-2 rounded-lg bg-gray-50 dark:bg-surface-card border border-gray-200 dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400">
+              CSV columns:{' '}
+              <code className="font-mono">position, item_id, type, label</code>.
+              Edit <code className="font-mono">position</code> values to
+              reorder, then re-upload.
+              <code className="font-mono">item_id</code> is authoritative — do
+              not edit it.
+            </div>
+
+            {uploadError && (
               <div className="mb-4 px-4 py-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
-                {loadError}
+                {uploadError}
               </div>
             )}
 
-            {items.length > 0 && (
-              <>
-                {/* Set header */}
-                <div className="mb-4 flex items-center justify-between">
-                  <div>
-                    <h2 className="text-lg font-semibold">{setTitle}</h2>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {items.length} items
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={handleDownload}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                    >
-                      <FiDownload className="w-4 h-4" />
-                      Download CSV
-                    </button>
-                    <button
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={isUploading}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-pink text-white text-sm font-medium hover:bg-[#c00950] disabled:opacity-50 transition-colors"
-                    >
-                      {isUploading ? (
-                        <TbLoader3 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <FiUpload className="w-4 h-4" />
-                      )}
-                      Upload CSV
-                    </button>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".csv"
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
-                  </div>
-                </div>
-
-                {/* CSV format hint */}
-                <div className="mb-4 px-3 py-2 rounded-lg bg-gray-50 dark:bg-surface-card border border-gray-200 dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400">
-                  CSV columns:{' '}
-                  <code className="font-mono">
-                    position, item_id, type, label
-                  </code>
-                  . Edit <code className="font-mono">position</code> values to
-                  reorder, then re-upload.
-                  <code className="font-mono">item_id</code> is authoritative —
-                  do not edit it.
-                </div>
-
-                {uploadError && (
-                  <div className="mb-4 px-4 py-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
-                    {uploadError}
-                  </div>
-                )}
-
-                {uploadSuccess && (
-                  <div className="mb-4 px-4 py-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 text-sm">
-                    Reorder applied successfully.
-                  </div>
-                )}
-
-                {/* Items list */}
-                <div className="bg-white dark:bg-surface-card rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
-                  {items.map((item, idx) => (
-                    <div
-                      key={item.id}
-                      className="flex items-start gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-800 last:border-b-0"
-                    >
-                      <span className="flex-shrink-0 w-7 text-center text-xs font-mono text-gray-400 dark:text-gray-500 pt-0.5">
-                        {idx + 1}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        {item.type === 'vocab' ? (
-                          <>
-                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                              {item.english}
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 font-japanese">
-                              {item.kana} {item.kanji && `(${item.kanji})`}
-                            </p>
-                          </>
-                        ) : (
-                          <>
-                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                              {item.title}
-                            </p>
-                            {item.description && (
-                              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                {item.description}
-                              </p>
-                            )}
-                          </>
-                        )}
-                      </div>
-                      <span className="flex-shrink-0 px-1.5 py-0.5 text-[10px] rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
-                        {item.type}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </>
+            {uploadSuccess && (
+              <div className="mb-4 px-4 py-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 text-sm">
+                Reorder applied successfully.
+              </div>
             )}
-          </div>
-        </main>
+
+            {/* Items list */}
+            <div className="bg-white dark:bg-surface-card rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
+              {items.map((item, idx) => (
+                <div
+                  key={item.id}
+                  className="flex items-start gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-800 last:border-b-0"
+                >
+                  <span className="flex-shrink-0 w-7 text-center text-xs font-mono text-gray-400 dark:text-gray-500 pt-0.5">
+                    {idx + 1}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    {item.type === 'vocab' ? (
+                      <>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                          {item.english}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 font-japanese">
+                          {item.kana} {item.kanji && `(${item.kanji})`}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                          {item.title}
+                        </p>
+                        {item.description && (
+                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                            {item.description}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <span className="flex-shrink-0 px-1.5 py-0.5 text-[10px] rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+                    {item.type}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
-    </>
+    </AuthenticatedLayout>
   );
 }
 

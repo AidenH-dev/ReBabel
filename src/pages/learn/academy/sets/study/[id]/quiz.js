@@ -1,6 +1,5 @@
 // pages/learn/academy/sets/study/[id]/quiz.js
-import Head from 'next/head';
-import MainSidebar from '@/components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import MasterQuizModeSelect from '@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterQuizModeSelect';
 import MasterQuizHeader from '@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterQuizHeader';
 import MasterQuestionCard from '@/components/Set/Features/Field-Card-Session/Quiz/controllers/MasterQuestionCard';
@@ -487,170 +486,167 @@ export default function SetQuiz() {
   // Show error state
   if (error) {
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
-        <MainSidebar />
-        <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
-              Error Loading Quiz
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
-            <button
-              onClick={() => router.push('/learn/academy/sets')}
-              className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
-            >
-              Back to Sets
-            </button>
+      <AuthenticatedLayout
+        sidebar="academy"
+        title="Error Loading Quiz"
+        variant="fixed"
+        mainClassName="px-4 sm:px-6 py-4 flex items-center justify-center"
+      >
+        <div className="text-center">
+          <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
+            Error Loading Quiz
           </div>
-        </main>
-      </div>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+          <button
+            onClick={() => router.push('/learn/academy/sets')}
+            className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
+          >
+            Back to Sets
+          </button>
+        </div>
+      </AuthenticatedLayout>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card sm:mt-10">
-      {quizCompleted && <MainSidebar />}
-      <main
-        className={`flex-1 flex flex-col p-3 sm:p-6 ${quizCompleted ? 'ml-0 lg:ml-auto' : 'w-full'}`}
-      >
-        <Head>
-          <title>Quiz • {setInfo?.title || 'Study Set'}</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        {/* Loading State */}
-        {isLoading ? (
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="w-full max-w-2xl space-y-6 px-4">
-              {/* Question card skeleton */}
-              <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card shadow-sm p-8">
-                <div className="flex flex-col items-center gap-4">
-                  <div className="h-3 w-20 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
-                  <div
-                    className="h-10 w-48 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                    style={{ animationDelay: '50ms' }}
-                  />
-                  <div
-                    className="h-5 w-36 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                    style={{ animationDelay: '100ms' }}
-                  />
-                </div>
-              </div>
-              {/* Option rows skeleton */}
-              <div className="space-y-3">
-                {[0, 1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="h-14 rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card animate-pulse"
-                    style={{ animationDelay: `${150 + i * 60}ms` }}
-                  >
-                    <div className="flex items-center h-full px-4 gap-3">
-                      <div className="h-5 w-5 rounded-full bg-black/[0.06] dark:bg-white/[0.06]" />
-                      <div
-                        className="h-4 rounded bg-black/[0.06] dark:bg-white/[0.06]"
-                        style={{ width: `${60 - i * 8}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
+    <AuthenticatedLayout
+      sidebar="academy"
+      title={`Quiz • ${setInfo?.title || 'Study Set'}`}
+      variant="gradient"
+      mainClassName="p-3 sm:p-6 sm:mt-10"
+    >
+      {/* Loading State */}
+      {isLoading ? (
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="w-full max-w-2xl space-y-6 px-4">
+            {/* Question card skeleton */}
+            <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card shadow-sm p-8">
+              <div className="flex flex-col items-center gap-4">
+                <div className="h-3 w-20 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
+                <div
+                  className="h-10 w-48 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                  style={{ animationDelay: '50ms' }}
+                />
+                <div
+                  className="h-5 w-36 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                  style={{ animationDelay: '100ms' }}
+                />
               </div>
             </div>
+            {/* Option rows skeleton */}
+            <div className="space-y-3">
+              {[0, 1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="h-14 rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card animate-pulse"
+                  style={{ animationDelay: `${150 + i * 60}ms` }}
+                >
+                  <div className="flex items-center h-full px-4 gap-3">
+                    <div className="h-5 w-5 rounded-full bg-black/[0.06] dark:bg-white/[0.06]" />
+                    <div
+                      className="h-4 rounded bg-black/[0.06] dark:bg-white/[0.06]"
+                      style={{ width: `${60 - i * 8}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        ) : !modeSelectionComplete ? (
-          /* Mode Selection Screen */
-          <MasterQuizModeSelect
-            setTitle={setInfo?.title}
-            setType={setType}
-            onSelectMode={handleModeSelect}
-            onExit={handleExit}
-          />
-        ) : (
-          <>
-            {/* Header */}
-            {!quizCompleted && (
-              <MasterQuizHeader
-                setTitle={setInfo?.title}
-                setType={setType}
-                sessionStats={sessionStats}
-                currentIndex={currentIndex}
-                totalQuestions={getCurrentItems().length}
-                currentPhase={currentPhase}
-                quizMode={quizMode}
-                quizType={quizType}
-                completedPhases={completedPhases}
-                completedCount={completedItems[currentPhase]?.size || 0}
-                onExit={handleExit}
-              />
-            )}
-
-            {/* Main Quiz Area */}
-            {quizCompleted ? (
-              <SummaryView
-                sessionStats={sessionStats}
-                answeredItems={answeredItems}
-                animateAccuracy={animateAccuracy}
-                onRetry={handleRetry}
-                onBackToSet={handleExit}
-                completionTitle="Quiz Complete!"
-              />
-            ) : currentPhase === 'review' ? (
-              <ReviewView
-                currentCard={reviewItems[currentIndex]}
-                isLastCard={currentIndex === reviewItems.length - 1}
-                isFirstCard={currentIndex === 0}
-                onNext={() => {
-                  // Mark current card as completed before moving
-                  setCompletedItems((prev) => {
-                    const newSet = new Set(prev['review']);
-                    newSet.add(reviewItems[currentIndex].id);
-                    return { ...prev, review: newSet };
-                  });
-                  if (currentIndex < reviewItems.length - 1) {
-                    setCurrentIndex((prev) => prev + 1);
-                  } else {
-                    handlePhaseComplete();
-                  }
-                }}
-                onPrevious={() => {
-                  if (currentIndex > 0) {
-                    setCurrentIndex((prev) => prev - 1);
-                  }
-                }}
-              />
-            ) : currentPhase === 'multiple-choice' ? (
-              <MasterMultipleChoice
-                quizItems={multipleChoiceItems}
-                currentIndex={currentIndex}
-                onAnswerSubmitted={handleAnswerSubmitted}
-                onNext={() => setCurrentIndex((prev) => prev + 1)}
-                onComplete={handlePhaseComplete}
-              />
-            ) : (
-              <MasterQuestionCard
-                quizItems={quizItems}
-                currentIndex={currentIndex}
-                onAnswerSubmitted={handleAnswerSubmitted}
-                onNext={() => setCurrentIndex((prev) => prev + 1)}
-                onEditItem={handleOpenEditItem}
-                disableKeyboardShortcuts={Boolean(editingItem)}
-                onComplete={() => {
-                  setQuizCompleted(true);
-                }}
-              />
-            )}
-
-            <ItemEditModal
-              item={editingItem}
-              isOpen={Boolean(editingItem)}
-              isSaving={isSavingEdit}
-              error={editError}
-              onClose={handleCloseEditItem}
-              onSave={handleSaveEditedItem}
+        </div>
+      ) : !modeSelectionComplete ? (
+        /* Mode Selection Screen */
+        <MasterQuizModeSelect
+          setTitle={setInfo?.title}
+          setType={setType}
+          onSelectMode={handleModeSelect}
+          onExit={handleExit}
+        />
+      ) : (
+        <>
+          {/* Header */}
+          {!quizCompleted && (
+            <MasterQuizHeader
+              setTitle={setInfo?.title}
+              setType={setType}
+              sessionStats={sessionStats}
+              currentIndex={currentIndex}
+              totalQuestions={getCurrentItems().length}
+              currentPhase={currentPhase}
+              quizMode={quizMode}
+              quizType={quizType}
+              completedPhases={completedPhases}
+              completedCount={completedItems[currentPhase]?.size || 0}
+              onExit={handleExit}
             />
-          </>
-        )}
-      </main>
-    </div>
+          )}
+
+          {/* Main Quiz Area */}
+          {quizCompleted ? (
+            <SummaryView
+              sessionStats={sessionStats}
+              answeredItems={answeredItems}
+              animateAccuracy={animateAccuracy}
+              onRetry={handleRetry}
+              onBackToSet={handleExit}
+              completionTitle="Quiz Complete!"
+            />
+          ) : currentPhase === 'review' ? (
+            <ReviewView
+              currentCard={reviewItems[currentIndex]}
+              isLastCard={currentIndex === reviewItems.length - 1}
+              isFirstCard={currentIndex === 0}
+              onNext={() => {
+                // Mark current card as completed before moving
+                setCompletedItems((prev) => {
+                  const newSet = new Set(prev['review']);
+                  newSet.add(reviewItems[currentIndex].id);
+                  return { ...prev, review: newSet };
+                });
+                if (currentIndex < reviewItems.length - 1) {
+                  setCurrentIndex((prev) => prev + 1);
+                } else {
+                  handlePhaseComplete();
+                }
+              }}
+              onPrevious={() => {
+                if (currentIndex > 0) {
+                  setCurrentIndex((prev) => prev - 1);
+                }
+              }}
+            />
+          ) : currentPhase === 'multiple-choice' ? (
+            <MasterMultipleChoice
+              quizItems={multipleChoiceItems}
+              currentIndex={currentIndex}
+              onAnswerSubmitted={handleAnswerSubmitted}
+              onNext={() => setCurrentIndex((prev) => prev + 1)}
+              onComplete={handlePhaseComplete}
+            />
+          ) : (
+            <MasterQuestionCard
+              quizItems={quizItems}
+              currentIndex={currentIndex}
+              onAnswerSubmitted={handleAnswerSubmitted}
+              onNext={() => setCurrentIndex((prev) => prev + 1)}
+              onEditItem={handleOpenEditItem}
+              disableKeyboardShortcuts={Boolean(editingItem)}
+              onComplete={() => {
+                setQuizCompleted(true);
+              }}
+            />
+          )}
+
+          <ItemEditModal
+            item={editingItem}
+            isOpen={Boolean(editingItem)}
+            isSaving={isSavingEdit}
+            error={editError}
+            onClose={handleCloseEditItem}
+            onSave={handleSaveEditedItem}
+          />
+        </>
+      )}
+    </AuthenticatedLayout>
   );
 }
 

@@ -1,5 +1,4 @@
-import Head from 'next/head';
-import AcademySidebar from '../../../components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -189,24 +188,20 @@ export default function AcademyHome() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
-      <AcademySidebar />
+    <AuthenticatedLayout
+      sidebar="academy"
+      title="Academy • ReBabel"
+      mainClassName="max-h-screen overflow-scroll px-8 py-6"
+    >
+      {/* Header Section */}
+      <div className="mb-3">
+        <div className="mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+            Academy
+          </h1>
+        </div>
 
-      <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6">
-        <Head>
-          <title>Academy • ReBabel</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        {/* Header Section */}
-        <div className="mb-3">
-          <div className="mb-2">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
-              Academy
-            </h1>
-          </div>
-
-          {/* Coming Soon Stats
+        {/* Coming Soon Stats
                     <div className="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg p-4 mb-6 border border-orange-200 dark:border-orange-800 text-sm">
                         <div className="flex items-start gap-3">
                             <MdConstruction className="text-orange-500 text-lg mt-0.5" />
@@ -242,177 +237,175 @@ export default function AcademyHome() {
                             </div>
                         </div>
                     </div> */}
-        </div>
+      </div>
 
-        {/* Main Content Grid */}
-        <div className="mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Study Sets Section - Available */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    Study Sets
-                  </h2>
-                  <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs rounded-full font-medium">
-                    Available
-                  </span>
-                  <button
-                    onClick={() => setShowInfoModal(true)}
-                    className="bg-blue-50 dark:text-white dark:bg-blue-900/10 text-xs rounded-lg px-1.5 py-1 border border-blue-200 dark:border-blue-800"
-                  >
-                    Learn More
-                  </button>
+      {/* Main Content Grid */}
+      <div className="mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Study Sets Section - Available */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Study Sets
+                </h2>
+                <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs rounded-full font-medium">
+                  Available
+                </span>
+                <button
+                  onClick={() => setShowInfoModal(true)}
+                  className="bg-blue-50 dark:text-white dark:bg-blue-900/10 text-xs rounded-lg px-1.5 py-1 border border-blue-200 dark:border-blue-800"
+                >
+                  Learn More
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {/* Create New Set Card */}
+              <div
+                onClick={handleCreateSet}
+                className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-brand-pink dark:hover:border-brand-pink cursor-pointer transition-all group"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center group-hover:bg-brand-pink/10 dark:group-hover:bg-brand-pink/20 transition-colors">
+                    <TbCards className="text-2xl text-gray-400 group-hover:text-brand-pink transition-colors" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900 dark:text-white group-hover:text-brand-pink transition-colors">
+                      Create A New Set
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-500">
+                      Add vocabulary, phrases, or concepts to study
+                    </p>
+                  </div>
+                  <FaPlus className="text-brand-pink opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
 
-              <div className="space-y-4">
-                {/* Create New Set Card */}
-                <div
-                  onClick={handleCreateSet}
-                  className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-brand-pink dark:hover:border-brand-pink cursor-pointer transition-all group"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center group-hover:bg-brand-pink/10 dark:group-hover:bg-brand-pink/20 transition-colors">
-                      <TbCards className="text-2xl text-gray-400 group-hover:text-brand-pink transition-colors" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900 dark:text-white group-hover:text-brand-pink transition-colors">
-                        Create A New Set
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-500">
-                        Add vocabulary, phrases, or concepts to study
-                      </p>
-                    </div>
-                    <FaPlus className="text-brand-pink opacity-0 group-hover:opacity-100 transition-opacity" />
+              {/* Browse Existing Sets */}
+              <button
+                onClick={() => router.push('/learn/academy/sets')}
+                className="w-full bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 hover:shadow-md transition-all group text-left"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                    <TbStack2 className="text-2xl text-blue-600 dark:text-blue-400" />
                   </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      Browse Existing Sets
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-500">
+                      Review and practice your study materials
+                    </p>
+                  </div>
+                  <FaArrowRight className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
+              </button>
 
-                {/* Browse Existing Sets */}
-                <button
-                  onClick={() => router.push('/learn/academy/sets')}
-                  className="w-full bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 hover:shadow-md transition-all group text-left"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                      <TbStack2 className="text-2xl text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        Browse Existing Sets
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-500">
-                        Review and practice your study materials
-                      </p>
-                    </div>
-                    <FaArrowRight className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+              {/* Quick Study */}
+              <button
+                onClick={handleQuickStudy}
+                disabled={isQuickStudyLoading}
+                className="w-full bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 hover:shadow-md transition-all group text-left disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                    <TbBolt
+                      className={`text-2xl text-green-600 dark:text-green-400 ${isQuickStudyLoading ? 'animate-pulse' : ''}`}
+                    />
                   </div>
-                </button>
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {isQuickStudyLoading
+                        ? 'Selecting Random Set...'
+                        : 'Quick Study Session'}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-500">
+                      {isQuickStudyLoading
+                        ? 'Loading your sets...'
+                        : 'Jump into a random quiz instantly'}
+                    </p>
+                  </div>
+                  {!isQuickStudyLoading && (
+                    <FaArrowRight className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  )}
+                </div>
+              </button>
+            </div>
+          </div>
 
-                {/* Quick Study */}
-                <button
-                  onClick={handleQuickStudy}
-                  disabled={isQuickStudyLoading}
-                  className="w-full bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 hover:shadow-md transition-all group text-left disabled:opacity-50 disabled:cursor-not-allowed"
+          {/* Learning Materials Section - Coming Soon */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Learning Materials
+                </h2>
+                <span className="px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs rounded-full font-medium">
+                  In Development
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {/* Coming Soon Cards */}
+              {[
+                {
+                  title: 'Add Course Materials',
+                  description: 'Upload textbooks and structured curricula',
+                  icon: FaBook,
+                  color: 'purple',
+                },
+                {
+                  title: 'Track Progress',
+                  description:
+                    'Monitor completion through chapters and sections',
+                  icon: FaClipboardList,
+                  color: 'indigo',
+                },
+                {
+                  title: 'Adaptive Learning',
+                  description: 'Personalized study paths',
+                  icon: FaBrain,
+                  color: 'pink',
+                },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 opacity-60 cursor-not-allowed relative overflow-hidden"
                 >
+                  <div className="absolute top-2 right-2">
+                    <FaLock className="text-gray-400 text-sm" />
+                  </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                      <TbBolt
-                        className={`text-2xl text-green-600 dark:text-green-400 ${isQuickStudyLoading ? 'animate-pulse' : ''}`}
+                    <div
+                      className={`w-12 h-12 rounded-lg bg-${item.color}-100 dark:bg-${item.color}-900/30 flex items-center justify-center`}
+                    >
+                      <item.icon
+                        className={`text-2xl text-${item.color}-600 dark:text-${item.color}-400`}
                       />
                     </div>
                     <div className="flex-1">
                       <p className="font-medium text-gray-900 dark:text-white">
-                        {isQuickStudyLoading
-                          ? 'Selecting Random Set...'
-                          : 'Quick Study Session'}
+                        {item.title}
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-500">
-                        {isQuickStudyLoading
-                          ? 'Loading your sets...'
-                          : 'Jump into a random quiz instantly'}
+                        {item.description}
                       </p>
                     </div>
-                    {!isQuickStudyLoading && (
-                      <FaArrowRight className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    )}
                   </div>
-                </button>
-              </div>
-            </div>
-
-            {/* Learning Materials Section - Coming Soon */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    Learning Materials
-                  </h2>
-                  <span className="px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs rounded-full font-medium">
-                    In Development
-                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-100/50 dark:from-gray-900/50 to-transparent pointer-events-none" />
                 </div>
-              </div>
-
-              <div className="space-y-4">
-                {/* Coming Soon Cards */}
-                {[
-                  {
-                    title: 'Add Course Materials',
-                    description: 'Upload textbooks and structured curricula',
-                    icon: FaBook,
-                    color: 'purple',
-                  },
-                  {
-                    title: 'Track Progress',
-                    description:
-                      'Monitor completion through chapters and sections',
-                    icon: FaClipboardList,
-                    color: 'indigo',
-                  },
-                  {
-                    title: 'Adaptive Learning',
-                    description: 'Personalized study paths',
-                    icon: FaBrain,
-                    color: 'pink',
-                  },
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 opacity-60 cursor-not-allowed relative overflow-hidden"
-                  >
-                    <div className="absolute top-2 right-2">
-                      <FaLock className="text-gray-400 text-sm" />
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`w-12 h-12 rounded-lg bg-${item.color}-100 dark:bg-${item.color}-900/30 flex items-center justify-center`}
-                      >
-                        <item.icon
-                          className={`text-2xl text-${item.color}-600 dark:text-${item.color}-400`}
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-gray-900 dark:text-white">
-                          {item.title}
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-500">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-100/50 dark:from-gray-900/50 to-transparent pointer-events-none" />
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </div>
-      </main>
-
+      </div>
       {/* Info Modal */}
       <InfoModal />
-    </div>
+    </AuthenticatedLayout>
   );
 }
 

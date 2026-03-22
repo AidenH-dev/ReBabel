@@ -1,5 +1,4 @@
-import Head from 'next/head';
-import AcademySidebar from '@/components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import SessionStatHeaderView from '@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView';
 import MasterConjugationCard from '@/components/Practice/Premium/Features/Conjugation/Session/controllers/MasterConjugationCard';
 import ConjugationEditModal from '@/components/Practice/Premium/Features/Conjugation/Session/views/ConjugationEditModal';
@@ -257,64 +256,69 @@ export default function ConjugationPracticeSession() {
   // Loading state
   if (isLoading || isGenerating) {
     return (
-      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card sm:pt-10">
-        <main className="flex-1 flex items-center justify-center p-3 sm:p-6">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-pink mx-auto"></div>
-            <p className="mt-4 text-sm text-black/60 dark:text-white/60">
-              Generating conjugation questions...
-            </p>
-          </div>
-        </main>
-      </div>
+      <AuthenticatedLayout
+        sidebar="academy"
+        title="Conjugation Practice"
+        variant="gradient"
+        mainClassName="p-3 sm:p-6 sm:pt-10 items-center justify-center"
+      >
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-pink mx-auto"></div>
+          <p className="mt-4 text-sm text-black/60 dark:text-white/60">
+            Generating conjugation questions...
+          </p>
+        </div>
+      </AuthenticatedLayout>
     );
   }
 
   // Error state
   if (error) {
     return (
-      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card sm:pt-10">
-        <main className="flex-1 flex items-center justify-center p-3 sm:p-6">
-          <div className="text-center max-w-md">
-            <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-8">
-              <div className="text-red-500 text-4xl mb-4">!</div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Something went wrong
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-white/60 mb-6">
-                {error}
-              </p>
-              <button
-                onClick={() => router.push('/learn/academy/practice')}
-                className="px-6 py-2.5 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-medium transition-all"
-              >
-                Return to Practice
-              </button>
-            </div>
+      <AuthenticatedLayout
+        sidebar="academy"
+        title="Conjugation Practice"
+        variant="gradient"
+        mainClassName="p-3 sm:p-6 sm:pt-10 items-center justify-center"
+      >
+        <div className="text-center max-w-md">
+          <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-8">
+            <div className="text-red-500 text-4xl mb-4">!</div>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Something went wrong
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-white/60 mb-6">
+              {error}
+            </p>
+            <button
+              onClick={() => router.push('/learn/academy/practice')}
+              className="px-6 py-2.5 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-medium transition-all"
+            >
+              Return to Practice
+            </button>
           </div>
-        </main>
-      </div>
+        </div>
+      </AuthenticatedLayout>
     );
   }
 
   // Summary state -- show sidebar like quiz does
   if (sessionComplete) {
     return (
-      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card sm:pt-10">
-        <Head>
-          <title>Conjugation Complete</title>
-        </Head>
-        <AcademySidebar />
-        <main className="flex-1 flex flex-col p-3 sm:p-6 ml-0 lg:ml-auto overflow-y-auto">
-          <SummaryView
-            sessionStats={sessionStats}
-            answeredItems={answeredItems}
-            animateAccuracy={animateAccuracy}
-            onBackToSet={() => router.push('/learn/academy/practice')}
-            completionTitle="Conjugation Complete!"
-          />
-        </main>
-      </div>
+      <AuthenticatedLayout
+        sidebar="academy"
+        title="Conjugation Complete"
+        variant="gradient"
+        mainClassName="p-3 sm:p-6 sm:pt-10 overflow-y-auto"
+      >
+        <SummaryView
+          sessionStats={sessionStats}
+          answeredItems={answeredItems}
+          animateAccuracy={animateAccuracy}
+          onBackToSet={() => router.push('/learn/academy/practice')}
+          completionTitle="Conjugation Complete!"
+        />
+      </AuthenticatedLayout>
     );
   }
 
@@ -325,37 +329,36 @@ export default function ConjugationPracticeSession() {
       : 0;
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card sm:pt-10">
-      <Head>
-        <title>Conjugation Practice</title>
-      </Head>
+    <AuthenticatedLayout
+      sidebar="academy"
+      title="Conjugation Practice"
+      variant="gradient"
+      mainClassName="p-3 sm:p-6 sm:pt-10 w-full overflow-y-auto"
+    >
+      <SessionStatHeaderView
+        setTitle="Conjugation Practice"
+        sessionStats={sessionStats}
+        currentIndex={currentIndex}
+        totalQuestions={questions.length}
+        currentPhase="conjugation"
+        completedPhases={[]}
+        phases={PHASES}
+        currentPhaseIndex={0}
+        currentPhaseConfig={PHASES[0]}
+        CurrentPhaseIcon={TbLanguageHiragana}
+        progressInPhase={progress}
+        onExit={handleExit}
+      />
 
-      <main className="flex-1 flex flex-col p-3 sm:p-6 w-full overflow-y-auto">
-        <SessionStatHeaderView
-          setTitle="Conjugation Practice"
-          sessionStats={sessionStats}
-          currentIndex={currentIndex}
-          totalQuestions={questions.length}
-          currentPhase="conjugation"
-          completedPhases={[]}
-          phases={PHASES}
-          currentPhaseIndex={0}
-          currentPhaseConfig={PHASES[0]}
-          CurrentPhaseIcon={TbLanguageHiragana}
-          progressInPhase={progress}
-          onExit={handleExit}
-        />
-
-        <MasterConjugationCard
-          questions={questions}
-          currentIndex={currentIndex}
-          onAnswerSubmitted={handleAnswerSubmitted}
-          onNext={handleNext}
-          onComplete={handleComplete}
-          onEditItem={(q) => setEditingQuestion(q)}
-          onSkipItem={handleSkipItem}
-        />
-      </main>
+      <MasterConjugationCard
+        questions={questions}
+        currentIndex={currentIndex}
+        onAnswerSubmitted={handleAnswerSubmitted}
+        onNext={handleNext}
+        onComplete={handleComplete}
+        onEditItem={(q) => setEditingQuestion(q)}
+        onSkipItem={handleSkipItem}
+      />
 
       {editingQuestion && (
         <ConjugationEditModal
@@ -369,7 +372,7 @@ export default function ConjugationPracticeSession() {
           onClose={() => setEditingQuestion(null)}
         />
       )}
-    </div>
+    </AuthenticatedLayout>
   );
 }
 

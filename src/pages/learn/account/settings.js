@@ -1,5 +1,4 @@
-import Head from 'next/head';
-import MainSidebar from '../../../components/Sidebars/MainSidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { useEffect, useState } from 'react';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import {
@@ -285,270 +284,266 @@ export default function Settings() {
   };
 
   return (
-    <div className="flex min-h-screen bg-surface-page">
-      <MainSidebar />
+    <AuthenticatedLayout
+      sidebar="main"
+      title="Settings - ReBabel"
+      mainClassName="overflow-y-auto md:flex md:items-center md:justify-center"
+    >
+      <div className="px-4 pt-[max(1.5rem,var(--cap-safe-top))] md:pt-0 md:p-6 pb-8 md:w-full">
+        <div className="max-w-lg mx-auto">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-6">
+            Settings
+          </h1>
 
-      <main className="ml-auto flex-1 overflow-y-auto md:flex md:items-center md:justify-center">
-        <Head>
-          <title>Settings - ReBabel</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        <div className="px-4 pt-[max(1.5rem,var(--cap-safe-top))] md:pt-0 md:p-6 pb-8 md:w-full">
-          <div className="max-w-lg mx-auto">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8] mb-6">
-              Settings
-            </h1>
-
-            <div className="bg-white dark:bg-surface-card dusk:bg-[#2a3444] rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 dusk:border-[#3a4556] divide-y divide-gray-200 dark:divide-gray-700 dusk:divide-[#3a4556]">
-              {loading ? (
-                /* Skeleton loading state */
-                <>
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <div key={i} className="p-4">
-                      <div className="flex items-center gap-3">
+          <div className="bg-white dark:bg-surface-card dusk:bg-[#2a3444] rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 dusk:border-[#3a4556] divide-y divide-gray-200 dark:divide-gray-700 dusk:divide-[#3a4556]">
+            {loading ? (
+              /* Skeleton loading state */
+              <>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
+                        style={{ animationDelay: `${i * 75}ms` }}
+                      />
+                      <div className="flex-1 min-w-0 space-y-2">
                         <div
-                          className="w-10 h-10 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
-                          style={{ animationDelay: `${i * 75}ms` }}
+                          className="h-3.5 w-16 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                          style={{ animationDelay: `${i * 75 + 25}ms` }}
                         />
-                        <div className="flex-1 min-w-0 space-y-2">
+                        <div
+                          className="h-4 w-40 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                          style={{ animationDelay: `${i * 75 + 50}ms` }}
+                        />
+                      </div>
+                      {/* Username row: small icon placeholder; Theme row: no button; others: button */}
+                      {i === 2 ? (
+                        <div
+                          className="w-8 h-8 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
+                          style={{ animationDelay: `${i * 75 + 75}ms` }}
+                        />
+                      ) : (
+                        i !== 4 && (
                           <div
-                            className="h-3.5 w-16 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                            style={{ animationDelay: `${i * 75 + 25}ms` }}
-                          />
-                          <div
-                            className="h-4 w-40 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                            style={{ animationDelay: `${i * 75 + 50}ms` }}
-                          />
-                        </div>
-                        {/* Username row: small icon placeholder; Theme row: no button; others: button */}
-                        {i === 2 ? (
-                          <div
-                            className="w-8 h-8 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
+                            className="h-9 w-24 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
                             style={{ animationDelay: `${i * 75 + 75}ms` }}
                           />
-                        ) : (
-                          i !== 4 && (
-                            <div
-                              className="h-9 w-24 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse flex-shrink-0"
-                              style={{ animationDelay: `${i * 75 + 75}ms` }}
-                            />
-                          )
-                        )}
-                      </div>
-                      {i === 4 && (
-                        <div className="mt-3 ml-13 flex flex-wrap gap-2">
-                          {[1, 2, 3, 4, 5].map((j) => (
-                            <div
-                              key={j}
-                              className="h-9 w-20 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                              style={{ animationDelay: `${j * 50 + 300}ms` }}
-                            />
-                          ))}
-                        </div>
+                        )
                       )}
                     </div>
-                  ))}
-                </>
-              ) : (
-                <>
-                  {/* Email Section */}
-                  <div className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
-                        <FiMail className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                          Email
-                        </p>
-                        <p className="text-gray-900 dark:text-white dusk:text-[#e8e0d8] truncate">
-                          {userProfile?.email || 'Not available'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Username Section */}
-                  <div className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
-                        <FiUser className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                          Username
-                        </p>
-                        {usernameEditing ? (
-                          <input
-                            type="text"
-                            value={usernameInput}
-                            onChange={(e) => {
-                              setUsernameInput(e.target.value);
-                              setUsernameError(null);
-                            }}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') handleUsernameSave();
-                              if (e.key === 'Escape') handleUsernameCancel();
-                            }}
-                            placeholder="Enter a username"
-                            maxLength={15}
-                            autoFocus
-                            className="w-full h-6 p-0 bg-transparent text-base leading-6 text-gray-900 dark:text-white dusk:text-[#e8e0d8] border-b border-brand-pink rounded-none focus:outline-none"
+                    {i === 4 && (
+                      <div className="mt-3 ml-13 flex flex-wrap gap-2">
+                        {[1, 2, 3, 4, 5].map((j) => (
+                          <div
+                            key={j}
+                            className="h-9 w-20 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                            style={{ animationDelay: `${j * 50 + 300}ms` }}
                           />
-                        ) : (
-                          <p className="h-6 leading-6 text-gray-900 dark:text-white dusk:text-[#e8e0d8] truncate">
-                            {username || (
-                              <span className="text-gray-400 dark:text-gray-500 dusk:text-[#a8b2c1]/50">
-                                Not set
-                              </span>
-                            )}
-                          </p>
-                        )}
-                        {usernameError && (
-                          <p className="mt-1 text-xs text-red-500">
-                            {usernameError}
-                          </p>
-                        )}
+                        ))}
                       </div>
-                      {usernameEditing ? (
-                        <div className="flex items-center gap-1.5 flex-shrink-0">
-                          <button
-                            onClick={handleUsernameCancel}
-                            disabled={usernameSaving}
-                            className="p-2 rounded-lg text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1] hover:bg-gray-100 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors disabled:opacity-50"
-                          >
-                            <FiX className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={handleUsernameSave}
-                            disabled={usernameSaving || !usernameInput.trim()}
-                            className="p-2 rounded-lg text-brand-pink hover:bg-brand-pink/10 transition-colors disabled:opacity-50"
-                          >
-                            {usernameSaving ? (
-                              <FiLoader className="w-4 h-4 animate-spin" />
-                            ) : (
-                              <FiCheck className="w-4 h-4" />
-                            )}
-                          </button>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => setUsernameEditing(true)}
-                          className="p-2 rounded-lg text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1] hover:bg-gray-100 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors flex-shrink-0"
-                        >
-                          <FiEdit2 className="w-4 h-4" />
-                        </button>
-                      )}
+                    )}
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {/* Email Section */}
+                <div className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                      <FiMail className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                        Email
+                      </p>
+                      <p className="text-gray-900 dark:text-white dusk:text-[#e8e0d8] truncate">
+                        {userProfile?.email || 'Not available'}
+                      </p>
                     </div>
                   </div>
+                </div>
 
-                  {/* Password Section */}
+                {/* Username Section */}
+                <div className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                      <FiUser className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                        Username
+                      </p>
+                      {usernameEditing ? (
+                        <input
+                          type="text"
+                          value={usernameInput}
+                          onChange={(e) => {
+                            setUsernameInput(e.target.value);
+                            setUsernameError(null);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleUsernameSave();
+                            if (e.key === 'Escape') handleUsernameCancel();
+                          }}
+                          placeholder="Enter a username"
+                          maxLength={15}
+                          autoFocus
+                          className="w-full h-6 p-0 bg-transparent text-base leading-6 text-gray-900 dark:text-white dusk:text-[#e8e0d8] border-b border-brand-pink rounded-none focus:outline-none"
+                        />
+                      ) : (
+                        <p className="h-6 leading-6 text-gray-900 dark:text-white dusk:text-[#e8e0d8] truncate">
+                          {username || (
+                            <span className="text-gray-400 dark:text-gray-500 dusk:text-[#a8b2c1]/50">
+                              Not set
+                            </span>
+                          )}
+                        </p>
+                      )}
+                      {usernameError && (
+                        <p className="mt-1 text-xs text-red-500">
+                          {usernameError}
+                        </p>
+                      )}
+                    </div>
+                    {usernameEditing ? (
+                      <div className="flex items-center gap-1.5 flex-shrink-0">
+                        <button
+                          onClick={handleUsernameCancel}
+                          disabled={usernameSaving}
+                          className="p-2 rounded-lg text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1] hover:bg-gray-100 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors disabled:opacity-50"
+                        >
+                          <FiX className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={handleUsernameSave}
+                          disabled={usernameSaving || !usernameInput.trim()}
+                          className="p-2 rounded-lg text-brand-pink hover:bg-brand-pink/10 transition-colors disabled:opacity-50"
+                        >
+                          {usernameSaving ? (
+                            <FiLoader className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <FiCheck className="w-4 h-4" />
+                          )}
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setUsernameEditing(true)}
+                        className="p-2 rounded-lg text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1] hover:bg-gray-100 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors flex-shrink-0"
+                      >
+                        <FiEdit2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Password Section */}
+                <div className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                      <FiKey className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                        Password
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                        {resetSent
+                          ? 'Check your email for reset link'
+                          : 'Send a password reset email'}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleResetPassword}
+                      disabled={resetLoading || resetSent}
+                      className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors disabled:opacity-50 ${
+                        resetSent
+                          ? 'border-green-500 text-green-600 dark:text-green-400'
+                          : 'border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]'
+                      }`}
+                    >
+                      {resetLoading ? (
+                        <FiLoader className="text-sm animate-spin" />
+                      ) : resetSent ? (
+                        <FiCheck className="text-sm" />
+                      ) : (
+                        <FiKey className="text-sm" />
+                      )}
+                      {resetSent ? 'Email Sent' : 'Reset Password'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Subscription Section - Only show for premium users */}
+                {subscription?.isPremium && (
                   <div className="p-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
-                        <FiKey className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
+                        <FiCreditCard className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                          Password
+                          Subscription
                         </p>
                         <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                          {resetSent
-                            ? 'Check your email for reset link'
-                            : 'Send a password reset email'}
+                          Manage billing & plan
                         </p>
                       </div>
                       <button
-                        onClick={handleResetPassword}
-                        disabled={resetLoading || resetSent}
-                        className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors disabled:opacity-50 ${
-                          resetSent
-                            ? 'border-green-500 text-green-600 dark:text-green-400'
-                            : 'border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]'
-                        }`}
+                        onClick={handleManageSubscription}
+                        disabled={portalLoading}
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors disabled:opacity-50"
                       >
-                        {resetLoading ? (
+                        {portalLoading ? (
                           <FiLoader className="text-sm animate-spin" />
-                        ) : resetSent ? (
-                          <FiCheck className="text-sm" />
                         ) : (
-                          <FiKey className="text-sm" />
+                          <FiExternalLink className="text-sm" />
                         )}
-                        {resetSent ? 'Email Sent' : 'Reset Password'}
+                        Manage
                       </button>
                     </div>
                   </div>
+                )}
 
-                  {/* Subscription Section - Only show for premium users */}
-                  {subscription?.isPremium && (
-                    <div className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
-                          <FiCreditCard className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                            Subscription
-                          </p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                            Manage billing & plan
-                          </p>
-                        </div>
-                        <button
-                          onClick={handleManageSubscription}
-                          disabled={portalLoading}
-                          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors disabled:opacity-50"
-                        >
-                          {portalLoading ? (
-                            <FiLoader className="text-sm animate-spin" />
-                          ) : (
-                            <FiExternalLink className="text-sm" />
-                          )}
-                          Manage
-                        </button>
-                      </div>
+                {/* Theme Section */}
+                <div className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
+                      <FiSun className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
                     </div>
-                  )}
-
-                  {/* Theme Section */}
-                  <div className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
-                        <FiSun className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                          Appearance
-                        </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                          Choose your preferred theme
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mt-3 ml-13 flex flex-wrap gap-2">
-                      {themeOptions.map((option) => {
-                        const Icon = option.icon;
-                        const isActive = theme === option.value;
-                        return (
-                          <button
-                            key={option.value}
-                            onClick={() => setTheme(option.value)}
-                            className={`inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                              isActive
-                                ? 'border-brand-pink bg-brand-pink/10 text-brand-pink'
-                                : 'border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]'
-                            }`}
-                          >
-                            <Icon className="text-sm" />
-                            {option.label}
-                          </button>
-                        );
-                      })}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                        Appearance
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                        Choose your preferred theme
+                      </p>
                     </div>
                   </div>
+                  <div className="mt-3 ml-13 flex flex-wrap gap-2">
+                    {themeOptions.map((option) => {
+                      const Icon = option.icon;
+                      const isActive = theme === option.value;
+                      return (
+                        <button
+                          key={option.value}
+                          onClick={() => setTheme(option.value)}
+                          className={`inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                            isActive
+                              ? 'border-brand-pink bg-brand-pink/10 text-brand-pink'
+                              : 'border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]'
+                          }`}
+                        >
+                          <Icon className="text-sm" />
+                          {option.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-                  {/* Push Notifications Test Section - Only show in native app
+                {/* Push Notifications Test Section - Only show in native app
               {isNativeApp && (
                 <div className="p-4">
                   <div className="flex items-center gap-3">
@@ -591,64 +586,62 @@ export default function Settings() {
                 </div>
               )}*/}
 
-                  {/* Sign Out Section */}
-                  <div className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 dusk:bg-red-900/20 flex items-center justify-center flex-shrink-0">
-                        <FiLogOut className="text-lg text-red-500 dark:text-red-400" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                          Sign Out
-                        </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                          Log out of your account
-                        </p>
-                      </div>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = '/api/auth/logout')
-                        }
-                        variant="danger"
-                        size="md"
-                        className="gap-2"
-                      >
-                        <FiLogOut className="text-sm" />
-                        Sign Out
-                      </Button>
+                {/* Sign Out Section */}
+                <div className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 dusk:bg-red-900/20 flex items-center justify-center flex-shrink-0">
+                      <FiLogOut className="text-lg text-red-500 dark:text-red-400" />
                     </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                        Sign Out
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
+                        Log out of your account
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() =>
+                        (window.location.href = '/api/auth/logout')
+                      }
+                      variant="danger"
+                      size="md"
+                      className="gap-2"
+                    >
+                      <FiLogOut className="text-sm" />
+                      Sign Out
+                    </Button>
                   </div>
-                </>
-              )}
-            </div>
+                </div>
+              </>
+            )}
+          </div>
 
-            {/* Footer Links - Small text below card */}
-            <div className="mt-4 flex items-center justify-center gap-3 text-xs text-gray-500 dark:text-gray-500 dusk:text-[#a8b2c1]/60 flex-wrap">
-              <button
-                onClick={() => setShowContact(true)}
-                className="hover:text-gray-700 dark:hover:text-gray-300 dusk:hover:text-[#e8e0d8] transition-colors"
-              >
-                Contact
-              </button>
-              <span>·</span>
-              <button
-                onClick={() => setShowPrivacy(true)}
-                className="hover:text-gray-700 dark:hover:text-gray-300 dusk:hover:text-[#e8e0d8] transition-colors"
-              >
-                Privacy
-              </button>
-              <span>·</span>
-              <button
-                onClick={() => setShowTerms(true)}
-                className="hover:text-gray-700 dark:hover:text-gray-300 dusk:hover:text-[#e8e0d8] transition-colors"
-              >
-                Terms
-              </button>
-            </div>
+          {/* Footer Links - Small text below card */}
+          <div className="mt-4 flex items-center justify-center gap-3 text-xs text-gray-500 dark:text-gray-500 dusk:text-[#a8b2c1]/60 flex-wrap">
+            <button
+              onClick={() => setShowContact(true)}
+              className="hover:text-gray-700 dark:hover:text-gray-300 dusk:hover:text-[#e8e0d8] transition-colors"
+            >
+              Contact
+            </button>
+            <span>·</span>
+            <button
+              onClick={() => setShowPrivacy(true)}
+              className="hover:text-gray-700 dark:hover:text-gray-300 dusk:hover:text-[#e8e0d8] transition-colors"
+            >
+              Privacy
+            </button>
+            <span>·</span>
+            <button
+              onClick={() => setShowTerms(true)}
+              className="hover:text-gray-700 dark:hover:text-gray-300 dusk:hover:text-[#e8e0d8] transition-colors"
+            >
+              Terms
+            </button>
           </div>
         </div>
-      </main>
-
+      </div>
       {/* Contact Modal */}
       <BaseModal
         isOpen={showContact}
@@ -951,7 +944,7 @@ export default function Settings() {
           </section>
         </div>
       </BaseModal>
-    </div>
+    </AuthenticatedLayout>
   );
 }
 

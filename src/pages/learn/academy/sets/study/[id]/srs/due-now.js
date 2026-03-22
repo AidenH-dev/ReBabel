@@ -1,9 +1,8 @@
 // pages/learn/academy/sets/study/[id]/srs/due-now.js
-import Head from 'next/head';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import AcademySidebar from '@/components/Sidebars/AcademySidebar';
+import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 
 // Import icons for phase indicators
 import { FaDumbbell } from 'react-icons/fa';
@@ -815,9 +814,8 @@ export default function DueNow() {
   // Show error state
   if (error) {
     return (
-      <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-        <AcademySidebar />
-        <main className="flex-1 flex items-center justify-center px-4 sm:px-6">
+      <AuthenticatedLayout sidebar="academy" title="Due Now" variant="fixed">
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
               Error Loading Set
@@ -830,173 +828,159 @@ export default function DueNow() {
               Back to Study Set
             </button>
           </div>
-        </main>
-      </div>
+        </div>
+      </AuthenticatedLayout>
     );
   }
 
   return (
-    <>
-      <Head>
-        <title>Due Now - {setInfo?.title || 'Study Set'}</title>
-        <meta name="description" content="Review cards that are due now" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card">
-        {/* Only show sidebar during complete phase (summary) */}
-        {currentPhase === 'complete' && <AcademySidebar />}
-
-        <main className="flex-1 flex flex-col p-3 sm:p-6 sm:mt-10">
-          {/* Loading State */}
-          {isLoading ? (
-            <div className="flex-1 flex flex-col items-center justify-center">
-              <div className="w-full max-w-2xl space-y-6 px-4">
-                {/* Session header skeleton */}
-                <div className="flex items-center justify-between">
-                  <div className="h-6 w-40 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
-                  <div
-                    className="h-5 w-20 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                    style={{ animationDelay: '50ms' }}
-                  />
-                </div>
-                {/* Progress bar skeleton */}
+    <AuthenticatedLayout
+      sidebar="academy"
+      title={`Due Now - ${setInfo?.title || 'Study Set'}`}
+      variant="gradient"
+      mainClassName="p-3 sm:p-6 sm:mt-10"
+    >
+      {/* Loading State */}
+      {isLoading ? (
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="w-full max-w-2xl space-y-6 px-4">
+            {/* Session header skeleton */}
+            <div className="flex items-center justify-between">
+              <div className="h-6 w-40 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
+              <div
+                className="h-5 w-20 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                style={{ animationDelay: '50ms' }}
+              />
+            </div>
+            {/* Progress bar skeleton */}
+            <div
+              className="h-2.5 w-full rounded-full bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+              style={{ animationDelay: '100ms' }}
+            />
+            {/* Card skeleton */}
+            <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card shadow-sm p-8">
+              <div className="flex flex-col items-center gap-4">
                 <div
-                  className="h-2.5 w-full rounded-full bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                  style={{ animationDelay: '100ms' }}
+                  className="h-10 w-36 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
+                  style={{ animationDelay: '150ms' }}
                 />
-                {/* Card skeleton */}
-                <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card shadow-sm p-8">
-                  <div className="flex flex-col items-center gap-4">
-                    <div
-                      className="h-10 w-36 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
-                      style={{ animationDelay: '150ms' }}
-                    />
-                    <div
-                      className="h-5 w-48 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
-                      style={{ animationDelay: '200ms' }}
-                    />
-                    <div
-                      className="h-4 w-28 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
-                      style={{ animationDelay: '250ms' }}
-                    />
-                  </div>
-                </div>
-                {/* Action buttons skeleton */}
-                <div className="flex justify-center gap-3">
-                  {[0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className="h-10 w-24 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse"
-                      style={{ animationDelay: `${300 + i * 50}ms` }}
-                    />
-                  ))}
-                </div>
+                <div
+                  className="h-5 w-48 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                  style={{ animationDelay: '200ms' }}
+                />
+                <div
+                  className="h-4 w-28 rounded bg-black/[0.03] dark:bg-white/[0.03] animate-pulse"
+                  style={{ animationDelay: '250ms' }}
+                />
               </div>
             </div>
-          ) : (
-            <>
-              {/* Show completion summary */}
-              {currentPhase === 'complete' && (
-                <SummaryView
-                  sessionStats={sessionStats}
-                  answeredItems={answeredItems}
-                  animateAccuracy={animateAccuracy}
-                  onBackToSet={handleExit}
-                  completionTitle="Lesson Complete!"
+            {/* Action buttons skeleton */}
+            <div className="flex justify-center gap-3">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="h-10 w-24 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse"
+                  style={{ animationDelay: `${300 + i * 50}ms` }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Show completion summary */}
+          {currentPhase === 'complete' && (
+            <SummaryView
+              sessionStats={sessionStats}
+              answeredItems={answeredItems}
+              animateAccuracy={animateAccuracy}
+              onBackToSet={handleExit}
+              completionTitle="Lesson Complete!"
+            />
+          )}
+
+          {/* Show active phase components */}
+          {currentPhase !== 'complete' && (
+            <div className="relative flex-1">
+              {showLevelChange && currentLevelChange && (
+                <LevelChangeView
+                  item={currentLevelChange.item}
+                  oldLevel={currentLevelChange.oldLevel}
+                  newLevel={currentLevelChange.newLevel}
+                  onComplete={handleLevelChangeComplete}
                 />
               )}
 
-              {/* Show active phase components */}
-              {currentPhase !== 'complete' && (
-                <div className="relative flex-1">
-                  {showLevelChange && currentLevelChange && (
-                    <LevelChangeView
-                      item={currentLevelChange.item}
-                      oldLevel={currentLevelChange.oldLevel}
-                      newLevel={currentLevelChange.newLevel}
-                      onComplete={handleLevelChangeComplete}
-                    />
-                  )}
+              {/* Quiz Header */}
+              <SessionStatHeaderView
+                setTitle={setInfo?.title}
+                sessionStats={sessionStats}
+                currentIndex={currentIndex}
+                totalQuestions={getCurrentArray().length}
+                currentPhase={currentPhase}
+                completedPhases={completedPhases}
+                phases={phases}
+                currentPhaseIndex={currentPhaseIndex}
+                currentPhaseConfig={currentPhaseConfig}
+                CurrentPhaseIcon={CurrentPhaseIcon}
+                progressInPhase={calculateProgressPercentage()}
+                completedCount={getCompletedCount()}
+                totalUniqueItems={getTotalUniqueItems()}
+                displayMode={'completion-count'}
+                onExit={handleExit}
+              />
 
-                  {/* Quiz Header */}
-                  <SessionStatHeaderView
-                    setTitle={setInfo?.title}
-                    sessionStats={sessionStats}
-                    currentIndex={currentIndex}
-                    totalQuestions={getCurrentArray().length}
-                    currentPhase={currentPhase}
-                    completedPhases={completedPhases}
-                    phases={phases}
-                    currentPhaseIndex={currentPhaseIndex}
-                    currentPhaseConfig={currentPhaseConfig}
-                    CurrentPhaseIcon={CurrentPhaseIcon}
-                    progressInPhase={calculateProgressPercentage()}
-                    completedCount={getCompletedCount()}
-                    totalUniqueItems={getTotalUniqueItems()}
-                    displayMode={'completion-count'}
-                    onExit={handleExit}
+              {/* Multiple Choice Phase */}
+              {currentPhase === 'multiple-choice' &&
+                activeMCArray.length > 0 && (
+                  <MultipleChoiceView
+                    currentItem={activeMCArray[currentIndex]}
+                    uniqueOptions={currentShuffledOptions}
+                    selectedOption={selectedOption}
+                    showResult={showResult}
+                    isCorrect={isCorrect}
+                    isTransitioning={false}
+                    isLastQuestion={currentIndex === activeMCArray.length - 1}
+                    onOptionSelect={handleMCOptionSelect}
+                    onNext={handleNext}
                   />
+                )}
 
-                  {/* Multiple Choice Phase */}
-                  {currentPhase === 'multiple-choice' &&
-                    activeMCArray.length > 0 && (
-                      <MultipleChoiceView
-                        currentItem={activeMCArray[currentIndex]}
-                        uniqueOptions={currentShuffledOptions}
-                        selectedOption={selectedOption}
-                        showResult={showResult}
-                        isCorrect={isCorrect}
-                        isTransitioning={false}
-                        isLastQuestion={
-                          currentIndex === activeMCArray.length - 1
-                        }
-                        onOptionSelect={handleMCOptionSelect}
-                        onNext={handleNext}
-                      />
-                    )}
-
-                  {/* Translation Phase */}
-                  {currentPhase === 'translation' &&
-                    activeTranslationArray.length > 0 && (
-                      <TypedResponseView
-                        currentItem={activeTranslationArray[currentIndex]}
-                        userAnswer={userAnswer}
-                        showResult={showResult}
-                        isCorrect={isCorrect}
-                        showHint={false}
-                        isLastQuestion={
-                          currentIndex === activeTranslationArray.length - 1
-                        }
-                        inputRef={translationInputRef}
-                        onInputChange={(e) => setUserAnswer(e.target.value)}
-                        onCheckAnswer={handleTranslationCheck}
-                        onNext={handleNext}
-                        onRetry={handleTranslationRetry}
-                        onEditItem={handleOpenEditItem}
-                        disableKeyboardShortcuts={Boolean(editingItem)}
-                      />
-                    )}
-                </div>
-              )}
-            </>
+              {/* Translation Phase */}
+              {currentPhase === 'translation' &&
+                activeTranslationArray.length > 0 && (
+                  <TypedResponseView
+                    currentItem={activeTranslationArray[currentIndex]}
+                    userAnswer={userAnswer}
+                    showResult={showResult}
+                    isCorrect={isCorrect}
+                    showHint={false}
+                    isLastQuestion={
+                      currentIndex === activeTranslationArray.length - 1
+                    }
+                    inputRef={translationInputRef}
+                    onInputChange={(e) => setUserAnswer(e.target.value)}
+                    onCheckAnswer={handleTranslationCheck}
+                    onNext={handleNext}
+                    onRetry={handleTranslationRetry}
+                    onEditItem={handleOpenEditItem}
+                    disableKeyboardShortcuts={Boolean(editingItem)}
+                  />
+                )}
+            </div>
           )}
+        </>
+      )}
 
-          <ItemEditModal
-            item={editingItem}
-            isOpen={Boolean(editingItem)}
-            isSaving={isSavingEdit}
-            error={editError}
-            onClose={handleCloseEditItem}
-            onSave={handleSaveEditedItem}
-          />
-        </main>
-      </div>
-    </>
+      <ItemEditModal
+        item={editingItem}
+        isOpen={Boolean(editingItem)}
+        isSaving={isSavingEdit}
+        error={editError}
+        onClose={handleCloseEditItem}
+        onSave={handleSaveEditedItem}
+      />
+    </AuthenticatedLayout>
   );
 }
 
