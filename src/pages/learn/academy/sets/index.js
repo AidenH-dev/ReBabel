@@ -911,7 +911,7 @@ export default function VocabularyDashboard() {
                           onClick={() =>
                             router.push('/learn/academy/sets/create')
                           }
-                          className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-brand-pink text-white hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-brand-pink"
+                          className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-brand-pink text-white hover:bg-brand-pink-hover transition-colors focus:outline-none focus:ring-2 focus:ring-brand-pink"
                         >
                           <FaPlus /> Create your first set
                         </button>

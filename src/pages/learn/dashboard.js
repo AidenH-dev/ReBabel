@@ -1183,7 +1183,7 @@ export default function DashboardPage() {
                     <p className="mb-3">You don&apos;t have any sets yet.</p>
                     <Button
                       onClick={() => router.push('/learn/academy/sets/create')}
-                      variant="primary-subtle"
+                      variant="primary"
                       size="sm"
                       className="gap-2"
                     >

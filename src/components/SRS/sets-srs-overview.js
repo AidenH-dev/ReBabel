@@ -279,7 +279,7 @@ export default function SetsSrsOverview({ active = true }) {
             Enable SRS on your notecard sets to use spaced repetition for better
             memorization.
           </p>
-          <button className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-brand-pink text-white hover:opacity-95">
+          <button className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-brand-pink text-white hover:bg-brand-pink-hover transition-colors">
             <FaPlus /> Enable SRS for a Set
           </button>
         </div>
