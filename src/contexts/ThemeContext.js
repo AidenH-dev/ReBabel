@@ -51,7 +51,11 @@ export function ThemeProvider({ children }) {
       const systemDark = window.matchMedia(
         '(prefers-color-scheme: dark)'
       ).matches;
-      root.classList.toggle('dark', systemDark);
+      if (systemDark) {
+        root.classList.add('dark');
+      } else {
+        root.classList.add('cream');
+      }
     } else if (theme === 'dusk') {
       root.classList.add('dark', 'dusk');
     } else if (theme === 'cream') {
@@ -68,7 +72,11 @@ export function ThemeProvider({ children }) {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e) => {
       document.documentElement.classList.remove('dark', 'dusk', 'cream');
-      document.documentElement.classList.toggle('dark', e.matches);
+      if (e.matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.add('cream');
+      }
     };
 
     mediaQuery.addEventListener('change', handleChange);
