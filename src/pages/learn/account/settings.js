@@ -283,7 +283,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page dusk:bg-[#1e2530]">
+    <div className="flex min-h-screen bg-surface-page">
       <MainSidebar />
 
       <main className="ml-auto flex-1 overflow-y-auto md:flex md:items-center md:justify-center">

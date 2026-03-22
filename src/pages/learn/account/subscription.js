@@ -108,10 +108,10 @@ export default function Subscription() {
   const isPremium = !!subscription?.isPremium;
 
   return (
-    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-surface-elevated text-[#4e4a4a] dark:text-white">
+    <div className="flex flex-row h-screen overflow-hidden bg-surface-page text-[#4e4a4a] dark:text-white">
       <MainSidebar />
 
-      <main className="ml-auto flex-1 flex flex-col items-center justify-center h-screen overflow-y-auto bg-gray-100 dark:bg-surface-elevated p-10">
+      <main className="ml-auto flex-1 flex flex-col items-center justify-center h-screen overflow-y-auto bg-surface-page p-10">
         <Head>
           <title>Subscription - ReBabel</title>
           <link rel="icon" href="/favicon.ico" />
