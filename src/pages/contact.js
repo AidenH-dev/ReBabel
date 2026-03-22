@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import Button from '@/components/ui/Button';
 import { FiMail, FiCheck, FiCopy } from 'react-icons/fi';
-import ThemeToggle from '@/components/ui/ThemeToggle';
 import { FaInstagram, FaDiscord, FaGithub } from 'react-icons/fa';
+import PublicLayout from '@/components/ui/PublicLayout';
 
 export default function Contact() {
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -48,9 +48,12 @@ export default function Contact() {
   ];
 
   return (
-    <>
+    <PublicLayout
+      title="Contact Us - ReBabel"
+      footerColumns={['product-simple', 'support', 'community']}
+      mainClassName="flex flex-col items-center justify-between overflow-hidden bg-gradient-to-b from-white to-gray-50 pt-5"
+    >
       <Head>
-        <title>Contact Us - ReBabel</title>
         <meta charSet="utf-8" />
         <meta
           name="viewport"
@@ -97,192 +100,95 @@ export default function Contact() {
         />
       </Head>
 
-      {/* Navbar */}
-      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/">
-              <span className="text-2xl font-bold text-brand-pink cursor-pointer">
-                ReBabel
-              </span>
-            </Link>
-            <div className="flex items-center gap-4">
-              <Link href="/api/auth/login">
-                <button className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 font-medium">
-                  Sign In
-                </button>
-              </Link>
-              <Link href="/api/auth/login">
-                <Button variant="primary" size="md">
-                  Join
-                </Button>
-              </Link>
-            </div>
-          </div>
+      {/* Header Section */}
+      <section className="w-full px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+            Contact Us
+          </h1>
+          <p className="text-lg text-gray-600">
+            Have questions or feedback? We&apos;d love to hear from you.
+          </p>
         </div>
-      </nav>
+      </section>
 
-      <main className="flex flex-col items-center justify-between overflow-hidden bg-gradient-to-b from-white to-gray-50 pt-5">
-        {/* Header Section */}
-        <section className="w-full px-4 sm:px-6 lg:px-8 pt-24 pb-12">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              Contact Us
-            </h1>
-            <p className="text-lg text-gray-600">
-              Have questions or feedback? We&apos;d love to hear from you.
-            </p>
-          </div>
-        </section>
+      {/* Contact Methods Section */}
+      <section className="w-full px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {contactMethods.map((method, index) => {
+              const Icon = method.icon;
+              const ActionIcon = method.actionIcon;
 
-        {/* Contact Methods Section */}
-        <section className="w-full px-4 sm:px-6 lg:px-8 pb-16">
-          <div className="max-w-3xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {contactMethods.map((method, index) => {
-                const Icon = method.icon;
-                const ActionIcon = method.actionIcon;
-
-                const content = (
-                  <div className="flex flex-col h-full p-6 bg-white border border-gray-200 rounded-lg hover:border-brand-pink/30 hover:shadow-md transition-all">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-lg bg-brand-pink/10 flex items-center justify-center flex-shrink-0">
-                        <Icon className="w-6 h-6 text-brand-pink" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                          {method.title}
-                        </h3>
-                        <p className="text-sm text-gray-600 break-all">
-                          {method.description}
-                        </p>
-                      </div>
+              const content = (
+                <div className="flex flex-col h-full p-6 bg-white border border-gray-200 rounded-lg hover:border-brand-pink/30 hover:shadow-md transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-brand-pink/10 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-6 h-6 text-brand-pink" />
                     </div>
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                      {method.action ? (
-                        <button
-                          onClick={method.action}
-                          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          {ActionIcon && <ActionIcon className="w-4 h-4" />}
-                          {method.actionLabel}
-                        </button>
-                      ) : (
-                        <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-brand-pink text-white hover:bg-brand-pink-hover transition-colors">
-                          {method.actionLabel} &rarr;
-                        </span>
-                      )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                        {method.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 break-all">
+                        {method.description}
+                      </p>
                     </div>
                   </div>
-                );
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    {method.action ? (
+                      <button
+                        onClick={method.action}
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        {ActionIcon && <ActionIcon className="w-4 h-4" />}
+                        {method.actionLabel}
+                      </button>
+                    ) : (
+                      <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-brand-pink text-white hover:bg-brand-pink-hover transition-colors">
+                        {method.actionLabel} &rarr;
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
 
-                if (method.href) {
-                  return (
-                    <a
-                      key={index}
-                      href={method.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block"
-                    >
-                      {content}
-                    </a>
-                  );
-                }
-
-                return <div key={index}>{content}</div>;
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="w-full py-12 bg-gradient-to-r from-brand-pink to-brand-pink-hover">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-              Ready to start learning?
-            </h2>
-            <p className="text-white/90 mb-6 max-w-xl mx-auto">
-              Join thousands of learners using ReBabel to master Japanese.
-            </p>
-            <Link href="/api/auth/login">
-              <Button variant="white-solid" size="lg">
-                Get Started Free
-              </Button>
-            </Link>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-xl font-bold text-brand-pink mb-4">
-                ReBabel
-              </h3>
-              <p className="text-sm text-gray-400">
-                Building the future of Japanese learning.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="/" className="hover:text-white">
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/blog" className="hover:text-white">
-                    Blog
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="/help" className="hover:text-white">
-                    Help & FAQ
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="hover:text-white">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Community</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
+              if (method.href) {
+                return (
                   <a
-                    href="https://discord.gg/wYsuQrcY4a"
+                    key={index}
+                    href={method.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-white"
+                    className="block"
                   >
-                    Discord
+                    {content}
                   </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 text-sm text-gray-400">
-            <div className="flex items-center justify-between">
-              <p>
-                &copy; 2025 ReBabel. All rights reserved. Currently in beta
-                development.
-              </p>
-              <ThemeToggle />
-            </div>
+                );
+              }
+
+              return <div key={index}>{content}</div>;
+            })}
           </div>
         </div>
-      </footer>
-    </>
+      </section>
+
+      {/* CTA Section */}
+      <section className="w-full py-12 bg-gradient-to-r from-brand-pink to-brand-pink-hover">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+            Ready to start learning?
+          </h2>
+          <p className="text-white/90 mb-6 max-w-xl mx-auto">
+            Join thousands of learners using ReBabel to master Japanese.
+          </p>
+          <Link href="/api/auth/login">
+            <Button variant="white-solid" size="lg">
+              Get Started Free
+            </Button>
+          </Link>
+        </div>
+      </section>
+    </PublicLayout>
   );
 }

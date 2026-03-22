@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Button from '@/components/ui/Button';
 import { FaChevronDown } from 'react-icons/fa';
 import { FiAlertTriangle } from 'react-icons/fi';
-import ThemeToggle from '@/components/ui/ThemeToggle';
+import PublicLayout from '@/components/ui/PublicLayout';
 
 export default function Help() {
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -72,9 +72,12 @@ export default function Help() {
   };
 
   return (
-    <>
+    <PublicLayout
+      title="Japanese Learning FAQ – SRS, Study Sets & More | ReBabel"
+      footerColumns={['product-simple', 'support', 'community']}
+      mainClassName="flex flex-col items-center justify-between overflow-hidden bg-gradient-to-b from-white to-gray-50 pt-5"
+    >
       <Head>
-        <title>Japanese Learning FAQ – SRS, Study Sets & More | ReBabel</title>
         <meta charSet="utf-8" />
         <meta
           name="viewport"
@@ -191,177 +194,83 @@ export default function Help() {
         />
       </Head>
 
-      {/* Navbar */}
-      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/">
-              <span className="text-2xl font-bold text-brand-pink cursor-pointer">
-                ReBabel
-              </span>
-            </Link>
-            <div className="flex items-center gap-4">
-              <Link href="/api/auth/login">
-                <button className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 font-medium">
-                  Sign In
-                </button>
-              </Link>
-              <Link href="/api/auth/login">
-                <Button variant="primary" size="md">
-                  Join
-                </Button>
-              </Link>
-            </div>
-          </div>
+      {/* Header Section */}
+      <section className="w-full px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+            Help & FAQ
+          </h1>
+          <p className="text-lg text-gray-600">
+            Find answers to common questions about ReBabel
+          </p>
         </div>
-      </nav>
+      </section>
 
-      <main className="flex flex-col items-center justify-between overflow-hidden bg-gradient-to-b from-white to-gray-50 pt-5">
-        {/* Header Section */}
-        <section className="w-full px-4 sm:px-6 lg:px-8 pt-24 pb-12">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              Help & FAQ
-            </h1>
-            <p className="text-lg text-gray-600">
-              Find answers to common questions about ReBabel
-            </p>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="w-full px-4 sm:px-6 lg:px-8 pb-16">
-          <div className="max-w-3xl mx-auto">
-            <dl className="space-y-4">
-              {faqs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="border border-gray-200 rounded-lg overflow-hidden hover:border-brand-pink/30 transition-colors"
+      {/* FAQ Section */}
+      <section className="w-full px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="max-w-3xl mx-auto">
+          <dl className="space-y-4">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="border border-gray-200 rounded-lg overflow-hidden hover:border-brand-pink/30 transition-colors"
+              >
+                <button
+                  onClick={() => toggleExpanded(index)}
+                  className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50/50 transition-colors duration-200"
                 >
-                  <button
-                    onClick={() => toggleExpanded(index)}
-                    className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50/50 transition-colors duration-200"
-                  >
-                    <dt className="text-lg font-semibold text-gray-900 text-left">
-                      {faq.question}
-                    </dt>
-                    <FaChevronDown
-                      className={`flex-shrink-0 text-brand-pink transition-transform duration-300 ${
-                        expandedIndex === index ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-
-                  {/* Answer - Animated */}
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      expandedIndex === index ? 'max-h-full' : 'max-h-0'
+                  <dt className="text-lg font-semibold text-gray-900 text-left">
+                    {faq.question}
+                  </dt>
+                  <FaChevronDown
+                    className={`flex-shrink-0 text-brand-pink transition-transform duration-300 ${
+                      expandedIndex === index ? 'rotate-180' : ''
                     }`}
-                  >
-                    <dd className="px-6 py-4 bg-gradient-to-r from-gray-50/50 to-white border-t border-gray-200">
-                      {typeof faq.answer === 'string' ? (
-                        <p className="text-gray-700 leading-relaxed">
-                          {faq.answer}
-                        </p>
-                      ) : (
-                        <div className="text-gray-700 leading-relaxed">
-                          {faq.answer}
-                        </div>
-                      )}
-                    </dd>
-                  </div>
+                  />
+                </button>
+
+                {/* Answer - Animated */}
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    expandedIndex === index ? 'max-h-full' : 'max-h-0'
+                  }`}
+                >
+                  <dd className="px-6 py-4 bg-gradient-to-r from-gray-50/50 to-white border-t border-gray-200">
+                    {typeof faq.answer === 'string' ? (
+                      <p className="text-gray-700 leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    ) : (
+                      <div className="text-gray-700 leading-relaxed">
+                        {faq.answer}
+                      </div>
+                    )}
+                  </dd>
                 </div>
-              ))}
-            </dl>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="w-full py-12 bg-gradient-to-r from-brand-pink to-brand-pink-hover">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-              Still have questions?
-            </h2>
-            <p className="text-white/90 mb-6 max-w-xl mx-auto">
-              Use the &quot;Report Issue&quot; button in the app or reach out to
-              us at{' '}
-              <span className="font-semibold">
-                rebabel.development@gmail.com
-              </span>
-            </p>
-            <Link href="/">
-              <Button variant="white-solid" size="lg">
-                Back to Home
-              </Button>
-            </Link>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-xl font-bold text-brand-pink mb-4">
-                ReBabel
-              </h3>
-              <p className="text-sm text-gray-400">
-                Building the future of Japanese learning.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="/" className="hover:text-white">
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/blog" className="hover:text-white">
-                    Blog
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="/help" className="hover:text-white">
-                    Help & FAQ
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Community</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <a
-                    href="https://discord.gg/2g6BHuaBtD"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-white"
-                  >
-                    Discord
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 text-sm text-gray-400">
-            <div className="flex items-center justify-between">
-              <p>
-                &copy; 2025 ReBabel. All rights reserved. Currently in beta
-                development.
-              </p>
-              <ThemeToggle />
-            </div>
-          </div>
+              </div>
+            ))}
+          </dl>
         </div>
-      </footer>
-    </>
+      </section>
+
+      {/* CTA Section */}
+      <section className="w-full py-12 bg-gradient-to-r from-brand-pink to-brand-pink-hover">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+            Still have questions?
+          </h2>
+          <p className="text-white/90 mb-6 max-w-xl mx-auto">
+            Use the &quot;Report Issue&quot; button in the app or reach out to
+            us at{' '}
+            <span className="font-semibold">rebabel.development@gmail.com</span>
+          </p>
+          <Link href="/">
+            <Button variant="white-solid" size="lg">
+              Back to Home
+            </Button>
+          </Link>
+        </div>
+      </section>
+    </PublicLayout>
   );
 }
