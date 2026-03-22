@@ -32,7 +32,7 @@ export default function Home() {
   return (
     <>
       {/* Simple Navbar */}
-      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
+      <nav className="fixed top-0 w-full bg-white/95 dark:bg-surface-page/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
@@ -53,7 +53,7 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <button
                 onClick={handleSignup}
-                className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 font-medium"
+                className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
               >
                 Sign In
               </button>
@@ -68,7 +68,7 @@ export default function Home() {
         </div>
       </nav>
 
-      <main className="flex flex-col items-center justify-between overflow-hidden bg-gradient-to-b from-white to-gray-50 pt-5">
+      <main className="flex flex-col items-center justify-between overflow-hidden bg-gradient-to-b from-white to-gray-50 dark:from-surface-page dark:to-surface-page pt-5">
         <Head>
           {/* Primary Meta Tags */}
           <title>ReBabel - Master Japanese with Science-Based Learning</title>
@@ -201,12 +201,12 @@ export default function Home() {
                   <span>Now Accepting Beta Users</span>
                 </div>
 
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
                   Study Japanese{' '}
                   <span className="text-brand-pink">smarter</span>, not harder.
                 </h1>
 
-                <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
+                <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0">
                   We&apos;re striving to make practicing Japanese a more
                   accessible and less complicated experience. Be part of our
                   journey from day one.
@@ -258,13 +258,13 @@ export default function Home() {
                 <div className="flex items-center gap-8 mt-8 justify-center lg:justify-start">
                   <div className="flex items-center gap-2">
                     <FaShieldAlt className="text-brand-pink" />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
                       <strong>Free Tier</strong> Access Forever
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <FaClock className="text-brand-pink" />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
                       <strong>Founder</strong> Pricing Available
                     </span>
                   </div>
@@ -273,16 +273,16 @@ export default function Home() {
                 <div className="mt-6 flex flex-col gap-3">
                   <Link
                     href="/kanji-practice"
-                    className="inline-flex items-center gap-3 rounded-2xl border border-brand-pink/20 bg-[#fff5f8] px-5 py-4 text-left shadow-sm transition hover:border-brand-pink/40 hover:bg-white"
+                    className="inline-flex items-center gap-3 rounded-2xl border border-brand-pink/20 bg-[#fff5f8] dark:bg-brand-pink/10 px-5 py-4 text-left shadow-sm transition hover:border-brand-pink/40 hover:bg-white dark:hover:bg-surface-card"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-pink text-white">
                       <FaGraduationCap className="text-sm" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">
                         Need printable kanji sheets?
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-300">
                         Open the kanji writing practice PDF generator
                       </p>
                     </div>
@@ -291,16 +291,16 @@ export default function Home() {
 
                   <Link
                     href="/study-guide/what-is-srs"
-                    className="inline-flex items-center gap-3 rounded-2xl border border-[#667eea]/20 bg-[#f0f1ff] px-5 py-4 text-left shadow-sm transition hover:border-[#667eea]/40 hover:bg-white"
+                    className="inline-flex items-center gap-3 rounded-2xl border border-[#667eea]/20 bg-[#f0f1ff] dark:bg-[#667eea]/10 px-5 py-4 text-left shadow-sm transition hover:border-[#667eea]/40 hover:bg-white dark:hover:bg-surface-card"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white">
                       <TbRepeat className="text-sm" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">
                         New to spaced repetition?
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-300">
                         Read our guide on what SRS is and how to use it
                       </p>
                     </div>
@@ -412,14 +412,14 @@ export default function Home() {
           </div>
         </section>*/}
         {/* Deep Dive Features Section */}
-        <section className="w-full pb-12 md:pb-16 bg-white">
+        <section className="w-full pb-12 md:pb-16 bg-white dark:bg-surface-page">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Section Header */}
             <div className="text-center mb-16 md:mb-24">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
                 What Do You Get?
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto italic">
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto italic">
                 All of these features below are free and will stay that way! We
                 are working on even better paid features if you want to support
                 us in the future.
@@ -437,10 +437,10 @@ export default function Home() {
                   <span className="inline-block text-sm font-bold text-brand-pink mb-3">
                     Feature 01
                   </span>
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     Integrated Study System
                   </h3>
-                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                  <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                     Stop juggling multiple paid apps. Study vocabulary and
                     grammar with SRS, test yourself with quizzes, or review with
                     flashcards - all in one place.
@@ -482,10 +482,10 @@ export default function Home() {
                   <span className="inline-block text-sm font-bold text-brand-pink mb-3">
                     Feature 02
                   </span>
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     Grammar + Vocab SRS
                   </h3>
-                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                  <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                     Practice grammar patterns with spaced repetition, not just
                     vocabulary. Most tools ignore grammar in SRS - we
                     don&apos;t.
@@ -505,10 +505,10 @@ export default function Home() {
                   <span className="inline-block text-sm font-bold text-brand-pink mb-3">
                     Feature 03
                   </span>
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     Custom Study Sets
                   </h3>
-                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                  <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                     Create sets for exactly what you&apos;re learning right now.
                     Your textbook chapter, your weak points, or upcoming test
                     material.
@@ -550,10 +550,10 @@ export default function Home() {
                   <span className="inline-block text-sm font-bold text-brand-pink mb-3">
                     Feature 04
                   </span>
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     Fast Vocabulary Practice
                   </h3>
-                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                  <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                     Type answers automatically in romaji or katakana without
                     switching keyboards. Practice vocabulary translations
                     quickly with a fluid typing interface.
@@ -572,10 +572,10 @@ export default function Home() {
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-pink/10 text-brand-pink text-xs font-medium mb-3">
                   Free Tool -- No Account Required
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
                   Japanese Conjugation Practice
                 </h2>
-                <p className="text-gray-600 mb-4 text-sm sm:text-base">
+                <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">
                   Master verb and adjective conjugation for JLPT N5 through N1.
                   Practice 3,700+ words across 19 verb forms and 6 adjective
                   forms with instant feedback. Type in romaji and watch it
@@ -594,7 +594,7 @@ export default function Home() {
                   <Link
                     key={n}
                     href={`/japanese-conjugation-practice/${n.toLowerCase()}`}
-                    className="w-14 h-14 rounded-xl bg-white shadow-sm border border-black/5 flex items-center justify-center text-sm font-bold text-gray-700 hover:text-brand-pink hover:border-brand-pink/30 transition-all"
+                    className="w-14 h-14 rounded-xl bg-white dark:bg-surface-card shadow-sm border border-black/5 dark:border-white/10 flex items-center justify-center text-sm font-bold text-gray-700 dark:text-gray-300 hover:text-brand-pink hover:border-brand-pink/30 transition-all"
                   >
                     {n}
                   </Link>
