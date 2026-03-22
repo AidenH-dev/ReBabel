@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FiAlertTriangle, FiX } from 'react-icons/fi';
+import { FiAlertTriangle } from 'react-icons/fi';
 import { clientLog } from '@/lib/clientLogger';
+import BaseModal from '@/components/ui/BaseModal';
 
 function ReportIssueButton() {
   const [open, setOpen] = useState(false);
@@ -118,150 +119,97 @@ function ReportIssueButton() {
       </button>
 
       {/* Modal */}
-      {open && (
-        <div
-          className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
-          role="dialog"
-          aria-modal="true"
-          onClick={(e) => e.target === e.currentTarget && handleClose()}
-        >
-          <div className="w-full max-w-2xl rounded-xl bg-surface-card shadow-2xl border border-border-default max-h-[90vh] overflow-y-auto">
-            {/* Header */}
-            <div className="sticky top-0 bg-surface-card border-b border-border-default p-5 flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Report an Issue
-                </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Help us improve by reporting bugs and issues!
-                </p>
-              </div>
-              <button
-                onClick={handleClose}
-                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                aria-label="Close"
-              >
-                <FiX className="w-5 h-5" />
-              </button>
-            </div>
+      <BaseModal
+        isOpen={open}
+        onClose={handleClose}
+        size="2xl"
+        title="Report an Issue"
+        subtitle="Help us improve by reporting bugs and issues!"
+        zIndex={60}
+        blur
+        stickyHeader
+        maxHeight="90vh"
+      >
+        {/* Form Content */}
+        <div className="px-6 py-5 space-y-2">
+          {/* Location */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Where did you encounter this issue?{' '}
+              <span className="text-brand-pink">*</span>
+            </label>
+            <input
+              type="text"
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+              placeholder="e.g., Flashcards, Quiz, Sets..."
+              className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-400 dark:placeholder-gray-500"
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1.5">
+              Be specific about where on the page
+            </p>
+          </div>
 
-            {/* Form Content */}
-            <div className="px-6 py-5 space-y-2">
-              {/* User Info Display (if available)
-              {userProfile && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2 border border-blue-200 dark:border-blue-800">
-                  <p className="text-xs text-blue-800 dark:text-blue-300">
-                    <strong>Reporting as:</strong> {userProfile.name || userProfile.email}
-                  </p>
-                </div>
-              )} */}
+          {/* Feature */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              What feature seems to be broken?{' '}
+              <span className="text-brand-pink">*</span>
+            </label>
+            <input
+              type="text"
+              name="feature"
+              value={formData.feature}
+              onChange={handleInputChange}
+              placeholder="e.g., Card flip, Answer submission..."
+              className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-400 dark:placeholder-gray-500"
+            />
+          </div>
 
-              {/* Location */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Where did you encounter this issue?{' '}
-                  <span className="text-brand-pink">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Flashcards, Quiz, Sets..."
-                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-400 dark:placeholder-gray-500"
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1.5">
-                  Be specific about where on the page
-                </p>
-              </div>
+          {/* Additional Description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Additional Details
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="What happened? Steps to reproduce..."
+              rows={2}
+              className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none placeholder-gray-400 dark:placeholder-gray-500"
+            />
+          </div>
 
-              {/* Feature */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  What feature seems to be broken?{' '}
-                  <span className="text-brand-pink">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="feature"
-                  value={formData.feature}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Card flip, Answer submission..."
-                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-400 dark:placeholder-gray-500"
-                />
-              </div>
-
-              {/* Additional Description */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Additional Details
-                </label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  placeholder="What happened? Steps to reproduce..."
-                  rows={2}
-                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none placeholder-gray-400 dark:placeholder-gray-500"
-                />
-              </div>
-
-              {/* Screenshot Upload 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Screenshot
-                </label>
-                <div className="relative">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="hidden"
-                    id="screenshot-upload"
-                  />
-                  <label
-                    htmlFor="screenshot-upload"
-                    className="flex items-center justify-center gap-2 w-full bg-surface-deep text-gray-700 dark:text-gray-300 px-3 sm:px-4 py-3 rounded-lg text-xs sm:text-sm border-2 border-dashed border-border-default hover:border-brand-pink dark:hover:border-brand-pink cursor-pointer transition-colors"
-                  >
-                    <FiUpload className="text-base sm:text-lg flex-shrink-0" />
-                    <span className="truncate">{screenshot ? screenshot.name : "Click to upload screenshot"}</span>
-                  </label>
-                  <p className="text-xs text-gray-500 dark:text-gray-500 mt-1.5">
-                    Max 10MB. PNG, JPG, GIF
-                  </p>
-                </div>
-              </div>*/}
-
-              {/* Action Buttons */}
-              <div className="flex flex-row sm:flex-row items-center gap-2 sm:gap-3 pt-4 border-t border-border-default">
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  disabled={isSubmitting}
-                  className="w-full sm:flex-1 px-4 py-2.5 rounded-lg text-sm font-medium border border-border-default text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className="w-full sm:flex-1 px-4 py-2.5 rounded-lg text-sm font-medium bg-brand-pink text-white hover:bg-brand-pink-hover transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-pink focus:ring-offset-2"
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <span className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
-                      Submitting...
-                    </span>
-                  ) : (
-                    'Submit Report'
-                  )}
-                </button>
-              </div>
-            </div>
+          {/* Action Buttons */}
+          <div className="flex flex-row sm:flex-row items-center gap-2 sm:gap-3 pt-4 border-t border-border-default">
+            <button
+              type="button"
+              onClick={handleClose}
+              disabled={isSubmitting}
+              className="w-full sm:flex-1 px-4 py-2.5 rounded-lg text-sm font-medium border border-border-default text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              className="w-full sm:flex-1 px-4 py-2.5 rounded-lg text-sm font-medium bg-brand-pink text-white hover:bg-brand-pink-hover transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-pink focus:ring-offset-2"
+            >
+              {isSubmitting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                  Submitting...
+                </span>
+              ) : (
+                'Submit Report'
+              )}
+            </button>
           </div>
         </div>
-      )}
+      </BaseModal>
     </>
   );
 }

@@ -13,6 +13,7 @@ import { MdDragHandle } from 'react-icons/md';
 import CustomSelect from '@/components/ui/CustomSelect';
 import { toKana } from 'wanakana';
 import { clientLog } from '@/lib/clientLogger';
+import BaseModal from '@/components/ui/BaseModal';
 import {
   DndContext,
   closestCenter,
@@ -1077,393 +1078,112 @@ export default function MasterItemsManagement({
       </div>
 
       {/* Add Item Modal */}
-      {showAddItemModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-start justify-between gap-3 flex-shrink-0">
-              <div className="min-w-0">
-                <div className="flex items-center gap-3 flex-wrap">
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white whitespace-nowrap">
-                    Add New Item
-                  </h2>
-                  <div className="flex bg-gray-100 dark:bg-surface-deep rounded-md p-0.5">
-                    {(!set_type || set_type === 'vocab') && (
-                      <button
-                        onClick={() => setAddItemType('vocabulary')}
-                        className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
-                          addItemType === 'vocabulary'
-                            ? 'bg-brand-pink text-white'
-                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                        }`}
-                      >
-                        Vocabulary
-                      </button>
-                    )}
-                    {(!set_type || set_type === 'grammar') && (
-                      <button
-                        onClick={() => setAddItemType('grammar')}
-                        className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
-                          addItemType === 'grammar'
-                            ? 'bg-brand-pink text-white'
-                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                        }`}
-                      >
-                        Grammar
-                      </button>
-                    )}
-                  </div>
-                </div>
-                {set_type && (
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1.5">
-                    {set_type === 'vocab' &&
-                      'This set contains only vocabulary items'}
-                    {set_type === 'grammar' &&
-                      'This set contains only grammar items'}
-                  </p>
-                )}
-              </div>
-              <button
-                onClick={handleCloseAddItemModal}
-                disabled={isAddingItem}
-                className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            {(addItemSuccess || addItemError) && (
-              <div className="px-6 pt-4 flex-shrink-0">
-                {addItemSuccess && (
-                  <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200 text-sm flex items-center gap-2">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    Item added successfully! Refreshing...
-                  </div>
-                )}
-                {addItemError && (
-                  <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
-                    <strong>Error:</strong> {addItemError}
-                  </div>
-                )}
-              </div>
-            )}
-
-            <form
-              onSubmit={handleAddItemSubmit}
-              className="flex-1 overflow-y-auto px-6 py-4"
+      <BaseModal
+        isOpen={showAddItemModal}
+        onClose={handleCloseAddItemModal}
+        size="2xl"
+        maxHeight="85vh"
+        scrollable
+        footer={
+          <div className="flex items-center justify-end gap-3">
+            <button
+              type="button"
+              onClick={handleCloseAddItemModal}
+              disabled={isAddingItem}
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
             >
-              <div className="space-y-4">
-                {addItemType === 'vocabulary' ? (
-                  <>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          English
-                        </label>
-                        <input
-                          type="text"
-                          value={vocabForm.english}
-                          onChange={(e) =>
-                            handleVocabFormChange('english', e.target.value)
-                          }
-                          placeholder="English term"
-                          className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          Kana{' '}
-                          <span className="text-gray-500 dark:text-gray-400">
-                            (type in romaji)
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          value={vocabForm.kana}
-                          onChange={(e) =>
-                            handleVocabFormChange('kana', e.target.value)
-                          }
-                          placeholder="ka → か, shi → し"
-                          className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          Kanji{' '}
-                          <span className="text-gray-500 dark:text-gray-400">
-                            (paste)
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          value={vocabForm.kanji}
-                          onChange={(e) =>
-                            handleVocabFormChange('kanji', e.target.value)
-                          }
-                          placeholder="漢字"
-                          className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Example Sentences{' '}
-                        <span className="text-gray-500">(one per line)</span>
-                      </label>
-                      <textarea
-                        rows={2}
-                        value={vocabForm.example_sentences}
-                        onChange={(e) =>
-                          handleVocabFormChange(
-                            'example_sentences',
-                            e.target.value
-                          )
-                        }
-                        placeholder="Example sentences"
-                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Tags{' '}
-                        <span className="text-gray-500">(comma-separated)</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={vocabForm.tags}
-                        onChange={(e) =>
-                          handleVocabFormChange('tags', e.target.value)
-                        }
-                        placeholder="tag1, tag2, tag3"
-                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center justify-between">
-                          <span>Title *</span>
-                          <div className="flex gap-0.5">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleGrammarTitleTypeSwitch('english')
-                              }
-                              className={`px-1 py-0.5 text-[10px] rounded transition-colors ${
-                                grammarTitleInputType === 'english'
-                                  ? 'bg-brand-pink text-white'
-                                  : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
-                              }`}
-                            >
-                              En
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleGrammarTitleTypeSwitch('kana')
-                              }
-                              className={`px-1 py-0.5 text-[10px] rounded transition-colors ${
-                                grammarTitleInputType === 'kana'
-                                  ? 'bg-brand-pink text-white'
-                                  : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
-                              }`}
-                            >
-                              あ
-                            </button>
-                          </div>
-                        </label>
-                        <input
-                          type="text"
-                          value={grammarForm.title}
-                          onChange={(e) =>
-                            handleGrammarFormChange('title', e.target.value)
-                          }
-                          placeholder={
-                            grammarTitleInputType === 'kana'
-                              ? 'Type in romaji'
-                              : 'Grammar pattern name'
-                          }
-                          className={`w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink ${
-                            grammarTitleInputType === 'kana'
-                              ? 'font-japanese'
-                              : ''
-                          }`}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          Topic
-                        </label>
-                        <input
-                          type="text"
-                          value={grammarForm.topic}
-                          onChange={(e) =>
-                            handleGrammarFormChange('topic', e.target.value)
-                          }
-                          placeholder="e.g., N5, JLPT"
-                          className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Description
-                      </label>
-                      <textarea
-                        rows={2}
-                        value={grammarForm.description}
-                        onChange={(e) =>
-                          handleGrammarFormChange('description', e.target.value)
-                        }
-                        placeholder="Brief explanation"
-                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Notes
-                      </label>
-                      <input
-                        type="text"
-                        value={grammarForm.notes}
-                        onChange={(e) =>
-                          handleGrammarFormChange('notes', e.target.value)
-                        }
-                        placeholder="Additional notes"
-                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Example Sentences{' '}
-                        <span className="text-gray-500">(one per line)</span>
-                      </label>
-                      <textarea
-                        rows={2}
-                        value={grammarForm.example_sentences}
-                        onChange={(e) =>
-                          handleGrammarFormChange(
-                            'example_sentences',
-                            e.target.value
-                          )
-                        }
-                        placeholder="Example sentences"
-                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Tags{' '}
-                        <span className="text-gray-500">(comma-separated)</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={grammarForm.tags}
-                        onChange={(e) =>
-                          handleGrammarFormChange('tags', e.target.value)
-                        }
-                        placeholder="tag1, tag2, tag3"
-                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
-                      />
-                    </div>
-                  </>
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                const form = document.getElementById('add-item-form');
+                if (form) form.requestSubmit();
+              }}
+              disabled={isAddingItem}
+              className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {isAddingItem ? (
+                <>
+                  <svg
+                    className="animate-spin h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Adding...
+                </>
+              ) : (
+                <>
+                  <FiPlus className="w-4 h-4" /> Add to Set
+                </>
+              )}
+            </button>
+          </div>
+        }
+      >
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-start justify-between gap-3 flex-shrink-0">
+          <div className="min-w-0">
+            <div className="flex items-center gap-3 flex-wrap">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                Add New Item
+              </h2>
+              <div className="flex bg-gray-100 dark:bg-surface-deep rounded-md p-0.5">
+                {(!set_type || set_type === 'vocab') && (
+                  <button
+                    onClick={() => setAddItemType('vocabulary')}
+                    className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
+                      addItemType === 'vocabulary'
+                        ? 'bg-brand-pink text-white'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                  >
+                    Vocabulary
+                  </button>
+                )}
+                {(!set_type || set_type === 'grammar') && (
+                  <button
+                    onClick={() => setAddItemType('grammar')}
+                    className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
+                      addItemType === 'grammar'
+                        ? 'bg-brand-pink text-white'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                  >
+                    Grammar
+                  </button>
                 )}
               </div>
-
-              <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={handleCloseAddItemModal}
-                  disabled={isAddingItem}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isAddingItem}
-                  className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {isAddingItem ? (
-                    <>
-                      <svg
-                        className="animate-spin h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Adding...
-                    </>
-                  ) : (
-                    <>
-                      <FiPlus className="w-4 h-4" /> Add to Set
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
+            </div>
+            {set_type && (
+              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1.5">
+                {set_type === 'vocab' &&
+                  'This set contains only vocabulary items'}
+                {set_type === 'grammar' &&
+                  'This set contains only grammar items'}
+              </p>
+            )}
           </div>
         </div>
-      )}
 
-      {/* Edit Item Modal */}
-      {editingItem && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Edit{' '}
-                  {editingItem.type === 'vocabulary' ? 'Vocabulary' : 'Grammar'}{' '}
-                  Item
-                </h2>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-mono">
-                  ID: {editingItem.id}
-                </p>
-              </div>
-              <button
-                onClick={handleCancelEdit}
-                disabled={isSaving || isDeleting}
-                className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
-              >
+        {(addItemSuccess || addItemError) && (
+          <div className="px-6 pt-4 flex-shrink-0">
+            {addItemSuccess && (
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200 text-sm flex items-center gap-2">
                 <svg
                   className="w-5 h-5"
                   fill="none"
@@ -1474,359 +1194,296 @@ export default function MasterItemsManagement({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
+                    d="M5 13l4 4L19 7"
                   />
                 </svg>
-              </button>
-            </div>
-
-            {(saveSuccess || saveError || deleteError) && (
-              <div className="px-6 pt-4 flex-shrink-0">
-                {saveSuccess && (
-                  <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200 text-sm flex items-center gap-2">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    Changes saved successfully!
-                  </div>
-                )}
-                {saveError && (
-                  <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
-                    <strong>Error:</strong> {saveError}
-                  </div>
-                )}
-                {deleteError && (
-                  <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
-                    <strong>Delete Error:</strong> {deleteError}
-                  </div>
-                )}
+                Item added successfully! Refreshing...
               </div>
             )}
+            {addItemError && (
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
+                <strong>Error:</strong> {addItemError}
+              </div>
+            )}
+          </div>
+        )}
 
-            <div className="flex-1 overflow-y-auto px-6 py-4">
-              <div className="space-y-4">
-                {editingItem.type === 'vocabulary' && (
-                  <>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        English
-                      </label>
-                      <input
-                        type="text"
-                        value={editFormData.english || ''}
-                        onChange={(e) =>
-                          handleFieldChange('english', e.target.value)
-                        }
-                        className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          Kana
-                        </label>
-                        <input
-                          type="text"
-                          value={editFormData.kana || ''}
-                          onChange={(e) =>
-                            handleFieldChange('kana', e.target.value)
-                          }
-                          className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          Kanji
-                        </label>
-                        <input
-                          type="text"
-                          value={editFormData.kanji || ''}
-                          onChange={(e) =>
-                            handleFieldChange('kanji', e.target.value)
-                          }
-                          className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Lexical Category
-                      </label>
-                      <CustomSelect
-                        value={editFormData.lexical_category || ''}
-                        onChange={(val) =>
-                          handleFieldChange('lexical_category', val)
-                        }
-                        options={[
-                          { value: '', label: 'Uncategorized' },
-                          { value: 'noun', label: 'Noun' },
-                          { value: 'verb', label: 'Verb' },
-                          { value: 'i-adjective', label: 'I-Adjective' },
-                          { value: 'na-adjective', label: 'Na-Adjective' },
-                          { value: 'adverb', label: 'Adverb' },
-                          { value: 'particle', label: 'Particle' },
-                          { value: 'counter', label: 'Counter' },
-                          { value: 'conjunction', label: 'Conjunction' },
-                          { value: 'pronoun', label: 'Pronoun' },
-                          { value: 'expression', label: 'Expression' },
-                          { value: 'interjection', label: 'Interjection' },
-                        ]}
-                      />
-                    </div>
-                  </>
-                )}
-
-                {editingItem.type === 'grammar' && (
-                  <>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Title
-                      </label>
-                      <input
-                        type="text"
-                        value={editFormData.title || ''}
-                        onChange={(e) =>
-                          handleFieldChange('title', e.target.value)
-                        }
-                        className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Description
-                      </label>
-                      <textarea
-                        value={editFormData.description || ''}
-                        onChange={(e) =>
-                          handleFieldChange('description', e.target.value)
-                        }
-                        rows={3}
-                        className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Topic
-                      </label>
-                      <input
-                        type="text"
-                        value={editFormData.topic || ''}
-                        onChange={(e) =>
-                          handleFieldChange('topic', e.target.value)
-                        }
-                        className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Notes
-                      </label>
-                      <textarea
-                        value={editFormData.notes || ''}
-                        onChange={(e) =>
-                          handleFieldChange('notes', e.target.value)
-                        }
-                        rows={3}
-                        className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
-                      />
-                    </div>
-                  </>
-                )}
-
+        <form
+          id="add-item-form"
+          onSubmit={handleAddItemSubmit}
+          className="px-6 py-4"
+        >
+          <div className="space-y-4">
+            {addItemType === 'vocabulary' ? (
+              <>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      English
+                    </label>
+                    <input
+                      type="text"
+                      value={vocabForm.english}
+                      onChange={(e) =>
+                        handleVocabFormChange('english', e.target.value)
+                      }
+                      placeholder="English term"
+                      className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Kana{' '}
+                      <span className="text-gray-500 dark:text-gray-400">
+                        (type in romaji)
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      value={vocabForm.kana}
+                      onChange={(e) =>
+                        handleVocabFormChange('kana', e.target.value)
+                      }
+                      placeholder="ka → か, shi → し"
+                      className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Kanji{' '}
+                      <span className="text-gray-500 dark:text-gray-400">
+                        (paste)
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      value={vocabForm.kanji}
+                      onChange={(e) =>
+                        handleVocabFormChange('kanji', e.target.value)
+                      }
+                      placeholder="漢字"
+                      className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
+                    />
+                  </div>
+                </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Example Sentences
-                    <span className="text-xs text-gray-500 ml-2">
-                      (one per line)
-                    </span>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Example Sentences{' '}
+                    <span className="text-gray-500">(one per line)</span>
                   </label>
                   <textarea
-                    value={
-                      Array.isArray(editFormData.example_sentences)
-                        ? editFormData.example_sentences.join('\n')
-                        : ''
-                    }
+                    rows={2}
+                    value={vocabForm.example_sentences}
                     onChange={(e) =>
-                      handleFieldChange(
-                        'example_sentences',
-                        e.target.value.split('\n').filter((s) => s.trim())
-                      )
+                      handleVocabFormChange('example_sentences', e.target.value)
                     }
-                    rows={4}
-                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
-                    placeholder="Enter example sentences, one per line"
+                    placeholder="Example sentences"
+                    className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
                   />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Tags
-                    <span className="text-xs text-gray-500 ml-2">
-                      (comma-separated)
-                    </span>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Tags{' '}
+                    <span className="text-gray-500">(comma-separated)</span>
                   </label>
                   <input
                     type="text"
-                    value={
-                      Array.isArray(editFormData.tags)
-                        ? editFormData.tags.join(', ')
-                        : ''
-                    }
+                    value={vocabForm.tags}
                     onChange={(e) =>
-                      handleFieldChange(
-                        'tags',
+                      handleVocabFormChange('tags', e.target.value)
+                    }
+                    placeholder="tag1, tag2, tag3"
+                    className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center justify-between">
+                      <span>Title *</span>
+                      <div className="flex gap-0.5">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleGrammarTitleTypeSwitch('english')
+                          }
+                          className={`px-1 py-0.5 text-[10px] rounded transition-colors ${
+                            grammarTitleInputType === 'english'
+                              ? 'bg-brand-pink text-white'
+                              : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
+                          }`}
+                        >
+                          En
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleGrammarTitleTypeSwitch('kana')}
+                          className={`px-1 py-0.5 text-[10px] rounded transition-colors ${
+                            grammarTitleInputType === 'kana'
+                              ? 'bg-brand-pink text-white'
+                              : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
+                          }`}
+                        >
+                          あ
+                        </button>
+                      </div>
+                    </label>
+                    <input
+                      type="text"
+                      value={grammarForm.title}
+                      onChange={(e) =>
+                        handleGrammarFormChange('title', e.target.value)
+                      }
+                      placeholder={
+                        grammarTitleInputType === 'kana'
+                          ? 'Type in romaji'
+                          : 'Grammar pattern name'
+                      }
+                      className={`w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink ${
+                        grammarTitleInputType === 'kana' ? 'font-japanese' : ''
+                      }`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Topic
+                    </label>
+                    <input
+                      type="text"
+                      value={grammarForm.topic}
+                      onChange={(e) =>
+                        handleGrammarFormChange('topic', e.target.value)
+                      }
+                      placeholder="e.g., N5, JLPT"
+                      className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={grammarForm.description}
+                    onChange={(e) =>
+                      handleGrammarFormChange('description', e.target.value)
+                    }
+                    placeholder="Brief explanation"
+                    className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Notes
+                  </label>
+                  <input
+                    type="text"
+                    value={grammarForm.notes}
+                    onChange={(e) =>
+                      handleGrammarFormChange('notes', e.target.value)
+                    }
+                    placeholder="Additional notes"
+                    className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Example Sentences{' '}
+                    <span className="text-gray-500">(one per line)</span>
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={grammarForm.example_sentences}
+                    onChange={(e) =>
+                      handleGrammarFormChange(
+                        'example_sentences',
                         e.target.value
-                          .split(',')
-                          .map((t) => t.trim())
-                          .filter(Boolean)
                       )
                     }
-                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
+                    placeholder="Example sentences"
+                    className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Tags{' '}
+                    <span className="text-gray-500">(comma-separated)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={grammarForm.tags}
+                    onChange={(e) =>
+                      handleGrammarFormChange('tags', e.target.value)
+                    }
                     placeholder="tag1, tag2, tag3"
+                    className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                   />
                 </div>
-              </div>
-            </div>
-
-            <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
-              <button
-                onClick={handleShowDeleteConfirm}
-                disabled={isSaving || isDeleting}
-                className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-                Remove from Set
-              </button>
-
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleCancelEdit}
-                  disabled={isSaving || isDeleting}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSaveEdit}
-                  disabled={isSaving || isDeleting}
-                  className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {isSaving ? (
-                    <>
-                      <svg
-                        className="animate-spin h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Saving...
-                    </>
-                  ) : (
-                    'Save Changes'
-                  )}
-                </button>
-              </div>
-            </div>
+              </>
+            )}
           </div>
-        </div>
-      )}
+        </form>
+      </BaseModal>
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <svg
-                  className="w-5 h-5 text-red-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  />
-                </svg>
-                Confirm Deletion
-              </h3>
-            </div>
+      {/* Edit Item Modal */}
+      <BaseModal
+        isOpen={!!editingItem}
+        onClose={handleCancelEdit}
+        size="2xl"
+        maxHeight="85vh"
+        scrollable
+        title={
+          editingItem
+            ? `Edit ${editingItem.type === 'vocabulary' ? 'Vocabulary' : 'Grammar'} Item`
+            : ''
+        }
+        subtitle={
+          editingItem ? (
+            <span className="font-mono">ID: {editingItem.id}</span>
+          ) : (
+            ''
+          )
+        }
+        footer={
+          <div className="flex items-center justify-between">
+            <button
+              onClick={handleShowDeleteConfirm}
+              disabled={isSaving || isDeleting}
+              className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+              Remove from Set
+            </button>
 
-            <div className="px-6 py-4">
-              <p className="text-gray-700 dark:text-gray-300 mb-2">
-                Are you sure you want to remove this item from the set?
-              </p>
-              {editingItem && (
-                <div className="mt-3 p-3 bg-surface-deep rounded-lg">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {editingItem.type === 'vocabulary'
-                      ? editingItem.english
-                      : editingItem.title}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-mono">
-                    ID: {editingItem.id}
-                  </p>
-                </div>
-              )}
-            </div>
-
-            <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3">
+            <div className="flex items-center gap-3">
               <button
-                onClick={handleCancelDelete}
-                disabled={isDeleting}
+                onClick={handleCancelEdit}
+                disabled={isSaving || isDeleting}
                 className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
-                onClick={handleDeleteItem}
-                disabled={isDeleting}
-                className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                onClick={handleSaveEdit}
+                disabled={isSaving || isDeleting}
+                className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                {isDeleting ? (
+                {isSaving ? (
                   <>
                     <svg
                       className="animate-spin h-4 w-4"
@@ -1847,57 +1504,20 @@ export default function MasterItemsManagement({
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
-                    Removing...
+                    Saving...
                   </>
                 ) : (
-                  <>
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                    Yes, Remove Item
-                  </>
+                  'Save Changes'
                 )}
               </button>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* View Item Modal */}
-      {viewingItem && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setViewingItem(null)}
-        >
-          <div
-            className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-lg max-h-[85vh] flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  {viewingItem.type === 'vocabulary'
-                    ? viewingItem.english
-                    : viewingItem.title}
-                </h2>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                  {viewingItem.type === 'vocabulary' ? 'Vocabulary' : 'Grammar'}
-                </p>
-              </div>
-              <button
-                onClick={() => setViewingItem(null)}
-                className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
+        }
+      >
+        {(saveSuccess || saveError || deleteError) && (
+          <div className="px-6 pt-4 flex-shrink-0">
+            {saveSuccess && (
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200 text-sm flex items-center gap-2">
                 <svg
                   className="w-5 h-5"
                   fill="none"
@@ -1908,129 +1528,456 @@ export default function MasterItemsManagement({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
+                    d="M5 13l4 4L19 7"
                   />
                 </svg>
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto px-6 py-4">
-              <div className="space-y-4">
-                {viewingItem.type === 'vocabulary' ? (
-                  <>
-                    <div className="text-center py-4 border-b border-gray-200 dark:border-gray-700">
-                      <div className="text-3xl font-japanese text-gray-900 dark:text-white mb-1">
-                        {viewingItem.kanji || viewingItem.kana}
-                      </div>
-                      {viewingItem.kanji && (
-                        <div className="text-lg text-gray-600 dark:text-gray-400 font-japanese">
-                          {viewingItem.kana}
-                        </div>
-                      )}
-                      <div className="text-lg text-gray-700 dark:text-gray-300 mt-2">
-                        {viewingItem.english}
-                      </div>
-                      {viewingItem.lexical_category && (
-                        <span className="inline-block mt-2 px-2 py-1 text-xs rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
-                          {viewingItem.lexical_category}
-                        </span>
-                      )}
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {viewingItem.description && (
-                      <div>
-                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                          Description
-                        </h3>
-                        <p className="text-gray-900 dark:text-white">
-                          {viewingItem.description}
-                        </p>
-                      </div>
-                    )}
-                    {viewingItem.topic && (
-                      <div>
-                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                          Topic
-                        </h3>
-                        <span className="inline-block px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400">
-                          {viewingItem.topic}
-                        </span>
-                      </div>
-                    )}
-                    {viewingItem.notes && (
-                      <div>
-                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                          Notes
-                        </h3>
-                        <p className="text-gray-900 dark:text-white whitespace-pre-wrap">
-                          {viewingItem.notes}
-                        </p>
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {viewingItem.example_sentences?.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-                      Example Sentences
-                    </h3>
-                    <div className="space-y-2">
-                      {viewingItem.example_sentences.map((sentence, i) => (
-                        <div
-                          key={i}
-                          className="p-3 bg-surface-deep rounded-lg text-gray-900 dark:text-white font-japanese"
-                        >
-                          {sentence}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {viewingItem.tags?.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-                      Tags
-                    </h3>
-                    <div className="flex flex-wrap gap-1">
-                      {viewingItem.tags.map((tag, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                Changes saved successfully!
               </div>
+            )}
+            {saveError && (
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
+                <strong>Error:</strong> {saveError}
+              </div>
+            )}
+            {deleteError && (
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
+                <strong>Delete Error:</strong> {deleteError}
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          <div className="space-y-4">
+            {editingItem.type === 'vocabulary' && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    English
+                  </label>
+                  <input
+                    type="text"
+                    value={editFormData.english || ''}
+                    onChange={(e) =>
+                      handleFieldChange('english', e.target.value)
+                    }
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Kana
+                    </label>
+                    <input
+                      type="text"
+                      value={editFormData.kana || ''}
+                      onChange={(e) =>
+                        handleFieldChange('kana', e.target.value)
+                      }
+                      className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Kanji
+                    </label>
+                    <input
+                      type="text"
+                      value={editFormData.kanji || ''}
+                      onChange={(e) =>
+                        handleFieldChange('kanji', e.target.value)
+                      }
+                      className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Lexical Category
+                  </label>
+                  <CustomSelect
+                    value={editFormData.lexical_category || ''}
+                    onChange={(val) =>
+                      handleFieldChange('lexical_category', val)
+                    }
+                    options={[
+                      { value: '', label: 'Uncategorized' },
+                      { value: 'noun', label: 'Noun' },
+                      { value: 'verb', label: 'Verb' },
+                      { value: 'i-adjective', label: 'I-Adjective' },
+                      { value: 'na-adjective', label: 'Na-Adjective' },
+                      { value: 'adverb', label: 'Adverb' },
+                      { value: 'particle', label: 'Particle' },
+                      { value: 'counter', label: 'Counter' },
+                      { value: 'conjunction', label: 'Conjunction' },
+                      { value: 'pronoun', label: 'Pronoun' },
+                      { value: 'expression', label: 'Expression' },
+                      { value: 'interjection', label: 'Interjection' },
+                    ]}
+                  />
+                </div>
+              </>
+            )}
+
+            {editingItem.type === 'grammar' && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    value={editFormData.title || ''}
+                    onChange={(e) => handleFieldChange('title', e.target.value)}
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    value={editFormData.description || ''}
+                    onChange={(e) =>
+                      handleFieldChange('description', e.target.value)
+                    }
+                    rows={3}
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Topic
+                  </label>
+                  <input
+                    type="text"
+                    value={editFormData.topic || ''}
+                    onChange={(e) => handleFieldChange('topic', e.target.value)}
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Notes
+                  </label>
+                  <textarea
+                    value={editFormData.notes || ''}
+                    onChange={(e) => handleFieldChange('notes', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
+                  />
+                </div>
+              </>
+            )}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Example Sentences
+                <span className="text-xs text-gray-500 ml-2">
+                  (one per line)
+                </span>
+              </label>
+              <textarea
+                value={
+                  Array.isArray(editFormData.example_sentences)
+                    ? editFormData.example_sentences.join('\n')
+                    : ''
+                }
+                onChange={(e) =>
+                  handleFieldChange(
+                    'example_sentences',
+                    e.target.value.split('\n').filter((s) => s.trim())
+                  )
+                }
+                rows={4}
+                className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
+                placeholder="Enter example sentences, one per line"
+              />
             </div>
 
-            <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3 flex-shrink-0">
-              <button
-                onClick={() => setViewingItem(null)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-              >
-                Close
-              </button>
-              <button
-                onClick={() => {
-                  handleEditItem(viewingItem.id, viewingItem.type);
-                  setViewingItem(null);
-                }}
-                className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors flex items-center gap-2"
-              >
-                <FiEdit2 className="w-4 h-4" />
-                Edit
-              </button>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Tags
+                <span className="text-xs text-gray-500 ml-2">
+                  (comma-separated)
+                </span>
+              </label>
+              <input
+                type="text"
+                value={
+                  Array.isArray(editFormData.tags)
+                    ? editFormData.tags.join(', ')
+                    : ''
+                }
+                onChange={(e) =>
+                  handleFieldChange(
+                    'tags',
+                    e.target.value
+                      .split(',')
+                      .map((t) => t.trim())
+                      .filter(Boolean)
+                  )
+                }
+                className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
+                placeholder="tag1, tag2, tag3"
+              />
             </div>
           </div>
         </div>
-      )}
+      </BaseModal>
+
+      {/* Delete Confirmation Modal */}
+      <BaseModal
+        isOpen={!!showDeleteConfirm}
+        onClose={handleCancelDelete}
+        size="md"
+        zIndex={60}
+        backdropOpacity={60}
+        closeOnBackdrop={false}
+        footer={
+          <div className="flex items-center justify-end gap-3">
+            <button
+              onClick={handleCancelDelete}
+              disabled={isDeleting}
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleDeleteItem}
+              disabled={isDeleting}
+              className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {isDeleting ? (
+                <>
+                  <svg
+                    className="animate-spin h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Removing...
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                  Yes, Remove Item
+                </>
+              )}
+            </button>
+          </div>
+        }
+      >
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <svg
+              className="w-5 h-5 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+            Confirm Deletion
+          </h3>
+        </div>
+
+        <div className="px-6 py-4">
+          <p className="text-gray-700 dark:text-gray-300 mb-2">
+            Are you sure you want to remove this item from the set?
+          </p>
+          {editingItem && (
+            <div className="mt-3 p-3 bg-surface-deep rounded-lg">
+              <p className="text-sm font-medium text-gray-900 dark:text-white">
+                {editingItem.type === 'vocabulary'
+                  ? editingItem.english
+                  : editingItem.title}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-mono">
+                ID: {editingItem.id}
+              </p>
+            </div>
+          )}
+        </div>
+      </BaseModal>
+
+      {/* View Item Modal */}
+      <BaseModal
+        isOpen={!!viewingItem}
+        onClose={() => setViewingItem(null)}
+        size="lg"
+        maxHeight="85vh"
+        scrollable
+        title={
+          viewingItem
+            ? viewingItem.type === 'vocabulary'
+              ? viewingItem.english
+              : viewingItem.title
+            : ''
+        }
+        subtitle={
+          viewingItem
+            ? viewingItem.type === 'vocabulary'
+              ? 'Vocabulary'
+              : 'Grammar'
+            : ''
+        }
+        footer={
+          <div className="flex items-center justify-end gap-3">
+            <button
+              onClick={() => setViewingItem(null)}
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              Close
+            </button>
+            <button
+              onClick={() => {
+                if (viewingItem) {
+                  handleEditItem(viewingItem.id, viewingItem.type);
+                  setViewingItem(null);
+                }
+              }}
+              className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors flex items-center gap-2"
+            >
+              <FiEdit2 className="w-4 h-4" />
+              Edit
+            </button>
+          </div>
+        }
+      >
+        <div className="px-6 py-4">
+          <div className="space-y-4">
+            {viewingItem.type === 'vocabulary' ? (
+              <>
+                <div className="text-center py-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="text-3xl font-japanese text-gray-900 dark:text-white mb-1">
+                    {viewingItem.kanji || viewingItem.kana}
+                  </div>
+                  {viewingItem.kanji && (
+                    <div className="text-lg text-gray-600 dark:text-gray-400 font-japanese">
+                      {viewingItem.kana}
+                    </div>
+                  )}
+                  <div className="text-lg text-gray-700 dark:text-gray-300 mt-2">
+                    {viewingItem.english}
+                  </div>
+                  {viewingItem.lexical_category && (
+                    <span className="inline-block mt-2 px-2 py-1 text-xs rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                      {viewingItem.lexical_category}
+                    </span>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {viewingItem.description && (
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+                      Description
+                    </h3>
+                    <p className="text-gray-900 dark:text-white">
+                      {viewingItem.description}
+                    </p>
+                  </div>
+                )}
+                {viewingItem.topic && (
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+                      Topic
+                    </h3>
+                    <span className="inline-block px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400">
+                      {viewingItem.topic}
+                    </span>
+                  </div>
+                )}
+                {viewingItem.notes && (
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+                      Notes
+                    </h3>
+                    <p className="text-gray-900 dark:text-white whitespace-pre-wrap">
+                      {viewingItem.notes}
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+
+            {viewingItem.example_sentences?.length > 0 && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                  Example Sentences
+                </h3>
+                <div className="space-y-2">
+                  {viewingItem.example_sentences.map((sentence, i) => (
+                    <div
+                      key={i}
+                      className="p-3 bg-surface-deep rounded-lg text-gray-900 dark:text-white font-japanese"
+                    >
+                      {sentence}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {viewingItem.tags?.length > 0 && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                  Tags
+                </h3>
+                <div className="flex flex-wrap gap-1">
+                  {viewingItem.tags.map((tag, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </BaseModal>
     </>
   );
 }

@@ -42,6 +42,7 @@ import {
 } from 'react-icons/tb';
 import { FiEdit2, FiMoreVertical, FiTag } from 'react-icons/fi';
 import { clientLog } from '@/lib/clientLogger';
+import BaseModal from '@/components/ui/BaseModal';
 
 // ============================================================================
 // MAIN COMPONENT
@@ -662,99 +663,105 @@ export default function ViewSet() {
       </button>
 
       {/* Auto-categorize modal */}
-      {showAutoCategorizeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white dark:bg-surface-card rounded-xl shadow-xl w-full max-w-md">
-            <div className="px-5 py-4 border-b border-gray-200 dark:border-white/10">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-                Auto-categorize Items
-              </h3>
-            </div>
-            <div className="px-5 py-4 space-y-3">
-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-pink/8 dark:bg-brand-pink/10">
-                <TbLanguageHiragana className="w-5 h-5 text-brand-pink flex-shrink-0" />
-                <p className="text-sm font-medium text-brand-pink">
-                  Categories are required for the Conjugation Practice feature
-                </p>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Labels each item as a verb, adjective, noun, etc. so conjugation
-                practice knows which words to include and how to generate
-                questions.
-              </p>
-              <ul className="text-xs text-gray-500 dark:text-gray-400 space-y-1.5">
-                <li className="flex items-start gap-2">
-                  <span className="text-brand-pink mt-0.5">&#x2022;</span>
-                  Items with kanji are categorized more accurately
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-brand-pink mt-0.5">&#x2022;</span>
-                  Miscategorized items can be corrected during practice
-                </li>
-              </ul>
-              {autoCategorizeResult && (
-                <div
-                  className={`text-sm px-3 py-2 rounded-lg ${
-                    autoCategorizeResult.startsWith('Error')
-                      ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'
-                      : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
-                  }`}
-                >
-                  {autoCategorizeResult}
-                </div>
-              )}
-            </div>
-            <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-gray-200 dark:border-white/10">
+      <BaseModal
+        isOpen={showAutoCategorizeModal}
+        onClose={() => {
+          setShowAutoCategorizeModal(false);
+          setAutoCategorizeResult(null);
+        }}
+        size="md"
+        blur={false}
+        footer={
+          <div className="flex items-center justify-end gap-2">
+            <button
+              onClick={() => {
+                setShowAutoCategorizeModal(false);
+                setAutoCategorizeResult(null);
+              }}
+              className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+            >
+              {autoCategorizeResult ? 'Done' : 'Cancel'}
+            </button>
+            {!autoCategorizeResult && (
               <button
-                onClick={() => {
-                  setShowAutoCategorizeModal(false);
-                  setAutoCategorizeResult(null);
-                }}
-                className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                onClick={handleRunAutoCategorize}
+                disabled={isAutoCategorizing}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-brand-pink hover:bg-[#c00950] text-white transition-colors disabled:opacity-50"
               >
-                {autoCategorizeResult ? 'Done' : 'Cancel'}
+                {isAutoCategorizing ? (
+                  <>
+                    <svg
+                      className="animate-spin w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Categorizing...
+                  </>
+                ) : (
+                  <>
+                    <FiTag className="w-4 h-4" />
+                    Run Auto-categorize
+                  </>
+                )}
               </button>
-              {!autoCategorizeResult && (
-                <button
-                  onClick={handleRunAutoCategorize}
-                  disabled={isAutoCategorizing}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-brand-pink hover:bg-[#c00950] text-white transition-colors disabled:opacity-50"
-                >
-                  {isAutoCategorizing ? (
-                    <>
-                      <svg
-                        className="animate-spin w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        />
-                      </svg>
-                      Categorizing...
-                    </>
-                  ) : (
-                    <>
-                      <FiTag className="w-4 h-4" />
-                      Run Auto-categorize
-                    </>
-                  )}
-                </button>
-              )}
-            </div>
+            )}
           </div>
+        }
+      >
+        {/* Custom header */}
+        <div className="px-5 py-4 border-b border-gray-200 dark:border-white/10">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+            Auto-categorize Items
+          </h3>
         </div>
-      )}
+        <div className="px-5 py-4 space-y-3">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-pink/8 dark:bg-brand-pink/10">
+            <TbLanguageHiragana className="w-5 h-5 text-brand-pink flex-shrink-0" />
+            <p className="text-sm font-medium text-brand-pink">
+              Categories are required for the Conjugation Practice feature
+            </p>
+          </div>
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            Labels each item as a verb, adjective, noun, etc. so conjugation
+            practice knows which words to include and how to generate questions.
+          </p>
+          <ul className="text-xs text-gray-500 dark:text-gray-400 space-y-1.5">
+            <li className="flex items-start gap-2">
+              <span className="text-brand-pink mt-0.5">&#x2022;</span>
+              Items with kanji are categorized more accurately
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-pink mt-0.5">&#x2022;</span>
+              Miscategorized items can be corrected during practice
+            </li>
+          </ul>
+          {autoCategorizeResult && (
+            <div
+              className={`text-sm px-3 py-2 rounded-lg ${
+                autoCategorizeResult.startsWith('Error')
+                  ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'
+                  : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
+              }`}
+            >
+              {autoCategorizeResult}
+            </div>
+          )}
+        </div>
+      </BaseModal>
     </div>
   );
 }

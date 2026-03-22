@@ -25,6 +25,7 @@ import { TbStack2, TbCards } from 'react-icons/tb';
 import { MdConstruction } from 'react-icons/md';
 import { LuAlarmClockCheck } from 'react-icons/lu';
 import { TbBolt } from 'react-icons/tb';
+import BaseModal from '@/components/ui/BaseModal';
 
 export default function AcademyHome() {
   const router = useRouter();
@@ -103,95 +104,87 @@ export default function AcademyHome() {
   };
 
   const InfoModal = () => {
-    if (!showInfoModal) return null;
-
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div className="bg-white dark:bg-surface-card rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                Study Sets vs Learning Materials: What&apos;s the Difference?
-              </h2>
-              <button
-                onClick={() => setShowInfoModal(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              >
-                <FaTimes />
-              </button>
+      <BaseModal
+        isOpen={showInfoModal}
+        onClose={() => setShowInfoModal(false)}
+        size="2xl"
+        blur={false}
+        maxHeight="90vh"
+        scrollable={true}
+        title="Study Sets vs Learning Materials: What's the Difference?"
+      >
+        <div className="p-6">
+          <div className="space-y-6">
+            {/* Sets Section */}
+            <div className="border-l-4 border-blue-500 pl-4">
+              <div className="flex items-center gap-2 mb-2">
+                <TbCards className="text-blue-500 text-xl" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Study Sets
+                </h3>
+                <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs rounded-full font-medium">
+                  Available Now
+                </span>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 mb-3">
+                Basic study groups that can be reviewed in notecard or quiz
+                format. Perfect for memorization and quick review sessions.
+              </p>
+              <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Examples:
+                </p>
+                <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                  <li>Fruits and vegetables vocabulary</li>
+                  <li>Chapter 1 grammar points</li>
+                  <li>Hiragana characters</li>
+                  <li>Common phrases</li>
+                  <li>Verb conjugations</li>
+                </ul>
+              </div>
             </div>
 
-            <div className="space-y-6">
-              {/* Sets Section */}
-              <div className="border-l-4 border-blue-500 pl-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <TbCards className="text-blue-500 text-xl" />
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Study Sets
-                  </h3>
-                  <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs rounded-full font-medium">
-                    Available Now
-                  </span>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400 mb-3">
-                  Basic study groups that can be reviewed in notecard or quiz
-                  format. Perfect for memorization and quick review sessions.
-                </p>
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Examples:
-                  </p>
-                  <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                    <li>Fruits and vegetables vocabulary</li>
-                    <li>Chapter 1 grammar points</li>
-                    <li>Hiragana characters</li>
-                    <li>Common phrases</li>
-                    <li>Verb conjugations</li>
-                  </ul>
-                </div>
+            {/* Learning Materials Section */}
+            <div className="border-l-4 border-purple-500 pl-4">
+              <div className="flex items-center gap-2 mb-2">
+                <FaBook className="text-purple-500 text-xl" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Learning Materials
+                </h3>
+                <span className="px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs rounded-full font-medium">
+                  Coming Soon
+                </span>
               </div>
+              <p className="text-gray-600 dark:text-gray-400 mb-3">
+                Complete course structures with dynamic and adaptive learning
+                engagement. Track progress through comprehensive textbooks and
+                structured curricula.
+              </p>
+              <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Examples:
+                </p>
+                <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                  <li>Genki 1 Textbook (full course)</li>
+                  <li>Minna no Nihongo (complete series)</li>
+                  <li>University Japanese Course</li>
+                  <li>JLPT N5-N1 Preparation Materials</li>
+                  <li>Custom institutional curricula</li>
+                </ul>
+              </div>
+            </div>
 
-              {/* Learning Materials Section */}
-              <div className="border-l-4 border-purple-500 pl-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <FaBook className="text-purple-500 text-xl" />
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Learning Materials
-                  </h3>
-                  <span className="px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs rounded-full font-medium">
-                    Coming Soon
-                  </span>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400 mb-3">
-                  Complete course structures with dynamic and adaptive learning
-                  engagement. Track progress through comprehensive textbooks and
-                  structured curricula.
-                </p>
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Examples:
-                  </p>
-                  <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                    <li>Genki 1 Textbook (full course)</li>
-                    <li>Minna no Nihongo (complete series)</li>
-                    <li>University Japanese Course</li>
-                    <li>JLPT N5-N1 Preparation Materials</li>
-                    <li>Custom institutional curricula</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-                <p className="text-sm text-blue-800 dark:text-blue-300">
-                  <strong>💡 Pro tip:</strong> Start with Sets for quick
-                  memorization tasks while we&apos;re building the full Learning
-                  Materials system!
-                </p>
-              </div>
+            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+              <p className="text-sm text-blue-800 dark:text-blue-300">
+                <strong>💡 Pro tip:</strong> Start with Sets for quick
+                memorization tasks while we&apos;re building the full Learning
+                Materials system!
+              </p>
             </div>
           </div>
         </div>
-      </div>
+      </BaseModal>
     );
   };
 

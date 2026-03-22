@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FaTimes, FaCheckCircle } from 'react-icons/fa';
 import { TbDownload, TbLoader3 } from 'react-icons/tb';
 import { clientLog } from '@/lib/clientLogger';
+import BaseModal from '@/components/ui/BaseModal';
 
 // Starter data for the three sets
 const COMMON_WORDS_DATA = [
@@ -209,8 +210,6 @@ export function BeginnerPackPopup({ isOpen, onClose, onImport, userProfile }) {
   });
   const [showSuccess, setShowSuccess] = useState(false);
 
-  if (!isOpen) return null;
-
   const createSet = async (setData) => {
     const response = await fetch('/api/database/v2/sets/create', {
       method: 'POST',
@@ -343,36 +342,57 @@ export function BeginnerPackPopup({ isOpen, onClose, onImport, userProfile }) {
     }
   };
 
-  if (showSuccess) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-        <div className="relative w-full sm:max-w-[440px] sm:mx-4">
-          <div className="bg-surface-card sm:rounded-2xl rounded-t-2xl shadow-2xl p-8 text-center">
-            <div className="mx-auto w-16 h-16 mb-5 rounded-2xl bg-green-500/10 dark:bg-green-500/15 flex items-center justify-center">
-              <FaCheckCircle className="text-2xl text-green-500" />
-            </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1.5">
-              You&apos;re all set
-            </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              3 starter sets added to your library
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={!isImporting ? onClose : undefined}
-      />
+    <BaseModal
+      isOpen={isOpen}
+      onClose={isImporting ? () => {} : onClose}
+      variant="bottom-sheet"
+      backdropOpacity={60}
+      blur={true}
+      closeOnBackdrop={!isImporting && !showSuccess}
+      footer={
+        !showSuccess ? (
+          <div className="space-y-2.5">
+            <button
+              onClick={handleImport}
+              disabled={isImporting}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[14px] font-semibold text-white bg-gradient-to-r from-brand-pink to-[#d10950] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-brand-pink/20"
+            >
+              {isImporting ? (
+                <TbLoader3 className="w-4.5 h-4.5 animate-spin" />
+              ) : (
+                <TbDownload className="w-4.5 h-4.5" />
+              )}
+              {isImporting ? 'Creating Sets...' : 'Add All to My Library'}
+            </button>
 
-      <div className="relative w-full sm:max-w-[440px] sm:mx-4">
-        <div className="bg-surface-card sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden">
+            {!isImporting && (
+              <button
+                onClick={onClose}
+                className="w-full py-2.5 rounded-xl text-[13px] font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+              >
+                Skip for now
+              </button>
+            )}
+          </div>
+        ) : null
+      }
+      footerClassName="border-t-0"
+    >
+      {showSuccess ? (
+        <div className="p-8 text-center">
+          <div className="mx-auto w-16 h-16 mb-5 rounded-2xl bg-green-500/10 dark:bg-green-500/15 flex items-center justify-center">
+            <FaCheckCircle className="text-2xl text-green-500" />
+          </div>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1.5">
+            You&apos;re all set
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            3 starter sets added to your library
+          </p>
+        </div>
+      ) : (
+        <>
           {/* Header with decorative kana background */}
           <div className="relative overflow-hidden px-6 pt-6 pb-5">
             {/* Faint scattered kana in background */}
@@ -485,35 +505,10 @@ export function BeginnerPackPopup({ isOpen, onClose, onImport, userProfile }) {
             </div>
           )}
 
-          {/* Actions */}
-          <div className="px-6 pt-5 pb-6 space-y-2.5">
-            <button
-              onClick={handleImport}
-              disabled={isImporting}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[14px] font-semibold text-white bg-gradient-to-r from-brand-pink to-[#d10950] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-brand-pink/20"
-            >
-              {isImporting ? (
-                <TbLoader3 className="w-4.5 h-4.5 animate-spin" />
-              ) : (
-                <TbDownload className="w-4.5 h-4.5" />
-              )}
-              {isImporting ? 'Creating Sets...' : 'Add All to My Library'}
-            </button>
-
-            {!isImporting && (
-              <button
-                onClick={onClose}
-                className="w-full py-2.5 rounded-xl text-[13px] font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-              >
-                Skip for now
-              </button>
-            )}
-          </div>
-
           {/* Bottom safe area for mobile */}
           <div className="h-[env(safe-area-inset-bottom)]" />
-        </div>
-      </div>
-    </div>
+        </>
+      )}
+    </BaseModal>
   );
 }
