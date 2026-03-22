@@ -4,18 +4,99 @@
 @custom-variant dusk (&:is(.dusk, .dusk *));
 @custom-variant cream (&:is(.cream, .cream *));
 
+/* ==========================================================================
+   Design Tokens — Semantic color variables for all themes.
+   Use Tailwind utilities like bg-surface-page, text-brand-pink, etc.
+   Theme switching is automatic — just change the class on <html>.
+   ========================================================================== */
+
+@theme {
+  /* Brand */
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-pink-hover: var(--brand-pink-hover);
+  --color-brand-pink-dark: var(--brand-pink-dark);
+  --color-brand-pink-ring: var(--brand-pink-ring);
+
+  /* Surfaces (backgrounds) */
+  --color-surface-page: var(--surface-page);
+  --color-surface-card: var(--surface-card);
+  --color-surface-deep: var(--surface-deep);
+  --color-surface-elevated: var(--surface-elevated);
+
+  /* Border */
+  --color-border-default: var(--border-default);
+  --color-border-subtle: var(--border-subtle);
+}
+
 @layer base {
   :root {
     --cap-safe-top: 0px;
+
+    /* Light mode (default) */
+    --brand-pink: #e30a5f;
+    --brand-pink-hover: #f41567;
+    --brand-pink-dark: #b0104f;
+    --brand-pink-ring: #e30a5f;
+
+    --surface-page: #f9fafb;
+    --surface-card: #ffffff;
+    --surface-deep: #f3f4f6;
+    --surface-elevated: #ffffff;
+
+    --border-default: rgba(0, 0, 0, 0.1);
+    --border-subtle: rgba(0, 0, 0, 0.05);
   }
 
   html,
   body {
-    @apply m-0 p-0 bg-[#141f25] overscroll-none;
+    @apply m-0 p-0 bg-surface-page overscroll-none;
+  }
+
+  /* Dark mode */
+  html.dark {
+    --brand-pink: #e30a5f;
+    --brand-pink-hover: #f41567;
+    --brand-pink-dark: #b0104f;
+    --brand-pink-ring: #e30a5f;
+
+    --surface-page: #141f25;
+    --surface-card: #1c2b35;
+    --surface-deep: #0f1a1f;
+    --surface-elevated: #172229;
+
+    --border-default: rgba(255, 255, 255, 0.1);
+    --border-subtle: rgba(255, 255, 255, 0.05);
+
+    /* Reset to Tailwind default cool grays */
+    --color-white: #ffffff;
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+    --color-gray-950: #030712;
   }
 
   /* Cream mode — warm parchment light theme */
   html.cream {
+    --brand-pink: #e30a5f;
+    --brand-pink-hover: #f41567;
+    --brand-pink-dark: #b0104f;
+    --brand-pink-ring: #e30a5f;
+
+    --surface-page: #ede7df;
+    --surface-card: #f2ece4;
+    --surface-deep: #e4ded6;
+    --surface-elevated: #f2ece4;
+
+    --border-default: rgba(0, 0, 0, 0.1);
+    --border-subtle: rgba(0, 0, 0, 0.05);
+
     --color-white: #f2ece4;
     --color-gray-50: #ede7df;
     --color-gray-100: #e4ded6;
@@ -29,7 +110,7 @@
     --color-gray-900: #1a1918;
     --color-gray-950: #110f0f;
 
-    /* Warm slate palette so slate-* utilities match the cream aesthetic */
+    /* Warm slate palette */
     --color-slate-50: #eee8e0;
     --color-slate-100: #e5dfd7;
     --color-slate-200: #d7d1c9;
@@ -45,37 +126,26 @@
 
   html.cream,
   html.cream body {
-    background-color: #ede7df;
+    background-color: var(--surface-page);
     color: #1a1918;
   }
 
-  /* Reset to Tailwind default cool grays for dark mode */
-  html.dark {
-    --color-white: #ffffff;
-    --color-gray-50: #f9fafb;
-    --color-gray-100: #f3f4f6;
-    --color-gray-200: #e5e7eb;
-    --color-gray-300: #d1d5db;
-    --color-gray-400: #9ca3af;
-    --color-gray-500: #6b7280;
-    --color-gray-600: #4b5563;
-    --color-gray-700: #374151;
-    --color-gray-800: #1f2937;
-    --color-gray-900: #111827;
-    --color-gray-950: #030712;
-  }
-
+  /* Dusk mode — muted blue-gray dark theme */
   html.dusk {
-    /* Design tokens (still available for explicit dusk: utilities) */
-    --dusk-page-bg: #2a3444;
-    --dusk-surface-bg: #344456;
-    --dusk-deep-surface: #1e2530;
-    --dusk-text-primary: #e8e0d8;
-    --dusk-text-secondary: #b0bac8;
-    --dusk-border: #4a5568;
-    --dusk-brand-pink: #e84580;
+    --brand-pink: #e84580;
+    --brand-pink-hover: #f06090;
+    --brand-pink-dark: #c23868;
+    --brand-pink-ring: #e84580;
 
-    /* Tailwind v4 CSS variable overrides — remaps all named color utilities site-wide */
+    --surface-page: #2a3444;
+    --surface-card: #3a4a5a;
+    --surface-deep: #1e2530;
+    --surface-elevated: #344456;
+
+    --border-default: #4a5568;
+    --border-subtle: #3a4556;
+
+    /* Tailwind v4 CSS variable overrides */
     --color-white: #e8e0d8;
     --color-gray-50: #e8e0d8;
     --color-gray-100: #d8d0c8;
@@ -100,11 +170,11 @@
 
   html.dusk,
   html.dusk body {
-    background-color: #2a3444;
+    background-color: var(--surface-page);
     color: #e8e0d8;
   }
 
-  /* Prevent iOS auto-zoom on input focus — triggers on any font-size < 16px */
+  /* Prevent iOS auto-zoom on input focus */
   input,
   textarea,
   select {
@@ -151,123 +221,4 @@
 /* Only adds safe area padding on Capacitor iOS (--cap-safe-top is 0px on web) */
 main {
   padding-top: var(--cap-safe-top) !important;
-}
-
-/* ==========================================================================
-   Dusk Theme — Class Selector Overrides
-   Handles hardcoded hex values in dark: utilities (no CSS variable to remap).
-   Specificity: (0,1,0) via :is() + :where() — ties with dark: utilities,
-   wins by source order. Explicit dusk: utilities at (0,2,0) still take priority.
-   ========================================================================== */
-@layer utilities {
-  /* --- Backgrounds --- */
-  /* Hierarchy (dark → dusk): deep → page → sidebar → header → mid → surface → lighter
-     #0f1a1f/#0f171b/#0f1419/#0f1619 → #1e2530  (deep)
-     #141f25          → #2a3444  (page bg)
-     #172229          → #2a3444  (sidebar — matches page)
-     #1a2834          → #344456  (header / elevated surface)
-     #1d2a32          → #344456  (mid surface)
-     #1c2b35          → #3a4a5a  (surface / cards)
-     #243642          → #4a5568  (lighter surface)
-  */
-
-  /* Page background: #141f25 → #2a3444 */
-  :is(.dusk, .dusk *):where(.dark\:bg-\[\#141f25\]) {
-    background-color: #2a3444;
-  }
-
-  /* Surface / cards: #1c2b35 → #3a4a5a */
-  :is(.dusk, .dusk *):where(.dark\:bg-\[\#1c2b35\]) {
-    background-color: #3a4a5a;
-  }
-
-  /* Deep surface: #0f1a1f → #1e2530 */
-  :is(.dusk, .dusk *):where(.dark\:bg-\[\#0f1a1f\]) {
-    background-color: #1e2530;
-  }
-
-  /* Sidebar/alt surface: #172229 → #2a3444 */
-  :is(.dusk, .dusk *):where(.dark\:bg-\[\#172229\]) {
-    background-color: #2a3444;
-  }
-
-  /* Header / elevated surface: #1a2834 → #344456 */
-  :is(.dusk, .dusk *):where(.dark\:bg-\[\#1a2834\]) {
-    background-color: #344456;
-  }
-
-  /* Mid surface: #1d2a32 → #344456 */
-  :is(.dusk, .dusk *):where(.dark\:bg-\[\#1d2a32\]) {
-    background-color: #344456;
-  }
-
-  /* Lighter surface: #243642 → #4a5568 */
-  :is(.dusk, .dusk *):where(.dark\:bg-\[\#243642\]) {
-    background-color: #4a5568;
-  }
-
-  /* Very deep surface: #0f171b → #1e2530 */
-  :is(.dusk, .dusk *):where(.dark\:bg-\[\#0f171b\]) {
-    background-color: #1e2530;
-  }
-
-  /* Time grid deep accent: #0f1419 → #1e2530 */
-  :is(.dusk, .dusk *):where(.dark\:bg-\[\#0f1419\]) {
-    background-color: #1e2530;
-  }
-
-  /* Admin table deep: #0f1619 → #1e2530 */
-  :is(.dusk, .dusk *):where(.dark\:bg-\[\#0f1619\]) {
-    background-color: #1e2530;
-  }
-
-  /* --- Gradients --- */
-
-  :is(.dusk, .dusk *):where(.dark\:from-\[\#141f25\]) {
-    --tw-gradient-from: #2a3444;
-  }
-  :is(.dusk, .dusk *):where(.dark\:to-\[\#141f25\]) {
-    --tw-gradient-to: #2a3444;
-  }
-  :is(.dusk, .dusk *):where(.dark\:from-\[\#0f1a1f\]) {
-    --tw-gradient-from: #1e2530;
-  }
-  :is(.dusk, .dusk *):where(.dark\:to-\[\#1c2b35\]) {
-    --tw-gradient-to: #3a4a5a;
-  }
-  :is(.dusk, .dusk *):where(.dark\:to-\[\#172229\]) {
-    --tw-gradient-to: #2a3444;
-  }
-  :is(.dusk, .dusk *):where(.dark\:from-\[\#0f1619\]) {
-    --tw-gradient-from: #1e2530;
-  }
-
-  /* --- Borders --- */
-
-  :is(.dusk, .dusk *):where(.dark\:border-white\/10) {
-    border-color: #4a5568;
-  }
-  :is(.dusk, .dusk *):where(.dark\:border-white\/5) {
-    border-color: #3a4556;
-  }
-
-  /* --- Text --- */
-
-  :is(.dusk, .dusk *):where(.dark\:text-\[\#b0b0b0\]) {
-    color: #b0bac8;
-  }
-
-  /* --- Shadows (inset borders) --- */
-
-  :is(.dusk, .dusk *):where(
-    .dark\:shadow-\[inset_0_0_0_2px_rgb\(75\,85\,99\)\]
-  ) {
-    box-shadow: inset 0 0 0 2px #4a5568;
-  }
-
-  /* --- Ring --- */
-
-  :is(.dusk, .dusk *):where(.dark\:ring-\[\#141f25\]) {
-    --tw-ring-color: #2a3444;
-  }
 }

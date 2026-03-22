@@ -101,7 +101,7 @@ function ActivityCalendar({ activityData }) {
             {week.map((day) => (
               <div
                 key={day.date}
-                className={`w-2.5 h-2.5 rounded-sm ${getColorClass(day.level)} transition-all hover:ring-1 hover:ring-[#e30a5f] cursor-pointer`}
+                className={`w-2.5 h-2.5 rounded-sm ${getColorClass(day.level)} transition-all hover:ring-1 hover:ring-brand-pink cursor-pointer`}
                 onMouseEnter={(e) => showTooltip(e, day)}
                 onMouseLeave={hideTooltip}
                 onClick={(e) => showTooltip(e, day)}
@@ -396,7 +396,7 @@ export default function DashboardPage() {
   // Show loading skeleton
   if (!mounted) {
     return (
-      <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
+      <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
         <MainSidebar />
 
         <main className="ml-auto flex-1 flex flex-col">
@@ -406,7 +406,7 @@ export default function DashboardPage() {
           </Head>
 
           {/* PageHeader skeleton */}
-          <div className="hidden lg:block -mt-[var(--cap-safe-top)] flex-shrink-0 bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 pt-[calc(var(--cap-safe-top)+1rem)] pb-4">
+          <div className="hidden lg:block -mt-[var(--cap-safe-top)] flex-shrink-0 bg-white dark:bg-surface-elevated border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 pt-[calc(var(--cap-safe-top)+1rem)] pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {/* Date skeleton */}
@@ -471,7 +471,7 @@ export default function DashboardPage() {
                     <div className="animate-pulse h-3 w-16 rounded bg-white/20 mt-2" />
                   </div>
                   {/* Study Time skeleton */}
-                  <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                  <div className="bg-white dark:bg-surface-card rounded-lg p-3 shadow-sm">
                     <div
                       className="animate-pulse w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900/30 mb-1"
                       style={{ animationDelay: '50ms' }}
@@ -486,7 +486,7 @@ export default function DashboardPage() {
                     />
                   </div>
                   {/* Accuracy skeleton */}
-                  <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                  <div className="bg-white dark:bg-surface-card rounded-lg p-3 shadow-sm">
                     <div
                       className="animate-pulse w-6 h-6 rounded-md bg-green-100 dark:bg-green-900/30 mb-1"
                       style={{ animationDelay: '100ms' }}
@@ -501,7 +501,7 @@ export default function DashboardPage() {
                     />
                   </div>
                   {/* Items Reviewed skeleton */}
-                  <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                  <div className="bg-white dark:bg-surface-card rounded-lg p-3 shadow-sm">
                     <div
                       className="animate-pulse w-6 h-6 rounded-md bg-purple-100 dark:bg-purple-900/30 mb-1"
                       style={{ animationDelay: '150ms' }}
@@ -518,7 +518,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Activity Calendar skeleton */}
-                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
+                <div className="bg-white dark:bg-surface-card rounded-lg p-4 shadow-sm">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <FaCalendarAlt className="text-gray-400 dark:text-gray-600 text-sm" />
@@ -572,7 +572,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Mobile Stats skeleton */}
-                <div className="md:hidden bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                <div className="md:hidden bg-white dark:bg-surface-card rounded-lg p-3 shadow-sm">
                   <div className="grid grid-cols-2 gap-2">
                     <div className="bg-gradient-to-br from-orange-500/60 to-red-500/60 rounded-lg p-3">
                       <div className="flex items-center gap-2">
@@ -614,7 +614,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Recent Sets skeleton */}
-                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
+                <div className="bg-white dark:bg-surface-card rounded-lg p-4 shadow-sm">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-1">
                       <div className="animate-pulse h-5 w-24 rounded bg-black/[0.06] dark:bg-white/[0.06]" />
@@ -625,7 +625,7 @@ export default function DashboardPage() {
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div
                         key={i}
-                        className="rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] p-3"
+                        className="rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-surface-elevated p-3"
                       >
                         <div
                           className="animate-pulse h-4 w-3/4 rounded bg-black/[0.06] dark:bg-white/[0.06]"
@@ -664,7 +664,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex h-[100dvh] overflow-hidden bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex h-[100dvh] overflow-hidden bg-gray-50 dark:bg-surface-page">
       <MainSidebar />
 
       <main className="ml-auto flex-1 flex flex-col min-h-0 overflow-hidden">
@@ -811,7 +811,7 @@ export default function DashboardPage() {
               </Link>
               <Link
                 href="/learn/academy/resources"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-brand-pink to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-brand-pink/40 transition-all"
               >
                 <TbBooks className="text-base" />
                 <span>Guide</span>
@@ -942,7 +942,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Study Time */}
-                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                <div className="bg-white dark:bg-surface-card rounded-lg p-3 shadow-sm">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
                       <FaClock className="text-xs text-blue-600 dark:text-blue-400" />
@@ -957,7 +957,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Accuracy */}
-                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                <div className="bg-white dark:bg-surface-card rounded-lg p-3 shadow-sm">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-6 h-6 rounded-md bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
                       <FaCheck className="text-xs text-green-600 dark:text-green-400" />
@@ -974,7 +974,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Items Reviewed */}
-                <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+                <div className="bg-white dark:bg-surface-card rounded-lg p-3 shadow-sm">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-6 h-6 rounded-md bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
                       <TbCards className="text-xs text-purple-600 dark:text-purple-400" />
@@ -990,7 +990,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Activity Calendar */}
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm">
+              <div className="bg-white dark:bg-surface-card rounded-lg p-4 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <FaCalendarAlt className="text-gray-600 dark:text-gray-400 text-sm" />
@@ -1069,7 +1069,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Compact Stats - Mobile only */}
-              <div className="md:hidden bg-white dark:bg-[#1c2b35] rounded-lg p-3 shadow-sm">
+              <div className="md:hidden bg-white dark:bg-surface-card rounded-lg p-3 shadow-sm">
                 <div className="grid grid-cols-2 gap-2">
                   <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-3 text-white">
                     <div className="flex items-center gap-2">
@@ -1136,7 +1136,7 @@ export default function DashboardPage() {
                 ) : (
                   <Link
                     href="/learn/academy/practice"
-                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white transition-all"
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-brand-pink to-[#c1084d] text-white transition-all"
                   >
                     <LuTextCursorInput className="text-base" />
                     <span>Study Translating</span>
@@ -1154,17 +1154,17 @@ export default function DashboardPage() {
               {/* Recent Sets */}
               <div
                 ref={setsCardRef}
-                className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-sm overflow-hidden"
+                className="bg-white dark:bg-surface-card rounded-lg p-4 shadow-sm overflow-hidden"
               >
                 {/* Header */}
                 <Link
                   href="/learn/academy/sets"
                   className="mb-4 flex items-center gap-1 w-fit group"
                 >
-                  <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white group-hover:text-[#e30a5f] transition-colors">
+                  <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white group-hover:text-brand-pink transition-colors">
                     Recent Sets
                   </h2>
-                  <FiChevronRight className="text-gray-400 dark:text-gray-500 text-lg mt-px group-hover:text-[#e30a5f] transition-colors" />
+                  <FiChevronRight className="text-gray-400 dark:text-gray-500 text-lg mt-px group-hover:text-brand-pink transition-colors" />
                 </Link>
 
                 {/* Sets */}
@@ -1182,7 +1182,7 @@ export default function DashboardPage() {
                     <p className="mb-3">You don&apos;t have any sets yet.</p>
                     <button
                       onClick={() => router.push('/learn/academy/sets/create')}
-                      className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95"
+                      className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-brand-pink text-white hover:opacity-95"
                     >
                       <FaPlus /> Create your first set
                     </button>
@@ -1212,7 +1212,7 @@ export default function DashboardPage() {
                         return (
                           <div
                             key={set.id}
-                            className="group rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] p-3 transition-all hover:shadow-sm focus-within:ring-2 focus-within:ring-[#e30a5f]"
+                            className="group rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-surface-elevated p-3 transition-all hover:shadow-sm focus-within:ring-2 focus-within:ring-brand-pink"
                           >
                             <div className="flex items-start justify-between gap-3">
                               <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 flex-1">
@@ -1250,7 +1250,7 @@ export default function DashboardPage() {
                       {sets.length < visibleSetCount && (
                         <Link
                           href="/learn/academy/sets/create"
-                          className="rounded-lg border-2 border-dashed border-[#e30a5f]/20 dark:border-[#e30a5f]/20 p-3 flex flex-col items-center justify-center gap-1.5 text-[#e30a5f]/60 dark:text-[#e30a5f]/50 hover:border-[#e30a5f]/50 hover:text-[#e30a5f] hover:bg-[#e30a5f]/[0.03] transition-colors"
+                          className="rounded-lg border-2 border-dashed border-brand-pink/20 dark:border-brand-pink/20 p-3 flex flex-col items-center justify-center gap-1.5 text-brand-pink/60 dark:text-brand-pink/50 hover:border-brand-pink/50 hover:text-brand-pink hover:bg-brand-pink/[0.03] transition-colors"
                         >
                           <FaPlus className="text-sm" />
                           <span className="text-xs font-medium">
@@ -1267,9 +1267,9 @@ export default function DashboardPage() {
                       {sets.length < visibleSetCount && (
                         <Link
                           href="/learn/academy/sets/create"
-                          className="flex items-center gap-3 px-3 py-2 text-[#e30a5f]/60 dark:text-[#e30a5f]/50 hover:text-[#e30a5f] hover:bg-[#e30a5f]/[0.03] transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-brand-pink/60 dark:text-brand-pink/50 hover:text-brand-pink hover:bg-brand-pink/[0.03] transition-colors"
                         >
-                          <div className="w-6 h-6 rounded-md border-2 border-dashed border-[#e30a5f]/30 flex items-center justify-center">
+                          <div className="w-6 h-6 rounded-md border-2 border-dashed border-brand-pink/30 flex items-center justify-center">
                             <FaPlus className="text-[8px]" />
                           </div>
                           <span className="text-sm font-medium">

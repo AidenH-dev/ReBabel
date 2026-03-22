@@ -65,12 +65,12 @@ export default function TimeGridWeek({
   const mobileDay = weekDays[selectedDayIndex] || weekDays[0];
 
   return (
-    <div className="rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden flex flex-col h-full bg-white dark:bg-[#141f25]">
+    <div className="rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden flex flex-col h-full bg-white dark:bg-surface-page">
       {/* Time grid */}
       <div className="flex-1 overflow-y-auto" ref={scrollRef}>
         <div className="inline-block min-w-full">
           {/* Header row with day labels */}
-          <div className="flex border-b border-gray-300 dark:border-gray-600 sticky top-0 z-10 bg-white dark:bg-[#1a2834]">
+          <div className="flex border-b border-gray-300 dark:border-gray-600 sticky top-0 z-10 bg-white dark:bg-surface-elevated">
             <div className="w-8 sm:w-14 flex-shrink-0 border-r border-gray-300 dark:border-gray-600"></div>
             {weekDays.map((day) => {
               const isToday = day.toDateString() === currentDayStr;
@@ -80,7 +80,7 @@ export default function TimeGridWeek({
                   className={`flex-1 px-0.5 sm:px-1 py-1 border-r border-gray-300 dark:border-gray-600 text-center text-[8px] sm:text-xs font-semibold ${
                     isToday
                       ? 'bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100'
-                      : 'bg-gray-50 dark:bg-[#0f1419] text-gray-900 dark:text-white'
+                      : 'bg-surface-deep text-gray-900 dark:text-white'
                   }`}
                 >
                   {formatDayHeader(day)}
@@ -102,7 +102,7 @@ export default function TimeGridWeek({
                 ref={isCurrentHour ? currentHourRef : undefined}
                 className={`flex border-b ${
                   isCurrentHour
-                    ? 'border-[#e30a5f] bg-red-50 dark:bg-red-950/20'
+                    ? 'border-brand-pink bg-red-50 dark:bg-red-950/20'
                     : 'border-gray-200 dark:border-gray-700'
                 }`}
               >
@@ -110,8 +110,8 @@ export default function TimeGridWeek({
                 <div
                   className={`w-8 sm:w-14 flex-shrink-0 border-r border-gray-300 dark:border-gray-600 px-0.5 sm:px-1 py-0.5 sm:py-1 text-[8px] sm:text-xs font-mono ${
                     isCurrentHour
-                      ? 'bg-[#e30a5f] text-white font-bold'
-                      : 'bg-gray-50 dark:bg-[#0f1419] text-gray-600 dark:text-gray-400'
+                      ? 'bg-brand-pink text-white font-bold'
+                      : 'bg-surface-deep text-gray-600 dark:text-gray-400'
                   }`}
                 >
                   {time}
@@ -131,17 +131,17 @@ export default function TimeGridWeek({
                         className={`flex-1 min-h-6 border-r border-gray-200 dark:border-gray-700 px-1 py-0.5 relative flex items-center justify-center ${
                           isTodayAndCurrentHour
                             ? 'bg-red-50 dark:bg-red-950/20'
-                            : 'bg-white dark:bg-[#141f25]'
+                            : 'bg-white dark:bg-surface-page'
                         }`}
                       >
                         {isTodayAndCurrentHour && (
                           <div
-                            className="absolute left-0 right-0 h-0.5 bg-[#e30a5f] z-10 pointer-events-none"
+                            className="absolute left-0 right-0 h-0.5 bg-brand-pink z-10 pointer-events-none"
                             style={{ top: `${(currentMinutes / 60) * 100}%` }}
                           />
                         )}
                         {itemCount > 0 && (
-                          <div className="bg-[#e30a5f] text-white rounded px-1 h-4 sm:h-5 flex items-center justify-center text-[8px] sm:text-[10px] font-semibold">
+                          <div className="bg-brand-pink text-white rounded px-1 h-4 sm:h-5 flex items-center justify-center text-[8px] sm:text-[10px] font-semibold">
                             {itemCount}
                           </div>
                         )}

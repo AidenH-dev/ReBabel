@@ -380,12 +380,12 @@ export default function VocabularyDashboard() {
   };
 
   return (
-    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#141f25] text-[#222] dark:text-white">
+    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-surface-page text-[#222] dark:text-white">
       {/* Sidebar */}
       <AcademySidebar />
 
       {/* Main */}
-      <main className="ml-auto flex-1 flex flex-col h-screen overflow-hidden bg-gray-50 dark:bg-[#141f25]">
+      <main className="ml-auto flex-1 flex flex-col h-screen overflow-hidden bg-gray-50 dark:bg-surface-page">
         {/* Desktop sticky header with inline stats */}
         <PageHeader
           title={
@@ -395,14 +395,14 @@ export default function VocabularyDashboard() {
               </h1>
               <button
                 onClick={() => setShowImportModal(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:bg-white dark:hover:bg-[#0f1a1f] hover:text-[#e30a5f] hover:shadow-sm hover:border-black/15 dark:hover:border-white/15 active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:bg-white dark:hover:bg-surface-deep hover:text-brand-pink hover:shadow-sm hover:border-black/15 dark:hover:border-white/15 active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-all"
               >
                 <TbDownload className="text-base" />
                 <span>Import</span>
               </button>
               <Link
                 href="/learn/academy/sets/create"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:bg-white dark:hover:bg-[#0f1a1f] hover:text-[#e30a5f] hover:shadow-sm hover:border-black/15 dark:hover:border-white/15 active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:bg-white dark:hover:bg-surface-deep hover:text-brand-pink hover:shadow-sm hover:border-black/15 dark:hover:border-white/15 active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-all"
               >
                 <FaPlus className="text-xs" />
                 <span>Create</span>
@@ -493,7 +493,7 @@ export default function VocabularyDashboard() {
               </button>
               <Link
                 href="/learn/academy/practice"
-                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40 transition-all"
+                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-brand-pink to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-brand-pink/40 transition-all"
               >
                 <LuTextCursorInput className="text-base" />
                 <span>Study Translating</span>
@@ -571,8 +571,8 @@ export default function VocabularyDashboard() {
                   className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
                   ${
                     activeTab === 'sets'
-                      ? 'text-[#e30a5f] border-[#e30a5f]'
-                      : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-[#e30a5f]'
+                      ? 'text-brand-pink border-brand-pink'
+                      : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-brand-pink'
                   }`}
                 >
                   View Sets
@@ -582,8 +582,8 @@ export default function VocabularyDashboard() {
                   className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
                   ${
                     activeTab === 'srs'
-                      ? 'text-[#e30a5f] border-[#e30a5f]'
-                      : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-[#e30a5f]'
+                      ? 'text-brand-pink border-brand-pink'
+                      : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-brand-pink'
                   }`}
                 >
                   SRS
@@ -594,7 +594,7 @@ export default function VocabularyDashboard() {
 
           {/* Content panel */}
           <div className="w-full max-w-6xl mx-auto">
-            <section className="mt-3 rounded-2xl shadow-sm bg-white dark:bg-[#1c2b35] border border-black/5 dark:border-white/5 p-4 sm:p-6">
+            <section className="mt-3 rounded-2xl shadow-sm bg-white dark:bg-surface-card border border-black/5 dark:border-white/5 p-4 sm:p-6">
               {/* SRS Section — kept mounted to preserve data, hidden when inactive */}
               <div style={{ display: activeTab === 'srs' ? 'block' : 'none' }}>
                 <SetsSrsOverview active={activeTab === 'srs'} />
@@ -636,14 +636,14 @@ export default function VocabularyDashboard() {
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => setShowImportModal(true)}
-                            className="p-2 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:text-[#e30a5f] transition"
+                            className="p-2 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:text-brand-pink transition"
                             aria-label="Import by code"
                           >
                             <TbDownload className="w-3.5 h-3.5" />
                           </button>
                           <Link
                             href="/learn/academy/sets/create"
-                            className="p-2 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:text-[#e30a5f] transition"
+                            className="p-2 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 hover:text-brand-pink transition"
                             aria-label="Create set"
                           >
                             <FaPlus className="w-3 h-3" />
@@ -655,7 +655,7 @@ export default function VocabularyDashboard() {
                     {/* Row 1: title (desktop only) + search + controls (desktop) */}
                     <div className="flex items-center gap-1.5 sm:gap-3">
                       {/* Title — hidden on mobile */}
-                      <h2 className="hidden sm:block text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white flex-shrink-0">
+                      <h2 className="hidden sm:block text-lg font-semibold tracking-tight text-gray-900 dark:text-white flex-shrink-0">
                         My Sets
                         <span
                           className="ml-2 text-xs font-normal text-black/60 dark:text-white/60 transition-opacity duration-200"
@@ -674,7 +674,7 @@ export default function VocabularyDashboard() {
                           placeholder="Search..."
                           value={searchSets}
                           onChange={(e) => setSearchSets(e.target.value)}
-                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-[#111] dark:text-white pl-8 pr-8 py-1.5 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#e30a5f] sm:placeholder:content-['Search…_(/)']"
+                          className="w-full bg-gray-50 dark:bg-surface-deep text-[#111] dark:text-white pl-8 pr-8 py-1.5 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-pink sm:placeholder:content-['Search…_(/)']"
                         />
                         {searchSets && (
                           <button
@@ -692,7 +692,7 @@ export default function VocabularyDashboard() {
                           onClick={() => setView('grid')}
                           className={`p-1.5 rounded-md transition ${
                             view === 'grid'
-                              ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                              ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                               : 'text-black/60 dark:text-white/60'
                           }`}
                           aria-label="Grid view"
@@ -703,7 +703,7 @@ export default function VocabularyDashboard() {
                           onClick={() => setView('list')}
                           className={`p-1.5 rounded-md transition ${
                             view === 'list'
-                              ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                              ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                               : 'text-black/60 dark:text-white/60'
                           }`}
                           aria-label="List view"
@@ -740,7 +740,7 @@ export default function VocabularyDashboard() {
                                 }}
                                 className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${
                                   isActive
-                                    ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                                    ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                                     : 'text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white'
                                 }`}
                               >
@@ -755,7 +755,7 @@ export default function VocabularyDashboard() {
                             onClick={() => setSortKey('recent')}
                             className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium transition ${
                               sortKey === 'recent'
-                                ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                                ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                                 : 'text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white'
                             }`}
                           >
@@ -766,7 +766,7 @@ export default function VocabularyDashboard() {
                             onClick={() => setSortKey('az')}
                             className={`px-2 py-1 rounded-md text-xs font-medium transition ${
                               sortKey === 'az'
-                                ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                                ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                                 : 'text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white'
                             }`}
                           >
@@ -779,7 +779,7 @@ export default function VocabularyDashboard() {
                             }}
                             className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium transition ${
                               sortKey === 'size'
-                                ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                                ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                                 : 'text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white'
                             }`}
                           >
@@ -801,7 +801,7 @@ export default function VocabularyDashboard() {
                             onClick={() => setView('grid')}
                             className={`p-1.5 rounded-md transition ${
                               view === 'grid'
-                                ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                                ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                                 : 'text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white'
                             }`}
                             aria-label="Grid view"
@@ -812,7 +812,7 @@ export default function VocabularyDashboard() {
                             onClick={() => setView('list')}
                             className={`p-1.5 rounded-md transition ${
                               view === 'list'
-                                ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                                ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                                 : 'text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white'
                             }`}
                             aria-label="List view"
@@ -856,7 +856,7 @@ export default function VocabularyDashboard() {
                           onClick={() => setSortKey('recent')}
                           className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium transition ${
                             sortKey === 'recent'
-                              ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                              ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                               : 'text-black/60 dark:text-white/60'
                           }`}
                         >
@@ -867,7 +867,7 @@ export default function VocabularyDashboard() {
                           onClick={() => setSortKey('az')}
                           className={`px-2 py-1 rounded-md text-xs font-medium transition ${
                             sortKey === 'az'
-                              ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                              ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                               : 'text-black/60 dark:text-white/60'
                           }`}
                         >
@@ -880,7 +880,7 @@ export default function VocabularyDashboard() {
                           }}
                           className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium transition ${
                             sortKey === 'size'
-                              ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                              ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                               : 'text-black/60 dark:text-white/60'
                           }`}
                         >
@@ -911,7 +911,7 @@ export default function VocabularyDashboard() {
                           onClick={() =>
                             router.push('/learn/academy/sets/create')
                           }
-                          className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                          className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-brand-pink text-white hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-brand-pink"
                         >
                           <FaPlus /> Create your first set
                         </button>
@@ -927,7 +927,7 @@ export default function VocabularyDashboard() {
                           (_, i) => (
                             <div
                               key={i}
-                              className="rounded-lg border border-black/5 dark:border-white/5 bg-gray-50 dark:bg-[#1d2a32] p-3"
+                              className="rounded-lg border border-black/5 dark:border-white/5 bg-gray-50 dark:bg-surface-elevated p-3"
                               style={{ animationDelay: `${i * 75}ms` }}
                             >
                               <div className="flex items-start justify-between gap-3 mb-2">
@@ -1002,7 +1002,7 @@ export default function VocabularyDashboard() {
                           <div className="flex justify-center mt-4">
                             <button
                               onClick={() => setShowAll((s) => !s)}
-                              className="text-sm px-3 py-2 rounded-md border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                              className="text-sm px-3 py-2 rounded-md border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-pink"
                             >
                               {showAll
                                 ? 'Show less'
@@ -1027,7 +1027,7 @@ export default function VocabularyDashboard() {
                         placeholder="Search groups"
                         value={searchTags}
                         onChange={(e) => setSearchTags(e.target.value)}
-                        className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-[#111] dark:text-white pl-9 pr-3 py-2 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                        className="w-full bg-gray-50 dark:bg-surface-deep text-[#111] dark:text-white pl-9 pr-3 py-2 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-pink"
                       />
                     </div>
                   </div>
@@ -1043,7 +1043,7 @@ export default function VocabularyDashboard() {
                         <Link
                           key={index}
                           href={group.path}
-                          className="flex flex-col justify-between p-3 rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] text-sm transition-all hover:shadow-sm hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                          className="flex flex-col justify-between p-3 rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-surface-elevated text-sm transition-all hover:shadow-sm hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-brand-pink"
                         >
                           <span className="text-sm font-semibold text-gray-900 dark:text-white">
                             {group.name}
@@ -1117,7 +1117,7 @@ function SetCard({ set, formatDate }) {
   const typeIndicator = getTypeIndicator();
 
   return (
-    <div className="group rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-[#1d2a32] p-3 transition-all hover:shadow-sm hover:-translate-y-px focus-within:ring-2 focus-within:ring-[#e30a5f]">
+    <div className="group rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-surface-elevated p-3 transition-all hover:shadow-sm hover:-translate-y-px focus-within:ring-2 focus-within:ring-brand-pink">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2">

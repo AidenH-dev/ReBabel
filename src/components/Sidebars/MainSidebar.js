@@ -75,7 +75,7 @@ function MainSidebar() {
     'text-gray-700 hover:bg-gray-200 hover:text-gray-900';
   const inactiveIconLight = 'text-gray-600 group-hover:text-gray-900';
   const activeLink =
-    'text-[#e30a5f] bg-gray-100 dark:bg-[#172229] dusk:bg-[#e84580]/10 shadow-[inset_0_0_0_2px_rgb(209,213,219)] dark:shadow-[inset_0_0_0_2px_rgb(75,85,99)] dusk:shadow-[inset_0_0_0_2px_rgba(232,69,128,0.3)]';
+    'text-brand-pink bg-gray-100 dark:bg-surface-elevated dusk:bg-[#e84580]/10 shadow-[inset_0_0_0_2px_rgb(209,213,219)] dark:shadow-[inset_0_0_0_2px_rgb(75,85,99)] dusk:shadow-[inset_0_0_0_2px_rgba(232,69,128,0.3)]';
   const inactiveLinkDark =
     'dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 dusk:text-[#b0bac8] dusk:hover:text-[#e8e0d8] dusk:hover:bg-[#344456]';
   const inactiveIconDark =
@@ -107,7 +107,7 @@ function MainSidebar() {
               <TbLayoutDashboard
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
                   isDashboardActive
-                    ? 'text-[#e30a5f]'
+                    ? 'text-brand-pink'
                     : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
@@ -128,7 +128,7 @@ function MainSidebar() {
               <TbSchool
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
                   isAcademyActive
-                    ? 'text-[#e30a5f]'
+                    ? 'text-brand-pink'
                     : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
@@ -149,7 +149,7 @@ function MainSidebar() {
               <TbBooks
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
                   isResourcesActive
-                    ? 'text-[#e30a5f]'
+                    ? 'text-brand-pink'
                     : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
@@ -167,7 +167,7 @@ function MainSidebar() {
             >
               <TbCertificate
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
-                  isCertificateActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                  isCertificateActive ? "text-brand-pink" : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
               <span className="ms-3">Certificate</span>
@@ -189,7 +189,7 @@ function MainSidebar() {
                 <FaRegUser
                   className={`flex-shrink-0 w-6 h-6 transition duration-75 ${
                     isStudentMenuActive
-                      ? 'text-[#e30a5f]'
+                      ? 'text-brand-pink'
                       : `${inactiveIconLight} ${inactiveIconDark}`
                   }`}
                 />
@@ -198,7 +198,7 @@ function MainSidebar() {
               <TbChevronDown
                 className={`w-5 h-5 transition-transform duration-200 ${
                   isStudentMenuExpanded ? 'rotate-180' : ''
-                } ${isStudentMenuActive ? 'text-[#e30a5f]' : 'text-gray-500 dark:text-gray-400 dusk:text-[#b0bac8]'}`}
+                } ${isStudentMenuActive ? 'text-brand-pink' : 'text-gray-500 dark:text-gray-400 dusk:text-[#b0bac8]'}`}
               />
             </button>
 
@@ -244,7 +244,7 @@ function MainSidebar() {
                       <Icon
                         className={`flex-shrink-0 w-5 h-5 transition duration-75 ${
                           item.active
-                            ? 'text-[#e30a5f]'
+                            ? 'text-brand-pink'
                             : `${inactiveIconLight} ${inactiveIconDark}`
                         }`}
                       />
@@ -263,9 +263,9 @@ function MainSidebar() {
   const bubbleBase =
     'flex items-center justify-center w-15 h-15 rounded-full border-2 border-gray-300 dark:border-gray-600 dusk:border-[#4a5568] bg-white/80 dark:bg-gray-800/60 dusk:bg-[#344456]/80 hover:bg-gray-100/90 dark:hover:bg-gray-700/70 dusk:hover:bg-[#344456] hover:border-gray-400 dark:hover:border-gray-500 dusk:hover:border-[#5a6878] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600';
   const bubbleActive =
-    'border-[#e30a5f] dark:border-[#e30a5f] bg-gray-100/90 dark:bg-[#172229]/80 dusk:bg-[#e84580]/10';
+    'border-brand-pink dark:border-brand-pink bg-gray-100/90 dark:bg-surface-elevated/80 dusk:bg-[#e84580]/10';
   const bubbleIconBase = 'w-6.5 h-6.5 text-gray-700 dark:text-gray-300';
-  const bubbleIconActive = 'w-6 h-6 text-[#e30a5f]';
+  const bubbleIconActive = 'w-6 h-6 text-brand-pink';
 
   const mobileNavItems = [
     {
@@ -382,7 +382,7 @@ function MainSidebar() {
                         }
                       >
                         <ChildIcon
-                          className={`w-6 h-6 ${child.active ? 'text-[#e30a5f]' : 'text-gray-700 dark:text-gray-300'}`}
+                          className={`w-6 h-6 ${child.active ? 'text-brand-pink' : 'text-gray-700 dark:text-gray-300'}`}
                         />
                       </button>
                     );
@@ -394,7 +394,7 @@ function MainSidebar() {
                   onClick={() =>
                     setIsStudentBubbleExpanded(!isStudentBubbleExpanded)
                   }
-                  className={`${bubbleBase} ${item.active ? bubbleActive : ''} ${isStudentBubbleExpanded ? 'ring-2 ring-[#e30a5f]/50' : ''} transition-all duration-200 ${isMobileMenuOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-75 pointer-events-none'}`}
+                  className={`${bubbleBase} ${item.active ? bubbleActive : ''} ${isStudentBubbleExpanded ? 'ring-2 ring-brand-pink/50' : ''} transition-all duration-200 ${isMobileMenuOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-75 pointer-events-none'}`}
                   style={{
                     transitionDelay: isMobileMenuOpen
                       ? `${(i + 1) * 50}ms`
@@ -405,7 +405,7 @@ function MainSidebar() {
                   tabIndex={isMobileMenuOpen ? 0 : -1}
                 >
                   <Icon
-                    className={`w-6 h-6 ${item.active ? 'text-[#e30a5f]' : 'text-gray-700 dark:text-gray-300'}`}
+                    className={`w-6 h-6 ${item.active ? 'text-brand-pink' : 'text-gray-700 dark:text-gray-300'}`}
                   />
                 </button>
               </div>
@@ -437,7 +437,7 @@ function MainSidebar() {
       </div>
 
       {/* Desktop Sidebar - Hidden on small screens */}
-      <div className="hidden lg:block w-64 h-screen p-4 bg-white dark:bg-[#172229] dusk:bg-[#2a3444] border-r-2 border-gray-300 dark:border-gray-600 dusk:border-[#4a5568]">
+      <div className="hidden lg:block w-64 h-screen p-4 bg-white dark:bg-surface-elevated dusk:bg-[#2a3444] border-r-2 border-gray-300 dark:border-gray-600 dusk:border-[#4a5568]">
         <NavigationContent />
       </div>
     </>

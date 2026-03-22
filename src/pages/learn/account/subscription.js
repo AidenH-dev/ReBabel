@@ -108,10 +108,10 @@ export default function Subscription() {
   const isPremium = !!subscription?.isPremium;
 
   return (
-    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#172229] text-[#4e4a4a] dark:text-white">
+    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-surface-elevated text-[#4e4a4a] dark:text-white">
       <MainSidebar />
 
-      <main className="ml-auto flex-1 flex flex-col items-center justify-center h-screen overflow-y-auto bg-gray-100 dark:bg-[#172229] p-10">
+      <main className="ml-auto flex-1 flex flex-col items-center justify-center h-screen overflow-y-auto bg-gray-100 dark:bg-surface-elevated p-10">
         <Head>
           <title>Subscription - ReBabel</title>
           <link rel="icon" href="/favicon.ico" />
@@ -119,7 +119,7 @@ export default function Subscription() {
 
         <div className="w-full max-w-md">
           <h1 className="text-3xl font-semibold mb-2 flex items-center gap-3">
-            <HiOutlineStar className="text-[#e30a5f]" />
+            <HiOutlineStar className="text-brand-pink" />
             Subscription
           </h1>
           {isPremium ? (
@@ -148,7 +148,7 @@ export default function Subscription() {
           )}
 
           {loading ? (
-            <div className="bg-white dark:bg-[#1c2b35] p-8 rounded-lg shadow-md">
+            <div className="bg-white dark:bg-surface-card p-8 rounded-lg shadow-md">
               <div className="flex items-center justify-center gap-2">
                 <TbLoader className="w-5 h-5 animate-spin" />
                 Loading...
@@ -156,9 +156,9 @@ export default function Subscription() {
             </div>
           ) : isPremium ? (
             /* Premium User View */
-            <div className="bg-white dark:bg-[#1c2b35] p-6 rounded-lg shadow-md border border-[#e30a5f]/20">
+            <div className="bg-white dark:bg-surface-card p-6 rounded-lg shadow-md border border-brand-pink/20">
               <div className="flex items-center gap-3 mb-6">
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#e30a5f] text-white font-medium">
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-pink text-white font-medium">
                   <HiOutlineStar className="w-5 h-5 text-amber-300" />
                   Premium Active
                 </span>
@@ -179,7 +179,7 @@ export default function Subscription() {
                 )}
               </div>
 
-              <div className="bg-[#e30a5f]/5 dark:bg-[#e30a5f]/10 rounded-lg p-4 mb-6 border border-[#e30a5f]/10">
+              <div className="bg-brand-pink/5 dark:bg-brand-pink/10 rounded-lg p-4 mb-6 border border-brand-pink/10">
                 <h3 className="font-medium mb-3">Premium Benefits:</h3>
                 <ul className="space-y-2 text-gray-600 dark:text-gray-400 text-sm">
                   <li className="flex items-center gap-2">
@@ -203,7 +203,7 @@ export default function Subscription() {
               <button
                 onClick={handleManageBilling}
                 disabled={processing}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[#e30a5f]/30 hover:border-[#e30a5f]/50 hover:bg-[#e30a5f]/5 transition-colors disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-brand-pink/30 hover:border-brand-pink/50 hover:bg-brand-pink/5 transition-colors disabled:opacity-50"
               >
                 {processing ? (
                   <TbLoader className="w-4 h-4 animate-spin" />
@@ -215,9 +215,9 @@ export default function Subscription() {
             </div>
           ) : (
             /* Free User View */
-            <div className="relative overflow-hidden bg-white dark:bg-[#1c2b35] rounded-lg shadow-md border border-[#e30a5f]/20">
+            <div className="relative overflow-hidden bg-white dark:bg-surface-card rounded-lg shadow-md border border-brand-pink/20">
               {/* Founder Banner */}
-              <div className="bg-[#e30a5f] px-6 py-3">
+              <div className="bg-brand-pink px-6 py-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
@@ -243,14 +243,14 @@ export default function Subscription() {
                     <span className="text-gray-400 dark:text-gray-500 text-lg line-through">
                       $8
                     </span>
-                    <span className="text-4xl font-bold text-[#e30a5f]">
+                    <span className="text-4xl font-bold text-brand-pink">
                       $5.50
                     </span>
                     <span className="text-gray-500 dark:text-gray-400 text-sm">
                       /mo
                     </span>
                   </div>
-                  <p className="text-xs text-[#e30a5f] font-medium mt-1">
+                  <p className="text-xs text-brand-pink font-medium mt-1">
                     Save 31% as a founding member
                   </p>
                 </div>
@@ -260,19 +260,19 @@ export default function Subscription() {
 
                 <ul className="space-y-2.5 mb-5 text-sm">
                   <li className="flex items-center gap-2.5">
-                    <TbCheck className="w-4 h-4 text-[#e30a5f] flex-shrink-0" />
+                    <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
                     <span>5 translation practice sessions per day</span>
                   </li>
                   <li className="flex items-center gap-2.5">
-                    <TbCheck className="w-4 h-4 text-[#e30a5f] flex-shrink-0" />
+                    <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
                     <span>Automatic grading & feedback</span>
                   </li>
                   <li className="flex items-center gap-2.5">
-                    <TbCheck className="w-4 h-4 text-[#e30a5f] flex-shrink-0" />
+                    <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
                     <span>Advanced practice modes</span>
                   </li>
                   <li className="flex items-center gap-2.5">
-                    <TbCheck className="w-4 h-4 text-[#e30a5f] flex-shrink-0" />
+                    <TbCheck className="w-4 h-4 text-brand-pink flex-shrink-0" />
                     <span>Priority support</span>
                   </li>
                 </ul>
@@ -280,7 +280,7 @@ export default function Subscription() {
                 <button
                   onClick={handleUpgrade}
                   disabled={processing}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#e30a5f] hover:bg-[#f41567] text-white font-semibold transition-all disabled:opacity-50"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-brand-pink hover:bg-brand-pink-hover text-white font-semibold transition-all disabled:opacity-50"
                 >
                   {processing ? (
                     <TbLoader className="w-4 h-4 animate-spin" />

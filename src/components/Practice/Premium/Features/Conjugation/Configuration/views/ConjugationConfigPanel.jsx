@@ -138,7 +138,7 @@ export default function ConjugationConfigPanel({
         <div className="relative">
           <div
             ref={setInputRef}
-            className="min-h-[42px] bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded-lg text-sm border border-black/10 dark:border-white/10 focus-within:ring-1 focus-within:ring-[#e30a5f] flex flex-wrap items-center gap-1.5"
+            className="min-h-[42px] bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded-lg text-sm border border-border-default focus-within:ring-1 focus-within:ring-brand-pink flex flex-wrap items-center gap-1.5"
           >
             {selectedSets.map((set) => (
               <div
@@ -195,14 +195,14 @@ export default function ConjugationConfigPanel({
             setSearchResults.length > 0 && (
               <div
                 ref={setDropdownRef}
-                className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1c2b35] border border-black/10 dark:border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto overscroll-contain"
+                className="absolute z-10 w-full mt-1 bg-surface-card border border-border-default rounded-lg shadow-lg max-h-60 overflow-y-auto overscroll-contain"
                 style={{ WebkitOverflowScrolling: 'touch' }}
               >
                 {setSearchResults.map((set) => (
                   <button
                     key={set.id}
                     onClick={() => handleSelectSet(set)}
-                    className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-[#22333e] transition-colors border-b border-black/5 dark:border-white/5 last:border-b-0"
+                    className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-[#22333e] transition-colors border-b border-border-subtle last:border-b-0"
                   >
                     <div className="text-sm font-medium text-black dark:text-white">
                       {set.name}
@@ -235,7 +235,7 @@ export default function ConjugationConfigPanel({
               }}
               className={`flex items-center gap-1.5 text-sm cursor-pointer mb-2 ${
                 specificItemsMode
-                  ? 'text-[#e30a5f] font-medium'
+                  ? 'text-brand-pink font-medium'
                   : 'text-gray-600 dark:text-gray-400'
               }`}
             >
@@ -243,7 +243,7 @@ export default function ConjugationConfigPanel({
                 type="checkbox"
                 checked={specificItemsMode}
                 readOnly
-                className="accent-[#e30a5f]"
+                className="accent-brand-pink"
               />
               Study specific items only
             </button>
@@ -252,12 +252,12 @@ export default function ConjugationConfigPanel({
               <div className="relative">
                 <div
                   ref={itemInputRef}
-                  className="min-h-[42px] bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded-lg text-sm border border-black/10 dark:border-white/10 focus-within:ring-1 focus-within:ring-[#e30a5f] flex flex-wrap items-center gap-1.5"
+                  className="min-h-[42px] bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded-lg text-sm border border-border-default focus-within:ring-1 focus-within:ring-brand-pink flex flex-wrap items-center gap-1.5"
                 >
                   {focalItems?.map((item) => (
                     <div
                       key={item.id}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm bg-[#e30a5f]/10 text-[#e30a5f] border border-[#e30a5f]/20"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm bg-brand-pink/10 text-brand-pink border border-brand-pink/20"
                     >
                       <span className="truncate max-w-[120px] sm:max-w-none">
                         {item.kanji || item.kana}
@@ -294,14 +294,14 @@ export default function ConjugationConfigPanel({
                 {showItemSuggestions && itemSearchResults.length > 0 && (
                   <div
                     ref={itemDropdownRef}
-                    className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1c2b35] border border-black/10 dark:border-white/10 rounded-lg shadow-lg max-h-48 overflow-y-auto overscroll-contain"
+                    className="absolute z-10 w-full mt-1 bg-surface-card border border-border-default rounded-lg shadow-lg max-h-48 overflow-y-auto overscroll-contain"
                     style={{ WebkitOverflowScrolling: 'touch' }}
                   >
                     {itemSearchResults.map((item) => (
                       <button
                         key={item.id}
                         onClick={() => handleSelectFocalItem(item)}
-                        className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-[#22333e] transition-colors border-b border-black/5 dark:border-white/5 last:border-b-0"
+                        className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-[#22333e] transition-colors border-b border-border-subtle last:border-b-0"
                       >
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium text-black dark:text-white">
@@ -349,7 +349,7 @@ export default function ConjugationConfigPanel({
             <FaArrowsUpDown
               className={
                 isSelectAll
-                  ? 'text-[#e30a5f]'
+                  ? 'text-brand-pink'
                   : 'text-gray-500 dark:text-gray-400'
               }
               size={14}
@@ -357,7 +357,7 @@ export default function ConjugationConfigPanel({
             <span
               className={
                 isSelectAll
-                  ? 'text-[#e30a5f] font-medium'
+                  ? 'text-brand-pink font-medium'
                   : 'text-gray-700 dark:text-gray-300'
               }
             >
@@ -372,7 +372,7 @@ export default function ConjugationConfigPanel({
             <FaShuffle
               className={
                 isRandomMode
-                  ? 'text-[#e30a5f]'
+                  ? 'text-brand-pink'
                   : 'text-gray-500 dark:text-gray-400'
               }
               size={14}
@@ -380,7 +380,7 @@ export default function ConjugationConfigPanel({
             <span
               className={
                 isRandomMode
-                  ? 'text-[#e30a5f] font-medium'
+                  ? 'text-brand-pink font-medium'
                   : 'text-gray-700 dark:text-gray-300'
               }
             >
@@ -392,7 +392,7 @@ export default function ConjugationConfigPanel({
         {/* Two-column grid -- single column on mobile for verbs */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Verbs */}
-          <div className="bg-gray-50 dark:bg-[#0f1a1f] rounded-xl p-4 border border-black/5 dark:border-white/5">
+          <div className="bg-surface-deep rounded-xl p-4 border border-border-subtle">
             <h4 className="text-sm font-semibold flex items-center gap-2 mb-3 text-gray-900 dark:text-white">
               <FaBook size={12} /> Verbs
             </h4>
@@ -411,7 +411,7 @@ export default function ConjugationConfigPanel({
                     checked={verbOptions[key]}
                     disabled={isRandomMode}
                     onChange={() => onToggleVerb(key)}
-                    className="accent-[#e30a5f] flex-shrink-0"
+                    className="accent-brand-pink flex-shrink-0"
                   />
                   <span className="text-gray-900 dark:text-white whitespace-nowrap">
                     {label}
@@ -425,7 +425,7 @@ export default function ConjugationConfigPanel({
           </div>
 
           {/* Adjectives */}
-          <div className="bg-gray-50 dark:bg-[#0f1a1f] rounded-xl p-4 border border-black/5 dark:border-white/5">
+          <div className="bg-surface-deep rounded-xl p-4 border border-border-subtle">
             <h4 className="text-sm font-semibold flex items-center gap-2 mb-3 text-gray-900 dark:text-white">
               <GiSpellBook size={12} /> Adjectives
             </h4>
@@ -444,7 +444,7 @@ export default function ConjugationConfigPanel({
                     checked={adjectiveOptions[key]}
                     disabled={isRandomMode}
                     onChange={() => onToggleAdjective(key)}
-                    className="accent-[#e30a5f] flex-shrink-0"
+                    className="accent-brand-pink flex-shrink-0"
                   />
                   <span className="text-gray-900 dark:text-white">{label}</span>
                   <span className="text-gray-400 dark:text-gray-500 text-xs">
@@ -458,7 +458,7 @@ export default function ConjugationConfigPanel({
       </div>
 
       {/* C. Bottom bar */}
-      <div className="p-3 bg-gray-100 dark:bg-[#0f1a1f] rounded-lg space-y-2 sm:space-y-0">
+      <div className="p-3 bg-gray-100 dark:bg-surface-deep rounded-lg space-y-2 sm:space-y-0">
         {/* Mobile: stats row */}
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm sm:hidden">
           <div>
@@ -496,8 +496,8 @@ export default function ConjugationConfigPanel({
                   onClick={() => onQuestionCountChange(n)}
                   className={`px-2.5 py-1 text-xs rounded-md transition-colors ${
                     questionCount === n
-                      ? 'bg-[#e30a5f] text-white font-medium'
-                      : 'bg-white dark:bg-[#1c2b35] text-gray-600 dark:text-gray-300 border border-black/10 dark:border-white/10'
+                      ? 'bg-brand-pink text-white font-medium'
+                      : 'bg-surface-card text-gray-600 dark:text-gray-300 border border-border-default'
                   }`}
                 >
                   {n}
@@ -507,8 +507,8 @@ export default function ConjugationConfigPanel({
               onClick={() => onQuestionCountChange('all')}
               className={`px-2.5 py-1 text-xs rounded-md transition-colors ${
                 questionCount === 'all'
-                  ? 'bg-[#e30a5f] text-white font-medium'
-                  : 'bg-white dark:bg-[#1c2b35] text-gray-600 dark:text-gray-300 border border-black/10 dark:border-white/10'
+                  ? 'bg-brand-pink text-white font-medium'
+                  : 'bg-surface-card text-gray-600 dark:text-gray-300 border border-border-default'
               }`}
             >
               All
@@ -520,7 +520,7 @@ export default function ConjugationConfigPanel({
         <div className="flex items-center gap-2 sm:hidden">
           <button
             onClick={() => onToggleSelectAll()}
-            className="px-3 py-2 text-sm rounded-lg border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300"
+            className="px-3 py-2 text-sm rounded-lg border border-border-default hover:bg-black/5 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300"
           >
             Clear All
           </button>
@@ -531,8 +531,8 @@ export default function ConjugationConfigPanel({
             }
             className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
               poolItems.length > 0 && (isRandomMode || totalFormCount > 0)
-                ? 'bg-[#e30a5f] hover:bg-[#f41567] text-white cursor-pointer active:scale-95'
-                : 'bg-[#e30a5f] text-white opacity-50 cursor-not-allowed'
+                ? 'bg-brand-pink hover:bg-brand-pink-hover text-white cursor-pointer active:scale-95'
+                : 'bg-brand-pink text-white opacity-50 cursor-not-allowed'
             }`}
           >
             <FaPlay size={12} />
@@ -559,7 +559,7 @@ export default function ConjugationConfigPanel({
               </span>
             </div>
             {poolItems.length > 0 && (
-              <div className="flex gap-2 text-xs text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap border-l border-black/10 dark:border-white/10 pl-3">
+              <div className="flex gap-2 text-xs text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap border-l border-border-default pl-3">
                 <span>{verbCount} verbs</span>
                 <span className="text-gray-300 dark:text-gray-600">|</span>
                 <span>{iAdjCount} i-adj</span>
@@ -584,8 +584,8 @@ export default function ConjugationConfigPanel({
                       onClick={() => onQuestionCountChange(n)}
                       className={`px-2 py-1 text-xs rounded-md transition-colors ${
                         questionCount === n
-                          ? 'bg-[#e30a5f] text-white font-medium'
-                          : 'bg-white dark:bg-[#1c2b35] text-gray-600 dark:text-gray-300 border border-black/10 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5'
+                          ? 'bg-brand-pink text-white font-medium'
+                          : 'bg-surface-card text-gray-600 dark:text-gray-300 border border-border-default hover:bg-gray-50 dark:hover:bg-white/5'
                       }`}
                     >
                       {n}
@@ -595,8 +595,8 @@ export default function ConjugationConfigPanel({
                   onClick={() => onQuestionCountChange('all')}
                   className={`px-2 py-1 text-xs rounded-md transition-colors ${
                     questionCount === 'all'
-                      ? 'bg-[#e30a5f] text-white font-medium'
-                      : 'bg-white dark:bg-[#1c2b35] text-gray-600 dark:text-gray-300 border border-black/10 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5'
+                      ? 'bg-brand-pink text-white font-medium'
+                      : 'bg-surface-card text-gray-600 dark:text-gray-300 border border-border-default hover:bg-gray-50 dark:hover:bg-white/5'
                   }`}
                 >
                   All
@@ -605,7 +605,7 @@ export default function ConjugationConfigPanel({
             )}
             <button
               onClick={() => onToggleSelectAll()}
-              className="px-3 py-2 text-sm rounded-lg border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300"
+              className="px-3 py-2 text-sm rounded-lg border border-border-default hover:bg-black/5 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300"
             >
               Clear All
             </button>
@@ -617,8 +617,8 @@ export default function ConjugationConfigPanel({
               }
               className={`inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                 poolItems.length > 0 && (isRandomMode || totalFormCount > 0)
-                  ? 'bg-[#e30a5f] hover:bg-[#f41567] text-white cursor-pointer active:scale-95'
-                  : 'bg-[#e30a5f] text-white opacity-50 cursor-not-allowed'
+                  ? 'bg-brand-pink hover:bg-brand-pink-hover text-white cursor-pointer active:scale-95'
+                  : 'bg-brand-pink text-white opacity-50 cursor-not-allowed'
               }`}
             >
               <FaPlay size={12} />

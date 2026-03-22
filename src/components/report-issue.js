@@ -125,9 +125,9 @@ function ReportIssueButton() {
           aria-modal="true"
           onClick={(e) => e.target === e.currentTarget && handleClose()}
         >
-          <div className="w-full max-w-2xl rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/5 dark:border-white/10 max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-2xl rounded-xl bg-surface-card shadow-2xl border border-border-default max-h-[90vh] overflow-y-auto">
             {/* Header */}
-            <div className="sticky top-0 bg-white dark:bg-[#1c2b35] border-b border-black/5 dark:border-white/10 p-5 flex items-center justify-between">
+            <div className="sticky top-0 bg-surface-card border-b border-border-default p-5 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                   Report an Issue
@@ -160,7 +160,7 @@ function ReportIssueButton() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Where did you encounter this issue?{' '}
-                  <span className="text-[#e30a5f]">*</span>
+                  <span className="text-brand-pink">*</span>
                 </label>
                 <input
                   type="text"
@@ -168,7 +168,7 @@ function ReportIssueButton() {
                   value={formData.location}
                   onChange={handleInputChange}
                   placeholder="e.g., Flashcards, Quiz, Sets..."
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#e30a5f] placeholder-gray-400 dark:placeholder-gray-500"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-400 dark:placeholder-gray-500"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-500 mt-1.5">
                   Be specific about where on the page
@@ -179,7 +179,7 @@ function ReportIssueButton() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   What feature seems to be broken?{' '}
-                  <span className="text-[#e30a5f]">*</span>
+                  <span className="text-brand-pink">*</span>
                 </label>
                 <input
                   type="text"
@@ -187,7 +187,7 @@ function ReportIssueButton() {
                   value={formData.feature}
                   onChange={handleInputChange}
                   placeholder="e.g., Card flip, Answer submission..."
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#e30a5f] placeholder-gray-400 dark:placeholder-gray-500"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-400 dark:placeholder-gray-500"
                 />
               </div>
 
@@ -202,7 +202,7 @@ function ReportIssueButton() {
                   onChange={handleInputChange}
                   placeholder="What happened? Steps to reproduce..."
                   rows={2}
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#e30a5f] resize-none placeholder-gray-400 dark:placeholder-gray-500"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2.5 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none placeholder-gray-400 dark:placeholder-gray-500"
                 />
               </div>
 
@@ -221,7 +221,7 @@ function ReportIssueButton() {
                   />
                   <label
                     htmlFor="screenshot-upload"
-                    className="flex items-center justify-center gap-2 w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-700 dark:text-gray-300 px-3 sm:px-4 py-3 rounded-lg text-xs sm:text-sm border-2 border-dashed border-black/10 dark:border-white/10 hover:border-[#e30a5f] dark:hover:border-[#e30a5f] cursor-pointer transition-colors"
+                    className="flex items-center justify-center gap-2 w-full bg-surface-deep text-gray-700 dark:text-gray-300 px-3 sm:px-4 py-3 rounded-lg text-xs sm:text-sm border-2 border-dashed border-border-default hover:border-brand-pink dark:hover:border-brand-pink cursor-pointer transition-colors"
                   >
                     <FiUpload className="text-base sm:text-lg flex-shrink-0" />
                     <span className="truncate">{screenshot ? screenshot.name : "Click to upload screenshot"}</span>
@@ -233,12 +233,12 @@ function ReportIssueButton() {
               </div>*/}
 
               {/* Action Buttons */}
-              <div className="flex flex-row sm:flex-row items-center gap-2 sm:gap-3 pt-4 border-t border-black/5 dark:border-white/10">
+              <div className="flex flex-row sm:flex-row items-center gap-2 sm:gap-3 pt-4 border-t border-border-default">
                 <button
                   type="button"
                   onClick={handleClose}
                   disabled={isSubmitting}
-                  className="w-full sm:flex-1 px-4 py-2.5 rounded-lg text-sm font-medium border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:flex-1 px-4 py-2.5 rounded-lg text-sm font-medium border border-border-default text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>
@@ -246,7 +246,7 @@ function ReportIssueButton() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="w-full sm:flex-1 px-4 py-2.5 rounded-lg text-sm font-medium bg-[#e30a5f] text-white hover:bg-[#f41567] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#e30a5f] focus:ring-offset-2"
+                  className="w-full sm:flex-1 px-4 py-2.5 rounded-lg text-sm font-medium bg-brand-pink text-white hover:bg-brand-pink-hover transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-pink focus:ring-offset-2"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">

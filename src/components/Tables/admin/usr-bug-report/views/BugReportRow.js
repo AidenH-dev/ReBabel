@@ -1,6 +1,9 @@
-import { formatDateTime, formatBrowserType, formatEmail } from '../models/bugReportFormatters';
-import { IoOpenOutline } from "react-icons/io5";
-
+import {
+  formatDateTime,
+  formatBrowserType,
+  formatEmail,
+} from '../models/bugReportFormatters';
+import { IoOpenOutline } from 'react-icons/io5';
 
 export const BugReportRow = ({ report, index, isExpanded, onToggleExpand }) => {
   return (
@@ -19,7 +22,8 @@ export const BugReportRow = ({ report, index, isExpanded, onToggleExpand }) => {
       <td className="px-6 py-4 whitespace-nowrap text-center">
         <button
           onClick={() => onToggleExpand(report.entity_id)}
-          className="inline-flex items-center gap-1 py-0.5 px-1.5  border-2 border-[#e30a5f] text-[#e30a5f] hover:bg-[#e30a5f]/10 dark:hover:bg-[#e30a5f]/20 rounded-lg transition-colors"        >
+          className="inline-flex items-center gap-1 py-0.5 px-1.5  border-2 border-brand-pink text-brand-pink hover:bg-brand-pink/10 dark:hover:bg-brand-pink/20 rounded-lg transition-colors"
+        >
           {isExpanded ? 'Close' : 'View'} <IoOpenOutline />
         </button>
       </td>

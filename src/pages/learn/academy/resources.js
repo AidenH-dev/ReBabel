@@ -37,7 +37,7 @@ export default function Resources() {
 
   const ScaledFrame = ({ src, zoom = 0.8, height = 640 }) => (
     <div
-      className="relative w-full overflow-hidden bg-white dark:bg-[#0f171b]"
+      className="relative w-full overflow-hidden bg-white dark:bg-surface-deep"
       style={{ height }}
     >
       <div
@@ -63,7 +63,7 @@ export default function Resources() {
     const IMAGE_SRC = '/nhk_preview_standin.jpg';
 
     return (
-      <section className="rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1d2a32] overflow-hidden h-full">
+      <section className="rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-elevated overflow-hidden h-full">
         <div className="flex items-center justify-between px-4 py-2 border-b border-black/5 dark:border-white/10">
           <div className="flex items-center gap-2">
             <TbNews className="w-4 h-4 text-black/40 dark:text-white/40" />
@@ -75,7 +75,7 @@ export default function Resources() {
             href="https://news.web.nhk.or.jp/news/easy/"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-[#e30a5f] hover:underline font-medium"
+            className="inline-flex items-center gap-1 text-xs text-brand-pink hover:underline font-medium"
           >
             Open <TbExternalLink className="w-3.5 h-3.5" />
           </a>
@@ -105,7 +105,7 @@ export default function Resources() {
     zoom = 0.75,
     height = 360,
   }) => (
-    <div className="rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1d2a32] overflow-hidden">
+    <div className="rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-elevated overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2 border-b border-black/5 dark:border-white/10">
         <div className="flex items-center gap-2">
           {icon}
@@ -117,7 +117,7 @@ export default function Resources() {
           href={href}
           target="_blank"
           rel="noreferrer"
-          className="text-[#e30a5f] inline-flex items-center gap-1 text-xs font-medium hover:underline"
+          className="text-brand-pink inline-flex items-center gap-1 text-xs font-medium hover:underline"
         >
           Visit <TbExternalLink className="w-3.5 h-3.5" />
         </a>
@@ -125,7 +125,7 @@ export default function Resources() {
       {previewSrc ? (
         <ScaledFrame src={previewSrc} zoom={zoom} height={height} />
       ) : (
-        <div className="h-64 w-full flex items-center justify-center text-sm text-black/40 dark:text-white/40 bg-white dark:bg-[#0f171b]">
+        <div className="h-64 w-full flex items-center justify-center text-sm text-black/40 dark:text-white/40 bg-white dark:bg-surface-deep">
           Preview unavailable
         </div>
       )}
@@ -133,7 +133,7 @@ export default function Resources() {
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
       <MainSidebar />
       <main className="ml-auto max-h-screen flex-1 flex flex-col overflow-hidden">
         <Head>
@@ -180,7 +180,7 @@ export default function Resources() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   <button
                     onClick={() => setView('srs-guide')}
-                    className="group text-left flex items-start gap-3 rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1d2a32] p-4 hover:shadow-sm hover:-translate-y-px transition-all"
+                    className="group text-left flex items-start gap-3 rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-elevated p-4 hover:shadow-sm hover:-translate-y-px transition-all"
                   >
                     <div className="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center shrink-0">
                       <TbRepeat className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -194,7 +194,7 @@ export default function Resources() {
                         with SRS on ReBabel.
                       </p>
                     </div>
-                    <TbArrowRight className="text-black/20 dark:text-white/20 group-hover:text-[#e30a5f] transition mt-1 shrink-0" />
+                    <TbArrowRight className="text-black/20 dark:text-white/20 group-hover:text-brand-pink transition mt-1 shrink-0" />
                   </button>
                 </div>
               </section>
@@ -235,7 +235,7 @@ export default function Resources() {
 
                 {/* How-to helper cards */}
                 <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <div className="rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1d2a32] p-5">
+                  <div className="rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-elevated p-5">
                     <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                       <div className="w-7 h-7 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
                         <TbBooks className="w-4 h-4 text-green-600 dark:text-green-400" />
@@ -251,7 +251,7 @@ export default function Resources() {
                     </p>
                   </div>
 
-                  <div className="rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1d2a32] p-5">
+                  <div className="rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-elevated p-5">
                     <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                       <div className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
                         <TbSearch className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -283,7 +283,7 @@ export default function Resources() {
                         href="https://jisho.org/"
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 text-xs font-medium hover:bg-black/[0.08] dark:hover:bg-white/[0.1] hover:text-[#e30a5f] transition-all"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.06] text-black/60 dark:text-white/60 text-xs font-medium hover:bg-black/[0.08] dark:hover:bg-white/[0.1] hover:text-brand-pink transition-all"
                       >
                         Open Jisho <TbExternalLink className="w-3.5 h-3.5" />
                       </a>
@@ -296,12 +296,12 @@ export default function Resources() {
         )}
 
         {view === 'srs-guide' && (
-          <div className="flex-1 overflow-y-auto bg-white dark:bg-[#141f25]">
+          <div className="flex-1 overflow-y-auto bg-white dark:bg-surface-page">
             {/* Mobile back button */}
             <div className="lg:hidden px-4 pt-[max(1rem,var(--cap-safe-top))] pb-2">
               <button
                 onClick={() => setView('resources')}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-black/60 dark:text-white/60 hover:text-[#e30a5f] transition"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-black/60 dark:text-white/60 hover:text-brand-pink transition"
               >
                 <TbArrowLeft className="w-4 h-4" />
                 Back to Resources

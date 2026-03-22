@@ -347,7 +347,7 @@ export default function SRSDashboard({ setId, setData }) {
   };
 
   return (
-    <div className="sm:mb-3 w-full h-fit sm:h-40 group relative p-3 bg-white dark:bg-[#1c2b35] rounded-lg border border-black/5 dark:border-white/10 transition-all shadow-sm flex flex-col">
+    <div className="sm:mb-3 w-full h-fit sm:h-40 group relative p-3 bg-surface-card rounded-lg border-border-default transition-all shadow-sm flex flex-col">
       {/* SRS Dashboard Button - replaces "Spaced Repetition" heading */}
       <div className="flex gap-2 mb-2">
         <button
@@ -393,7 +393,7 @@ export default function SRSDashboard({ setId, setData }) {
               e.stopPropagation();
               handleDueNowClick();
             }}
-            className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#c1084d] rounded-lg text-white enabled:hover:brightness-110 enabled:hover:ring-2 enabled:hover:ring-[#e30a5f]/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="h-full flex flex-col items-start justify-center gap-0.5 px-4 py-2 bg-gradient-to-r from-brand-pink to-[#c1084d] rounded-lg text-white enabled:hover:brightness-110 enabled:hover:ring-2 enabled:hover:ring-brand-pink/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={loading || error || stats.dueNow === 0}
           >
             <div className="hidden sm:inline font-medium text-sm">Due Now</div>
@@ -454,7 +454,7 @@ export default function SRSDashboard({ setId, setData }) {
         </div>
 
         {/* Set Completion Progress */}
-        <div className="flex-1 bg-gray-50 dark:bg-[#1d2a32] rounded-lg border border-black/5 dark:border-white/10 p-3 flex flex-col justify-between">
+        <div className="flex-1 bg-surface-deep rounded-lg border-border-default p-3 flex flex-col justify-between">
           <div className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">
             Learn New Completed
           </div>
@@ -491,7 +491,7 @@ export default function SRSDashboard({ setId, setData }) {
                 <div className="h-full w-full rounded-full bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
               ) : (
                 <div
-                  className="bg-gradient-to-r from-[#e30a5f] to-[#c1084d] h-full rounded-full transition-all duration-500 ease-out"
+                  className="bg-gradient-to-r from-brand-pink to-[#c1084d] h-full rounded-full transition-all duration-500 ease-out"
                   style={{
                     width: `${stats.totalSetItems > 0 ? (stats.completedItems / stats.totalSetItems) * 100 : 0}%`,
                   }}

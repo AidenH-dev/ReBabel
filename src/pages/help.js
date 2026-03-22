@@ -41,7 +41,7 @@ export default function Help() {
           before you forget them. Check out our{' '}
           <Link
             href="/study-guide/what-is-srs"
-            className="text-[#e30a5f] font-semibold hover:text-[#f41567] transition-colors"
+            className="text-brand-pink font-semibold hover:text-brand-pink-hover transition-colors"
           >
             SRS guide
           </Link>{' '}
@@ -194,7 +194,7 @@ export default function Help() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/">
-              <span className="text-2xl font-bold text-[#e30a5f] cursor-pointer">
+              <span className="text-2xl font-bold text-brand-pink cursor-pointer">
                 ReBabel
               </span>
             </Link>
@@ -205,7 +205,7 @@ export default function Help() {
                 </button>
               </Link>
               <Link href="/api/auth/login">
-                <button className="px-4 py-2 text-sm bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium rounded-lg transition-colors">
+                <button className="px-4 py-2 text-sm bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors">
                   Join
                 </button>
               </Link>
@@ -234,7 +234,7 @@ export default function Help() {
               {faqs.map((faq, index) => (
                 <div
                   key={index}
-                  className="border border-gray-200 rounded-lg overflow-hidden hover:border-[#e30a5f]/30 transition-colors"
+                  className="border border-gray-200 rounded-lg overflow-hidden hover:border-brand-pink/30 transition-colors"
                 >
                   <button
                     onClick={() => toggleExpanded(index)}
@@ -244,7 +244,7 @@ export default function Help() {
                       {faq.question}
                     </dt>
                     <FaChevronDown
-                      className={`flex-shrink-0 text-[#e30a5f] transition-transform duration-300 ${
+                      className={`flex-shrink-0 text-brand-pink transition-transform duration-300 ${
                         expandedIndex === index ? 'rotate-180' : ''
                       }`}
                     />
@@ -275,7 +275,7 @@ export default function Help() {
         </section>
 
         {/* CTA Section */}
-        <section className="w-full py-12 bg-gradient-to-r from-[#e30a5f] to-[#f41567]">
+        <section className="w-full py-12 bg-gradient-to-r from-brand-pink to-brand-pink-hover">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
               Still have questions?
@@ -288,7 +288,7 @@ export default function Help() {
               </span>
             </p>
             <Link href="/">
-              <button className="px-8 py-3 bg-white text-[#e30a5f] font-semibold rounded-lg hover:bg-gray-100 transition-colors">
+              <button className="px-8 py-3 bg-white text-brand-pink font-semibold rounded-lg hover:bg-gray-100 transition-colors">
                 Back to Home
               </button>
             </Link>
@@ -301,7 +301,9 @@ export default function Help() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-xl font-bold text-[#e30a5f] mb-4">ReBabel</h3>
+              <h3 className="text-xl font-bold text-brand-pink mb-4">
+                ReBabel
+              </h3>
               <p className="text-sm text-gray-400">
                 Building the future of Japanese learning.
               </p>

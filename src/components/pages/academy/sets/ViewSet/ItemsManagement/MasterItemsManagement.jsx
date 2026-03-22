@@ -48,7 +48,7 @@ function SortableItem({ item, onView, onEdit }) {
     <div
       ref={setNodeRef}
       style={style}
-      className={`group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-2 shadow-sm overflow-hidden ${
+      className={`group bg-gray-50 dark:bg-surface-elevated rounded-lg p-2 shadow-sm overflow-hidden ${
         isDragging ? 'shadow-lg scale-[1.01]' : 'hover:shadow-md transition-all'
       }`}
     >
@@ -741,11 +741,11 @@ export default function MasterItemsManagement({
     <>
       {/* Content Area */}
       <div
-        className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-sm border border-black/5 dark:border-white/10
+        className="bg-surface-card rounded-lg shadow-sm border border-border-default
                       flex flex-col flex-1 min-h-0 overflow-hidden"
       >
         {/* Toolbar */}
-        <div className="border-b border-black/5 dark:border-white/10 px-4 py-3 flex-shrink-0">
+        <div className="border-b border-border-default px-4 py-3 flex-shrink-0">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="relative flex-1 max-w-md">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -754,7 +754,7 @@ export default function MasterItemsManagement({
                 placeholder="Search items..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 dark:text-white bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                className="w-full pl-10 pr-3 py-2 dark:text-white bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink"
               />
             </div>
 
@@ -770,12 +770,12 @@ export default function MasterItemsManagement({
               />
 
               {/* Hide grid/list toggle on mobile */}
-              <div className="hidden sm:flex items-center gap-1 rounded-lg bg-gray-100 dark:bg-[#0f1a1f] p-1">
+              <div className="hidden sm:flex items-center gap-1 rounded-lg bg-gray-100 dark:bg-surface-deep p-1">
                 <button
                   onClick={() => setViewMode('list')}
                   className={`p-1.5 rounded transition-colors ${
                     viewMode === 'list'
-                      ? 'bg-white dark:bg-[#1d2a32] text-[#e30a5f]'
+                      ? 'bg-white dark:bg-surface-elevated text-brand-pink'
                       : 'text-gray-600 dark:text-gray-400'
                   }`}
                 >
@@ -785,7 +785,7 @@ export default function MasterItemsManagement({
                   onClick={() => setViewMode('grid')}
                   className={`p-1.5 rounded transition-colors ${
                     viewMode === 'grid'
-                      ? 'bg-white dark:bg-[#1d2a32] text-[#e30a5f]'
+                      ? 'bg-white dark:bg-surface-elevated text-brand-pink'
                       : 'text-gray-600 dark:text-gray-400'
                   }`}
                 >
@@ -798,8 +798,8 @@ export default function MasterItemsManagement({
                   onClick={() => setIsReorderMode((prev) => !prev)}
                   className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-colors ${
                     isReorderMode
-                      ? 'bg-[#e30a5f] text-white hover:bg-[#c00950]'
-                      : 'bg-gray-100 dark:bg-[#0f1a1f] text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                      ? 'bg-brand-pink text-white hover:bg-[#c00950]'
+                      : 'bg-gray-100 dark:bg-surface-deep text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                   }`}
                   title={isReorderMode ? 'Exit reorder mode' : 'Reorder items'}
                 >
@@ -810,7 +810,7 @@ export default function MasterItemsManagement({
 
               <button
                 onClick={handleOpenAddItemModal}
-                className="p-2 rounded-lg bg-[#e30a5f] text-white hover:bg-[#c00950] transition-colors"
+                className="p-2 rounded-lg bg-brand-pink text-white hover:bg-[#c00950] transition-colors"
                 title="Add new item"
               >
                 <FiPlus className="w-4 h-4" />
@@ -823,8 +823,8 @@ export default function MasterItemsManagement({
           items.length > 0 &&
           !autoCategorizeDismissed &&
           !setData?.auto_categorized && (
-            <div className="mx-2 sm:mx-4 mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[#e30a5f]/10 dark:bg-[#e30a5f]/15 border border-[#e30a5f]/20">
-              <FiTag className="w-4 h-4 text-[#e30a5f] flex-shrink-0" />
+            <div className="mx-2 sm:mx-4 mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-pink/10 dark:bg-brand-pink/15 border border-brand-pink/20">
+              <FiTag className="w-4 h-4 text-brand-pink flex-shrink-0" />
               <p className="flex-1 min-w-0 text-xs text-gray-700 dark:text-gray-300">
                 <span className="sm:hidden">
                   Items need categorization for practice.
@@ -839,7 +839,7 @@ export default function MasterItemsManagement({
               {!isAutoCategorizing && !autoCategorizeResult && (
                 <button
                   onClick={onOpenAutoCategorizeModal}
-                  className="px-2.5 py-1 text-xs font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-md transition-colors flex-shrink-0 whitespace-nowrap"
+                  className="px-2.5 py-1 text-xs font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-md transition-colors flex-shrink-0 whitespace-nowrap"
                 >
                   Auto-categorize
                 </button>
@@ -917,7 +917,7 @@ export default function MasterItemsManagement({
                       <div
                         key={item.id}
                         onClick={() => setViewingItem(item)}
-                        className="group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-2 shadow-sm hover:shadow-md transition-all overflow-hidden cursor-pointer"
+                        className="group bg-gray-50 dark:bg-surface-elevated rounded-lg p-2 shadow-sm hover:shadow-md transition-all overflow-hidden cursor-pointer"
                       >
                         <div className="flex items-start gap-2 w-full">
                           <div className="flex-shrink-0 w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-[10px] font-medium text-gray-600 dark:text-gray-400">
@@ -1001,7 +1001,7 @@ export default function MasterItemsManagement({
                   <div
                     key={item.id}
                     onClick={() => setViewingItem(item)}
-                    className="group bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-3 hover:shadow-sm transition-all cursor-pointer"
+                    className="group bg-gray-50 dark:bg-surface-elevated rounded-lg p-3 hover:shadow-sm transition-all cursor-pointer"
                   >
                     <div className="flex items-start justify-between mb-1.5">
                       <span className="text-[10px] text-gray-500 dark:text-gray-500">
@@ -1079,20 +1079,20 @@ export default function MasterItemsManagement({
       {/* Add Item Modal */}
       {showAddItemModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
+          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-start justify-between gap-3 flex-shrink-0">
               <div className="min-w-0">
                 <div className="flex items-center gap-3 flex-wrap">
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white whitespace-nowrap">
                     Add New Item
                   </h2>
-                  <div className="flex bg-gray-100 dark:bg-[#0f1a1f] rounded-md p-0.5">
+                  <div className="flex bg-gray-100 dark:bg-surface-deep rounded-md p-0.5">
                     {(!set_type || set_type === 'vocab') && (
                       <button
                         onClick={() => setAddItemType('vocabulary')}
                         className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
                           addItemType === 'vocabulary'
-                            ? 'bg-[#e30a5f] text-white'
+                            ? 'bg-brand-pink text-white'
                             : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                         }`}
                       >
@@ -1104,7 +1104,7 @@ export default function MasterItemsManagement({
                         onClick={() => setAddItemType('grammar')}
                         className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
                           addItemType === 'grammar'
-                            ? 'bg-[#e30a5f] text-white'
+                            ? 'bg-brand-pink text-white'
                             : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                         }`}
                       >
@@ -1190,7 +1190,7 @@ export default function MasterItemsManagement({
                             handleVocabFormChange('english', e.target.value)
                           }
                           placeholder="English term"
-                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                          className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                         />
                       </div>
                       <div>
@@ -1207,7 +1207,7 @@ export default function MasterItemsManagement({
                             handleVocabFormChange('kana', e.target.value)
                           }
                           placeholder="ka → か, shi → し"
-                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] font-japanese"
+                          className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
                         />
                       </div>
                       <div>
@@ -1224,7 +1224,7 @@ export default function MasterItemsManagement({
                             handleVocabFormChange('kanji', e.target.value)
                           }
                           placeholder="漢字"
-                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] font-japanese"
+                          className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
                         />
                       </div>
                     </div>
@@ -1243,7 +1243,7 @@ export default function MasterItemsManagement({
                           )
                         }
                         placeholder="Example sentences"
-                        className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
                       />
                     </div>
                     <div>
@@ -1258,7 +1258,7 @@ export default function MasterItemsManagement({
                           handleVocabFormChange('tags', e.target.value)
                         }
                         placeholder="tag1, tag2, tag3"
-                        className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                       />
                     </div>
                   </>
@@ -1276,7 +1276,7 @@ export default function MasterItemsManagement({
                               }
                               className={`px-1 py-0.5 text-[10px] rounded transition-colors ${
                                 grammarTitleInputType === 'english'
-                                  ? 'bg-[#e30a5f] text-white'
+                                  ? 'bg-brand-pink text-white'
                                   : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
                               }`}
                             >
@@ -1289,7 +1289,7 @@ export default function MasterItemsManagement({
                               }
                               className={`px-1 py-0.5 text-[10px] rounded transition-colors ${
                                 grammarTitleInputType === 'kana'
-                                  ? 'bg-[#e30a5f] text-white'
+                                  ? 'bg-brand-pink text-white'
                                   : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
                               }`}
                             >
@@ -1308,7 +1308,7 @@ export default function MasterItemsManagement({
                               ? 'Type in romaji'
                               : 'Grammar pattern name'
                           }
-                          className={`w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] ${
+                          className={`w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink ${
                             grammarTitleInputType === 'kana'
                               ? 'font-japanese'
                               : ''
@@ -1326,7 +1326,7 @@ export default function MasterItemsManagement({
                             handleGrammarFormChange('topic', e.target.value)
                           }
                           placeholder="e.g., N5, JLPT"
-                          className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                          className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                         />
                       </div>
                     </div>
@@ -1341,7 +1341,7 @@ export default function MasterItemsManagement({
                           handleGrammarFormChange('description', e.target.value)
                         }
                         placeholder="Brief explanation"
-                        className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
                       />
                     </div>
                     <div>
@@ -1355,7 +1355,7 @@ export default function MasterItemsManagement({
                           handleGrammarFormChange('notes', e.target.value)
                         }
                         placeholder="Additional notes"
-                        className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                       />
                     </div>
                     <div>
@@ -1373,7 +1373,7 @@ export default function MasterItemsManagement({
                           )
                         }
                         placeholder="Example sentences"
-                        className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
                       />
                     </div>
                     <div>
@@ -1388,7 +1388,7 @@ export default function MasterItemsManagement({
                           handleGrammarFormChange('tags', e.target.value)
                         }
                         placeholder="tag1, tag2, tag3"
-                        className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                        className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                       />
                     </div>
                   </>
@@ -1407,7 +1407,7 @@ export default function MasterItemsManagement({
                 <button
                   type="submit"
                   disabled={isAddingItem}
-                  className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {isAddingItem ? (
                     <>
@@ -1447,7 +1447,7 @@ export default function MasterItemsManagement({
       {/* Edit Item Modal */}
       {editingItem && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
+          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
               <div>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -1527,7 +1527,7 @@ export default function MasterItemsManagement({
                         onChange={(e) =>
                           handleFieldChange('english', e.target.value)
                         }
-                        className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                        className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                       />
                     </div>
 
@@ -1542,7 +1542,7 @@ export default function MasterItemsManagement({
                           onChange={(e) =>
                             handleFieldChange('kana', e.target.value)
                           }
-                          className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                          className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink"
                         />
                       </div>
 
@@ -1556,7 +1556,7 @@ export default function MasterItemsManagement({
                           onChange={(e) =>
                             handleFieldChange('kanji', e.target.value)
                           }
-                          className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                          className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink"
                         />
                       </div>
                     </div>
@@ -1601,7 +1601,7 @@ export default function MasterItemsManagement({
                         onChange={(e) =>
                           handleFieldChange('title', e.target.value)
                         }
-                        className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                        className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                       />
                     </div>
 
@@ -1615,7 +1615,7 @@ export default function MasterItemsManagement({
                           handleFieldChange('description', e.target.value)
                         }
                         rows={3}
-                        className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f] resize-none"
+                        className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
                       />
                     </div>
 
@@ -1629,7 +1629,7 @@ export default function MasterItemsManagement({
                         onChange={(e) =>
                           handleFieldChange('topic', e.target.value)
                         }
-                        className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                        className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                       />
                     </div>
 
@@ -1643,7 +1643,7 @@ export default function MasterItemsManagement({
                           handleFieldChange('notes', e.target.value)
                         }
                         rows={3}
-                        className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f] resize-none"
+                        className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
                       />
                     </div>
                   </>
@@ -1669,7 +1669,7 @@ export default function MasterItemsManagement({
                       )
                     }
                     rows={4}
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-[#e30a5f] resize-none"
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
                     placeholder="Enter example sentences, one per line"
                   />
                 </div>
@@ -1697,7 +1697,7 @@ export default function MasterItemsManagement({
                           .filter(Boolean)
                       )
                     }
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                     placeholder="tag1, tag2, tag3"
                   />
                 </div>
@@ -1737,7 +1737,7 @@ export default function MasterItemsManagement({
                 <button
                   onClick={handleSaveEdit}
                   disabled={isSaving || isDeleting}
-                  className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {isSaving ? (
                     <>
@@ -1775,7 +1775,7 @@ export default function MasterItemsManagement({
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
+          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                 <svg
@@ -1800,7 +1800,7 @@ export default function MasterItemsManagement({
                 Are you sure you want to remove this item from the set?
               </p>
               {editingItem && (
-                <div className="mt-3 p-3 bg-gray-50 dark:bg-[#0f1a1f] rounded-lg">
+                <div className="mt-3 p-3 bg-surface-deep rounded-lg">
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {editingItem.type === 'vocabulary'
                       ? editingItem.english
@@ -1880,7 +1880,7 @@ export default function MasterItemsManagement({
           onClick={() => setViewingItem(null)}
         >
           <div
-            className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-lg max-h-[85vh] flex flex-col"
+            className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-lg max-h-[85vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
@@ -1981,7 +1981,7 @@ export default function MasterItemsManagement({
                       {viewingItem.example_sentences.map((sentence, i) => (
                         <div
                           key={i}
-                          className="p-3 bg-gray-50 dark:bg-[#0f1a1f] rounded-lg text-gray-900 dark:text-white font-japanese"
+                          className="p-3 bg-surface-deep rounded-lg text-gray-900 dark:text-white font-japanese"
                         >
                           {sentence}
                         </div>
@@ -2022,7 +2022,7 @@ export default function MasterItemsManagement({
                   handleEditItem(viewingItem.id, viewingItem.type);
                   setViewingItem(null);
                 }}
-                className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors flex items-center gap-2"
+                className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors flex items-center gap-2"
               >
                 <FiEdit2 className="w-4 h-4" />
                 Edit

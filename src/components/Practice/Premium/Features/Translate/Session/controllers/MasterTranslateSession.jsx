@@ -336,7 +336,7 @@ export default function MasterTranslateSession({
   if (isGenerating) {
     return (
       <div className="flex flex-col items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#e30a5f]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-pink"></div>
         <p className="mt-4 text-sm text-black/60 dark:text-white/60">
           Generating {sessionLength} practice sentences...
         </p>
@@ -370,7 +370,7 @@ export default function MasterTranslateSession({
         </p>
         <button
           onClick={() => onGenerationError?.('Generation failed')}
-          className="px-6 py-3 rounded-lg bg-[#e30a5f] text-white font-medium hover:opacity-90 transition-opacity"
+          className="px-6 py-3 rounded-lg bg-brand-pink text-white font-medium hover:opacity-90 transition-opacity"
         >
           Return to Practice
         </button>
@@ -386,7 +386,7 @@ export default function MasterTranslateSession({
           onClick={handleSubmit}
           disabled={isGrading || !userAnswer.trim()}
           className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all
-                   bg-gradient-to-r from-[#e30a5f] to-[#f41567] hover:from-[#f41567] hover:to-[#e30a5f] text-white
+                   bg-gradient-to-r from-brand-pink to-brand-pink-hover hover:from-brand-pink-hover hover:to-brand-pink text-white
                    disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
         >
           {isGrading ? (
@@ -402,13 +402,13 @@ export default function MasterTranslateSession({
         <div className="flex gap-2">
           <button
             onClick={handleRetry}
-            className="flex-1 px-4 py-3 rounded-lg border-2 border-[#e30a5f] text-[#e30a5f] font-medium hover:bg-[#e30a5f]/10"
+            className="flex-1 px-4 py-3 rounded-lg border-2 border-brand-pink text-brand-pink font-medium hover:bg-brand-pink/10"
           >
             I Was Correct
           </button>
           <button
             onClick={handleNext}
-            className="flex-1 px-4 py-3 rounded-lg bg-[#e30a5f] text-white font-medium hover:opacity-90"
+            className="flex-1 px-4 py-3 rounded-lg bg-brand-pink text-white font-medium hover:opacity-90"
           >
             {currentQuestionIndex + 1 >= sessionLength
               ? 'Finish'
@@ -448,12 +448,12 @@ export default function MasterTranslateSession({
       {/* Left Panel - Translation Area */}
       {/* Desktop: always visible | Mobile: hidden when showing results */}
       <div
-        className={`bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-4 sm:p-6 ${showResult ? 'hidden lg:block' : 'block'}`}
+        className={`bg-surface-card rounded-xl shadow-sm p-4 sm:p-6 ${showResult ? 'hidden lg:block' : 'block'}`}
       >
         {/* English Sentence */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <span className="w-8 h-8 bg-[#e30a5f] text-white rounded-full flex items-center justify-center text-sm">
+            <span className="w-8 h-8 bg-brand-pink text-white rounded-full flex items-center justify-center text-sm">
               1
             </span>
             English Sentence
@@ -474,7 +474,7 @@ export default function MasterTranslateSession({
         {/* User Translation Input */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <span className="w-8 h-8 bg-[#e30a5f] text-white rounded-full flex items-center justify-center text-sm">
+            <span className="w-8 h-8 bg-brand-pink text-white rounded-full flex items-center justify-center text-sm">
               2
             </span>
             Your Translation
@@ -486,8 +486,8 @@ export default function MasterTranslateSession({
             onKeyDown={handleKeyDown}
             disabled={showResult}
             className="w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg resize-none
-                     bg-white dark:bg-[#0f1a1f] text-gray-900 dark:text-white
-                     focus:border-[#e30a5f] dark:focus:border-[#e30a5f] focus:outline-none
+                     bg-white dark:bg-surface-deep text-gray-900 dark:text-white
+                     focus:border-brand-pink dark:focus:border-brand-pink focus:outline-none
                      disabled:bg-gray-100 dark:disabled:bg-white/5 disabled:cursor-not-allowed
                      placeholder-gray-400 dark:placeholder-gray-500"
             rows="3"
@@ -508,7 +508,7 @@ export default function MasterTranslateSession({
       {/* Right Panel - Grading Results */}
       {/* Desktop: always visible | Mobile: hidden until results ready */}
       <div
-        className={`bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-4 sm:p-6 ${showResult ? 'block' : 'hidden lg:block'} mt-4 lg:mt-0`}
+        className={`bg-surface-card rounded-xl shadow-sm p-4 sm:p-6 ${showResult ? 'block' : 'hidden lg:block'} mt-4 lg:mt-0`}
       >
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Grading Results

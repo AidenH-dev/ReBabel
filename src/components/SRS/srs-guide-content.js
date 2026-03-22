@@ -64,7 +64,7 @@ const rebabelSteps = [
           SRS Dashboard
         </span>
         , use{' '}
-        <span className="inline-flex items-center align-middle whitespace-nowrap rounded-md bg-gradient-to-r from-[#e30a5f] to-[#c1084d] px-2 py-0.5 text-sm font-semibold text-white">
+        <span className="inline-flex items-center align-middle whitespace-nowrap rounded-md bg-gradient-to-r from-brand-pink to-[#c1084d] px-2 py-0.5 text-sm font-semibold text-white">
           <LuRepeat className="mr-1 h-4 w-4 opacity-80" />
           Due Now
         </span>{' '}
@@ -144,8 +144,8 @@ export default function SRSGuideContent({
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-white/90 dark:bg-[#1c2b35]/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
-                <FaClock className="text-[#e30a5f] mb-3" />
+              <div className="bg-white/90 dark:bg-surface-card/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
+                <FaClock className="text-brand-pink mb-3" />
                 <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                   Review less often
                 </p>
@@ -153,8 +153,8 @@ export default function SRSGuideContent({
                   Easy items get spaced farther apart over time.
                 </p>
               </div>
-              <div className="bg-white/90 dark:bg-[#1c2b35]/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
-                <FaCalendarCheck className="text-[#e30a5f] mb-3" />
+              <div className="bg-white/90 dark:bg-surface-card/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
+                <FaCalendarCheck className="text-brand-pink mb-3" />
                 <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                   Catch forgetting early
                 </p>
@@ -162,8 +162,8 @@ export default function SRSGuideContent({
                   Hard items return sooner before they fully disappear.
                 </p>
               </div>
-              <div className="bg-white/90 dark:bg-[#1c2b35]/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
-                <FaSeedling className="text-[#e30a5f] mb-3" />
+              <div className="bg-white/90 dark:bg-surface-card/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
+                <FaSeedling className="text-brand-pink mb-3" />
                 <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                   Build long-term retention
                 </p>
@@ -177,8 +177,8 @@ export default function SRSGuideContent({
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] sm:gap-10 items-center">
             <div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-tight mb-6">
-                What is <span className="text-[#e30a5f]">SRS</span>, and why its
-                the best tool for memorizing Japanese
+                What is <span className="text-brand-pink">SRS</span>, and why
+                its the best tool for memorizing Japanese
               </h1>
               <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed mb-4 sm:mb-8">
                 Spaced repetition (SRS) times your reviews so you see each item
@@ -189,7 +189,7 @@ export default function SRSGuideContent({
 
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-rose-200/50 dark:from-rose-900/30 via-white dark:via-transparent to-blue-100/50 dark:to-blue-900/20 rounded-[2rem] blur-3xl" />
-              <div className="relative bg-white/90 dark:bg-[#1c2b35]/90 border border-white dark:border-white/10 rounded-[2rem] shadow-2xl shadow-slate-200/70 dark:shadow-black/30 p-4 md:p-6">
+              <div className="relative bg-white/90 dark:bg-surface-card/90 border border-white dark:border-white/10 rounded-[2rem] shadow-2xl shadow-slate-200/70 dark:shadow-black/30 p-4 md:p-6">
                 <div className="sm:grid sm:grid-cols-2 flex w-full gap-4 mb-4">
                   <div className="w-full rounded-2xl bg-[#fff4f7] dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/50 p-4">
                     <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-1 sm:mb-2">
@@ -202,14 +202,14 @@ export default function SRSGuideContent({
                       <p className="hidden sm:flex text-2xl font-bold text-slate-900 dark:text-white mb-2">
                         Better recall
                       </p>
-                      <FaArrowTrendUp className="text-[#e30a5f] text-3xl font-black ml-2 " />
+                      <FaArrowTrendUp className="text-brand-pink text-3xl font-black ml-2 " />
                     </div>
                     <p className="text-sm text-slate-600 dark:text-slate-300">
                       You review only what matters when it matters. Everything
                       is automated
                     </p>
                   </div>
-                  <div className="hidden sm:grid rounded-2xl bg-slate-50 dark:bg-[#243642] border border-slate-200 dark:border-white/10 p-4">
+                  <div className="hidden sm:grid rounded-2xl bg-slate-50 dark:bg-surface-elevated border border-slate-200 dark:border-white/10 p-4">
                     <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">
                       For Japanese
                     </p>
@@ -223,8 +223,8 @@ export default function SRSGuideContent({
                   </div>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl">
-                  <div className="bg-white/90 dark:bg-[#1c2b35]/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
-                    <FaClock className="text-[#e30a5f] mb-3" />
+                  <div className="bg-white/90 dark:bg-surface-card/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
+                    <FaClock className="text-brand-pink mb-3" />
                     <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                       Review less often
                     </p>
@@ -232,8 +232,8 @@ export default function SRSGuideContent({
                       Easy items get spaced farther apart over time.
                     </p>
                   </div>
-                  <div className="hidden sm:grid bg-white/90 dark:bg-[#1c2b35]/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
-                    <FaCalendarCheck className="text-[#e30a5f] mb-3" />
+                  <div className="hidden sm:grid bg-white/90 dark:bg-surface-card/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
+                    <FaCalendarCheck className="text-brand-pink mb-3" />
                     <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                       Catch forgetting early
                     </p>
@@ -241,8 +241,8 @@ export default function SRSGuideContent({
                       Hard items return sooner before they fully disappear.
                     </p>
                   </div>
-                  <div className="bg-white/90 dark:bg-[#1c2b35]/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
-                    <FaSeedling className="text-[#e30a5f] mb-3" />
+                  <div className="bg-white/90 dark:bg-surface-card/90 border border-rose-100 dark:border-rose-900/50 rounded-2xl p-4 shadow-sm">
+                    <FaSeedling className="text-brand-pink mb-3" />
                     <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                       Build long-term retention
                     </p>
@@ -259,7 +259,7 @@ export default function SRSGuideContent({
 
       {/* How it works */}
       <section className="w-full px-4 sm:px-6 lg:px-8 pb-8 sm:pb-14">
-        <div className="max-w-[68rem] mx-auto rounded-[1.45rem] bg-slate-950 dark:bg-[#0f1a1f] text-white p-5 md:p-6 shadow-2xl shadow-slate-300/25 dark:shadow-black/30">
+        <div className="max-w-[68rem] mx-auto rounded-[1.45rem] bg-slate-950 dark:bg-surface-deep text-white p-5 md:p-6 shadow-2xl shadow-slate-300/25 dark:shadow-black/30">
           <div className="max-w-[46rem] mb-6">
             <p className="text-sm uppercase tracking-[0.24em] text-rose-200 mb-3">
               How it works
@@ -294,7 +294,7 @@ export default function SRSGuideContent({
                     key={moment.day}
                     className="relative rounded-[1rem] bg-white/5 border border-white/10 p-3.5"
                   >
-                    <div className="absolute -left-6 top-4 flex h-4 w-4 items-center justify-center rounded-full border border-rose-200 bg-slate-950 dark:bg-[#0f1a1f] shadow-[0_0_0_4px_rgba(15,23,42,1)]">
+                    <div className="absolute -left-6 top-4 flex h-4 w-4 items-center justify-center rounded-full border border-rose-200 bg-slate-950 dark:bg-surface-deep shadow-[0_0_0_4px_rgba(15,23,42,1)]">
                       <div className="h-1.5 w-1.5 rounded-full bg-rose-300" />
                     </div>
                     <p className="text-sm font-semibold text-rose-200 mb-1">
@@ -318,7 +318,7 @@ export default function SRSGuideContent({
       {!compact && (
         <section className="w-full px-4 sm:px-6 lg:px-8 pb-8 sm:pb-16">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-white dark:bg-[#1c2b35] rounded-[2rem] border border-slate-200 dark:border-white/10 p-8 shadow-sm">
+            <div className="bg-surface-card rounded-[2rem] border border-slate-200 dark:border-white/10 p-8 shadow-sm">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-3">
                 Anki and SRS
               </p>
@@ -344,7 +344,7 @@ export default function SRSGuideContent({
               <div className="space-y-4">
                 {ankiSteps.map((step) => (
                   <div key={step} className="flex items-start gap-3">
-                    <FaCheckCircle className="text-[#e30a5f] mt-1 flex-shrink-0" />
+                    <FaCheckCircle className="text-brand-pink mt-1 flex-shrink-0" />
                     <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
                       {step}
                     </p>
@@ -353,7 +353,7 @@ export default function SRSGuideContent({
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-[#f5e1e9] dark:from-[#2a1f25] via-white dark:via-[#1c2b35] to-sky-50 dark:to-[#1a2530] rounded-[2rem] border border-rose-100 dark:border-white/10 p-8 shadow-sm">
+            <div className="bg-gradient-to-br from-[#f5e1e9] dark:from-[#2a1f25] via-white dark:via-surface-card to-sky-50 dark:to-[#1a2530] rounded-[2rem] border border-rose-100 dark:border-white/10 p-8 shadow-sm">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-3">
                 ReBabel AND SRS
               </p>
@@ -383,7 +383,7 @@ export default function SRSGuideContent({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="rounded-2xl bg-gray-50 dark:bg-white/5 border border-rose-100 dark:border-white/10 p-4">
                   <div className="flex">
-                    <FaCheckCircle className="text-[#e30a5f] mt-1 flex-shrink-0 mr-1" />
+                    <FaCheckCircle className="text-brand-pink mt-1 flex-shrink-0 mr-1" />
                     <p className="font-semibold text-slate-900 dark:text-white mb-2">
                       Definitive Feedback
                     </p>
@@ -395,7 +395,7 @@ export default function SRSGuideContent({
                 </div>
                 <div className="rounded-2xl bg-gray-50 dark:bg-white/5 border border-rose-100 dark:border-white/10 p-4">
                   <div className="flex">
-                    <FaCheckCircle className="text-[#e30a5f] mt-1 flex-shrink-0 mr-1" />
+                    <FaCheckCircle className="text-brand-pink mt-1 flex-shrink-0 mr-1" />
                     <p className="font-semibold text-slate-900 dark:text-white mb-2">
                       Study Beyond SRS
                     </p>
@@ -407,7 +407,7 @@ export default function SRSGuideContent({
                 </div>
                 <div className="rounded-2xl bg-gray-50 dark:bg-white/5 border border-rose-100 dark:border-white/10 p-4">
                   <div className="flex">
-                    <FaCheckCircle className="text-[#e30a5f] mt-1 flex-shrink-0 mr-1" />
+                    <FaCheckCircle className="text-brand-pink mt-1 flex-shrink-0 mr-1" />
                     <p className="font-semibold text-slate-900 dark:text-white mb-2">
                       New Words Study Faster
                     </p>
@@ -419,7 +419,7 @@ export default function SRSGuideContent({
                 </div>
                 <div className="rounded-2xl bg-gray-50 dark:bg-white/5 border border-rose-100 dark:border-white/10 p-4">
                   <div className="flex">
-                    <FaCheckCircle className="text-[#e30a5f] mt-1 flex-shrink-0 mr-1" />
+                    <FaCheckCircle className="text-brand-pink mt-1 flex-shrink-0 mr-1" />
                     <p className="font-semibold text-slate-900 dark:text-white mb-2">
                       Forget Flashcards
                     </p>
@@ -462,7 +462,7 @@ export default function SRSGuideContent({
                 className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
               >
                 <div className={index % 2 === 1 ? 'lg:order-2' : ''}>
-                  <div className="inline-flex items-center gap-2 text-sm font-semibold text-[#b0104f] dark:text-rose-300 bg-[#fff1f6] dark:bg-rose-950/40 px-3 py-1 rounded-full mb-4">
+                  <div className="inline-flex items-center gap-2 text-sm font-semibold text-brand-pink-dark dark:text-rose-300 bg-[#fff1f6] dark:bg-rose-950/40 px-3 py-1 rounded-full mb-4">
                     Step 0{index + 1}
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">
@@ -472,12 +472,12 @@ export default function SRSGuideContent({
                     {step.description}
                   </p>
                   <div className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
-                    <FaTasks className="text-[#e30a5f] mt-1 flex-shrink-0" />
+                    <FaTasks className="text-brand-pink mt-1 flex-shrink-0" />
                     <p>{step.tip}</p>
                   </div>
                 </div>
                 <div className={index % 2 === 1 ? 'lg:order-1' : ''}>
-                  <div className="rounded-[2rem] bg-white dark:bg-[#1c2b35] border border-slate-200 dark:border-white/10 p-4 shadow-sm">
+                  <div className="rounded-[2rem] bg-surface-card border border-slate-200 dark:border-white/10 p-4 shadow-sm">
                     {step.image.endsWith('.gif') ? (
                       <img
                         src={step.image}
@@ -504,7 +504,7 @@ export default function SRSGuideContent({
       {/* Best practices + What to expect */}
       <section className="w-full px-4 sm:px-6 lg:px-8 pb-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8">
-          <div className="bg-slate-900 dark:bg-[#0f1a1f] text-white rounded-[2rem] p-8 md:p-10">
+          <div className="bg-slate-900 dark:bg-surface-deep text-white rounded-[2rem] p-8 md:p-10">
             <p className="text-sm uppercase tracking-[0.2em] text-rose-200 mb-3">
               Best practices
             </p>
@@ -524,7 +524,7 @@ export default function SRSGuideContent({
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#1c2b35] rounded-[2rem] border border-slate-200 dark:border-white/10 p-8 shadow-sm">
+          <div className="bg-surface-card rounded-[2rem] border border-slate-200 dark:border-white/10 p-8 shadow-sm">
             <p className="text-sm uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-3">
               Good to know
             </p>

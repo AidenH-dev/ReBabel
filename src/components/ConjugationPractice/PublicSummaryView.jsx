@@ -59,13 +59,13 @@ export default function PublicSummaryView({
               <span className="text-xs font-medium text-gray-700 dark:text-white/80">
                 Accuracy
               </span>
-              <span className="text-lg font-bold text-[#e30a5f]">
+              <span className="text-lg font-bold text-brand-pink">
                 {sessionStats.accuracy}%
               </span>
             </div>
             <div className="w-full h-5 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#e30a5f] to-[#f41567] transition-all duration-[1500ms] ease-out"
+                className="h-full rounded-full bg-gradient-to-r from-brand-pink to-brand-pink-hover transition-all duration-[1500ms] ease-out"
                 style={{
                   width: animateAccuracy ? `${sessionStats.accuracy}%` : '0%',
                 }}
@@ -75,7 +75,7 @@ export default function PublicSummaryView({
 
           <button
             onClick={onPracticeAgain}
-            className="w-full px-4 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-all text-sm"
+            className="w-full px-4 py-2.5 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-medium transition-all text-sm"
           >
             Practice Again
           </button>

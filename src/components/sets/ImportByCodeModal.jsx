@@ -148,10 +148,10 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden relative">
+      <div className="bg-surface-card rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden relative">
         {/* Import progress overlay */}
         {isImporting && (
-          <div className="absolute inset-0 z-10 bg-white/80 dark:bg-[#1c2b35]/80 backdrop-blur-sm flex items-center justify-center rounded-xl">
+          <div className="absolute inset-0 z-10 bg-white/80 dark:bg-surface-card/80 backdrop-blur-sm flex items-center justify-center rounded-xl">
             <ImportProgressOverlay
               importStage={importStage}
               importProgress={importProgress}
@@ -198,7 +198,7 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
               maxLength={36}
               autoFocus
               disabled={isImporting}
-              className="flex-1 px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]/30 focus:border-[#e30a5f] font-mono tracking-wider disabled:opacity-50"
+              className="flex-1 px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-pink/30 focus:border-brand-pink font-mono tracking-wider disabled:opacity-50"
             />
             <button
               onClick={handleLookup}
@@ -257,7 +257,7 @@ export default function ImportByCodeModal({ isOpen, onClose }) {
                 <button
                   onClick={handleImport}
                   disabled={isImporting}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-brand-pink to-[#c1084d] text-white hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isImporting ? (
                     <TbLoader3 className="w-4 h-4 animate-spin" />

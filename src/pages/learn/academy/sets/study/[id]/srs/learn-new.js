@@ -705,8 +705,8 @@ export default function LearnNew() {
         id: 'translation',
         name: 'Translation',
         icon: FaDumbbell,
-        color: 'bg-[#e30a5f]',
-        borderColor: 'border-[#e30a5f]',
+        color: 'bg-brand-pink',
+        borderColor: 'border-brand-pink',
       });
     }
 
@@ -785,7 +785,7 @@ export default function LearnNew() {
             <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
             <button
               onClick={() => router.push(`/learn/academy/sets/study/${id}`)}
-              className="px-4 py-2 bg-[#e30a5f] text-white rounded-lg hover:bg-[#c00950] transition-colors"
+              className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
             >
               Back to Study Set
             </button>
@@ -807,7 +807,7 @@ export default function LearnNew() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
+      <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card">
         {/* Only show sidebar during complete phase (summary) */}
         {currentPhase === 'complete' && <AcademySidebar />}
 
@@ -830,7 +830,7 @@ export default function LearnNew() {
                   style={{ animationDelay: '100ms' }}
                 />
                 {/* Card skeleton */}
-                <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1c2b35] shadow-sm p-8">
+                <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card shadow-sm p-8">
                   <div className="flex flex-col items-center gap-4">
                     <div
                       className="h-10 w-36 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
@@ -975,7 +975,7 @@ export default function LearnNew() {
               {/* SRS Error Popup */}
               {srsError && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                  <div className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-2xl max-w-md w-full p-6 space-y-4">
+                  <div className="bg-white dark:bg-surface-card rounded-lg shadow-2xl max-w-md w-full p-6 space-y-4">
                     <div className="flex items-center space-x-3">
                       <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
                         <svg

@@ -574,13 +574,13 @@ export default function MasterSetHeader({
                 <FiMoreVertical className="w-4 h-4" />
               </button>
               {showOptions && (
-                <div className="absolute right-0 dark:text-white mt-1 w-56 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
+                <div className="absolute right-0 dark:text-white mt-1 w-56 bg-surface-card rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
                   <button
                     onClick={() => {
                       handleOpenSRSModal();
                       setShowOptions(false);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
                   >
                     <TbRepeat className="inline w-4 h-4" />
                     SRS Settings
@@ -606,7 +606,7 @@ export default function MasterSetHeader({
       {/* Edit Set Details Modal */}
       {editingSet && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
+          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
               <div>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -677,7 +677,7 @@ export default function MasterSetHeader({
                     onChange={(e) =>
                       handleSetFieldChange('title', e.target.value)
                     }
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                     placeholder="Enter set title"
                   />
                 </div>
@@ -717,7 +717,7 @@ export default function MasterSetHeader({
                 <button
                   onClick={handleSaveSetDetails}
                   disabled={isSavingSet || isDeletingSet}
-                  className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {isSavingSet ? (
                     <>
@@ -755,7 +755,7 @@ export default function MasterSetHeader({
       {/* Delete Set Confirmation Modal */}
       {showDeleteSetConfirm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
+          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                 <svg
@@ -786,7 +786,7 @@ export default function MasterSetHeader({
               </p>
 
               {setData && (
-                <div className="p-3 bg-gray-50 dark:bg-[#0f1a1f] rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="p-3 bg-surface-deep rounded-lg border border-gray-200 dark:border-gray-700">
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {setData.title}
                   </p>
@@ -870,7 +870,7 @@ export default function MasterSetHeader({
       {/* SRS Settings Modal */}
       {showSRSModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
+          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
             {/* Header */}
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
               <div>
@@ -1016,7 +1016,7 @@ export default function MasterSetHeader({
                 </div>
 
                 {/* Status Toggle Section */}
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0f1a1f] dark:to-[#1c2b35] rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-deep dark:to-surface-card rounded-lg p-6 border border-gray-200 dark:border-gray-700">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -1032,7 +1032,7 @@ export default function MasterSetHeader({
                     {/* Premium Toggle Switch */}
                     <button
                       onClick={() => handleToggleSRS(!isSrsEnabled)}
-                      className={`relative flex-shrink-0 h-10 w-20 rounded-full transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#e30a5f] dark:focus:ring-offset-[#1c2b35] ${
+                      className={`relative flex-shrink-0 h-10 w-20 rounded-full transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-pink dark:focus:ring-offset-surface-card ${
                         isSrsEnabled
                           ? 'bg-gradient-to-r from-green-400 to-green-500 shadow-lg shadow-green-500/40'
                           : 'bg-gradient-to-r from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 shadow-md'
@@ -1101,7 +1101,7 @@ export default function MasterSetHeader({
               <button
                 onClick={handleSaveSRSSettings}
                 disabled={isSavingSRS}
-                className="px-6 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSavingSRS ? (
                   <>
@@ -1151,11 +1151,11 @@ export default function MasterSetHeader({
       {/* Share Set Modal */}
       {showShareModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
+          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <TbShare2 className="w-5 h-5 text-[#E30B5C]" />
+                  <TbShare2 className="w-5 h-5 text-brand-pink" />
                   Share Set
                 </h2>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -1389,7 +1389,7 @@ export default function MasterSetHeader({
                     </div>
                     <p className="mt-2 text-xs font-fredoka h-4">
                       {isGeneratingShare ? (
-                        <span className="text-[#E30B5C] dark:text-[#f41567]">
+                        <span className="text-brand-pink dark:text-brand-pink-hover">
                           Generating link...
                         </span>
                       ) : showShareResult ? (
@@ -1431,7 +1431,7 @@ export default function MasterSetHeader({
                           type="text"
                           readOnly
                           value={shareUrl}
-                          className="flex-1 h-full px-2 py-1.5 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-[7px] leading-tight text-gray-900 dark:text-white font-mono break-all"
+                          className="flex-1 h-full px-2 py-1.5 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-[7px] leading-tight text-gray-900 dark:text-white font-mono break-all"
                           onClick={(e) => e.target.select()}
                         />
                         <button
@@ -1455,7 +1455,7 @@ export default function MasterSetHeader({
 
                   {/* Import code */}
                   {showShareResult && shareToken && (
-                    <div className="bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+                    <div className="bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg p-3">
                       <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-2">
                         Import code
                       </label>
@@ -1537,7 +1537,7 @@ export default function MasterSetHeader({
                           disabled={isGeneratingShare}
                           className={`px-2.5 py-1 text-[10px] font-medium rounded-md transition-colors disabled:opacity-50 ${
                             shareExpiry === opt.value
-                              ? 'bg-[#E30B5C] text-white'
+                              ? 'bg-brand-pink text-white'
                               : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                           }`}
                         >
@@ -1573,7 +1573,7 @@ export default function MasterSetHeader({
       {/* Disable SRS Confirmation Modal */}
       {showDisableSRSConfirm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
+          <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                 <svg

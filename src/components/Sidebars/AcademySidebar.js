@@ -66,7 +66,7 @@ function AcademySidebar({ hideMobileMenu = false }) {
     'text-gray-700 hover:bg-gray-200 hover:text-gray-900';
   const inactiveIconLight = 'text-gray-600 group-hover:text-gray-900';
   const activeLink =
-    'text-[#e30a5f] bg-gray-100 dark:bg-[#172229] shadow-[inset_0_0_0_2px_rgb(209,213,219)] dark:shadow-[inset_0_0_0_2px_rgb(75,85,99)]';
+    'text-brand-pink bg-gray-100 dark:bg-surface-elevated shadow-[inset_0_0_0_2px_rgb(209,213,219)] dark:shadow-[inset_0_0_0_2px_rgb(75,85,99)]';
   const inactiveLinkDark =
     'dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700';
   const inactiveIconDark = 'dark:text-gray-400 dark:group-hover:text-white';
@@ -117,7 +117,7 @@ function AcademySidebar({ hideMobileMenu = false }) {
               aria-current={isAcademyHomeActive ? "page" : undefined}
             >
               <TbHome
-                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isAcademyHomeActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                className={`flex-shrink-0 w-7 h-7 transition duration-75 ${isAcademyHomeActive ? "text-brand-pink" : `${inactiveIconLight} ${inactiveIconDark}`
                   }`}
               />
               <span className="ms-3">Home</span>
@@ -137,7 +137,7 @@ function AcademySidebar({ hideMobileMenu = false }) {
               <TbStack2
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
                   isSetsActive
-                    ? 'text-[#e30a5f]'
+                    ? 'text-brand-pink'
                     : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
@@ -158,7 +158,7 @@ function AcademySidebar({ hideMobileMenu = false }) {
               <HiOutlinePencilAlt
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
                   isPracticeActive
-                    ? 'text-[#e30a5f]'
+                    ? 'text-brand-pink'
                     : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
@@ -176,7 +176,7 @@ function AcademySidebar({ hideMobileMenu = false }) {
             >
               <TbLayoutGrid
                 className={`flex-shrink-0 w-7 h-7 transition duration-75 ${
-                  isModulesActive ? "text-[#e30a5f]" : `${inactiveIconLight} ${inactiveIconDark}`
+                  isModulesActive ? "text-brand-pink" : `${inactiveIconLight} ${inactiveIconDark}`
                 }`}
               />
               <span className="ms-3">Modules</span>
@@ -190,9 +190,9 @@ function AcademySidebar({ hideMobileMenu = false }) {
   const bubbleBase =
     'flex items-center justify-center w-15 h-15 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/60 hover:bg-gray-100/90 dark:hover:bg-gray-700/70 hover:border-gray-400 dark:hover:border-gray-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600';
   const bubbleActive =
-    'border-[#e30a5f] dark:border-[#e30a5f] bg-gray-100/90 dark:bg-[#172229]/80';
+    'border-brand-pink dark:border-brand-pink bg-gray-100/90 dark:bg-surface-elevated/80';
   const bubbleIconBase = 'w-6.5 h-6.5 text-gray-700 dark:text-gray-300';
-  const bubbleIconActive = 'w-6 h-6 text-[#e30a5f]';
+  const bubbleIconActive = 'w-6 h-6 text-brand-pink';
 
   const mobileNavItems = [
     //{ href: "/learn/dashboard", icon: TbLayoutDashboard, active: isDashboardActive, label: "Dashboard" },
@@ -299,7 +299,7 @@ function AcademySidebar({ hideMobileMenu = false }) {
       </div>
 
       {/* Desktop Sidebar - Hidden on small screens */}
-      <div className="hidden lg:block w-64 h-screen p-4 bg-white dark:bg-[#172229] border-r-2 border-gray-300 dark:border-gray-600">
+      <div className="hidden lg:block w-64 h-screen p-4 bg-white dark:bg-surface-elevated border-r-2 border-gray-300 dark:border-gray-600">
         <NavigationContent />
       </div>
     </>

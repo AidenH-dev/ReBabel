@@ -33,7 +33,7 @@ export default function ItemEditModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
+      <div className="bg-surface-card rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[85vh] flex flex-col">
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
           <div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -84,7 +84,7 @@ export default function ItemEditModal({
                     type="text"
                     value={formData.english || ''}
                     onChange={(e) => handleChange('english', e.target.value)}
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                   />
                 </div>
 
@@ -97,7 +97,7 @@ export default function ItemEditModal({
                       type="text"
                       value={formData.kana || ''}
                       onChange={(e) => handleChange('kana', e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                      className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink"
                     />
                   </div>
 
@@ -109,7 +109,7 @@ export default function ItemEditModal({
                       type="text"
                       value={formData.kanji || ''}
                       onChange={(e) => handleChange('kanji', e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                      className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink"
                     />
                   </div>
                 </div>
@@ -148,7 +148,7 @@ export default function ItemEditModal({
                     type="text"
                     value={formData.title || ''}
                     onChange={(e) => handleChange('title', e.target.value)}
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                   />
                 </div>
 
@@ -162,7 +162,7 @@ export default function ItemEditModal({
                       handleChange('description', e.target.value)
                     }
                     rows={3}
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f] resize-none"
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
                   />
                 </div>
 
@@ -174,7 +174,7 @@ export default function ItemEditModal({
                     type="text"
                     value={formData.topic || ''}
                     onChange={(e) => handleChange('topic', e.target.value)}
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                   />
                 </div>
 
@@ -186,7 +186,7 @@ export default function ItemEditModal({
                     value={formData.notes || ''}
                     onChange={(e) => handleChange('notes', e.target.value)}
                     rows={3}
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f] resize-none"
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
                   />
                 </div>
               </>
@@ -215,7 +215,7 @@ export default function ItemEditModal({
                   )
                 }
                 rows={4}
-                className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-[#e30a5f] resize-none"
+                className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
                 placeholder="Enter example sentences, one per line"
               />
             </div>
@@ -241,7 +241,7 @@ export default function ItemEditModal({
                       .filter(Boolean)
                   )
                 }
-                className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                 placeholder="tag1, tag2, tag3"
               />
             </div>
@@ -259,7 +259,7 @@ export default function ItemEditModal({
           <button
             onClick={() => onSave(formData)}
             disabled={isSaving}
-            className="px-4 py-2 text-sm font-medium text-white bg-[#e30a5f] hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-4 py-2 text-sm font-medium text-white bg-brand-pink hover:bg-[#c00950] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {isSaving ? (
               <>

@@ -3,7 +3,7 @@ export const TimeRangeFilter = ({
   customDateRange,
   onTimeRangeChange,
   onCustomDateChange,
-  onApplyCustomRange
+  onApplyCustomRange,
 }) => {
   const showCustomRange = timeRangePreset === 'custom';
 
@@ -20,7 +20,7 @@ export const TimeRangeFilter = ({
               type="date"
               value={customDateRange?.startDate || ''}
               onChange={(e) => onCustomDateChange('startDate', e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#172229] text-[#4e4a4a] dark:text-white"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-surface-elevated text-[#4e4a4a] dark:text-white"
             />
           </div>
           <div className="flex-1">
@@ -31,14 +31,16 @@ export const TimeRangeFilter = ({
               type="date"
               value={customDateRange?.endDate || ''}
               onChange={(e) => onCustomDateChange('endDate', e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#172229] text-[#4e4a4a] dark:text-white"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-surface-elevated text-[#4e4a4a] dark:text-white"
             />
           </div>
           <div className="flex items-end">
             <button
               onClick={onApplyCustomRange}
-              disabled={!customDateRange?.startDate || !customDateRange?.endDate}
-              className="px-6 py-2 bg-[#e30a5f] text-white rounded-lg hover:bg-[#c40850] disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+              disabled={
+                !customDateRange?.startDate || !customDateRange?.endDate
+              }
+              className="px-6 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c40850] disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
             >
               Apply
             </button>
@@ -54,7 +56,7 @@ export const TimeRangeFilter = ({
         <select
           value={timeRangePreset}
           onChange={(e) => onTimeRangeChange(e.target.value)}
-          className="ml-2 px-3 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-[#172229] text-[#4e4a4a] dark:text-white"
+          className="ml-2 px-3 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-surface-elevated text-[#4e4a4a] dark:text-white"
         >
           <option value="24h">Last 24 Hours</option>
           <option value="7d">Last 7 Days</option>

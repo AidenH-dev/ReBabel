@@ -16,8 +16,8 @@ const PHASES = [
     id: 'conjugation',
     name: 'Conjugation',
     icon: TbLanguageHiragana,
-    color: 'bg-[#e30a5f]',
-    borderColor: 'border-[#e30a5f]',
+    color: 'bg-brand-pink',
+    borderColor: 'border-brand-pink',
   },
 ];
 
@@ -257,10 +257,10 @@ export default function ConjugationPracticeSession() {
   // Loading state
   if (isLoading || isGenerating) {
     return (
-      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] sm:pt-10">
+      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card sm:pt-10">
         <main className="flex-1 flex items-center justify-center p-3 sm:p-6">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#e30a5f] mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-pink mx-auto"></div>
             <p className="mt-4 text-sm text-black/60 dark:text-white/60">
               Generating conjugation questions...
             </p>
@@ -273,7 +273,7 @@ export default function ConjugationPracticeSession() {
   // Error state
   if (error) {
     return (
-      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] sm:pt-10">
+      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card sm:pt-10">
         <main className="flex-1 flex items-center justify-center p-3 sm:p-6">
           <div className="text-center max-w-md">
             <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-8">
@@ -286,7 +286,7 @@ export default function ConjugationPracticeSession() {
               </p>
               <button
                 onClick={() => router.push('/learn/academy/practice')}
-                className="px-6 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-all"
+                className="px-6 py-2.5 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-medium transition-all"
               >
                 Return to Practice
               </button>
@@ -300,7 +300,7 @@ export default function ConjugationPracticeSession() {
   // Summary state -- show sidebar like quiz does
   if (sessionComplete) {
     return (
-      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] sm:pt-10">
+      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card sm:pt-10">
         <Head>
           <title>Conjugation Complete</title>
         </Head>
@@ -325,7 +325,7 @@ export default function ConjugationPracticeSession() {
       : 0;
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] sm:pt-10">
+    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card sm:pt-10">
       <Head>
         <title>Conjugation Practice</title>
       </Head>

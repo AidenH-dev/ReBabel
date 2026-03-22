@@ -550,7 +550,7 @@ export default function SetFlashcards() {
   // Show error state
   if (error) {
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
+      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
         <MainSidebar />
         <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex items-center justify-center">
           <div className="text-center">
@@ -560,7 +560,7 @@ export default function SetFlashcards() {
             <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
             <button
               onClick={() => router.push('/learn/academy/sets')}
-              className="px-4 py-2 bg-[#e30a5f] text-white rounded-lg hover:bg-[#c00950] transition-colors"
+              className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
             >
               Back to Sets
             </button>
@@ -571,7 +571,7 @@ export default function SetFlashcards() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] overflow-x-hidden  sm:mt-10">
+    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card overflow-x-hidden  sm:mt-10">
       <main className="ml-auto flex-1 flex flex-col p-6 overflow-x-hidden">
         <Head>
           <title>Flashcards • {setInfo?.title || 'Study Set'}</title>
@@ -591,7 +591,7 @@ export default function SetFlashcards() {
               </button>
 
               <div className="flex items-center gap-2">
-                <TbCards className="text-[#e30a5f] text-xl" />
+                <TbCards className="text-brand-pink text-xl" />
                 <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
                   {setInfo?.title || 'Flashcards'}
                 </h1>
@@ -604,7 +604,7 @@ export default function SetFlashcards() {
                 onClick={() => setStudyMode('plain')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   studyMode === 'plain'
-                    ? 'bg-[#e30a5f] text-white'
+                    ? 'bg-brand-pink text-white'
                     : 'text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
@@ -614,7 +614,7 @@ export default function SetFlashcards() {
                 onClick={() => setStudyMode('quiz')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   studyMode === 'quiz' 
-                    ? 'bg-[#e30a5f] text-white' 
+                    ? 'bg-brand-pink text-white' 
                     : 'text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
@@ -624,7 +624,7 @@ export default function SetFlashcards() {
                 onClick={() => setStudyMode('interval')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   studyMode === 'interval' 
-                    ? 'bg-[#e30a5f] text-white' 
+                    ? 'bg-brand-pink text-white' 
                     : 'text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
@@ -643,7 +643,7 @@ export default function SetFlashcards() {
             </div>
             <div className="w-full bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-[#e30a5f] to-[#f41567] transition-all duration-500 ease-out rounded-full"
+                className="h-full bg-gradient-to-r from-brand-pink to-brand-pink-hover transition-all duration-500 ease-out rounded-full"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -670,7 +670,7 @@ export default function SetFlashcards() {
                 ))}
               </div>
               {/* Card skeleton */}
-              <div className="w-full aspect-[3/2] max-w-xl mx-auto rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#1c2b35] shadow-sm">
+              <div className="w-full aspect-[3/2] max-w-xl mx-auto rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card shadow-sm">
                 <div className="flex flex-col items-center justify-center h-full gap-4 p-8">
                   <div
                     className="h-8 w-32 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse"
@@ -958,7 +958,7 @@ export default function SetFlashcards() {
                 {!isLastCard ? (
                   <button
                     onClick={handleNext}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-all active:scale-95"
+                    className="flex items-center gap-2 px-4 py-2 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-medium transition-all active:scale-95"
                   >
                     Next <FaArrowRight />
                   </button>

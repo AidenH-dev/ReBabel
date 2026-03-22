@@ -135,7 +135,7 @@ export default function ImportSharedSet() {
 
   if (error) {
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
+      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
         <MainSidebar />
         <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex items-center justify-center">
           <div className="text-center">
@@ -146,7 +146,7 @@ export default function ImportSharedSet() {
             <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
             <button
               onClick={() => router.push('/learn/academy/sets')}
-              className="px-4 py-2 bg-[#e30a5f] text-white rounded-lg hover:bg-[#c00950] transition-colors"
+              className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
             >
               Back to Sets
             </button>
@@ -157,7 +157,7 @@ export default function ImportSharedSet() {
   }
 
   return (
-    <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
       <MainSidebar />
 
       <main className="ml-auto flex-1 flex flex-col min-h-0 sm:overflow-hidden">
@@ -207,7 +207,7 @@ export default function ImportSharedSet() {
               <button
                 onClick={handleImport}
                 disabled={isImporting}
-                className="px-5 py-2 text-sm text-white bg-[#E30B5C] hover:bg-[#B0104F] font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-5 py-2 text-sm text-white bg-brand-pink hover:bg-brand-pink-dark font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {isImporting ? (
                   <>
@@ -275,12 +275,12 @@ export default function ImportSharedSet() {
                 />
               </div>
               {/* Skeleton items */}
-              <div className="flex-1 min-h-0 bg-white dark:bg-[#1c2b35] border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+              <div className="flex-1 min-h-0 bg-white dark:bg-surface-card border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
                 <div className="p-2 space-y-1.5">
                   {Array.from({ length: 12 }).map((_, i) => (
                     <div
                       key={i}
-                      className="bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-2"
+                      className="bg-gray-50 dark:bg-surface-elevated rounded-lg p-2"
                     >
                       <div className="w-full">
                         <div
@@ -334,7 +334,7 @@ export default function ImportSharedSet() {
                   <button
                     onClick={handleImport}
                     disabled={isImporting}
-                    className="px-4 py-2 text-sm text-white bg-[#E30B5C] hover:bg-[#B0104F] font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 flex-shrink-0"
+                    className="px-4 py-2 text-sm text-white bg-brand-pink hover:bg-brand-pink-dark font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 flex-shrink-0"
                   >
                     {isImporting ? (
                       <TbLoader3 className="w-4 h-4 animate-spin" />
@@ -373,7 +373,7 @@ export default function ImportSharedSet() {
                     placeholder="Search items..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 bg-white dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]/30 focus:border-[#e30a5f]"
+                    className="w-full pl-9 pr-3 py-2 bg-white dark:bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-pink/30 focus:border-brand-pink"
                   />
                 </div>
                 <span className="text-xs text-gray-400 flex-shrink-0">
@@ -384,12 +384,12 @@ export default function ImportSharedSet() {
               </div>
 
               {/* Items list */}
-              <div className="flex-1 min-h-0 bg-white dark:bg-[#1c2b35] border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+              <div className="flex-1 min-h-0 bg-white dark:bg-surface-card border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
                 <div className="overflow-y-auto h-full p-2 space-y-1.5">
                   {filteredItems.map((item, index) => (
                     <div
                       key={item.id || index}
-                      className="bg-gray-50 dark:bg-[#1d2a32] rounded-lg p-2 shadow-sm overflow-hidden"
+                      className="bg-gray-50 dark:bg-surface-elevated rounded-lg p-2 shadow-sm overflow-hidden"
                     >
                       <div className="flex items-start gap-2 w-full">
                         <div className="flex-shrink-0 w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-[10px] font-medium text-gray-600 dark:text-gray-400">

@@ -486,7 +486,7 @@ export default function CreateNewSet() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
       <MainSidebar />
 
       <main className="ml-auto flex-1 px-4 sm:px-6 py-4">
@@ -501,7 +501,7 @@ export default function CreateNewSet() {
             <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
               <Link
                 href="/learn/academy/sets"
-                className="hover:text-[#e30a5f] transition-colors"
+                className="hover:text-brand-pink transition-colors"
               >
                 Set
               </Link>
@@ -516,7 +516,7 @@ export default function CreateNewSet() {
           </div>
 
           {/* Set Name & Counter */}
-          <div className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-sm border border-black/5 dark:border-white/10 p-3 mb-3">
+          <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10 p-3 mb-3">
             <div className="flex gap-3 items-center">
               <div className="flex-1">
                 <input
@@ -524,7 +524,7 @@ export default function CreateNewSet() {
                   value={newSetName}
                   onChange={handleSetNameChange}
                   placeholder="Set name (e.g., 'JLPT N5 Vocabulary')"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-3 py-2 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#e30a5f] placeholder-gray-500 dark:placeholder-gray-400"
+                  className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-3 py-2 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
@@ -534,11 +534,11 @@ export default function CreateNewSet() {
           </div>
 
           {/* Type & Description Bar */}
-          <div className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-sm border border-black/5 dark:border-white/10 p-3 mb-4">
+          <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10 p-3 mb-4">
             <div className="flex gap-3 items-center">
               {/* Type Toggle */}
               <div className="flex items-center gap-2">
-                <div className="flex bg-gray-200 dark:bg-[#0f1a1f] rounded-md p-1">
+                <div className="flex bg-gray-200 dark:bg-surface-deep rounded-md p-1">
                   <button
                     onClick={() => setItemType('vocabulary')}
                     disabled={
@@ -546,7 +546,7 @@ export default function CreateNewSet() {
                     }
                     className={`px-3 py-2 mr-0.5 text-xs font-medium rounded transition-colors ${
                       itemType === 'vocabulary'
-                        ? 'bg-[#e30a5f] text-white'
+                        ? 'bg-brand-pink text-white'
                         : 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
                     } ${proposedItems.length > 0 && itemType !== 'vocabulary' ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
@@ -559,7 +559,7 @@ export default function CreateNewSet() {
                     }
                     className={`px-3 py-2 text-xs font-medium rounded transition-colors ${
                       itemType === 'grammar'
-                        ? 'bg-[#e30a5f] text-white'
+                        ? 'bg-brand-pink text-white'
                         : 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
                     } ${proposedItems.length > 0 && itemType !== 'grammar' ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
@@ -575,7 +575,7 @@ export default function CreateNewSet() {
                   value={setDescription}
                   onChange={(e) => setSetDescription(e.target.value)}
                   placeholder="Set description (optional)"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-3 py-2 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#e30a5f] placeholder-gray-500 dark:placeholder-gray-400"
+                  className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-3 py-2 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-pink placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
             </div>
@@ -584,7 +584,7 @@ export default function CreateNewSet() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Left Column - Input Methods */}
             <div className="lg:col-span-2">
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-sm border border-black/5 dark:border-white/10">
+              <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10">
                 {/* Tab Navigation */}
                 <div className="border-b border-black/5 dark:border-white/10 px-4 mt-2">
                   <div className="flex items-center">
@@ -607,7 +607,7 @@ export default function CreateNewSet() {
                           className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors flex items-center gap-1.5
                                                        ${
                                                          activeTab === key
-                                                           ? 'text-[#e30a5f] border-[#e30a5f]'
+                                                           ? 'text-brand-pink border-brand-pink'
                                                            : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-gray-900 dark:hover:text-white'
                                                        }`}
                         >
@@ -641,7 +641,7 @@ export default function CreateNewSet() {
                                   )
                                 }
                                 placeholder="English term"
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
                               />
                             </div>
                             <div>
@@ -658,7 +658,7 @@ export default function CreateNewSet() {
                                   handleSingleFormChange('kana', e.target.value)
                                 }
                                 placeholder="ka → か, shi → し"
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] font-japanese"
+                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
                               />
                             </div>
                             <div>
@@ -680,7 +680,7 @@ export default function CreateNewSet() {
                                   )
                                 }
                                 placeholder="kanji → かんじ"
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] font-japanese"
+                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
                               />
                               <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
                                 Filling in kanji improves auto-categorization
@@ -703,7 +703,7 @@ export default function CreateNewSet() {
                                   )
                                 }
                                 placeholder="Example sentences (one per line)"
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
                               />
                             </div>
                           </div>
@@ -719,13 +719,13 @@ export default function CreateNewSet() {
                                   handleSingleFormChange('tags', e.target.value)
                                 }
                                 placeholder="tag1, tag2, tag3"
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
                               />
                             </div>
                             <div>
                               <button
                                 type="submit"
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 transition-opacity"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium bg-brand-pink text-white hover:opacity-95 transition-opacity"
                               >
                                 <FiPlus className="w-3 h-3" /> Add to Set
                               </button>
@@ -757,7 +757,7 @@ export default function CreateNewSet() {
                                                                         type="button"
                                                                         onClick={() => handleGrammarTitleTypeSwitch("english")}
                                                                         className={`px-1 py-0.5 text-[10px] rounded transition-colors ${grammarTitleInputType === "english"
-                                                                                ? "bg-[#e30a5f] text-white"
+                                                                                ? "bg-brand-pink text-white"
                                                                                 : "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
                                                                             }`}
                                                                     >
@@ -767,7 +767,7 @@ export default function CreateNewSet() {
                                                                         type="button"
                                                                         onClick={() => handleGrammarTitleTypeSwitch("kana")}
                                                                         className={`px-1 py-0.5 text-[10px] rounded transition-colors ${grammarTitleInputType === "kana"
-                                                                                ? "bg-[#e30a5f] text-white"
+                                                                                ? "bg-brand-pink text-white"
                                                                                 : "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
                                                                             }`}
                                                                     >
@@ -789,7 +789,7 @@ export default function CreateNewSet() {
                                     ? 'Type in romaji: ka → か, shi → し'
                                     : 'Grammar pattern name'
                                 }
-                                className={`w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] ${
+                                className={`w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink ${
                                   grammarTitleInputType === 'kana'
                                     ? 'font-japanese'
                                     : ''
@@ -810,7 +810,7 @@ export default function CreateNewSet() {
                                   )
                                 }
                                 placeholder="e.g., N5, JLPT, Particles"
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
                               />
                             </div>
                           </div>
@@ -829,7 +829,7 @@ export default function CreateNewSet() {
                                   )
                                 }
                                 placeholder="Brief explanation of the grammar pattern"
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
                               />
                             </div>
                           </div>
@@ -848,7 +848,7 @@ export default function CreateNewSet() {
                                   )
                                 }
                                 placeholder="Additional notes, usage tips, etc."
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
                               />
                             </div>
                             <div>
@@ -865,7 +865,7 @@ export default function CreateNewSet() {
                                   )
                                 }
                                 placeholder="tag1, tag2, tag3"
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink"
                               />
                             </div>
                           </div>
@@ -884,7 +884,7 @@ export default function CreateNewSet() {
                                   )
                                 }
                                 placeholder="Example sentences (one per line)"
-                                className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                                className="w-full bg-gray-50 dark:bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
                               />
                             </div>
                           </div>
@@ -910,7 +910,7 @@ export default function CreateNewSet() {
             {/* Right Column - Preview */}
             <div className="lg:col-span-1 flex">
               <div
-                className={`bg-white dark:bg-[#1c2b35] rounded-lg shadow-sm p-4 transition-all duration-300 flex flex-col w-full h-fit sticky top-4 max-h-[calc(60vh-2rem)] ${showBorderHighlight ? 'border border-red-500' : 'border border-black/5 dark:border-white/10'}`}
+                className={`bg-white dark:bg-surface-card rounded-lg shadow-sm p-4 transition-all duration-300 flex flex-col w-full h-fit sticky top-4 max-h-[calc(60vh-2rem)] ${showBorderHighlight ? 'border border-red-500' : 'border border-black/5 dark:border-white/10'}`}
                 onClick={() => setShowBorderHighlight(false)}
               >
                 <div className="flex items-center justify-between mb-3 flex-shrink-0">
@@ -947,7 +947,7 @@ export default function CreateNewSet() {
                     {proposedItems.map((item, idx) => (
                       <div
                         key={idx}
-                        className="bg-gray-50 dark:bg-[#1d2a32] rounded p-2 text-xs"
+                        className="bg-gray-50 dark:bg-surface-elevated rounded p-2 text-xs"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1 min-w-0">
@@ -1040,7 +1040,7 @@ export default function CreateNewSet() {
                 <div className="mt-4 pt-4 border-t border-black/5 dark:border-white/10 flex items-center justify-left flex-shrink-0">
                   <Link
                     href="/learn/academy/sets"
-                    className="inline-flex items-center mr-4 gap-2 px-3 py-2 rounded text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1d2a32] transition-colors"
+                    className="inline-flex items-center mr-4 gap-2 px-3 py-2 rounded text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-surface-elevated transition-colors"
                   >
                     Cancel
                   </Link>
@@ -1051,7 +1051,7 @@ export default function CreateNewSet() {
                       proposedItems.length === 0 ||
                       isSubmitting
                     }
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium bg-brand-pink text-white hover:opacity-95 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <>

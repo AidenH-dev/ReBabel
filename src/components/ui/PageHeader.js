@@ -25,7 +25,7 @@ export default function PageHeader({
   const router = useRouter();
 
   return (
-    <div className="hidden lg:block -mt-[var(--cap-safe-top)] flex-shrink-0 bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 pt-[calc(var(--cap-safe-top)+1rem)] pb-4">
+    <div className="hidden lg:block -mt-[var(--cap-safe-top)] flex-shrink-0 bg-white dark:bg-surface-elevated border-b border-gray-300 dark:border-gray-700 px-4 sm:px-6 pt-[calc(var(--cap-safe-top)+1rem)] pb-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 min-w-0">
           {(backHref || onBack) && (

@@ -189,7 +189,7 @@ export default function ConjugationPracticeHub({ levels }) {
       </Head>
 
       {/* Navbar */}
-      <nav className="fixed top-0 w-full bg-white/95 dark:bg-[#141f25]/95 backdrop-blur-sm border-b border-gray-200 dark:border-white/10 z-50">
+      <nav className="fixed top-0 w-full bg-white/95 dark:bg-surface-page/95 backdrop-blur-sm border-b border-gray-200 dark:border-white/10 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center gap-2">
@@ -200,7 +200,9 @@ export default function ConjugationPracticeHub({ levels }) {
                 height={32}
                 className="rounded-lg"
               />
-              <span className="text-2xl font-bold text-[#e30a5f]">ReBabel</span>
+              <span className="text-2xl font-bold text-brand-pink">
+                ReBabel
+              </span>
             </Link>
             <div className="flex items-center gap-4">
               <Link
@@ -211,7 +213,7 @@ export default function ConjugationPracticeHub({ levels }) {
               </Link>
               <Link
                 href="/api/auth/login"
-                className="px-4 py-2 text-sm bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium rounded-lg transition-colors"
+                className="px-4 py-2 text-sm bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors"
               >
                 Sign Up Free
               </Link>
@@ -220,11 +222,11 @@ export default function ConjugationPracticeHub({ levels }) {
         </div>
       </nav>
 
-      <main className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-[#141f25] dark:to-[#1c2b35] pt-8 pb-12">
+      <main className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-surface-page dark:to-surface-card pt-8 pb-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20">
           {/* Hero */}
           <div className="text-center mb-10 sm:mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e30a5f]/10 text-[#e30a5f] text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-pink/10 text-brand-pink text-sm font-medium mb-4">
               <TbLanguageHiragana size={18} />
               Free Practice Tool
             </div>
@@ -244,7 +246,7 @@ export default function ConjugationPracticeHub({ levels }) {
               <Link
                 key={n}
                 href={`/japanese-conjugation-practice/n${n}`}
-                className="group bg-white dark:bg-[#1c2b35] rounded-2xl shadow-sm border border-black/5 dark:border-white/5 p-5 hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="group bg-white dark:bg-surface-card rounded-2xl shadow-sm border border-black/5 dark:border-white/5 p-5 hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div
@@ -266,7 +268,7 @@ export default function ConjugationPracticeHub({ levels }) {
                   <span>{levels[n].iAdj} i-adj</span>
                   <span>{levels[n].naAdj} na-adj</span>
                 </div>
-                <div className="text-sm font-medium text-[#e30a5f] group-hover:underline">
+                <div className="text-sm font-medium text-brand-pink group-hover:underline">
                   Practice N{n} &rarr;
                 </div>
               </Link>
@@ -363,9 +365,9 @@ export default function ConjugationPracticeHub({ levels }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Link
                 href="/study-guide/what-is-srs"
-                className="group bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm border border-black/5 dark:border-white/5 p-4 hover:shadow-md transition-all"
+                className="group bg-white dark:bg-surface-card rounded-xl shadow-sm border border-black/5 dark:border-white/5 p-4 hover:shadow-md transition-all"
               >
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#e30a5f] transition-colors">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-brand-pink transition-colors">
                   What is Spaced Repetition?
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -375,9 +377,9 @@ export default function ConjugationPracticeHub({ levels }) {
               </Link>
               <Link
                 href="/kanji-practice"
-                className="group bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm border border-black/5 dark:border-white/5 p-4 hover:shadow-md transition-all"
+                className="group bg-white dark:bg-surface-card rounded-xl shadow-sm border border-black/5 dark:border-white/5 p-4 hover:shadow-md transition-all"
               >
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#e30a5f] transition-colors">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-brand-pink transition-colors">
                   Kanji Writing Practice PDF Generator
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">

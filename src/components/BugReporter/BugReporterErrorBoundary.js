@@ -95,7 +95,7 @@ class BugReporterErrorBoundaryInner extends React.Component {
               fontSize: '14px',
               fontWeight: 500,
               color: '#fff',
-              backgroundColor: '#da1c60',
+              backgroundColor: 'var(--brand-pink)',
               border: 'none',
               borderRadius: '8px',
               cursor: 'pointer',

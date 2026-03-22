@@ -32,7 +32,7 @@ export default function CustomSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between gap-2 bg-white dark:bg-[#0f1a1f] border border-black/10 dark:border-white/10 rounded-md px-3 py-2 text-sm text-gray-900 dark:text-white text-left whitespace-nowrap"
+        className="w-full flex items-center justify-between gap-2 bg-white dark:bg-surface-deep border border-border-default rounded-md px-3 py-2 text-sm text-gray-900 dark:text-white text-left whitespace-nowrap"
       >
         <span className="truncate">{selectedLabel}</span>
         <svg
@@ -50,7 +50,7 @@ export default function CustomSelect({
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute z-50 mt-1 left-0 min-w-full bg-white dark:bg-[#1a2834] border border-black/10 dark:border-white/10 rounded-md shadow-lg overflow-hidden">
+        <div className="absolute z-50 mt-1 left-0 min-w-full bg-white dark:bg-surface-elevated border border-border-default rounded-md shadow-lg overflow-hidden">
           {options.map((option) => (
             <button
               key={option.value}
@@ -61,7 +61,7 @@ export default function CustomSelect({
               }}
               className={`w-full text-left px-3 py-2 text-sm whitespace-nowrap transition-colors ${
                 value === option.value
-                  ? 'bg-[#e30a5f]/10 text-[#e30a5f] dark:text-[#ff4d8d] font-medium'
+                  ? 'bg-brand-pink/10 text-brand-pink dark:text-[#ff4d8d] font-medium'
                   : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5'
               }`}
             >

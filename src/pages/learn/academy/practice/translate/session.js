@@ -110,11 +110,11 @@ export default function TranslatePracticeSession() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#141f25]">
+      <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-surface-page">
         <AcademySidebar />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#e30a5f] mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-pink mx-auto"></div>
             <p className="mt-4 text-sm text-black/60 dark:text-white/60">
               Loading practice session...
             </p>
@@ -126,7 +126,7 @@ export default function TranslatePracticeSession() {
 
   if (sessionComplete) {
     return (
-      <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#141f25]">
+      <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-surface-page">
         <AcademySidebar />
         <main className="flex-1 p-3 sm:p-6 overflow-y-auto">
           <TranslateSummaryView
@@ -144,7 +144,7 @@ export default function TranslatePracticeSession() {
   }
 
   return (
-    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#141f25]">
+    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-surface-page">
       <Head>
         <title>Translate Practice</title>
       </Head>
@@ -168,7 +168,7 @@ export default function TranslatePracticeSession() {
               </button>
 
               <div className="flex items-center gap-2 min-w-0">
-                <FaDumbbell className="shrink-0 text-[#e30a5f] text-lg sm:text-xl" />
+                <FaDumbbell className="shrink-0 text-brand-pink text-lg sm:text-xl" />
                 <h1 className="text-base sm:text-xl font-semibold text-gray-900 dark:text-white truncate">
                   Translate Practice
                 </h1>
@@ -220,7 +220,7 @@ export default function TranslatePracticeSession() {
               {/* Progress Bar */}
               <div className="flex-1 bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
                 <div
-                  className="h-full transition-all duration-500 ease-out rounded-full bg-[#e30a5f]"
+                  className="h-full transition-all duration-500 ease-out rounded-full bg-brand-pink"
                   style={{
                     width: `${(questionResults.length / config.sessionLength) * 100}%`,
                   }}

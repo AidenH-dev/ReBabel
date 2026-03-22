@@ -59,7 +59,7 @@ export default function PublicConjugationCard({
 
   const questionDisplay = (
     <div className="text-center mb-6 sm:mb-8">
-      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#e30a5f]/10 text-[#e30a5f] text-sm font-medium mb-4">
+      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-pink/10 text-brand-pink text-sm font-medium mb-4">
         Conjugate to: {question.form.label} ({question.form.japanese})
       </div>
       {question.word.kanji ? (

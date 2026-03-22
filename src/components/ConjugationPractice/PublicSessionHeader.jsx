@@ -24,7 +24,7 @@ export default function PublicSessionHeader({
             <TbX className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 dark:text-white" />
           </button>
           <div className="flex items-center gap-2">
-            <TbLanguageHiragana className="text-[#e30a5f] text-lg sm:text-xl" />
+            <TbLanguageHiragana className="text-brand-pink text-lg sm:text-xl" />
             <h1 className="text-base sm:text-xl font-semibold text-gray-900 dark:text-white truncate">
               JLPT N{level} Conjugation
             </h1>
@@ -57,7 +57,7 @@ export default function PublicSessionHeader({
         </div>
         <div className="bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
           <div
-            className="h-full transition-all duration-500 ease-out rounded-full bg-[#e30a5f]"
+            className="h-full transition-all duration-500 ease-out rounded-full bg-brand-pink"
             style={{ width: `${progress}%` }}
           />
         </div>

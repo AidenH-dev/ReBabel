@@ -192,7 +192,9 @@ export default function SharedSetPage({
                 height={32}
                 className="rounded-lg"
               />
-              <span className="text-2xl font-bold text-[#e30a5f]">ReBabel</span>
+              <span className="text-2xl font-bold text-brand-pink">
+                ReBabel
+              </span>
               <span className="ml-1 text-xs bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-2 py-1 rounded-full">
                 BETA
               </span>
@@ -219,7 +221,7 @@ export default function SharedSetPage({
             <p className="text-gray-500 mb-8 max-w-md mx-auto">{error}</p>
             <Link
               href="/"
-              className="px-6 py-3 bg-[#E30B5C] text-white rounded-lg hover:bg-[#B0104F] transition-colors text-sm font-medium"
+              className="px-6 py-3 bg-brand-pink text-white rounded-lg hover:bg-brand-pink-dark transition-colors text-sm font-medium"
             >
               Go to ReBabel
             </Link>
@@ -278,7 +280,7 @@ export default function SharedSetPage({
                     <div className="flex flex-col items-start sm:items-end gap-1.5">
                       <button
                         onClick={handleSignup}
-                        className="px-5 py-2 text-sm font-medium text-[#E30B5C] border border-[#E30B5C] rounded-lg hover:bg-[#E30B5C] hover:text-white transition-colors flex items-center gap-2"
+                        className="px-5 py-2 text-sm font-medium text-brand-pink border border-brand-pink rounded-lg hover:bg-brand-pink hover:text-white transition-colors flex items-center gap-2"
                       >
                         <svg
                           className="w-4 h-4"
@@ -316,7 +318,7 @@ export default function SharedSetPage({
                       placeholder="Search items..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]/30 focus:border-[#e30a5f]"
+                      className="w-full pl-9 pr-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-pink/30 focus:border-brand-pink"
                     />
                   </div>
                   <span className="text-xs text-gray-400 flex-shrink-0">

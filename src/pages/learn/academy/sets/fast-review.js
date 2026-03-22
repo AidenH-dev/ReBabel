@@ -684,8 +684,8 @@ export default function FastReview() {
         id: 'translation',
         name: 'Translation',
         icon: FaDumbbell,
-        color: 'bg-[#e30a5f]',
-        borderColor: 'border-[#e30a5f]',
+        color: 'bg-brand-pink',
+        borderColor: 'border-brand-pink',
       });
     }
 
@@ -729,7 +729,7 @@ export default function FastReview() {
             </p>
             <button
               onClick={() => router.push('/learn/academy/sets')}
-              className="px-4 py-2 bg-[#e30a5f] text-white rounded-lg hover:bg-[#c00950] transition-colors"
+              className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
             >
               Back to Sets
             </button>
@@ -754,7 +754,7 @@ export default function FastReview() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35]">
+      <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card">
         {/* Only show sidebar during complete phase (summary) */}
         {currentPhase === 'complete' && <AcademySidebar />}v
         <main className="flex-1 flex flex-col p-3 sm:p-6 md:mt-10">

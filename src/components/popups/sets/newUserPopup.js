@@ -176,9 +176,9 @@ const SETS = [
     description: 'Essential vocabulary for everyday use',
     count: 50,
     preview: ['私', '水', '人', '本', '日', '今'],
-    color: 'text-[#e30a5f]',
-    bgColor: 'bg-[#e30a5f]/8 dark:bg-[#e30a5f]/10',
-    borderColor: 'border-[#e30a5f]/15 dark:border-[#e30a5f]/20',
+    color: 'text-brand-pink',
+    bgColor: 'bg-brand-pink/8 dark:bg-brand-pink/10',
+    borderColor: 'border-brand-pink/15 dark:border-brand-pink/20',
   },
   {
     title: 'Complete Hiragana',
@@ -348,7 +348,7 @@ export function BeginnerPackPopup({ isOpen, onClose, onImport, userProfile }) {
       <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
         <div className="relative w-full sm:max-w-[440px] sm:mx-4">
-          <div className="bg-white dark:bg-[#1c2b35] sm:rounded-2xl rounded-t-2xl shadow-2xl p-8 text-center">
+          <div className="bg-surface-card sm:rounded-2xl rounded-t-2xl shadow-2xl p-8 text-center">
             <div className="mx-auto w-16 h-16 mb-5 rounded-2xl bg-green-500/10 dark:bg-green-500/15 flex items-center justify-center">
               <FaCheckCircle className="text-2xl text-green-500" />
             </div>
@@ -372,7 +372,7 @@ export function BeginnerPackPopup({ isOpen, onClose, onImport, userProfile }) {
       />
 
       <div className="relative w-full sm:max-w-[440px] sm:mx-4">
-        <div className="bg-white dark:bg-[#1c2b35] sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden">
+        <div className="bg-surface-card sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden">
           {/* Header with decorative kana background */}
           <div className="relative overflow-hidden px-6 pt-6 pb-5">
             {/* Faint scattered kana in background */}
@@ -402,7 +402,7 @@ export function BeginnerPackPopup({ isOpen, onClose, onImport, userProfile }) {
             )}
 
             <div className="relative">
-              <p className="text-[11px] font-medium text-[#e30a5f] uppercase tracking-wider mb-1.5">
+              <p className="text-[11px] font-medium text-brand-pink uppercase tracking-wider mb-1.5">
                 Starter Pack
               </p>
               <h2 className="text-[22px] font-bold text-gray-900 dark:text-white leading-tight mb-1">
@@ -476,7 +476,7 @@ export function BeginnerPackPopup({ isOpen, onClose, onImport, userProfile }) {
               </div>
               <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
                 <div
-                  className="bg-[#e30a5f] h-full rounded-full transition-all duration-500 ease-out"
+                  className="bg-brand-pink h-full rounded-full transition-all duration-500 ease-out"
                   style={{
                     width: `${(importStatus.success / importStatus.total) * 100}%`,
                   }}
@@ -490,7 +490,7 @@ export function BeginnerPackPopup({ isOpen, onClose, onImport, userProfile }) {
             <button
               onClick={handleImport}
               disabled={isImporting}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[14px] font-semibold text-white bg-gradient-to-r from-[#e30a5f] to-[#d10950] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-[#e30a5f]/20"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[14px] font-semibold text-white bg-gradient-to-r from-brand-pink to-[#d10950] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-brand-pink/20"
             >
               {isImporting ? (
                 <TbLoader3 className="w-4.5 h-4.5 animate-spin" />

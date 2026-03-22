@@ -242,7 +242,7 @@ function SetReorderPage() {
 
   if (isLoading || !isAuthorized) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#172229]">
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-surface-elevated">
         <div className="text-gray-600 dark:text-gray-400">Loading...</div>
       </div>
     );
@@ -253,7 +253,7 @@ function SetReorderPage() {
       <Head>
         <title>Set Reorder - Admin - ReBabel</title>
       </Head>
-      <div className="flex flex-row min-h-screen bg-white dark:bg-[#172229] text-[#4e4a4a] dark:text-white">
+      <div className="flex flex-row min-h-screen bg-white dark:bg-surface-elevated text-[#4e4a4a] dark:text-white">
         <AdminSidebar />
         <main className="flex-1 overflow-auto">
           <div className="max-w-3xl mx-auto p-6 md:p-8">
@@ -271,12 +271,12 @@ function SetReorderPage() {
                 value={setIdInput}
                 onChange={(e) => setSetIdInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleLoadSet()}
-                className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#172229] text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-elevated text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
               />
               <button
                 onClick={handleLoadSet}
                 disabled={isLoadingSet || !setIdInput.trim()}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#e30a5f] text-white text-sm font-medium hover:bg-[#c00950] disabled:opacity-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-pink text-white text-sm font-medium hover:bg-[#c00950] disabled:opacity-50 transition-colors"
               >
                 {isLoadingSet ? (
                   <TbLoader3 className="w-4 h-4 animate-spin" />
@@ -314,7 +314,7 @@ function SetReorderPage() {
                     <button
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isUploading}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#e30a5f] text-white text-sm font-medium hover:bg-[#c00950] disabled:opacity-50 transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-pink text-white text-sm font-medium hover:bg-[#c00950] disabled:opacity-50 transition-colors"
                     >
                       {isUploading ? (
                         <TbLoader3 className="w-4 h-4 animate-spin" />
@@ -334,7 +334,7 @@ function SetReorderPage() {
                 </div>
 
                 {/* CSV format hint */}
-                <div className="mb-4 px-3 py-2 rounded-lg bg-gray-50 dark:bg-[#1c2b35] border border-gray-200 dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400">
+                <div className="mb-4 px-3 py-2 rounded-lg bg-gray-50 dark:bg-surface-card border border-gray-200 dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400">
                   CSV columns:{' '}
                   <code className="font-mono">
                     position, item_id, type, label
@@ -358,7 +358,7 @@ function SetReorderPage() {
                 )}
 
                 {/* Items list */}
-                <div className="bg-white dark:bg-[#1c2b35] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
+                <div className="bg-white dark:bg-surface-card rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
                   {items.map((item, idx) => (
                     <div
                       key={item.id}

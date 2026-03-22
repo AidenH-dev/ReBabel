@@ -72,7 +72,7 @@ export default function ConjugationEditModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-xl w-full max-w-md">
+      <div className="bg-surface-card rounded-xl shadow-xl w-full max-w-md">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-white/10">
           <div>
@@ -109,7 +109,7 @@ export default function ConjugationEditModal({
                 onClick={() => setSkipChoice('remove')}
                 className={`w-full text-left p-3 rounded-lg border-2 transition-colors ${
                   skipChoice === 'remove'
-                    ? 'border-[#e30a5f] bg-[#e30a5f]/5 dark:bg-[#e30a5f]/10'
+                    ? 'border-brand-pink bg-brand-pink/5 dark:bg-brand-pink/10'
                     : 'border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20'
                 }`}
               >
@@ -126,7 +126,7 @@ export default function ConjugationEditModal({
                 onClick={() => setSkipChoice('recategorize')}
                 className={`w-full text-left p-3 rounded-lg border-2 transition-colors ${
                   skipChoice === 'recategorize'
-                    ? 'border-[#e30a5f] bg-[#e30a5f]/5 dark:bg-[#e30a5f]/10'
+                    ? 'border-brand-pink bg-brand-pink/5 dark:bg-brand-pink/10'
                     : 'border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20'
                 }`}
               >
@@ -143,7 +143,7 @@ export default function ConjugationEditModal({
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                  className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                 >
                   <option value="">-- Select category --</option>
                   {CATEGORY_OPTIONS.map((opt) => (
@@ -172,7 +172,7 @@ export default function ConjugationEditModal({
                     setCategory(e.target.value);
                     if (e.target.value !== 'verb') setVerbGroup('');
                   }}
-                  className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                  className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                 >
                   <option value="">-- Select --</option>
                   {CATEGORY_OPTIONS.map((opt) => (
@@ -191,7 +191,7 @@ export default function ConjugationEditModal({
                   <select
                     value={verbGroup}
                     onChange={(e) => setVerbGroup(e.target.value)}
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                    className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
                   >
                     <option value="">-- Select --</option>
                     {VERB_GROUP_OPTIONS.map((opt) => (
@@ -212,7 +212,7 @@ export default function ConjugationEditModal({
                   value={kanji}
                   onChange={(e) => setKanji(e.target.value)}
                   placeholder="Add kanji for better categorization"
-                  className="w-full px-3 py-2 bg-gray-50 dark:bg-[#0f1a1f] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                  className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink"
                 />
               </div>
 
@@ -246,7 +246,7 @@ export default function ConjugationEditModal({
               disabled={
                 isSaving || (skipChoice === 'recategorize' && !category)
               }
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-[#e30a5f] hover:bg-[#c00950] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-brand-pink hover:bg-[#c00950] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSaving && <TbLoader3 className="w-4 h-4 animate-spin" />}
               {skipChoice === 'remove' ? 'Remove and skip' : 'Save and skip'}
@@ -255,7 +255,7 @@ export default function ConjugationEditModal({
             <button
               onClick={handleSave}
               disabled={isSaving || !category}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-[#e30a5f] hover:bg-[#c00950] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-brand-pink hover:bg-[#c00950] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSaving ? (
                 <TbLoader3 className="w-4 h-4 animate-spin" />

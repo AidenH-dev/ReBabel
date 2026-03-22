@@ -6,7 +6,7 @@ export default function SignupCTA({ compact = false }) {
 
   return (
     <div
-      className={`${compact ? 'p-4' : 'p-6 sm:p-8'} rounded-2xl bg-gradient-to-br from-[#e30a5f]/5 to-[#e30a5f]/10 dark:from-[#e30a5f]/10 dark:to-[#e30a5f]/5 border border-[#e30a5f]/20`}
+      className={`${compact ? 'p-4' : 'p-6 sm:p-8'} rounded-2xl bg-gradient-to-br from-brand-pink/5 to-brand-pink/10 dark:from-brand-pink/10 dark:to-brand-pink/5 border border-brand-pink/20`}
     >
       <h3
         className={`${compact ? 'text-base' : 'text-lg sm:text-xl'} font-bold text-gray-900 dark:text-white mb-2`}
@@ -31,14 +31,17 @@ export default function SignupCTA({ compact = false }) {
           'Track your study progress over time',
         ].map((feature) => (
           <li key={feature} className="flex items-center gap-2">
-            <FaCheckCircle className="text-[#e30a5f] flex-shrink-0" size={12} />
+            <FaCheckCircle
+              className="text-brand-pink flex-shrink-0"
+              size={12}
+            />
             {feature}
           </li>
         ))}
       </ul>
       <button
         onClick={() => router.push('/api/auth/login')}
-        className="w-full sm:w-auto px-6 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium rounded-lg transition-colors text-sm"
+        className="w-full sm:w-auto px-6 py-2.5 bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors text-sm"
       >
         Create Free Account
       </button>

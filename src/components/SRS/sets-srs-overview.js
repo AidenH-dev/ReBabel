@@ -13,7 +13,7 @@ import SrsSetHealthCard from '@/components/SRS/sets-srs-set-card';
 
 function SetCardSkeleton({ delay = 0 }) {
   return (
-    <div className="bg-white dark:bg-[#1d2a32] border border-black/5 dark:border-white/10 rounded-xl p-4">
+    <div className="bg-white dark:bg-surface-elevated border border-border-default rounded-xl p-4">
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="flex items-center gap-2 flex-1">
           <div
@@ -255,7 +255,7 @@ export default function SetsSrsOverview({ active = true }) {
   if (error) {
     return (
       <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white">
+        <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
           Spaced Repetition
         </h2>
         <div className="rounded-xl border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10 p-6 text-center text-sm text-red-700 dark:text-red-300">
@@ -270,16 +270,16 @@ export default function SetsSrsOverview({ active = true }) {
   if (!data?.sets?.length) {
     return (
       <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white">
+        <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
           Spaced Repetition
         </h2>
-        <div className="rounded-xl border border-dashed border-black/10 dark:border-white/10 p-8 text-center text-sm text-black/70 dark:text-white/70">
+        <div className="rounded-xl border border-dashed border-border-default p-8 text-center text-sm text-black/70 dark:text-white/70">
           <p className="mb-3">No SRS-enabled sets yet.</p>
           <p className="text-xs mb-4">
             Enable SRS on your notecard sets to use spaced repetition for better
             memorization.
           </p>
-          <button className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95">
+          <button className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-brand-pink text-white hover:opacity-95">
             <FaPlus /> Enable SRS for a Set
           </button>
         </div>
@@ -292,9 +292,9 @@ export default function SetsSrsOverview({ active = true }) {
   return (
     <div className="flex flex-col gap-3">
       {/* ── Header: title + stats + view toggle ──────────────────── */}
-      <div className="flex items-center justify-between gap-2 pb-3 sm:pb-1 border-b border-black/5 dark:border-white/10">
+      <div className="flex items-center justify-between gap-2 pb-3 sm:pb-1 border-b border-border-default">
         <div className="flex items-center gap-3 min-w-0">
-          <h2 className="hidden sm:block text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white">
+          <h2 className="hidden sm:block text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
             Spaced Repetition
           </h2>
           <span className="hidden sm:block w-px h-4 bg-black/10 dark:bg-white/10" />
@@ -314,7 +314,7 @@ export default function SetsSrsOverview({ active = true }) {
             </span>
             <span className="text-black/15 dark:text-white/15">·</span>
             <span>
-              <span className="font-bold text-[#e30a5f]">
+              <span className="font-bold text-brand-pink">
                 {aggregate.totalDue}
               </span>{' '}
               due
@@ -327,7 +327,7 @@ export default function SetsSrsOverview({ active = true }) {
             onClick={() => setSrsView('sets')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition ${
               srsView === 'sets'
-                ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                 : 'text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white'
             }`}
           >
@@ -338,7 +338,7 @@ export default function SetsSrsOverview({ active = true }) {
             onClick={() => setSrsView('statistics')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition ${
               srsView === 'statistics'
-                ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                 : 'text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white'
             }`}
           >
@@ -394,7 +394,7 @@ export default function SetsSrsOverview({ active = true }) {
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-[#111] dark:text-white pl-8 pr-8 py-1.5 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                  className="w-full bg-surface-deep text-[#111] dark:text-white pl-8 pr-8 py-1.5 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink"
                 />
                 {searchQuery && (
                   <button
@@ -418,7 +418,7 @@ export default function SetsSrsOverview({ active = true }) {
                     onClick={() => setSortBy(opt.value)}
                     className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${
                       sortBy === opt.value
-                        ? 'bg-white dark:bg-[#0f1a1f] text-[#e30a5f] shadow-sm'
+                        ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
                         : 'text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white'
                     }`}
                   >
@@ -431,7 +431,7 @@ export default function SetsSrsOverview({ active = true }) {
 
           {/* Sets grid */}
           {sortedSets.length === 0 && searchQuery ? (
-            <div className="rounded-lg border border-dashed border-black/10 dark:border-white/10 p-6 text-center text-xs text-black/60 dark:text-white/60">
+            <div className="rounded-lg border border-dashed border-border-default p-6 text-center text-xs text-black/60 dark:text-white/60">
               No sets matching &quot;{searchQuery}&quot;
             </div>
           ) : (

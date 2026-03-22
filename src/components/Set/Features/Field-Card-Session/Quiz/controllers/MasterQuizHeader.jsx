@@ -1,34 +1,88 @@
 // components/pages/academy/sets/QuizSet/QuizHeader/MasterQuizHeader.jsx
-import { FaBook } from "react-icons/fa";
-import { IoSparkles } from "react-icons/io5";
-import { FaDumbbell } from "react-icons/fa";
-import SessionStatHeaderView from "@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView.jsx";
+import { FaBook } from 'react-icons/fa';
+import { IoSparkles } from 'react-icons/io5';
+import { FaDumbbell } from 'react-icons/fa';
+import SessionStatHeaderView from '@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView.jsx';
 
 // Static phase configurations for vocab sets
 const VOCAB_PHASE_CONFIGS = {
   'completely-new': [
-    { id: 'review', name: 'Review', icon: FaBook, color: 'bg-blue-500', borderColor: 'border-blue-500' },
-    { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' },
-    { id: 'translation', name: 'Translation', icon: FaDumbbell, color: 'bg-[#e30a5f]', borderColor: 'border-[#e30a5f]' }
+    {
+      id: 'review',
+      name: 'Review',
+      icon: FaBook,
+      color: 'bg-blue-500',
+      borderColor: 'border-blue-500',
+    },
+    {
+      id: 'multiple-choice',
+      name: 'Multiple Choice',
+      icon: IoSparkles,
+      color: 'bg-purple-500',
+      borderColor: 'border-purple-500',
+    },
+    {
+      id: 'translation',
+      name: 'Translation',
+      icon: FaDumbbell,
+      color: 'bg-brand-pink',
+      borderColor: 'border-brand-pink',
+    },
   ],
-  'new': [
-    { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' },
-    { id: 'translation', name: 'Translation', icon: FaDumbbell, color: 'bg-[#e30a5f]', borderColor: 'border-[#e30a5f]' }
+  new: [
+    {
+      id: 'multiple-choice',
+      name: 'Multiple Choice',
+      icon: IoSparkles,
+      color: 'bg-purple-500',
+      borderColor: 'border-purple-500',
+    },
+    {
+      id: 'translation',
+      name: 'Translation',
+      icon: FaDumbbell,
+      color: 'bg-brand-pink',
+      borderColor: 'border-brand-pink',
+    },
   ],
-  'practice': [
-    { id: 'translation', name: 'Translation', icon: FaDumbbell, color: 'bg-[#e30a5f]', borderColor: 'border-[#e30a5f]' }
-  ]
+  practice: [
+    {
+      id: 'translation',
+      name: 'Translation',
+      icon: FaDumbbell,
+      color: 'bg-brand-pink',
+      borderColor: 'border-brand-pink',
+    },
+  ],
 };
 
 // Static phase configurations for grammar sets
 const GRAMMAR_PHASE_CONFIGS = {
   'with-review': [
-    { id: 'review', name: 'Review', icon: FaBook, color: 'bg-blue-500', borderColor: 'border-blue-500' },
-    { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' }
+    {
+      id: 'review',
+      name: 'Review',
+      icon: FaBook,
+      color: 'bg-blue-500',
+      borderColor: 'border-blue-500',
+    },
+    {
+      id: 'multiple-choice',
+      name: 'Multiple Choice',
+      icon: IoSparkles,
+      color: 'bg-purple-500',
+      borderColor: 'border-purple-500',
+    },
   ],
   'mc-only': [
-    { id: 'multiple-choice', name: 'Multiple Choice', icon: IoSparkles, color: 'bg-purple-500', borderColor: 'border-purple-500' }
-  ]
+    {
+      id: 'multiple-choice',
+      name: 'Multiple Choice',
+      icon: IoSparkles,
+      color: 'bg-purple-500',
+      borderColor: 'border-purple-500',
+    },
+  ],
 };
 
 export default function MasterQuizHeader({
@@ -42,18 +96,20 @@ export default function MasterQuizHeader({
   quizType,
   completedPhases,
   completedCount = 0,
-  onExit
+  onExit,
 }) {
   // Select appropriate phase configs based on set type
-  const phaseConfigs = setType === 'grammar' ? GRAMMAR_PHASE_CONFIGS : VOCAB_PHASE_CONFIGS;
+  const phaseConfigs =
+    setType === 'grammar' ? GRAMMAR_PHASE_CONFIGS : VOCAB_PHASE_CONFIGS;
   const currentModeKey = setType === 'grammar' ? quizType : quizMode;
   const phases = phaseConfigs[currentModeKey] || [];
-  const currentPhaseIndex = phases.findIndex(p => p.id === currentPhase);
+  const currentPhaseIndex = phases.findIndex((p) => p.id === currentPhase);
   const currentPhaseConfig = phases[currentPhaseIndex];
   const CurrentPhaseIcon = currentPhaseConfig?.icon;
 
   // Calculate progress within current phase based on completed items count
-  const progressInPhase = totalQuestions > 0 ? (completedCount / totalQuestions) * 100 : 0;
+  const progressInPhase =
+    totalQuestions > 0 ? (completedCount / totalQuestions) * 100 : 0;
 
   // Render using shared SessionStatHeaderView component
   return (

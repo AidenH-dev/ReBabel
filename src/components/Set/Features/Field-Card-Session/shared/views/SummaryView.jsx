@@ -89,7 +89,7 @@ export default function SummaryView({
                   <span className="text-xs font-medium text-gray-700 dark:text-white/80">
                     Overall Accuracy
                   </span>
-                  <span className="text-xl font-bold bg-gradient-to-r from-[#e30a5f] to-[#f41567] bg-clip-text text-transparent">
+                  <span className="text-xl font-bold bg-gradient-to-r from-brand-pink to-brand-pink-hover bg-clip-text text-transparent">
                     {sessionStats.accuracy}%
                   </span>
                 </div>
@@ -103,7 +103,7 @@ export default function SummaryView({
                     }}
                   >
                     {/* Base gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#e30a5f] via-[#f41567] to-[#e30a5f]"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-brand-pink via-brand-pink-hover to-brand-pink"></div>
 
                     {/* Liquid wave effect */}
                     <div
@@ -234,7 +234,7 @@ export default function SummaryView({
                   onClick={onBackToSet}
                   className={`${
                     onRetry ? 'flex-1' : 'w-full'
-                  } px-4 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base`}
+                  } px-4 py-2.5 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base`}
                 >
                   Back to Study Set
                 </button>

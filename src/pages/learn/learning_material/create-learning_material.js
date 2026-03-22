@@ -345,7 +345,7 @@ export default function CreateLearning_material() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
       <MainSidebar />
 
       <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6">
@@ -364,7 +364,7 @@ export default function CreateLearning_material() {
             <span>Back to Dashboard</span>
           </button>
 
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
+          <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               Create New Learning Material
             </h1>
@@ -389,7 +389,7 @@ export default function CreateLearning_material() {
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
                       activeStep >= item.step
-                        ? 'bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white'
+                        ? 'bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white'
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
                     }`}
                   >
@@ -408,7 +408,7 @@ export default function CreateLearning_material() {
                     <div
                       className={`flex-1 h-0.5 ${
                         activeStep > item.step
-                          ? 'bg-gradient-to-r from-[#e30a5f] to-[#f41567]'
+                          ? 'bg-gradient-to-r from-brand-pink to-brand-pink-hover'
                           : 'bg-gray-200 dark:bg-gray-700'
                       }`}
                     />
@@ -472,7 +472,7 @@ export default function CreateLearning_material() {
         {activeStep === 3 && (
           <div className="space-y-6">
             {/* Learning_material Summary */}
-            <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
+            <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
                 Review Your Learning Material
               </h2>
@@ -480,7 +480,7 @@ export default function CreateLearning_material() {
               {/* Learning_material Info Summary */}
               <div className="mb-8">
                 <h3 className="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                  <FaBook className="text-[#e30a5f]" />
+                  <FaBook className="text-brand-pink" />
                   Learning Material Information
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
@@ -548,7 +548,7 @@ export default function CreateLearning_material() {
               {/* Sections Summary */}
               <div>
                 <h3 className="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                  <FaClipboardList className="text-[#e30a5f]" />
+                  <FaClipboardList className="text-brand-pink" />
                   Sections ({sections.length})
                 </h3>
 
@@ -611,7 +611,7 @@ export default function CreateLearning_material() {
             </div>
 
             {/* Action Buttons */}
-            <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
+            <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6">
               <div className="flex items-center gap-3 mb-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                 <FaLightbulb className="text-green-600 dark:text-green-400 text-lg" />
                 <div>
@@ -634,7 +634,7 @@ export default function CreateLearning_material() {
                 <button
                   onClick={handleCreateLearning_material}
                   disabled={isLoading}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white rounded-lg font-medium hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white rounded-lg font-medium hover:shadow-lg transition-all flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
                     <>

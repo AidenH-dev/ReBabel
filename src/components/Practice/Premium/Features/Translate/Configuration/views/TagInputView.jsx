@@ -1,8 +1,8 @@
 // Tag Input View
 // Input field with autocomplete for selecting focal points from pool
 
-import { FaTimes } from "react-icons/fa";
-import { useState, useRef, useEffect } from "react";
+import { FaTimes } from 'react-icons/fa';
+import { useState, useRef, useEffect } from 'react';
 
 export default function TagInputView({
   label,
@@ -12,20 +12,23 @@ export default function TagInputView({
   onAddTag,
   onRemoveTag,
   maxTags,
-  category
+  category,
 }) {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef(null);
   const dropdownRef = useRef(null);
 
   // Filter suggestions based on input
-  const suggestions = poolItems.filter(item => {
+  const suggestions = poolItems.filter((item) => {
     // Check if item already selected (compare by content for custom items)
-    const isSelected = selectedTags.some(tag =>
-      (tag.id && item.id && tag.id === item.id) ||
-      (category === 'grammar' && tag.title === item.title) ||
-      (category === 'vocabulary' && tag.english === item.english && tag.kana === item.kana)
+    const isSelected = selectedTags.some(
+      (tag) =>
+        (tag.id && item.id && tag.id === item.id) ||
+        (category === 'grammar' && tag.title === item.title) ||
+        (category === 'vocabulary' &&
+          tag.english === item.english &&
+          tag.kana === item.kana)
     );
     if (isSelected) return false;
 
@@ -75,7 +78,7 @@ export default function TagInputView({
   const handleSelectSuggestion = (item) => {
     if (maxTags && selectedTags.length >= maxTags) return;
     onAddTag(item);
-    setInputValue("");
+    setInputValue('');
     setShowSuggestions(false);
     inputRef.current?.focus();
   };
@@ -117,17 +120,19 @@ export default function TagInputView({
       </label>
 
       <div className="relative">
-        <div className="min-h-[40px] bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus-within:ring-1 focus-within:ring-[#e30a5f]">
+        <div className="min-h-[40px] bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus-within:ring-1 focus-within:ring-brand-pink">
           {/* Selected Tags */}
           <div className="flex flex-wrap gap-1 mb-1">
-            {selectedTagItems.map(item => (
+            {selectedTagItems.map((item) => (
               <div
                 key={item.id}
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-[#e30a5f]/10 text-[#e30a5f] border border-[#e30a5f]/20"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-brand-pink/10 text-brand-pink border border-brand-pink/20"
               >
                 <span>{getItemDisplay(item)}</span>
                 <button
-                  onClick={() => onRemoveTag(item.id || item.title || item.english)}
+                  onClick={() =>
+                    onRemoveTag(item.id || item.title || item.english)
+                  }
                   className="hover:opacity-70"
                 >
                   <FaTimes className="text-xs" />
@@ -144,7 +149,9 @@ export default function TagInputView({
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             onKeyDown={handleKeyDown}
-            placeholder={isAtMaxTags ? `Max ${maxTags} items selected` : placeholder}
+            placeholder={
+              isAtMaxTags ? `Max ${maxTags} items selected` : placeholder
+            }
             disabled={isAtMaxTags}
             className="w-full bg-transparent border-none outline-none text-base placeholder:text-black/40 dark:placeholder:text-white/40 disabled:cursor-not-allowed"
           />
@@ -154,13 +161,13 @@ export default function TagInputView({
         {showSuggestions && !isAtMaxTags && suggestions.length > 0 && (
           <div
             ref={dropdownRef}
-            className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1c2b35] border border-black/10 dark:border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+            className="absolute z-10 w-full mt-1 bg-surface-card border border-border-default rounded-lg shadow-lg max-h-60 overflow-y-auto"
           >
-            {suggestions.map(item => (
+            {suggestions.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleSelectSuggestion(item)}
-                className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-[#22333e] transition-colors border-b border-black/5 dark:border-white/5 last:border-b-0"
+                className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-[#22333e] transition-colors border-b border-border-subtle last:border-b-0"
               >
                 <div className="text-sm font-medium text-black dark:text-white">
                   {getItemDisplay(item)}

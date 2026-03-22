@@ -330,14 +330,14 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
   const tabClass = (tab) =>
     `pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors ${
       activeTab === tab
-        ? 'text-[#e30a5f] border-[#e30a5f]'
-        : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-[#e30a5f]'
+        ? 'text-brand-pink border-brand-pink'
+        : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-brand-pink'
     }`;
 
   return (
     <div>
       {/* Tabs */}
-      <div className="border-b border-black/5 dark:border-white/10">
+      <div className="border-b border-border-default">
         <div className="flex items-end gap-6 -mb-px h-10">
           <button
             onClick={() => handleTabSwitch('log')}
@@ -365,7 +365,7 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-[#1a2834] rounded-xl border border-gray-200 dark:border-white/10 p-3 sm:p-4 mt-3">
+      <div className="bg-white dark:bg-surface-elevated rounded-xl border border-gray-200 dark:border-white/10 p-3 sm:p-4 mt-3">
         {selectedItemId && selectedHistory.length > 0 && selectedItemStats ? (
           /* ===== ITEM DETAIL VIEW ===== */
           <div>
@@ -475,13 +475,13 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
 
             {/* Next review */}
             <div
-              className={`rounded-lg px-3 py-2 mb-3 ${selectedItemStats.isDue ? 'bg-[#e30a5f]/10' : 'bg-gray-50 dark:bg-white/5'}`}
+              className={`rounded-lg px-3 py-2 mb-3 ${selectedItemStats.isDue ? 'bg-brand-pink/10' : 'bg-gray-50 dark:bg-white/5'}`}
             >
               <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                 Next Review
               </p>
               <p
-                className={`text-sm font-bold ${selectedItemStats.isDue ? 'text-[#e30a5f]' : 'text-gray-900 dark:text-white'}`}
+                className={`text-sm font-bold ${selectedItemStats.isDue ? 'text-brand-pink' : 'text-gray-900 dark:text-white'}`}
               >
                 {selectedItemStats.dueIn}
               </p>
@@ -533,7 +533,7 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
                       value={itemSearch}
                       onChange={(e) => setItemSearch(e.target.value)}
                       placeholder="Search..."
-                      className="w-full text-xs pl-6 pr-2 py-1 rounded-md border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-[#e30a5f] focus:ring-1 focus:ring-[#e30a5f]/30"
+                      className="w-full text-xs pl-6 pr-2 py-1 rounded-md border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-brand-pink focus:ring-1 focus:ring-brand-pink/30"
                     />
                   </div>
                   <div className="flex items-center gap-0.5 flex-shrink-0">
@@ -565,7 +565,7 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
                         title={opt.title}
                         className={`p-1.5 rounded-md text-sm transition-colors ${
                           itemSort === opt.value
-                            ? 'bg-[#e30a5f]/10 text-[#e30a5f]'
+                            ? 'bg-brand-pink/10 text-brand-pink'
                             : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-600 dark:hover:text-gray-300'
                         }`}
                       >
@@ -581,7 +581,7 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
                     onClick={() => setLevelFilter(null)}
                     className={`px-2 py-0.5 rounded-full text-[10px] font-medium transition-colors ${
                       levelFilter === null
-                        ? 'bg-[#e30a5f] text-white'
+                        ? 'bg-brand-pink text-white'
                         : 'bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/15'
                     }`}
                   >
@@ -651,7 +651,7 @@ export default function SrsTabbedPanel({ setId, rawItems }) {
                                 levelUp
                                   ? 'border-green-400 dark:border-green-500'
                                   : 'border-red-300 dark:border-red-400'
-                              } bg-white dark:bg-[#1a2834]`}
+                              } bg-white dark:bg-surface-elevated`}
                             >
                               <div
                                 className={`h-1.5 w-1.5 rounded-full ${

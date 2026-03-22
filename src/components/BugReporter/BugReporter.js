@@ -221,9 +221,9 @@ export default function BugReporter() {
             if (e.target === e.currentTarget) closeModal();
           }}
         >
-          <div className="w-full max-w-lg rounded-xl bg-white dark:bg-[#1c2b35] shadow-2xl border border-black/10 dark:border-white/10 max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-lg rounded-xl bg-surface-card shadow-2xl border border-border-default max-h-[90vh] overflow-y-auto">
             {/* Header */}
-            <div className="sticky top-0 bg-white dark:bg-[#1c2b35] border-b border-black/5 dark:border-white/10 px-5 py-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-surface-card border-b border-border-default px-5 py-4 flex items-center justify-between">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                 Report a Bug
               </h2>
@@ -274,7 +274,7 @@ export default function BugReporter() {
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="Short summary of the bug"
-                      className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-3 py-2 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#da1c60]"
+                      className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink"
                     />
                   </div>
 
@@ -293,7 +293,7 @@ export default function BugReporter() {
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="What happened? What did you expect?"
                       rows={4}
-                      className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-3 py-2 rounded-lg text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-[#da1c60] resize-none"
+                      className="w-full bg-surface-deep text-gray-900 dark:text-white px-3 py-2 rounded-lg text-sm border border-border-default focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
                     />
                   </div>
 
@@ -314,7 +314,7 @@ export default function BugReporter() {
                             value={s}
                             checked={severity === s}
                             onChange={() => setSeverity(s)}
-                            className="accent-[#da1c60]"
+                            className="accent-brand-pink"
                           />
                           {s.charAt(0).toUpperCase() + s.slice(1)}
                         </label>
@@ -330,7 +330,7 @@ export default function BugReporter() {
                         data-testid="screenshot-checkbox"
                         checked={includeScreenshot}
                         onChange={(e) => setIncludeScreenshot(e.target.checked)}
-                        className="accent-[#da1c60]"
+                        className="accent-brand-pink"
                       />
                       Include screenshot
                     </label>
@@ -342,7 +342,7 @@ export default function BugReporter() {
                       data-testid="bug-cancel-button"
                       type="button"
                       onClick={closeModal}
-                      className="flex-1 px-4 py-2 rounded-lg text-sm font-medium border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                      className="flex-1 px-4 py-2 rounded-lg text-sm font-medium border border-border-default text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                     >
                       Cancel
                     </button>
@@ -351,7 +351,7 @@ export default function BugReporter() {
                       type="button"
                       onClick={handleSubmit}
                       disabled={!canSubmit || isSubmitting}
-                      className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-[#da1c60] text-white hover:bg-[#E30B5C] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#da1c60]"
+                      className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-brand-pink text-white hover:bg-brand-pink transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-pink"
                     >
                       {isSubmitting ? 'Submitting…' : 'Submit Report'}
                     </button>

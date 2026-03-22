@@ -240,7 +240,7 @@ export default function ConjugationPracticeLevelPage({
       </Head>
 
       {/* Navbar */}
-      <nav className="fixed top-0 w-full bg-white/95 dark:bg-[#141f25]/95 backdrop-blur-sm border-b border-gray-200 dark:border-white/10 z-50">
+      <nav className="fixed top-0 w-full bg-white/95 dark:bg-surface-page/95 backdrop-blur-sm border-b border-gray-200 dark:border-white/10 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center gap-2">
@@ -251,7 +251,9 @@ export default function ConjugationPracticeLevelPage({
                 height={32}
                 className="rounded-lg"
               />
-              <span className="text-2xl font-bold text-[#e30a5f]">ReBabel</span>
+              <span className="text-2xl font-bold text-brand-pink">
+                ReBabel
+              </span>
             </Link>
             <div className="flex items-center gap-4">
               <Link
@@ -262,7 +264,7 @@ export default function ConjugationPracticeLevelPage({
               </Link>
               <Link
                 href="/api/auth/login"
-                className="px-4 py-2 text-sm bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium rounded-lg transition-colors"
+                className="px-4 py-2 text-sm bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors"
               >
                 Sign Up Free
               </Link>
@@ -271,14 +273,14 @@ export default function ConjugationPracticeLevelPage({
         </div>
       </nav>
 
-      <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141f25] dark:to-[#1c2b35] pt-8 pb-8">
+      <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-surface-page dark:to-surface-card pt-8 pb-8">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20">
           {phase === 'config' && (
             <>
               <div className="mb-6">
                 <Link
                   href="/japanese-conjugation-practice"
-                  className="text-sm text-gray-500 dark:text-gray-400 hover:text-[#e30a5f] transition-colors"
+                  className="text-sm text-gray-500 dark:text-gray-400 hover:text-brand-pink transition-colors"
                 >
                   &larr; All Levels
                 </Link>
@@ -289,7 +291,7 @@ export default function ConjugationPracticeLevelPage({
                   Select the conjugation forms you want to practice, then begin.
                 </p>
               </div>
-              <div className="bg-white dark:bg-[#1c2b35] rounded-2xl shadow-sm border border-black/5 dark:border-white/5 p-4 sm:p-6">
+              <div className="bg-white dark:bg-surface-card rounded-2xl shadow-sm border border-black/5 dark:border-white/5 p-4 sm:p-6">
                 <PublicConfigPanel
                   levelStats={levelStats}
                   level={level}
@@ -377,7 +379,7 @@ export default function ConjugationPracticeLevelPage({
           {phase === 'loading' && (
             <div className="flex items-center justify-center min-h-[60vh]">
               <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#e30a5f] mx-auto" />
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-pink mx-auto" />
                 <p className="mt-4 text-sm text-black/60 dark:text-white/60">
                   Generating questions...
                 </p>

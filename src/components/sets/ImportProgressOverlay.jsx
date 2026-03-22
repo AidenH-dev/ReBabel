@@ -17,14 +17,14 @@ export default function ImportProgressOverlay({
   variant = 'overlay',
 }) {
   const card = (
-    <div className="bg-white dark:bg-[#1c2b35] rounded-2xl border border-gray-200 dark:border-gray-700 shadow-xl p-8 w-full max-w-sm mx-4 text-center">
+    <div className="bg-surface-card rounded-2xl border border-gray-200 dark:border-gray-700 shadow-xl p-8 w-full max-w-sm mx-4 text-center">
       {importStage === 'done' ? (
         <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
           <TbCheck className="w-7 h-7 text-green-600 dark:text-green-400" />
         </div>
       ) : (
-        <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-[#E30B5C]/10 flex items-center justify-center">
-          <TbDownload className="w-7 h-7 text-[#E30B5C] animate-bounce" />
+        <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-brand-pink/10 flex items-center justify-center">
+          <TbDownload className="w-7 h-7 text-brand-pink animate-bounce" />
         </div>
       )}
 
@@ -44,7 +44,7 @@ export default function ImportProgressOverlay({
           className={`h-full rounded-full transition-all duration-500 ease-out ${
             importStage === 'done'
               ? 'bg-green-500'
-              : 'bg-gradient-to-r from-[#E30B5C] to-[#f41567]'
+              : 'bg-gradient-to-r from-brand-pink to-brand-pink-hover'
           }`}
           style={{ width: `${importProgress}%` }}
         />
@@ -55,7 +55,7 @@ export default function ImportProgressOverlay({
         <span
           className={
             importStage === 'set' || importProgress > 30
-              ? 'text-[#E30B5C] dark:text-[#f41567] font-medium'
+              ? 'text-brand-pink dark:text-brand-pink-hover font-medium'
               : ''
           }
         >
@@ -64,7 +64,7 @@ export default function ImportProgressOverlay({
         <span
           className={
             importStage === 'items' || importProgress > 70
-              ? 'text-[#E30B5C] dark:text-[#f41567] font-medium'
+              ? 'text-brand-pink dark:text-brand-pink-hover font-medium'
               : ''
           }
         >
@@ -78,7 +78,7 @@ export default function ImportProgressOverlay({
         <span
           className={
             importStage === 'linking' || importStage === 'done'
-              ? 'text-[#E30B5C] dark:text-[#f41567] font-medium'
+              ? 'text-brand-pink dark:text-brand-pink-hover font-medium'
               : ''
           }
         >
@@ -105,7 +105,7 @@ export default function ImportProgressOverlay({
   if (variant === 'inline') return card;
 
   return (
-    <div className="absolute inset-0 z-20 bg-gray-50/80 dark:bg-[#141f25]/80 backdrop-blur-sm flex items-center justify-center">
+    <div className="absolute inset-0 z-20 bg-gray-50/80 dark:bg-surface-page/80 backdrop-blur-sm flex items-center justify-center">
       {card}
     </div>
   );

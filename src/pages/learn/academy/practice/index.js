@@ -628,12 +628,12 @@ export default function VocabularyDashboard() {
   };
 
   return (
-    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-[#141f25] text-[#222] dark:text-white">
+    <div className="flex flex-row h-screen overflow-hidden bg-white dark:bg-surface-page text-[#222] dark:text-white">
       {/* Sidebar */}
       <AcademySidebar />
 
       {/* Main */}
-      <main className="ml-auto flex-1 flex h-screen overflow-y-auto bg-gray-50 dark:bg-[#141f25] px-3 sm:px-10 sm:mt-0">
+      <main className="ml-auto flex-1 flex h-screen overflow-y-auto bg-gray-50 dark:bg-surface-page px-3 sm:px-10 sm:mt-0">
         <div className="w-full flex min-h-full mx-2">
           <div className="w-full max-w-6xl mx-auto py-8">
             <BeginnerPackPopup
@@ -660,8 +660,8 @@ export default function VocabularyDashboard() {
                     className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
                                             ${
                                               activeTab === 'translate'
-                                                ? 'text-[#e30a5f] border-[#e30a5f]'
-                                                : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-[#e30a5f]'
+                                                ? 'text-brand-pink border-brand-pink'
+                                                : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-brand-pink'
                                             }`}
                   >
                     <span className="inline-flex items-center gap-2">
@@ -674,8 +674,8 @@ export default function VocabularyDashboard() {
                     className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
                                             ${
                                               activeTab === 'conjugation'
-                                                ? 'text-[#e30a5f] border-[#e30a5f]'
-                                                : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-[#e30a5f]'
+                                                ? 'text-brand-pink border-brand-pink'
+                                                : 'text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-brand-pink'
                                             }`}
                   >
                     <span className="inline-flex items-center gap-2">
@@ -688,8 +688,8 @@ export default function VocabularyDashboard() {
                                         onClick={() => setActiveTab("QuickTime")}
                                         className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors
                                             ${activeTab === "QuickTime"
-                                                ? "text-[#e30a5f] border-[#e30a5f]"
-                                                : "text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-[#e30a5f]"
+                                                ? "text-brand-pink border-brand-pink"
+                                                : "text-black/70 dark:text-white/80 border-transparent hover:text-black dark:hover:text-white hover:border-brand-pink"
                                             }`}
                                     >
                                         <span className="inline-flex items-center gap-2">
@@ -703,11 +703,11 @@ export default function VocabularyDashboard() {
 
             {/* Content panel */}
             <div className="w-full">
-              <section className="mt-3 rounded-2xl shadow-sm bg-white dark:bg-[#1c2b35] border border-black/5 dark:border-white/5 p-4 sm:p-6">
+              <section className="mt-3 rounded-2xl shadow-sm bg-white dark:bg-surface-card border border-black/5 dark:border-white/5 p-4 sm:p-6">
                 {/* Translate (formerly Sets) */}
                 {activeTab === 'conjugation' && (
                   <div className="flex flex-col gap-4">
-                    <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white">
+                    <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
                       Conjugation Practice
                     </h2>
                     <ConjugationConfigPanel
@@ -747,7 +747,7 @@ export default function VocabularyDashboard() {
                 {activeTab === 'translate' && (
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-lg font-semibold tracking-tight text-[#0f1a1f] dark:text-white flex-1">
+                      <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white flex-1">
                         Practice Scope
                       </h2>
                       {!isPremiumLoading &&
@@ -821,7 +821,7 @@ export default function VocabularyDashboard() {
       {/* Custom Item Card Swap Modals - Fixed Overlay */}
       {showCustomItemModal.vocabulary && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+          <div className="bg-white dark:bg-surface-card rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="relative min-h-[400px] p-6">
               <CardSwapCustomItemModal
                 category="vocabulary"
@@ -841,7 +841,7 @@ export default function VocabularyDashboard() {
       )}
       {showCustomItemModal.grammar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+          <div className="bg-white dark:bg-surface-card rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="relative min-h-[400px] p-6">
               <CardSwapCustomItemModal
                 category="grammar"
@@ -884,14 +884,14 @@ function SetCard({ set, formatDate, isSelected, onSelect }) {
 
   return (
     <div
-      className={`group rounded-lg border ${isSelected ? 'border-[#e30a5f] ring-2 ring-[#e30a5f]/20' : 'border-black/5 dark:border-white/10'} bg-gray-50 dark:bg-[#1d2a32] p-3 transition-all hover:shadow-sm hover:-translate-y-px focus-within:ring-2 focus-within:ring-[#e30a5f] relative`}
+      className={`group rounded-lg border ${isSelected ? 'border-brand-pink ring-2 ring-brand-pink/20' : 'border-black/5 dark:border-white/10'} bg-gray-50 dark:bg-surface-elevated p-3 transition-all hover:shadow-sm hover:-translate-y-px focus-within:ring-2 focus-within:ring-brand-pink relative`}
     >
       {/* Checkbox */}
       <input
         type="checkbox"
         checked={isSelected}
         onChange={(e) => onSelect(set.id, e.target.checked)}
-        className="absolute top-3 left-3 w-4 h-4 rounded border-gray-300 text-[#e30a5f] focus:ring-[#e30a5f] cursor-pointer"
+        className="absolute top-3 left-3 w-4 h-4 rounded border-gray-300 text-brand-pink focus:ring-brand-pink cursor-pointer"
       />
 
       <div className="flex items-start justify-between gap-3 ml-6">
@@ -955,14 +955,14 @@ function SetRow({ set, formatDate, isSelected, onSelect }) {
 
   return (
     <div
-      className={`flex items-center justify-between gap-3 ${isSelected ? 'bg-[#e30a5f]/5' : 'bg-white/70 dark:bg-white/[0.02]'} px-3 py-2`}
+      className={`flex items-center justify-between gap-3 ${isSelected ? 'bg-brand-pink/5' : 'bg-white/70 dark:bg-white/[0.02]'} px-3 py-2`}
     >
       {/* Checkbox */}
       <input
         type="checkbox"
         checked={isSelected}
         onChange={(e) => onSelect(set.id, e.target.checked)}
-        className="w-4 h-4 rounded border-gray-300 text-[#e30a5f] focus:ring-[#e30a5f] cursor-pointer"
+        className="w-4 h-4 rounded border-gray-300 text-brand-pink focus:ring-brand-pink cursor-pointer"
       />
 
       <div className="min-w-0 flex-1">

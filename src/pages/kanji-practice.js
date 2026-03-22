@@ -184,7 +184,7 @@ function BubbleListField({
       <span className="mb-2 block text-sm font-medium text-slate-700">
         {label}
       </span>
-      <div className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition focus-within:border-[#e30a5f] focus-within:bg-white focus-within:ring-1 focus-within:ring-[#e30a5f]/20">
+      <div className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition focus-within:border-brand-pink focus-within:bg-white focus-within:ring-1 focus-within:ring-brand-pink/20">
         <div
           ref={scrollRef}
           className="flex min-h-[28px] items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -248,7 +248,7 @@ function SortableBubbleChip({ item, index, onChange, onRemove }) {
         transition,
         opacity: isDragging ? 0.85 : 1,
       }}
-      className="flex shrink-0 cursor-grab select-none items-center gap-1 rounded-full border border-[#e30a5f]/25 bg-[#e30a5f]/10 px-2 py-0.5 text-[#e30a5f] active:cursor-grabbing"
+      className="flex shrink-0 cursor-grab select-none items-center gap-1 rounded-full border border-brand-pink/25 bg-brand-pink/10 px-2 py-0.5 text-brand-pink active:cursor-grabbing"
     >
       <input
         value={item.value}
@@ -256,14 +256,14 @@ function SortableBubbleChip({ item, index, onChange, onRemove }) {
         onPointerDown={(event) => event.stopPropagation()}
         onMouseDown={(event) => event.stopPropagation()}
         style={{ width: `${Math.max(getTextWidthPx(item.value) + 3, 22)}px` }}
-        className="bg-transparent text-sm text-[#e30a5f] outline-none"
+        className="bg-transparent text-sm text-brand-pink outline-none"
       />
       <button
         type="button"
         onClick={() => onRemove(index)}
         onPointerDown={(event) => event.stopPropagation()}
         onMouseDown={(event) => event.stopPropagation()}
-        className="rounded-sm pl-0.5 pr-0 text-xs text-[#e30a5f]/80 transition hover:text-[#e30a5f]"
+        className="rounded-sm pl-0.5 pr-0 text-xs text-brand-pink/80 transition hover:text-brand-pink"
         aria-label="Remove item"
       >
         <FaTimes className="text-[10px]" />
@@ -511,7 +511,7 @@ export default function KanjiPdfTestPage() {
             <div className="flex items-center gap-2">
               <Link
                 href="/"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-[#e30a5f]/20 bg-[#fff5f8] text-sm font-semibold text-[#b0104f] transition hover:border-[#e30a5f]/40 hover:bg-white"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-brand-pink/20 bg-[#fff5f8] text-sm font-semibold text-[#b0104f] transition hover:border-brand-pink/40 hover:bg-white"
                 aria-label="Back to home"
               >
                 <FaArrowLeft className="text-xs" />
@@ -628,7 +628,7 @@ export default function KanjiPdfTestPage() {
                     onChange={(event) =>
                       setNoBackgroundColor(event.target.checked)
                     }
-                    className="h-4 w-4 rounded border-slate-300 text-[#e30a5f] focus:ring-[#e30a5f]"
+                    className="h-4 w-4 rounded border-slate-300 text-brand-pink focus:ring-brand-pink"
                   />
                   No background color
                 </label>
@@ -638,14 +638,14 @@ export default function KanjiPdfTestPage() {
                     <p className="mb-1.5 text-xs font-medium uppercase tracking-[0.18em] text-slate-500">
                       Guides
                     </p>
-                    <div className="grid grid-cols-3 rounded-2xl bg-white p-1 ring-1 ring-[#e30a5f]/20">
+                    <div className="grid grid-cols-3 rounded-2xl bg-white p-1 ring-1 ring-brand-pink/20">
                       <button
                         type="button"
                         onClick={() => setShowGuides(false)}
                         className={`rounded-xl px-2 py-2 text-[11px] font-medium transition sm:px-3 sm:text-xs ${
                           !showGuides
-                            ? 'bg-[#e30a5f] text-white'
-                            : 'text-slate-600 hover:bg-[#e30a5f]/10 hover:text-[#e30a5f]'
+                            ? 'bg-brand-pink text-white'
+                            : 'text-slate-600 hover:bg-brand-pink/10 hover:text-brand-pink'
                         }`}
                       >
                         None
@@ -658,8 +658,8 @@ export default function KanjiPdfTestPage() {
                         }}
                         className={`rounded-xl px-2 py-2 text-[11px] font-medium transition sm:px-3 sm:text-xs ${
                           showGuides && guideStyle === 'standard'
-                            ? 'bg-[#e30a5f] text-white'
-                            : 'text-slate-600 hover:bg-[#e30a5f]/10 hover:text-[#e30a5f]'
+                            ? 'bg-brand-pink text-white'
+                            : 'text-slate-600 hover:bg-brand-pink/10 hover:text-brand-pink'
                         }`}
                       >
                         Standard
@@ -672,8 +672,8 @@ export default function KanjiPdfTestPage() {
                         }}
                         className={`rounded-xl px-2 py-2 text-[11px] font-medium transition sm:px-3 sm:text-xs ${
                           showGuides && guideStyle === 'dotted-cross'
-                            ? 'bg-[#e30a5f] text-white'
-                            : 'text-slate-600 hover:bg-[#e30a5f]/10 hover:text-[#e30a5f]'
+                            ? 'bg-brand-pink text-white'
+                            : 'text-slate-600 hover:bg-brand-pink/10 hover:text-brand-pink'
                         }`}
                       >
                         Dotted
@@ -685,14 +685,14 @@ export default function KanjiPdfTestPage() {
                     <p className="mb-1.5 text-xs font-medium uppercase tracking-[0.18em] text-slate-500">
                       Model row
                     </p>
-                    <div className="grid grid-cols-2 rounded-2xl bg-white p-1 ring-1 ring-[#e30a5f]/20">
+                    <div className="grid grid-cols-2 rounded-2xl bg-white p-1 ring-1 ring-brand-pink/20">
                       <button
                         type="button"
                         onClick={() => setIncludeTraceRow(true)}
                         className={`rounded-xl px-2 py-2 text-[11px] font-medium transition sm:px-3 sm:text-xs ${
                           includeTraceRow
-                            ? 'bg-[#e30a5f] text-white'
-                            : 'text-slate-600 hover:bg-[#e30a5f]/10 hover:text-[#e30a5f]'
+                            ? 'bg-brand-pink text-white'
+                            : 'text-slate-600 hover:bg-brand-pink/10 hover:text-brand-pink'
                         }`}
                       >
                         Show
@@ -702,8 +702,8 @@ export default function KanjiPdfTestPage() {
                         onClick={() => setIncludeTraceRow(false)}
                         className={`rounded-xl px-2 py-2 text-[11px] font-medium transition sm:px-3 sm:text-xs ${
                           !includeTraceRow
-                            ? 'bg-[#e30a5f] text-white'
-                            : 'text-slate-600 hover:bg-[#e30a5f]/10 hover:text-[#e30a5f]'
+                            ? 'bg-brand-pink text-white'
+                            : 'text-slate-600 hover:bg-brand-pink/10 hover:text-brand-pink'
                         }`}
                       >
                         Hide
@@ -718,7 +718,7 @@ export default function KanjiPdfTestPage() {
                   type="button"
                   onClick={handleDownload}
                   disabled={downloading}
-                  className="inline-flex items-center justify-center gap-2 rounded-[1.2rem] bg-[#e30a5f] px-4 py-3 text-xs font-semibold text-white transition hover:bg-[#b0104f] disabled:cursor-wait disabled:opacity-70"
+                  className="inline-flex items-center justify-center gap-2 rounded-[1.2rem] bg-brand-pink px-4 py-3 text-xs font-semibold text-white transition hover:bg-brand-pink-dark disabled:cursor-wait disabled:opacity-70"
                 >
                   <FaDownload />
                   {downloading ? 'Rendering PDF...' : 'Download PDF'}
@@ -726,7 +726,7 @@ export default function KanjiPdfTestPage() {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="inline-flex items-center justify-center gap-2 rounded-[1.2rem] border border-[#e30a5f]/30 bg-white px-4 py-3 text-xs font-semibold text-[#b0104f] transition hover:border-[#e30a5f] hover:bg-[#e30a5f]/10"
+                  className="inline-flex items-center justify-center gap-2 rounded-[1.2rem] border border-brand-pink/30 bg-white px-4 py-3 text-xs font-semibold text-[#b0104f] transition hover:border-brand-pink hover:bg-brand-pink/10"
                 >
                   <FaUndo />
                   Reset sample

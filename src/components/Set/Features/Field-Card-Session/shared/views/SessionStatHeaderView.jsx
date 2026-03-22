@@ -1,7 +1,7 @@
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import { TbX } from "react-icons/tb";
-import { MdQuiz } from "react-icons/md";
-import { BsCheckCircleFill } from "react-icons/bs";
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { TbX } from 'react-icons/tb';
+import { MdQuiz } from 'react-icons/md';
+import { BsCheckCircleFill } from 'react-icons/bs';
 
 /**
  * SessionStatHeaderView - Shared presentational component for quiz/session headers
@@ -49,7 +49,7 @@ export default function SessionStatHeaderView({
   completedCount,
   totalUniqueItems,
   displayMode = 'question-count',
-  onExit
+  onExit,
 }) {
   // Get phase status helper
   const getPhaseStatus = (phase) => {
@@ -71,9 +71,9 @@ export default function SessionStatHeaderView({
           </button>
 
           <div className="flex items-center gap-2">
-            <MdQuiz className="text-[#e30a5f] text-lg sm:text-xl" />
+            <MdQuiz className="text-brand-pink text-lg sm:text-xl" />
             <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white truncate">
-              {setTitle || "Quiz"}
+              {setTitle || 'Quiz'}
             </h1>
           </div>
         </div>
@@ -83,13 +83,15 @@ export default function SessionStatHeaderView({
           <div className="flex items-center gap-1.5 sm:gap-2">
             <FaCheckCircle className="text-green-500 text-sm" />
             <span className="text-gray-600 dark:text-white/70">
-              <span className="hidden sm:inline">Correct: </span>{sessionStats.correct}
+              <span className="hidden sm:inline">Correct: </span>
+              {sessionStats.correct}
             </span>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2">
             <FaTimesCircle className="text-red-500 text-sm" />
             <span className="text-gray-600 dark:text-white/70">
-              <span className="hidden sm:inline">Incorrect: </span>{sessionStats.incorrect}
+              <span className="hidden sm:inline">Incorrect: </span>
+              {sessionStats.incorrect}
             </span>
           </div>
           <div className="text-gray-600 dark:text-white/70">
@@ -114,13 +116,15 @@ export default function SessionStatHeaderView({
                   return (
                     <div key={phase.id} className="flex items-center gap-1.5">
                       {/* Compact Phase Dot/Icon */}
-                      <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition-all ${
-                        isCompleted
-                          ? `${phase.color} text-white`
-                          : isActive
-                          ? `${phase.borderColor} border bg-white dark:bg-white/10 text-gray-900 dark:text-white`
-                          : 'bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-white/40'
-                      }`}>
+                      <div
+                        className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition-all ${
+                          isCompleted
+                            ? `${phase.color} text-white`
+                            : isActive
+                              ? `${phase.borderColor} border bg-white dark:bg-white/10 text-gray-900 dark:text-white`
+                              : 'bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-white/40'
+                        }`}
+                      >
                         {isCompleted ? (
                           <BsCheckCircleFill className="text-xs" />
                         ) : (
@@ -131,8 +135,16 @@ export default function SessionStatHeaderView({
 
                       {/* Arrow Separator */}
                       {index < phases.length - 1 && (
-                        <svg className="w-3 h-3 text-gray-300 dark:text-white/20" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                        <svg
+                          className="w-3 h-3 text-gray-300 dark:text-white/20"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                       )}
                     </div>
@@ -153,8 +165,7 @@ export default function SessionStatHeaderView({
               <span>
                 {displayMode === 'completion-count' && currentPhase !== 'review'
                   ? `${completedCount} completed out of ${totalUniqueItems} total`
-                  : `Question ${currentIndex + 1} of ${totalQuestions}`
-                }
+                  : `Question ${currentIndex + 1} of ${totalQuestions}`}
               </span>
             </span>
           </div>
@@ -174,22 +185,34 @@ export default function SessionStatHeaderView({
           </div>
 
           {/* Mobile: Next Phase Indicator */}
-          {phases && phases.length > 1 && currentPhaseIndex < phases.length - 1 && (
-            <div className="sm:hidden flex items-center gap-1.5">
-              <svg className="w-3 h-3 text-gray-400 dark:text-white/40" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-              </svg>
-              {(() => {
-                const nextPhase = phases[currentPhaseIndex + 1];
-                const NextIcon = nextPhase.icon;
-                return (
-                  <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs ${nextPhase.borderColor} border bg-white dark:bg-white/5 text-gray-600 dark:text-white/60`}>
-                    <NextIcon className="text-xs" />
-                  </div>
-                );
-              })()}
-            </div>
-          )}
+          {phases &&
+            phases.length > 1 &&
+            currentPhaseIndex < phases.length - 1 && (
+              <div className="sm:hidden flex items-center gap-1.5">
+                <svg
+                  className="w-3 h-3 text-gray-400 dark:text-white/40"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {(() => {
+                  const nextPhase = phases[currentPhaseIndex + 1];
+                  const NextIcon = nextPhase.icon;
+                  return (
+                    <div
+                      className={`flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs ${nextPhase.borderColor} border bg-white dark:bg-white/5 text-gray-600 dark:text-white/60`}
+                    >
+                      <NextIcon className="text-xs" />
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
         </div>
       </div>
     </div>

@@ -107,7 +107,7 @@ export default function AcademyHome() {
 
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="bg-white dark:bg-surface-card rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -196,7 +196,7 @@ export default function AcademyHome() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
       <AcademySidebar />
 
       <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6">
@@ -277,28 +277,28 @@ export default function AcademyHome() {
                 {/* Create New Set Card */}
                 <div
                   onClick={handleCreateSet}
-                  className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6 border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[#e30a5f] dark:hover:border-[#e30a5f] cursor-pointer transition-all group"
+                  className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-brand-pink dark:hover:border-brand-pink cursor-pointer transition-all group"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center group-hover:bg-[#e30a5f]/10 dark:group-hover:bg-[#e30a5f]/20 transition-colors">
-                      <TbCards className="text-2xl text-gray-400 group-hover:text-[#e30a5f] transition-colors" />
+                    <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center group-hover:bg-brand-pink/10 dark:group-hover:bg-brand-pink/20 transition-colors">
+                      <TbCards className="text-2xl text-gray-400 group-hover:text-brand-pink transition-colors" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900 dark:text-white group-hover:text-[#e30a5f] transition-colors">
+                      <p className="font-medium text-gray-900 dark:text-white group-hover:text-brand-pink transition-colors">
                         Create A New Set
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-500">
                         Add vocabulary, phrases, or concepts to study
                       </p>
                     </div>
-                    <FaPlus className="text-[#e30a5f] opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <FaPlus className="text-brand-pink opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                 </div>
 
                 {/* Browse Existing Sets */}
                 <button
                   onClick={() => router.push('/learn/academy/sets')}
-                  className="w-full bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6 hover:shadow-md transition-all group text-left"
+                  className="w-full bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 hover:shadow-md transition-all group text-left"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
@@ -320,7 +320,7 @@ export default function AcademyHome() {
                 <button
                   onClick={handleQuickStudy}
                   disabled={isQuickStudyLoading}
-                  className="w-full bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6 hover:shadow-md transition-all group text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 hover:shadow-md transition-all group text-left disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
@@ -386,7 +386,7 @@ export default function AcademyHome() {
                 ].map((item, idx) => (
                   <div
                     key={idx}
-                    className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6 opacity-60 cursor-not-allowed relative overflow-hidden"
+                    className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 opacity-60 cursor-not-allowed relative overflow-hidden"
                   >
                     <div className="absolute top-2 right-2">
                       <FaLock className="text-gray-400 text-sm" />

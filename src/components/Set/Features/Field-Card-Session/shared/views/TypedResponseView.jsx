@@ -169,7 +169,7 @@ export default function TypedResponseView({
                 }
                 text-gray-900 dark:text-white
                 placeholder-gray-400 dark:placeholder-white/40
-                focus:outline-none focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent
+                focus:outline-none focus:ring-2 focus:ring-brand-pink focus:border-transparent
                 disabled:opacity-75`}
             />
 
@@ -256,7 +256,7 @@ export default function TypedResponseView({
                 disabled={!userAnswer.trim()}
                 className={`w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
                   userAnswer.trim()
-                    ? 'bg-[#e30a5f] hover:bg-[#f41567] text-white active:scale-95'
+                    ? 'bg-brand-pink hover:bg-brand-pink-hover text-white active:scale-95'
                     : 'bg-gray-200 dark:bg-white/10 text-gray-400 dark:text-white/30 cursor-not-allowed'
                 }`}
               >
@@ -295,7 +295,7 @@ export default function TypedResponseView({
                   onClick={onNext}
                   className="w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all active:scale-95
                     flex items-center justify-center text-sm sm:text-base
-                    bg-[#e30a5f] hover:bg-[#f41567] text-white focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900"
+                    bg-brand-pink hover:bg-brand-pink-hover text-white focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900"
                 >
                   Next Question
                   <FaArrowRight className="inline ml-2" />
@@ -305,7 +305,7 @@ export default function TypedResponseView({
                   onClick={onNext}
                   className={`w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base ${
                     isCorrect
-                      ? 'bg-[#e30a5f] hover:bg-[#f41567] text-white'
+                      ? 'bg-brand-pink hover:bg-brand-pink-hover text-white'
                       : 'bg-gray-600 hover:bg-gray-700 text-white'
                   }`}
                 >

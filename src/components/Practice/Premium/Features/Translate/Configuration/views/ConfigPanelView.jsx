@@ -54,10 +54,10 @@ export default function ConfigPanelView({
       fontSize: '1rem',
       minHeight: 40,
       height: 40,
-      borderColor: state.isFocused ? '#e30a5f' : 'rgba(0,0,0,0.1)',
-      boxShadow: state.isFocused ? '0 0 0 1px #e30a5f' : 'none',
+      borderColor: state.isFocused ? 'var(--brand-pink)' : 'rgba(0,0,0,0.1)',
+      boxShadow: state.isFocused ? '0 0 0 1px var(--brand-pink)' : 'none',
       '&:hover': {
-        borderColor: state.isFocused ? '#e30a5f' : 'rgba(0,0,0,0.1)',
+        borderColor: state.isFocused ? 'var(--brand-pink)' : 'rgba(0,0,0,0.1)',
       },
     }),
     valueContainer: (base) => ({
@@ -88,10 +88,14 @@ export default function ConfigPanelView({
       fontSize: '1rem',
       minHeight: 40,
       height: 40,
-      borderColor: state.isFocused ? '#e30a5f' : 'rgba(255,255,255,0.1)',
-      boxShadow: state.isFocused ? '0 0 0 1px #e30a5f' : 'none',
+      borderColor: state.isFocused
+        ? 'var(--brand-pink)'
+        : 'rgba(255,255,255,0.1)',
+      boxShadow: state.isFocused ? '0 0 0 1px var(--brand-pink)' : 'none',
       '&:hover': {
-        borderColor: state.isFocused ? '#e30a5f' : 'rgba(255,255,255,0.1)',
+        borderColor: state.isFocused
+          ? 'var(--brand-pink)'
+          : 'rgba(255,255,255,0.1)',
       },
     }),
     valueContainer: (base) => ({
@@ -110,11 +114,17 @@ export default function ConfigPanelView({
       height: 40,
     }),
     singleValue: (base) => ({ ...base, color: '#fff', fontSize: '1rem' }),
-    menu: (base) => ({ ...base, backgroundColor: '#1c2b35', zIndex: 50 }),
+    menu: (base) => ({
+      ...base,
+      backgroundColor: 'var(--surface-card)',
+      zIndex: 50,
+    }),
     option: (base, state) => ({
       ...base,
       fontSize: '1rem',
-      backgroundColor: state.isFocused ? '#22333e' : '#1c2b35',
+      backgroundColor: state.isFocused
+        ? 'var(--surface-elevated)'
+        : 'var(--surface-card)',
       color: '#fff',
     }),
     placeholder: (base) => ({ ...base, color: '#999', fontSize: '1rem' }),
@@ -123,10 +133,10 @@ export default function ConfigPanelView({
   return (
     <div className="md:sticky md:top-0 z-10">
       {' '}
-      {/** bg-white dark:bg-[#1c2b35] border border-black/5 dark:border-white/5 rounded-xl p-4 mb-4 shadow-sm */}
+      {/** bg-surface-card border border-border-subtle rounded-xl p-4 mb-4 shadow-sm */}
       {/* Pool Headers */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-        <div className="flex flex-col gap-2 bg-white dark:bg-[#22333e] border border-black/5 dark:border-white/5 rounded-xl p-4 inset-shadow-xs dark:inset-shadow-[#1c2b35]">
+        <div className="flex flex-col gap-2 bg-white dark:bg-surface-elevated border border-border-subtle rounded-xl p-4 inset-shadow-xs dark:inset-shadow-surface-card">
           <div className="flex items-center justify-between">
             <span className="font-medium text-black dark:text-white">
               Vocabulary
@@ -175,10 +185,10 @@ export default function ConfigPanelView({
             />
             <button
               onClick={() => onOpenAddModal('vocabulary')}
-              className="h-[38px] shrink-0 text-[#e30a5f] inline-flex items-center px-2 rounded text-sm font-medium border border-[#e30a5f] hover:bg-[#e30a5f]/10 transition-colors"
+              className="h-[38px] shrink-0 text-brand-pink inline-flex items-center px-2 rounded text-sm font-medium border border-brand-pink hover:bg-brand-pink/10 transition-colors"
             >
               Custom
-              <FaPlus className="ml-1 text-[#e30a5f]" />
+              <FaPlus className="ml-1 text-brand-pink" />
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -215,7 +225,7 @@ export default function ConfigPanelView({
             ))}
           </div>
         </div>
-        <div className="flex flex-col gap-2 bg-white dark:bg-[#22333e] border border-black/5 dark:border-white/5 rounded-xl p-4 inset-shadow-xs dark:inset-shadow-[#1c2b35]">
+        <div className="flex flex-col gap-2 bg-white dark:bg-surface-elevated border border-border-subtle rounded-xl p-4 inset-shadow-xs dark:inset-shadow-surface-card">
           <div className="flex items-center justify-between">
             <span className="font-medium text-black dark:text-white">
               Grammar
@@ -264,10 +274,10 @@ export default function ConfigPanelView({
             />
             <button
               onClick={() => onOpenAddModal('grammar')}
-              className="h-[38px] shrink-0 text-[#e30a5f] inline-flex items-center px-2 rounded text-sm font-medium border border-[#e30a5f] hover:bg-[#e30a5f]/10 transition-colors"
+              className="h-[38px] shrink-0 text-brand-pink inline-flex items-center px-2 rounded text-sm font-medium border border-brand-pink hover:bg-brand-pink/10 transition-colors"
             >
               Custom
-              <FaPlus className="ml-1 text-[#e30a5f]" />
+              <FaPlus className="ml-1 text-brand-pink" />
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -306,7 +316,7 @@ export default function ConfigPanelView({
         </div>
       </div>
       {/* Focus Configuration Summary */}
-      <div className="mb-3 p-3 bg-gray-100 dark:bg-[#0f1a1f] rounded-lg">
+      <div className="mb-3 p-3 bg-gray-100 dark:bg-surface-deep rounded-lg">
         <div className="flex items-center justify-between mb-2">
           <h4 className="text-xs font-semibold uppercase text-black/60 dark:text-white/60">
             Focus Configuration
@@ -370,20 +380,20 @@ export default function ConfigPanelView({
                 disabled={
                   poolItems.grammar.length === 0 && poolItems.vocab.length === 0
                 }
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg border border-border-default hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FaRandom className="text-xs" />
               </button>
               <button
                 onClick={onClearAll}
-                className="px-3 py-2 text-sm rounded-lg border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5"
+                className="px-3 py-2 text-sm rounded-lg border border-border-default hover:bg-black/5 dark:hover:bg-white/5"
               >
                 Clear All
               </button>
               <button
                 onClick={onStartPractice}
                 disabled={!canStart}
-                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-[#e30a5f] text-white rounded-lg hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-brand-pink text-white rounded-lg hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FaPlay /> Start Practice
               </button>

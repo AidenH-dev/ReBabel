@@ -155,7 +155,7 @@ export default function PublicConfigPanel({
     <div>
       {/* Level info */}
       <div className="flex flex-wrap items-center gap-3 mb-4 text-sm text-gray-600 dark:text-gray-400">
-        <span className="px-3 py-1 rounded-full bg-[#e30a5f]/10 text-[#e30a5f] font-semibold">
+        <span className="px-3 py-1 rounded-full bg-brand-pink/10 text-brand-pink font-semibold">
           JLPT N{level}
         </span>
         <span>{levelStats.verbs} verbs</span>
@@ -173,7 +173,7 @@ export default function PublicConfigPanel({
           }}
           className={`flex items-center gap-1.5 text-sm cursor-pointer mb-2 ${
             specificItemsMode
-              ? 'text-[#e30a5f] font-medium'
+              ? 'text-brand-pink font-medium'
               : 'text-gray-600 dark:text-gray-400'
           }`}
         >
@@ -181,7 +181,7 @@ export default function PublicConfigPanel({
             type="checkbox"
             checked={specificItemsMode}
             readOnly
-            className="accent-[#e30a5f]"
+            className="accent-brand-pink"
           />
           Study specific items only
         </button>
@@ -190,12 +190,12 @@ export default function PublicConfigPanel({
           <div className="relative">
             <div
               ref={itemInputRef}
-              className="min-h-[42px] bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded-lg text-sm border border-black/10 dark:border-white/10 focus-within:ring-1 focus-within:ring-[#e30a5f] flex flex-wrap items-center gap-1.5"
+              className="min-h-[42px] bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded-lg text-sm border border-border-default focus-within:ring-1 focus-within:ring-brand-pink flex flex-wrap items-center gap-1.5"
             >
               {focalItems.map((item, i) => (
                 <div
                   key={`${item.k}-${i}`}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm bg-[#e30a5f]/10 text-[#e30a5f] border border-[#e30a5f]/20"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm bg-brand-pink/10 text-brand-pink border border-brand-pink/20"
                 >
                   <span className="truncate max-w-[120px] sm:max-w-none">
                     {item.j || item.k}
@@ -241,7 +241,7 @@ export default function PublicConfigPanel({
             {showItemSuggestions && itemSearchResults.length > 0 && (
               <div
                 ref={itemDropdownRef}
-                className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1c2b35] border border-black/10 dark:border-white/10 rounded-lg shadow-lg max-h-48 overflow-y-auto overscroll-contain"
+                className="absolute z-10 w-full mt-1 bg-surface-card border border-border-default rounded-lg shadow-lg max-h-48 overflow-y-auto overscroll-contain"
                 style={{ WebkitOverflowScrolling: 'touch' }}
               >
                 {itemSearchResults.map((item, i) => (
@@ -252,7 +252,7 @@ export default function PublicConfigPanel({
                       setItemSearchValue('');
                       setShowItemSuggestions(false);
                     }}
-                    className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-[#22333e] transition-colors border-b border-black/5 dark:border-white/5 last:border-b-0"
+                    className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-[#22333e] transition-colors border-b border-border-subtle last:border-b-0"
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-black dark:text-white">
@@ -284,7 +284,7 @@ export default function PublicConfigPanel({
           <FaArrowsUpDown
             className={
               isSelectAll
-                ? 'text-[#e30a5f]'
+                ? 'text-brand-pink'
                 : 'text-gray-500 dark:text-gray-400'
             }
             size={14}
@@ -292,7 +292,7 @@ export default function PublicConfigPanel({
           <span
             className={
               isSelectAll
-                ? 'text-[#e30a5f] font-medium'
+                ? 'text-brand-pink font-medium'
                 : 'text-gray-700 dark:text-gray-300'
             }
           >
@@ -306,7 +306,7 @@ export default function PublicConfigPanel({
           <FaShuffle
             className={
               isRandomMode
-                ? 'text-[#e30a5f]'
+                ? 'text-brand-pink'
                 : 'text-gray-500 dark:text-gray-400'
             }
             size={14}
@@ -314,7 +314,7 @@ export default function PublicConfigPanel({
           <span
             className={
               isRandomMode
-                ? 'text-[#e30a5f] font-medium'
+                ? 'text-brand-pink font-medium'
                 : 'text-gray-700 dark:text-gray-300'
             }
           >
@@ -325,7 +325,7 @@ export default function PublicConfigPanel({
 
       {/* Form grids */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div className="bg-gray-50 dark:bg-[#0f1a1f] rounded-xl p-4 border border-black/5 dark:border-white/5">
+        <div className="bg-surface-deep rounded-xl p-4 border border-border-subtle">
           <h4 className="text-sm font-semibold flex items-center gap-2 mb-3 text-gray-900 dark:text-white">
             <FaBook size={12} /> Verbs
           </h4>
@@ -340,7 +340,7 @@ export default function PublicConfigPanel({
                   checked={verbOptions[key]}
                   disabled={isRandomMode}
                   onChange={() => handleToggleVerb(key)}
-                  className="accent-[#e30a5f] flex-shrink-0"
+                  className="accent-brand-pink flex-shrink-0"
                 />
                 <span className="text-gray-900 dark:text-white whitespace-nowrap">
                   {label}
@@ -353,7 +353,7 @@ export default function PublicConfigPanel({
           </div>
         </div>
 
-        <div className="bg-gray-50 dark:bg-[#0f1a1f] rounded-xl p-4 border border-black/5 dark:border-white/5">
+        <div className="bg-surface-deep rounded-xl p-4 border border-border-subtle">
           <h4 className="text-sm font-semibold flex items-center gap-2 mb-3 text-gray-900 dark:text-white">
             <GiSpellBook size={12} /> Adjectives
           </h4>
@@ -368,7 +368,7 @@ export default function PublicConfigPanel({
                   checked={adjectiveOptions[key]}
                   disabled={isRandomMode}
                   onChange={() => handleToggleAdjective(key)}
-                  className="accent-[#e30a5f] flex-shrink-0"
+                  className="accent-brand-pink flex-shrink-0"
                 />
                 <span className="text-gray-900 dark:text-white">{label}</span>
                 <span className="text-gray-400 dark:text-gray-500 text-xs">
@@ -381,7 +381,7 @@ export default function PublicConfigPanel({
       </div>
 
       {/* Bottom bar */}
-      <div className="p-3 bg-gray-100 dark:bg-[#0f1a1f] rounded-lg space-y-2 sm:space-y-0">
+      <div className="p-3 bg-gray-100 dark:bg-surface-deep rounded-lg space-y-2 sm:space-y-0">
         {/* Mobile */}
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm sm:hidden">
           <div>
@@ -411,14 +411,14 @@ export default function PublicConfigPanel({
                 <button
                   key={n}
                   onClick={() => setQuestionCount(n)}
-                  className={`px-2.5 py-1 text-xs rounded-md transition-colors ${questionCount === n ? 'bg-[#e30a5f] text-white font-medium' : 'bg-white dark:bg-[#1c2b35] text-gray-600 dark:text-gray-300 border border-black/10 dark:border-white/10'}`}
+                  className={`px-2.5 py-1 text-xs rounded-md transition-colors ${questionCount === n ? 'bg-brand-pink text-white font-medium' : 'bg-surface-card text-gray-600 dark:text-gray-300 border border-border-default'}`}
                 >
                   {n}
                 </button>
               ))}
             <button
               onClick={() => setQuestionCount('all')}
-              className={`px-2.5 py-1 text-xs rounded-md transition-colors ${questionCount === 'all' ? 'bg-[#e30a5f] text-white font-medium' : 'bg-white dark:bg-[#1c2b35] text-gray-600 dark:text-gray-300 border border-black/10 dark:border-white/10'}`}
+              className={`px-2.5 py-1 text-xs rounded-md transition-colors ${questionCount === 'all' ? 'bg-brand-pink text-white font-medium' : 'bg-surface-card text-gray-600 dark:text-gray-300 border border-border-default'}`}
             >
               All
             </button>
@@ -429,7 +429,7 @@ export default function PublicConfigPanel({
           <button
             onClick={handleStart}
             disabled={!isRandomMode && totalFormCount === 0}
-            className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${isRandomMode || totalFormCount > 0 ? 'bg-[#e30a5f] hover:bg-[#f41567] text-white cursor-pointer active:scale-95' : 'bg-[#e30a5f] text-white opacity-50 cursor-not-allowed'}`}
+            className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${isRandomMode || totalFormCount > 0 ? 'bg-brand-pink hover:bg-brand-pink-hover text-white cursor-pointer active:scale-95' : 'bg-brand-pink text-white opacity-50 cursor-not-allowed'}`}
           >
             <FaPlay size={12} /> Begin Practice
           </button>
@@ -466,14 +466,14 @@ export default function PublicConfigPanel({
                     <button
                       key={n}
                       onClick={() => setQuestionCount(n)}
-                      className={`px-2 py-1 text-xs rounded-md transition-colors ${questionCount === n ? 'bg-[#e30a5f] text-white font-medium' : 'bg-white dark:bg-[#1c2b35] text-gray-600 dark:text-gray-300 border border-black/10 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5'}`}
+                      className={`px-2 py-1 text-xs rounded-md transition-colors ${questionCount === n ? 'bg-brand-pink text-white font-medium' : 'bg-surface-card text-gray-600 dark:text-gray-300 border border-border-default hover:bg-gray-50 dark:hover:bg-white/5'}`}
                     >
                       {n}
                     </button>
                   ))}
                 <button
                   onClick={() => setQuestionCount('all')}
-                  className={`px-2 py-1 text-xs rounded-md transition-colors ${questionCount === 'all' ? 'bg-[#e30a5f] text-white font-medium' : 'bg-white dark:bg-[#1c2b35] text-gray-600 dark:text-gray-300 border border-black/10 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5'}`}
+                  className={`px-2 py-1 text-xs rounded-md transition-colors ${questionCount === 'all' ? 'bg-brand-pink text-white font-medium' : 'bg-surface-card text-gray-600 dark:text-gray-300 border border-border-default hover:bg-gray-50 dark:hover:bg-white/5'}`}
                 >
                   All
                 </button>
@@ -482,7 +482,7 @@ export default function PublicConfigPanel({
             <button
               onClick={handleStart}
               disabled={!isRandomMode && totalFormCount === 0}
-              className={`inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${isRandomMode || totalFormCount > 0 ? 'bg-[#e30a5f] hover:bg-[#f41567] text-white cursor-pointer active:scale-95' : 'bg-[#e30a5f] text-white opacity-50 cursor-not-allowed'}`}
+              className={`inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${isRandomMode || totalFormCount > 0 ? 'bg-brand-pink hover:bg-brand-pink-hover text-white cursor-pointer active:scale-95' : 'bg-brand-pink text-white opacity-50 cursor-not-allowed'}`}
             >
               <FaPlay size={12} /> Begin Practice
             </button>

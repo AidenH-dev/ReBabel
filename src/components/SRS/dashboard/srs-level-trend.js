@@ -121,11 +121,11 @@ export default function SrsLoadChart({ loadChart }) {
       </h3>
       <div className="flex items-center gap-3 mb-3">
         <div className="flex items-center gap-1.5 text-[10px] text-gray-500 dark:text-gray-400">
-          <span className="w-2 h-2 rounded-sm bg-[#e30a5f]" />
+          <span className="w-2 h-2 rounded-sm bg-brand-pink" />
           Reviewed
         </div>
         <div className="flex items-center gap-1.5 text-[10px] text-gray-500 dark:text-gray-400">
-          <span className="w-2 h-2 rounded-sm bg-[#e30a5f]/30 border border-[#e30a5f]/40" />
+          <span className="w-2 h-2 rounded-sm bg-brand-pink/30 border border-brand-pink/40" />
           Upcoming
         </div>
         {avgPast > 0 && (
@@ -146,12 +146,12 @@ export default function SrsLoadChart({ loadChart }) {
             <div className="font-semibold text-[11px] mb-0.5">
               {formatDate(tooltip.date)}
               {tooltip.isToday && (
-                <span className="ml-1 text-[#e30a5f]">(today)</span>
+                <span className="ml-1 text-brand-pink">(today)</span>
               )}
             </div>
             {(tooltip.isPast || tooltip.isToday) && tooltip.reviewed > 0 && (
               <div className="text-gray-300">
-                <span className="text-[#e30a5f] font-medium">
+                <span className="text-brand-pink font-medium">
                   {tooltip.reviewed}
                 </span>{' '}
                 reviewed
@@ -251,9 +251,9 @@ export default function SrsLoadChart({ loadChart }) {
                 rx="1"
                 fill={
                   bar.isToday
-                    ? '#e30a5f'
+                    ? 'var(--brand-pink)'
                     : bar.isPast
-                      ? '#e30a5f'
+                      ? 'var(--brand-pink)'
                       : 'rgba(227, 10, 95, 0.25)'
                 }
                 stroke={
@@ -275,7 +275,7 @@ export default function SrsLoadChart({ loadChart }) {
               y1={padT - 2}
               x2={padL + todayIdx * barW + barW / 2}
               y2={padT + plotH + 2}
-              stroke="#e30a5f"
+              stroke="var(--brand-pink)"
               strokeWidth="0.75"
               strokeDasharray="2 2"
               className="pointer-events-none"
@@ -284,7 +284,7 @@ export default function SrsLoadChart({ loadChart }) {
               x={padL + todayIdx * barW + barW / 2}
               y={padT - 4}
               textAnchor="middle"
-              fill="#e30a5f"
+              fill="var(--brand-pink)"
               fontSize="6"
               fontWeight="600"
               className="pointer-events-none"
@@ -302,7 +302,7 @@ export default function SrsLoadChart({ loadChart }) {
               y1={avgLineY}
               x2={w - padR}
               y2={avgLineY}
-              stroke="#e30a5f"
+              stroke="var(--brand-pink)"
               strokeWidth="0.75"
               strokeDasharray="4 3"
               opacity="0.4"
@@ -312,7 +312,7 @@ export default function SrsLoadChart({ loadChart }) {
               x={w - padR}
               y={avgLineY - 3}
               textAnchor="end"
-              fill="#e30a5f"
+              fill="var(--brand-pink)"
               fontSize="6"
               opacity="0.6"
               className="pointer-events-none"

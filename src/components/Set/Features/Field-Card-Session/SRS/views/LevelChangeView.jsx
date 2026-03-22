@@ -78,7 +78,7 @@ export default function SRSLevelChange({
         }`}
       >
         <div
-          className={`w-[calc(100vw-1.5rem)] max-w-2xl rounded-xl border-2 border-dashed bg-white/90 px-3 py-3 shadow-lg backdrop-blur-sm sm:px-4 sm:py-3.5 lg:w-40 lg:max-w-none lg:px-4 lg:py-4 xl:w-48 dark:bg-[#141f25]/90 ${toneClass}`}
+          className={`w-[calc(100vw-1.5rem)] max-w-2xl rounded-xl border-2 border-dashed bg-white/90 px-3 py-3 shadow-lg backdrop-blur-sm sm:px-4 sm:py-3.5 lg:w-40 lg:max-w-none lg:px-4 lg:py-4 xl:w-48 dark:bg-surface-page/90 ${toneClass}`}
         >
           <div className="flex items-center justify-between gap-3 sm:gap-5 lg:flex-col lg:items-start lg:gap-4">
             <div className="min-w-0 lg:w-full">

@@ -42,7 +42,9 @@ export default function Home() {
                 height={32}
                 className="rounded-lg"
               />
-              <span className="text-2xl font-bold text-[#e30a5f]">ReBabel</span>
+              <span className="text-2xl font-bold text-brand-pink">
+                ReBabel
+              </span>
               <span className="ml-1 text-xs bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-2 py-1 rounded-full">
                 BETA
               </span>
@@ -56,7 +58,7 @@ export default function Home() {
               </button>
               <button
                 onClick={handleSignup}
-                className="px-4 py-2 text-sm bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium rounded-lg transition-colors"
+                className="px-4 py-2 text-sm bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors"
               >
                 Join Early Access
               </button>
@@ -199,8 +201,8 @@ export default function Home() {
                 </div>
 
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-                  Study Japanese <span className="text-[#e30a5f]">smarter</span>
-                  , not harder.
+                  Study Japanese{' '}
+                  <span className="text-brand-pink">smarter</span>, not harder.
                 </h1>
 
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
@@ -215,7 +217,7 @@ export default function Home() {
                     <div className="absolute inset-x-0 bottom-0 bg-[#B0104F] rounded-lg translate-y-1 h-[90%]"></div>
                     <button
                       onClick={handleSignup}
-                      className="relative px-8 py-3 text-lg text-white bg-[#E30B5C] hover:bg-[#f41567] font-semibold rounded-lg transform transition-all duration-200 active:translate-y-1 w-full sm:w-auto"
+                      className="relative px-8 py-3 text-lg text-white bg-brand-pink hover:bg-brand-pink-hover font-semibold rounded-lg transform transition-all duration-200 active:translate-y-1 w-full sm:w-auto"
                     >
                       Join Beta - It&apos;s Free
                     </button>
@@ -254,13 +256,13 @@ export default function Home() {
                 {/* Trust Indicators */}
                 <div className="flex items-center gap-8 mt-8 justify-center lg:justify-start">
                   <div className="flex items-center gap-2">
-                    <FaShieldAlt className="text-[#e30a5f]" />
+                    <FaShieldAlt className="text-brand-pink" />
                     <span className="text-sm text-gray-600">
                       <strong>Free Tier</strong> Access Forever
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <FaClock className="text-[#e30a5f]" />
+                    <FaClock className="text-brand-pink" />
                     <span className="text-sm text-gray-600">
                       <strong>Founder</strong> Pricing Available
                     </span>
@@ -270,9 +272,9 @@ export default function Home() {
                 <div className="mt-6 flex flex-col gap-3">
                   <Link
                     href="/kanji-practice"
-                    className="inline-flex items-center gap-3 rounded-2xl border border-[#e30a5f]/20 bg-[#fff5f8] px-5 py-4 text-left shadow-sm transition hover:border-[#e30a5f]/40 hover:bg-white"
+                    className="inline-flex items-center gap-3 rounded-2xl border border-brand-pink/20 bg-[#fff5f8] px-5 py-4 text-left shadow-sm transition hover:border-brand-pink/40 hover:bg-white"
                   >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e30a5f] text-white">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-pink text-white">
                       <FaGraduationCap className="text-sm" />
                     </div>
                     <div className="flex-1">
@@ -283,7 +285,7 @@ export default function Home() {
                         Open the kanji writing practice PDF generator
                       </p>
                     </div>
-                    <FaArrowRightLong className="ml-auto text-[#e30a5f] flex-shrink-0" />
+                    <FaArrowRightLong className="ml-auto text-brand-pink flex-shrink-0" />
                   </Link>
 
                   <Link
@@ -323,7 +325,7 @@ export default function Home() {
                   </div>
                 </div>
                 {/* Decorative Elements */}
-                <div className="absolute -top-4 -right-4 w-72 h-72 bg-[#e30a5f]/10 rounded-full blur-3xl"></div>
+                <div className="absolute -top-4 -right-4 w-72 h-72 bg-brand-pink/10 rounded-full blur-3xl"></div>
                 <div className="absolute -bottom-4 -left-4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
               </div>
             </div>
@@ -343,7 +345,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
 
               <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#e30a5f] to-[#f41567] rounded-lg flex items-center justify-center text-white mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-brand-pink to-brand-pink-hover rounded-lg flex items-center justify-center text-white mb-4">
                   <MdTranslate className="text-2xl" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
@@ -431,7 +433,7 @@ export default function Home() {
                 data-animation="fade-right"
               >
                 <div className="text-center md:text-left">
-                  <span className="inline-block text-sm font-bold text-[#e30a5f] mb-3">
+                  <span className="inline-block text-sm font-bold text-brand-pink mb-3">
                     Feature 01
                   </span>
                   <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -476,7 +478,7 @@ export default function Home() {
                 data-animation="fade-left"
               >
                 <div className="text-center md:text-left">
-                  <span className="inline-block text-sm font-bold text-[#e30a5f] mb-3">
+                  <span className="inline-block text-sm font-bold text-brand-pink mb-3">
                     Feature 02
                   </span>
                   <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -499,7 +501,7 @@ export default function Home() {
                 data-animation="fade-right"
               >
                 <div className="text-center md:text-left">
-                  <span className="inline-block text-sm font-bold text-[#e30a5f] mb-3">
+                  <span className="inline-block text-sm font-bold text-brand-pink mb-3">
                     Feature 03
                   </span>
                   <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -544,7 +546,7 @@ export default function Home() {
                 data-animation="fade-left"
               >
                 <div className="text-center md:text-left">
-                  <span className="inline-block text-sm font-bold text-[#e30a5f] mb-3">
+                  <span className="inline-block text-sm font-bold text-brand-pink mb-3">
                     Feature 04
                   </span>
                   <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -562,11 +564,11 @@ export default function Home() {
         </section>
 
         {/* Free Conjugation Practice Banner */}
-        <section className="w-full py-12 sm:py-16 bg-gradient-to-r from-[#e30a5f]/5 to-[#f41567]/5">
+        <section className="w-full py-12 sm:py-16 bg-gradient-to-r from-brand-pink/5 to-brand-pink-hover/5">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
               <div className="flex-1">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#e30a5f]/10 text-[#e30a5f] text-xs font-medium mb-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-pink/10 text-brand-pink text-xs font-medium mb-3">
                   Free Tool -- No Account Required
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
@@ -580,7 +582,7 @@ export default function Home() {
                 </p>
                 <Link
                   href="/japanese-conjugation-practice"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium rounded-lg transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors text-sm"
                 >
                   Try It Free
                   <FaArrowRightLong size={14} />
@@ -591,7 +593,7 @@ export default function Home() {
                   <Link
                     key={n}
                     href={`/japanese-conjugation-practice/${n.toLowerCase()}`}
-                    className="w-14 h-14 rounded-xl bg-white shadow-sm border border-black/5 flex items-center justify-center text-sm font-bold text-gray-700 hover:text-[#e30a5f] hover:border-[#e30a5f]/30 transition-all"
+                    className="w-14 h-14 rounded-xl bg-white shadow-sm border border-black/5 flex items-center justify-center text-sm font-bold text-gray-700 hover:text-brand-pink hover:border-brand-pink/30 transition-all"
                   >
                     {n}
                   </Link>
@@ -645,7 +647,7 @@ export default function Home() {
               </div>
 
               <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#e30a5f] to-[#f41567] rounded-lg flex items-center justify-center text-white mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-brand-pink to-brand-pink-hover rounded-lg flex items-center justify-center text-white mb-4">
                   <MdTranslate className="text-2xl" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
@@ -740,7 +742,7 @@ export default function Home() {
                   level: "Advanced",
                   desc: "Native-like Fluency",
                   status: "Coming Q3 2025",
-                  color: "from-[#e30a5f] to-[#f41567]",
+                  color: "from-brand-pink to-brand-pink-hover",
                 },
               ].map((stage, index) => (
                 <div key={stage.level} className="relative">
@@ -759,7 +761,7 @@ export default function Home() {
                       {stage.level}
                     </h3>
                     <p className="text-gray-600 text-sm mb-2">{stage.desc}</p>
-                    <span className="text-xs text-[#e30a5f] font-medium">
+                    <span className="text-xs text-brand-pink font-medium">
                       {stage.status}
                     </span>
                   </div>
@@ -795,8 +797,8 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-[#e30a5f]/10 to-[#f41567]/10 rounded-2xl p-8 border border-[#e30a5f]/20">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#e30a5f] to-[#f41567] rounded-lg flex items-center justify-center text-white mb-4">
+              <div className="bg-gradient-to-br from-brand-pink/10 to-brand-pink-hover/10 rounded-2xl p-8 border border-brand-pink/20">
+                <div className="w-12 h-12 bg-gradient-to-br from-brand-pink to-brand-pink-hover rounded-lg flex items-center justify-center text-white mb-4">
                   <FaStar className="text-2xl" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
@@ -838,7 +840,7 @@ export default function Home() {
         </section>*/}
 
         {/* CTA Section with Discord Invite */}
-        <section className="w-full py-20 bg-gradient-to-r from-[#e30a5f] to-[#f41567]">
+        <section className="w-full py-20 bg-gradient-to-r from-brand-pink to-brand-pink-hover">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Join the Community!
@@ -920,7 +922,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-xl font-bold text-[#e30a5f] mb-4">ReBabel</h3>
+              <h3 className="text-xl font-bold text-brand-pink mb-4">
+                ReBabel
+              </h3>
               <p className="text-sm text-gray-400">
                 Building the future of Japanese learning.
               </p>

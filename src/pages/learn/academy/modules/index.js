@@ -1,11 +1,11 @@
-import Head from "next/head";
-import AcademySidebar from "../../../../components/Sidebars/AcademySidebar";
-import { useState } from "react";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { FaArrowRightArrowLeft } from "react-icons/fa6";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import Select from "react-select";
+import Head from 'next/head';
+import AcademySidebar from '../../../../components/Sidebars/AcademySidebar';
+import { useState } from 'react';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { FaArrowRightArrowLeft } from 'react-icons/fa6';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Select from 'react-select';
 
 export default function GrammarDashboard() {
   const [translateSettings, setTranslateSettings] = useState(false);
@@ -47,26 +47,26 @@ export default function GrammarDashboard() {
         )}`
       );
     } else {
-      alert("Please select a lesson.");
+      alert('Please select a lesson.');
     }
   };
 
   // --- Keep ONLY Verb Conjugations in practice sets ---
   const grammarPracticeSets = [
     {
-      name: "Verb Conjugations",
-      path: "/learn/grammar/practice/verbs",
+      name: 'Verb Conjugations',
+      path: '/learn/grammar/practice/verbs',
       exercises: 15,
-      date: "12/23/2024",
+      date: '12/23/2024',
     },
   ];
 
   return (
-    <div className="flex flex-row min-h-screen bg-white dark:bg-[#141f25] text-[#4e4a4a] dark:text-white">
+    <div className="flex flex-row min-h-screen bg-white dark:bg-surface-page text-[#4e4a4a] dark:text-white">
       <AcademySidebar />
 
       {/* Main area - responsive padding and margin */}
-      <main className="ml-auto flex-1 min-h-screen bg-gray-100 dark:bg-[#141f25]">
+      <main className="ml-auto flex-1 min-h-screen bg-gray-100 dark:bg-surface-page">
         <Head>
           <title>Grammar • Translation & Verbs</title>
           <link rel="icon" href="/favicon.ico" />
@@ -96,11 +96,11 @@ export default function GrammarDashboard() {
                 <div
                   className={`absolute inset-0 transform transition-all duration-300 ${
                     translateSettings
-                      ? "opacity-100 translate-y-0 pointer-events-auto z-10"
-                      : "opacity-0 -translate-y-2 pointer-events-none z-0"
+                      ? 'opacity-100 translate-y-0 pointer-events-auto z-10'
+                      : 'opacity-0 -translate-y-2 pointer-events-none z-0'
                   }`}
                 >
-                  <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-4 shadow-md h-full flex flex-col">
+                  <div className="bg-white dark:bg-surface-card rounded-lg p-4 shadow-md h-full flex flex-col">
                     <div className="flex-1">
                       <h2 className="text-sm sm:text-base font-semibold mb-2 text-gray-800 dark:text-gray-200">
                         Translation Settings
@@ -115,7 +115,7 @@ export default function GrammarDashboard() {
                           <input
                             type="checkbox"
                             checked={selectedBooks.genki1}
-                            onChange={() => handleBookSelection("genki1")}
+                            onChange={() => handleBookSelection('genki1')}
                             className="mr-2"
                           />
                           Genki 1 (Third Edition)
@@ -130,7 +130,10 @@ export default function GrammarDashboard() {
                             options={filteredLessonOptions}
                             value={
                               selectedLesson
-                                ? { value: selectedLesson, label: selectedLesson }
+                                ? {
+                                    value: selectedLesson,
+                                    label: selectedLesson,
+                                  }
                                 : null
                             }
                             onChange={(option) =>
@@ -142,40 +145,61 @@ export default function GrammarDashboard() {
                             styles={{
                               control: (base, state) => ({
                                 ...base,
-                                backgroundColor: "#fff",
-                                color: "#000",
+                                backgroundColor: '#fff',
+                                color: '#000',
                                 minHeight: 34,
                                 height: 34,
-                                borderColor: state.isFocused ? "#e30a5f" : base.borderColor,
-                                boxShadow: state.isFocused ? "0 0 0 1px #e30a5f" : "none",
-                                "&:hover": {
-                                  borderColor: state.isFocused ? "#e30a5f" : base.borderColor,
+                                borderColor: state.isFocused
+                                  ? 'var(--brand-pink)'
+                                  : base.borderColor,
+                                boxShadow: state.isFocused
+                                  ? '0 0 0 1px var(--brand-pink)'
+                                  : 'none',
+                                '&:hover': {
+                                  borderColor: state.isFocused
+                                    ? 'var(--brand-pink)'
+                                    : base.borderColor,
                                 },
                               }),
                               valueContainer: (base) => ({
                                 ...base,
-                                padding: "0 8px",
+                                padding: '0 8px',
                               }),
-                              input: (base) => ({ ...base, margin: 0, padding: 0 }),
+                              input: (base) => ({
+                                ...base,
+                                margin: 0,
+                                padding: 0,
+                              }),
                               indicatorsContainer: (base) => ({
                                 ...base,
                                 height: 34,
                               }),
-                              singleValue: (base) => ({ ...base, color: "#000" }),
-                              menu: (base) => ({ ...base, backgroundColor: "#fff" }),
+                              singleValue: (base) => ({
+                                ...base,
+                                color: '#000',
+                              }),
+                              menu: (base) => ({
+                                ...base,
+                                backgroundColor: '#fff',
+                              }),
                               option: (base, state) => ({
                                 ...base,
-                                fontSize: "0.875rem",
-                                backgroundColor: state.isFocused ? "#f0f0f0" : "#fff",
-                                color: "#000",
+                                fontSize: '0.875rem',
+                                backgroundColor: state.isFocused
+                                  ? '#f0f0f0'
+                                  : '#fff',
+                                color: '#000',
                               }),
-                              placeholder: (base) => ({ ...base, color: "#999" }),
+                              placeholder: (base) => ({
+                                ...base,
+                                color: '#999',
+                              }),
                             }}
                           />
                         ) : (
                           <p className="text-gray-500 text-xs sm:text-sm">
-                            Check <span className="font-medium">Genki 1</span> to choose a
-                            lesson.
+                            Check <span className="font-medium">Genki 1</span>{' '}
+                            to choose a lesson.
                           </p>
                         )}
                       </div>
@@ -192,7 +216,7 @@ export default function GrammarDashboard() {
                       <div className="relative inline-block">
                         <div className="absolute inset-x-0 bottom-0 bg-[#B0104F] rounded-lg translate-y-1 h-[88%] transition-transform duration-200"></div>
                         <button
-                          className="relative bg-[#E30B5C] active:bg-[#f41567] text-white py-1.5 px-3 rounded-lg transform transition-transform duration-200 active:translate-y-1 text-xs"
+                          className="relative bg-brand-pink active:bg-brand-pink-hover text-white py-1.5 px-3 rounded-lg transform transition-transform duration-200 active:translate-y-1 text-xs"
                           onClick={handleBegin}
                         >
                           Begin
@@ -206,13 +230,13 @@ export default function GrammarDashboard() {
                 <div
                   className={`transform transition-all duration-300 ${
                     !translateSettings
-                      ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : "opacity-0 -translate-y-2 pointer-events-none"
+                      ? 'opacity-100 translate-y-0 pointer-events-auto'
+                      : 'opacity-0 -translate-y-2 pointer-events-none'
                   }`}
                 >
                   <div
                     onClick={toggleTranslateSettings}
-                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-gray-200 hover:border-0 border-2 border-gray-200 bg-gradient-to-r from-[#662f45] to-[#e30a5f] bg-[length:200%] hover:animate-gradient-ease rounded-lg p-5 shadow-lg flex flex-col justify-center items-center h-[200px]"
+                    className="cursor-pointer hover:brightness-110 hover:outline hover:outline-gray-200 hover:border-0 border-2 border-gray-200 bg-gradient-to-r from-[#662f45] to-brand-pink bg-[length:200%] hover:animate-gradient-ease rounded-lg p-5 shadow-lg flex flex-col justify-center items-center h-[200px]"
                   >
                     <h2 className="text-sm sm:text-base font-semibold mb-1.5 text-white flex items-center">
                       <FaArrowRightArrowLeft className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-2.5" />
@@ -229,7 +253,7 @@ export default function GrammarDashboard() {
               {/* Verb Conjugations Section    */}
               {/* ============================
               <section>
-                <div className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg p-5 sm:p-6 lg:p-8 h-[200px] flex flex-col justify-center">
+                <div className="bg-white dark:bg-surface-card rounded-lg shadow-lg p-5 sm:p-6 lg:p-8 h-[200px] flex flex-col justify-center">
                   <h2 className="text-base sm:text-lg font-[500] mb-1.5 text-gray-800 dark:text-gray-200">
                     Adjective & Verb Conjugations
                   </h2>
@@ -241,7 +265,7 @@ export default function GrammarDashboard() {
                       <Link
                         key={index}
                         href={"/learn/grammar/conjugation"}
-                        className="inline-flex items-center justify-center bg-[#e30a5f] hover:bg-[#b30e50] text-white rounded-md px-3 py-1.5 text-xs transition active:translate-y-[1px] shadow-md w-full sm:w-auto"
+                        className="inline-flex items-center justify-center bg-brand-pink hover:bg-[#b30e50] text-white rounded-md px-3 py-1.5 text-xs transition active:translate-y-[1px] shadow-md w-full sm:w-auto"
                       >
                         Start A Practice Session
                       </Link>

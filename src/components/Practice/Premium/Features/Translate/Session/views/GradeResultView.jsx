@@ -140,7 +140,7 @@ export default function GradeResultView({ gradeResult }) {
         {/* Error Details (expandable) */}
         {gradeResult.errors && (
           <details className="mt-4">
-            <summary className="cursor-pointer text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-[#e30a5f]">
+            <summary className="cursor-pointer text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-brand-pink">
               View Error Details
             </summary>
             <div className="mt-2 space-y-2">

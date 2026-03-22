@@ -60,13 +60,13 @@ export default function SrsSetHealthCard({ set }) {
   return (
     <Link
       href={`/learn/academy/sets/study/${setId}`}
-      className="block bg-white dark:bg-[#1d2a32] border border-black/5 dark:border-white/10 rounded-xl p-4 hover:shadow-md hover:border-black/10 dark:hover:border-white/15 transition-all group"
+      className="block bg-white dark:bg-surface-elevated border border-border-default rounded-xl p-4 hover:shadow-md hover:border-black/10 dark:hover:border-white/15 transition-all group"
     >
       {/* Row 1: Title + type badge + due badge */}
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-white truncate group-hover:text-[#e30a5f] transition-colors">
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-white truncate group-hover:text-brand-pink transition-colors">
               {setTitle}
             </h4>
             {typeStyle && (

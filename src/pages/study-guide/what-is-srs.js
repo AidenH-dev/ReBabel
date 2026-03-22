@@ -109,12 +109,14 @@ export default function WhatIsSrsPage() {
         />
       </Head>
 
-      <nav className="fixed top-0 w-full bg-white/90 dark:bg-[#141f25]/90 backdrop-blur-md border-b border-rose-100 dark:border-white/10 z-50">
+      <nav className="fixed top-0 w-full bg-white/90 dark:bg-surface-page/90 backdrop-blur-md border-b border-rose-100 dark:border-white/10 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-[#e30a5f]">ReBabel</span>
-              <span className="text-xs bg-[#fff1f6] dark:bg-rose-950/40 text-[#b0104f] dark:text-rose-300 px-2 py-1 rounded-full border border-rose-200 dark:border-rose-800/50">
+              <span className="text-2xl font-bold text-brand-pink">
+                ReBabel
+              </span>
+              <span className="text-xs bg-[#fff1f6] dark:bg-rose-950/40 text-brand-pink-dark dark:text-rose-300 px-2 py-1 rounded-full border border-rose-200 dark:border-rose-800/50">
                 Study Guide
               </span>
             </Link>
@@ -127,7 +129,7 @@ export default function WhatIsSrsPage() {
               </Link>
               <button
                 onClick={handleSignup}
-                className="px-4 py-2 text-sm bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium rounded-lg transition-colors"
+                className="px-4 py-2 text-sm bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors"
               >
                 Start Free
               </button>
@@ -136,11 +138,11 @@ export default function WhatIsSrsPage() {
         </div>
       </nav>
 
-      <main className="bg-white dark:bg-[#141f25] overflow-hidden">
+      <main className="bg-white dark:bg-surface-page overflow-hidden">
         <SRSGuideContent />
 
         <section className="w-full px-4 sm:px-6 lg:px-8 pb-20">
-          <div className="max-w-5xl mx-auto rounded-[2.25rem] bg-gradient-to-r from-[#e30a5f] to-[#f54b8b] text-white p-8 md:p-12 shadow-2xl shadow-rose-200/70 dark:shadow-black/30">
+          <div className="max-w-5xl mx-auto rounded-[2.25rem] bg-gradient-to-r from-brand-pink to-[#f54b8b] text-white p-8 md:p-12 shadow-2xl shadow-rose-200/70 dark:shadow-black/30">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 items-center">
               <div>
                 <p className="text-sm uppercase tracking-[0.2em] text-rose-100 mb-3">
@@ -158,7 +160,7 @@ export default function WhatIsSrsPage() {
               <div className="flex flex-col sm:flex-row lg:flex-col gap-3">
                 <button
                   onClick={handleSignup}
-                  className="px-6 py-3 bg-white text-[#b0104f] font-semibold rounded-xl hover:bg-rose-50 transition-colors"
+                  className="px-6 py-3 bg-white text-brand-pink-dark font-semibold rounded-xl hover:bg-rose-50 transition-colors"
                 >
                   Start Free
                 </button>
@@ -180,7 +182,9 @@ export default function WhatIsSrsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-xl font-bold text-[#e30a5f] mb-4">ReBabel</h3>
+              <h3 className="text-xl font-bold text-brand-pink mb-4">
+                ReBabel
+              </h3>
               <p className="text-sm text-gray-400">
                 Building the future of Japanese learning.
               </p>

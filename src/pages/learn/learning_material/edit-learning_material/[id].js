@@ -495,11 +495,11 @@ export default function EditLearning_materialPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
+      <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
         <MainSidebar />
         <main className="ml-auto flex-1 px-8 py-6 flex items-center justify-center">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-[#e30a5f] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <div className="w-12 h-12 border-4 border-brand-pink border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-gray-600 dark:text-gray-400">
               Loading learning material...
             </p>
@@ -510,7 +510,7 @@ export default function EditLearning_materialPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
       <MainSidebar />
 
       <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6">
@@ -529,7 +529,7 @@ export default function EditLearning_materialPage() {
             <span>Back to Dashboard</span>
           </button>
 
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700/50">
+          <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700/50">
             <div className="flex items-start justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
@@ -543,7 +543,7 @@ export default function EditLearning_materialPage() {
                 <button
                   onClick={handleSaveChanges}
                   disabled={saving}
-                  className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white font-medium disabled:opacity-60 hover:shadow-lg transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white font-medium disabled:opacity-60 hover:shadow-lg transition-all"
                 >
                   <FaSave />
                   {saving ? 'Saving...' : 'Save All Changes'}
@@ -579,7 +579,7 @@ export default function EditLearning_materialPage() {
                 onClick={() => setActiveTab('info')}
                 className={`flex-1 px-4 py-2 rounded-md font-medium transition-all flex items-center justify-center gap-2 ${
                   activeTab === 'info'
-                    ? 'bg-white dark:bg-[#243642] text-[#e30a5f] shadow-sm border border-gray-200 dark:border-gray-600/50'
+                    ? 'bg-white dark:bg-surface-elevated text-brand-pink shadow-sm border border-gray-200 dark:border-gray-600/50'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
@@ -590,7 +590,7 @@ export default function EditLearning_materialPage() {
                 onClick={() => setActiveTab('content')}
                 className={`flex-1 px-4 py-2 rounded-md font-medium transition-all flex items-center justify-center gap-2 ${
                   activeTab === 'content'
-                    ? 'bg-white dark:bg-[#243642] text-[#e30a5f] shadow-sm border border-gray-200 dark:border-gray-600/50'
+                    ? 'bg-white dark:bg-surface-elevated text-brand-pink shadow-sm border border-gray-200 dark:border-gray-600/50'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
@@ -652,9 +652,9 @@ function Learning_materialInfoTab({
   sections,
 }) {
   return (
-    <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700/50">
+    <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700/50">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-2">
-        <FaBook className="text-[#e30a5f]" />
+        <FaBook className="text-brand-pink" />
         Learning Material Details
       </h2>
 
@@ -667,7 +667,7 @@ function Learning_materialInfoTab({
             type="text"
             value={learning_materialInfo.title}
             onChange={(e) => onChange('title', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#243642] text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-surface-elevated text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-pink focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
           />
         </div>
 
@@ -679,7 +679,7 @@ function Learning_materialInfoTab({
                         type="text"
                         value={learning_materialInfo.learning_materials}
                         onChange={(e) => onChange('learning_materials', e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#243642] text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-surface-elevated text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-pink focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
                     />
                 </div>*/}
 
@@ -690,7 +690,7 @@ function Learning_materialInfoTab({
           <select
             value={learning_materialInfo.institution}
             onChange={(e) => onChange('institution', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#243642] text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-surface-elevated text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-pink focus:border-transparent"
           >
             <option value="Self-Study">Self-Study</option>
             <option value="University">University</option>
@@ -710,7 +710,7 @@ function Learning_materialInfoTab({
             type="text"
             value={learning_materialInfo.study_goal}
             onChange={(e) => onChange('study_goal', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#243642] text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-surface-elevated text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-pink focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
           />
         </div>
 
@@ -722,7 +722,7 @@ function Learning_materialInfoTab({
             type="date"
             value={learning_materialInfo.start_date}
             onChange={(e) => onChange('start_date', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#243642] text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-surface-elevated text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-pink focus:border-transparent"
           />
         </div>
 
@@ -734,7 +734,7 @@ function Learning_materialInfoTab({
             type="date"
             value={learning_materialInfo.end_date}
             onChange={(e) => onChange('end_date', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#243642] text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-surface-elevated text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-pink focus:border-transparent"
           />
         </div>
 
@@ -746,19 +746,19 @@ function Learning_materialInfoTab({
             value={learning_materialInfo.description}
             onChange={(e) => onChange('description', e.target.value)}
             rows={4}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#243642] text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent resize-none placeholder-gray-400 dark:placeholder-gray-500"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-surface-elevated text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-pink focus:border-transparent resize-none placeholder-gray-400 dark:placeholder-gray-500"
           />
         </div>
       </div>
 
       {/* Learning_material Stats */}
-      <div className="mt-8 p-4 bg-gray-50 dark:bg-[#243642] rounded-lg border border-gray-200 dark:border-gray-600/50">
+      <div className="mt-8 p-4 bg-gray-50 dark:bg-surface-elevated rounded-lg border border-gray-200 dark:border-gray-600/50">
         <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
           Learning Material Statistics
         </h3>
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center">
-            <p className="text-2xl font-bold text-[#e30a5f]">
+            <p className="text-2xl font-bold text-brand-pink">
               {sections.length}
             </p>
             <p className="text-xs text-gray-600 dark:text-gray-400">Sections</p>
@@ -821,7 +821,7 @@ function SectionsTab({
                 className="border border-gray-200 dark:border-gray-600/50 rounded-lg overflow-hidden"
               >
                 <div
-                  className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#243642] transition-colors"
+                  className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-surface-elevated transition-colors"
                   onClick={() => actions.toggleSectionExpansion(section.id)}
                 >
                   <div className="flex items-center gap-3">
@@ -863,7 +863,7 @@ function SectionsTab({
                 </div>
 
                 {section.isExpanded && (
-                  <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-600/50 bg-gray-50 dark:bg-[#0f1419]/30">
+                  <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-600/50 bg-gray-50 dark:bg-surface-deep/30">
                     {section.description && (
                       <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 mb-4">
                         {section.description}
@@ -879,7 +879,7 @@ function SectionsTab({
                           {section.grammar.map((g) => (
                             <div
                               key={g.id}
-                              className="bg-white dark:bg-[#243642] p-3 rounded-lg border border-gray-200 dark:border-gray-600/50 flex items-start justify-between"
+                              className="bg-white dark:bg-surface-elevated p-3 rounded-lg border border-gray-200 dark:border-gray-600/50 flex items-start justify-between"
                             >
                               <div className="flex-1">
                                 <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
@@ -941,7 +941,7 @@ function SectionsTab({
       )}
 
       {/* Section Editor */}
-      <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
+      <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
             {isEditing
@@ -974,7 +974,7 @@ function SectionsTab({
                 }))
               }
               placeholder="e.g., Chapter 6: Te-form"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-pink focus:border-transparent"
             />
           </div>
 
@@ -992,7 +992,7 @@ function SectionsTab({
               }
               placeholder="Brief description of this section..."
               rows={2}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent resize-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-pink focus:border-transparent resize-none"
             />
           </div>
         </div>
@@ -1005,7 +1005,7 @@ function SectionsTab({
             </h4>
             <button
               onClick={() => setShowGrammarForm(!showGrammarForm)}
-              className="flex items-center gap-2 px-3 py-1.5 bg-[#e30a5f]/10 text-[#e30a5f] rounded-lg hover:bg-[#e30a5f]/20 transition-all text-sm"
+              className="flex items-center gap-2 px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg hover:bg-brand-pink/20 transition-all text-sm"
             >
               <FaPlus />
               Add Grammar
@@ -1067,7 +1067,7 @@ function SectionsTab({
                   ))}
                   <button
                     onClick={() => actions.addExample('grammar')}
-                    className="text-xs text-[#e30a5f] hover:text-[#f41567]"
+                    className="text-xs text-brand-pink hover:text-[#f41567]"
                   >
                     + Add example
                   </button>
@@ -1076,7 +1076,7 @@ function SectionsTab({
                 <div className="flex gap-2">
                   <button
                     onClick={actions.addGrammarPoint}
-                    className="px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white rounded-lg text-sm font-medium"
+                    className="px-4 py-2 bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white rounded-lg text-sm font-medium"
                   >
                     Add Grammar Point
                   </button>
@@ -1140,7 +1140,7 @@ function SectionsTab({
             </h4>
             <button
               onClick={() => setShowVocabForm(!showVocabForm)}
-              className="flex items-center gap-2 px-3 py-1.5 bg-[#e30a5f]/10 text-[#e30a5f] rounded-lg hover:bg-[#e30a5f]/20 transition-all text-sm"
+              className="flex items-center gap-2 px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg hover:bg-brand-pink/20 transition-all text-sm"
             >
               <FaPlus />
               Add Vocabulary
@@ -1216,7 +1216,7 @@ function SectionsTab({
                   ))}
                   <button
                     onClick={() => actions.addExample('vocab')}
-                    className="text-xs text-[#e30a5f] hover:text-[#f41567]"
+                    className="text-xs text-brand-pink hover:text-[#f41567]"
                   >
                     + Add example
                   </button>
@@ -1225,7 +1225,7 @@ function SectionsTab({
                 <div className="flex gap-2">
                   <button
                     onClick={actions.addVocabulary}
-                    className="px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white rounded-lg text-sm font-medium"
+                    className="px-4 py-2 bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white rounded-lg text-sm font-medium"
                   >
                     Add Vocabulary
                   </button>

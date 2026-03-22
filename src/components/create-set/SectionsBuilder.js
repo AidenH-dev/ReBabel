@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   FaGripVertical,
   FaChevronDown,
@@ -10,7 +10,7 @@ import {
   FaLightbulb,
   FaCheck,
   FaArrowRight,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 export default function SectionsBuilder({
   sections,
@@ -51,9 +51,9 @@ export default function SectionsBuilder({
     !isEditing &&
     Boolean(
       currentSection?.title ||
-        currentSection?.description ||
-        (currentSection?.grammar?.length ?? 0) > 0 ||
-        (currentSection?.vocabulary?.length ?? 0) > 0
+      currentSection?.description ||
+      (currentSection?.grammar?.length ?? 0) > 0 ||
+      (currentSection?.vocabulary?.length ?? 0) > 0
     );
 
   return (
@@ -115,7 +115,7 @@ function SavedSectionsList({ sections, onEdit, onRemove, onToggle }) {
       {sections.map((section, index) => (
         <div
           key={section.id}
-          className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm overflow-hidden"
+          className="bg-surface-card rounded-xl shadow-sm overflow-hidden"
         >
           <div
             className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50"
@@ -128,7 +128,8 @@ function SavedSectionsList({ sections, onEdit, onRemove, onToggle }) {
                   Section {index + 1}: {section.title}
                 </h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {section.grammar.length} grammar points, {section.vocabulary.length} vocabulary items
+                  {section.grammar.length} grammar points,{' '}
+                  {section.vocabulary.length} vocabulary items
                 </p>
               </div>
             </div>
@@ -174,8 +175,11 @@ function SavedSectionsList({ sections, onEdit, onRemove, onToggle }) {
                   </h5>
                   <div className="space-y-2">
                     {section.grammar.map((g) => (
-                      <div key={g.id} className="flex items-start gap-2 text-sm">
-                        <FaPencilAlt className="text-[#e30a5f] mt-0.5" />
+                      <div
+                        key={g.id}
+                        className="flex items-start gap-2 text-sm"
+                      >
+                        <FaPencilAlt className="text-brand-pink mt-0.5" />
                         <div>
                           <span className="font-medium text-gray-900 dark:text-white">
                             {g.point}
@@ -246,15 +250,15 @@ function SectionEditor({
       (currentSection.vocabulary?.length ?? 0) > 0);
 
   return (
-    <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
+    <div className="bg-surface-card rounded-xl shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           {/* 🔧 NEW: correct header for edit mode */}
           {isEditing
-            ? `Edit Section${currentSection?.title ? `: ${currentSection.title}` : ""}`
+            ? `Edit Section${currentSection?.title ? `: ${currentSection.title}` : ''}`
             : sectionsCount > 0
-            ? `Add Section ${sectionsCount + 1}`
-            : "Add Your First Section"}
+              ? `Add Section ${sectionsCount + 1}`
+              : 'Add Your First Section'}
         </h3>
         {/* 🔧 Only show “Required” chip when adding the very first section */}
         {!isEditing && sectionsCount === 0 && (
@@ -273,9 +277,11 @@ function SectionEditor({
           <input
             type="text"
             value={currentSection.title}
-            onChange={(e) => setCurrentSection((prev) => ({ ...prev, title: e.target.value }))}
+            onChange={(e) =>
+              setCurrentSection((prev) => ({ ...prev, title: e.target.value }))
+            }
             placeholder="e.g., Section 6: Te-form"
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-pink focus:border-transparent"
           />
         </div>
 
@@ -285,10 +291,15 @@ function SectionEditor({
           </label>
           <textarea
             value={currentSection.description}
-            onChange={(e) => setCurrentSection((prev) => ({ ...prev, description: e.target.value }))}
+            onChange={(e) =>
+              setCurrentSection((prev) => ({
+                ...prev,
+                description: e.target.value,
+              }))
+            }
             placeholder="Brief description of what this section covers..."
             rows={2}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#e30a5f] focus:border-transparent resize-none"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-pink focus:border-transparent resize-none"
           />
         </div>
       </div>
@@ -301,7 +312,7 @@ function SectionEditor({
           </h4>
           <button
             onClick={() => setShowGrammarForm(!showGrammarForm)}
-            className="flex items-center gap-2 px-3 py-1.5 bg-[#e30a5f]/10 text-[#e30a5f] rounded-lg hover:bg-[#e30a5f]/20 transition-all text-sm"
+            className="flex items-center gap-2 px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg hover:bg-brand-pink/20 transition-all text-sm"
           >
             <FaPlus />
             Add Grammar
@@ -314,14 +325,22 @@ function SectionEditor({
               <input
                 type="text"
                 value={currentGrammar.point}
-                onChange={(e) => setCurrentGrammar((prev) => ({ ...prev, point: e.target.value }))}
+                onChange={(e) =>
+                  setCurrentGrammar((prev) => ({
+                    ...prev,
+                    point: e.target.value,
+                  }))
+                }
                 placeholder="Grammar point (e.g., て-form + います)"
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
               />
               <textarea
                 value={currentGrammar.explanation}
                 onChange={(e) =>
-                  setCurrentGrammar((prev) => ({ ...prev, explanation: e.target.value }))
+                  setCurrentGrammar((prev) => ({
+                    ...prev,
+                    explanation: e.target.value,
+                  }))
                 }
                 placeholder="Explanation..."
                 rows={2}
@@ -337,13 +356,15 @@ function SectionEditor({
                     <input
                       type="text"
                       value={example}
-                      onChange={(e) => updateExample("grammar", idx, e.target.value)}
+                      onChange={(e) =>
+                        updateExample('grammar', idx, e.target.value)
+                      }
                       placeholder="Example sentence..."
                       className="flex-1 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
                     />
                     {currentGrammar.examples.length > 1 && (
                       <button
-                        onClick={() => removeExample("grammar", idx)}
+                        onClick={() => removeExample('grammar', idx)}
                         className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
                       >
                         <FaTimes className="text-sm" />
@@ -352,8 +373,8 @@ function SectionEditor({
                   </div>
                 ))}
                 <button
-                  onClick={() => addExample("grammar")}
-                  className="text-xs text-[#e30a5f] hover:text-[#f41567]"
+                  onClick={() => addExample('grammar')}
+                  className="text-xs text-brand-pink hover:text-brand-pink-hover"
                 >
                   + Add example
                 </button>
@@ -362,7 +383,7 @@ function SectionEditor({
               <div className="flex gap-2">
                 <button
                   onClick={addGrammarPoint}
-                  className="px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white rounded-lg text-sm font-medium"
+                  className="px-4 py-2 bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white rounded-lg text-sm font-medium"
                 >
                   Add Grammar Point
                 </button>
@@ -396,7 +417,10 @@ function SectionEditor({
                       {g.examples
                         .filter((ex) => ex)
                         .map((ex, idx) => (
-                          <p key={idx} className="text-xs text-gray-500 dark:text-gray-500 italic">
+                          <p
+                            key={idx}
+                            className="text-xs text-gray-500 dark:text-gray-500 italic"
+                          >
                             • {ex}
                           </p>
                         ))}
@@ -423,7 +447,7 @@ function SectionEditor({
           </h4>
           <button
             onClick={() => setShowVocabForm(!showVocabForm)}
-            className="flex items-center gap-2 px-3 py-1.5 bg-[#e30a5f]/10 text-[#e30a5f] rounded-lg hover:bg-[#e30a5f]/20 transition-all text-sm"
+            className="flex items-center gap-2 px-3 py-1.5 bg-brand-pink/10 text-brand-pink rounded-lg hover:bg-brand-pink/20 transition-all text-sm"
           >
             <FaPlus />
             Add Vocabulary
@@ -437,7 +461,12 @@ function SectionEditor({
                 <input
                   type="text"
                   value={currentVocab.word}
-                  onChange={(e) => setCurrentVocab((prev) => ({ ...prev, word: e.target.value }))}
+                  onChange={(e) =>
+                    setCurrentVocab((prev) => ({
+                      ...prev,
+                      word: e.target.value,
+                    }))
+                  }
                   placeholder="Word (e.g., 食べる)"
                   className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
                 />
@@ -445,7 +474,10 @@ function SectionEditor({
                   type="text"
                   value={currentVocab.reading}
                   onChange={(e) =>
-                    setCurrentVocab((prev) => ({ ...prev, reading: e.target.value }))
+                    setCurrentVocab((prev) => ({
+                      ...prev,
+                      reading: e.target.value,
+                    }))
                   }
                   placeholder="Reading (e.g., たべる)"
                   className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
@@ -454,7 +486,10 @@ function SectionEditor({
                   type="text"
                   value={currentVocab.meaning}
                   onChange={(e) =>
-                    setCurrentVocab((prev) => ({ ...prev, meaning: e.target.value }))
+                    setCurrentVocab((prev) => ({
+                      ...prev,
+                      meaning: e.target.value,
+                    }))
                   }
                   placeholder="Meaning (e.g., to eat)"
                   className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
@@ -470,13 +505,15 @@ function SectionEditor({
                     <input
                       type="text"
                       value={example}
-                      onChange={(e) => updateExample("vocab", idx, e.target.value)}
+                      onChange={(e) =>
+                        updateExample('vocab', idx, e.target.value)
+                      }
                       placeholder="Example sentence..."
                       className="flex-1 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
                     />
                     {currentVocab.examples.length > 1 && (
                       <button
-                        onClick={() => removeExample("vocab", idx)}
+                        onClick={() => removeExample('vocab', idx)}
                         className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
                       >
                         <FaTimes className="text-sm" />
@@ -485,8 +522,8 @@ function SectionEditor({
                   </div>
                 ))}
                 <button
-                  onClick={() => addExample("vocab")}
-                  className="text-xs text-[#e30a5f] hover:text-[#f41567]"
+                  onClick={() => addExample('vocab')}
+                  className="text-xs text-brand-pink hover:text-brand-pink-hover"
                 >
                   + Add example
                 </button>
@@ -495,7 +532,7 @@ function SectionEditor({
               <div className="flex gap-2">
                 <button
                   onClick={addVocabulary}
-                  className="px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white rounded-lg text-sm font-medium"
+                  className="px-4 py-2 bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white rounded-lg text-sm font-medium"
                 >
                   Add Vocabulary
                 </button>
@@ -591,8 +628,8 @@ function SectionEditor({
                   <button
                     onClick={() =>
                       setCurrentSection({
-                        title: "",
-                        description: "",
+                        title: '',
+                        description: '',
                         grammar: [],
                         vocabulary: [],
                         isExpanded: true,
@@ -621,7 +658,9 @@ function SectionEditor({
             <div className="text-sm">
               {/* 🔧 Dynamic callout copy */}
               <p className="text-blue-900 dark:text-blue-100 font-medium">
-                {isEditing ? "Ready to update this section?" : "Ready to save this section?"}
+                {isEditing
+                  ? 'Ready to update this section?'
+                  : 'Ready to save this section?'}
               </p>
               <p className="text-blue-700 dark:text-blue-300 text-xs mt-1">
                 {isEditing
@@ -636,9 +675,15 @@ function SectionEditor({
   );
 }
 
-function SectionsNavigation({ sectionsCount, hasUnsaved, onBack, onReview, canProceed }) {
+function SectionsNavigation({
+  sectionsCount,
+  hasUnsaved,
+  onBack,
+  onReview,
+  canProceed,
+}) {
   return (
-    <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
+    <div className="bg-surface-card rounded-xl shadow-sm p-6">
       <div className="flex justify-between items-center">
         <button
           onClick={onBack}
@@ -649,9 +694,11 @@ function SectionsNavigation({ sectionsCount, hasUnsaved, onBack, onReview, canPr
 
         <div className="flex items-center gap-4">
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            <span className="font-medium text-gray-900 dark:text-white">{sectionsCount}</span>{" "}
-            section{sectionsCount !== 1 ? "s" : ""} created
-            {hasUnsaved && " (+1 unsaved)"}
+            <span className="font-medium text-gray-900 dark:text-white">
+              {sectionsCount}
+            </span>{' '}
+            section{sectionsCount !== 1 ? 's' : ''} created
+            {hasUnsaved && ' (+1 unsaved)'}
           </div>
 
           <button
@@ -659,8 +706,8 @@ function SectionsNavigation({ sectionsCount, hasUnsaved, onBack, onReview, canPr
             disabled={!canProceed}
             className={`px-6 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
               canProceed
-                ? "bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white hover:shadow-lg"
-                : "bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed"
+                ? 'bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white hover:shadow-lg'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
             }`}
           >
             Review Learning Material

@@ -178,7 +178,7 @@ function AdminPage() {
         {
           label: 'Signups',
           data: daily.map((d) => d.signups),
-          borderColor: '#e30a5f',
+          borderColor: 'var(--brand-pink)',
           backgroundColor: 'rgba(227, 10, 95, 0.1)',
           fill: true,
           tension: 0.3,
@@ -209,7 +209,7 @@ function AdminPage() {
           },
         },
         tooltip: {
-          backgroundColor: '#1c2b35',
+          backgroundColor: 'var(--surface-card)',
           titleColor: '#fff',
           bodyColor: '#d1d5db',
           borderColor: '#374151',
@@ -254,7 +254,7 @@ function AdminPage() {
   // --- Loading / unauthorized screen ---
   if (isLoading || !isAuthorized) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#172229]">
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-surface-elevated">
         <div className="text-gray-600 dark:text-gray-400">Loading...</div>
       </div>
     );
@@ -270,14 +270,14 @@ function AdminPage() {
       <Head>
         <title>Admin - ReBabel</title>
       </Head>
-      <div className="flex flex-row min-h-screen bg-white dark:bg-[#172229] text-[#4e4a4a] dark:text-white">
+      <div className="flex flex-row min-h-screen bg-white dark:bg-surface-elevated text-[#4e4a4a] dark:text-white">
         <AdminSidebar />
         <main className="flex-1 overflow-auto">
           <div className="max-w-5xl mx-auto p-6 md:p-8">
             {/* ── Header ── */}
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-2">
-                <FaShieldAlt className="text-xl text-[#e30a5f]" />
+                <FaShieldAlt className="text-xl text-brand-pink" />
                 <h1 className="text-3xl font-bold">Admin Dashboard</h1>
               </div>
               <p className="text-gray-600 dark:text-gray-400">
@@ -287,19 +287,19 @@ function AdminPage() {
 
             {/* ── Headline Stat Cards ── */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-6 border border-gray-200 dark:border-gray-800">
+              <div className="bg-white dark:bg-surface-card rounded-lg p-6 border border-gray-200 dark:border-gray-800">
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                   Total Users
                 </p>
                 {metricsLoading ? (
-                  <TbLoader3 className="text-2xl text-[#e30a5f] animate-spin" />
+                  <TbLoader3 className="text-2xl text-brand-pink animate-spin" />
                 ) : (
-                  <p className="text-2xl font-bold text-[#e30a5f]">
+                  <p className="text-2xl font-bold text-brand-pink">
                     {totalUsers !== null ? totalUsers.toLocaleString() : '—'}
                   </p>
                 )}
               </div>
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-6 border border-gray-200 dark:border-gray-800">
+              <div className="bg-white dark:bg-surface-card rounded-lg p-6 border border-gray-200 dark:border-gray-800">
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                   New Signups ({rangeLabel})
                 </p>
@@ -311,7 +311,7 @@ function AdminPage() {
                   </p>
                 )}
               </div>
-              <div className="bg-white dark:bg-[#1c2b35] rounded-lg p-6 border border-gray-200 dark:border-gray-800">
+              <div className="bg-white dark:bg-surface-card rounded-lg p-6 border border-gray-200 dark:border-gray-800">
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                   Avg DAU — Study ({rangeLabel})
                 </p>
@@ -326,7 +326,7 @@ function AdminPage() {
             </div>
 
             {/* ── Platform Metrics Section ── */}
-            <div className="bg-white dark:bg-[#1c2b35] rounded-lg border border-gray-200 dark:border-gray-800">
+            <div className="bg-white dark:bg-surface-card rounded-lg border border-gray-200 dark:border-gray-800">
               {/* Header with date controls */}
               <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
@@ -338,9 +338,9 @@ function AdminPage() {
                       <button
                         key={label}
                         onClick={() => handlePreset(days)}
-                        className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e30a5f] ${
+                        className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink ${
                           activePreset === days
-                            ? 'bg-[#E30B5C] text-white'
+                            ? 'bg-brand-pink text-white'
                             : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                         }`}
                       >
@@ -360,7 +360,7 @@ function AdminPage() {
                     value={startDate}
                     onChange={handleStartChange}
                     max={endDate}
-                    className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#172229] text-gray-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                    className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-surface-elevated text-gray-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink"
                   />
                   <label className="text-gray-500 dark:text-gray-400">to</label>
                   <input
@@ -369,7 +369,7 @@ function AdminPage() {
                     onChange={handleEndChange}
                     min={startDate}
                     max={utcDateString(0)}
-                    className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#172229] text-gray-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#e30a5f]"
+                    className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-surface-elevated text-gray-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink"
                   />
                 </div>
               </div>
@@ -384,7 +384,7 @@ function AdminPage() {
               {/* Loading */}
               {metricsLoading && (
                 <div className="flex items-center justify-center py-16">
-                  <TbLoader3 className="text-3xl text-[#e30a5f] animate-spin mr-2" />
+                  <TbLoader3 className="text-3xl text-brand-pink animate-spin mr-2" />
                   <span className="text-gray-600 dark:text-gray-400 text-sm">
                     Loading metrics...
                   </span>

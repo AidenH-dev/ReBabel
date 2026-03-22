@@ -20,7 +20,7 @@ export default function SrsProgressPipeline({ stages }) {
         {stages.map((stage, i) => (
           <div key={stage.label} className="flex flex-col items-center z-10">
             <div
-              className={`${STAGES[i]?.color || 'bg-gray-400'} w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-white text-[10px] sm:text-xs font-medium ring-2 ring-white dark:ring-[#141f25]`}
+              className={`${STAGES[i]?.color || 'bg-gray-400'} w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-white text-[10px] sm:text-xs font-medium ring-2 ring-white dark:ring-surface-page`}
             >
               {stage.count}
             </div>

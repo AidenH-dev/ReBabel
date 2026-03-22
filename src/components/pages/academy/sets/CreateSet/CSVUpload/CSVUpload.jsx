@@ -69,15 +69,15 @@ export default function CSVUpload({ onUpload, itemType, onColumnsMapped }) {
             onDragLeave={handleDragLeave}
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               isDragging
-                ? 'border-[#e30a5f] bg-pink-50 dark:bg-pink-900/10'
-                : 'border-gray-300 dark:border-gray-600 hover:border-[#e30a5f] dark:hover:border-[#e30a5f]'
+                ? 'border-brand-pink bg-pink-50 dark:bg-pink-900/10'
+                : 'border-gray-300 dark:border-gray-600 hover:border-brand-pink dark:hover:border-brand-pink'
             }`}
           >
             <FiUpload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
               Drag and drop your CSV file here, or
             </p>
-            <label className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 transition-opacity cursor-pointer">
+            <label className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium bg-brand-pink text-white hover:opacity-95 transition-opacity cursor-pointer">
               <FiFile className="w-4 h-4" />
               Browse Files
               <input

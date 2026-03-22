@@ -25,28 +25,48 @@ export default function Blog({ posts }) {
 
   // Filter posts by selected tag
   const filteredPosts = selectedTag
-    ? posts.filter((post) => (post.frontmatter.tags || []).includes(selectedTag))
+    ? posts.filter((post) =>
+        (post.frontmatter.tags || []).includes(selectedTag)
+      )
     : posts;
 
   return (
     <>
       <Head>
         <title>ReBabel Blog - Language Learning Tips & Study Strategies</title>
-        <meta name="description" content="Discover effective language learning techniques, science-backed study strategies, and Japanese language tips to accelerate your learning journey." />
-        <meta name="keywords" content="language learning, study strategies, spaced repetition, Japanese learning tips, JLPT preparation, language learning methods" />
+        <meta
+          name="description"
+          content="Discover effective language learning techniques, science-backed study strategies, and Japanese language tips to accelerate your learning journey."
+        />
+        <meta
+          name="keywords"
+          content="language learning, study strategies, spaced repetition, Japanese learning tips, JLPT preparation, language learning methods"
+        />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="ReBabel Blog - Language Learning Tips & Study Strategies" />
-        <meta property="og:description" content="Discover effective language learning techniques, science-backed study strategies, and Japanese language tips." />
+        <meta
+          property="og:title"
+          content="ReBabel Blog - Language Learning Tips & Study Strategies"
+        />
+        <meta
+          property="og:description"
+          content="Discover effective language learning techniques, science-backed study strategies, and Japanese language tips."
+        />
         <meta property="og:image" content="https://rebabel.org/og-image.png" />
         <meta property="og:url" content="https://rebabel.org/blog" />
         <meta property="og:site_name" content="ReBabel" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="ReBabel Blog - Language Learning Tips & Study Strategies" />
-        <meta name="twitter:description" content="Discover effective language learning techniques, science-backed study strategies, and Japanese language tips." />
+        <meta
+          name="twitter:title"
+          content="ReBabel Blog - Language Learning Tips & Study Strategies"
+        />
+        <meta
+          name="twitter:description"
+          content="Discover effective language learning techniques, science-backed study strategies, and Japanese language tips."
+        />
         <meta name="twitter:image" content="https://rebabel.org/og-image.png" />
 
         {/* Canonical URL */}
@@ -62,7 +82,8 @@ export default function Blog({ posts }) {
               '@context': 'https://schema.org',
               '@type': 'CollectionPage',
               name: 'ReBabel Blog',
-              description: 'Language learning tips, study strategies, and educational articles',
+              description:
+                'Language learning tips, study strategies, and educational articles',
               url: 'https://rebabel.org/blog',
               publisher: {
                 '@type': 'Organization',
@@ -70,18 +91,25 @@ export default function Blog({ posts }) {
                 url: 'https://rebabel.org',
                 image: 'https://rebabel.org/og-image.png',
               },
-            })
+            }),
           }}
         />
       </Head>
 
-      <main className="dark:bg-[#141f25] bg-white min-h-screen">
+      <main className="dark:bg-surface-page bg-white min-h-screen">
         {/* Header Section */}
-        <div className="dark:bg-gradient-to-b dark:from-gray-900 dark:to-[#141f25] bg-gradient-to-b from-gray-50 to-white py-8 px-4 dark:border-b dark:border-gray-800 border-b border-gray-200">
+        <div className="dark:bg-gradient-to-b dark:from-gray-900 dark:to-surface-page bg-gradient-to-b from-gray-50 to-white py-8 px-4 dark:border-b dark:border-gray-800 border-b border-gray-200">
           <div className="max-w-6xl mx-auto">
             <h1 className="flex items-center gap-3">
-              <Link href='/' className="text-4xl font-bold text-[#e30a5f] font-inter hover:opacity-80 transition-opacity">ReBabel</Link>
-              <span className="text-lg dark:text-gray-300 text-gray-700 font-inter">Blog</span>
+              <Link
+                href="/"
+                className="text-4xl font-bold text-brand-pink font-inter hover:opacity-80 transition-opacity"
+              >
+                ReBabel
+              </Link>
+              <span className="text-lg dark:text-gray-300 text-gray-700 font-inter">
+                Blog
+              </span>
             </h1>
           </div>
         </div>
@@ -93,10 +121,11 @@ export default function Blog({ posts }) {
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setSelectedTag(null)}
-                className={`px-4 py-2 rounded-full font-fredoka font-medium transition-all ${selectedTag === null
-                    ? 'bg-[#e30a5f] text-white shadow-lg'
+                className={`px-4 py-2 rounded-full font-fredoka font-medium transition-all ${
+                  selectedTag === null
+                    ? 'bg-brand-pink text-white shadow-lg'
                     : 'dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 bg-gray-200 text-gray-800 hover:bg-gray-300'
-                  }`}
+                }`}
               >
                 All Articles
               </button>
@@ -105,10 +134,11 @@ export default function Blog({ posts }) {
                 <button
                   key={tag}
                   onClick={() => setSelectedTag(tag)}
-                  className={`px-4 py-2 rounded-full font-fredoka font-medium transition-all ${selectedTag === tag
-                      ? 'bg-[#e30a5f] text-white shadow-lg'
+                  className={`px-4 py-2 rounded-full font-fredoka font-medium transition-all ${
+                    selectedTag === tag
+                      ? 'bg-brand-pink text-white shadow-lg'
                       : 'dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 bg-gray-200 text-gray-800 hover:bg-gray-300'
-                    }`}
+                  }`}
                 >
                   {tag}
                 </button>
@@ -117,7 +147,9 @@ export default function Blog({ posts }) {
 
             {selectedTag && (
               <p className="dark:text-gray-400 text-gray-600 mt-4">
-                Showing {filteredPosts.length} article{filteredPosts.length !== 1 ? 's' : ''} tagged with &quot;{selectedTag}&quot;
+                Showing {filteredPosts.length} article
+                {filteredPosts.length !== 1 ? 's' : ''} tagged with &quot;
+                {selectedTag}&quot;
               </p>
             )}
           </div>
@@ -136,11 +168,12 @@ export default function Blog({ posts }) {
           ) : (
             <div className="text-center py-12">
               <p className="dark:text-gray-400 text-gray-600 text-lg">
-                No articles found for &quot;{selectedTag}&quot;. Try a different tag!
+                No articles found for &quot;{selectedTag}&quot;. Try a different
+                tag!
               </p>
               <button
                 onClick={() => setSelectedTag(null)}
-                className="mt-4 px-4 py-2 bg-[#e30a5f] hover:bg-[#ff1f75] text-white rounded-lg transition-colors font-fredoka"
+                className="mt-4 px-4 py-2 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg transition-colors font-fredoka"
               >
                 View All Articles
               </button>
@@ -155,10 +188,14 @@ export default function Blog({ posts }) {
               Want more learning insights?
             </h3>
             <p className="dark:text-gray-300 text-gray-700 mb-6 max-w-2xl mx-auto">
-              Subscribe to our newsletter for weekly tips, study strategies, and language learning techniques delivered to your inbox.
+              Subscribe to our newsletter for weekly tips, study strategies, and
+              language learning techniques delivered to your inbox.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
-              <Link href="/learn" className="px-6 py-3 bg-[#e30a5f] hover:bg-[#ff1f75] text-white rounded-lg font-fredoka font-medium transition-colors">
+              <Link
+                href="/learn"
+                className="px-6 py-3 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-fredoka font-medium transition-colors"
+              >
                 Start Learning Now
               </Link>
             </div>

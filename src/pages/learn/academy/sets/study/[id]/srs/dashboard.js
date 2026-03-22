@@ -183,11 +183,11 @@ export default function SRSDashboard() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
+      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
         <MainSidebar hideMobileMenu />
         <main className="ml-auto flex-1 flex flex-col min-h-0 overflow-hidden">
           {/* Desktop header skeleton */}
-          <div className="hidden lg:block flex-shrink-0 bg-white dark:bg-[#1a2834] border-b border-gray-300 dark:border-gray-700 px-6 py-5">
+          <div className="hidden lg:block flex-shrink-0 bg-white dark:bg-surface-elevated border-b border-gray-300 dark:border-gray-700 px-6 py-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-9 w-36 rounded-lg bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
@@ -270,7 +270,7 @@ export default function SRSDashboard() {
                     <div className="h-4 w-32 rounded bg-black/[0.06] dark:bg-white/[0.06] animate-pulse" />
                     <div className="h-3 w-16 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
                   </div>
-                  <div className="h-48 sm:h-56 lg:h-64 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#141f25] overflow-hidden">
+                  <div className="h-48 sm:h-56 lg:h-64 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-surface-page overflow-hidden">
                     <div className="h-8 bg-black/[0.03] dark:bg-white/[0.03] border-b border-gray-300 dark:border-gray-600 animate-pulse" />
                     <div className="space-y-0">
                       {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
@@ -373,7 +373,7 @@ export default function SRSDashboard() {
 
   if (error) {
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
+      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
         <MainSidebar hideMobileMenu />
         <main className="ml-auto flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -383,7 +383,7 @@ export default function SRSDashboard() {
             <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
             <button
               onClick={() => router.push(`/learn/academy/sets/study/${id}`)}
-              className="px-4 py-2 bg-[#e30a5f] text-white rounded-lg hover:bg-[#c00950] transition-colors"
+              className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
             >
               Back to Set
             </button>
@@ -398,7 +398,7 @@ export default function SRSDashboard() {
   // ========================================================================
 
   return (
-    <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
       <MainSidebar hideMobileMenu />
 
       <main className="ml-auto flex-1 flex flex-col min-h-0 overflow-hidden">
@@ -421,7 +421,7 @@ export default function SRSDashboard() {
                 href={`/learn/academy/sets/study/${id}/srs/due-now`}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                   stats.dueNow > 0
-                    ? 'bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white hover:brightness-110 hover:ring-2 hover:ring-[#e30a5f]/40'
+                    ? 'bg-gradient-to-r from-brand-pink to-brand-pink-dark text-white hover:brightness-110 hover:ring-2 hover:ring-brand-pink/40'
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
                 }`}
               >
@@ -480,7 +480,7 @@ export default function SRSDashboard() {
                 href={`/learn/academy/sets/study/${id}/srs/due-now`}
                 className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-semibold transition-all ${
                   stats.dueNow > 0
-                    ? 'bg-gradient-to-r from-[#e30a5f] to-[#c1084d] text-white shadow-lg shadow-[#e30a5f]/20'
+                    ? 'bg-gradient-to-r from-brand-pink to-brand-pink-dark text-white shadow-lg shadow-brand-pink/20'
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 pointer-events-none'
                 }`}
               >

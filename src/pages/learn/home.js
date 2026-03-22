@@ -183,7 +183,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page">
       <MainSidebar />
 
       <main className="ml-auto max-h-screen overflow-scroll flex-1 px-8 py-6">
@@ -194,10 +194,10 @@ export default function Home() {
 
         {/* Header with User Info and Stats */}
         <div className="mb-6">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
+          <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#e30a5f] to-[#f41567] flex items-center justify-center text-white text-xl font-bold">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-brand-pink to-brand-pink-hover flex items-center justify-center text-white text-xl font-bold">
                   {userProfile?.name
                     ? userProfile.name.charAt(0).toUpperCase()
                     : 'U'}
@@ -248,13 +248,13 @@ export default function Home() {
 
         {/* Tab Navigation */}
         <div className="mb-6">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-1">
+          <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-1">
             <div className="flex">
               <button
                 onClick={() => setActiveTab('academic')}
                 className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
                   activeTab === 'academic'
-                    ? 'bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white shadow-lg'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
@@ -268,7 +268,7 @@ export default function Home() {
                 onClick={() => setActiveTab('certificate')}
                 className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
                   activeTab === 'certificate'
-                    ? 'bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white shadow-lg'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
@@ -292,7 +292,7 @@ export default function Home() {
               </h2>
               <button
                 onClick={handleCreateNewLearning_material}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white rounded-lg hover:shadow-lg transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white rounded-lg hover:shadow-lg transition-all"
               >
                 <FaPlus />
                 <span>Add New Learning Material</span>
@@ -304,7 +304,7 @@ export default function Home() {
               {academicLearning_materials.map((learning_material) => (
                 <div
                   key={learning_material.id}
-                  className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm overflow-hidden"
+                  className="bg-white dark:bg-surface-card rounded-xl shadow-sm overflow-hidden"
                 >
                   {/* Learning_material Header */}
                   <div className="p-6 border-b border-gray-100 dark:border-gray-700">
@@ -331,7 +331,7 @@ export default function Home() {
                           onClick={() =>
                             handleUploadMaterials(learning_material.id)
                           }
-                          className="p-2 text-[#e30a5f] hover:text-[#f41567]"
+                          className="p-2 text-brand-pink hover:text-[#f41567]"
                         >
                           <FaCloudArrowUp />
                         </button>
@@ -350,7 +350,7 @@ export default function Home() {
                       </div>
                       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                         <div
-                          className="bg-gradient-to-r from-[#e30a5f] to-[#f41567] h-2 rounded-full transition-all"
+                          className="bg-gradient-to-r from-brand-pink to-brand-pink-hover h-2 rounded-full transition-all"
                           style={{ width: `${learning_material.progress}%` }}
                         />
                       </div>
@@ -413,7 +413,7 @@ export default function Home() {
                                   {deadline.title}
                                 </span>
                               </div>
-                              <span className="text-xs font-medium text-[#e30a5f]">
+                              <span className="text-xs font-medium text-brand-pink">
                                 {deadline.date}
                               </span>
                             </div>
@@ -425,7 +425,7 @@ export default function Home() {
 
                   {/* Quick Actions */}
                   <div className="px-6 pb-6 flex gap-3">
-                    <button className="flex-1 px-4 py-2 bg-[#e30a5f]/10 text-[#e30a5f] rounded-lg hover:bg-[#e30a5f]/20 transition-all text-sm font-medium">
+                    <button className="flex-1 px-4 py-2 bg-brand-pink/10 text-brand-pink rounded-lg hover:bg-brand-pink/20 transition-all text-sm font-medium">
                       Continue Learning
                     </button>
                     <button className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-sm font-medium">
@@ -438,9 +438,9 @@ export default function Home() {
               {/* Add Learning_material Card */}
               <div
                 onClick={handleCreateNewLearning_material}
-                className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6 border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-[#e30a5f] dark:hover:border-[#e30a5f] cursor-pointer transition-all group"
+                className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6 border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-brand-pink dark:hover:border-brand-pink cursor-pointer transition-all group"
               >
-                <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-gray-400 group-hover:text-[#e30a5f] transition-colors">
+                <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-gray-400 group-hover:text-brand-pink transition-colors">
                   <FaPlus className="text-4xl mb-3" />
                   <p className="text-lg font-medium">
                     Add New Learning Material
@@ -466,7 +466,7 @@ export default function Home() {
               {certificateTracks.map((track) => (
                 <div
                   key={track.id}
-                  className={`bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm overflow-hidden ${
+                  className={`bg-white dark:bg-surface-card rounded-xl shadow-sm overflow-hidden ${
                     track.locked ? 'opacity-60' : ''
                   }`}
                 >
@@ -489,7 +489,7 @@ export default function Home() {
                       </div>
                       <TbCertificate
                         className={`text-2xl ${
-                          track.locked ? 'text-gray-400' : 'text-[#e30a5f]'
+                          track.locked ? 'text-gray-400' : 'text-brand-pink'
                         }`}
                       />
                     </div>
@@ -569,7 +569,7 @@ export default function Home() {
                               `/learn/jlpt/${track.name.toLowerCase().replace(' ', '-')}`
                             )
                           }
-                          className="flex-1 px-4 py-2 bg-gradient-to-r from-[#e30a5f] to-[#f41567] text-white rounded-lg hover:shadow-lg transition-all text-sm font-medium"
+                          className="flex-1 px-4 py-2 bg-gradient-to-r from-brand-pink to-brand-pink-hover text-white rounded-lg hover:shadow-lg transition-all text-sm font-medium"
                         >
                           Continue
                         </button>
@@ -591,13 +591,13 @@ export default function Home() {
             </div>
 
             {/* Study Resources */}
-            <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-sm p-6">
+            <div className="bg-white dark:bg-surface-card rounded-xl shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Certificate Study Resources
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button className="flex items-center gap-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group">
-                  <TbCards className="text-2xl text-[#e30a5f]" />
+                  <TbCards className="text-2xl text-brand-pink" />
                   <div className="text-left">
                     <p className="font-medium text-gray-900 dark:text-white">
                       Vocabulary Flashcards
@@ -610,7 +610,7 @@ export default function Home() {
                 </button>
 
                 <button className="flex items-center gap-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group">
-                  <FaPencilAlt className="text-2xl text-[#e30a5f]" />
+                  <FaPencilAlt className="text-2xl text-brand-pink" />
                   <div className="text-left">
                     <p className="font-medium text-gray-900 dark:text-white">
                       Grammar Drills
@@ -623,7 +623,7 @@ export default function Home() {
                 </button>
 
                 <button className="flex items-center gap-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group">
-                  <FaClipboardList className="text-2xl text-[#e30a5f]" />
+                  <FaClipboardList className="text-2xl text-brand-pink" />
                   <div className="text-left">
                     <p className="font-medium text-gray-900 dark:text-white">
                       Practice Tests

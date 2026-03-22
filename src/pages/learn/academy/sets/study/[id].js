@@ -382,7 +382,7 @@ export default function ViewSet() {
 
   if (error) {
     return (
-      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
+      <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
         <MainSidebar />
         <main className="ml-auto flex-1 px-4 sm:px-6 py-4 flex items-center justify-center">
           <div className="text-center">
@@ -392,7 +392,7 @@ export default function ViewSet() {
             <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
             <button
               onClick={() => router.push('/learn/academy/sets')}
-              className="px-4 py-2 bg-[#e30a5f] text-white rounded-lg hover:bg-[#c00950] transition-colors"
+              className="px-4 py-2 bg-brand-pink text-white rounded-lg hover:bg-[#c00950] transition-colors"
             >
               Back to Sets
             </button>
@@ -407,7 +407,7 @@ export default function ViewSet() {
   // ============================================================================
 
   return (
-    <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-[#141f25]">
+    <div className="flex h-screen min-h-0 bg-gray-50 dark:bg-surface-page">
       {/* Left sidebar navigation */}
       <MainSidebar />
 
@@ -442,7 +442,7 @@ export default function ViewSet() {
                         if (e.key === 'Escape') setIsEditingTitle(false);
                       }}
                       disabled={isSavingTitle}
-                      className="col-start-1 row-start-1 text-2xl font-bold text-gray-900 dark:text-white bg-transparent border-b border-[#e30a5f]/50 outline-none m-0 p-0 px-px leading-normal w-full"
+                      className="col-start-1 row-start-1 text-2xl font-bold text-gray-900 dark:text-white bg-transparent border-b border-brand-pink/50 outline-none m-0 p-0 px-px leading-normal w-full"
                     />
                   ) : (
                     <span
@@ -513,13 +513,13 @@ export default function ViewSet() {
                     <FiMoreVertical className="w-4.5 h-4.5" />
                   </button>
                   {showHeaderOptions && (
-                    <div className="absolute right-0 dark:text-white mt-1 w-56 bg-white dark:bg-[#1c2b35] rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
+                    <div className="absolute right-0 dark:text-white mt-1 w-56 bg-white dark:bg-surface-card rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
                       <button
                         onClick={() => {
                           headerActionsRef.current?.openEdit?.();
                           setShowHeaderOptions(false);
                         }}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
                       >
                         <FiEdit2 className="inline w-4 h-4" />
                         Edit Set Details
@@ -529,7 +529,7 @@ export default function ViewSet() {
                           headerActionsRef.current?.openShareModal?.();
                           setShowHeaderOptions(false);
                         }}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
                       >
                         <TbShare2 className="inline w-4 h-4" />
                         Share Set
@@ -539,7 +539,7 @@ export default function ViewSet() {
                           headerActionsRef.current?.openSRSModal?.();
                           setShowHeaderOptions(false);
                         }}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
                       >
                         <TbRepeat className="inline w-4 h-4" />
                         SRS Settings
@@ -550,7 +550,7 @@ export default function ViewSet() {
                             setShowHeaderOptions(false);
                             setShowAutoCategorizeModal(true);
                           }}
-                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-[#1d2a32] flex items-center gap-2"
+                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-surface-elevated flex items-center gap-2"
                         >
                           <FiTag className="inline w-4 h-4" />
                           Auto-categorize
@@ -590,7 +590,7 @@ export default function ViewSet() {
           {isLoading ? (
             <div className="grid gap-3 mb-3 pt-2 sm:pt-0 grid-cols-1 sm:grid-cols-2 sm:h-40">
               {/* SRS module skeleton */}
-              <div className="rounded-lg border border-black/5 dark:border-white/10 bg-white dark:bg-[#1c2b35] p-3 flex flex-col justify-between">
+              <div className="rounded-lg border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card p-3 flex flex-col justify-between">
                 <div className="flex gap-2 mb-2">
                   <div className="flex-1 h-10 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] animate-pulse" />
                 </div>
@@ -664,16 +664,16 @@ export default function ViewSet() {
       {/* Auto-categorize modal */}
       {showAutoCategorizeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white dark:bg-[#1c2b35] rounded-xl shadow-xl w-full max-w-md">
+          <div className="bg-white dark:bg-surface-card rounded-xl shadow-xl w-full max-w-md">
             <div className="px-5 py-4 border-b border-gray-200 dark:border-white/10">
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
                 Auto-categorize Items
               </h3>
             </div>
             <div className="px-5 py-4 space-y-3">
-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#e30a5f]/8 dark:bg-[#e30a5f]/10">
-                <TbLanguageHiragana className="w-5 h-5 text-[#e30a5f] flex-shrink-0" />
-                <p className="text-sm font-medium text-[#e30a5f]">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-pink/8 dark:bg-brand-pink/10">
+                <TbLanguageHiragana className="w-5 h-5 text-brand-pink flex-shrink-0" />
+                <p className="text-sm font-medium text-brand-pink">
                   Categories are required for the Conjugation Practice feature
                 </p>
               </div>
@@ -684,11 +684,11 @@ export default function ViewSet() {
               </p>
               <ul className="text-xs text-gray-500 dark:text-gray-400 space-y-1.5">
                 <li className="flex items-start gap-2">
-                  <span className="text-[#e30a5f] mt-0.5">&#x2022;</span>
+                  <span className="text-brand-pink mt-0.5">&#x2022;</span>
                   Items with kanji are categorized more accurately
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-[#e30a5f] mt-0.5">&#x2022;</span>
+                  <span className="text-brand-pink mt-0.5">&#x2022;</span>
                   Miscategorized items can be corrected during practice
                 </li>
               </ul>
@@ -718,7 +718,7 @@ export default function ViewSet() {
                 <button
                   onClick={handleRunAutoCategorize}
                   disabled={isAutoCategorizing}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-[#e30a5f] hover:bg-[#c00950] text-white transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-brand-pink hover:bg-[#c00950] text-white transition-colors disabled:opacity-50"
                 >
                   {isAutoCategorizing ? (
                     <>

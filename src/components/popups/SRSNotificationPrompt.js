@@ -30,7 +30,7 @@ export function SRSNotificationPrompt({
       />
 
       <div className="relative w-full sm:max-w-[400px] sm:mx-4">
-        <div className="bg-white dark:bg-[#1c2b35] sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden">
+        <div className="bg-surface-card sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden">
           {/* Header */}
           <div className="relative px-6 pt-6 pb-4">
             {/* Faint bell watermark */}
@@ -52,15 +52,15 @@ export function SRSNotificationPrompt({
             )}
 
             <div className="relative">
-              <div className="w-11 h-11 rounded-xl bg-[#e30a5f]/10 dark:bg-[#e30a5f]/15 flex items-center justify-center mb-3">
-                <TbBell className="w-5.5 h-5.5 text-[#e30a5f]" />
+              <div className="w-11 h-11 rounded-xl bg-brand-pink/10 dark:bg-brand-pink/15 flex items-center justify-center mb-3">
+                <TbBell className="w-5.5 h-5.5 text-brand-pink" />
               </div>
               <h2 className="text-[20px] font-bold text-gray-900 dark:text-white leading-tight mb-1">
                 Never miss a review
               </h2>
               <p className="text-[14px] text-gray-500 dark:text-gray-400 leading-relaxed">
                 You have{' '}
-                <span className="font-semibold text-[#e30a5f]">
+                <span className="font-semibold text-brand-pink">
                   {srsSetCount} {srsSetCount === 1 ? 'set' : 'sets'}
                 </span>{' '}
                 using spaced repetition. Get a nudge when items are ready for
@@ -71,9 +71,9 @@ export function SRSNotificationPrompt({
 
           {/* Feature cards */}
           <div className="px-6 space-y-2">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-[#e30a5f]/5 dark:bg-[#e30a5f]/8 border border-[#e30a5f]/10 dark:border-[#e30a5f]/15">
-              <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#e30a5f]/10 dark:bg-[#e30a5f]/15 flex items-center justify-center">
-                <TbClock className="w-4 h-4 text-[#e30a5f]" />
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-pink/5 dark:bg-brand-pink/8 border border-brand-pink/10 dark:border-brand-pink/15">
+              <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-pink/10 dark:bg-brand-pink/15 flex items-center justify-center">
+                <TbClock className="w-4 h-4 text-brand-pink" />
               </div>
               <p className="text-[13px] text-gray-600 dark:text-gray-400">
                 Reminders when your reviews are due
@@ -94,7 +94,7 @@ export function SRSNotificationPrompt({
             <button
               onClick={handleEnableNotifications}
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[14px] font-semibold text-white bg-gradient-to-r from-[#e30a5f] to-[#d10950] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-[#e30a5f]/20"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[14px] font-semibold text-white bg-gradient-to-r from-brand-pink to-[#d10950] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-brand-pink/20"
             >
               {isLoading ? (
                 <TbLoader3 className="w-4.5 h-4.5 animate-spin" />

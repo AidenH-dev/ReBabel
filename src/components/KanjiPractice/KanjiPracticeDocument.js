@@ -31,7 +31,7 @@ Font.register({
 const cellPt = 36; // 48px * 0.75
 const hPadPt = 40.5; // 54px * 0.75
 const vPadPt = 39; // 52px * 0.75
-const accentColor = '#B0104F';
+const accentColor = 'var(--brand-pink)';
 const guideColor = '#e3e3e3';
 
 const styles = StyleSheet.create({

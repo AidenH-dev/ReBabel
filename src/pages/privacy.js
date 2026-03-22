@@ -1,5 +1,5 @@
-import Head from "next/head";
-import Link from "next/link";
+import Head from 'next/head';
+import Link from 'next/link';
 
 export default function Privacy() {
   return (
@@ -7,12 +7,18 @@ export default function Privacy() {
       <Head>
         <title>Privacy Policy - ReBabel</title>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
         <meta
           name="description"
           content="ReBabel Privacy Policy - Learn how we collect, use, and protect your personal information on our Japanese learning platform."
         />
-        <meta name="keywords" content="privacy policy, data protection, rebabel, japanese learning" />
+        <meta
+          name="keywords"
+          content="privacy policy, data protection, rebabel, japanese learning"
+        />
         <meta name="author" content="ReBabel" />
         <meta name="theme-color" content="#e30a5f" />
 
@@ -42,7 +48,7 @@ export default function Privacy() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/">
-              <span className="text-2xl font-bold text-[#e30a5f] cursor-pointer">
+              <span className="text-2xl font-bold text-brand-pink cursor-pointer">
                 ReBabel
               </span>
             </Link>
@@ -53,7 +59,7 @@ export default function Privacy() {
                 </button>
               </Link>
               <Link href="/api/auth/login">
-                <button className="px-4 py-2 text-sm bg-[#e30a5f] hover:bg-[#f41567] text-white font-medium rounded-lg transition-colors">
+                <button className="px-4 py-2 text-sm bg-brand-pink hover:bg-brand-pink-hover text-white font-medium rounded-lg transition-colors">
                   Join
                 </button>
               </Link>
@@ -69,9 +75,7 @@ export default function Privacy() {
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
               Privacy Policy
             </h1>
-            <p className="text-lg text-gray-600">
-              Last updated: February 2025
-            </p>
+            <p className="text-lg text-gray-600">Last updated: February 2025</p>
           </div>
         </section>
 
@@ -84,7 +88,10 @@ export default function Privacy() {
                   Introduction
                 </h2>
                 <p className="text-gray-600 leading-relaxed">
-                  ReBabel (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Japanese learning platform.
+                  ReBabel (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;)
+                  is committed to protecting your privacy. This Privacy Policy
+                  explains how we collect, use, disclose, and safeguard your
+                  information when you use our Japanese learning platform.
                 </p>
               </div>
 
@@ -124,7 +131,9 @@ export default function Privacy() {
                   Data Security
                 </h2>
                 <p className="text-gray-600 leading-relaxed">
-                  We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
+                  We implement appropriate technical and organizational measures
+                  to protect your personal information against unauthorized
+                  access, alteration, disclosure, or destruction.
                 </p>
               </div>
 
@@ -133,7 +142,9 @@ export default function Privacy() {
                   Third-Party Services
                 </h2>
                 <p className="text-gray-600 leading-relaxed">
-                  We may use third-party services for authentication, analytics, and payment processing. These services have their own privacy policies governing the use of your information.
+                  We may use third-party services for authentication, analytics,
+                  and payment processing. These services have their own privacy
+                  policies governing the use of your information.
                 </p>
               </div>
 
@@ -157,10 +168,11 @@ export default function Privacy() {
                   Contact Us
                 </h2>
                 <p className="text-gray-600 leading-relaxed">
-                  If you have questions about this Privacy Policy, please contact us at{" "}
+                  If you have questions about this Privacy Policy, please
+                  contact us at{' '}
                   <a
                     href="mailto:rebabel.development@gmail.com"
-                    className="text-[#e30a5f] hover:underline"
+                    className="text-brand-pink hover:underline"
                   >
                     rebabel.development@gmail.com
                   </a>
@@ -173,7 +185,9 @@ export default function Privacy() {
                   Changes to This Policy
                 </h2>
                 <p className="text-gray-600 leading-relaxed">
-                  We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the &quot;Last updated&quot; date.
+                  We may update this Privacy Policy from time to time. We will
+                  notify you of any changes by posting the new policy on this
+                  page and updating the &quot;Last updated&quot; date.
                 </p>
               </div>
             </div>
@@ -186,7 +200,9 @@ export default function Privacy() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-xl font-bold text-[#e30a5f] mb-4">ReBabel</h3>
+              <h3 className="text-xl font-bold text-brand-pink mb-4">
+                ReBabel
+              </h3>
               <p className="text-sm text-gray-400">
                 Building the future of Japanese learning.
               </p>
@@ -238,7 +254,10 @@ export default function Privacy() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2025 ReBabel. All rights reserved. Currently in beta development.</p>
+            <p>
+              &copy; 2025 ReBabel. All rights reserved. Currently in beta
+              development.
+            </p>
           </div>
         </div>
       </footer>

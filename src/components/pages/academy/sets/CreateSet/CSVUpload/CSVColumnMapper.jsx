@@ -139,7 +139,7 @@ export default function CSVColumnMapper({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-[#1c2b35] rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col m-4">
+      <div className="bg-surface-card rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col m-4">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <div>
@@ -248,13 +248,13 @@ export default function CSVColumnMapper({
         <div className="flex items-center justify-end gap-3 p-4 border-t border-gray-200 dark:border-gray-700">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1d2a32] transition-colors"
+            className="px-4 py-2 rounded text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-surface-elevated transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleMapColumns}
-            className="px-4 py-2 rounded text-sm font-medium bg-[#e30a5f] text-white hover:opacity-95 transition-opacity"
+            className="px-4 py-2 rounded text-sm font-medium bg-brand-pink text-white hover:opacity-95 transition-opacity"
           >
             Map Columns & Insert
           </button>

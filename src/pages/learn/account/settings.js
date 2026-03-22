@@ -283,7 +283,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#141f25] dusk:bg-[#1e2530]">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-surface-page dusk:bg-[#1e2530]">
       <MainSidebar />
 
       <main className="ml-auto flex-1 overflow-y-auto md:flex md:items-center md:justify-center">
@@ -298,7 +298,7 @@ export default function Settings() {
               Settings
             </h1>
 
-            <div className="bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 dusk:border-[#3a4556] divide-y divide-gray-200 dark:divide-gray-700 dusk:divide-[#3a4556]">
+            <div className="bg-white dark:bg-surface-card dusk:bg-[#2a3444] rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 dusk:border-[#3a4556] divide-y divide-gray-200 dark:divide-gray-700 dusk:divide-[#3a4556]">
               {loading ? (
                 /* Skeleton loading state */
                 <>
@@ -392,7 +392,7 @@ export default function Settings() {
                             placeholder="Enter a username"
                             maxLength={15}
                             autoFocus
-                            className="w-full h-6 p-0 bg-transparent text-base leading-6 text-gray-900 dark:text-white dusk:text-[#e8e0d8] border-b border-[#e30a5f] rounded-none focus:outline-none"
+                            className="w-full h-6 p-0 bg-transparent text-base leading-6 text-gray-900 dark:text-white dusk:text-[#e8e0d8] border-b border-brand-pink rounded-none focus:outline-none"
                           />
                         ) : (
                           <p className="h-6 leading-6 text-gray-900 dark:text-white dusk:text-[#e8e0d8] truncate">
@@ -421,7 +421,7 @@ export default function Settings() {
                           <button
                             onClick={handleUsernameSave}
                             disabled={usernameSaving || !usernameInput.trim()}
-                            className="p-2 rounded-lg text-[#e30a5f] hover:bg-[#e30a5f]/10 transition-colors disabled:opacity-50"
+                            className="p-2 rounded-lg text-brand-pink hover:bg-brand-pink/10 transition-colors disabled:opacity-50"
                           >
                             {usernameSaving ? (
                               <FiLoader className="w-4 h-4 animate-spin" />
@@ -534,7 +534,7 @@ export default function Settings() {
                             onClick={() => setTheme(option.value)}
                             className={`inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
                               isActive
-                                ? 'border-[#e30a5f] bg-[#e30a5f]/10 text-[#e30a5f]'
+                                ? 'border-brand-pink bg-brand-pink/10 text-brand-pink'
                                 : 'border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]'
                             }`}
                           >
@@ -651,7 +651,7 @@ export default function Settings() {
           className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={(e) => e.target === e.currentTarget && setShowContact(false)}
         >
-          <div className="w-full max-w-sm rounded-xl bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] shadow-2xl border border-black/5 dark:border-white/10 dusk:border-[#3a4556]">
+          <div className="w-full max-w-sm rounded-xl bg-white dark:bg-surface-card dusk:bg-[#2a3444] shadow-2xl border border-black/5 dark:border-white/10 dusk:border-[#3a4556]">
             <div className="p-4 flex items-center justify-between border-b border-black/5 dark:border-white/10">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8]">
                 Contact Us
@@ -672,7 +672,7 @@ export default function Settings() {
                   onClick={copyEmail}
                   className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 dusk:border-[#3a4556] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors text-left"
                 >
-                  <FiMail className="text-[#e30a5f]" />
+                  <FiMail className="text-brand-pink" />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 dark:text-white dusk:text-[#e8e0d8] text-sm">
                       Email
@@ -691,7 +691,7 @@ export default function Settings() {
                   }}
                   className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 dusk:border-[#3a4556] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26] transition-colors text-left"
                 >
-                  <FiAlertCircle className="text-[#e30a5f]" />
+                  <FiAlertCircle className="text-brand-pink" />
                   <div>
                     <p className="font-medium text-gray-900 dark:text-white dusk:text-[#e8e0d8] text-sm">
                       Report an Issue
@@ -713,8 +713,8 @@ export default function Settings() {
           className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={(e) => e.target === e.currentTarget && setShowPrivacy(false)}
         >
-          <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] shadow-2xl border border-black/5 dark:border-white/10 dusk:border-[#3a4556] flex flex-col">
-            <div className="sticky top-0 bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] border-b border-black/5 dark:border-white/10 dusk:border-[#3a4556] p-4 flex items-center justify-between rounded-t-xl">
+          <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-surface-card dusk:bg-[#2a3444] shadow-2xl border border-black/5 dark:border-white/10 dusk:border-[#3a4556] flex flex-col">
+            <div className="sticky top-0 bg-white dark:bg-surface-card dusk:bg-[#2a3444] border-b border-black/5 dark:border-white/10 dusk:border-[#3a4556] p-4 flex items-center justify-between rounded-t-xl">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8]">
                 Privacy Policy
               </h2>
@@ -820,7 +820,7 @@ export default function Settings() {
                   data. Contact us at{' '}
                   <button
                     onClick={copyEmail}
-                    className="text-[#e30a5f] hover:underline"
+                    className="text-brand-pink hover:underline"
                   >
                     {copiedEmail ? 'Copied!' : 'rebabel.development@gmail.com'}
                   </button>{' '}
@@ -836,7 +836,7 @@ export default function Settings() {
                   Questions? Email us at{' '}
                   <button
                     onClick={copyEmail}
-                    className="text-[#e30a5f] hover:underline"
+                    className="text-brand-pink hover:underline"
                   >
                     {copiedEmail ? 'Copied!' : 'rebabel.development@gmail.com'}
                   </button>
@@ -853,8 +853,8 @@ export default function Settings() {
           className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={(e) => e.target === e.currentTarget && setShowTerms(false)}
         >
-          <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] shadow-2xl border border-black/5 dark:border-white/10 dusk:border-[#3a4556] flex flex-col">
-            <div className="sticky top-0 bg-white dark:bg-[#1c2b35] dusk:bg-[#2a3444] border-b border-black/5 dark:border-white/10 dusk:border-[#3a4556] p-4 flex items-center justify-between rounded-t-xl">
+          <div className="w-full max-w-2xl max-h-[80vh] rounded-xl bg-white dark:bg-surface-card dusk:bg-[#2a3444] shadow-2xl border border-black/5 dark:border-white/10 dusk:border-[#3a4556] flex flex-col">
+            <div className="sticky top-0 bg-white dark:bg-surface-card dusk:bg-[#2a3444] border-b border-black/5 dark:border-white/10 dusk:border-[#3a4556] p-4 flex items-center justify-between rounded-t-xl">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white dusk:text-[#e8e0d8]">
                 Terms of Service
               </h2>
@@ -923,7 +923,7 @@ export default function Settings() {
                   <strong>Refunds:</strong> Contact{' '}
                   <button
                     onClick={copyEmail}
-                    className="text-[#e30a5f] hover:underline"
+                    className="text-brand-pink hover:underline"
                   >
                     {copiedEmail ? 'Copied!' : 'rebabel.development@gmail.com'}
                   </button>{' '}
@@ -976,7 +976,7 @@ export default function Settings() {
                   Questions? Email us at{' '}
                   <button
                     onClick={copyEmail}
-                    className="text-[#e30a5f] hover:underline"
+                    className="text-brand-pink hover:underline"
                   >
                     {copiedEmail ? 'Copied!' : 'rebabel.development@gmail.com'}
                   </button>

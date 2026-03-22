@@ -154,7 +154,7 @@ export default function CardSwapCustomItemModal({
                     handleVocabFormChange('english', e.target.value)
                   }
                   placeholder="English term"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                 />
               </div>
               <div>
@@ -171,7 +171,7 @@ export default function CardSwapCustomItemModal({
                     handleVocabFormChange('kana', e.target.value)
                   }
                   placeholder="ka → か, shi → し"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] font-japanese"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
                 />
               </div>
               <div>
@@ -188,7 +188,7 @@ export default function CardSwapCustomItemModal({
                     handleVocabFormChange('kanji', e.target.value)
                   }
                   placeholder="kanji → かんじ"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] font-japanese"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink font-japanese"
                 />
               </div>
               <div>
@@ -224,7 +224,7 @@ export default function CardSwapCustomItemModal({
                     handleVocabFormChange('example_sentences', e.target.value)
                   }
                   placeholder="Example sentences (one per line)"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
                 />
               </div>
             </div>
@@ -240,7 +240,7 @@ export default function CardSwapCustomItemModal({
                     handleVocabFormChange('tags', e.target.value)
                   }
                   placeholder="tag1, tag2, tag3"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                 />
               </div>
             </div>
@@ -271,7 +271,7 @@ export default function CardSwapCustomItemModal({
                       ? 'Type in romaji: ka → か, shi → し'
                       : 'Grammar pattern name'
                   }
-                  className={`w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] ${grammarTitleInputType === 'kana' ? 'font-japanese' : ''}`}
+                  className={`w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink ${grammarTitleInputType === 'kana' ? 'font-japanese' : ''}`}
                 />
               </div>
               <div>
@@ -285,7 +285,7 @@ export default function CardSwapCustomItemModal({
                     handleGrammarFormChange('topic', e.target.value)
                   }
                   placeholder="e.g., N5, JLPT, Particles"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                 />
               </div>
             </div>
@@ -301,7 +301,7 @@ export default function CardSwapCustomItemModal({
                     handleGrammarFormChange('description', e.target.value)
                   }
                   placeholder="Brief explanation of the grammar pattern"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
                 />
               </div>
             </div>
@@ -317,7 +317,7 @@ export default function CardSwapCustomItemModal({
                     handleGrammarFormChange('notes', e.target.value)
                   }
                   placeholder="Additional notes, usage tips, etc."
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                 />
               </div>
               <div>
@@ -331,7 +331,7 @@ export default function CardSwapCustomItemModal({
                     handleGrammarFormChange('tags', e.target.value)
                   }
                   placeholder="tag1, tag2, tag3"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f]"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink"
                 />
               </div>
             </div>
@@ -347,7 +347,7 @@ export default function CardSwapCustomItemModal({
                     handleGrammarFormChange('example_sentences', e.target.value)
                   }
                   placeholder="Example sentences (one per line)"
-                  className="w-full bg-gray-50 dark:bg-[#0f1a1f] text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-black/10 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-[#e30a5f] resize-none"
+                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
                 />
               </div>
             </div>
@@ -355,17 +355,17 @@ export default function CardSwapCustomItemModal({
         )}
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-2 pt-4 border-t border-black/5 dark:border-white/5 mt-4">
+        <div className="flex justify-end gap-2 pt-4 border-t border-border-subtle mt-4">
           <button
             type="button"
             onClick={handleCancel}
-            className="px-4 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1d2a32] transition-colors"
+            className="px-4 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-surface-elevated transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-[#e30a5f] text-white hover:opacity-95 transition-opacity"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-brand-pink text-white hover:opacity-95 transition-opacity"
           >
             <FiPlus className="w-3 h-3" /> Add Item
           </button>

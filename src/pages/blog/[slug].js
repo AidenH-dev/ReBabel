@@ -138,7 +138,7 @@ export default function BlogPost({ post, relatedPosts }) {
         />
       </Head>
 
-      <main className="dark:bg-[#141f25] bg-white min-h-screen">
+      <main className="dark:bg-surface-page bg-white min-h-screen">
         {/* Hero/Header Section */}
         {image && (
           <div className="relative h-96 dark:bg-gray-900 bg-gray-200 overflow-hidden">
@@ -148,7 +148,7 @@ export default function BlogPost({ post, relatedPosts }) {
               fill
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 dark:bg-gradient-to-t dark:from-[#141f25] dark:to-transparent bg-gradient-to-t from-white to-transparent" />
+            <div className="absolute inset-0 dark:bg-gradient-to-t dark:from-surface-page dark:to-transparent bg-gradient-to-t from-white to-transparent" />
           </div>
         )}
 
@@ -157,7 +157,7 @@ export default function BlogPost({ post, relatedPosts }) {
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <Link
               href="/blog"
-              className="flex items-center gap-2 dark:text-gray-400 dark:hover:text-[#e30a5f] text-gray-600 hover:text-[#e30a5f] transition-colors font-fredoka font-medium"
+              className="flex items-center gap-2 dark:text-gray-400 dark:hover:text-brand-pink text-gray-600 hover:text-brand-pink transition-colors font-fredoka font-medium"
             >
               <FiArrowLeft size={20} />
               Back to Blog
@@ -170,7 +170,7 @@ export default function BlogPost({ post, relatedPosts }) {
                 title="Copy link"
               >
                 <FiCopy
-                  className="dark:text-gray-400 dark:hover:text-[#e30a5f] text-gray-600 hover:text-[#e30a5f]"
+                  className="dark:text-gray-400 dark:hover:text-brand-pink text-gray-600 hover:text-brand-pink"
                   size={20}
                 />
                 {copied && (
@@ -196,7 +196,7 @@ export default function BlogPost({ post, relatedPosts }) {
                 <Link
                   key={tag}
                   href={`/blog?tag=${tag}`}
-                  className="px-3 py-1 bg-[#e30a5f] bg-opacity-20 text-white text-sm rounded-full hover:bg-opacity-30 transition-colors font-fredoka"
+                  className="px-3 py-1 bg-brand-pink bg-opacity-20 text-white text-sm rounded-full hover:bg-opacity-30 transition-colors font-fredoka"
                 >
                   {tag}
                 </Link>
@@ -271,7 +271,7 @@ export default function BlogPost({ post, relatedPosts }) {
             </p>
             <Link
               href="/learn"
-              className="inline-block px-8 py-3 bg-[#e30a5f] hover:bg-[#ff1f75] text-white rounded-lg font-fredoka font-medium transition-colors"
+              className="inline-block px-8 py-3 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-fredoka font-medium transition-colors"
             >
               Start Learning
             </Link>
