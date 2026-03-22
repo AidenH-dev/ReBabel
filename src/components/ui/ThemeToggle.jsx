@@ -1,18 +1,13 @@
 import { useTheme } from '@/contexts/ThemeContext';
-import {
-  TbSun,
-  TbMoon,
-  TbMoonStars,
-  TbLeaf,
-  TbDeviceDesktop,
-} from 'react-icons/tb';
+import { FiMonitor, FiSun, FiMoon } from 'react-icons/fi';
+import { TbCoffee, TbSunset2 } from 'react-icons/tb';
 
 const THEMES = [
-  { key: 'system', icon: TbDeviceDesktop, label: 'System' },
-  { key: 'light', icon: TbSun, label: 'Light' },
-  { key: 'dark', icon: TbMoon, label: 'Dark' },
-  { key: 'cream', icon: TbLeaf, label: 'Cream' },
-  { key: 'dusk', icon: TbMoonStars, label: 'Dusk' },
+  { key: 'system', icon: FiMonitor, label: 'System' },
+  { key: 'light', icon: FiSun, label: 'Light' },
+  { key: 'dark', icon: FiMoon, label: 'Dark' },
+  { key: 'cream', icon: TbCoffee, label: 'Cream' },
+  { key: 'dusk', icon: TbSunset2, label: 'Dusk' },
 ];
 
 /**
