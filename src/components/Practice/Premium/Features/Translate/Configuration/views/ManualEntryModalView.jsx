@@ -1,8 +1,8 @@
 // Manual Entry Modal View
 // Pure presentational component for manually adding temporary vocab/grammar items
 
-import { FaTimes } from 'react-icons/fa';
 import { useState } from 'react';
+import BaseModal from '@/components/ui/BaseModal';
 
 export default function ManualEntryModalView({
   isOpen,
@@ -11,8 +11,6 @@ export default function ManualEntryModalView({
   onConfirm,
 }) {
   const [entries, setEntries] = useState('');
-
-  if (!isOpen) return null;
 
   const handleConfirm = () => {
     // Parse entries (one per line)
@@ -49,39 +47,14 @@ export default function ManualEntryModalView({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="bg-surface-card rounded-xl shadow-xl max-w-lg w-full">
-        <div className="flex items-center justify-between p-4 border-b border-border-subtle">
-          <h2 className="text-lg font-semibold text-black dark:text-white">
-            Add Temporary {missingType === 'grammar' ? 'Grammar' : 'Vocabulary'}
-          </h2>
-          <button
-            onClick={handleClose}
-            className="text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white"
-          >
-            <FaTimes />
-          </button>
-        </div>
-
-        <div className="p-4">
-          <p className="text-sm text-black/60 dark:text-white/60 mb-3">
-            {missingType === 'grammar'
-              ? 'Enter grammar patterns (one per line)'
-              : 'Enter vocabulary in format: english, kana, kanji (one per line)'}
-          </p>
-          <textarea
-            value={entries}
-            onChange={(e) => setEntries(e.target.value)}
-            placeholder={
-              missingType === 'grammar'
-                ? 'です\nました\nている'
-                : 'hello, こんにちは, 今日は\nthank you, ありがとう, 有難う'
-            }
-            className="w-full h-48 p-3 bg-surface-deep rounded-lg border border-border-default text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
-          />
-        </div>
-
-        <div className="flex justify-end gap-2 p-4 border-t border-border-subtle">
+    <BaseModal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="lg"
+      blur={false}
+      title={`Add Temporary ${missingType === 'grammar' ? 'Grammar' : 'Vocabulary'}`}
+      footer={
+        <div className="flex justify-end gap-2">
           <button
             onClick={handleClose}
             className="px-3 py-2 text-sm rounded-lg border border-border-default hover:bg-black/5 dark:hover:bg-white/5 text-black dark:text-white"
@@ -96,7 +69,25 @@ export default function ManualEntryModalView({
             Add Items
           </button>
         </div>
+      }
+    >
+      <div className="p-4">
+        <p className="text-sm text-black/60 dark:text-white/60 mb-3">
+          {missingType === 'grammar'
+            ? 'Enter grammar patterns (one per line)'
+            : 'Enter vocabulary in format: english, kana, kanji (one per line)'}
+        </p>
+        <textarea
+          value={entries}
+          onChange={(e) => setEntries(e.target.value)}
+          placeholder={
+            missingType === 'grammar'
+              ? 'です\nました\nている'
+              : 'hello, こんにちは, 今日は\nthank you, ありがとう, 有難う'
+          }
+          className="w-full h-48 p-3 bg-surface-deep rounded-lg border border-border-default text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-pink"
+        />
       </div>
-    </div>
+    </BaseModal>
   );
 }
