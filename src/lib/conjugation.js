@@ -8,6 +8,10 @@
  *   conjugate(kana, category, verbGroup, form) -> { answer, acceptableAnswers }
  *   generateQuestions(items, selectedVerbForms, selectedAdjForms, count, randomMode) -> questions[]
  */
+import {
+  VERB_FORMS,
+  ADJECTIVE_FORMS,
+} from '@/components/Conjugation/shared/models/conjugationConfig';
 
 // ─── Godan stem map ──────────────────────────────────────────────
 // Maps dictionary-form ending -> replacement kana for each stem type
@@ -478,66 +482,18 @@ export function generateQuestions(
   count,
   randomMode
 ) {
-  // Form key/label definitions (must stay in sync with conjugationConfig.js)
-  const VERB_FORM_KEYS = [
-    'dictionary',
-    'nai',
-    'ta',
-    'nakatta',
-    'te',
-    'masu',
-    'masen',
-    'mashita',
-    'masendeshita',
-    'tai',
-    'takunai',
-    'potential',
-    'passive',
-    'causative',
-    'causativePassive',
-    'imperative',
-    'volitional',
-    'conditional',
-    'tara',
-  ];
-  const ADJ_FORM_KEYS = [
-    'PresentAffirmative',
-    'PresentNegative',
-    'PastAffirmative',
-    'PastNegative',
-    'TeForm',
-    'Adverbial',
-  ];
-
-  const VERB_FORM_LABELS = {
-    dictionary: { label: 'Dictionary', japanese: '辞書' },
-    nai: { label: 'Negative', japanese: 'ない' },
-    ta: { label: 'Past', japanese: 'た' },
-    nakatta: { label: 'Past Negative', japanese: 'なかった' },
-    te: { label: 'Te-form', japanese: 'て' },
-    masu: { label: 'Masu', japanese: 'ます' },
-    masen: { label: 'Masu Negative', japanese: 'ません' },
-    mashita: { label: 'Masu Past', japanese: 'ました' },
-    masendeshita: { label: 'Masu Past Neg', japanese: 'ませんでした' },
-    tai: { label: 'Tai-form (want)', japanese: 'たい' },
-    takunai: { label: 'Tai Negative', japanese: 'たくない' },
-    potential: { label: 'Potential', japanese: '可能' },
-    passive: { label: 'Passive', japanese: '受身' },
-    causative: { label: 'Causative', japanese: '使役' },
-    causativePassive: { label: 'Causative-passive', japanese: '使役受身' },
-    imperative: { label: 'Imperative', japanese: '命令' },
-    volitional: { label: 'Volitional', japanese: '意向' },
-    conditional: { label: 'Conditional (ば)', japanese: '条件' },
-    tara: { label: 'Conditional (たら)', japanese: 'たら' },
-  };
-  const ADJ_FORM_LABELS = {
-    PresentAffirmative: { label: 'Present Affirmative', japanese: '基本' },
-    PresentNegative: { label: 'Present Negative', japanese: 'ない' },
-    PastAffirmative: { label: 'Past Affirmative', japanese: 'かった' },
-    PastNegative: { label: 'Past Negative', japanese: 'くなかった' },
-    TeForm: { label: 'Te-form', japanese: 'くて' },
-    Adverbial: { label: 'Adverbial', japanese: 'く/に' },
-  };
+  // Derive keys and label maps from shared conjugation config
+  const VERB_FORM_KEYS = VERB_FORMS.map((f) => f.key);
+  const ADJ_FORM_KEYS = ADJECTIVE_FORMS.map((f) => f.key);
+  const VERB_FORM_LABELS = Object.fromEntries(
+    VERB_FORMS.map((f) => [f.key, { label: f.label, japanese: f.japanese }])
+  );
+  const ADJ_FORM_LABELS = Object.fromEntries(
+    ADJECTIVE_FORMS.map((f) => [
+      f.key,
+      { label: f.label, japanese: f.japanese },
+    ])
+  );
 
   // Separate items by category, skip items without kana
   const verbs = items.filter((i) => i.lexical_category === 'verb' && i.kana);

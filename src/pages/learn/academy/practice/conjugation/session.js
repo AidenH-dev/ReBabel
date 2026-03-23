@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import SessionStatHeaderView from '@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView';
-import MasterConjugationCard from '@/components/Practice/Premium/Features/Conjugation/Session/controllers/MasterConjugationCard';
-import ConjugationEditModal from '@/components/Practice/Premium/Features/Conjugation/Session/views/ConjugationEditModal';
+import ConjugationCard from '@/components/Conjugation/shared/views/ConjugationCard';
+import ConjugationEditModal from '@/components/Conjugation/Premium/ConjugationEditModal';
 import SummaryView from '@/components/Set/Features/Field-Card-Session/shared/views/SummaryView';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -350,7 +350,7 @@ export default function ConjugationPracticeSession() {
         onExit={handleExit}
       />
 
-      <MasterConjugationCard
+      <ConjugationCard
         questions={questions}
         currentIndex={currentIndex}
         onAnswerSubmitted={handleAnswerSubmitted}

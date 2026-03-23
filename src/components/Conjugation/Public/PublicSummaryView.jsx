@@ -1,5 +1,5 @@
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import SignupCTA from './SignupCTA';
+import SignupCTA from '@/components/Conjugation/Public/SignupCTA';
 
 export default function PublicSummaryView({
   sessionStats,

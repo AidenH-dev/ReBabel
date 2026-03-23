@@ -7,9 +7,9 @@ import {
   VERB_FORMS,
   ADJECTIVE_FORMS,
   CONJUGATABLE_CATEGORIES,
-} from '../models/conjugationConfig';
+} from '@/components/Conjugation/shared/models/conjugationConfig';
 
-export default function ConjugationConfigPanel({
+export default function PremiumConfigPanel({
   availableSets,
   selectedSets,
   onSelectSet,

@@ -17,12 +17,12 @@ import { BeginnerPackPopup } from '@/components/popups/sets/newUserPopup';
 import { LuAlarmClock } from 'react-icons/lu';
 import ConfigPanelView from '@/components/Practice/Premium/Features/Translate/Configuration/views/ConfigPanelView';
 import CardSwapCustomItemModal from '@/components/Practice/Premium/Features/Translate/Configuration/views/CardSwapCustomItemModal';
-import ConjugationConfigPanel from '@/components/Practice/Premium/Features/Conjugation/Configuration/views/ConjugationConfigPanel';
+import PremiumConfigPanel from '@/components/Conjugation/Premium/PremiumConfigPanel';
 import {
   createInitialVerbOptions,
   createInitialAdjectiveOptions,
   filterConjugatableItems,
-} from '@/components/Practice/Premium/Features/Conjugation/Configuration/models/conjugationConfig';
+} from '@/components/Conjugation/shared/models/conjugationConfig';
 import { usePremium } from '@/contexts/PremiumContext';
 import { InlineError } from '@/components/ui/errors';
 
@@ -745,7 +745,7 @@ export default function VocabularyDashboard() {
                   <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
                     Conjugation Practice
                   </h2>
-                  <ConjugationConfigPanel
+                  <PremiumConfigPanel
                     availableSets={recentsSets}
                     selectedSets={conjugationSelectedSets}
                     onSelectSet={handleConjugationSelectSet}

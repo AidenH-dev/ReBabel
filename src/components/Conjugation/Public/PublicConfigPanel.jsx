@@ -8,7 +8,7 @@ import {
   ADJECTIVE_FORMS,
   createInitialVerbOptions,
   createInitialAdjectiveOptions,
-} from '@/components/Practice/Premium/Features/Conjugation/Configuration/models/conjugationConfig';
+} from '@/components/Conjugation/shared/models/conjugationConfig';
 
 export default function PublicConfigPanel({
   levelStats,

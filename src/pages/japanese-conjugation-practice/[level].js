@@ -6,10 +6,10 @@ import { useRouter } from 'next/router';
 import fs from 'fs';
 import path from 'path';
 import { generateQuestions } from '@/lib/conjugation';
-import PublicConfigPanel from '@/components/ConjugationPractice/PublicConfigPanel';
-import PublicConjugationCard from '@/components/ConjugationPractice/PublicConjugationCard';
-import PublicSessionHeader from '@/components/ConjugationPractice/PublicSessionHeader';
-import PublicSummaryView from '@/components/ConjugationPractice/PublicSummaryView';
+import PublicConfigPanel from '@/components/Conjugation/Public/PublicConfigPanel';
+import ConjugationCard from '@/components/Conjugation/shared/views/ConjugationCard';
+import SessionStatHeaderView from '@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView';
+import PublicSummaryView from '@/components/Conjugation/Public/PublicSummaryView';
 
 const VALID_LEVELS = ['n5', 'n4', 'n3', 'n2', 'n1'];
 
@@ -389,14 +389,25 @@ export default function ConjugationPracticeLevelPage({
 
           {phase === 'session' && (
             <>
-              <PublicSessionHeader
-                level={level}
+              <SessionStatHeaderView
+                setTitle={`JLPT N${level} Conjugation`}
                 sessionStats={sessionStats}
                 currentIndex={currentIndex}
                 totalQuestions={questions.length}
+                currentPhase={null}
+                completedPhases={[]}
+                phases={[]}
+                currentPhaseIndex={-1}
+                currentPhaseConfig={null}
+                CurrentPhaseIcon={null}
+                progressInPhase={
+                  questions.length > 0
+                    ? Math.round((currentIndex / questions.length) * 100)
+                    : 0
+                }
                 onExit={() => setPhase('config')}
               />
-              <PublicConjugationCard
+              <ConjugationCard
                 questions={questions}
                 currentIndex={currentIndex}
                 onAnswerSubmitted={handleAnswerSubmitted}

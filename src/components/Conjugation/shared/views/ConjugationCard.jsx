@@ -3,7 +3,7 @@ import TypedResponseView from '@/components/Set/Features/Field-Card-Session/shar
 import { FiEdit2 } from 'react-icons/fi';
 import { FaTimes } from 'react-icons/fa';
 
-export default function MasterConjugationCard({
+export default function ConjugationCard({
   questions,
   currentIndex,
   onAnswerSubmitted,

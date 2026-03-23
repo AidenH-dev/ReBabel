@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { TbLanguageHiragana } from 'react-icons/tb';
 import { FaChevronDown } from 'react-icons/fa';
-import SignupCTA from '@/components/ConjugationPractice/SignupCTA';
+import SignupCTA from '@/components/Conjugation/Public/SignupCTA';
 
 export async function getStaticProps() {
   const levels = {};
