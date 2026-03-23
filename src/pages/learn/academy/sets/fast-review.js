@@ -107,6 +107,7 @@ export default function FastReview() {
 
   // ============ REFS ============
   const translationInputRef = useRef(null);
+  const sessionInitializedRef = useRef(false);
   const leveledItemIdsRef = useRef(new Set());
   const mistakesPerItemRef = useRef(mistakesPerItem);
   mistakesPerItemRef.current = mistakesPerItem;
@@ -233,9 +234,10 @@ export default function FastReview() {
     fetchAllDueItems();
   }, []);
 
-  // Initialize active arrays when data is loaded
+  // Initialize active arrays when data is loaded (once only)
   useEffect(() => {
-    if (itemData.length > 0) {
+    if (itemData.length > 0 && !sessionInitializedRef.current) {
+      sessionInitializedRef.current = true;
       startAnalyticsSession();
       setActiveTranslationArray([...translationArray]);
       setActiveMCArray([...multipleChoiceArray]);
@@ -632,6 +634,12 @@ export default function FastReview() {
         prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
       );
       setActiveTranslationArray((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+      setMultipleChoiceArray((prev) =>
+        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
+      );
+      setActiveMCArray((prev) =>
         prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
       );
 

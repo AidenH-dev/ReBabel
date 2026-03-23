@@ -599,49 +599,6 @@ export default function Settings() {
                   </div>
                 </div>
 
-                {/* Push Notifications Test Section - Only show in native app
-              {isNativeApp && (
-                <div className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 dusk:bg-[#171c26] flex items-center justify-center flex-shrink-0">
-                      <FiBell className="text-lg text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                        Push Notifications
-                      </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 dusk:text-[#a8b2c1]">
-                        {pushStatus === 'success'
-                          ? 'Test notification sent!'
-                          : pushStatus === 'error'
-                          ? pushError
-                          : 'Test push notification delivery'}
-                      </p>
-                    </div>
-                    <button
-                      onClick={handleTestPush}
-                      disabled={pushLoading}
-                      className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors disabled:opacity-50 ${
-                        pushStatus === 'success'
-                          ? "border-green-500 text-green-600 dark:text-green-400"
-                          : pushStatus === 'error'
-                          ? "border-red-500 text-red-600 dark:text-red-400"
-                          : "border-gray-300 dark:border-gray-600 dusk:border-[#3a4556] text-gray-700 dark:text-gray-300 dusk:text-[#a8b2c1] hover:bg-gray-50 dark:hover:bg-gray-800 dusk:hover:bg-[#171c26]"
-                      }`}
-                    >
-                      {pushLoading ? (
-                        <FiLoader className="text-sm animate-spin" />
-                      ) : pushStatus === 'success' ? (
-                        <FiCheck className="text-sm" />
-                      ) : (
-                        <FiBell className="text-sm" />
-                      )}
-                      {pushLoading ? 'Sending...' : pushStatus === 'success' ? 'Sent!' : 'Test'}
-                    </button>
-                  </div>
-                </div>
-              )}*/}
-
                 {/* Sign Out Section */}
                 <div className="p-4">
                   <div className="flex items-center gap-3">
