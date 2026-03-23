@@ -92,6 +92,19 @@ export function PremiumProvider({ children }) {
     }
   }, [user, userLoading, fetchSubscription, fetchSessionCount]);
 
+  // Re-fetch subscription + session count when user returns to tab
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && user) {
+        fetchSubscription();
+        fetchSessionCount();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () =>
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [user, fetchSubscription, fetchSessionCount]);
+
   // Reset session count at midnight (check every minute)
   useEffect(() => {
     const checkMidnight = () => {

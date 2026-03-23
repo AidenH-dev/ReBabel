@@ -54,6 +54,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "stripe": "^20.2.0",
+    "swr": "^2.4.1",
     "wanakana": "^5.3.1"
   },
   "devDependencies": {
