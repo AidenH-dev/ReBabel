@@ -27,13 +27,18 @@ import {
 import { transformItems } from '@/lib/study/itemTransform';
 import { generateTranslationItems } from '@/lib/study/translationGeneration';
 import {
-  buildEditableItem,
-  toUpdateRequest,
   mergeIntoBaseItem,
   mergeIntoQuestionItem,
 } from '@/lib/study/itemEditing';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
 import { clientLog } from '@/lib/clientLogger';
+
+// Shared study hooks
+import useQuestionState from '@/hooks/study/useQuestionState';
+import useSessionStats from '@/hooks/study/useSessionStats';
+import usePhaseProgress from '@/hooks/study/usePhaseProgress';
+import useItemEditing from '@/hooks/study/useItemEditing';
+import useSrsLevelTracking from '@/hooks/study/useSrsLevelTracking';
 
 export default function FastReview() {
   const router = useRouter();
@@ -58,59 +63,62 @@ export default function FastReview() {
   const [activeTranslationArray, setActiveTranslationArray] = useState([]);
   const [activeMCArray, setActiveMCArray] = useState([]);
 
-  // ============ QUESTION STATE (Translation) ============
-  const [showResult, setShowResult] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [userAnswer, setUserAnswer] = useState('');
+  // ============ SHARED HOOKS ============
+  const {
+    showResult,
+    setShowResult,
+    isCorrect,
+    setIsCorrect,
+    userAnswer,
+    setUserAnswer,
+    selectedOption,
+    setSelectedOption,
+    currentShuffledOptions,
+    setCurrentShuffledOptions,
+    resetQuestion,
+  } = useQuestionState();
 
-  // ============ QUESTION STATE (Multiple Choice) ============
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [currentShuffledOptions, setCurrentShuffledOptions] = useState([]);
+  const {
+    sessionStats,
+    answeredItems,
+    animateAccuracy,
+    recordAnswer,
+    retractLastAnswer,
+    triggerAccuracyAnimation,
+  } = useSessionStats();
 
-  // ============ ITEM EDITING STATE ============
-  const [editingItem, setEditingItem] = useState(null);
-  const [isSavingEdit, setIsSavingEdit] = useState(false);
-  const [editError, setEditError] = useState(null);
+  const {
+    phaseProgress,
+    setPhaseProgress,
+    completedPhases,
+    markItemCompleted,
+  } = usePhaseProgress();
 
-  // ============ SUMMARY STATE ============
-  const [animateAccuracy, setAnimateAccuracy] = useState(false);
+  const {
+    editingItem,
+    isSavingEdit,
+    editError,
+    openEdit,
+    closeEdit,
+    saveEdit,
+  } = useItemEditing();
 
-  // ============ SESSION TRACKING ============
-  const [sessionStats, setSessionStats] = useState({
-    correct: 0,
-    incorrect: 0,
-    totalAttempts: 0,
-    accuracy: 0,
-  });
-  const sessionStatsRef = useRef(sessionStats);
-  sessionStatsRef.current = sessionStats;
-  const [answeredItems, setAnsweredItems] = useState([]);
-
-  // ============ PHASE PROGRESS TRACKING ============
-  const [phaseProgress, setPhaseProgress] = useState({
-    translation: {
-      completedItems: new Set(),
-      totalUniqueItems: 0,
-    },
-  });
-  const [completedPhases, setCompletedPhases] = useState([]);
-
-  // ============ SRS LEVEL TRACKING ============
-  const [itemSRSLevels, setItemSRSLevels] = useState({}); // Map of originalId -> { level, mistakes }
-  const [mistakesPerItem, setMistakesPerItem] = useState({}); // Map of originalId -> number of mistakes in this session
-  const [showLevelChange, setShowLevelChange] = useState(false);
-  const [currentLevelChange, setCurrentLevelChange] = useState(null); // { item, oldLevel, newLevel }
-  const [
-    shouldGoToSummaryAfterLevelChange,
+  const {
+    mistakesPerItemRef,
+    showLevelChange,
+    currentLevelChange,
     setShouldGoToSummaryAfterLevelChange,
-  ] = useState(false);
+    leveledItemIdsRef,
+    initLevels,
+    recordMistake,
+    retractMistake,
+    checkAndTriggerLevelChange,
+    handleLevelChangeComplete,
+  } = useSrsLevelTracking();
 
   // ============ REFS ============
   const translationInputRef = useRef(null);
   const sessionInitializedRef = useRef(false);
-  const leveledItemIdsRef = useRef(new Set());
-  const mistakesPerItemRef = useRef(mistakesPerItem);
-  mistakesPerItemRef.current = mistakesPerItem;
 
   // ============ ANALYTICS ============
   const {
@@ -180,14 +188,7 @@ export default function FastReview() {
         // ============================================
         // Initialize SRS levels for each item
         // ============================================
-        const srsLevelsMap = {};
-        const mistakesMap = {};
-        transformedItemData.forEach((item) => {
-          srsLevelsMap[item.id] = item.srs_level || 1;
-          mistakesMap[item.id] = 0; // Start with 0 mistakes
-        });
-        setItemSRSLevels(srsLevelsMap);
-        setMistakesPerItem(mistakesMap);
+        initLevels(transformedItemData);
 
         // ============================================
         // QUESTION ARRAYS: Separate by Type
@@ -301,13 +302,10 @@ export default function FastReview() {
   // Handle Multiple Choice option selection
   const handleMCOptionSelect = (selectedAnswer) => {
     const currentItem = activeMCArray[currentIndex];
-    const isCorrect = validateMultipleChoice(
-      selectedAnswer,
-      currentItem.answer
-    );
+    const correct = validateMultipleChoice(selectedAnswer, currentItem.answer);
 
     handleAnswerSubmitted({
-      isCorrect,
+      isCorrect: correct,
       userAnswer: selectedAnswer,
       correctAnswer: currentItem.answer,
       questionId: currentItem.id,
@@ -318,7 +316,7 @@ export default function FastReview() {
 
     setSelectedOption(selectedAnswer);
     setShowResult(true);
-    setIsCorrect(isCorrect);
+    setIsCorrect(correct);
   };
 
   // Handle answer submission for Translation phase
@@ -326,54 +324,24 @@ export default function FastReview() {
     const currentItem = getCurrentArray()[currentIndex];
     const originalId = currentItem.originalId;
 
-    // Record the answer
-    setAnsweredItems((prev) => [
-      ...prev,
-      {
-        ...answerData,
-        phase: currentPhase,
-        timestamp: Date.now(),
-        originalId: originalId,
-        setId: currentItem.setId,
-        setTitle: currentItem.setTitle,
-      },
-    ]);
-
-    // Update session stats
-    setSessionStats((prev) => {
-      const newCorrect = prev.correct + (answerData.isCorrect ? 1 : 0);
-      const newIncorrect = prev.incorrect + (answerData.isCorrect ? 0 : 1);
-      const newTotal = prev.totalAttempts + 1;
-
-      return {
-        correct: newCorrect,
-        incorrect: newIncorrect,
-        totalAttempts: newTotal,
-        accuracy: Math.round((newCorrect / newTotal) * 100),
-      };
+    // Record the answer via hook
+    recordAnswer({
+      ...answerData,
+      phase: currentPhase,
+      timestamp: Date.now(),
+      originalId: originalId,
+      setId: currentItem.setId,
+      setTitle: currentItem.setTitle,
     });
 
     // Track mistakes per original item
     if (!answerData.isCorrect) {
-      setMistakesPerItem((prev) => ({
-        ...prev,
-        [originalId]: (prev[originalId] || 0) + 1,
-      }));
+      recordMistake(originalId);
     }
 
     // Track unique items completed
     if (answerData.isCorrect) {
-      setPhaseProgress((prev) => {
-        const newCompletedItems = new Set(prev[currentPhase].completedItems);
-        newCompletedItems.add(currentItem.id);
-        return {
-          ...prev,
-          [currentPhase]: {
-            ...prev[currentPhase],
-            completedItems: newCompletedItems,
-          },
-        };
-      });
+      markItemCompleted(currentPhase, currentItem.id);
     }
 
     // If incorrect, add current item to end of array
@@ -398,11 +366,16 @@ export default function FastReview() {
 
     const isLastQuestion = currentIndex >= currentArray.length - 1;
 
-    const willShowLevelChange = checkAndTriggerLevelChange(originalId);
+    const willShowLevelChange = checkAndTriggerLevelChange(
+      originalId,
+      translationArray,
+      phaseProgress,
+      itemData
+    );
 
     // If this is the last question AND we're showing a level change,
     // wait for the level change animation to complete before going to summary.
-    // Don't reset UI state — keep showing the answered card behind the animation.
+    // Don't reset UI state -- keep showing the answered card behind the animation.
     if (isLastQuestion && willShowLevelChange) {
       setShouldGoToSummaryAfterLevelChange(true);
       return;
@@ -420,83 +393,6 @@ export default function FastReview() {
     }
   };
 
-  // Check if all variations of an item are completed and trigger level change
-  const checkAndTriggerLevelChange = (originalId) => {
-    if (leveledItemIdsRef.current.has(originalId)) {
-      return false;
-    }
-
-    const questionsForItem = translationArray.filter(
-      (q) => q.originalId === originalId
-    );
-    const totalVariations = questionsForItem.length;
-
-    const completedVariations = questionsForItem.filter((q) =>
-      phaseProgress.translation.completedItems.has(q.id)
-    ).length;
-
-    if (completedVariations === totalVariations) {
-      const originalItem = itemData.find((item) => item.id === originalId);
-      if (!originalItem) return false;
-
-      const oldLevel = itemSRSLevels[originalId] || 1;
-      const mistakes = mistakesPerItem[originalId] || 0;
-
-      const newLevel =
-        mistakes === 0 ? oldLevel + 1 : Math.max(1, oldLevel - 1);
-
-      setItemSRSLevels((prev) => ({
-        ...prev,
-        [originalId]: newLevel,
-      }));
-
-      setCurrentLevelChange({
-        item: originalItem,
-        oldLevel,
-        newLevel,
-      });
-      setShowLevelChange(true);
-      leveledItemIdsRef.current.add(originalId);
-
-      saveSRSLevel(originalItem.uuid, newLevel);
-
-      return true;
-    }
-
-    return false;
-  };
-
-  // Save SRS level to database
-  const saveSRSLevel = async (uuid, newLevel) => {
-    try {
-      const response = await fetch(
-        `/api/database/v2/srs/item/create-entry/${uuid}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            srs_level: newLevel,
-            scope: 'fast_review_multi_set',
-          }),
-        }
-      );
-
-      const result = await response.json();
-
-      if (!result.success) {
-        clientLog.error('fast_review.save_srs_level_failed', {
-          error: result.error,
-        });
-      }
-    } catch (error) {
-      clientLog.error('fast_review.save_srs_level_error', {
-        error: error?.message || String(error),
-      });
-    }
-  };
-
   // Handle phase completion and transition
   const handlePhaseComplete = () => {
     if (currentPhase === 'multiple-choice') {
@@ -507,11 +403,11 @@ export default function FastReview() {
         setUserAnswer('');
       } else {
         setCurrentPhase('complete');
-        setTimeout(() => setAnimateAccuracy(true), 100);
+        triggerAccuracyAnimation();
       }
     } else if (currentPhase === 'translation') {
       setCurrentPhase('complete');
-      setTimeout(() => setAnimateAccuracy(true), 100);
+      triggerAccuracyAnimation();
     }
   };
 
@@ -520,14 +416,14 @@ export default function FastReview() {
   const handleTranslationCheck = () => {
     const currentItem = activeTranslationArray[currentIndex];
 
-    const isCorrect = validateTypedAnswer(
+    const correct = validateTypedAnswer(
       userAnswer,
       currentItem.answer,
       currentItem.answerType
     );
 
     handleAnswerSubmitted({
-      isCorrect,
+      isCorrect: correct,
       userAnswer,
       correctAnswer: currentItem.answer,
       questionId: currentItem.id,
@@ -541,45 +437,20 @@ export default function FastReview() {
     const currentItem = activeTranslationArray[currentIndex];
     const originalId = currentItem.originalId;
 
-    setAnsweredItems((prev) => prev.slice(0, -1));
+    // Remove last answered item and reverse stats
+    retractLastAnswer();
 
-    setSessionStats((prev) => {
-      const newIncorrect = Math.max(0, prev.incorrect - 1);
-      const newCorrect = prev.correct + 1;
-      const newTotal = prev.totalAttempts;
-      const newAccuracy =
-        newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0;
+    // Decrement mistake count
+    retractMistake(originalId);
 
-      return {
-        ...prev,
-        correct: newCorrect,
-        incorrect: newIncorrect,
-        accuracy: newAccuracy,
-      };
-    });
+    // Mark item as completed (user claims correct)
+    markItemCompleted(currentPhase, currentItem.id);
 
-    setMistakesPerItem((prev) => ({
-      ...prev,
-      [originalId]: Math.max(0, (prev[originalId] || 0) - 1),
-    }));
-
-    setPhaseProgress((prev) => {
-      const newCompletedItems = new Set(prev[currentPhase].completedItems);
-      newCompletedItems.add(currentItem.id);
-      return {
-        ...prev,
-        [currentPhase]: {
-          ...prev[currentPhase],
-          completedItems: newCompletedItems,
-        },
-      };
-    });
-
+    // Remove the duplicate item from the end of the translation array
     setActiveTranslationArray((prev) => prev.slice(0, -1));
 
-    setShowResult(false);
-    setIsCorrect(false);
-    setUserAnswer('');
+    // Reset UI state
+    resetQuestion();
 
     if (translationInputRef?.current) {
       translationInputRef.current.focus();
@@ -588,70 +459,14 @@ export default function FastReview() {
 
   // ============ ITEM EDITING HANDLERS ============
 
-  const handleOpenEditItem = (questionItem) => {
-    const editable = buildEditableItem(questionItem);
-    if (!editable) {
-      setEditError('This item cannot be edited right now.');
-      return;
-    }
-
-    setEditError(null);
-    setEditingItem(editable);
-  };
-
-  const handleCloseEditItem = () => {
-    if (isSavingEdit) return;
-    setEditingItem(null);
-    setEditError(null);
-  };
-
   const handleSaveEditedItem = async (updatedItem) => {
-    setIsSavingEdit(true);
-    setEditError(null);
-
-    try {
-      const request = toUpdateRequest(updatedItem);
-      const response = await fetch(
-        '/api/database/v2/sets/update-from-full-set',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(request),
-        }
-      );
-
-      const result = await response.json();
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Failed to update item');
-      }
-
-      setItemData((prev) =>
-        prev.map((item) => mergeIntoBaseItem(item, updatedItem))
-      );
-      setTranslationArray((prev) =>
-        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
-      );
-      setActiveTranslationArray((prev) =>
-        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
-      );
-      setMultipleChoiceArray((prev) =>
-        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
-      );
-      setActiveMCArray((prev) =>
-        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
-      );
-
-      setEditingItem(null);
-    } catch (error) {
-      clientLog.error('fast_review.edit_item_failed', {
-        error: error?.message || String(error),
-      });
-      setEditError(error.message || 'Failed to update item');
-    } finally {
-      setIsSavingEdit(false);
-    }
+    await saveEdit(updatedItem, [
+      { setState: setItemData, mergeFn: mergeIntoBaseItem },
+      { setState: setTranslationArray, mergeFn: mergeIntoQuestionItem },
+      { setState: setActiveTranslationArray, mergeFn: mergeIntoQuestionItem },
+      { setState: setMultipleChoiceArray, mergeFn: mergeIntoQuestionItem },
+      { setState: setActiveMCArray, mergeFn: mergeIntoQuestionItem },
+    ]);
   };
 
   // ============ GENERAL HANDLERS ============
@@ -661,14 +476,8 @@ export default function FastReview() {
     router.push('/learn/academy/sets');
   };
 
-  const handleLevelChangeComplete = () => {
-    setShowLevelChange(false);
-    setCurrentLevelChange(null);
-
-    if (shouldGoToSummaryAfterLevelChange) {
-      setShouldGoToSummaryAfterLevelChange(false);
-      handlePhaseComplete();
-    }
+  const onLevelChangeComplete = () => {
+    handleLevelChangeComplete(handlePhaseComplete);
   };
 
   // ============ COMPUTED VALUES ============
@@ -790,7 +599,7 @@ export default function FastReview() {
                   item={currentLevelChange.item}
                   oldLevel={currentLevelChange.oldLevel}
                   newLevel={currentLevelChange.newLevel}
-                  onComplete={handleLevelChangeComplete}
+                  onComplete={onLevelChangeComplete}
                 />
               )}
 
@@ -846,7 +655,7 @@ export default function FastReview() {
                     onCheckAnswer={handleTranslationCheck}
                     onNext={handleNext}
                     onRetry={handleTranslationRetry}
-                    onEditItem={handleOpenEditItem}
+                    onEditItem={openEdit}
                     disableKeyboardShortcuts={Boolean(editingItem)}
                   />
                 )}
@@ -860,7 +669,7 @@ export default function FastReview() {
         isOpen={Boolean(editingItem)}
         isSaving={isSavingEdit}
         error={editError}
-        onClose={handleCloseEditItem}
+        onClose={closeEdit}
         onSave={handleSaveEditedItem}
       />
     </AuthenticatedLayout>

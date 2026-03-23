@@ -28,14 +28,18 @@ import {
 import { transformItems } from '@/lib/study/itemTransform';
 import { generateTranslationItems } from '@/lib/study/translationGeneration';
 import {
-  buildEditableItem,
-  toUpdateRequest,
   mergeIntoBaseItem,
   mergeIntoQuestionItem,
 } from '@/lib/study/itemEditing';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
 import { clientLog } from '@/lib/clientLogger';
 import { markSetStudied } from '@/lib/setActions';
+
+// Shared study hooks
+import useQuestionState from '@/hooks/study/useQuestionState';
+import useSessionStats from '@/hooks/study/useSessionStats';
+import usePhaseProgress from '@/hooks/study/usePhaseProgress';
+import useItemEditing from '@/hooks/study/useItemEditing';
 
 export default function LearnNew() {
   const router = useRouter();
@@ -67,44 +71,46 @@ export default function LearnNew() {
   const [activeMCArray, setActiveMCArray] = useState([]);
   const [activeTranslationArray, setActiveTranslationArray] = useState([]);
 
-  // ============ QUESTION STATE (MC & Translation) ============
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [showResult, setShowResult] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [userAnswer, setUserAnswer] = useState('');
-  const [currentShuffledOptions, setCurrentShuffledOptions] = useState([]);
+  // ============ SHARED HOOKS ============
+  const {
+    showResult,
+    setShowResult,
+    isCorrect,
+    setIsCorrect,
+    userAnswer,
+    setUserAnswer,
+    selectedOption,
+    setSelectedOption,
+    currentShuffledOptions,
+    setCurrentShuffledOptions,
+    resetQuestion,
+  } = useQuestionState();
 
-  // ============ ITEM EDITING STATE ============
-  const [editingItem, setEditingItem] = useState(null);
-  const [isSavingEdit, setIsSavingEdit] = useState(false);
-  const [editError, setEditError] = useState(null);
+  const {
+    sessionStats,
+    sessionStatsRef,
+    answeredItems,
+    animateAccuracy,
+    recordAnswer,
+    retractLastAnswer,
+    triggerAccuracyAnimation,
+  } = useSessionStats();
 
-  // ============ SUMMARY STATE ============
-  const [animateAccuracy, setAnimateAccuracy] = useState(false);
+  const {
+    phaseProgress,
+    setPhaseProgress,
+    completedPhases,
+    markItemCompleted,
+  } = usePhaseProgress();
 
-  // ============ SESSION TRACKING ============
-  const [sessionStats, setSessionStats] = useState({
-    correct: 0,
-    incorrect: 0,
-    totalAttempts: 0,
-    accuracy: 0,
-  });
-  const sessionStatsRef = useRef(sessionStats);
-  sessionStatsRef.current = sessionStats;
-  const [answeredItems, setAnsweredItems] = useState([]);
-
-  // ============ PHASE PROGRESS TRACKING ============
-  const [phaseProgress, setPhaseProgress] = useState({
-    'multiple-choice': {
-      completedItems: new Set(),
-      totalUniqueItems: 0,
-    },
-    translation: {
-      completedItems: new Set(),
-      totalUniqueItems: 0,
-    },
-  });
-  const [completedPhases, setCompletedPhases] = useState([]);
+  const {
+    editingItem,
+    isSavingEdit,
+    editError,
+    openEdit,
+    closeEdit,
+    saveEdit,
+  } = useItemEditing();
 
   // ============ REFS ============
   const translationInputRef = useRef(null);
@@ -257,7 +263,7 @@ export default function LearnNew() {
       setActiveTranslationArray([...translationArray]);
 
       // Calculate total questions per phase (each variation counts separately)
-      const progressConfig = {
+      const phaseProgressObj = {
         'multiple-choice': {
           completedItems: new Set(),
           totalUniqueItems: multipleChoiceArray.length,
@@ -266,13 +272,13 @@ export default function LearnNew() {
 
       // Only track translation phase for non-grammar sets
       if (setType !== 'grammar') {
-        progressConfig['translation'] = {
+        phaseProgressObj['translation'] = {
           completedItems: new Set(),
           totalUniqueItems: translationArray.length,
         };
       }
 
-      setPhaseProgress(progressConfig);
+      setPhaseProgress(phaseProgressObj);
     }
   }, [itemData, reviewArray, multipleChoiceArray, translationArray, setType]);
 
@@ -296,48 +302,21 @@ export default function LearnNew() {
 
   // Handle answer submission for MC and Translation phases
   const handleAnswerSubmitted = (answerData) => {
-    // Record the answer
-    setAnsweredItems((prev) => [
-      ...prev,
-      {
-        ...answerData,
-        phase: currentPhase,
-        timestamp: Date.now(),
-      },
-    ]);
-
-    // Update session stats
-    setSessionStats((prev) => {
-      const newCorrect = prev.correct + (answerData.isCorrect ? 1 : 0);
-      const newIncorrect = prev.incorrect + (answerData.isCorrect ? 0 : 1);
-      const newTotal = prev.totalAttempts + 1;
-
-      return {
-        correct: newCorrect,
-        incorrect: newIncorrect,
-        totalAttempts: newTotal,
-        accuracy: Math.round((newCorrect / newTotal) * 100),
-      };
+    // Record the answer via hook
+    recordAnswer({
+      ...answerData,
+      phase: currentPhase,
+      timestamp: Date.now(),
     });
 
     // Track unique items completed for MC and Translation phases
-    // Each variation (e.g., "English → Kana") counts as a separate completion
+    // Each variation (e.g., "English -> Kana") counts as a separate completion
     if (
       answerData.isCorrect &&
       (currentPhase === 'multiple-choice' || currentPhase === 'translation')
     ) {
       const currentItem = getCurrentArray()[currentIndex];
-      setPhaseProgress((prev) => {
-        const newCompletedItems = new Set(prev[currentPhase].completedItems);
-        newCompletedItems.add(currentItem.id); // Use item.id (e.g., "vocab-1-mc-en-kana")
-        return {
-          ...prev,
-          [currentPhase]: {
-            ...prev[currentPhase],
-            completedItems: newCompletedItems,
-          },
-        };
-      });
+      markItemCompleted(currentPhase, currentItem.id);
     }
 
     // If incorrect, add current item to end of array
@@ -390,8 +369,7 @@ export default function LearnNew() {
 
         if (success) {
           setCurrentPhase('complete');
-          // Trigger accuracy bar animation after a short delay
-          setTimeout(() => setAnimateAccuracy(true), 100);
+          triggerAccuracyAnimation();
         }
         // If save fails, stay on multiple-choice phase and show error popup
       } else {
@@ -404,8 +382,7 @@ export default function LearnNew() {
 
       if (success) {
         setCurrentPhase('complete');
-        // Trigger accuracy bar animation after a short delay
-        setTimeout(() => setAnimateAccuracy(true), 100);
+        triggerAccuracyAnimation();
       }
       // If save fails, stay on translation phase and show error popup
     }
@@ -434,10 +411,10 @@ export default function LearnNew() {
 
     const currentItem = activeMCArray[currentIndex];
     // Use shared validation utility
-    const isCorrect = validateMultipleChoice(option, currentItem.answer);
+    const correct = validateMultipleChoice(option, currentItem.answer);
 
     handleAnswerSubmitted({
-      isCorrect,
+      isCorrect: correct,
       userAnswer: option,
       correctAnswer: currentItem.answer,
       questionId: currentItem.id,
@@ -453,14 +430,14 @@ export default function LearnNew() {
     const currentItem = activeTranslationArray[currentIndex];
 
     // Use shared validation utility
-    const isCorrect = validateTypedAnswer(
+    const correct = validateTypedAnswer(
       userAnswer,
       currentItem.answer,
       currentItem.answerType
     );
 
     handleAnswerSubmitted({
-      isCorrect,
+      isCorrect: correct,
       userAnswer,
       correctAnswer: currentItem.answer,
       questionId: currentItem.id,
@@ -481,47 +458,18 @@ export default function LearnNew() {
 
     const currentItem = activeTranslationArray[currentIndex];
 
-    // Remove last answered item
-    setAnsweredItems((prev) => prev.slice(0, -1));
-
-    // Reverse stats changes (remove 1 incorrect, remove 1 total attempt)
-    // Then add 1 correct (user claims they were correct)
-    setSessionStats((prev) => {
-      const newIncorrect = Math.max(0, prev.incorrect - 1);
-      const newCorrect = prev.correct + 1;
-      const newTotal = prev.totalAttempts; // Same total, just switching incorrect to correct
-      const newAccuracy =
-        newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0;
-
-      return {
-        ...prev,
-        correct: newCorrect,
-        incorrect: newIncorrect,
-        accuracy: newAccuracy,
-      };
-    });
+    // Remove last answered item and reverse stats
+    retractLastAnswer();
 
     // Mark item as completed (user claims correct)
-    setPhaseProgress((prev) => {
-      const newCompletedItems = new Set(prev[currentPhase].completedItems);
-      newCompletedItems.add(currentItem.id); // Use item.id for individual variation
-      return {
-        ...prev,
-        [currentPhase]: {
-          ...prev[currentPhase],
-          completedItems: newCompletedItems,
-        },
-      };
-    });
+    markItemCompleted(currentPhase, currentItem.id);
 
     // Remove the duplicate item from the end of the translation array
     // (it was added because the answer was marked incorrect)
     setActiveTranslationArray((prev) => prev.slice(0, -1));
 
     // Reset UI state to allow retyping
-    setShowResult(false);
-    setIsCorrect(false);
-    setUserAnswer('');
+    resetQuestion();
 
     // Focus the input field
     if (translationInputRef?.current) {
@@ -531,76 +479,16 @@ export default function LearnNew() {
 
   // ============ ITEM EDITING HANDLERS ============
 
-  const handleOpenEditItem = (questionItem) => {
-    const editable = buildEditableItem(questionItem);
-    if (!editable) {
-      setEditError('This item cannot be edited right now.');
-      return;
-    }
-
-    setEditError(null);
-    setEditingItem(editable);
-  };
-
-  const handleCloseEditItem = () => {
-    if (isSavingEdit) return;
-    setEditingItem(null);
-    setEditError(null);
-  };
-
   const handleSaveEditedItem = async (updatedItem) => {
-    setIsSavingEdit(true);
-    setEditError(null);
-
-    try {
-      const request = toUpdateRequest(updatedItem);
-      const response = await fetch(
-        '/api/database/v2/sets/update-from-full-set',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(request),
-        }
-      );
-
-      const result = await response.json();
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Failed to update item');
-      }
-
-      setItemData((prev) =>
-        prev.map((item) => mergeIntoBaseItem(item, updatedItem))
-      );
-      setReviewArray((prev) =>
-        prev.map((item) => mergeIntoBaseItem(item, updatedItem))
-      );
-      setActiveReviewArray((prev) =>
-        prev.map((item) => mergeIntoBaseItem(item, updatedItem))
-      );
-      setTranslationArray((prev) =>
-        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
-      );
-      setActiveTranslationArray((prev) =>
-        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
-      );
-      setMultipleChoiceArray((prev) =>
-        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
-      );
-      setActiveMCArray((prev) =>
-        prev.map((item) => mergeIntoQuestionItem(item, updatedItem))
-      );
-
-      setEditingItem(null);
-    } catch (error) {
-      clientLog.error('srs.item_update_failed', {
-        error: error?.message || String(error),
-      });
-      setEditError(error.message || 'Failed to update item');
-    } finally {
-      setIsSavingEdit(false);
-    }
+    await saveEdit(updatedItem, [
+      { setState: setItemData, mergeFn: mergeIntoBaseItem },
+      { setState: setReviewArray, mergeFn: mergeIntoBaseItem },
+      { setState: setActiveReviewArray, mergeFn: mergeIntoBaseItem },
+      { setState: setTranslationArray, mergeFn: mergeIntoQuestionItem },
+      { setState: setActiveTranslationArray, mergeFn: mergeIntoQuestionItem },
+      { setState: setMultipleChoiceArray, mergeFn: mergeIntoQuestionItem },
+      { setState: setActiveMCArray, mergeFn: mergeIntoQuestionItem },
+    ]);
   };
 
   // ============ GENERAL HANDLERS ============
@@ -916,7 +804,7 @@ export default function LearnNew() {
                       onCheckAnswer={handleTranslationCheck}
                       onNext={handleNext}
                       onRetry={handleTranslationRetry}
-                      onEditItem={handleOpenEditItem}
+                      onEditItem={openEdit}
                       disableKeyboardShortcuts={Boolean(editingItem)}
                     />
                   </div>
@@ -954,7 +842,7 @@ export default function LearnNew() {
                     const success = await saveAllItemsToSRS();
                     if (success) {
                       setCurrentPhase('complete');
-                      setTimeout(() => setAnimateAccuracy(true), 100);
+                      triggerAccuracyAnimation();
                     }
                   }}
                   className="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
@@ -1003,7 +891,7 @@ export default function LearnNew() {
             isOpen={Boolean(editingItem)}
             isSaving={isSavingEdit}
             error={editError}
-            onClose={handleCloseEditItem}
+            onClose={closeEdit}
             onSave={handleSaveEditedItem}
           />
         </>
