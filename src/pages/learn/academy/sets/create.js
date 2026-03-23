@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { FaPlus, FaTimes, FaCheck, FaTrash, FaKeyboard } from 'react-icons/fa';
 import { FiUpload, FiPlus, FiX, FiCheck } from 'react-icons/fi';
 import { toKana } from 'wanakana';
-import CSVUpload from '../../../../components/pages/academy/sets/CreateSet/CSVUpload/CSVUpload';
+import CSVUpload from '@/components/SetCreator/CSVUpload/CSVUpload';
 import CustomSelect from '@/components/ui/CustomSelect';
 import Button from '@/components/ui/Button';
 import { clientLog } from '@/lib/clientLogger';
