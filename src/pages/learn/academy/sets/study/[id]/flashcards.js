@@ -23,7 +23,7 @@ import {
   buildEditableItem,
   toUpdateRequest,
   mergeIntoBaseItem,
-} from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
+} from '@/lib/study/itemEditing';
 import { clientLog } from '@/lib/clientLogger';
 import { markSetStudied } from '@/lib/setActions';
 

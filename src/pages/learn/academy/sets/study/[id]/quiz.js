@@ -13,15 +13,15 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import {
   generateOptionsFromQuizItems,
   shuffleArray,
-} from '@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration';
-import { transformItems } from '@/components/Set/Features/Field-Card-Session/shared/models/itemTransform';
-import { generateQuizItems } from '@/components/Set/Features/Field-Card-Session/shared/models/translationGeneration';
+} from '@/lib/study/mcOptionGeneration';
+import { transformItems } from '@/lib/study/itemTransform';
+import { generateQuizItems } from '@/lib/study/translationGeneration';
 import {
   buildEditableItem,
   toUpdateRequest,
   mergeIntoBaseItem,
   mergeIntoQuestionItem,
-} from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
+} from '@/lib/study/itemEditing';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
 import { clientLog } from '@/lib/clientLogger';
 import { markSetStudied } from '@/lib/setActions';

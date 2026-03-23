@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import TypedResponseView from '@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx';
-import { validateTypedAnswer } from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation';
+import { validateTypedAnswer } from '@/lib/study/answerValidation';
 
 export default function MasterQuestionCard({
   quizItems,

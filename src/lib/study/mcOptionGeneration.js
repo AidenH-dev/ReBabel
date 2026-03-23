@@ -24,22 +24,22 @@ export const shuffleArray = (array) => {
 const extractFieldValue = (item, answerType) => {
   if (!item) return null;
 
-  if (item.type === "vocabulary") {
+  if (item.type === 'vocabulary') {
     switch (answerType) {
-      case "Kana":
+      case 'Kana':
         return item.kana || null;
-      case "English":
+      case 'English':
         return item.english || null;
-      case "Kanji":
+      case 'Kanji':
         return item.kanji || null;
       default:
         return null;
     }
-  } else if (item.type === "grammar") {
+  } else if (item.type === 'grammar') {
     switch (answerType) {
-      case "Description":
+      case 'Description':
         return item.description || null;
-      case "Grammar Pattern":
+      case 'Grammar Pattern':
         return item.title || null;
       default:
         return null;
@@ -170,22 +170,22 @@ export const pregenerateMultipleChoiceItems = (
   const multipleChoiceItems = [];
 
   dataItems.forEach((item) => {
-    if (item.type === "vocabulary") {
+    if (item.type === 'vocabulary') {
       // English � Kana
       multipleChoiceItems.push({
         id: `${item.id}-mc-en-kana`,
         originalId: item.id,
         uuid: item.uuid,
-        type: "vocabulary",
-        questionType: "English",
-        answerType: "Kana",
+        type: 'vocabulary',
+        questionType: 'English',
+        answerType: 'Kana',
         question: item.english,
         answer: item.kana,
         hint: item.lexical_category,
         distractors: generateDistractorsFromData(
           item.kana,
-          "Kana",
-          "vocabulary",
+          'Kana',
+          'vocabulary',
           sourceForDistractors,
           distractorCount
         ),
@@ -196,16 +196,16 @@ export const pregenerateMultipleChoiceItems = (
         id: `${item.id}-mc-kana-en`,
         originalId: item.id,
         uuid: item.uuid,
-        type: "vocabulary",
-        questionType: "Kana",
-        answerType: "English",
+        type: 'vocabulary',
+        questionType: 'Kana',
+        answerType: 'English',
         question: item.kana,
         answer: item.english,
         hint: item.lexical_category,
         distractors: generateDistractorsFromData(
           item.english,
-          "English",
-          "vocabulary",
+          'English',
+          'vocabulary',
           sourceForDistractors,
           distractorCount
         ),
@@ -218,16 +218,16 @@ export const pregenerateMultipleChoiceItems = (
           id: `${item.id}-mc-en-kanji`,
           originalId: item.id,
           uuid: item.uuid,
-          type: "vocabulary",
-          questionType: "English",
-          answerType: "Kanji",
+          type: 'vocabulary',
+          questionType: 'English',
+          answerType: 'Kanji',
           question: item.english,
           answer: item.kanji,
           hint: `${item.lexical_category} (${item.kana})`,
           distractors: generateDistractorsFromData(
             item.kanji,
-            "Kanji",
-            "vocabulary",
+            'Kanji',
+            'vocabulary',
             sourceForDistractors,
             distractorCount
           ),
@@ -238,16 +238,16 @@ export const pregenerateMultipleChoiceItems = (
           id: `${item.id}-mc-kanji-en`,
           originalId: item.id,
           uuid: item.uuid,
-          type: "vocabulary",
-          questionType: "Kanji",
-          answerType: "English",
+          type: 'vocabulary',
+          questionType: 'Kanji',
+          answerType: 'English',
           question: item.kanji,
           answer: item.english,
           hint: `${item.lexical_category} (${item.kana})`,
           distractors: generateDistractorsFromData(
             item.english,
-            "English",
-            "vocabulary",
+            'English',
+            'vocabulary',
             sourceForDistractors,
             distractorCount
           ),
@@ -258,16 +258,16 @@ export const pregenerateMultipleChoiceItems = (
           id: `${item.id}-mc-kana-kanji`,
           originalId: item.id,
           uuid: item.uuid,
-          type: "vocabulary",
-          questionType: "Kana",
-          answerType: "Kanji",
+          type: 'vocabulary',
+          questionType: 'Kana',
+          answerType: 'Kanji',
           question: item.kana,
           answer: item.kanji,
           hint: item.english,
           distractors: generateDistractorsFromData(
             item.kanji,
-            "Kanji",
-            "vocabulary",
+            'Kanji',
+            'vocabulary',
             sourceForDistractors,
             distractorCount
           ),
@@ -278,37 +278,37 @@ export const pregenerateMultipleChoiceItems = (
           id: `${item.id}-mc-kanji-kana`,
           originalId: item.id,
           uuid: item.uuid,
-          type: "vocabulary",
-          questionType: "Kanji",
-          answerType: "Kana",
+          type: 'vocabulary',
+          questionType: 'Kanji',
+          answerType: 'Kana',
           question: item.kanji,
           answer: item.kana,
           hint: item.english,
           distractors: generateDistractorsFromData(
             item.kana,
-            "Kana",
-            "vocabulary",
+            'Kana',
+            'vocabulary',
             sourceForDistractors,
             distractorCount
           ),
         });
       }
-    } else if (item.type === "grammar") {
+    } else if (item.type === 'grammar') {
       // Title � Description
       multipleChoiceItems.push({
         id: `${item.id}-mc-title-desc`,
         originalId: item.id,
         uuid: item.uuid,
-        type: "grammar",
-        questionType: "Grammar Pattern",
-        answerType: "Description",
+        type: 'grammar',
+        questionType: 'Grammar Pattern',
+        answerType: 'Description',
         question: item.title,
         answer: item.description,
         hint: item.topic,
         distractors: generateDistractorsFromData(
           item.description,
-          "Description",
-          "grammar",
+          'Description',
+          'grammar',
           sourceForDistractors,
           distractorCount
         ),
@@ -319,16 +319,16 @@ export const pregenerateMultipleChoiceItems = (
         id: `${item.id}-mc-desc-title`,
         originalId: item.id,
         uuid: item.uuid,
-        type: "grammar",
-        questionType: "Description",
-        answerType: "Grammar Pattern",
+        type: 'grammar',
+        questionType: 'Description',
+        answerType: 'Grammar Pattern',
         question: item.description,
         answer: item.title,
         hint: item.topic,
         distractors: generateDistractorsFromData(
           item.title,
-          "Grammar Pattern",
-          "grammar",
+          'Grammar Pattern',
+          'grammar',
           sourceForDistractors,
           distractorCount
         ),

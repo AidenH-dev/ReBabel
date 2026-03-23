@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import MultipleChoiceView from '@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx';
-import { validateMultipleChoice } from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation';
-import { generateOptionsFromQuizItems } from '@/components/Set/Features/Field-Card-Session/shared/models/mcOptionGeneration';
+import { validateMultipleChoice } from '@/lib/study/answerValidation';
+import { generateOptionsFromQuizItems } from '@/lib/study/mcOptionGeneration';
 
 export default function MasterMultipleChoice({
   quizItems,
