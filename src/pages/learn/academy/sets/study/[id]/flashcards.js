@@ -25,6 +25,7 @@ import {
   mergeIntoBaseItem,
 } from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/itemEditing';
 import { clientLog } from '@/lib/clientLogger';
+import { markSetStudied } from '@/lib/setActions';
 
 export default function SetFlashcards() {
   const router = useRouter();
@@ -68,24 +69,6 @@ export default function SetFlashcards() {
     abort: abortAnalyticsSession,
   } = useAnalyticsSession('flashcards');
   const currentIndexRef = useRef(0);
-
-  const markSetStudied = async (setId) => {
-    try {
-      await fetch('/api/database/v2/sets/update-from-full-set', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          entityType: 'set',
-          entityId: setId,
-          updates: { last_studied: new Date().toISOString() },
-        }),
-      });
-    } catch (err) {
-      clientLog.error('set.mark_studied_failed', {
-        error: err?.message || String(err),
-      });
-    }
-  };
 
   // Study mode
   const [studyMode, setStudyMode] = useState('plain'); // plain, quiz, interval
