@@ -1,21 +1,20 @@
 // Master Focus Selector Controller
 // Handles business logic for combined pool focus selection with limits
 
-import { useState, useEffect } from "react";
-
+import { useState, useEffect } from 'react';
 
 export default function MasterFocusSelector({
   isOpen,
-  allGrammarItems,  // Combined from all grammar sets
-  allVocabItems,    // Combined from all vocab sets
+  allGrammarItems, // Combined from all grammar sets
+  allVocabItems, // Combined from all vocab sets
   initialGrammarIds,
   initialVocabIds,
   onConfirm,
-  onClose
+  onClose,
 }) {
   const [selectedGrammarIds, setSelectedGrammarIds] = useState([]);
   const [selectedVocabIds, setSelectedVocabIds] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const MAX_GRAMMAR = 2;
   const MAX_VOCAB = 10;
@@ -25,14 +24,14 @@ export default function MasterFocusSelector({
     if (isOpen) {
       setSelectedGrammarIds(initialGrammarIds || []);
       setSelectedVocabIds(initialVocabIds || []);
-      setSearchQuery("");
+      setSearchQuery('');
     }
   }, [isOpen, initialGrammarIds, initialVocabIds]);
 
   const handleGrammarToggle = (itemId) => {
-    setSelectedGrammarIds(prev => {
+    setSelectedGrammarIds((prev) => {
       if (prev.includes(itemId)) {
-        return prev.filter(id => id !== itemId);
+        return prev.filter((id) => id !== itemId);
       } else if (prev.length < MAX_GRAMMAR) {
         return [...prev, itemId];
       }
@@ -41,9 +40,9 @@ export default function MasterFocusSelector({
   };
 
   const handleVocabToggle = (itemId) => {
-    setSelectedVocabIds(prev => {
+    setSelectedVocabIds((prev) => {
       if (prev.includes(itemId)) {
-        return prev.filter(id => id !== itemId);
+        return prev.filter((id) => id !== itemId);
       } else if (prev.length < MAX_VOCAB) {
         return [...prev, itemId];
       }
@@ -56,7 +55,5 @@ export default function MasterFocusSelector({
     onClose();
   };
 
-  return (
-    <></>
-  );
+  return <></>;
 }

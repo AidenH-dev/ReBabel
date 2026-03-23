@@ -2,8 +2,8 @@
 // Main session page for on-demand translate practice
 
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
-import MasterTranslateSession from '@/components/Practice/Premium/Features/Translate/Session/controllers/MasterTranslateSession';
-import TranslateSummaryView from '@/components/Practice/Premium/Features/Translate/Session/views/TranslateSummaryView';
+import MasterTranslateSession from '@/components/Translate/Session/controllers/MasterTranslateSession';
+import TranslateSummaryView from '@/components/Translate/Session/views/TranslateSummaryView';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';

@@ -15,8 +15,8 @@ import { LuTextCursorInput } from 'react-icons/lu';
 import { TbLanguageHiragana } from 'react-icons/tb';
 import { BeginnerPackPopup } from '@/components/Popups/BeginnerPackPopup';
 import { LuAlarmClock } from 'react-icons/lu';
-import ConfigPanelView from '@/components/Practice/Premium/Features/Translate/Configuration/views/ConfigPanelView';
-import CardSwapCustomItemModal from '@/components/Practice/Premium/Features/Translate/Configuration/views/CardSwapCustomItemModal';
+import ConfigPanelView from '@/components/Translate/Configuration/views/ConfigPanelView';
+import CardSwapCustomItemModal from '@/components/Translate/Configuration/views/CardSwapCustomItemModal';
 import PremiumConfigPanel from '@/components/Conjugation/Premium/PremiumConfigPanel';
 import {
   createInitialVerbOptions,
