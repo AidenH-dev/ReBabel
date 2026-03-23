@@ -1,9 +1,10 @@
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import useSWR from 'swr';
+import fetcher from '@/lib/fetcher';
 import Link from 'next/link';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
-import { clientLog } from '@/lib/clientLogger';
 import { FaPlus, FaFire, FaClock, FaChartLine } from 'react-icons/fa';
 import {
   FiSearch,
@@ -111,28 +112,80 @@ export default function VocabularyDashboard() {
     savePreference('sets_size_desc', String(v));
   };
 
-  const [userProfile, setUserProfile] = useState(null);
-  const [profileError, setProfileError] = useState(null);
-  const [recentsSets, setRecentsSets] = useState([]);
-  const [isLoadingSets, setIsLoadingSets] = useState(true);
-  const [setsError, setSetsError] = useState(null);
-
   const [showBeginnerPopup, setShowBeginnerPopup] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
 
-  // Fast Review state
-  const [totalDueItems, setTotalDueItems] = useState(0);
-  const [isLoadingDueCount, setIsLoadingDueCount] = useState(true);
-  const [dueError, setDueError] = useState(null);
+  // --- SWR data fetching ---
 
-  // Dashboard stats state
-  const [dashboardStats, setDashboardStats] = useState({
-    totalSets: 0,
-    totalItems: 0,
-    activeSrsItems: 0,
+  // 1. User profile
+  const { data: profileData, error: profileErrorObj } = useSWR(
+    '/api/auth/me',
+    fetcher
+  );
+  const userProfile = profileData || null;
+  const profileError = profileErrorObj
+    ? 'Failed to load your profile. Please try again.'
+    : null;
+
+  // 2. Sets list (depends on profile userId)
+  const userId = userProfile?.sub;
+  const {
+    data: setsRaw,
+    error: setsErrorObj,
+    isLoading: isLoadingSets,
+  } = useSWR(
+    userId
+      ? `/api/database/v2/sets/retrieve-list/${encodeURIComponent(userId)}`
+      : null,
+    fetcher,
+    { revalidateOnFocus: true }
+  );
+
+  const recentsSets = useMemo(() => {
+    if (!setsRaw?.data?.sets) return [];
+    const formattedData = setsRaw.data.sets.map((record) => ({
+      id: record.entity_id,
+      name: record.data.title || 'Untitled Set',
+      item_num: record.data.item_num,
+      date: record.data.date_created || record.data.updated_at,
+      path: `/learn/academy/set/study/${record.entity_id}`,
+      set_type: record.data.set_type || null,
+    }));
+    formattedData.sort((a, b) => new Date(b.date) - new Date(a.date));
+    return formattedData;
+  }, [setsRaw]);
+
+  const setsError = setsErrorObj
+    ? 'Failed to load your sets. Please try again.'
+    : null;
+
+  // 3. Due count (depends on profile)
+  const {
+    data: dueRaw,
+    error: dueErrorObj,
+    isLoading: isLoadingDueCount,
+  } = useSWR(
+    userId ? '/api/database/v2/srs/all-due?countOnly=true' : null,
+    fetcher,
+    { revalidateOnFocus: false, focusThrottleInterval: 10000 }
+  );
+  const totalDueItems = dueRaw?.data?.metadata?.totalDueItems ?? 0;
+  const dueError = dueErrorObj ? 'Failed to load due items count.' : null;
+
+  // 4. Dashboard stats (depends on profile)
+  const {
+    data: statsRaw,
+    error: statsErrorObj,
+    isLoading: isLoadingStats,
+  } = useSWR(userId ? '/api/database/v2/stats/dashboard' : null, fetcher, {
+    revalidateOnFocus: true,
   });
-  const [isLoadingStats, setIsLoadingStats] = useState(true);
-  const [statsError, setStatsError] = useState(null);
+  const dashboardStats = useMemo(() => {
+    if (!statsRaw?.data)
+      return { totalSets: 0, totalItems: 0, activeSrsItems: 0 };
+    return statsRaw.data;
+  }, [statsRaw]);
+  const statsError = statsErrorObj ? 'Failed to load stats.' : null;
 
   const router = useRouter();
   const searchRef = useRef(null);
@@ -149,69 +202,7 @@ export default function VocabularyDashboard() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // Fetch the Auth0 user profile on mount.
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        setProfileError(null);
-        const response = await fetch('/api/auth/me');
-        const profile = await response.json();
-        setUserProfile(profile);
-      } catch (error) {
-        clientLog.error('sets.fetch_profile_failed', {
-          error: error?.message || String(error),
-        });
-        setProfileError('Failed to load your profile. Please try again.');
-      }
-    };
-    fetchUserProfile();
-  }, []);
-
-  // Once the user profile is loaded, fetch the user sets from Supabase.
-  useEffect(() => {
-    const fetchUserSets = async () => {
-      if (!(userProfile && userProfile.sub)) return;
-      setIsLoadingSets(true);
-      try {
-        setSetsError(null);
-        const response = await fetch(
-          `/api/database/v2/sets/retrieve-list/${encodeURIComponent(userProfile.sub)}`
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (!result.success) {
-          throw new Error(result.error || 'Failed to fetch user sets');
-        }
-
-        const formattedData = result.data.sets.map((record) => ({
-          id: record.entity_id,
-          name: record.data.title || 'Untitled Set',
-          item_num: record.data.item_num,
-          date: record.data.date_created || record.data.updated_at,
-          path: `/learn/academy/set/study/${record.entity_id}`,
-          set_type: record.data.set_type || null,
-        }));
-
-        formattedData.sort((a, b) => new Date(b.date) - new Date(a.date));
-        setRecentsSets(formattedData);
-      } catch (error) {
-        clientLog.error('sets.fetch_user_sets_failed', {
-          error: error?.message || String(error),
-        });
-        setSetsError('Failed to load your sets. Please try again.');
-        setRecentsSets([]);
-      } finally {
-        setIsLoadingSets(false);
-      }
-    };
-    fetchUserSets();
-  }, [userProfile]);
-
+  // Show beginner popup when sets are loaded but empty
   useEffect(() => {
     if (
       !isLoadingSets &&
@@ -222,60 +213,6 @@ export default function VocabularyDashboard() {
       setShowBeginnerPopup(true);
     }
   }, [isLoadingSets, recentsSets, userProfile, setsError]);
-
-  // Fetch Fast Review due count — once only
-  const dueCountFetched = useRef(false);
-  useEffect(() => {
-    if (!userProfile || dueCountFetched.current) return;
-    dueCountFetched.current = true;
-
-    const fetchDueCount = async () => {
-      try {
-        setDueError(null);
-        const response = await fetch(
-          '/api/database/v2/srs/all-due?countOnly=true'
-        );
-        const result = await response.json();
-        if (result.success && result.data) {
-          setTotalDueItems(result.data.metadata.totalDueItems);
-        }
-      } catch (error) {
-        clientLog.error('sets.fetch_due_count_failed', {
-          error: error?.message || String(error),
-        });
-        setDueError('Failed to load due items count.');
-      } finally {
-        setIsLoadingDueCount(false);
-      }
-    };
-
-    fetchDueCount();
-  }, [userProfile]);
-
-  // Fetch dashboard stats
-  useEffect(() => {
-    const fetchDashboardStats = async () => {
-      if (!userProfile) return;
-
-      try {
-        setStatsError(null);
-        const response = await fetch('/api/database/v2/stats/dashboard');
-        const result = await response.json();
-        if (result.success && result.data) {
-          setDashboardStats(result.data);
-        }
-      } catch (error) {
-        clientLog.error('sets.fetch_dashboard_stats_failed', {
-          error: error?.message || String(error),
-        });
-        setStatsError('Failed to load stats.');
-      } finally {
-        setIsLoadingStats(false);
-      }
-    };
-
-    fetchDashboardStats();
-  }, [userProfile]);
 
   // Helpers
   const fixDateString = (dateString) => {
