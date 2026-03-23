@@ -2,7 +2,9 @@
 import Link from 'next/link';
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import useSWR from 'swr';
+import fetcher from '@/lib/fetcher';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
 import {
@@ -20,7 +22,6 @@ import { LuTextCursorInput } from 'react-icons/lu';
 import PageHeader from '../../components/ui/PageHeader';
 import SetRow from '../../components/ui/SetRow';
 import Button from '@/components/ui/Button';
-import { clientLog } from '@/lib/clientLogger';
 import { InlineError } from '@/components/ui/errors';
 
 function ActivityCalendar({ activityData }) {
@@ -210,36 +211,114 @@ function useJapaneseDate() {
 export default function DashboardPage() {
   const router = useRouter();
   const jpDate = useJapaneseDate();
-  const [userProfile, setUserProfile] = useState(null);
-  const [profileError, setProfileError] = useState(null);
   const [greeting, setGreeting] = useState('Hello');
   const [mounted, setMounted] = useState(false);
-
-  const [dashboardLoading, setDashboardLoading] = useState(true);
-  const [statsError, setStatsError] = useState(null);
-
-  // Sets state
-  const [sets, setSets] = useState([]);
-  const [setsLoading, setSetsLoading] = useState(true);
-  const [setsError, setSetsError] = useState(null);
-  const [totalDueItems, setTotalDueItems] = useState(0);
-  const [dueLoading, setDueLoading] = useState(true);
-  const [dueError, setDueError] = useState(null);
   const setsCardRef = useRef(null);
   const [visibleSetCount, setVisibleSetCount] = useState(3);
 
-  // Initialize with null to distinguish "not yet loaded" from "loaded with zero"
-  const [userData, setUserData] = useState({
-    name: '',
-    currentStreak: null,
-    longestStreak: null,
-    totalStudyTime: null,
-    sessionsCompleted: null,
-    daysActiveLast60: null,
-    cardsReviewed: null,
-    accuracyRate: null,
-    activityData: [],
-  });
+  // --- SWR data fetching ---
+
+  // 1. User profile
+  const { data: profileData, error: profileErrorObj } = useSWR(
+    '/api/auth/me',
+    fetcher
+  );
+  const userProfile = profileData || null;
+  const profileError = profileErrorObj
+    ? 'Failed to load your profile. Please try again.'
+    : null;
+
+  // 2. Sets list (depends on profile userId)
+  const userId = userProfile?.sub;
+  const {
+    data: setsRaw,
+    error: setsErrorObj,
+    isLoading: setsLoading,
+  } = useSWR(
+    userId
+      ? `/api/database/v2/sets/retrieve-list/${encodeURIComponent(userId)}`
+      : null,
+    fetcher,
+    { revalidateOnFocus: true }
+  );
+
+  const sets = useMemo(() => {
+    if (!setsRaw?.data?.sets) return [];
+    return setsRaw.data.sets
+      .map((record) => ({
+        id: record.entity_id,
+        name: record.data.title || 'Untitled Set',
+        item_num: parseInt(record.data.item_num, 10) || 0,
+        date:
+          record.data.last_studied ||
+          record.data.date_created ||
+          record.data.updated_at,
+        set_type: record.data.set_type || null,
+      }))
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+  }, [setsRaw]);
+
+  const setsError = setsErrorObj ? 'Failed to load your sets.' : null;
+
+  // 3. Due count (depends on profile)
+  const {
+    data: dueRaw,
+    error: dueErrorObj,
+    isLoading: dueLoading,
+  } = useSWR(
+    userId ? '/api/database/v2/srs/all-due?countOnly=true' : null,
+    fetcher,
+    { revalidateOnFocus: true }
+  );
+  const totalDueItems = dueRaw?.data?.metadata?.totalDueItems ?? 0;
+  const dueError = dueErrorObj ? 'Failed to load due items count.' : null;
+
+  // 4. Dashboard stats (independent)
+  const timezone = useMemo(
+    () => Intl.DateTimeFormat().resolvedOptions().timeZone,
+    []
+  );
+  const {
+    data: statsRaw,
+    error: statsErrorObj,
+    isLoading: dashboardLoading,
+  } = useSWR(
+    `/api/analytics/user/dashboard?timezone=${encodeURIComponent(timezone)}`,
+    fetcher,
+    { revalidateOnFocus: true }
+  );
+  const statsError = statsErrorObj ? 'Failed to load dashboard stats.' : null;
+
+  const userData = useMemo(() => {
+    const d = statsRaw?.message;
+    if (!d) {
+      return {
+        name: userProfile?.name || '',
+        currentStreak: null,
+        longestStreak: null,
+        totalStudyTime: null,
+        sessionsCompleted: null,
+        daysActiveLast60: null,
+        cardsReviewed: null,
+        accuracyRate: null,
+        activityData: [],
+      };
+    }
+    return {
+      name: userProfile?.name || '',
+      currentStreak: d.current_streak ?? 0,
+      longestStreak: d.longest_streak ?? 0,
+      totalStudyTime: formatStudyTime(d.total_study_minutes),
+      cardsReviewed: d.total_items_reviewed ?? null,
+      accuracyRate:
+        d.accuracy_rate != null
+          ? Math.round(d.accuracy_rate * 1000) / 10
+          : null,
+      activityData: d.activity_data ?? [],
+      sessionsCompleted: d.sessions_completed ?? 0,
+      daysActiveLast60: d.days_active_last_60 ?? 0,
+    };
+  }, [statsRaw, userProfile]);
 
   const formatStudyTime = (minutes) => {
     if (!minutes) return '0m';
@@ -248,92 +327,7 @@ export default function DashboardPage() {
     return h > 0 ? `${h}h ${m}m` : `${m}m`;
   };
 
-  // Fetch user profile
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        setProfileError(null);
-        const response = await fetch('/api/auth/me');
-        const profile = await response.json();
-        setUserProfile(profile);
-        if (profile?.name) {
-          setUserData((prev) => ({ ...prev, name: profile.name }));
-        }
-      } catch (error) {
-        clientLog.error('dashboard.fetch_failed', {
-          endpoint: '/api/auth/me',
-          error: error?.message || String(error),
-        });
-        setProfileError('Failed to load your profile. Please try again.');
-      }
-    };
-    fetchUserProfile();
-  }, []);
-
-  // Fetch sets once we have a userProfile
-  useEffect(() => {
-    if (!userProfile?.sub) return;
-    const fetchSets = async () => {
-      setSetsLoading(true);
-      try {
-        setSetsError(null);
-        const res = await fetch(
-          `/api/database/v2/sets/retrieve-list/${encodeURIComponent(userProfile.sub)}`
-        );
-        const result = await res.json();
-        if (result.success && result.data?.sets) {
-          const formatted = result.data.sets
-            .map((record) => ({
-              id: record.entity_id,
-              name: record.data.title || 'Untitled Set',
-              item_num: parseInt(record.data.item_num, 10) || 0,
-              date:
-                record.data.last_studied ||
-                record.data.date_created ||
-                record.data.updated_at,
-              set_type: record.data.set_type || null,
-            }))
-            .sort((a, b) => new Date(b.date) - new Date(a.date));
-          setSets(formatted);
-        }
-      } catch (err) {
-        clientLog.error('dashboard.fetch_failed', {
-          endpoint: '/api/database/v2/sets/retrieve-list',
-          error: err?.message || String(err),
-        });
-        setSetsError('Failed to load your sets.');
-      } finally {
-        setSetsLoading(false);
-      }
-    };
-    fetchSets();
-  }, [userProfile]);
-
-  // Fetch total SRS due count
-  useEffect(() => {
-    if (!userProfile?.sub) return;
-    const fetchDueCount = async () => {
-      try {
-        setDueError(null);
-        const res = await fetch('/api/database/v2/srs/all-due?countOnly=true');
-        const result = await res.json();
-        if (result.success && result.data) {
-          setTotalDueItems(result.data.metadata.totalDueItems);
-        }
-      } catch (err) {
-        clientLog.error('dashboard.fetch_failed', {
-          endpoint: '/api/database/v2/srs/all-due',
-          error: err?.message || String(err),
-        });
-        setDueError('Failed to load due items count.');
-      } finally {
-        setDueLoading(false);
-      }
-    };
-    fetchDueCount();
-  }, [userProfile]);
-
-  // Set greeting and mounted state, then fetch real dashboard data
+  // Set greeting and mounted state
   useEffect(() => {
     setMounted(true);
 
@@ -341,44 +335,6 @@ export default function DashboardPage() {
     if (hour < 12) setGreeting('Good morning');
     else if (hour < 18) setGreeting('Good afternoon');
     else setGreeting('Good evening');
-
-    const fetchDashboard = async () => {
-      try {
-        setStatsError(null);
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const res = await fetch(
-          `/api/analytics/user/dashboard?timezone=${encodeURIComponent(timezone)}`
-        );
-        const json = await res.json();
-        if (res.ok && json.message) {
-          const d = json.message;
-          setUserData((prev) => ({
-            ...prev,
-            currentStreak: d.current_streak ?? 0,
-            longestStreak: d.longest_streak ?? 0,
-            totalStudyTime: formatStudyTime(d.total_study_minutes),
-            cardsReviewed: d.total_items_reviewed ?? null,
-            accuracyRate:
-              d.accuracy_rate != null
-                ? Math.round(d.accuracy_rate * 1000) / 10
-                : null,
-            activityData: d.activity_data ?? [],
-            sessionsCompleted: d.sessions_completed ?? 0,
-            daysActiveLast60: d.days_active_last_60 ?? 0,
-          }));
-        }
-      } catch (err) {
-        clientLog.error('dashboard.fetch_failed', {
-          endpoint: '/api/analytics/user/dashboard',
-          error: err?.message || String(err),
-        });
-        setStatsError('Failed to load dashboard stats.');
-      } finally {
-        setDashboardLoading(false);
-      }
-    };
-
-    fetchDashboard();
   }, []);
 
   // Calculate how many set cards fit without scrolling
