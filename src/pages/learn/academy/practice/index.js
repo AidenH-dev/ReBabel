@@ -13,7 +13,7 @@ import {
 } from 'react-icons/fi';
 import { LuTextCursorInput } from 'react-icons/lu';
 import { TbLanguageHiragana } from 'react-icons/tb';
-import { BeginnerPackPopup } from '@/components/popups/sets/newUserPopup';
+import { BeginnerPackPopup } from '@/components/Popups/BeginnerPackPopup';
 import { LuAlarmClock } from 'react-icons/lu';
 import ConfigPanelView from '@/components/Practice/Premium/Features/Translate/Configuration/views/ConfigPanelView';
 import CardSwapCustomItemModal from '@/components/Practice/Premium/Features/Translate/Configuration/views/CardSwapCustomItemModal';

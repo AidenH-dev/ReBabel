@@ -14,7 +14,7 @@ import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 import { useEffect, useRef, useState } from 'react';
 import Script from 'next/script';
-import { SRSNotificationPrompt } from '@/components/popups/SRSNotificationPrompt';
+import { SRSNotificationPrompt } from '@/components/Popups/SRSNotificationPrompt';
 import { clientLog } from '@/lib/clientLogger';
 
 const IOS_VIEWPORT_CONTENT =

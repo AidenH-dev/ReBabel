@@ -24,7 +24,7 @@ import {
 } from 'react-icons/tb';
 import PageHeader from '@/components/ui/PageHeader';
 import { MdAutorenew } from 'react-icons/md';
-import { BeginnerPackPopup } from '@/components/popups/sets/newUserPopup';
+import { BeginnerPackPopup } from '@/components/Popups/BeginnerPackPopup';
 import CustomSelect from '@/components/ui/CustomSelect';
 import SetRow from '@/components/ui/SetRow';
 import { HiOutlineLightningBolt } from 'react-icons/hi';
