@@ -32,7 +32,7 @@ import { LuTextCursorInput } from 'react-icons/lu';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 import { TiChartPieOutline } from 'react-icons/ti';
 import { useUserPreferences } from '@/contexts/PreferencesContext';
-import SetsSrsOverview from '@/components/SRS/sets-srs-overview';
+import SetsSrsOverview from '@/components/SRS/SetsSrsOverview';
 import ImportByCodeModal from '@/components/SetImport/ImportByCodeModal';
 import { InlineError } from '@/components/ui/errors';
 

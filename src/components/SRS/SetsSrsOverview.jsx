@@ -3,11 +3,11 @@ import { FiSearch } from 'react-icons/fi';
 import { FaPlus } from 'react-icons/fa';
 import { TbChartInfographic } from 'react-icons/tb';
 import { TbStack2 } from 'react-icons/tb';
-import SrsProgressPipeline from '@/components/SRS/dashboard/srs-progress-pipeline';
-import SrsMasteryBar from '@/components/SRS/dashboard/srs-mastery-bar';
-import SrsLevelDistribution from '@/components/SRS/dashboard/srs-level-distribution';
-import SrsLoadChart from '@/components/SRS/dashboard/srs-level-trend';
-import SrsSetHealthCard from '@/components/SRS/sets-srs-set-card';
+import SrsProgressPipeline from '@/components/SRS/dashboard/SrsProgressPipeline';
+import SrsMasteryBar from '@/components/SRS/dashboard/SrsMasteryBar';
+import SrsLevelDistribution from '@/components/SRS/dashboard/SrsLevelDistribution';
+import SrsLoadChart from '@/components/SRS/dashboard/SrsLevelTrend';
+import SrsSetHealthCard from '@/components/SRS/SetsSrsSetCard';
 
 // ── Skeleton components ──────────────────────────────────────────────
 

@@ -4,10 +4,10 @@ import {
   TimeGridWeek,
   useSrsTimeGrid,
 } from '@/components/SRS/visuals/SrsTimeGrid';
-import SrsProgressPipeline from '@/components/SRS/dashboard/srs-progress-pipeline';
-import SrsMasteryBar from '@/components/SRS/dashboard/srs-mastery-bar';
-import SrsLevelDistribution from '@/components/SRS/dashboard/srs-level-distribution';
-import SrsTabbedPanel from '@/components/SRS/dashboard/srs-tabbed-panel';
+import SrsProgressPipeline from '@/components/SRS/dashboard/SrsProgressPipeline';
+import SrsMasteryBar from '@/components/SRS/dashboard/SrsMasteryBar';
+import SrsLevelDistribution from '@/components/SRS/dashboard/SrsLevelDistribution';
+import SrsTabbedPanel from '@/components/SRS/dashboard/SrsTabbedPanel';
 import { calculateNextReviewDate } from '@/components/SRS/visuals/SrsTimeGrid/models/srsDataModel';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useState, useEffect, useMemo, useCallback } from 'react';

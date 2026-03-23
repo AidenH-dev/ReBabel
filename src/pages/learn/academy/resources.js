@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import PageHeader from '@/components/ui/PageHeader';
-import SRSGuideContent from '@/components/SRS/srs-guide-content';
+import SRSGuideContent from '@/components/SRS/SrsGuideContent';
 import {
   TbExternalLink,
   TbSearch,

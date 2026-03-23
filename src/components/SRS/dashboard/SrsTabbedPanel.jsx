@@ -7,7 +7,7 @@ import {
   TbSortAZ,
   TbFlame,
 } from 'react-icons/tb';
-import SrsItemHistoryChart from './srs-item-history-chart';
+import SrsItemHistoryChart from './SrsItemHistoryChart';
 import { calculateNextReviewDate } from '@/components/SRS/visuals/SrsTimeGrid/models/srsDataModel';
 import { clientLog } from '@/lib/clientLogger';
 

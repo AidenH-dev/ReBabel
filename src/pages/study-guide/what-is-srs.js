@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import SRSGuideContent from '@/components/SRS/srs-guide-content';
+import SRSGuideContent from '@/components/SRS/SrsGuideContent';
 import PublicLayout from '@/components/ui/PublicLayout';
 
 export default function WhatIsSrsPage() {
