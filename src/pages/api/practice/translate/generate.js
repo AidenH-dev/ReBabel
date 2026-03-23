@@ -2,6 +2,7 @@ import { withAuth } from '@/lib/withAuth';
 import { tracedLLMCall } from '@/lib/langsmith';
 import { createRateLimiter } from '@/lib/rateLimit';
 import { getProviderConfig } from '@/lib/llmProviders';
+import { shuffleArray } from '@/lib/study/mcOptionGeneration';
 
 export const config = {
   maxDuration: 60,
@@ -11,12 +12,10 @@ const limiter = createRateLimiter({ windowMs: 60_000, maxRequests: 10 });
 
 async function handler(req, res) {
   if (!limiter.check(req.auth0Sub)) {
-    return res
-      .status(429)
-      .json({
-        success: false,
-        error: 'Too many requests. Please try again later.',
-      });
+    return res.status(429).json({
+      success: false,
+      error: 'Too many requests. Please try again later.',
+    });
   }
 
   if (req.method !== 'POST') {
@@ -52,26 +51,15 @@ async function handler(req, res) {
 
   const providerConfig = getProviderConfig(provider);
   if (!providerConfig.key) {
-    return res
-      .status(500)
-      .json({
-        success: false,
-        error: `API key not configured for provider: ${provider}`,
-      });
+    return res.status(500).json({
+      success: false,
+      error: `API key not configured for provider: ${provider}`,
+    });
   }
 
   // Randomly select subset of pools to reduce token usage
   const MAX_VOCAB = 20;
   const MAX_GRAMMAR = 15;
-
-  const shuffleArray = (arr) => {
-    const shuffled = [...arr];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
 
   const trimmedVocabPool = shuffleArray(vocabPool).slice(0, MAX_VOCAB);
   const trimmedGrammarPool = shuffleArray(grammarPool).slice(0, MAX_GRAMMAR);

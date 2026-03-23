@@ -12,6 +12,7 @@ import {
   VERB_FORMS,
   ADJECTIVE_FORMS,
 } from '@/components/Conjugation/shared/models/conjugationConfig';
+import { shuffleArray } from '@/lib/study/mcOptionGeneration';
 
 // ─── Godan stem map ──────────────────────────────────────────────
 // Maps dictionary-form ending -> replacement kana for each stem type
@@ -543,14 +544,8 @@ export function generateQuestions(
     }
   }
 
-  // Shuffle
-  for (let i = pairs.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
-  }
-
-  // Slice to count
-  const selected = pairs.slice(0, count);
+  // Shuffle and slice to count
+  const selected = shuffleArray(pairs).slice(0, count);
 
   // Generate questions
   const questions = [];
