@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { FiSearch } from 'react-icons/fi';
 import { TbStack2, TbDownload, TbLoader3, TbEye } from 'react-icons/tb';
-import ImportProgressOverlay from '@/components/sets/ImportProgressOverlay';
+import ImportProgressOverlay from '@/components/SetImport/ImportProgressOverlay';
 import { clientLog } from '@/lib/clientLogger';
 import BaseModal from '@/components/ui/BaseModal';
 

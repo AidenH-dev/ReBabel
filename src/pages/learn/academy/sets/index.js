@@ -33,7 +33,7 @@ import { FaRegFolderOpen } from 'react-icons/fa6';
 import { TiChartPieOutline } from 'react-icons/ti';
 import { useUserPreferences } from '@/contexts/PreferencesContext';
 import SetsSrsOverview from '@/components/SRS/sets-srs-overview';
-import ImportByCodeModal from '@/components/sets/ImportByCodeModal';
+import ImportByCodeModal from '@/components/SetImport/ImportByCodeModal';
 import { InlineError } from '@/components/ui/errors';
 
 export default function VocabularyDashboard() {

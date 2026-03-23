@@ -4,7 +4,7 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import PageHeader from '@/components/ui/PageHeader';
 import { TbStack2, TbLoader3 } from 'react-icons/tb';
-import ImportProgressOverlay from '@/components/sets/ImportProgressOverlay';
+import ImportProgressOverlay from '@/components/SetImport/ImportProgressOverlay';
 import { clientLog } from '@/lib/clientLogger';
 import { FiSearch } from 'react-icons/fi';
 
