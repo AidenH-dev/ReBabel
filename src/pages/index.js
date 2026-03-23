@@ -11,7 +11,7 @@ import {
   FaShieldAlt,
 } from 'react-icons/fa';
 import { FaArrowRightLong } from 'react-icons/fa6';
-import { TbRepeat } from 'react-icons/tb';
+import { TbRepeat, TbWriting } from 'react-icons/tb';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export async function getStaticProps() {
@@ -599,6 +599,43 @@ export default function Home() {
                     {n}
                   </Link>
                 ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Free Kanji PDF Generator Banner */}
+        <section className="w-full py-12 sm:py-16 bg-gradient-to-r from-blue-500/5 to-cyan-500/5">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
+              <div className="flex-1">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-medium mb-3">
+                  Free Tool -- No Account Required
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
+                  Kanji Writing Practice Sheets
+                </h2>
+                <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">
+                  Generate custom kanji writing practice PDFs with stroke-order
+                  guides, readings, and meanings. Configure grid size, guide
+                  style, and model rows. Print and practice anywhere -- no app
+                  needed.
+                </p>
+                <Link
+                  href="/kanji-practice"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm"
+                >
+                  Open Generator
+                  <FaArrowRightLong size={14} />
+                </Link>
+              </div>
+              <div className="flex items-center justify-center md:justify-end">
+                <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-white dark:bg-surface-card shadow-sm border border-black/5 dark:border-white/10 flex flex-col items-center justify-center gap-2">
+                  <TbWriting className="text-4xl sm:text-5xl text-blue-600 dark:text-blue-400" />
+                  <span className="text-2xl sm:text-3xl font-bold text-gray-700 dark:text-gray-300">
+                    PDF
+                  </span>
+                </div>
               </div>
             </div>
           </div>
