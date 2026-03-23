@@ -26,9 +26,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 // Component imports
-import MasterItemsManagement from '@/components/pages/academy/sets/ViewSet/ItemsManagement/MasterItemsManagement';
-import PracticeOptions from '@/components/pages/academy/sets/ViewSet/PracticeOptions/MasterPracticeOptions';
-import MasterSetHeader from '@/components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader';
+import MasterItemsManagement from '@/components/SetViewer/ItemsManagement/MasterItemsManagement';
+import PracticeOptions from '@/components/SetViewer/PracticeOptions/MasterPracticeOptions';
+import MasterSetHeader from '@/components/SetViewer/SetHeader/MasterSetHeader';
 import PageHeader from '@/components/ui/PageHeader';
 import {
   TbStack2,
