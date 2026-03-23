@@ -372,13 +372,17 @@ function conjugateKuru(_kana, form) {
 
 // ─── I-adjective conjugation ─────────────────────────────────────
 function conjugateIAdjective(kana, form) {
-  // Handle いい/よい special case
-  const isIi = kana === 'いい' || kana === 'よい';
-  const stem = isIi ? 'よ' : kana.slice(0, -1); // drop い
+  // Handle いい/よい special case (includes compounds like かっこいい)
+  const isIi =
+    kana === 'いい' ||
+    kana === 'よい' ||
+    kana.endsWith('いい') ||
+    kana.endsWith('よい');
+  const stem = isIi ? kana.replace(/いい$|よい$/, 'よ') : kana.slice(0, -1); // drop い
 
   switch (form) {
     case 'PresentAffirmative':
-      return simple(isIi ? 'いい' : kana);
+      return simple(kana);
 
     case 'PresentNegative':
       return simple(stem + 'くない');
