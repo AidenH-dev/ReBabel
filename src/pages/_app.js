@@ -4,7 +4,7 @@ import { UserProvider, useUser } from '@auth0/nextjs-auth0/client';
 import { PremiumProvider } from '@/contexts/PremiumContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { PreferencesProvider } from '@/contexts/PreferencesContext';
-import ReportIssueButton from '@/components/report-issue';
+import ReportIssueButton from '@/components/ui/ReportIssueButton';
 import BugReporter from '@/components/BugReporter'; // Implements SPEC-LLM-UI-001
 import BugReporterErrorBoundary from '@/components/BugReporter/BugReporterErrorBoundary';
 import { BugReporterProvider } from '@/contexts/BugReporterContext';
