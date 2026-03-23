@@ -1,8 +1,8 @@
-// /src/components/create-set/Learning_materialInfoForm.js
+// /src/components/SetCreator/LearningMaterialInfoForm.jsx
 
 import React from 'react';
 
-export default function Learning_materialInfoForm({
+export default function LearningMaterialInfoForm({
   learning_materialInfo,
   onChange,
   onNext,

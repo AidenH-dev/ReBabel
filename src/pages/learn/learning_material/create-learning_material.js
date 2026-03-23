@@ -24,8 +24,8 @@ import {
   FaArrowRight,
   FaLightbulb,
 } from 'react-icons/fa';
-import Learning_materialInfoForm from '../../../components/create-set/Learning_materialInfoForm';
-import SectionsBuilder from '../../../components/create-set/SectionsBuilder';
+import LearningMaterialInfoForm from '@/components/SetCreator/LearningMaterialInfoForm';
+import SectionsBuilder from '@/components/SetCreator/SectionsBuilder';
 import { clientLog } from '@/lib/clientLogger';
 
 import { FaArrowTrendUp, FaListCheck, FaFileLines } from 'react-icons/fa6';
@@ -416,7 +416,7 @@ export default function CreateLearning_material() {
 
       {/* Step 1: Learning_material Information */}
       {activeStep === 1 && (
-        <Learning_materialInfoForm
+        <LearningMaterialInfoForm
           learning_materialInfo={learning_materialInfo}
           onChange={handleLearning_materialInfoChange}
           onNext={() => setActiveStep(2)}
