@@ -47,7 +47,7 @@ export default function AuthenticatedLayout({
     <div className={`${wrapperClasses} ${wrapperClassName}`}>
       <Sidebar />
       <main
-        className={`ml-auto flex-1 flex flex-col ${
+        className={`ml-auto flex-1 flex flex-col overflow-x-hidden ${
           variant === 'fixed' ? 'overflow-y-auto' : ''
         } ${mainClassName}`}
       >
