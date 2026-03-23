@@ -21,7 +21,7 @@ import {
 import { TbSunset2, TbCoffee } from 'react-icons/tb';
 import BaseModal from '@/components/ui/BaseModal';
 import Button from '@/components/ui/Button';
-import { useTheme } from '../../../contexts/ThemeContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { clientLog } from '@/lib/clientLogger';
 import { InlineError, ActionError } from '@/components/ui/errors';
 

@@ -13,7 +13,7 @@ import {
   FaVolumeUp,
   FaBrain,
 } from 'react-icons/fa';
-import KeyboardShortcutHint from '../../../../../../components/Set/Features/Field-Card-Session/shared/views/KeyboardShortcutHint';
+import KeyboardShortcutHint from '@/components/Set/Features/Field-Card-Session/shared/views/KeyboardShortcutHint';
 import { TbCards, TbX } from 'react-icons/tb';
 import { MdFlip } from 'react-icons/md';
 import { FiEdit2 } from 'react-icons/fi';

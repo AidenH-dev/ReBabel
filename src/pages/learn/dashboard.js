@@ -19,8 +19,8 @@ import { FiPlay, FiChevronRight } from 'react-icons/fi';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 import { HiOutlineLightningBolt } from 'react-icons/hi';
 import { LuTextCursorInput } from 'react-icons/lu';
-import PageHeader from '../../components/ui/PageHeader';
-import SetRow from '../../components/ui/SetRow';
+import PageHeader from '@/components/ui/PageHeader';
+import SetRow from '@/components/ui/SetRow';
 import Button from '@/components/ui/Button';
 import { InlineError } from '@/components/ui/errors';
 

@@ -1,6 +1,6 @@
 // pages/api/database/v1/sections/[id].js
 import { withAuth } from '@/lib/withAuth';
-import { supabaseAdmin } from '../../../../../lib/supabaseAdmin';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export default withAuth(async function handler(req, res) {
   const ownerId = req.auth0Sub;

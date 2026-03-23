@@ -1,6 +1,6 @@
 // pages/api/database/v1/learning_materials/create.js
 import { withAuth } from '@/lib/withAuth';
-import { supabaseAdmin } from '../../../../../lib/supabaseAdmin';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 const norm = (s = '') => s.normalize('NFKC').toLowerCase().trim();
 const slug = (s = '') => norm(s).replace(/\s+/g, '-');
