@@ -100,7 +100,7 @@ export default function DashboardPage() {
   const statsError = statsErrorObj ? 'Failed to load dashboard stats.' : null;
 
   const userData = useMemo(() => {
-    const d = statsRaw?.message;
+    const d = statsRaw?.data;
     if (!d) {
       return {
         name: userProfile?.name || '',
