@@ -64,11 +64,15 @@ src/
       academy/            # SRS study interface
     admin/
     blog/
-  components/
-    SRS/                  # Spaced repetition UI
-    Set/Features/         # Flashcard session (Quiz, SRS) — MVC pattern
-    Practice/             # Translation practice components
-    Sidebars/             # MainSidebar, AcademySidebar, AdminSidebar
+  components/             # See Component Organization below
+    Conjugation/          # Tier 3: Verb conjugation (Public/ + Premium/ + shared/)
+    Set/Features/         # Tier 3: Quiz/SRS session engine (Quiz/ + SRS/ + shared/)
+    Translate/            # Tier 2: AI translation practice (Configuration/ + Session/)
+    SetViewer/            # Tier 2: Set viewing/management UI
+    SetCreator/           # Tier 2: Set creation + CSV upload
+    SRS/                  # Tier 2: SRS dashboard, charts, TimeGrid
+    Sidebars/             # Tier 1: MainSidebar, AcademySidebar, AdminSidebar
+    ui/                   # Tier 1: Shared primitives (Button, BaseModal, layouts)
   contexts/
     PremiumContext.js     # Subscription state + daily session limits
     ThemeContext.js       # Light/dark/system theme with localStorage
@@ -76,6 +80,56 @@ src/
     langsmith.js          # tracedLLMCall(), traced(), submitFeedback()
     supabaseAdmin.js      # Shared Supabase admin client (service role, no RLS)
 ```
+
+## Component Organization (Tiered System)
+
+All component directories follow one of three tiers based on complexity:
+
+### Tier 1 -- Flat (1-4 files, no subdirs)
+
+Used for simple, single-purpose components.
+
+| Directory        | Files | Purpose               |
+| ---------------- | ----- | --------------------- |
+| `blog/`          | 2     | Content display       |
+| `KanjiPractice/` | 2     | Kanji practice viewer |
+| `Popups/`        | 2     | Global popup modals   |
+| `SetImport/`     | 2     | Import sets by code   |
+| `Sidebars/`      | 3     | Navigation sidebars   |
+
+### Tier 2 -- Feature Directory (medium complexity, one level of subdirs)
+
+Used for self-contained features that need internal organization.
+
+| Directory       | Files | Purpose                                               |
+| --------------- | ----- | ----------------------------------------------------- |
+| `BugReporter/`  | 5     | Bug reporting with tests                              |
+| `SetCreator/`   | 5     | Set creation workflow + CSV upload                    |
+| `SetViewer/`    | 5     | Set viewing/management UI                             |
+| `SRS/`          | 15    | SRS dashboard, charts, TimeGrid (MVC)                 |
+| `Tables/admin/` | 11    | Admin data tables (MVC)                               |
+| `Translate/`    | 11    | AI translation practice (Configuration/ + Session/)   |
+| `ui/`           | 15    | Shared primitives (buttons, modals, layouts, errors/) |
+
+### Tier 3 -- Feature Hierarchy (complex, shared/ + variant dirs, MVC)
+
+Used for features with multiple modes or variants that share components.
+
+| Directory                          | Files | Purpose                                          |
+| ---------------------------------- | ----- | ------------------------------------------------ |
+| `Conjugation/`                     | 7     | Verb conjugation (Public/ + Premium/ + shared/)  |
+| `Set/Features/Field-Card-Session/` | 15    | Quiz/SRS session engine (Quiz/ + SRS/ + shared/) |
+
+### Conventions
+
+- **Directory names:** PascalCase (e.g., `SetViewer/`, not `set-viewer/`)
+- **Component files:** `PascalCase.jsx` (e.g., `MasterSetHeader.jsx`)
+- **Utility/logic files:** `camelCase.js` (e.g., `csvUtils.js`)
+- **Extension:** `.jsx` for files containing JSX, `.js` for pure logic
+- **MVC subdirs:** `controllers/` (orchestrators), `views/` (presentational), `models/` (data/config)
+- **Shared code in Tier 3:** Place in `shared/` directory with MVC subdirs; feature variants import from shared
+
+Reference implementations: `Set/Features/Field-Card-Session/` and `Conjugation/`.
 
 ## Key Patterns
 
