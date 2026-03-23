@@ -1,4 +1,3 @@
-// components/pages/academy/sets/QuizSet/ModeSelect/MasterQuizModeSelect.jsx
 import { FaGraduationCap, FaBrain, FaDumbbell } from 'react-icons/fa';
 import { MdQuiz } from 'react-icons/md';
 import { BsFillQuestionSquareFill } from 'react-icons/bs';

@@ -1,4 +1,3 @@
-// components/pages/academy/sets/ViewSet/SetHeader/MasterSetHeader.jsx
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { FiEdit2, FiMoreVertical, FiCopy, FiCheck } from 'react-icons/fi';

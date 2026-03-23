@@ -1,4 +1,3 @@
-// /components/pages/academy/sets/QuizSet/QuestionCard/MasterQuestionCard.jsx
 import { useState, useRef, useEffect, useCallback } from 'react';
 import TypedResponseView from '@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx';
 import { validateTypedAnswer } from '@/components/Set/Features/Field-Card-Session/shared/controllers/utils/answerValidation';

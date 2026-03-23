@@ -1,4 +1,3 @@
-// components/pages/academy/sets/ViewSet/PracticeOptions/MasterPracticeOptions.jsx
 import { useRouter } from 'next/router';
 import { FaPlay } from 'react-icons/fa';
 import { MdQuiz } from 'react-icons/md';

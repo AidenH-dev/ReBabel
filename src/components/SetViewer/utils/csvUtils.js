@@ -1,5 +1,3 @@
-// @/components/pages/academy/sets/ViewSet/utils/csvUtils.js
-
 export { toSlug } from '@/lib/slug';
 
 export function escapeCSVCell(value) {

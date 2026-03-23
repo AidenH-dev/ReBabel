@@ -1,4 +1,3 @@
-// components/pages/academy/sets/QuizSet/QuizHeader/MasterQuizHeader.jsx
 import { FaBook } from 'react-icons/fa';
 import { IoSparkles } from 'react-icons/io5';
 import { FaDumbbell } from 'react-icons/fa';

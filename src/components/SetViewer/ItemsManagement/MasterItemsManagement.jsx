@@ -1,4 +1,3 @@
-// /components/pages/academy/sets/ViewSet/ItemsManagement/MasterItemsManagement.jsx
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {

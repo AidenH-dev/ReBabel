@@ -118,7 +118,7 @@ Used for features with multiple modes or variants that share components.
 | Directory                          | Files | Purpose                                          |
 | ---------------------------------- | ----- | ------------------------------------------------ |
 | `Conjugation/`                     | 7     | Verb conjugation (Public/ + Premium/ + shared/)  |
-| `Set/Features/Field-Card-Session/` | 15    | Quiz/SRS session engine (Quiz/ + SRS/ + shared/) |
+| `Set/Features/Field-Card-Session/` | 17    | Quiz/SRS session engine (Quiz/ + SRS/ + shared/) |
 
 ### Conventions
 
@@ -209,8 +209,9 @@ Tailwind CSS throughout. Key brand colors:
 
 ## File Naming
 
-- Component files: `kebab-case.js` (e.g. `progress-bar.js`)
+- Component files: `PascalCase.jsx` (e.g. `MasterSetHeader.jsx`) -- see Component Organization above
 - API routes: `kebab-case.js` (e.g. `fetch-vocabulary.js`)
+- Utility/logic files: `camelCase.js` (e.g. `csvUtils.js`)
 - Variables/functions: `camelCase`
 - Path alias: `@/*` → `src/*`
 
