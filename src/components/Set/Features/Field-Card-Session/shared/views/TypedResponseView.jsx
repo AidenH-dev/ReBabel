@@ -188,9 +188,9 @@ export default function TypedResponseView({
             )}
           </div>
 
-          {/* Result Feedback -- always renders incorrect-sized content for stable height */}
+          {/* Result Feedback -- always renders worst-case content invisible for stable height */}
           <div className="relative">
-            {/* Invisible incorrect layout always present to hold height */}
+            {/* Invisible layout always present to hold height */}
             <div
               className="p-3 sm:p-4 text-sm sm:text-base invisible"
               aria-hidden="true"
@@ -199,10 +199,27 @@ export default function TypedResponseView({
                 <FaTimes />
                 <span className="font-semibold">Incorrect</span>
               </div>
-              <div className="text-xs sm:text-sm">
+              <div className="text-xs sm:text-sm mb-2">
                 The correct answer is:{' '}
                 <span className="font-bold">{currentItem.answer}</span>
               </div>
+              {/* Reserve space for item detail */}
+              {currentItem.type === 'vocabulary' && (
+                <div className="flex items-center gap-2 pt-2 border-t border-transparent text-xs sm:text-sm">
+                  <span className="font-bold">
+                    {currentItem.kanji || currentItem.kana}
+                  </span>
+                  {currentItem.kanji && <span>{currentItem.kana}</span>}
+                  <span>·</span>
+                  <span>{currentItem.english}</span>
+                  {currentItem.lexical_category && (
+                    <>
+                      <span>·</span>
+                      <span>{currentItem.lexical_category}</span>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
             {/* Visible feedback positioned on top */}
             <div
@@ -215,9 +232,34 @@ export default function TypedResponseView({
               }`}
             >
               {isCorrect ? (
-                <div className="flex items-center gap-2">
-                  <FaCheck />
-                  <span className="font-semibold">Correct!</span>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <FaCheck />
+                    <span className="font-semibold">Correct!</span>
+                  </div>
+                  {/* Item detail on correct */}
+                  {currentItem.type === 'vocabulary' && (
+                    <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 pt-2 mt-2 border-t border-green-200 dark:border-green-700/50 text-xs sm:text-sm text-green-700 dark:text-green-300/80">
+                      <span className="font-bold">
+                        {currentItem.kanji || currentItem.kana}
+                      </span>
+                      {currentItem.kanji && (
+                        <span className="text-green-600 dark:text-green-400/70">
+                          {currentItem.kana}
+                        </span>
+                      )}
+                      <span className="opacity-40">·</span>
+                      <span>{currentItem.english}</span>
+                      {currentItem.lexical_category && (
+                        <>
+                          <span className="opacity-40">·</span>
+                          <span className="opacity-70">
+                            {currentItem.lexical_category}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div>
@@ -229,6 +271,29 @@ export default function TypedResponseView({
                     The correct answer is:{' '}
                     <span className="font-bold">{currentItem.answer}</span>
                   </div>
+                  {/* Item detail on incorrect */}
+                  {currentItem.type === 'vocabulary' && (
+                    <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 pt-2 mt-2 border-t border-red-200 dark:border-red-700/50 text-xs sm:text-sm text-red-700 dark:text-red-300/80">
+                      <span className="font-bold">
+                        {currentItem.kanji || currentItem.kana}
+                      </span>
+                      {currentItem.kanji && (
+                        <span className="text-red-600 dark:text-red-400/70">
+                          {currentItem.kana}
+                        </span>
+                      )}
+                      <span className="opacity-40">·</span>
+                      <span>{currentItem.english}</span>
+                      {currentItem.lexical_category && (
+                        <>
+                          <span className="opacity-40">·</span>
+                          <span className="opacity-70">
+                            {currentItem.lexical_category}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
