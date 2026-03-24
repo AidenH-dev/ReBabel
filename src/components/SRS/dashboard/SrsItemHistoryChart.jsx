@@ -39,8 +39,8 @@ export default function SrsItemHistoryChart({ history, itemName }) {
       {
         label: 'SRS Level',
         data: sorted.map((h) => h.srs_level),
-        borderColor: 'var(--brand-pink)',
-        backgroundColor: 'var(--brand-pink)',
+        borderColor: '#e30a5f',
+        backgroundColor: '#e30a5f',
         pointRadius: 3,
         pointHoverRadius: 5,
         borderWidth: 2,
