@@ -546,33 +546,29 @@ export default function CreateNewSet() {
         <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10 p-3 mb-4">
           <div className="flex gap-3 items-center">
             {/* Type Toggle */}
-            <div className="flex items-center gap-2">
-              <div className="flex bg-gray-200 dark:bg-surface-deep rounded-md p-1">
-                <button
-                  onClick={() => setItemType('vocabulary')}
-                  disabled={
-                    proposedItems.length > 0 && itemType !== 'vocabulary'
-                  }
-                  className={`px-3 py-2 mr-0.5 text-xs font-medium rounded transition-colors ${
-                    itemType === 'vocabulary'
-                      ? 'bg-brand-pink text-white'
-                      : 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
-                  } ${proposedItems.length > 0 && itemType !== 'vocabulary' ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  Vocabulary
-                </button>
-                <button
-                  onClick={() => setItemType('grammar')}
-                  disabled={proposedItems.length > 0 && itemType !== 'grammar'}
-                  className={`px-3 py-2 text-xs font-medium rounded transition-colors ${
-                    itemType === 'grammar'
-                      ? 'bg-brand-pink text-white'
-                      : 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
-                  } ${proposedItems.length > 0 && itemType !== 'grammar' ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  Grammar
-                </button>
-              </div>
+            <div className="flex items-center gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1 self-stretch">
+              <button
+                onClick={() => setItemType('vocabulary')}
+                disabled={proposedItems.length > 0 && itemType !== 'vocabulary'}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition ${
+                  itemType === 'vocabulary'
+                    ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
+                    : 'text-black/60 dark:text-white/60'
+                } ${proposedItems.length > 0 && itemType !== 'vocabulary' ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                Vocabulary
+              </button>
+              <button
+                onClick={() => setItemType('grammar')}
+                disabled={proposedItems.length > 0 && itemType !== 'grammar'}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition ${
+                  itemType === 'grammar'
+                    ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
+                    : 'text-black/60 dark:text-white/60'
+                } ${proposedItems.length > 0 && itemType !== 'grammar' ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                Grammar
+              </button>
             </div>
 
             {/* Description Field */}
@@ -593,36 +589,33 @@ export default function CreateNewSet() {
           <div className="lg:col-span-2">
             <div className="bg-white dark:bg-surface-card rounded-lg shadow-sm border border-black/5 dark:border-white/10">
               {/* Tab Navigation */}
-              <div className="border-b border-black/5 dark:border-white/10 px-4 mt-2">
-                <div className="flex items-center">
-                  <div className="flex gap-4 -mb-px h-10">
-                    {[
-                      {
-                        key: 'single',
-                        label: 'Add Single',
-                        icon: <FiPlus className="w-3 h-3" />,
-                      },
-                      {
-                        key: 'csv',
-                        label: 'CSV Upload',
-                        icon: <FiUpload className="w-3 h-3" />,
-                      },
-                    ].map(({ key, label, icon }) => (
-                      <button
-                        key={key}
-                        onClick={() => setActiveTab(key)}
-                        className={`pb-2 pt-1 px-1 text-sm font-medium focus:outline-none border-b-2 transition-colors flex items-center gap-1.5
-                                                       ${
-                                                         activeTab === key
-                                                           ? 'text-brand-pink border-brand-pink'
-                                                           : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-gray-900 dark:hover:text-white'
-                                                       }`}
-                      >
-                        {icon}
-                        {label}
-                      </button>
-                    ))}
-                  </div>
+              <div className="px-4 pt-3">
+                <div className="flex items-center gap-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] p-1 w-fit">
+                  {[
+                    {
+                      key: 'single',
+                      label: 'Add Single',
+                      icon: <FiPlus className="w-3 h-3" />,
+                    },
+                    {
+                      key: 'csv',
+                      label: 'CSV Upload',
+                      icon: <FiUpload className="w-3 h-3" />,
+                    },
+                  ].map(({ key, label, icon }) => (
+                    <button
+                      key={key}
+                      onClick={() => setActiveTab(key)}
+                      className={`px-3 py-1.5 rounded-md text-xs font-medium transition flex items-center gap-1.5 ${
+                        activeTab === key
+                          ? 'bg-white dark:bg-surface-deep text-brand-pink shadow-sm'
+                          : 'text-black/60 dark:text-white/60'
+                      }`}
+                    >
+                      {icon}
+                      {label}
+                    </button>
+                  ))}
                 </div>
               </div>
 

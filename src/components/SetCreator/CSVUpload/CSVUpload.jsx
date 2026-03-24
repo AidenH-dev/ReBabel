@@ -150,7 +150,7 @@ export default function CSVUpload({ onUpload, itemType, onColumnsMapped }) {
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
               Drag and drop your CSV file here, or
             </p>
-            <label className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium bg-brand-pink text-white hover:opacity-95 transition-opacity cursor-pointer">
+            <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-brand-pink text-white hover:bg-brand-pink-hover active:scale-[0.98] transition cursor-pointer">
               <FiFile className="w-4 h-4" />
               Browse Files
               <input
