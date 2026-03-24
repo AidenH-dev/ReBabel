@@ -6,6 +6,7 @@ export default function CustomSelect({
   options,
   className = '',
   placeholder = 'Select...',
+  size = 'md',
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
@@ -27,16 +28,22 @@ export default function CustomSelect({
   const selectedLabel =
     options.find((o) => o.value === value)?.label || placeholder;
 
+  const isSmall = size === 'sm';
+
   return (
     <div ref={ref} className={`relative block ${className}`}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between gap-2 bg-white dark:bg-surface-deep border border-border-default rounded-md px-3 py-2 text-sm text-gray-900 dark:text-white text-left whitespace-nowrap"
+        className={`w-full flex items-center justify-between gap-2 bg-white dark:bg-surface-deep border border-border-default rounded-md text-left whitespace-nowrap ${
+          isSmall
+            ? 'px-2 py-1.5 text-xs text-gray-700 dark:text-gray-300'
+            : 'px-3 py-2 text-sm text-gray-900 dark:text-white'
+        }`}
       >
         <span className="truncate">{selectedLabel}</span>
         <svg
-          className={`w-4 h-4 flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''} ${isSmall ? 'w-3 h-3' : 'w-4 h-4'}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -59,10 +66,12 @@ export default function CustomSelect({
                 onChange(option.value);
                 setIsOpen(false);
               }}
-              className={`w-full text-left px-3 py-2 text-sm whitespace-nowrap transition-colors ${
+              className={`w-full text-left whitespace-nowrap transition-colors ${
+                isSmall ? 'px-2 py-1.5 text-xs' : 'px-3 py-2 text-sm'
+              } ${
                 value === option.value
-                  ? 'bg-brand-pink/10 text-brand-pink dark:text-[#ff4d8d] font-medium'
-                  : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5'
+                  ? 'bg-brand-pink/10 text-brand-pink dark:text-[#ff4d8d]'
+                  : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5'
               }`}
             >
               {option.label}

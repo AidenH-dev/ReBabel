@@ -25,7 +25,7 @@ export function SRSNotificationPrompt({
     <BaseModal
       isOpen={isOpen}
       onClose={isLoading ? () => {} : onClose}
-      variant="bottom-sheet"
+      variant="centered"
       backdropOpacity={60}
       blur={true}
       closeOnBackdrop={!isLoading}

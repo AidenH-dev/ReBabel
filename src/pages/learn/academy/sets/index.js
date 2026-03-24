@@ -68,6 +68,8 @@ export default function VocabularyDashboard() {
     if (serverPrefs.sets_sort) setSortKeyState(serverPrefs.sets_sort);
     if (serverPrefs.sets_size_desc !== undefined)
       setSizeDescState(serverPrefs.sets_size_desc !== 'false');
+    if (serverPrefs.dismiss_beginner_pack === 'true')
+      beginnerDismissedRef.current = true;
   });
 
   // Load saved preferences from localStorage on mount (instant, before server responds)
@@ -79,6 +81,8 @@ export default function VocabularyDashboard() {
       setSortKeyState(savedSort);
     const savedSizeDir = localStorage.getItem('sets-size-desc');
     if (savedSizeDir !== null) setSizeDescState(savedSizeDir !== 'false');
+    if (localStorage.getItem('dismiss-beginner-pack') === 'true')
+      beginnerDismissedRef.current = true;
   }, []);
 
   const setView = (v) => {
@@ -113,6 +117,7 @@ export default function VocabularyDashboard() {
   };
 
   const [showBeginnerPopup, setShowBeginnerPopup] = useState(false);
+  const beginnerDismissedRef = useRef(false);
   const [showImportModal, setShowImportModal] = useState(false);
 
   // --- SWR data fetching ---
@@ -202,9 +207,10 @@ export default function VocabularyDashboard() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // Show beginner popup when sets are loaded but empty
+  // Show beginner popup when sets are loaded but empty (only once per session)
   useEffect(() => {
     if (
+      !beginnerDismissedRef.current &&
       !isLoadingSets &&
       recentsSets.length === 0 &&
       userProfile &&
@@ -468,7 +474,11 @@ export default function VocabularyDashboard() {
         )}
         <BeginnerPackPopup
           isOpen={showBeginnerPopup}
-          onClose={() => setShowBeginnerPopup(false)}
+          onClose={() => {
+            beginnerDismissedRef.current = true;
+            setShowBeginnerPopup(false);
+            savePreference('dismiss_beginner_pack', 'true');
+          }}
           onImport={() => {
             // After successful import, reload to show the new sets
             window.location.reload();
@@ -478,6 +488,7 @@ export default function VocabularyDashboard() {
         <ImportByCodeModal
           isOpen={showImportModal}
           onClose={() => setShowImportModal(false)}
+          userProfile={userProfile}
         />
 
         {/* Desktop stats are now in the PageHeader above */}

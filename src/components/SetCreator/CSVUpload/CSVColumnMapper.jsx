@@ -1,8 +1,64 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 import CustomSelect from '@/components/ui/CustomSelect';
 import BaseModal from '@/components/ui/BaseModal';
 import Button from '@/components/ui/Button';
+
+const fieldDefinitions = {
+  vocabulary: {
+    required: [
+      {
+        key: 'english',
+        label: 'English',
+        description: 'English translation/meaning',
+      },
+      {
+        key: 'kana',
+        label: 'Kana',
+        description: 'Hiragana/Katakana reading',
+      },
+    ],
+    requireOneOf: ['english', 'kana'], // At least one of these must be mapped
+    optional: [
+      { key: 'kanji', label: 'Kanji', description: 'Kanji characters' },
+      {
+        key: 'example_sentences',
+        label: 'Example Sentences',
+        description: 'Usage examples',
+      },
+      { key: 'tags', label: 'Tags', description: 'Comma-separated tags' },
+      {
+        key: 'audio',
+        label: 'Audio URL',
+        description: 'Pronunciation audio link',
+      },
+    ],
+  },
+  grammar: {
+    required: [
+      { key: 'title', label: 'Title', description: 'Grammar pattern name' },
+      {
+        key: 'description',
+        label: 'Description',
+        description: 'Explanation of the pattern',
+      },
+    ],
+    optional: [
+      {
+        key: 'topic',
+        label: 'Topic',
+        description: 'Category (e.g., N5, JLPT)',
+      },
+      { key: 'notes', label: 'Notes', description: 'Additional usage tips' },
+      {
+        key: 'example_sentences',
+        label: 'Example Sentences',
+        description: 'Usage examples',
+      },
+      { key: 'tags', label: 'Tags', description: 'Comma-separated tags' },
+    ],
+  },
+};
 
 export default function CSVColumnMapper({
   isOpen,
@@ -14,64 +70,10 @@ export default function CSVColumnMapper({
   const [columnMappings, setColumnMappings] = useState({});
   const [validationErrors, setValidationErrors] = useState([]);
 
-  // Define required and optional fields based on item type
-  const fieldDefinitions = {
-    vocabulary: {
-      required: [
-        {
-          key: 'english',
-          label: 'English',
-          description: 'English translation/meaning',
-        },
-        {
-          key: 'kana',
-          label: 'Kana',
-          description: 'Hiragana/Katakana reading',
-        },
-      ],
-      requireOneOf: ['english', 'kana'], // At least one of these must be mapped
-      optional: [
-        { key: 'kanji', label: 'Kanji', description: 'Kanji characters' },
-        {
-          key: 'example_sentences',
-          label: 'Example Sentences',
-          description: 'Usage examples',
-        },
-        { key: 'tags', label: 'Tags', description: 'Comma-separated tags' },
-        {
-          key: 'audio',
-          label: 'Audio URL',
-          description: 'Pronunciation audio link',
-        },
-      ],
-    },
-    grammar: {
-      required: [
-        { key: 'title', label: 'Title', description: 'Grammar pattern name' },
-        {
-          key: 'description',
-          label: 'Description',
-          description: 'Explanation of the pattern',
-        },
-      ],
-      optional: [
-        {
-          key: 'topic',
-          label: 'Topic',
-          description: 'Category (e.g., N5, JLPT)',
-        },
-        { key: 'notes', label: 'Notes', description: 'Additional usage tips' },
-        {
-          key: 'example_sentences',
-          label: 'Example Sentences',
-          description: 'Usage examples',
-        },
-        { key: 'tags', label: 'Tags', description: 'Comma-separated tags' },
-      ],
-    },
-  };
-
-  const fields = fieldDefinitions[itemType] || fieldDefinitions.vocabulary;
+  const fields = useMemo(
+    () => fieldDefinitions[itemType] || fieldDefinitions.vocabulary,
+    [itemType]
+  );
 
   // Validate mappings
   const validateMappings = () => {
@@ -135,7 +137,7 @@ export default function CSVColumnMapper({
 
     setColumnMappings(autoMappings);
     setValidationErrors([]);
-  }, [isOpen, csvHeaders, itemType, fields]);
+  }, [isOpen, csvHeaders, itemType]);
 
   const footerContent = (
     <div className="flex items-center justify-end gap-3">

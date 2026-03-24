@@ -12,6 +12,10 @@ const PREF_KEYS = {
   sets_view: { localKey: 'sets-view', default: 'grid' },
   sets_sort: { localKey: 'sets-sort', default: 'recent' },
   sets_size_desc: { localKey: 'sets-size-desc', default: 'true' },
+  dismiss_beginner_pack: {
+    localKey: 'dismiss-beginner-pack',
+    default: 'false',
+  },
 };
 
 const PreferencesContext = createContext();

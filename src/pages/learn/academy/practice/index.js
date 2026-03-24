@@ -14,6 +14,7 @@ import {
 import { LuTextCursorInput } from 'react-icons/lu';
 import { TbLanguageHiragana } from 'react-icons/tb';
 import { BeginnerPackPopup } from '@/components/Popups/BeginnerPackPopup';
+import { useUserPreferences } from '@/contexts/PreferencesContext';
 import { LuAlarmClock } from 'react-icons/lu';
 import ConfigPanelView from '@/components/Translate/Configuration/views/ConfigPanelView';
 import CardSwapCustomItemModal from '@/components/Translate/Configuration/views/CardSwapCustomItemModal';
@@ -54,6 +55,18 @@ export default function VocabularyDashboard() {
   const [setsError, setSetsError] = useState(null);
 
   const [showBeginnerPopup, setShowBeginnerPopup] = useState(false);
+  const beginnerDismissedRef = useRef(false);
+
+  const { savePreference } = useUserPreferences((serverPrefs) => {
+    if (serverPrefs.dismiss_beginner_pack === 'true')
+      beginnerDismissedRef.current = true;
+  });
+
+  // Check localStorage immediately (before server prefs arrive)
+  useEffect(() => {
+    if (localStorage.getItem('dismiss-beginner-pack') === 'true')
+      beginnerDismissedRef.current = true;
+  }, []);
 
   // Selection state for translate practice
   // POOLS - What's available to practice from
@@ -172,6 +185,7 @@ export default function VocabularyDashboard() {
 
   useEffect(() => {
     if (
+      !beginnerDismissedRef.current &&
       !isLoadingSets &&
       recentsSets.length === 0 &&
       userProfile &&
@@ -678,7 +692,11 @@ export default function VocabularyDashboard() {
           )}
           <BeginnerPackPopup
             isOpen={showBeginnerPopup}
-            onClose={() => setShowBeginnerPopup(false)}
+            onClose={() => {
+              beginnerDismissedRef.current = true;
+              setShowBeginnerPopup(false);
+              savePreference('dismiss_beginner_pack', 'true');
+            }}
             onImport={() => {
               // After successful import, reload to show the new sets
               window.location.reload();
