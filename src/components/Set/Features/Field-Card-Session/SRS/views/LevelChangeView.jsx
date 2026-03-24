@@ -139,7 +139,7 @@ export default function SRSLevelChange({
         }`}
       >
         <div
-          className={`rounded-xl border-[1.5px] border-dotted ${toneBorder} ${toneBg} px-3 py-2 shadow-md backdrop-blur-sm sm:px-4 sm:py-2.5`}
+          className={`rounded-xl border-[1.5px] border-dashed ${toneBorder} ${toneBg} px-3 py-2 shadow-md backdrop-blur-sm sm:px-4 sm:py-2.5`}
         >
           <div className="flex items-center gap-3 sm:gap-4">
             {/* Level transition badge */}
@@ -212,7 +212,7 @@ export default function SRSLevelChange({
 export function LevelChangePlaceholder() {
   return (
     <div className="pointer-events-none invisible" aria-hidden="true">
-      <div className="rounded-xl border-[1.5px] border-dotted border-transparent px-3 py-2 sm:px-4 sm:py-2.5">
+      <div className="rounded-xl border-[1.5px] border-dashed border-transparent px-3 py-2 sm:px-4 sm:py-2.5">
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-1.5 shrink-0">
             <span className="text-base sm:text-lg font-bold">0</span>
