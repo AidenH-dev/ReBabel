@@ -27,7 +27,8 @@ export function generateShortToken(): string {
 
 function buildShareUrl(baseUrl: string, token: string, title?: string): string {
   const slug = toSlug(title || 'set');
-  return `${baseUrl}/shared/sets/${token}/${slug}`;
+  const base = baseUrl.replace(/\/+$/, '');
+  return `${base}/shared/sets/${token}/${slug}`;
 }
 
 interface ApiResponse {
