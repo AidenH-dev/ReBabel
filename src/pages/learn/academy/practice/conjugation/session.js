@@ -316,7 +316,7 @@ export default function ConjugationPracticeSession() {
           answeredItems={answeredItems}
           animateAccuracy={animateAccuracy}
           onBackToSet={() => router.push('/learn/academy/practice')}
-          completionTitle="Conjugation Complete!"
+          completionTitle="Conjugation Practice Complete"
         />
       </AuthenticatedLayout>
     );

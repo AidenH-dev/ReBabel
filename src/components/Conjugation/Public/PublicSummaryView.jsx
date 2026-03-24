@@ -1,4 +1,5 @@
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FiCheckCircle } from 'react-icons/fi';
 import SignupCTA from '@/components/Conjugation/Public/SignupCTA';
 
 export default function PublicSummaryView({
@@ -12,60 +13,68 @@ export default function PublicSummaryView({
     <div className="flex-1 flex flex-col lg:flex-row gap-4 max-w-5xl mx-auto w-full">
       {/* Left: Summary */}
       <div className="flex-1">
-        <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8">
-          <div className="text-center mb-4">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-full mb-3">
-              <FaCheckCircle className="text-white text-2xl" />
+        <div className="bg-white dark:bg-white/10 rounded-xl border border-gray-200 dark:border-white/10 p-4 sm:p-6">
+          {/* Completion Header */}
+          <div className="mb-4">
+            <div className="flex items-center gap-3 mb-1">
+              <FiCheckCircle className="w-9 h-9 sm:w-11 sm:h-11 text-green-600 dark:text-green-400 flex-shrink-0" />
+              <div>
+                <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white leading-tight">
+                  Session Complete!
+                </h2>
+                <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
+                  JLPT N{level} Conjugation Practice
+                </p>
+              </div>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">
-              Session Complete!
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-white/60">
-              JLPT N{level} Conjugation Practice
-            </p>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-3 mb-4">
-            <div className="bg-gray-50 dark:bg-white/5 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-gray-900 dark:text-white">
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            <div className="bg-gray-50 dark:bg-white/5 rounded-lg px-3 py-2 text-center">
+              <div className="text-lg font-bold text-gray-900 dark:text-white">
                 {sessionStats.correct}
               </div>
-              <div className="text-xs text-gray-600 dark:text-white/60 flex items-center justify-center gap-1">
-                <FaCheckCircle className="text-green-500" /> Correct
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium flex items-center justify-center gap-1">
+                <FaCheckCircle
+                  className="text-green-500"
+                  style={{ fontSize: 8 }}
+                />
+                Correct
               </div>
             </div>
-            <div className="bg-gray-50 dark:bg-white/5 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-gray-900 dark:text-white">
+            <div className="bg-gray-50 dark:bg-white/5 rounded-lg px-3 py-2 text-center">
+              <div className="text-lg font-bold text-gray-900 dark:text-white">
                 {sessionStats.incorrect}
               </div>
-              <div className="text-xs text-gray-600 dark:text-white/60 flex items-center justify-center gap-1">
-                <FaTimesCircle className="text-red-500" /> Incorrect
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium flex items-center justify-center gap-1">
+                <FaTimesCircle
+                  className="text-red-400"
+                  style={{ fontSize: 8 }}
+                />
+                Incorrect
               </div>
             </div>
-            <div className="bg-gray-50 dark:bg-white/5 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-gray-900 dark:text-white">
-                {answeredItems.length}
+            <div className="bg-gray-50 dark:bg-white/5 rounded-lg px-3 py-2 text-center">
+              <div className="text-lg font-bold text-brand-pink">
+                {sessionStats.accuracy}%
               </div>
-              <div className="text-xs text-gray-600 dark:text-white/60">
-                Total
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium">
+                Accuracy
               </div>
             </div>
           </div>
 
           {/* Accuracy bar */}
           <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-gray-700 dark:text-white/80">
-                Accuracy
-              </span>
-              <span className="text-lg font-bold text-brand-pink">
-                {sessionStats.accuracy}%
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                Overall Accuracy
               </span>
             </div>
-            <div className="w-full h-5 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-brand-pink to-brand-pink-hover transition-all duration-[1500ms] ease-out"
+                className="h-full rounded-full bg-gradient-to-r from-brand-pink to-[#c1084d] transition-all duration-[1500ms] ease-out"
                 style={{
                   width: animateAccuracy ? `${sessionStats.accuracy}%` : '0%',
                 }}
@@ -75,7 +84,7 @@ export default function PublicSummaryView({
 
           <button
             onClick={onPracticeAgain}
-            className="w-full px-4 py-2.5 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-medium transition-all text-sm"
+            className="w-full px-4 py-2.5 rounded-lg font-medium text-sm text-white transition-all active:scale-95 bg-gradient-to-r from-brand-pink to-[#c1084d] hover:brightness-110"
           >
             Practice Again
           </button>
@@ -89,58 +98,64 @@ export default function PublicSummaryView({
 
       {/* Right: Question Breakdown */}
       <div className="w-full lg:w-1/3">
-        <div className="bg-white dark:bg-white/10 rounded-2xl shadow-xl p-3 sm:p-4 max-h-[400px] lg:max-h-[600px] overflow-y-auto">
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+        <div className="bg-white dark:bg-white/10 rounded-xl border border-gray-200 dark:border-white/10 p-3 sm:p-4 max-h-[400px] lg:max-h-[600px] overflow-y-auto">
+          <h3 className="text-xs font-semibold text-gray-900 dark:text-white mb-3">
             Question Breakdown
           </h3>
           <div className="space-y-1.5">
             {answeredItems.map((item, i) => (
               <div
                 key={i}
-                className={`p-2.5 rounded-lg border ${
+                className={`rounded-md border px-2.5 py-2 text-xs transition-colors ${
                   item.isCorrect
-                    ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-                    : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                    ? 'border-green-300/70 dark:border-green-500/20 bg-green-50/60 dark:bg-green-500/5'
+                    : 'border-red-300/70 dark:border-red-400/20 bg-red-50/60 dark:bg-red-400/5'
                 }`}
               >
-                <div className="flex items-center gap-1 mb-1">
+                <div className="flex items-center gap-1 mb-0.5">
                   {item.isCorrect ? (
                     <FaCheckCircle
                       className="text-green-500"
-                      style={{ fontSize: 10 }}
+                      style={{ fontSize: 9 }}
                     />
                   ) : (
                     <FaTimesCircle
-                      className="text-red-500"
-                      style={{ fontSize: 10 }}
+                      className="text-red-400"
+                      style={{ fontSize: 9 }}
                     />
                   )}
-                  <span className="text-xs text-gray-500 dark:text-white/50">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500">
                     {item.questionType}
                   </span>
                 </div>
-                <div className="text-xs">
-                  <span className="text-gray-600 dark:text-white/60">Q: </span>
+                <div className="text-[11px]">
+                  <span className="text-[10px] text-gray-500 dark:text-gray-400">
+                    Q:{' '}
+                  </span>
                   <span className="font-semibold text-gray-900 dark:text-white">
                     {item.question}
                   </span>
                 </div>
                 {!item.isCorrect && (
-                  <div className="text-xs mt-0.5">
-                    <span className="text-gray-600 dark:text-white/60">
+                  <div className="text-[11px] mt-0.5">
+                    <span className="text-[10px] text-gray-500 dark:text-gray-400">
                       You:{' '}
                     </span>
-                    <span className="text-red-600 dark:text-red-400 line-through">
+                    <span className="text-red-500 dark:text-red-400 line-through">
                       {item.userAnswer}
                     </span>
                   </div>
                 )}
-                <div className="text-xs mt-0.5">
-                  <span className="text-gray-600 dark:text-white/60">
+                <div className="text-[11px] mt-0.5">
+                  <span className="text-[10px] text-gray-500 dark:text-gray-400">
                     {item.isCorrect ? 'You: ' : 'Answer: '}
                   </span>
                   <span
-                    className={`font-medium ${item.isCorrect ? 'text-green-700 dark:text-green-300' : 'text-gray-900 dark:text-white'}`}
+                    className={`font-medium ${
+                      item.isCorrect
+                        ? 'text-green-600 dark:text-green-400'
+                        : 'text-gray-900 dark:text-white'
+                    }`}
                   >
                     {item.isCorrect ? item.userAnswer : item.correctAnswer}
                   </span>

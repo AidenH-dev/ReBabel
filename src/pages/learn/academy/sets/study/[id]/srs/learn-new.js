@@ -727,7 +727,7 @@ export default function LearnNew() {
               answeredItems={answeredItems}
               animateAccuracy={animateAccuracy}
               onBackToSet={handleExit}
-              completionTitle="Lesson Complete!"
+              completionTitle="SRS Learn New Complete"
             />
           )}
 

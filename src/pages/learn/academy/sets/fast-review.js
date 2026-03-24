@@ -589,7 +589,7 @@ export default function FastReview() {
               answeredItems={answeredItems}
               animateAccuracy={animateAccuracy}
               onBackToSet={handleExit}
-              completionTitle="Fast Review Complete!"
+              completionTitle="Fast Review Complete"
               setBreakdown={setBreakdown}
             />
           )}

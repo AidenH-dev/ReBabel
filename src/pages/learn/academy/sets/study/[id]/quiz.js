@@ -570,7 +570,7 @@ export default function SetQuiz() {
               animateAccuracy={animateAccuracy}
               onRetry={handleRetry}
               onBackToSet={handleExit}
-              completionTitle="Quiz Complete!"
+              completionTitle="Quiz Complete"
             />
           ) : currentPhase === 'review' ? (
             <ReviewView

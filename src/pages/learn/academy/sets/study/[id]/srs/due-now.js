@@ -684,7 +684,7 @@ export default function DueNow() {
               answeredItems={answeredItems}
               animateAccuracy={animateAccuracy}
               onBackToSet={handleExit}
-              completionTitle="Lesson Complete!"
+              completionTitle="SRS Review Complete"
             />
           )}
 
