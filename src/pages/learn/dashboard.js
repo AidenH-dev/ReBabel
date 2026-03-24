@@ -217,10 +217,7 @@ export default function DashboardPage() {
                 <span className="absolute left-0 top-full -mt-1 text-[0.55rem] text-gray-400 dark:text-gray-500 font-medium tracking-wider uppercase whitespace-nowrap">
                   {jpDate.englishDate}
                 </span>
-                <span
-                  className="inline-block w-[5px] h-[5px] rounded-full bg-gray-400 dark:bg-gray-500 mx-2"
-                  style={{ verticalAlign: '0.3em' }}
-                />
+                <span className="self-center translate-y-[3px] w-[5px] h-[5px] rounded-full bg-gray-400 dark:bg-gray-500 mx-2" />
                 <ruby>
                   <span
                     className="font-medium"
@@ -349,10 +346,7 @@ export default function DashboardPage() {
             <span className="absolute left-0 top-full -mt-1 text-[0.5rem] text-gray-400 dark:text-gray-500 font-medium tracking-wider uppercase whitespace-nowrap">
               {jpDate.englishDate}
             </span>
-            <span
-              className="inline-block w-[4px] h-[4px] rounded-full bg-gray-400 dark:bg-gray-500 mx-1.5"
-              style={{ verticalAlign: '0.25em' }}
-            />
+            <span className="self-center translate-y-[3px] w-[4px] h-[4px] rounded-full bg-gray-400 dark:bg-gray-500 mx-1.5" />
             <ruby>
               <span
                 className="font-medium"
