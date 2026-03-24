@@ -59,7 +59,7 @@ export default function SessionStatHeaderView({
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto mb-4 sm:mb-6">
+    <div className="w-full max-w-5xl mx-auto mb-4 sm:mb-6 sm:mt-10">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4">
         <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <button

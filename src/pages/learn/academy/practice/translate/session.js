@@ -155,7 +155,7 @@ export default function TranslatePracticeSession() {
       mainClassName="px-1 pt-0 pb-1 sm:p-6 overflow-y-auto"
     >
       {/* Header - Quiz Mode Style */}
-      <div className="w-full max-w-5xl mx-auto mb-3 sm:mb-6">
+      <div className="w-full max-w-5xl mx-auto mb-3 sm:mb-6 sm:mt-10">
         <div className="flex items-center justify-between mb-3 sm:mb-4">
           <div className="flex items-center gap-3 sm:gap-4 min-w-0 ml-0 ">
             <button

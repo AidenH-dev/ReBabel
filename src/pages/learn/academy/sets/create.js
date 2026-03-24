@@ -497,7 +497,7 @@ export default function CreateNewSet() {
       title="Create New Set"
       mainClassName="px-4 sm:px-6 py-4"
     >
-      <div className="w-full max-w-6xl mx-auto relative">
+      <div className="w-full max-w-6xl mx-auto relative sm:mt-10">
         {profileError && (
           <InlineError
             message={profileError}
