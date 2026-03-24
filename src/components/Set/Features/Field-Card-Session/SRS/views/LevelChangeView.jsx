@@ -1,6 +1,43 @@
-import { useEffect, useState, useRef } from 'react';
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { FaArrowRight } from 'react-icons/fa';
+import { SRS_INTERVALS } from '@/lib/srs/constants';
 
+/** Format an SRS interval in ms to a short human label. */
+function formatInterval(ms) {
+  if (!ms) return '';
+  const minutes = ms / (60 * 1000);
+  if (minutes < 60) return `${minutes}m`;
+  const hours = minutes / 60;
+  if (hours < 24) return `${Math.round(hours)}h`;
+  const days = hours / 24;
+  if (days < 30) return `${Math.round(days)}d`;
+  const months = days / 30;
+  return `${Math.round(months)}mo`;
+}
+
+/** Get a human-readable label for an SRS level interval. */
+function getDueLabel(level) {
+  const ms = SRS_INTERVALS[level];
+  if (!ms) return null;
+  const minutes = ms / (60 * 1000);
+  if (minutes < 60) return `${minutes} min`;
+  const hours = minutes / 60;
+  if (hours < 24) return `${Math.round(hours)} hr`;
+  const days = hours / 24;
+  if (days === 1) return '1 day';
+  if (days < 30) return `${Math.round(days)} days`;
+  const months = days / 30;
+  if (months === 1) return '1 month';
+  return `${Math.round(months)} months`;
+}
+
+/**
+ * SRSLevelChange — shows a level-up/down notification after completing all
+ * variations of an item.
+ *
+ * Renders in-flow between progress bar and question card at all breakpoints.
+ * Back-to-back: Effect re-runs on prop change, clearing old timers first.
+ */
 export default function SRSLevelChange({
   item,
   oldLevel,
@@ -10,138 +47,195 @@ export default function SRSLevelChange({
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const timersRef = useRef({});
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   const levelIncreased = newLevel > oldLevel;
   const levelDecreased = newLevel < oldLevel;
 
+  const fireComplete = useCallback(() => {
+    if (onCompleteRef.current) onCompleteRef.current();
+  }, []);
+
   useEffect(() => {
-    const timers = timersRef.current;
+    Object.values(timersRef.current).forEach((t) => clearTimeout(t));
+    const timers = {};
+    timersRef.current = timers;
 
-    timers.showTimer = setTimeout(() => {
-      setIsVisible(true);
-    }, 80);
+    setIsVisible(false);
+    setIsAnimating(false);
 
-    timers.animateTimer = setTimeout(() => {
-      setIsAnimating(true);
-    }, 450);
-
-    timers.hideTimer = setTimeout(() => {
-      setIsVisible(false);
-    }, 1800);
-
-    timers.completeTimer = setTimeout(() => {
-      if (onComplete) onComplete();
-    }, 2100);
+    timers.show = setTimeout(() => setIsVisible(true), 80);
+    timers.animate = setTimeout(() => setIsAnimating(true), 400);
+    timers.hide = setTimeout(() => setIsVisible(false), 2200);
+    timers.complete = setTimeout(fireComplete, 2500);
 
     return () => {
-      Object.values(timers).forEach((timer) => clearTimeout(timer));
+      Object.values(timersRef.current).forEach((t) => clearTimeout(t));
     };
-  }, [onComplete]);
+  }, [item, oldLevel, newLevel, fireComplete]);
 
   const getItemDisplay = () => {
-    if (item.type === 'vocabulary') {
-      return item.kanji || item.kana;
-    }
-    if (item.type === 'grammar') {
-      return item.title;
-    }
+    if (item.type === 'vocabulary') return item.kanji || item.kana;
+    if (item.type === 'grammar') return item.title;
     return '';
   };
 
   const getSubtitle = () => {
-    if (item.type === 'vocabulary') {
-      return item.english;
-    }
-    if (item.type === 'grammar') {
-      return item.topic;
-    }
+    if (item.type === 'vocabulary') return item.english;
+    if (item.type === 'grammar') return item.topic;
     return '';
   };
 
-  const changeLabel = levelIncreased
+  const labelText = levelIncreased
     ? 'Level Up'
     : levelDecreased
       ? 'Level Down'
-      : 'Level Stable';
+      : 'No Change';
 
-  const toneClass = levelIncreased
-    ? 'border-emerald-500/80 text-emerald-700 dark:text-emerald-300'
+  const labelColor = levelIncreased
+    ? 'text-emerald-700 dark:text-emerald-300'
     : levelDecreased
-      ? 'border-red-500/80 text-red-700 dark:text-red-300'
-      : 'border-gray-500/70 text-gray-700 dark:text-gray-300';
+      ? 'text-red-700 dark:text-red-300'
+      : 'text-gray-600 dark:text-gray-400';
+
+  const toneBorder = levelIncreased
+    ? 'border-emerald-400 dark:border-emerald-500/60'
+    : levelDecreased
+      ? 'border-red-400 dark:border-red-500/60'
+      : 'border-gray-400 dark:border-gray-500/60';
+
+  const toneBg = levelIncreased
+    ? 'bg-emerald-50 dark:bg-emerald-950/40'
+    : levelDecreased
+      ? 'bg-red-50 dark:bg-red-950/40'
+      : 'bg-gray-50 dark:bg-gray-900/40';
+
+  const arrowColor = levelIncreased
+    ? 'text-emerald-500'
+    : levelDecreased
+      ? 'text-red-500'
+      : 'text-gray-400';
+
+  const newLevelColor = levelIncreased
+    ? 'text-emerald-600 dark:text-emerald-400'
+    : levelDecreased
+      ? 'text-red-600 dark:text-red-400'
+      : 'text-gray-700 dark:text-white';
+
+  const dividerColor = levelIncreased
+    ? 'bg-emerald-300 dark:bg-emerald-700'
+    : levelDecreased
+      ? 'bg-red-300 dark:bg-red-700'
+      : 'bg-gray-300 dark:bg-gray-600';
+
+  const dueLabel = getDueLabel(newLevel);
 
   return (
-    <div className="pointer-events-none absolute left-1/2 top-20 z-20 -translate-x-1/2 sm:top-24 lg:left-[calc(50%+24.5rem)] lg:top-1/2 lg:z-0 lg:-translate-x-0 lg:-translate-y-1/2 xl:left-[calc(50%+25rem)]">
+    <div className="pointer-events-none">
       <div
-        className={`transform transition-all duration-700 ease-out ${
-          isVisible ? 'translate-y-0 opacity-100' : '-translate-y-8 opacity-0'
+        className={`transition-opacity duration-500 ease-out ${
+          isVisible ? 'opacity-100' : 'opacity-0'
         }`}
       >
         <div
-          className={`w-[calc(100vw-1.5rem)] max-w-2xl rounded-xl border-2 border-dashed bg-white/90 px-3 py-3 shadow-lg backdrop-blur-sm sm:px-4 sm:py-3.5 lg:w-40 lg:max-w-none lg:px-4 lg:py-4 xl:w-48 dark:bg-surface-page/90 ${toneClass}`}
+          className={`rounded-xl border-[1.5px] border-dotted ${toneBorder} ${toneBg} px-3 py-2 shadow-md backdrop-blur-sm sm:px-4 sm:py-2.5`}
         >
-          <div className="flex items-center justify-between gap-3 sm:gap-5 lg:flex-col lg:items-start lg:gap-4">
-            <div className="min-w-0 lg:w-full">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.16em] opacity-80 sm:text-xs lg:text-sm">
-                SRS {changeLabel}
+          <div className="flex items-center gap-3 sm:gap-4">
+            {/* Level transition badge */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span className="text-base font-bold text-gray-400 dark:text-gray-500 sm:text-lg">
+                {oldLevel}
+              </span>
+              <FaArrowRight
+                className={`text-xs ${arrowColor} ${
+                  isAnimating ? 'scale-125' : 'scale-100'
+                } transition-transform duration-300`}
+              />
+              <span
+                className={`text-lg font-extrabold sm:text-xl ${newLevelColor} ${
+                  isAnimating ? 'scale-110' : 'scale-95 opacity-80'
+                } transition-all duration-300`}
+              >
+                {newLevel}
+              </span>
+            </div>
+
+            {/* Divider */}
+            <div className={`w-px h-7 sm:h-8 ${dividerColor}`} />
+
+            {/* Item info */}
+            <div className="min-w-0 flex-1">
+              <div className="flex items-baseline gap-2">
+                <span className="truncate text-sm font-bold text-gray-900 dark:text-white sm:text-base">
+                  {getItemDisplay()}
+                </span>
+                <span
+                  className={`shrink-0 text-[10px] font-semibold uppercase tracking-wider sm:text-xs ${labelColor}`}
+                >
+                  {labelText}
+                </span>
               </div>
-              <div className="truncate text-base font-bold text-gray-900 dark:text-white sm:text-lg lg:whitespace-normal lg:break-words lg:text-lg lg:leading-tight">
-                {getItemDisplay()}
-              </div>
-              <div className="truncate text-xs text-gray-600 dark:text-white/70 sm:text-sm lg:mt-1 lg:whitespace-normal lg:break-words lg:text-sm lg:leading-tight">
+              <div className="truncate text-[11px] text-gray-500 dark:text-white/60 sm:text-xs">
                 {getSubtitle()}
               </div>
             </div>
 
-            <div className="flex shrink-0 items-center gap-2 sm:gap-3 lg:w-full lg:flex-col lg:items-center lg:gap-1.5 lg:border-t lg:border-current/20 lg:pt-3">
-              <div
-                className={`text-xl font-bold text-gray-500 dark:text-gray-300 sm:text-2xl lg:text-2xl ${
-                  levelIncreased ? 'lg:order-3' : 'lg:order-1'
-                }`}
-              >
-                {oldLevel}
-              </div>
-
-              {levelIncreased && (
-                <div
-                  className={`transform transition-all duration-300 lg:order-2 ${
-                    isAnimating ? '-translate-y-1 scale-110' : 'scale-100'
-                  }`}
-                >
-                  <FaArrowUp className="text-lg text-emerald-500 sm:text-xl lg:text-xl" />
+            {/* Next due */}
+            {dueLabel && (
+              <>
+                <div className={`w-px h-7 sm:h-8 shrink-0 ${dividerColor}`} />
+                <div className="flex flex-col items-end shrink-0">
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500 sm:text-[11px]">
+                    Next in
+                  </span>
+                  <span
+                    className={`text-xs font-bold sm:text-sm ${newLevelColor}`}
+                  >
+                    {dueLabel}
+                  </span>
                 </div>
-              )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-              {levelDecreased && (
-                <div
-                  className={`transform transition-all duration-300 lg:order-2 ${
-                    isAnimating ? 'translate-y-1 scale-110' : 'scale-100'
-                  }`}
-                >
-                  <FaArrowDown className="text-lg text-red-500 sm:text-xl lg:text-xl" />
-                </div>
-              )}
-
-              {!levelIncreased && !levelDecreased && (
-                <div className="text-lg text-gray-500 dark:text-gray-300 sm:text-xl lg:order-2 lg:text-xl">
-                  -
-                </div>
-              )}
-
-              <div
-                className={`text-xl font-bold transition-all duration-300 sm:text-2xl lg:text-2xl ${
-                  isAnimating ? 'scale-110 opacity-100' : 'scale-95 opacity-80'
-                } ${
-                  levelIncreased
-                    ? 'text-emerald-600 dark:text-emerald-400'
-                    : levelDecreased
-                      ? 'text-red-600 dark:text-red-400'
-                      : 'text-gray-800 dark:text-white'
-                } ${levelIncreased ? 'lg:order-1' : 'lg:order-3'}`}
-              >
-                {newLevel}
-              </div>
+/**
+ * Invisible placeholder with the same structure/sizing as the real card.
+ * Render this inside the slot when no level change is active so the slot
+ * always has the correct natural height.
+ */
+export function LevelChangePlaceholder() {
+  return (
+    <div className="pointer-events-none invisible" aria-hidden="true">
+      <div className="rounded-xl border-[1.5px] border-dotted border-transparent px-3 py-2 sm:px-4 sm:py-2.5">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-base sm:text-lg font-bold">0</span>
+            <FaArrowRight className="text-xs" />
+            <span className="text-lg sm:text-xl font-extrabold">0</span>
+          </div>
+          <div className="w-px h-7 sm:h-8" />
+          <div className="min-w-0 flex-1">
+            <div className="flex items-baseline gap-2">
+              <span className="text-sm sm:text-base font-bold">
+                Placeholder
+              </span>
+              <span className="text-[10px] sm:text-xs font-semibold uppercase">
+                Level Up
+              </span>
             </div>
+            <div className="text-[11px] sm:text-xs">subtitle</div>
+          </div>
+          {/* Match the due section height in placeholder */}
+          <div className="w-px h-7 sm:h-8 shrink-0" />
+          <div className="flex flex-col items-end shrink-0">
+            <span className="text-[10px] sm:text-[11px]">Next in</span>
+            <span className="text-xs sm:text-sm font-bold">0 days</span>
           </div>
         </div>
       </div>

@@ -13,7 +13,9 @@ import SessionStatHeaderView from '@/components/Set/Features/Field-Card-Session/
 import TypedResponseView from '@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView.jsx';
 import MultipleChoiceView from '@/components/Set/Features/Field-Card-Session/shared/views/MultipleChoiceView.jsx';
 import SummaryView from '@/components/Set/Features/Field-Card-Session/shared/views/SummaryView';
-import LevelChangeView from '@/components/Set/Features/Field-Card-Session/SRS/views/LevelChangeView';
+import LevelChangeView, {
+  LevelChangePlaceholder,
+} from '@/components/Set/Features/Field-Card-Session/SRS/views/LevelChangeView';
 import ItemEditModal from '@/components/Set/Features/Field-Card-Session/shared/views/ItemEditModal.jsx';
 import {
   validateTypedAnswer,
@@ -689,15 +691,6 @@ export default function DueNow() {
           {/* Show active phase components */}
           {currentPhase !== 'complete' && (
             <div className="relative flex-1">
-              {showLevelChange && currentLevelChange && (
-                <LevelChangeView
-                  item={currentLevelChange.item}
-                  oldLevel={currentLevelChange.oldLevel}
-                  newLevel={currentLevelChange.newLevel}
-                  onComplete={onLevelChangeComplete}
-                />
-              )}
-
               {/* Quiz Header */}
               <SessionStatHeaderView
                 setTitle={setInfo?.title}
@@ -716,6 +709,20 @@ export default function DueNow() {
                 displayMode={'completion-count'}
                 onExit={handleExit}
               />
+
+              {/* Level Change slot — placeholder keeps height stable */}
+              <div className="max-w-3xl mx-auto px-2 sm:px-0 relative z-20 pb-2 sm:pb-3">
+                {showLevelChange && currentLevelChange ? (
+                  <LevelChangeView
+                    item={currentLevelChange.item}
+                    oldLevel={currentLevelChange.oldLevel}
+                    newLevel={currentLevelChange.newLevel}
+                    onComplete={onLevelChangeComplete}
+                  />
+                ) : (
+                  <LevelChangePlaceholder />
+                )}
+              </div>
 
               {/* Multiple Choice Phase */}
               {currentPhase === 'multiple-choice' &&

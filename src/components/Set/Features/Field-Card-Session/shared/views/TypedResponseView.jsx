@@ -111,7 +111,7 @@ export default function TypedResponseView({
     <div className="flex-1 flex flex-col items-center justify-center px-2 sm:px-0">
       <div className="w-full max-w-3xl">
         {/* Question Card */}
-        <div className="relative z-10 bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
+        <div className="relative bg-white dark:bg-white/10 rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
           {showResult && onEditItem && currentItem?.uuid && (
             <button
               onClick={() => onEditItem(currentItem)}
