@@ -187,15 +187,10 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3">
               {/* Japanese date */}
               <span
-                className="relative text-2xl text-gray-900 dark:text-white"
+                className="relative text-2xl text-gray-900 dark:text-white inline-flex items-baseline"
                 style={{ fontFeatureSettings: '"palt"' }}
               >
-                <ruby>
-                  <span className="font-bold">{jpDate.monthNum}</span>
-                  <rp>(</rp>
-                  <rt className={jpDate.rtClass}>{jpDate.monthNumReading}</rt>
-                  <rp>)</rp>
-                </ruby>
+                <span className="font-bold">{jpDate.monthNum}</span>
                 <ruby>
                   <span
                     className="font-medium"
@@ -207,12 +202,7 @@ export default function DashboardPage() {
                   <rt className={jpDate.rtClass}>{jpDate.monthKanjiReading}</rt>
                   <rp>)</rp>
                 </ruby>
-                <ruby>
-                  <span className="font-bold">{jpDate.dayNum}</span>
-                  <rp>(</rp>
-                  <rt className={jpDate.rtClass}>{jpDate.dayNumReading}</rt>
-                  <rp>)</rp>
-                </ruby>
+                <span className="font-bold">{jpDate.dayNum}</span>
                 <ruby>
                   <span
                     className="font-medium"
@@ -329,15 +319,10 @@ export default function DashboardPage() {
       <div className="lg:hidden px-4 pt-[max(1rem,var(--cap-safe-top))] pb-4">
         <div className="flex items-baseline gap-2.5 text-lg sm:text-xl md:text-2xl">
           <span
-            className="relative text-gray-900 dark:text-white"
+            className="relative text-gray-900 dark:text-white inline-flex items-baseline"
             style={{ fontFeatureSettings: '"palt"' }}
           >
-            <ruby>
-              <span className="font-bold">{jpDate.monthNum}</span>
-              <rp>(</rp>
-              <rt className={jpDate.rtClass}>{jpDate.monthNumReading}</rt>
-              <rp>)</rp>
-            </ruby>
+            <span className="font-bold">{jpDate.monthNum}</span>
             <ruby>
               <span
                 className="font-medium"
@@ -349,12 +334,7 @@ export default function DashboardPage() {
               <rt className={jpDate.rtClass}>{jpDate.monthKanjiReading}</rt>
               <rp>)</rp>
             </ruby>
-            <ruby>
-              <span className="font-bold">{jpDate.dayNum}</span>
-              <rp>(</rp>
-              <rt className={jpDate.rtClass}>{jpDate.dayNumReading}</rt>
-              <rp>)</rp>
-            </ruby>
+            <span className="font-bold">{jpDate.dayNum}</span>
             <ruby>
               <span
                 className="font-medium"
