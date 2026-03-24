@@ -370,7 +370,8 @@ export default function FastReview() {
       originalId,
       translationArray,
       phaseProgress,
-      itemData
+      itemData,
+      'srs_fast_review'
     );
 
     // If this is the last question AND we're showing a level change,

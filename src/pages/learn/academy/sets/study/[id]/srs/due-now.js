@@ -419,7 +419,8 @@ export default function DueNow() {
       originalId,
       translationArray,
       phaseProgress,
-      itemData
+      itemData,
+      'srs_due_now'
     );
 
     // If this is the last question AND we're showing a level change,

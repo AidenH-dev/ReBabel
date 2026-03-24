@@ -48,7 +48,7 @@ export default function useSrsLevelTracking() {
   //   itemData - the base item data array (to find the original item with uuid)
   // Returns true if level change was triggered, false otherwise.
   const checkAndTriggerLevelChange = useCallback(
-    (originalId, translationArray, phaseProgress, itemData) => {
+    (originalId, translationArray, phaseProgress, itemData, scope) => {
       if (leveledItemIdsRef.current.has(originalId)) {
         return false;
       }
@@ -91,7 +91,7 @@ export default function useSrsLevelTracking() {
         leveledItemIdsRef.current.add(originalId);
 
         // Save the new SRS level to the database
-        saveSRSLevel(originalItem.uuid, newLevel);
+        saveSRSLevel(originalItem.uuid, newLevel, scope);
 
         return true;
       }

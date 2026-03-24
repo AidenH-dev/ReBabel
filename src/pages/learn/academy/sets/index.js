@@ -172,7 +172,7 @@ export default function VocabularyDashboard() {
   } = useSWR(
     userId ? '/api/database/v2/srs/all-due?countOnly=true' : null,
     fetcher,
-    { revalidateOnFocus: false, focusThrottleInterval: 10000 }
+    { revalidateOnFocus: true, focusThrottleInterval: 10000 }
   );
   const totalDueItems = dueRaw?.data?.metadata?.totalDueItems ?? 0;
   const dueError = dueErrorObj ? 'Failed to load due items count.' : null;
