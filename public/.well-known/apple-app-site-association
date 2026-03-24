@@ -5,8 +5,8 @@
       {
         "appID": "T7575TZYZ8.org.rebabel.app",
         "paths": [
-          "/learn/subscription*",
-          "/learn/settings*"
+          "/learn/*",
+          "/shared/sets/*"
         ]
       }
     ]
