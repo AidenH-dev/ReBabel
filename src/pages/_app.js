@@ -15,6 +15,7 @@ import { PostHogProvider } from 'posthog-js/react';
 import { useEffect, useRef, useState } from 'react';
 import Script from 'next/script';
 import { SRSNotificationPrompt } from '@/components/Popups/SRSNotificationPrompt';
+import usePushNotifications from '@/hooks/usePushNotifications';
 import { clientLog } from '@/lib/clientLogger';
 
 const IOS_VIEWPORT_CONTENT =
@@ -122,93 +123,10 @@ function PlatformHeartbeatBridge() {
   return null;
 }
 
-// 🔔 Bridge component for push notification permission on native app
+// Push notification bridge: auto re-registers token on launch + first-time prompt
 function PushNotificationBridge() {
-  const { user, isLoading } = useUser();
-  const [showPrompt, setShowPrompt] = useState(false);
-  const [srsCount, setSrsCount] = useState(0);
-  const [isNativePlatform, setIsNativePlatform] = useState(false);
-
-  useEffect(() => {
-    if (isLoading || !user) return;
-
-    const checkSrsAndPrompt = async () => {
-      // Check if already requested
-      if (localStorage.getItem('push_permission_requested')) return;
-
-      try {
-        const { Capacitor } = await import('@capacitor/core');
-        if (!Capacitor.isNativePlatform()) return;
-
-        setIsNativePlatform(true);
-
-        // Check if user has SRS-enabled sets
-        const response = await fetch('/api/database/v2/sets/srs-count');
-        if (!response.ok) return;
-
-        const data = await response.json();
-        if (data.success && data.count > 0) {
-          setSrsCount(data.count);
-          setShowPrompt(true);
-        }
-      } catch (e) {
-        clientLog.warn('capacitor.not_available');
-      }
-    };
-
-    checkSrsAndPrompt();
-  }, [user, isLoading]);
-
-  const handleEnableNotifications = async () => {
-    if (!isNativePlatform) return;
-
-    try {
-      const { PushNotifications } =
-        await import('@capacitor/push-notifications');
-
-      // Request permission
-      const result = await PushNotifications.requestPermissions();
-      localStorage.setItem('push_permission_requested', 'true');
-
-      if (result.receive === 'granted') {
-        // Add listener BEFORE calling register to avoid race condition
-        PushNotifications.addListener('registration', async (token) => {
-          try {
-            await fetch('/api/push/register-token', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                deviceToken: token.value,
-                platform: 'ios',
-              }),
-            });
-          } catch (err) {
-            clientLog.error('push.register_failed', {
-              error: err?.message || String(err),
-            });
-          }
-        });
-
-        PushNotifications.addListener('registrationError', (error) => {
-          clientLog.error('push.registration_error', {
-            error: error?.message || String(error),
-          });
-        });
-
-        await PushNotifications.register();
-      }
-    } catch (e) {
-      clientLog.error('push.permission_failed', {
-        error: e?.message || String(e),
-      });
-    }
-  };
-
-  const handleClosePrompt = () => {
-    setShowPrompt(false);
-    // Mark as requested so we don't show again
-    localStorage.setItem('push_permission_requested', 'true');
-  };
+  const { showPrompt, srsCount, handleEnableNotifications, handleClosePrompt } =
+    usePushNotifications();
 
   return (
     <SRSNotificationPrompt

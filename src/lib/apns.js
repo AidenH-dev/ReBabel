@@ -78,7 +78,11 @@ export function sendAPNsNotification(
       if (statusCode === 200) {
         resolve({ success: true, statusCode });
       } else {
-        resolve({ success: false, statusCode, error: responseData });
+        let reason = null;
+        try {
+          reason = JSON.parse(responseData).reason;
+        } catch {}
+        resolve({ success: false, statusCode, error: responseData, reason });
       }
     });
 

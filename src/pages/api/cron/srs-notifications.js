@@ -138,27 +138,42 @@ export default withLogger(async function handler(req, res) {
     } = apnsConfig;
     const jwt = createAPNsJWT(apnsKeyId, apnsTeamId, privateKey);
 
-    // Send notifications to each user
-    const results = [];
-    for (const user of users) {
-      // Get last_notified_at if not included in RPC response
-      let lastNotifiedAt = user.last_notified_at;
-      if (!lastNotifiedAt) {
-        const { data: prefData } = await supabaseKvs
-          .from('notification_preferences')
-          .select('last_notified_at')
-          .eq('user_id', user.user_id)
-          .single();
-        lastNotifiedAt = prefData?.last_notified_at;
-      }
+    // APNs reasons that mean the token is permanently invalid
+    const INVALID_TOKEN_REASONS = [
+      'BadDeviceToken',
+      'Unregistered',
+      'DeviceTokenNotForTopic',
+    ];
 
-      // Calculate newly due items (items that became due since last notification)
+    // Group rows by user so we calculate due count once and send to all devices
+    const userMap = new Map();
+    for (const row of users) {
+      if (!userMap.has(row.user_id)) {
+        userMap.set(row.user_id, {
+          user_id: row.user_id,
+          due_count: row.due_count,
+          tokens: [],
+        });
+      }
+      userMap.get(row.user_id).tokens.push(row.device_token);
+    }
+
+    const results = [];
+    for (const user of userMap.values()) {
+      // Get last_notified_at
+      const { data: prefData } = await supabaseKvs
+        .from('notification_preferences')
+        .select('last_notified_at')
+        .eq('user_id', user.user_id)
+        .single();
+      const lastNotifiedAt = prefData?.last_notified_at;
+
+      // Calculate newly due items once per user
       const newlyDueCount = await getNewlyDueCount(
         user.user_id,
         lastNotifiedAt
       );
 
-      // Skip if no newly due items
       if (newlyDueCount === 0) {
         results.push({
           user_id: user.user_id,
@@ -181,49 +196,65 @@ export default withLogger(async function handler(req, res) {
           sound: 'default',
           badge: Number(user.due_count),
         },
-        // Custom data for deep linking
         route: '/learn/academy/sets/fast-review',
       };
 
-      try {
-        const result = await sendAPNsNotification(
-          user.device_token,
-          notification,
-          jwt,
-          bundleId,
-          isProduction
-        );
+      // Send to all of this user's devices
+      let anySent = false;
+      for (const token of user.tokens) {
+        try {
+          const result = await sendAPNsNotification(
+            token,
+            notification,
+            jwt,
+            bundleId,
+            isProduction
+          );
 
-        results.push({
-          user_id: user.user_id,
-          success: result.success,
-          error: result.error,
-        });
+          results.push({
+            user_id: user.user_id,
+            success: result.success,
+            error: result.error,
+          });
 
-        // Update last_notified_at for this user
-        if (result.success) {
-          await supabaseKvs
-            .from('notification_preferences')
-            .update({ last_notified_at: new Date().toISOString() })
-            .eq('user_id', user.user_id);
+          if (result.success) {
+            anySent = true;
+          } else if (INVALID_TOKEN_REASONS.includes(result.reason)) {
+            // Token is permanently invalid -- remove it so we stop retrying
+            await supabaseKvs.rpc('unregister_device_token', {
+              p_token: token,
+            });
+            req.log.info('apns.stale_token_removed', {
+              userId: user.user_id,
+              reason: result.reason,
+            });
+          }
+        } catch (err) {
+          req.log.error('apns.send_failed', {
+            userId: user.user_id,
+            error: err?.message || String(err),
+            stack: err?.stack,
+          });
+          results.push({
+            user_id: user.user_id,
+            success: false,
+            error: err.message,
+          });
         }
-      } catch (err) {
-        req.log.error('apns.send_failed', {
-          userId: user.user_id,
-          error: err?.message || String(err),
-          stack: err?.stack,
-        });
-        results.push({
-          user_id: user.user_id,
-          success: false,
-          error: err.message,
-        });
+      }
+
+      // Update last_notified_at once after all devices for this user
+      if (anySent) {
+        await supabaseKvs
+          .from('notification_preferences')
+          .update({ last_notified_at: new Date().toISOString() })
+          .eq('user_id', user.user_id);
       }
     }
 
-    const successCount = results.filter((r) => r.success).length;
+    const successCount = results.filter((r) => r.success && !r.skipped).length;
     req.log.info('cron.notifications.complete', {
-      usersChecked: users.length,
+      usersChecked: userMap.size,
       notificationsSent: successCount,
     });
     return res.json({
