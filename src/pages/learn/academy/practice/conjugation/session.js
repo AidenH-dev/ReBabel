@@ -1,4 +1,5 @@
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
+import BaseModal from '@/components/ui/BaseModal';
 import SessionStatHeaderView from '@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView';
 import ConjugationCard from '@/components/Conjugation/shared/views/ConjugationCard';
 import ConjugationEditModal from '@/components/Conjugation/Premium/ConjugationEditModal';
@@ -38,6 +39,9 @@ export default function ConjugationPracticeSession() {
     totalAttempts: 0,
     accuracy: 0,
   });
+
+  // Base form alert state — questions where the answer is the word itself
+  const [baseFormMatches, setBaseFormMatches] = useState([]);
 
   // Edit modal state
   const [editingQuestion, setEditingQuestion] = useState(null);
@@ -105,7 +109,18 @@ export default function ConjugationPracticeSession() {
           return;
         }
 
-        setQuestions(data.data.questions);
+        const generated = data.data.questions;
+
+        // Detect questions where the expected answer matches the stored word
+        const matches = generated.filter(
+          (q) => q.expectedAnswer === q.word.kana
+        );
+
+        if (matches.length > 0) {
+          setBaseFormMatches(matches);
+        }
+
+        setQuestions(generated);
         await startAnalyticsSession();
       } catch (err) {
         clientLog.error('conjugation.generate_questions_failed', {
@@ -160,6 +175,31 @@ export default function ConjugationPracticeSession() {
         accuracy: newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0,
       };
     });
+  };
+
+  // Base form alert: user chose to skip the matching questions
+  const allQuestionsMatchBaseForm =
+    baseFormMatches.length > 0 && baseFormMatches.length === questions.length;
+
+  const handleSkipBaseFormMatches = () => {
+    if (allQuestionsMatchBaseForm) {
+      abortAnalyticsSession();
+      router.push('/learn/academy/practice');
+      return;
+    }
+
+    const matchSet = new Set(
+      baseFormMatches.map(
+        (q) => `${q.word.kana}::${q.word.kanji || ''}::${q.form.key}`
+      )
+    );
+    setQuestions((prev) =>
+      prev.filter(
+        (q) =>
+          !matchSet.has(`${q.word.kana}::${q.word.kanji || ''}::${q.form.key}`)
+      )
+    );
+    setBaseFormMatches([]);
   };
 
   const handleNext = () => {
@@ -389,6 +429,74 @@ export default function ConjugationPracticeSession() {
           }}
           onClose={() => setEditingQuestion(null)}
         />
+      )}
+
+      {baseFormMatches.length > 0 && (
+        <BaseModal
+          isOpen
+          onClose={
+            allQuestionsMatchBaseForm
+              ? handleSkipBaseFormMatches
+              : () => setBaseFormMatches([])
+          }
+          title="Words Already in Target Form"
+          size="md"
+          footer={
+            <div className="flex gap-3 w-full">
+              {allQuestionsMatchBaseForm ? (
+                <button
+                  onClick={handleSkipBaseFormMatches}
+                  className="flex-1 px-4 py-2.5 rounded-lg bg-brand-pink hover:bg-brand-pink-hover text-white font-medium transition-colors"
+                >
+                  Back to Practice
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setBaseFormMatches([])}
+                    className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition-colors"
+                  >
+                    Keep All
+                  </button>
+                  <button
+                    onClick={handleSkipBaseFormMatches}
+                    className="flex-1 px-4 py-2.5 rounded-lg bg-brand-pink hover:bg-brand-pink-hover text-white font-medium transition-colors"
+                  >
+                    Skip These ({baseFormMatches.length})
+                  </button>
+                </>
+              )}
+            </div>
+          }
+        >
+          <div className="p-6">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              {allQuestionsMatchBaseForm
+                ? 'All words in this session are already stored in the form you selected to practice. There are no questions to study.'
+                : 'Some words are already stored in the form you selected to practice. The answer would be the same as the word itself.'}
+            </p>
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {baseFormMatches.map((q, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50 dark:bg-white/5"
+                >
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    {q.word.kanji || q.word.kana}
+                    {q.word.kanji && (
+                      <span className="text-gray-500 dark:text-gray-400 ml-1">
+                        ({q.word.kana})
+                      </span>
+                    )}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 ml-3">
+                    {q.form.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </BaseModal>
       )}
     </AuthenticatedLayout>
   );
