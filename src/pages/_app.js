@@ -12,48 +12,14 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Script from 'next/script';
 import { SRSNotificationPrompt } from '@/components/Popups/SRSNotificationPrompt';
 import usePushNotifications from '@/hooks/usePushNotifications';
+import useCapacitorInit from '@/hooks/useCapacitorInit';
 import { clientLog } from '@/lib/clientLogger';
 
-const IOS_VIEWPORT_CONTENT =
-  'width=device-width, initial-scale=1, viewport-fit=cover';
-
-// Detect iPhone model by screen size and set --cap-safe-top CSS variable.
-// Capacitor's webview returns 0 for env(safe-area-inset-*), so we detect manually.
-function applyCapacitorSafeArea() {
-  if (typeof window === 'undefined') return;
-  const screenH = Math.max(window.screen.height, window.screen.width);
-  let top = 20;
-  if (screenH >= 852)
-    top = 40; // Dynamic Island (iPhone 14 Pro, 15, 16, etc.)
-  else if (screenH >= 812) top = 28; // Notch (iPhone X, 11, 12, 13, 14, etc.)
-  document.documentElement.style.setProperty('--cap-safe-top', `${top}px`);
-}
-
-function ensureNativeIOSViewportCover() {
-  if (typeof document === 'undefined') return;
-
-  const viewportMeta = document.querySelector('meta[name="viewport"]');
-
-  if (!viewportMeta) {
-    const createdMeta = document.createElement('meta');
-    createdMeta.setAttribute('name', 'viewport');
-    createdMeta.setAttribute('content', IOS_VIEWPORT_CONTENT);
-    document.head.appendChild(createdMeta);
-    return;
-  }
-
-  const content = viewportMeta.getAttribute('content') || '';
-
-  if (!content.includes('viewport-fit=cover')) {
-    viewportMeta.setAttribute('content', `${content}, viewport-fit=cover`);
-  }
-}
-
-// 🔔 Early push notification listener setup (for cold start handling)
+// Early push notification listener setup (for cold start handling)
 // This runs immediately when the module loads on the client
 if (typeof window !== 'undefined') {
   (async () => {
@@ -87,7 +53,7 @@ const fredoka = Fredoka({
   weight: ['300', '400', '500', '600', '700'],
 });
 
-// 🔹 Bridge component that runs inside <UserProvider>
+// Bridge component that runs inside <UserProvider>
 function PostHogAuthBridge() {
   const { user, isLoading } = useUser();
 
@@ -139,40 +105,7 @@ function PushNotificationBridge() {
 }
 
 export default function MyApp({ Component, pageProps }) {
-  const [isPosthogEnabled, setIsPosthogEnabled] = useState(false);
-
-  useEffect(() => {
-    const enforceForNativeIOS = async () => {
-      try {
-        const { Capacitor } = await import('@capacitor/core');
-        if (!Capacitor.isNativePlatform()) return;
-        if (!/iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
-
-        ensureNativeIOSViewportCover();
-        applyCapacitorSafeArea();
-      } catch (e) {
-        clientLog.warn('capacitor.not_available');
-      }
-    };
-
-    enforceForNativeIOS();
-  }, []);
-
-  useEffect(() => {
-    // Only initialize PostHog outside of development
-    if (process.env.NEXT_PUBLIC_NODE_ENV !== 'development') {
-      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-        api_host:
-          process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
-        person_profiles: 'identified_only',
-        defaults: '2025-05-24',
-        session_recording: {
-          maskAllInputs: false, // unmask inputs for language typing visibility
-        },
-      });
-      setIsPosthogEnabled(true);
-    }
-  }, []);
+  useCapacitorInit();
 
   return (
     <UserProvider>
@@ -194,20 +127,8 @@ export default function MyApp({ Component, pageProps }) {
           `}
             </Script>
             <BugReporterProvider>
-              {isPosthogEnabled ? (
-                <PostHogProvider client={posthog}>
-                  <PostHogAuthBridge />
-                  <div className={fredoka.className}>
-                    <BugReporterErrorBoundary>
-                      <Component {...pageProps} />
-                    </BugReporterErrorBoundary>
-                    <ReportIssueButton />
-                    <BugReporter />
-                    <Analytics />
-                    <SpeedInsights />
-                  </div>
-                </PostHogProvider>
-              ) : (
+              <PostHogProvider client={posthog}>
+                <PostHogAuthBridge />
                 <div className={fredoka.className}>
                   <BugReporterErrorBoundary>
                     <Component {...pageProps} />
@@ -217,7 +138,7 @@ export default function MyApp({ Component, pageProps }) {
                   <Analytics />
                   <SpeedInsights />
                 </div>
-              )}
+              </PostHogProvider>
             </BugReporterProvider>
           </PremiumProvider>
         </ThemeProvider>

@@ -30,7 +30,7 @@
 
 @layer base {
   :root {
-    --cap-safe-top: 0px;
+    --cap-safe-top: env(safe-area-inset-top, 0px);
 
     /* Light mode (default) */
     --brand-pink: #e30a5f;
