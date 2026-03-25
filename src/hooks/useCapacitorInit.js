@@ -39,7 +39,9 @@ function ensureNativeIOSViewportCover() {
 
 async function hideSplashScreen() {
   try {
-    const { SplashScreen } = await import('@capacitor/splash-screen');
+    const { SplashScreen } = await import(
+      /* webpackIgnore: true */ '@capacitor/splash-screen'
+    );
     await SplashScreen.hide();
   } catch {
     // Not running in Capacitor, or plugin not available — expected on web
