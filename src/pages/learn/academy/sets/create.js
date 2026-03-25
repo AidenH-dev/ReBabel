@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { FaPlus, FaTimes, FaCheck, FaTrash, FaKeyboard } from 'react-icons/fa';
+import { TbArrowBackUp } from 'react-icons/tb';
 import { FiUpload, FiPlus, FiX, FiCheck } from 'react-icons/fi';
 import { toKana } from 'wanakana';
 import CSVUpload from '@/components/SetCreator/CSVUpload/CSVUpload';
@@ -494,6 +495,7 @@ export default function CreateNewSet() {
   return (
     <AuthenticatedLayout
       sidebar="academy"
+      sidebarProps={{ hideMobileMenu: true }}
       title="Create New Set"
       mainClassName="px-4 sm:px-6 py-4"
     >
@@ -1058,6 +1060,13 @@ export default function CreateNewSet() {
           </div>
         </div>
       </div>
+      {/* Mobile floating back button */}
+      <button
+        onClick={() => router.back()}
+        className="lg:hidden fixed bottom-6 left-6 z-[60] flex items-center justify-center w-15 h-15 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/60 hover:bg-gray-100/90 dark:hover:bg-gray-700/70 hover:border-gray-400 dark:hover:border-gray-500 transition-all shadow-lg"
+      >
+        <TbArrowBackUp className="w-6.5 h-6.5 text-gray-700 dark:text-gray-300" />
+      </button>
     </AuthenticatedLayout>
   );
 }
