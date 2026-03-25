@@ -1,4 +1,22 @@
 /**
+ * Safely coerce a value into an array.
+ * Handles: actual arrays, JSON-stringified arrays, plain strings, and nullish values.
+ */
+export function safeParseArray(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'string') {
+    if (value.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(value);
+        if (Array.isArray(parsed)) return parsed;
+      } catch {}
+    }
+    return value.trim() ? [value] : [];
+  }
+  return [];
+}
+
+/**
  * Transforms raw API items into the internal format used by all field card sessions.
  *
  * @param {Array} apiItems - Raw items from the API response
@@ -22,10 +40,8 @@ export function transformItems(apiItems, options = {}) {
           kanji: item.kanji || null,
           english: item.english || '',
           lexical_category: item.lexical_category || '',
-          example_sentences: Array.isArray(item.example_sentences)
-            ? item.example_sentences
-            : [item.example_sentences].filter(Boolean),
-          tags: Array.isArray(item.tags) ? item.tags : [],
+          example_sentences: safeParseArray(item.example_sentences),
+          tags: safeParseArray(item.tags),
         };
 
         if (includeSrsLevel) {
@@ -48,14 +64,12 @@ export function transformItems(apiItems, options = {}) {
           description: item.description || '',
           topic: item.topic || '',
           notes: item.notes || '',
-          example_sentences: Array.isArray(item.example_sentences)
-            ? item.example_sentences.map((ex) =>
-                typeof ex === 'string'
-                  ? ex
-                  : `${ex.japanese || ''} (${ex.english || ''})`
-              )
-            : [],
-          tags: Array.isArray(item.tags) ? item.tags : [],
+          example_sentences: safeParseArray(item.example_sentences).map((ex) =>
+            typeof ex === 'string'
+              ? ex
+              : `${ex.japanese || ''} (${ex.english || ''})`
+          ),
+          tags: safeParseArray(item.tags),
         };
 
         if (includeSrsLevel) {

@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { toKana } from 'wanakana';
 import CustomSelect from '@/components/ui/CustomSelect';
+import ExampleSentenceList from '@/components/ui/ExampleSentenceList';
 import { FiPlus, FiX } from 'react-icons/fi';
 
 export default function CardSwapCustomItemModal({
@@ -19,7 +20,7 @@ export default function CardSwapCustomItemModal({
     kana: '',
     kanji: '',
     lexical_category: '',
-    example_sentences: '',
+    example_sentences: [],
     tags: '',
   });
 
@@ -29,7 +30,7 @@ export default function CardSwapCustomItemModal({
     description: '',
     topic: '',
     notes: '',
-    example_sentences: '',
+    example_sentences: [],
     tags: '',
   });
 
@@ -72,7 +73,7 @@ export default function CardSwapCustomItemModal({
         kana: vocabForm.kana.trim(),
         kanji: vocabForm.kanji.trim(),
         lexical_category: vocabForm.lexical_category.trim(),
-        example_sentences: vocabForm.example_sentences.trim(),
+        example_sentences: vocabForm.example_sentences.filter((s) => s.trim()),
         tags: vocabForm.tags.trim(),
       };
       onConfirm([item]);
@@ -90,7 +91,9 @@ export default function CardSwapCustomItemModal({
         description: grammarForm.description.trim(),
         topic: grammarForm.topic.trim(),
         notes: grammarForm.notes.trim(),
-        example_sentences: grammarForm.example_sentences.trim(),
+        example_sentences: grammarForm.example_sentences.filter((s) =>
+          s.trim()
+        ),
         tags: grammarForm.tags.trim(),
       };
       onConfirm([item]);
@@ -212,21 +215,17 @@ export default function CardSwapCustomItemModal({
                 />
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-3 mb-3">
-              <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Example Sentences
-                </label>
-                <textarea
-                  rows={2}
-                  value={vocabForm.example_sentences}
-                  onChange={(e) =>
-                    handleVocabFormChange('example_sentences', e.target.value)
-                  }
-                  placeholder="Example sentences (one per line)"
-                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
-                />
-              </div>
+            <div className="mb-3">
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Example Sentences
+              </label>
+              <ExampleSentenceList
+                sentences={vocabForm.example_sentences}
+                onChange={(arr) =>
+                  handleVocabFormChange('example_sentences', arr)
+                }
+                compact
+              />
             </div>
             <div className="grid grid-cols-1 gap-3 mb-3">
               <div>
@@ -335,21 +334,17 @@ export default function CardSwapCustomItemModal({
                 />
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-3 mb-3">
-              <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Example Sentences
-                </label>
-                <textarea
-                  rows={2}
-                  value={grammarForm.example_sentences}
-                  onChange={(e) =>
-                    handleGrammarFormChange('example_sentences', e.target.value)
-                  }
-                  placeholder="Example sentences (one per line)"
-                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
-                />
-              </div>
+            <div className="mb-3">
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Example Sentences
+              </label>
+              <ExampleSentenceList
+                sentences={grammarForm.example_sentences}
+                onChange={(arr) =>
+                  handleGrammarFormChange('example_sentences', arr)
+                }
+                compact
+              />
             </div>
           </>
         )}

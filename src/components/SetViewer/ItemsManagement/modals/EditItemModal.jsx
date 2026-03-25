@@ -1,5 +1,6 @@
 import CustomSelect from '@/components/ui/CustomSelect';
 import BaseModal from '@/components/ui/BaseModal';
+import ExampleSentenceList from '@/components/ui/ExampleSentenceList';
 
 export default function EditItemModal({
   isOpen,
@@ -259,23 +260,14 @@ export default function EditItemModal({
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Example Sentences
-              <span className="text-xs text-gray-500 ml-2">(one per line)</span>
             </label>
-            <textarea
-              value={
+            <ExampleSentenceList
+              sentences={
                 Array.isArray(editFormData.example_sentences)
-                  ? editFormData.example_sentences.join('\n')
-                  : ''
+                  ? editFormData.example_sentences
+                  : []
               }
-              onChange={(e) =>
-                onFieldChange(
-                  'example_sentences',
-                  e.target.value.split('\n').filter((s) => s.trim())
-                )
-              }
-              rows={4}
-              className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
-              placeholder="Enter example sentences, one per line"
+              onChange={(arr) => onFieldChange('example_sentences', arr)}
             />
           </div>
 

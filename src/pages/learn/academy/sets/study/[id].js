@@ -29,6 +29,7 @@ import { useRouter } from 'next/router';
 import MasterItemsManagement from '@/components/SetViewer/ItemsManagement/MasterItemsManagement';
 import PracticeOptions from '@/components/SetViewer/PracticeOptions/MasterPracticeOptions';
 import MasterSetHeader from '@/components/SetViewer/SetHeader/MasterSetHeader';
+import { safeParseArray } from '@/lib/study/itemTransform';
 import PageHeader from '@/components/ui/PageHeader';
 import {
   TbStack2,
@@ -191,10 +192,8 @@ export default function ViewSet() {
                     lexical_category: item.lexical_category || '',
                     status: item.known_status || 'unknown',
                     srs_level: item.srs_level || 0,
-                    example_sentences: Array.isArray(item.example_sentences)
-                      ? item.example_sentences
-                      : [item.example_sentences].filter(Boolean),
-                    tags: Array.isArray(item.tags) ? item.tags : [],
+                    example_sentences: safeParseArray(item.example_sentences),
+                    tags: safeParseArray(item.tags),
                   };
                 }
                 // Handle grammar items
@@ -208,14 +207,14 @@ export default function ViewSet() {
                     status: item.known_status || 'unknown',
                     srs_level: item.srs_level || 0,
                     notes: item.notes || '',
-                    example_sentences: Array.isArray(item.example_sentences)
-                      ? item.example_sentences.map((ex) =>
-                          typeof ex === 'string'
-                            ? ex
-                            : `${ex.japanese || ''} (${ex.english || ''})`
-                        )
-                      : [],
-                    tags: Array.isArray(item.tags) ? item.tags : [],
+                    example_sentences: safeParseArray(
+                      item.example_sentences
+                    ).map((ex) =>
+                      typeof ex === 'string'
+                        ? ex
+                        : `${ex.japanese || ''} (${ex.english || ''})`
+                    ),
+                    tags: safeParseArray(item.tags),
                   };
                 }
                 return null;

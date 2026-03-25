@@ -87,7 +87,7 @@ export default function MasterItemsManagement({
     kana: '',
     kanji: '',
     lexical_category: '',
-    example_sentences: '',
+    example_sentences: [],
     tags: '',
   });
 
@@ -96,7 +96,7 @@ export default function MasterItemsManagement({
     description: '',
     topic: '',
     notes: '',
-    example_sentences: '',
+    example_sentences: [],
     tags: '',
   });
 
@@ -203,12 +203,10 @@ export default function MasterItemsManagement({
         updates.srs_level = editFormData.srs_level.toString();
       }
       if (editFormData.tags !== undefined) {
-        updates.tags = JSON.stringify(editFormData.tags);
+        updates.tags = editFormData.tags;
       }
       if (editFormData.example_sentences !== undefined) {
-        updates.example_sentences = JSON.stringify(
-          editFormData.example_sentences
-        );
+        updates.example_sentences = editFormData.example_sentences;
       }
 
       if (editingItem.type === 'vocabulary') {
@@ -455,7 +453,9 @@ export default function MasterItemsManagement({
           kana: vocabForm.kana.trim(),
           kanji: vocabForm.kanji.trim(),
           lexical_category: vocabForm.lexical_category.trim(),
-          example_sentences: vocabForm.example_sentences.trim(),
+          example_sentences: vocabForm.example_sentences.filter((s) =>
+            s.trim()
+          ),
           tags: vocabForm.tags.trim()
             ? vocabForm.tags
                 .split(',')
@@ -474,15 +474,12 @@ export default function MasterItemsManagement({
         }
 
         item_type = 'grammar';
-        const exampleSentences = grammarForm.example_sentences.trim()
-          ? grammarForm.example_sentences
-              .split('\n')
-              .filter((s) => s.trim())
-              .map((s) => ({
-                japanese: s.trim(),
-                english: '',
-              }))
-          : [];
+        const exampleSentences = grammarForm.example_sentences
+          .filter((s) => s.trim())
+          .map((s) => ({
+            japanese: s.trim(),
+            english: '',
+          }));
 
         item_data = {
           owner: userProfile.sub,

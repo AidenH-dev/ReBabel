@@ -1,3 +1,5 @@
+import { safeParseArray } from '@/lib/study/itemTransform';
+
 export function buildEditableItem(questionItem) {
   if (!questionItem || !questionItem.uuid) return null;
 
@@ -11,10 +13,8 @@ export function buildEditableItem(questionItem) {
       description: questionItem.description || '',
       topic: questionItem.topic || '',
       notes: questionItem.notes || '',
-      example_sentences: Array.isArray(questionItem.example_sentences)
-        ? questionItem.example_sentences
-        : [],
-      tags: Array.isArray(questionItem.tags) ? questionItem.tags : [],
+      example_sentences: safeParseArray(questionItem.example_sentences),
+      tags: safeParseArray(questionItem.tags),
     };
   }
 
@@ -25,10 +25,8 @@ export function buildEditableItem(questionItem) {
     kana: questionItem.kana || '',
     kanji: questionItem.kanji || '',
     lexical_category: questionItem.lexical_category || '',
-    example_sentences: Array.isArray(questionItem.example_sentences)
-      ? questionItem.example_sentences
-      : [],
-    tags: Array.isArray(questionItem.tags) ? questionItem.tags : [],
+    example_sentences: safeParseArray(questionItem.example_sentences),
+    tags: safeParseArray(questionItem.tags),
   };
 }
 
@@ -46,8 +44,8 @@ export function toUpdateRequest(editableItem) {
         description: editableItem.description || '',
         topic: editableItem.topic || '',
         notes: editableItem.notes || '',
-        example_sentences: JSON.stringify(editableItem.example_sentences || []),
-        tags: JSON.stringify(editableItem.tags || []),
+        example_sentences: editableItem.example_sentences || [],
+        tags: editableItem.tags || [],
       },
     };
   }
@@ -60,8 +58,8 @@ export function toUpdateRequest(editableItem) {
       kana: editableItem.kana || '',
       kanji: editableItem.kanji || '',
       lexical_category: editableItem.lexical_category || '',
-      example_sentences: JSON.stringify(editableItem.example_sentences || []),
-      tags: JSON.stringify(editableItem.tags || []),
+      example_sentences: editableItem.example_sentences || [],
+      tags: editableItem.tags || [],
     },
   };
 }

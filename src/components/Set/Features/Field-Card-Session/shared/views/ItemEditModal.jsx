@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import CustomSelect from '@/components/ui/CustomSelect';
 import BaseModal from '@/components/ui/BaseModal';
+import ExampleSentenceList from '@/components/ui/ExampleSentenceList';
 
 export default function ItemEditModal({
   item,
@@ -217,26 +218,14 @@ export default function ItemEditModal({
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Example Sentences
-              <span className="text-xs text-gray-500 ml-2">(one per line)</span>
             </label>
-            <textarea
-              value={
+            <ExampleSentenceList
+              sentences={
                 Array.isArray(formData.example_sentences)
-                  ? formData.example_sentences.join('\n')
-                  : ''
+                  ? formData.example_sentences
+                  : []
               }
-              onChange={(e) =>
-                handleChange(
-                  'example_sentences',
-                  e.target.value
-                    .split('\n')
-                    .map((line) => line.trim())
-                    .filter(Boolean)
-                )
-              }
-              rows={4}
-              className="w-full px-3 py-2 bg-surface-deep border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white font-japanese focus:outline-none focus:ring-2 focus:ring-brand-pink resize-none"
-              placeholder="Enter example sentences, one per line"
+              onChange={(arr) => handleChange('example_sentences', arr)}
             />
           </div>
 

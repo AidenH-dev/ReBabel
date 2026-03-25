@@ -1,5 +1,6 @@
 import { FiPlus } from 'react-icons/fi';
 import BaseModal from '@/components/ui/BaseModal';
+import ExampleSentenceList from '@/components/ui/ExampleSentenceList';
 
 export default function AddItemModal({
   isOpen,
@@ -200,17 +201,14 @@ export default function AddItemModal({
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Example Sentences{' '}
-                  <span className="text-gray-500">(one per line)</span>
+                  Example Sentences
                 </label>
-                <textarea
-                  rows={2}
-                  value={vocabForm.example_sentences}
-                  onChange={(e) =>
-                    onVocabFormChange('example_sentences', e.target.value)
+                <ExampleSentenceList
+                  sentences={vocabForm.example_sentences}
+                  onChange={(arr) =>
+                    onVocabFormChange('example_sentences', arr)
                   }
-                  placeholder="Example sentences"
-                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
+                  compact
                 />
               </div>
               <div>
@@ -316,17 +314,14 @@ export default function AddItemModal({
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Example Sentences{' '}
-                  <span className="text-gray-500">(one per line)</span>
+                  Example Sentences
                 </label>
-                <textarea
-                  rows={2}
-                  value={grammarForm.example_sentences}
-                  onChange={(e) =>
-                    onGrammarFormChange('example_sentences', e.target.value)
+                <ExampleSentenceList
+                  sentences={grammarForm.example_sentences}
+                  onChange={(arr) =>
+                    onGrammarFormChange('example_sentences', arr)
                   }
-                  placeholder="Example sentences"
-                  className="w-full bg-surface-deep text-gray-900 dark:text-white px-2 py-1.5 rounded text-sm border border-border-default focus:outline-none focus:ring-1 focus:ring-brand-pink resize-none"
+                  compact
                 />
               </div>
               <div>
