@@ -116,6 +116,8 @@ export default function LearnNew() {
   // ============ REFS ============
   const translationInputRef = useRef(null);
   const sessionInitializedRef = useRef(false);
+  const mistakesPerItemRef = useRef({});
+  const srsLevelChangesRef = useRef(null);
 
   // ============ ANALYTICS ============
   const {
@@ -263,6 +265,13 @@ export default function LearnNew() {
       setActiveMCArray([...multipleChoiceArray]);
       setActiveTranslationArray([...translationArray]);
 
+      // Initialize per-item mistake tracking
+      const mistakesMap = {};
+      itemData.forEach((item) => {
+        mistakesMap[item.id] = 0;
+      });
+      mistakesPerItemRef.current = mistakesMap;
+
       // Calculate total questions per phase (each variation counts separately)
       const phaseProgressObj = {
         'multiple-choice': {
@@ -320,9 +329,12 @@ export default function LearnNew() {
       markItemCompleted(currentPhase, currentItem.id);
     }
 
-    // If incorrect, add current item to end of array
+    // If incorrect, track mistake and add current item to end of array
     if (!answerData.isCorrect) {
       const currentItem = getCurrentArray()[currentIndex];
+      const originalId = currentItem.originalId || currentItem.id;
+      mistakesPerItemRef.current[originalId] =
+        (mistakesPerItemRef.current[originalId] || 0) + 1;
 
       if (currentPhase === 'multiple-choice') {
         setActiveMCArray((prev) => [...prev, currentItem]);
@@ -369,6 +381,7 @@ export default function LearnNew() {
         const success = await saveAllItemsToSRS();
 
         if (success) {
+          srsLevelChangesRef.current = computeSrsLevelChanges();
           setCurrentPhase('complete');
           triggerAccuracyAnimation();
         }
@@ -382,6 +395,7 @@ export default function LearnNew() {
       const success = await saveAllItemsToSRS();
 
       if (success) {
+        srsLevelChangesRef.current = computeSrsLevelChanges();
         setCurrentPhase('complete');
         triggerAccuracyAnimation();
       }
@@ -462,6 +476,13 @@ export default function LearnNew() {
     // Remove last answered item and reverse stats
     retractLastAnswer();
 
+    // Retract mistake for this item
+    const originalId = currentItem.originalId || currentItem.id;
+    mistakesPerItemRef.current[originalId] = Math.max(
+      0,
+      (mistakesPerItemRef.current[originalId] || 0) - 1
+    );
+
     // Mark item as completed (user claims correct)
     markItemCompleted(currentPhase, currentItem.id);
 
@@ -490,6 +511,19 @@ export default function LearnNew() {
       { setState: setMultipleChoiceArray, mergeFn: mergeIntoQuestionItem },
       { setState: setActiveMCArray, mergeFn: mergeIntoQuestionItem },
     ]);
+  };
+
+  // ============ SRS LEVEL CHANGE COMPUTATION ============
+
+  const computeSrsLevelChanges = () => {
+    const mistakes = mistakesPerItemRef.current;
+    let levelsUp = 0;
+    let levelsDown = 0;
+    itemData.forEach((item) => {
+      if ((mistakes[item.id] || 0) === 0) levelsUp++;
+      else levelsDown++;
+    });
+    return { levelsUp, levelsDown };
   };
 
   // ============ GENERAL HANDLERS ============
@@ -729,6 +763,7 @@ export default function LearnNew() {
               animateAccuracy={animateAccuracy}
               onBackToSet={handleExit}
               completionTitle="SRS Learn New Complete"
+              srsLevelChanges={srsLevelChangesRef.current}
             />
           )}
 
@@ -842,6 +877,7 @@ export default function LearnNew() {
                     setSrsError(null);
                     const success = await saveAllItemsToSRS();
                     if (success) {
+                      srsLevelChangesRef.current = computeSrsLevelChanges();
                       setCurrentPhase('complete');
                       triggerAccuracyAnimation();
                     }

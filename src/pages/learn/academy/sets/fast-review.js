@@ -121,6 +121,7 @@ export default function FastReview() {
   // ============ REFS ============
   const translationInputRef = useRef(null);
   const sessionInitializedRef = useRef(false);
+  const srsLevelChangesRef = useRef(null);
 
   // ============ ANALYTICS ============
   const {
@@ -291,6 +292,18 @@ export default function FastReview() {
 
   // ============ HELPER FUNCTIONS ============
 
+  const computeSrsLevelChanges = () => {
+    const leveledIds = [...leveledItemIdsRef.current];
+    const mistakes = mistakesPerItemRef.current;
+    let levelsUp = 0;
+    let levelsDown = 0;
+    leveledIds.forEach((id) => {
+      if ((mistakes[id] || 0) === 0) levelsUp++;
+      else levelsDown++;
+    });
+    return { levelsUp, levelsDown };
+  };
+
   // Get current array based on phase
   const getCurrentArray = () => {
     if (currentPhase === 'multiple-choice') {
@@ -405,10 +418,12 @@ export default function FastReview() {
         setShowResult(false);
         setUserAnswer('');
       } else {
+        srsLevelChangesRef.current = computeSrsLevelChanges();
         setCurrentPhase('complete');
         triggerAccuracyAnimation();
       }
     } else if (currentPhase === 'translation') {
+      srsLevelChangesRef.current = computeSrsLevelChanges();
       setCurrentPhase('complete');
       triggerAccuracyAnimation();
     }
@@ -591,6 +606,7 @@ export default function FastReview() {
               onBackToSet={handleExit}
               completionTitle="Fast Review Complete"
               setBreakdown={setBreakdown}
+              srsLevelChanges={srsLevelChangesRef.current}
             />
           )}
 
