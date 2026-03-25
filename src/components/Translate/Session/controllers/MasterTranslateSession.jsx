@@ -267,8 +267,8 @@ export default function MasterTranslateSession({
   // Render loading state
   if (isGenerating) {
     return (
-      <div className="flex flex-col items-center justify-center p-8">
-        <BouncingDots scale={0.8} />
+      <div className="flex flex-col items-center justify-center px-8 min-h-[60vh]">
+        <BouncingDots />
         <p className="text-sm text-black/60 dark:text-white/60">
           Generating {sessionLength} practice sentences...
         </p>

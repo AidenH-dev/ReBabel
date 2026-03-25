@@ -153,7 +153,7 @@ export default function TranslatePracticeSession() {
       sidebar="academy"
       title="Translate Practice"
       variant="fixed"
-      mainClassName="px-1 pt-0 pb-1 sm:p-6 overflow-y-auto"
+      mainClassName="px-3 pt-0 pb-1 sm:p-6 overflow-y-auto"
     >
       {/* Header - Quiz Mode Style */}
       <div className="w-full max-w-5xl mx-auto mb-3 sm:mb-6 sm:mt-10">
