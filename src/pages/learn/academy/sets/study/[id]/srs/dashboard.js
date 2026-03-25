@@ -184,6 +184,7 @@ export default function SRSDashboard() {
     return (
       <AuthenticatedLayout
         sidebar="academy"
+        sidebarProps={{ hideMobileMenu: true }}
         title="SRS Dashboard"
         variant="fixed"
         mainClassName="min-h-0 overflow-hidden"
@@ -402,6 +403,7 @@ export default function SRSDashboard() {
   return (
     <AuthenticatedLayout
       sidebar="academy"
+      sidebarProps={{ hideMobileMenu: true }}
       title={`${setTitle} - SRS Dashboard`}
       variant="fixed"
       mainClassName="min-h-0 overflow-hidden"

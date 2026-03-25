@@ -411,6 +411,7 @@ export default function ViewSet() {
   return (
     <AuthenticatedLayout
       sidebar="academy"
+      sidebarProps={{ hideMobileMenu: true }}
       title={`${setData.title} - View Set`}
       variant="fixed"
       mainClassName="min-h-0 sm:overflow-hidden"

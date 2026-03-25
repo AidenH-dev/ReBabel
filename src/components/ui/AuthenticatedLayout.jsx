@@ -34,6 +34,7 @@ const WRAPPER_VARIANTS = {
  */
 export default function AuthenticatedLayout({
   sidebar = 'main',
+  sidebarProps = {},
   title,
   variant = 'default',
   mainClassName = '',
@@ -45,7 +46,7 @@ export default function AuthenticatedLayout({
 
   return (
     <div className={`${wrapperClasses} ${wrapperClassName}`}>
-      <Sidebar />
+      <Sidebar {...sidebarProps} />
       <main
         className={`ml-auto flex-1 flex flex-col overflow-x-hidden ${
           variant === 'fixed' ? 'overflow-y-auto' : ''
