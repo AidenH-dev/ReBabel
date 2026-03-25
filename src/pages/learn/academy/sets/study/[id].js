@@ -39,6 +39,7 @@ import {
   TbTrash,
   TbArrowBackUp,
   TbLanguageHiragana,
+  TbLoader,
 } from 'react-icons/tb';
 import { FiEdit2, FiMoreVertical, FiTag } from 'react-icons/fi';
 import { clientLog } from '@/lib/clientLogger';
@@ -679,30 +680,15 @@ export default function ViewSet() {
               <button
                 onClick={handleRunAutoCategorize}
                 disabled={isAutoCategorizing}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-brand-pink hover:bg-[#c00950] text-white transition-colors disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 pl-3 pr-4 py-1.5 text-sm font-medium rounded-lg bg-brand-pink hover:bg-[#c00950] text-white transition-colors disabled:opacity-50"
               >
                 {isAutoCategorizing ? (
                   <>
-                    <svg
-                      className="animate-spin w-4 h-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    Categorizing...
+                    <TbLoader
+                      className="w-5 h-5 animate-spin"
+                      strokeWidth={2.5}
+                    />
+                    Categorizing
                   </>
                 ) : (
                   <>

@@ -2,6 +2,7 @@
 // Handles batch sentence generation and LLM-based grading
 
 import { useState, useEffect, useRef } from 'react';
+import BouncingDots from '@/components/ui/BouncingDots';
 import { toKana } from 'wanakana';
 import GradeResultView from '../views/GradeResultView';
 import FeedbackRow from '../views/FeedbackRow';
@@ -267,8 +268,8 @@ export default function MasterTranslateSession({
   if (isGenerating) {
     return (
       <div className="flex flex-col items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-pink"></div>
-        <p className="mt-4 text-sm text-black/60 dark:text-white/60">
+        <BouncingDots scale={0.8} />
+        <p className="text-sm text-black/60 dark:text-white/60">
           Generating {sessionLength} practice sentences...
         </p>
       </div>

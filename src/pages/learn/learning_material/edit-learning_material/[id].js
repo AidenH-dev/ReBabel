@@ -1,5 +1,6 @@
 // pages/learn/edit-learning_material/[id].js
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
+import BouncingDots from '@/components/ui/BouncingDots';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -499,8 +500,8 @@ export default function EditLearning_materialPage() {
         title="Edit Learning Material • ReBabel"
         mainClassName="px-8 py-6 flex items-center justify-center"
       >
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-brand-pink border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <div className="flex flex-col items-center">
+          <BouncingDots scale={0.8} />
           <p className="text-gray-600 dark:text-gray-400">
             Loading learning material...
           </p>

@@ -1,5 +1,6 @@
 // pages/learn/academy/sets/study/[id]/srs/learn-new.js
 import { useState, useEffect, useRef, useMemo } from 'react';
+import BouncingDots from '@/components/ui/BouncingDots';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
@@ -813,8 +814,8 @@ export default function LearnNew() {
               {/* SRS Saving Loading Screen */}
               {isSavingSRS && (
                 <div className="flex-1 flex items-center justify-center">
-                  <div className="text-center space-y-4">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-500 mx-auto"></div>
+                  <div className="flex flex-col items-center space-y-4">
+                    <BouncingDots />
                     <p className="text-xl font-semibold text-gray-700 dark:text-white">
                       Saving your progress to SRS...
                     </p>

@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import BouncingDots from '@/components/ui/BouncingDots';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -378,9 +379,9 @@ export default function ConjugationPracticeLevelPage({
 
           {phase === 'loading' && (
             <div className="flex items-center justify-center min-h-[60vh]">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-pink mx-auto" />
-                <p className="mt-4 text-sm text-black/60 dark:text-white/60">
+              <div className="flex flex-col items-center">
+                <BouncingDots scale={0.8} />
+                <p className="text-sm text-black/60 dark:text-white/60">
                   Generating questions...
                 </p>
               </div>

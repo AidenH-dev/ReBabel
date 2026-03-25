@@ -2,6 +2,7 @@
 // Main session page for on-demand translate practice
 
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
+import BouncingDots from '@/components/ui/BouncingDots';
 import MasterTranslateSession from '@/components/Translate/Session/controllers/MasterTranslateSession';
 import TranslateSummaryView from '@/components/Translate/Session/views/TranslateSummaryView';
 import { useState, useEffect } from 'react';
@@ -115,9 +116,9 @@ export default function TranslatePracticeSession() {
         variant="fixed"
       >
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-pink mx-auto"></div>
-            <p className="mt-4 text-sm text-black/60 dark:text-white/60">
+          <div className="flex flex-col items-center">
+            <BouncingDots scale={0.8} />
+            <p className="text-sm text-black/60 dark:text-white/60">
               Loading practice session...
             </p>
           </div>

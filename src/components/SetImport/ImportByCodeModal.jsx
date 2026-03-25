@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { FiSearch, FiCheckCircle } from 'react-icons/fi';
-import { TbStack2, TbDownload, TbLoader3, TbEye } from 'react-icons/tb';
+import { TbStack2, TbDownload, TbLoader, TbEye } from 'react-icons/tb';
 import ImportProgressOverlay from '@/components/SetImport/ImportProgressOverlay';
 import {
   STARTER_SETS,
@@ -310,14 +310,17 @@ export default function ImportByCodeModal({ isOpen, onClose, userProfile }) {
                   <button
                     onClick={handleImport}
                     disabled={isImporting}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-brand-pink to-[#c1084d] text-white hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 flex items-center justify-center gap-2 pl-3 pr-4 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-brand-pink to-[#c1084d] text-white hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isImporting ? (
-                      <TbLoader3 className="w-4 h-4 animate-spin" />
+                      <TbLoader
+                        className="w-5 h-5 animate-spin"
+                        strokeWidth={2.5}
+                      />
                     ) : (
                       <TbDownload className="w-4 h-4" />
                     )}
-                    {isImporting ? 'Importing...' : 'Import'}
+                    {isImporting ? 'Importing' : 'Import'}
                   </button>
                   <button
                     onClick={handleViewSet}
@@ -378,11 +381,14 @@ export default function ImportByCodeModal({ isOpen, onClose, userProfile }) {
                             className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-white bg-gradient-to-r from-brand-pink to-[#c1084d] hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {isCurrentlyImporting ? (
-                              <TbLoader3 className="w-3.5 h-3.5 animate-spin" />
+                              <TbLoader
+                                className="w-4 h-4 animate-spin"
+                                strokeWidth={2.5}
+                              />
                             ) : (
                               <TbDownload className="w-3.5 h-3.5" />
                             )}
-                            {isCurrentlyImporting ? 'Adding...' : 'Add'}
+                            {isCurrentlyImporting ? 'Adding' : 'Add'}
                           </button>
                         )}
                       </div>

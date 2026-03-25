@@ -1,4 +1,5 @@
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
+import BouncingDots from '@/components/ui/BouncingDots';
 import BaseModal from '@/components/ui/BaseModal';
 import SessionStatHeaderView from '@/components/Set/Features/Field-Card-Session/shared/views/SessionStatHeaderView';
 import ConjugationCard from '@/components/Conjugation/shared/views/ConjugationCard';
@@ -320,9 +321,9 @@ export default function ConjugationPracticeSession() {
         variant="gradient"
         mainClassName="p-3 sm:p-6 sm:pt-10 items-center justify-center"
       >
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-pink mx-auto"></div>
-          <p className="mt-4 text-sm text-black/60 dark:text-white/60">
+        <div className="flex flex-col items-center">
+          <BouncingDots scale={0.8} />
+          <p className="text-sm text-black/60 dark:text-white/60">
             Generating conjugation questions...
           </p>
         </div>
