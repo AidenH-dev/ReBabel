@@ -183,42 +183,60 @@ export default function ConjugationPracticeSession() {
   };
 
   // Called when user confirms the skip (from edit modal)
+  // Erases the word from the session entirely — past answers and future questions
   const handleConfirmSkip = () => {
-    // Retract answer if one was submitted for this question
-    if (answeredItems.length > 0) {
-      const currentQ = questions[currentIndex];
-      const questionLabel = currentQ.word.kanji || currentQ.word.kana;
-      const last = answeredItems[answeredItems.length - 1];
-      if (last.question === questionLabel) {
-        setAnsweredItems((prev) => prev.slice(0, -1));
-        setSessionStats((prev) => {
-          const wasCorrect = last.isCorrect;
-          const newCorrect = prev.correct - (wasCorrect ? 1 : 0);
-          const newIncorrect = prev.incorrect - (wasCorrect ? 0 : 1);
-          const newTotal = prev.totalAttempts - 1;
-          return {
-            correct: newCorrect,
-            incorrect: newIncorrect,
-            totalAttempts: newTotal,
-            accuracy:
-              newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0,
-          };
-        });
-      }
+    const currentQ = questions[currentIndex];
+    const skipKana = currentQ.word.kana;
+    const skipKanji = currentQ.word.kanji || null;
+    const questionLabel = skipKanji || skipKana;
+
+    // Remove ALL answered items for this word and adjust stats
+    const keptAnswers = answeredItems.filter(
+      (a) => a.question !== questionLabel
+    );
+    const removedAnswers = answeredItems.length - keptAnswers.length;
+    if (removedAnswers > 0) {
+      const removedCorrect = answeredItems.filter(
+        (a) => a.question === questionLabel && a.isCorrect
+      ).length;
+      const removedIncorrect = removedAnswers - removedCorrect;
+      setAnsweredItems(keptAnswers);
+      setSessionStats((prev) => {
+        const newCorrect = prev.correct - removedCorrect;
+        const newIncorrect = prev.incorrect - removedIncorrect;
+        const newTotal = prev.totalAttempts - removedAnswers;
+        return {
+          correct: newCorrect,
+          incorrect: newIncorrect,
+          totalAttempts: newTotal,
+          accuracy:
+            newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0,
+        };
+      });
     }
 
-    // Remove this question from the session entirely
-    setQuestions((prev) => {
-      const updated = [...prev];
-      updated.splice(currentIndex, 1);
-      return updated;
-    });
-    // If we removed the last question, complete the session
-    // currentIndex stays the same since the array shifted, unless it was the last
-    if (questions.length <= 1) {
+    // Count how many removed questions were before currentIndex so we can adjust it
+    const removedBefore = questions
+      .slice(0, currentIndex)
+      .filter(
+        (q) => q.word.kana === skipKana && (q.word.kanji || null) === skipKanji
+      ).length;
+
+    // Remove ALL questions for this word
+    const remaining = questions.filter(
+      (q) => q.word.kana !== skipKana || (q.word.kanji || null) !== skipKanji
+    );
+    setQuestions(remaining);
+
+    // Shift currentIndex back by the number of removed questions that were before it
+    const adjustedIndex = currentIndex - removedBefore;
+
+    if (remaining.length === 0) {
       handleComplete();
-    } else if (currentIndex >= questions.length - 1) {
-      setCurrentIndex(questions.length - 2);
+    } else if (adjustedIndex >= remaining.length) {
+      setCurrentIndex(remaining.length - 1);
+    } else {
+      setCurrentIndex(adjustedIndex);
     }
   };
 
