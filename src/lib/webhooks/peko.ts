@@ -12,6 +12,7 @@ export type PekoEventType =
   | 'subscription.updated'
   | 'subscription.canceled'
   | 'subscription.payment_failed'
+  | 'subscription.payment_received'
   | 'bug_report';
 
 export interface PekoEvent {
@@ -152,7 +153,7 @@ export function notifyError(error: Error, context?: ErrorContext): void {
  * Report subscription events
  */
 export function notifySubscription(
-  type: 'created' | 'updated' | 'canceled' | 'payment_failed',
+  type: 'created' | 'updated' | 'canceled' | 'payment_failed' | 'payment_received',
   data: SubscriptionData
 ): void {
   const eventType = `subscription.${type}` as PekoEventType;
@@ -162,6 +163,7 @@ export function notifySubscription(
     updated: 'low',
     canceled: 'medium',
     payment_failed: 'high',
+    payment_received: 'high',
   };
 
   const summaryMap: Record<string, string> = {
@@ -169,6 +171,7 @@ export function notifySubscription(
     updated: `Subscription updated: ${data.stripeSubscriptionId}`,
     canceled: `Subscription canceled: ${data.stripeSubscriptionId}`,
     payment_failed: `Payment failed for subscription: ${data.stripeSubscriptionId}`,
+    payment_received: `Payment received: ${data.stripeSubscriptionId}`,
   };
 
   notifyPeko({

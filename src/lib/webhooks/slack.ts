@@ -149,7 +149,7 @@ export function notifySlackError(error: Error, context?: ErrorContext): void {
  * Report subscription events
  */
 export function notifySlackSubscription(
-  type: 'created' | 'updated' | 'canceled' | 'payment_failed',
+  type: 'created' | 'updated' | 'canceled' | 'payment_failed' | 'payment_received',
   data: SubscriptionData
 ): void {
   const eventType = `subscription.${type}` as PekoEventType;
@@ -159,6 +159,7 @@ export function notifySlackSubscription(
     updated: 'low',
     canceled: 'medium',
     payment_failed: 'high',
+    payment_received: 'high',
   };
 
   const summaryMap: Record<string, string> = {
@@ -166,6 +167,7 @@ export function notifySlackSubscription(
     updated: `Subscription updated: ${data.stripeSubscriptionId}`,
     canceled: `Subscription canceled: ${data.userId}`,
     payment_failed: `Payment failed: ${data.userId}`,
+    payment_received: `Payment received: ${data.userId}`,
   };
 
   notifySlack({

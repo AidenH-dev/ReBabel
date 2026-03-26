@@ -54,16 +54,6 @@ export default withLogger(async function handler(req, res: NextApiResponse) {
           const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
           await handleSubscriptionUpdate(subscription, event.id);
           req.log.info('subscription.state_change', { event: event.type, userId: subscription.metadata.rebabel_user_id || subscription.metadata.auth0_user_id });
-          const subData = {
-            userId: subscription.metadata.auth0_user_id,
-            stripeCustomerId: subscription.customer as string,
-            stripeSubscriptionId: subscription.id,
-            status: subscription.status,
-            priceId: subscription.items.data[0]?.price.id,
-            eventId: event.id,
-          };
-          notifySubscription('created', subData);
-          notifySlackSubscription('created', subData);
         }
         break;
       }
@@ -73,26 +63,16 @@ export default withLogger(async function handler(req, res: NextApiResponse) {
         const subscription = event.data.object as Stripe.Subscription;
         await handleSubscriptionUpdate(subscription, event.id);
         req.log.info('subscription.state_change', { event: event.type, userId: subscription.metadata.rebabel_user_id || subscription.metadata.auth0_user_id });
-        const notifyType = event.type === 'customer.subscription.created' ? 'created' : 'updated' as const;
-        const subEventData = {
-          userId: subscription.metadata.auth0_user_id,
-          stripeCustomerId: subscription.customer as string,
-          stripeSubscriptionId: subscription.id,
-          status: subscription.status,
-          priceId: subscription.items.data[0]?.price.id,
-          eventId: event.id,
-        };
-        notifySubscription(notifyType, subEventData);
-        notifySlackSubscription(notifyType, subEventData);
         break;
       }
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
         await handleSubscriptionCanceled(subscription, event.id);
-        req.log.info('subscription.state_change', { event: event.type, userId: subscription.metadata.rebabel_user_id || subscription.metadata.auth0_user_id });
+        const cancelUserId = subscription.metadata.rebabel_user_id || subscription.metadata.auth0_user_id;
+        req.log.info('subscription.state_change', { event: event.type, userId: cancelUserId });
         const cancelData = {
-          userId: subscription.metadata.auth0_user_id,
+          userId: cancelUserId,
           stripeCustomerId: subscription.customer as string,
           stripeSubscriptionId: subscription.id,
           status: 'canceled',
@@ -103,14 +83,36 @@ export default withLogger(async function handler(req, res: NextApiResponse) {
         break;
       }
 
+      case 'invoice.paid': {
+        const invoice = event.data.object as Stripe.Invoice;
+        const inv = invoice as any;
+        if (inv.subscription) {
+          const sub = await stripe.subscriptions.retrieve(inv.subscription as string);
+          const paidUserId = sub.metadata.rebabel_user_id || sub.metadata.auth0_user_id;
+          req.log.info('subscription.payment_received', { event: event.type, userId: paidUserId, amount: inv.amount_paid, currency: inv.currency });
+          const paidData = {
+            userId: paidUserId,
+            stripeCustomerId: inv.customer as string,
+            stripeSubscriptionId: inv.subscription as string,
+            status: 'paid',
+            priceId: sub.items.data[0]?.price.id,
+            eventId: event.id,
+          };
+          notifySubscription('payment_received', paidData);
+          notifySlackSubscription('payment_received', paidData);
+        }
+        break;
+      }
+
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice;
         const inv = invoice as any;
         if (inv.subscription) {
           const sub = await stripe.subscriptions.retrieve(inv.subscription as string);
-          req.log.info('subscription.state_change', { event: event.type, userId: sub.metadata.rebabel_user_id || sub.metadata.auth0_user_id });
+          const failUserId = sub.metadata.rebabel_user_id || sub.metadata.auth0_user_id;
+          req.log.info('subscription.state_change', { event: event.type, userId: failUserId });
           const failData = {
-            userId: sub.metadata.auth0_user_id,
+            userId: failUserId,
             stripeSubscriptionId: inv.subscription as string,
             status: 'past_due',
             eventId: event.id,

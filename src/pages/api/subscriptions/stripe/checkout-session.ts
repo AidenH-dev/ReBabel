@@ -20,7 +20,6 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  const auth0UserId = req.auth0Sub;
   const userId = req.userId;
   const userEmail = req.auth0Email;
 
@@ -35,7 +34,7 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
     if (!customerId) {
       const customer = await stripe.customers.create({
         email: userEmail,
-        metadata: { auth0_user_id: auth0UserId, rebabel_user_id: userId },
+        metadata: { rebabel_user_id: userId },
       });
       customerId = customer.id;
     }
@@ -54,9 +53,9 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
       success_url: `${(req.headers['x-forwarded-proto'] as string) || 'https'}://${req.headers.host}/learn/account/subscription?success=true`,
       cancel_url: `${(req.headers['x-forwarded-proto'] as string) || 'https'}://${req.headers.host}/learn/account/subscription?canceled=true`,
       subscription_data: {
-        metadata: { auth0_user_id: auth0UserId, rebabel_user_id: userId },
+        metadata: { rebabel_user_id: userId },
       },
-      metadata: { auth0_user_id: auth0UserId, rebabel_user_id: userId },
+      metadata: { rebabel_user_id: userId },
     });
 
     return res.status(200).json({
