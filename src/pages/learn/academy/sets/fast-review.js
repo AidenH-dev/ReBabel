@@ -127,6 +127,7 @@ export default function FastReview() {
   const {
     start: startAnalyticsSession,
     finish: finishAnalyticsSession,
+    update: updateAnalyticsSession,
     abort: abortAnalyticsSession,
   } = useAnalyticsSession('srs_fast_review');
 
@@ -388,6 +389,17 @@ export default function FastReview() {
       itemData,
       'srs_fast_review'
     );
+
+    // Rolling update: persist partial analytics after each level-up so
+    // the server has the latest counts if the client crashes or tab closes.
+    if (willShowLevelChange) {
+      const leveledIds = [...leveledItemIdsRef.current];
+      const mistakes = mistakesPerItemRef.current;
+      updateAnalyticsSession(
+        leveledIds.length,
+        leveledIds.filter((id) => (mistakes[id] || 0) === 0).length
+      );
+    }
 
     // If this is the last question AND we're showing a level change,
     // wait for the level change animation to complete before going to summary.

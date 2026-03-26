@@ -1,6 +1,6 @@
 // Implements SPEC-LLM-001
 // POST /api/analytics/user/sessions/[id]/finish
-// Body: { itemsReviewed?: number, itemsCorrect?: number }
+// Body: { itemsReviewed?: number, itemsCorrect?: number, rollingUpdate?: boolean }
 import { NextApiResponse } from 'next';
 import { withAuth } from '@/lib/withAuth';
 import type { AuthedRequest } from '@/lib/withAuth';
@@ -27,7 +27,7 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
     return res.status(400).json({ success: false, error: 'Session ID required' });
   }
 
-  const { itemsReviewed, itemsCorrect } = req.body || {};
+  const { itemsReviewed, itemsCorrect, rollingUpdate } = req.body || {};
 
   // Validate itemsReviewed
   if (itemsReviewed !== undefined && itemsReviewed !== null) {
@@ -58,6 +58,11 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
     return res.status(400).json({ success: false, error: 'itemsCorrect cannot exceed itemsReviewed' });
   }
 
+  // Validate rollingUpdate
+  if (rollingUpdate !== undefined && typeof rollingUpdate !== 'boolean') {
+    return res.status(400).json({ success: false, error: 'rollingUpdate must be a boolean' });
+  }
+
   try {
     // First verify the session belongs to this user
     const { data: sessionData } = await supabaseKvs
@@ -72,6 +77,7 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
         p_entity_id: id,
         p_items_reviewed: itemsReviewed ?? null,
         p_items_correct: itemsCorrect ?? null,
+        p_rolling_update: rollingUpdate ?? false,
       });
 
     if (error) {
