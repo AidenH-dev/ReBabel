@@ -2,9 +2,10 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { FaArrowLeft } from 'react-icons/fa';
-import { TbLanguageKatakana } from 'react-icons/tb';
 import { KATAKANA_ROWS, PRESETS } from '@/lib/practiceSheets/kanaData';
+import MobileBackBubble from '@/components/PracticeSheets/shared/MobileBackBubble';
 import KanaControlPanel from '@/components/PracticeSheets/KanaSheet/KanaControlPanel';
 
 const KanaSheetViewer = dynamic(
@@ -31,6 +32,7 @@ const KanaSheetViewer = dynamic(
 
 export default function KatakanaPracticePage() {
   const router = useRouter();
+  const { user } = useUser();
   const [selectedRowIds, setSelectedRowIds] = useState(
     new Set(PRESETS.full.rowIds)
   );
@@ -142,7 +144,7 @@ export default function KatakanaPracticePage() {
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-gray-100 text-sm text-gray-700 transition hover:border-gray-400 hover:bg-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-400 dark:hover:bg-gray-700"
+                className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-gray-100 text-sm text-gray-700 transition hover:border-gray-400 hover:bg-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-400 dark:hover:bg-gray-700 ${user ? 'hidden lg:inline-flex' : ''}`}
                 aria-label="Go back"
               >
                 <FaArrowLeft className="text-xs" />
@@ -188,6 +190,7 @@ export default function KatakanaPracticePage() {
           </section>
         </div>
       </main>
+      <MobileBackBubble />
     </>
   );
 }

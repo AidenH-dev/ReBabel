@@ -2,9 +2,10 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { FaArrowLeft } from 'react-icons/fa';
-import { TbBooks } from 'react-icons/tb';
 import MultiKanjiControlPanel from '@/components/PracticeSheets/MultiKanjiSheet/MultiKanjiControlPanel';
+import MobileBackBubble from '@/components/PracticeSheets/shared/MobileBackBubble';
 
 const MultiKanjiSheetViewer = dynamic(
   () =>
@@ -37,6 +38,7 @@ const DEFAULT_KANJI_LIST = [
 
 export default function MultiKanjiSheetPage() {
   const router = useRouter();
+  const { user } = useUser();
   const [kanjiList, setKanjiList] = useState(DEFAULT_KANJI_LIST);
   const [layoutMode, setLayoutMode] = useState('compact');
   const [practiceRows, setPracticeRows] = useState(3);
@@ -166,7 +168,7 @@ export default function MultiKanjiSheetPage() {
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-gray-100 text-sm text-gray-700 transition hover:border-gray-400 hover:bg-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-400 dark:hover:bg-gray-700"
+                className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-gray-100 text-sm text-gray-700 transition hover:border-gray-400 hover:bg-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-400 dark:hover:bg-gray-700 ${user ? 'hidden lg:inline-flex' : ''}`}
                 aria-label="Go back"
               >
                 <FaArrowLeft className="text-xs" />
@@ -206,6 +208,7 @@ export default function MultiKanjiSheetPage() {
           </section>
         </div>
       </main>
+      <MobileBackBubble />
     </>
   );
 }
