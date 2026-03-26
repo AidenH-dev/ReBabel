@@ -233,11 +233,11 @@ export default function Subscription() {
                     <HiOutlineStar className="w-3 h-3 text-white" />
                   </div>
                   <span className="text-white text-sm font-semibold tracking-wide">
-                    Founder Pricing
+                    Early Access Pricing
                   </span>
                 </div>
                 <span className="text-white/80 text-xs font-medium">
-                  Early access — locks in for life
+                  Locks in for Life
                 </span>
               </div>
             </div>
@@ -296,7 +296,7 @@ export default function Subscription() {
                 ) : (
                   <HiOutlineStar className="w-4 h-4" />
                 )}
-                Get Founder Pricing
+                Get Early Access Pricing
               </Button>
 
               <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-3">
