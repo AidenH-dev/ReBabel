@@ -34,14 +34,68 @@ export default function RecentSetsSection({
 
       {/* Sets */}
       {setsLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              className="animate-pulse rounded-lg bg-black/[0.06] dark:bg-white/[0.06] h-24"
-            />
-          ))}
-        </div>
+        <>
+          {/* Desktop/tablet skeleton — grid cards */}
+          <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={i}
+                className="rounded-lg border border-black/5 dark:border-white/10 bg-gray-50 dark:bg-surface-elevated p-3"
+              >
+                <div
+                  className="animate-pulse h-4 w-3/4 rounded bg-black/[0.06] dark:bg-white/[0.06]"
+                  style={{ animationDelay: `${i * 80}ms` }}
+                />
+                <div className="mt-2 flex items-center justify-between">
+                  <div
+                    className="animate-pulse h-3 w-14 rounded bg-black/[0.04] dark:bg-white/[0.04]"
+                    style={{ animationDelay: `${i * 80 + 40}ms` }}
+                  />
+                  <div
+                    className="animate-pulse h-5 w-12 rounded-full bg-black/[0.04] dark:bg-white/[0.04]"
+                    style={{ animationDelay: `${i * 80 + 60}ms` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Mobile skeleton — list rows */}
+          <div className="sm:hidden divide-y divide-black/5 dark:divide-white/10 rounded-lg overflow-hidden border border-black/5 dark:border-white/10">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between gap-3 bg-white/70 dark:bg-white/[0.02] px-3 py-2.5"
+              >
+                <div className="min-w-0 flex-1">
+                  <div
+                    className="animate-pulse h-4 w-3/4 rounded bg-black/[0.06] dark:bg-white/[0.06]"
+                    style={{ animationDelay: `${i * 80}ms` }}
+                  />
+                  <div className="flex items-center gap-2 mt-1.5">
+                    <div
+                      className="animate-pulse h-3 w-14 rounded bg-black/[0.04] dark:bg-white/[0.04]"
+                      style={{ animationDelay: `${i * 80 + 40}ms` }}
+                    />
+                    <div
+                      className="animate-pulse h-4 w-12 rounded-full bg-black/[0.04] dark:bg-white/[0.04]"
+                      style={{ animationDelay: `${i * 80 + 60}ms` }}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="animate-pulse h-6 w-14 rounded-md bg-black/[0.06] dark:bg-white/[0.06]"
+                    style={{ animationDelay: `${i * 80 + 80}ms` }}
+                  />
+                  <div
+                    className="animate-pulse h-6 w-14 rounded-md bg-black/[0.06] dark:bg-white/[0.06]"
+                    style={{ animationDelay: `${i * 80 + 100}ms` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       ) : setsError ? (
         <InlineError
           message={setsError}
