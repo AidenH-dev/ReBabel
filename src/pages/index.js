@@ -273,20 +273,23 @@ export default function Home() {
                 <div className="mt-6 flex flex-col gap-3">
                   <Link
                     href="/practice-sheets"
-                    className="inline-flex items-center gap-3 rounded-2xl border border-brand-pink/20 bg-[#fff5f8] dark:bg-brand-pink/10 px-5 py-4 text-left shadow-sm transition hover:border-brand-pink/40 hover:bg-white dark:hover:bg-surface-card"
+                    className="group inline-flex items-center gap-3 rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card px-5 py-4 text-left shadow-sm transition hover:shadow-md hover:-translate-y-0.5"
                   >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-pink text-white">
-                      <FaGraduationCap className="text-sm" />
-                    </div>
+                    <span
+                      className="text-3xl leading-none transition-colors group-hover:text-brand-pink"
+                      style={{ fontFamily: '"Noto Serif JP", serif' }}
+                    >
+                      書
+                    </span>
                     <div className="flex-1">
                       <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                        Need printable kanji sheets?
+                        Japanese Writing Practice Sheets
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
-                        Open the kanji writing practice PDF generator
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Kanji, hiragana, and katakana printable PDFs
                       </p>
                     </div>
-                    <FaArrowRightLong className="ml-auto text-brand-pink flex-shrink-0" />
+                    <FaArrowRightLong className="ml-auto text-gray-300 group-hover:text-brand-pink transition-colors flex-shrink-0" />
                   </Link>
 
                   <Link
@@ -609,32 +612,44 @@ export default function Home() {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
               <div className="flex-1">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-medium mb-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-pink/10 text-brand-pink text-xs font-medium mb-3">
                   Free Tool -- No Account Required
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
-                  Kanji Writing Practice Sheets
+                  Japanese Writing Practice Sheets
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">
-                  Generate custom kanji writing practice PDFs with stroke-order
-                  guides, readings, and meanings. Configure grid size, guide
-                  style, and model rows. Print and practice anywhere -- no app
-                  needed.
+                  Create printable practice sheets for kanji, hiragana, and
+                  katakana. Customize guide styles, grid sizes, and layouts.
+                  Download as PDF and practice anywhere -- no account needed.
                 </p>
                 <Link
                   href="/practice-sheets"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-pink to-[#c1084d] hover:brightness-110 text-white font-medium rounded-lg transition-all text-sm"
                 >
-                  Open Generator
+                  Create Practice Sheets
                   <FaArrowRightLong size={14} />
                 </Link>
               </div>
               <div className="flex items-center justify-center md:justify-end">
-                <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-white dark:bg-surface-card shadow-sm border border-black/5 dark:border-white/10 flex flex-col items-center justify-center gap-2">
-                  <TbWriting className="text-4xl sm:text-5xl text-blue-600 dark:text-blue-400" />
-                  <span className="text-2xl sm:text-3xl font-bold text-gray-700 dark:text-gray-300">
-                    PDF
-                  </span>
+                <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-white dark:bg-surface-card shadow-sm border border-black/5 dark:border-white/10 flex items-center justify-center">
+                  <div
+                    className="grid grid-cols-2 gap-2 sm:gap-3"
+                    style={{ fontFamily: '"Noto Serif JP", serif' }}
+                  >
+                    <span className="text-3xl sm:text-4xl text-gray-800 dark:text-gray-200">
+                      漢
+                    </span>
+                    <span className="text-3xl sm:text-4xl text-gray-800 dark:text-gray-200">
+                      字
+                    </span>
+                    <span className="text-3xl sm:text-4xl text-gray-800 dark:text-gray-200">
+                      あ
+                    </span>
+                    <span className="text-3xl sm:text-4xl text-gray-800 dark:text-gray-200">
+                      ア
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
