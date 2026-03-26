@@ -24,6 +24,13 @@ Font.register({
     { src: '/fonts/NotoSansJP-Bold.ttf', fontWeight: 700 },
   ],
 });
+Font.register({
+  family: 'Fredoka',
+  fonts: [
+    { src: '/fonts/Fredoka-Regular.ttf', fontWeight: 400 },
+    { src: '/fonts/Fredoka-SemiBold.ttf', fontWeight: 600 },
+  ],
+});
 
 // A4 at 72dpi: 595.28 x 841.89 pt
 // Conversion: px * 0.75 = pt
@@ -77,9 +84,9 @@ const styles = StyleSheet.create({
   },
   nameDateLabel: {
     fontSize: 8,
-    fontFamily: 'NotoSansJP',
+    fontFamily: 'Fredoka',
     color: '#64748b',
-    fontWeight: 'bold',
+    fontWeight: 600,
     letterSpacing: 0.8,
     textTransform: 'uppercase',
   },
@@ -114,12 +121,17 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     fontSize: 10.5,
-    fontFamily: 'NotoSansJP',
+    fontFamily: 'Fredoka',
     color: '#111827',
-    fontWeight: 'bold',
+    fontWeight: 600,
     width: 52,
   },
   infoValue: {
+    fontSize: 10.5,
+    fontFamily: 'Fredoka',
+    color: '#334155',
+  },
+  infoValueJP: {
     fontSize: 10.5,
     fontFamily: 'NotoSansJP',
     color: '#334155',
@@ -131,9 +143,9 @@ const styles = StyleSheet.create({
   },
   sectionLabel: {
     fontSize: 10.5,
-    fontFamily: 'NotoSansJP',
+    fontFamily: 'Fredoka',
     color: '#334155',
-    fontWeight: 'bold',
+    fontWeight: 600,
     letterSpacing: 1.2,
     marginBottom: 3,
     textTransform: 'uppercase',
@@ -152,14 +164,14 @@ const styles = StyleSheet.create({
   },
   footerTip: {
     fontSize: 8,
-    fontFamily: 'NotoSansJP',
+    fontFamily: 'Fredoka',
     color: '#64748b',
   },
   footerBrand: {
     fontSize: 8,
-    fontFamily: 'NotoSansJP',
+    fontFamily: 'Fredoka',
     color: accentColor,
-    fontWeight: 'bold',
+    fontWeight: 600,
   },
 });
 
@@ -305,13 +317,13 @@ export default function KanjiPracticeDocument({
             </View>
             <View style={styles.infoLine}>
               <Text style={styles.infoLabel}>On:</Text>
-              <Text style={styles.infoValue}>
+              <Text style={styles.infoValueJP}>
                 {onList && onList.length ? onList.join(', ') : '-'}
               </Text>
             </View>
             <View style={styles.infoLine}>
               <Text style={styles.infoLabel}>Kun:</Text>
-              <Text style={styles.infoValue}>
+              <Text style={styles.infoValueJP}>
                 {kunList && kunList.length ? kunList.join(', ') : '-'}
               </Text>
             </View>

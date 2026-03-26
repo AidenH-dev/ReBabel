@@ -3,14 +3,17 @@ import Head from 'next/head';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useMemo, useRef, useState } from 'react';
+import BouncingDots from '@/components/ui/BouncingDots';
+import Button from '@/components/ui/Button';
 
 const KanjiPracticeViewer = dynamic(
   () => import('@/components/KanjiPractice/KanjiPracticeViewer'),
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-[500px] w-full items-center justify-center text-sm text-slate-400">
-        Loading preview…
+      <div className="flex h-[500px] w-full flex-col items-center justify-center">
+        <BouncingDots scale={0.6} />
+        <p className="mt-1 text-sm text-gray-400">Loading preview...</p>
       </div>
     ),
   }
@@ -29,13 +32,8 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import {
-  FaArrowLeft,
-  FaDownload,
-  FaMagic,
-  FaUndo,
-  FaTimes,
-} from 'react-icons/fa';
+import { FaArrowLeft, FaUndo, FaTimes } from 'react-icons/fa';
+import { TbDownload, TbFileDescription } from 'react-icons/tb';
 
 const cellSizePx = 48;
 const recommendedColumns = 14;
@@ -181,10 +179,10 @@ function BubbleListField({
 
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-slate-700">
+      <span className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
         {label}
       </span>
-      <div className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition focus-within:border-brand-pink focus-within:bg-white focus-within:ring-1 focus-within:ring-brand-pink/20">
+      <div className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition focus-within:border-brand-pink focus-within:bg-white focus-within:ring-1 focus-within:ring-brand-pink/20 dark:border-gray-700 dark:bg-surface-deep dark:text-white dark:focus-within:bg-surface-card">
         <div
           ref={scrollRef}
           className="flex min-h-[28px] items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -220,7 +218,7 @@ function BubbleListField({
               }
             }}
             placeholder={placeholder}
-            className="min-w-[8rem] flex-1 bg-transparent py-0.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
+            className="min-w-[8rem] flex-1 bg-transparent py-0.5 text-sm text-gray-900 outline-none placeholder:text-gray-400 dark:text-white"
           />
         </div>
       </div>
@@ -505,34 +503,36 @@ export default function KanjiPdfTestPage() {
         />
       </Head>
 
-      <main className="min-h-screen overflow-y-auto bg-[radial-gradient(circle_at_top,_rgba(64,79,125,0.18),_transparent_28%),linear-gradient(180deg,_#fcfaf7_0%,_#f4ede3_52%,_#eef3f6_100%)] px-3 py-3 text-slate-900 sm:px-4 sm:py-4 lg:h-screen lg:overflow-hidden lg:px-6 lg:py-5">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 lg:grid lg:h-full lg:grid-cols-[340px_minmax(0,1fr)]">
-          <section className="rounded-[2rem] border border-white/70 bg-white/80 p-4 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-4 lg:overflow-y-auto">
+      <main className="min-h-screen overflow-y-auto bg-surface-page px-3 py-3 text-gray-900 dark:text-white sm:px-4 sm:py-4 lg:h-screen lg:overflow-hidden lg:p-0">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 lg:mx-12 lg:my-7 lg:max-w-none lg:grid lg:h-[calc(100vh-56px)] lg:grid-cols-[340px_minmax(0,1fr)]">
+          <section className="rounded-xl border border-gray-200 bg-surface-card p-4 shadow-xl dark:border-gray-700 lg:overflow-y-auto">
             <div className="flex items-center gap-2">
               <Link
                 href="/"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-brand-pink/20 bg-[#fff5f8] text-sm font-semibold text-[#b0104f] transition hover:border-brand-pink/40 hover:bg-white"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-gray-100 text-sm text-gray-700 transition hover:border-gray-400 hover:bg-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-400 dark:hover:bg-gray-700"
                 aria-label="Back to home"
               >
                 <FaArrowLeft className="text-xs" />
               </Link>
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#B0104F] text-white shadow-lg shadow-[#B0104F]/20">
-                <FaMagic />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-pink text-white shadow-lg shadow-brand-pink/20">
+                <TbFileDescription className="text-base" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold">Kanji PDF Editor</h1>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Kanji PDF Editor
+                </h1>
               </div>
             </div>
 
             <div className="mt-3 space-y-2">
               <label className="block">
-                <span className="mb-2 block text-sm font-medium text-slate-700">
+                <span className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Kanji
                 </span>
                 <input
                   value={kanji}
                   onChange={(event) => setKanji(event.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-lg text-slate-900 outline-none transition focus:border-slate-400 focus:bg-white"
+                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-lg text-gray-900 outline-none transition focus:border-gray-400 focus:bg-white dark:border-gray-700 dark:bg-surface-deep dark:text-white dark:focus:border-gray-500 dark:focus:bg-surface-card"
                 />
               </label>
 
@@ -586,10 +586,10 @@ export default function KanjiPdfTestPage() {
                 />
               </div>
 
-              <div className="rounded-[1.6rem] border border-slate-200 bg-slate-50/80 p-3.5">
+              <div className="rounded-xl border border-gray-200 bg-gray-50 p-3.5 dark:border-gray-700 dark:bg-surface-deep">
                 <div className="grid gap-3 sm:grid-cols-2">
                   <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-slate-700">
+                    <span className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Columns
                     </span>
                     <input
@@ -605,7 +605,7 @@ export default function KanjiPdfTestPage() {
                   </label>
 
                   <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-slate-700">
+                    <span className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Rows
                     </span>
                     <input
@@ -621,31 +621,31 @@ export default function KanjiPdfTestPage() {
                   </label>
                 </div>
 
-                <label className="mt-3 flex items-center gap-2 text-sm text-slate-700">
+                <label className="mt-3 flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                   <input
                     type="checkbox"
                     checked={noBackgroundColor}
                     onChange={(event) =>
                       setNoBackgroundColor(event.target.checked)
                     }
-                    className="h-4 w-4 rounded border-slate-300 text-brand-pink focus:ring-brand-pink"
+                    className="h-4 w-4 rounded border-gray-300 text-brand-pink focus:ring-brand-pink dark:border-gray-600"
                   />
                   No background color
                 </label>
 
                 <div className="mt-3 space-y-3">
                   <div>
-                    <p className="mb-1.5 text-xs font-medium uppercase tracking-[0.18em] text-slate-500">
+                    <p className="mb-1.5 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                       Guides
                     </p>
-                    <div className="grid grid-cols-3 rounded-2xl bg-white p-1 ring-1 ring-brand-pink/20">
+                    <div className="grid grid-cols-3 rounded-lg bg-black/[0.04] p-1 dark:bg-white/[0.06]">
                       <button
                         type="button"
                         onClick={() => setShowGuides(false)}
-                        className={`rounded-xl px-2 py-2 text-[11px] font-medium transition sm:px-3 sm:text-xs ${
+                        className={`rounded-md px-3 py-2 text-xs font-medium transition ${
                           !showGuides
-                            ? 'bg-brand-pink text-white'
-                            : 'text-slate-600 hover:bg-brand-pink/10 hover:text-brand-pink'
+                            ? 'bg-white text-brand-pink shadow-sm dark:bg-surface-deep'
+                            : 'text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white'
                         }`}
                       >
                         None
@@ -656,10 +656,10 @@ export default function KanjiPdfTestPage() {
                           setShowGuides(true);
                           setGuideStyle('standard');
                         }}
-                        className={`rounded-xl px-2 py-2 text-[11px] font-medium transition sm:px-3 sm:text-xs ${
+                        className={`rounded-md px-3 py-2 text-xs font-medium transition ${
                           showGuides && guideStyle === 'standard'
-                            ? 'bg-brand-pink text-white'
-                            : 'text-slate-600 hover:bg-brand-pink/10 hover:text-brand-pink'
+                            ? 'bg-white text-brand-pink shadow-sm dark:bg-surface-deep'
+                            : 'text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white'
                         }`}
                       >
                         Standard
@@ -670,10 +670,10 @@ export default function KanjiPdfTestPage() {
                           setShowGuides(true);
                           setGuideStyle('dotted-cross');
                         }}
-                        className={`rounded-xl px-2 py-2 text-[11px] font-medium transition sm:px-3 sm:text-xs ${
+                        className={`rounded-md px-3 py-2 text-xs font-medium transition ${
                           showGuides && guideStyle === 'dotted-cross'
-                            ? 'bg-brand-pink text-white'
-                            : 'text-slate-600 hover:bg-brand-pink/10 hover:text-brand-pink'
+                            ? 'bg-white text-brand-pink shadow-sm dark:bg-surface-deep'
+                            : 'text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white'
                         }`}
                       >
                         Dotted
@@ -682,17 +682,17 @@ export default function KanjiPdfTestPage() {
                   </div>
 
                   <div>
-                    <p className="mb-1.5 text-xs font-medium uppercase tracking-[0.18em] text-slate-500">
+                    <p className="mb-1.5 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                       Model row
                     </p>
-                    <div className="grid grid-cols-2 rounded-2xl bg-white p-1 ring-1 ring-brand-pink/20">
+                    <div className="grid grid-cols-2 rounded-lg bg-black/[0.04] p-1 dark:bg-white/[0.06]">
                       <button
                         type="button"
                         onClick={() => setIncludeTraceRow(true)}
-                        className={`rounded-xl px-2 py-2 text-[11px] font-medium transition sm:px-3 sm:text-xs ${
+                        className={`rounded-md px-3 py-2 text-xs font-medium transition ${
                           includeTraceRow
-                            ? 'bg-brand-pink text-white'
-                            : 'text-slate-600 hover:bg-brand-pink/10 hover:text-brand-pink'
+                            ? 'bg-white text-brand-pink shadow-sm dark:bg-surface-deep'
+                            : 'text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white'
                         }`}
                       >
                         Show
@@ -700,10 +700,10 @@ export default function KanjiPdfTestPage() {
                       <button
                         type="button"
                         onClick={() => setIncludeTraceRow(false)}
-                        className={`rounded-xl px-2 py-2 text-[11px] font-medium transition sm:px-3 sm:text-xs ${
+                        className={`rounded-md px-3 py-2 text-xs font-medium transition ${
                           !includeTraceRow
-                            ? 'bg-brand-pink text-white'
-                            : 'text-slate-600 hover:bg-brand-pink/10 hover:text-brand-pink'
+                            ? 'bg-white text-brand-pink shadow-sm dark:bg-surface-deep'
+                            : 'text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white'
                         }`}
                       >
                         Hide
@@ -718,24 +718,25 @@ export default function KanjiPdfTestPage() {
                   type="button"
                   onClick={handleDownload}
                   disabled={downloading}
-                  className="inline-flex items-center justify-center gap-2 rounded-[1.2rem] bg-brand-pink px-4 py-3 text-xs font-semibold text-white transition hover:bg-brand-pink-dark disabled:cursor-wait disabled:opacity-70"
+                  className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-brand-pink to-[#c1084d] px-4 py-2 text-sm font-semibold text-white transition-all hover:brightness-110 hover:ring-2 hover:ring-brand-pink/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <FaDownload />
-                  {downloading ? 'Rendering PDF...' : 'Download PDF'}
+                  <TbDownload className="text-base" />
+                  {downloading ? 'Rendering...' : 'Download'}
                 </button>
-                <button
-                  type="button"
+                <Button
+                  variant="pink-outline"
+                  size="md"
                   onClick={handleReset}
-                  className="inline-flex items-center justify-center gap-2 rounded-[1.2rem] border border-brand-pink/30 bg-white px-4 py-3 text-xs font-semibold text-[#b0104f] transition hover:border-brand-pink hover:bg-brand-pink/10"
+                  className="gap-2"
                 >
                   <FaUndo />
                   Reset sample
-                </button>
+                </Button>
               </div>
             </div>
           </section>
 
-          <section className="rounded-[2rem] border border-white/70 bg-white/40 p-1 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-2 lg:overflow-hidden">
+          <section className="overflow-hidden rounded-xl border border-gray-200 bg-surface-card shadow-xl dark:border-gray-700">
             <KanjiPracticeViewer
               kanji={kanji}
               meaningText={meaningText}
