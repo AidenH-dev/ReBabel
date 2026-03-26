@@ -272,7 +272,7 @@ export default function Home() {
 
                 <div className="mt-6 flex flex-col gap-3">
                   <Link
-                    href="/kanji-practice"
+                    href="/practice-sheets"
                     className="inline-flex items-center gap-3 rounded-2xl border border-brand-pink/20 bg-[#fff5f8] dark:bg-brand-pink/10 px-5 py-4 text-left shadow-sm transition hover:border-brand-pink/40 hover:bg-white dark:hover:bg-surface-card"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-pink text-white">
@@ -622,7 +622,7 @@ export default function Home() {
                   needed.
                 </p>
                 <Link
-                  href="/kanji-practice"
+                  href="/practice-sheets"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm"
                 >
                   Open Generator

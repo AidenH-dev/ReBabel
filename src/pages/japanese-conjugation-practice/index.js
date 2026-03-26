@@ -376,7 +376,7 @@ export default function ConjugationPracticeHub({ levels }) {
                 </p>
               </Link>
               <Link
-                href="/kanji-practice"
+                href="/practice-sheets"
                 className="group bg-white dark:bg-surface-card rounded-xl shadow-sm border border-black/5 dark:border-white/5 p-4 hover:shadow-md transition-all"
               >
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-brand-pink transition-colors">

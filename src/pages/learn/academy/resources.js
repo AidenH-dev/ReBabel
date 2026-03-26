@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import AuthenticatedLayout from '@/components/ui/AuthenticatedLayout';
 import PageHeader from '@/components/ui/PageHeader';
 import SRSGuideContent from '@/components/SRS/SrsGuideContent';
+import Link from 'next/link';
 import {
   TbExternalLink,
   TbSearch,
@@ -195,7 +196,64 @@ export default function Resources() {
               </div>
             </section>
 
-            {/* SECTION 2: RECOMMENDED OUTSIDE RESOURCES */}
+            {/* SECTION 2: PRACTICE SHEETS */}
+            <section className="mb-8">
+              <h2 className="text-sm font-semibold text-black/40 dark:text-white/40 uppercase tracking-wider mb-3">
+                Practice Sheets
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  {
+                    href: '/practice-sheets/kanji',
+                    char: '漢',
+                    title: 'Kanji Practice Sheets',
+                    desc: 'Create custom practice sheets for individual kanji with readings, meanings, and guide lines.',
+                  },
+                  {
+                    href: '/practice-sheets/multi-kanji',
+                    char: '字',
+                    title: 'Multi-Kanji Workbook',
+                    desc: 'Build multi-kanji practice sheets with compact, full-page, or grid-only layouts.',
+                  },
+                  {
+                    href: '/practice-sheets/hiragana',
+                    char: 'あ',
+                    title: 'Hiragana Practice Sheets',
+                    desc: 'Practice hiragana writing with presets for the full alphabet, vowels, or custom row selection.',
+                  },
+                  {
+                    href: '/practice-sheets/katakana',
+                    char: 'ア',
+                    title: 'Katakana Practice Sheets',
+                    desc: 'Practice katakana writing with presets for the full alphabet, vowels, or custom row selection.',
+                  },
+                ].map((sheet) => (
+                  <Link
+                    key={sheet.href}
+                    href={sheet.href}
+                    className="group flex items-start gap-3 rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-elevated p-4 hover:shadow-sm hover:-translate-y-px transition-all"
+                  >
+                    <span
+                      className="text-2xl leading-none shrink-0 mt-0.5 transition-colors group-hover:text-brand-pink"
+                      style={{ fontFamily: '"Noto Serif JP", serif' }}
+                    >
+                      {sheet.char}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white leading-snug">
+                        {sheet.title}
+                      </h3>
+                      <p className="text-xs text-black/50 dark:text-white/50 mt-1 line-clamp-2">
+                        {sheet.desc}
+                      </p>
+                    </div>
+                    <TbArrowRight className="text-black/20 dark:text-white/20 group-hover:text-brand-pink transition mt-1 shrink-0" />
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            {/* SECTION 3: RECOMMENDED OUTSIDE RESOURCES */}
             <section>
               <h2 className="text-sm font-semibold text-black/40 dark:text-white/40 uppercase tracking-wider mb-3">
                 Recommended Outside Resources

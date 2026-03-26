@@ -22,8 +22,32 @@ function generateSiteMap(posts) {
         <priority>0.8</priority>
       </url>
       <url>
-        <loc>https://www.rebabel.org/kanji-practice</loc>
-        <lastmod>2026-03-14</lastmod>
+        <loc>https://www.rebabel.org/practice-sheets</loc>
+        <lastmod>2026-03-25</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+      </url>
+      <url>
+        <loc>https://www.rebabel.org/practice-sheets/kanji</loc>
+        <lastmod>2026-03-25</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+      <url>
+        <loc>https://www.rebabel.org/practice-sheets/multi-kanji</loc>
+        <lastmod>2026-03-25</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+      <url>
+        <loc>https://www.rebabel.org/practice-sheets/hiragana</loc>
+        <lastmod>2026-03-25</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+      <url>
+        <loc>https://www.rebabel.org/practice-sheets/katakana</loc>
+        <lastmod>2026-03-25</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
       </url>
