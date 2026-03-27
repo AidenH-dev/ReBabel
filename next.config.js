@@ -1,5 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Ensure apple-app-site-association is served with correct content type
+  // so iOS can validate Universal Links. The file has no extension, so
+  // hosting providers may default to application/octet-stream without this.
+  async headers() {
+    return [
+      {
+        source: '/.well-known/apple-app-site-association',
+        headers: [{ key: 'Content-Type', value: 'application/json' }],
+      },
+    ];
+  },
   // Include kuromoji dictionary files in serverless function output
   experimental: {
     outputFileTracingIncludes: {

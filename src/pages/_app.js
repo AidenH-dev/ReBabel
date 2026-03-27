@@ -40,6 +40,25 @@ if (typeof window !== 'undefined') {
           window.location.href = route;
         }
       );
+
+      // Universal Link handler — when iOS opens the app via a Universal Link,
+      // navigate the WebView to the linked page. Requires @capacitor/app.
+      try {
+        const { App } = await import('@capacitor/app');
+        App.addListener('appUrlOpen', (data) => {
+          if (!data.url) return;
+          const url = new URL(data.url);
+          // Only handle rebabel.org URLs — navigate to the path within the app
+          if (
+            url.hostname === 'rebabel.org' ||
+            url.hostname === 'www.rebabel.org'
+          ) {
+            window.location.href = url.pathname + url.search + url.hash;
+          }
+        });
+      } catch {
+        // @capacitor/app not installed — Universal Link navigation won't work
+      }
     } catch (e) {
       clientLog.error('push.cold_start_failed', {
         error: e?.message || String(e),

@@ -1,10 +1,12 @@
 {
   "applinks": {
-    "apps": [],
     "details": [
       {
-        "appID": "T7575TZYZ8.org.rebabel.app",
-        "paths": ["/learn/*", "/shared/sets/*"]
+        "appIDs": ["T7575TZYZ8.org.rebabel.app"],
+        "components": [
+          { "/": "/learn/*" },
+          { "/": "/shared/sets/*" }
+        ]
       }
     ]
   }
