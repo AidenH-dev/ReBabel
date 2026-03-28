@@ -273,10 +273,10 @@ export default function Home() {
                 <div className="mt-6 flex flex-col gap-3">
                   <Link
                     href="/practice-sheets"
-                    className="group inline-flex items-center gap-3 rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card px-5 py-4 text-left shadow-sm transition hover:shadow-md hover:-translate-y-0.5"
+                    className="group inline-flex items-center gap-3 rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card px-5 py-4 text-left shadow-sm transition-all hover:border-brand-pink/30"
                   >
                     <span
-                      className="text-3xl leading-none transition-colors group-hover:text-brand-pink"
+                      className="text-3xl leading-none text-gray-900 dark:text-white transition-colors group-hover:text-brand-pink"
                       style={{ fontFamily: '"Noto Serif JP", serif' }}
                     >
                       書
@@ -294,20 +294,18 @@ export default function Home() {
 
                   <Link
                     href="/study-guide/what-is-srs"
-                    className="inline-flex items-center gap-3 rounded-2xl border border-[#667eea]/20 bg-[#f0f1ff] dark:bg-[#667eea]/10 px-5 py-4 text-left shadow-sm transition hover:border-[#667eea]/40 hover:bg-white dark:hover:bg-surface-card"
+                    className="group inline-flex items-center gap-3 rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-surface-card px-5 py-4 text-left shadow-sm transition-all hover:border-brand-pink/30"
                   >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white">
-                      <TbRepeat className="text-sm" />
-                    </div>
+                    <TbRepeat className="text-3xl leading-none text-[#667eea] dark:text-[#667eea] transition-colors group-hover:text-brand-pink" />
                     <div className="flex-1">
                       <p className="text-sm font-semibold text-gray-900 dark:text-white">
                         New to spaced repetition?
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         Read our guide on what SRS is and how to use it
                       </p>
                     </div>
-                    <FaArrowRightLong className="ml-auto text-[#667eea] flex-shrink-0" />
+                    <FaArrowRightLong className="ml-auto text-gray-300 group-hover:text-brand-pink transition-colors flex-shrink-0" />
                   </Link>
                 </div>
               </div>
