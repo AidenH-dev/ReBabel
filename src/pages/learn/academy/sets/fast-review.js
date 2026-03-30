@@ -559,11 +559,7 @@ export default function FastReview() {
   // Show error state
   if (error) {
     return (
-      <AuthenticatedLayout
-        sidebar="academy"
-        title="Fast Review"
-        variant="fixed"
-      >
+      <AuthenticatedLayout sidebar={false} title="Fast Review" variant="fixed">
         <div className="flex-1 flex items-center justify-center px-4 sm:px-6">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
@@ -590,7 +586,7 @@ export default function FastReview() {
 
   return (
     <AuthenticatedLayout
-      sidebar="academy"
+      sidebar={false}
       title="Fast Review"
       variant="gradient"
       mainClassName="p-3 sm:p-6 md:mt-10"
