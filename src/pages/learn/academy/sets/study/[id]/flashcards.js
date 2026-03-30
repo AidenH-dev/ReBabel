@@ -18,6 +18,10 @@ import { TbCards, TbX } from 'react-icons/tb';
 import { MdFlip } from 'react-icons/md';
 import { FiEdit2 } from 'react-icons/fi';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
+import useSessionState from '@/hooks/useSessionState';
+import ResumeSessionModal from '@/components/Set/Features/Field-Card-Session/shared/views/ResumeSessionModal';
+import ChunkCompletionView from '@/components/Set/Features/Field-Card-Session/shared/views/ChunkCompletionView';
+import ChunkedProgressBar from '@/components/Set/Features/Field-Card-Session/shared/views/ChunkedProgressBar';
 import ItemEditModal from '@/components/Set/Features/Field-Card-Session/shared/views/ItemEditModal.jsx';
 import {
   buildEditableItem,
@@ -61,6 +65,7 @@ export default function SetFlashcards() {
 
   // Card confidence levels
   const [cardConfidence, setCardConfidence] = useState({});
+  const cardConfidenceRef = useRef(cardConfidence);
 
   // ============ ANALYTICS ============
   const {
@@ -72,6 +77,20 @@ export default function SetFlashcards() {
 
   // Study mode
   const [studyMode, setStudyMode] = useState('plain'); // plain, quiz, interval
+
+  // ============ SESSION PERSISTENCE ============
+  const sessionState = useSessionState();
+  const [showResumeModal, setShowResumeModal] = useState(false);
+  const [resumeLoadingAction, setResumeLoadingAction] = useState(null);
+  const [showChunkComplete, setShowChunkComplete] = useState(false);
+  const [chunkStats, setChunkStats] = useState({
+    correct: 0,
+    incorrect: 0,
+    totalAttempts: 0,
+    accuracy: 0,
+  });
+  const [isChunkActionLoading, setIsChunkActionLoading] = useState(false);
+  const [sessionCheckDone, setSessionCheckDone] = useState(false);
 
   const SLIDE_DURATION = 150;
 
@@ -85,6 +104,25 @@ export default function SetFlashcards() {
     'enter-from-right': 'translate-x-full',
     'enter-from-left': '-translate-x-full',
   };
+
+  // Keep cardConfidence ref in sync (for stale-closure-safe access in handleNext)
+  cardConfidenceRef.current = cardConfidence;
+
+  // Keep chunk boundary ref in sync with activeSession (immune to stale closures)
+  useEffect(() => {
+    const as = sessionState.activeSession;
+    if (as?.is_chunked === 'true') {
+      const chunkIdx = parseInt(as.current_chunk_index) || 0;
+      const chunkSz = parseInt(as.chunk_size) || 25;
+      const totalChks = parseInt(as.total_chunks) || 1;
+      chunkBoundaryRef.current = {
+        chunkEnd: (chunkIdx + 1) * chunkSz,
+        chunkIdx,
+        totalChunks: totalChks,
+        chunkSize: chunkSz,
+      };
+    }
+  }, [sessionState.activeSession]);
 
   // Keep currentIndexRef in sync for use in analytics finish (avoids stale closure)
   useEffect(() => {
@@ -198,13 +236,41 @@ export default function SetFlashcards() {
     fetchSetData();
   }, [id]);
 
-  // Start analytics session when card data is ready
+  // Check for active session on mount
   useEffect(() => {
-    if (cardsData.length > 0) {
+    if (!id) return;
+    sessionState.checkForActive('flashcards', id).then((active) => {
+      if (active && parseInt(active.items_completed) > 0) {
+        setShowResumeModal(true);
+      } else if (active) {
+        // Unstarted session (0 items completed) -- silently abandon it
+        sessionState.abandon();
+      }
+      setSessionCheckDone(true);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  // Start analytics session and create session state when card data is ready.
+  // Must wait for sessionCheckDone so we don't create a new session / start analytics
+  // while a resumable session is being detected.
+  const sessionInitRef = useRef(false);
+  useEffect(() => {
+    if (
+      cardsData.length > 0 &&
+      sessionCheckDone &&
+      !showResumeModal &&
+      !sessionInitRef.current
+    ) {
+      sessionInitRef.current = true;
       startAnalyticsSession();
+      const sessionItems = cardsData.map((c) => ({ itemId: c.uuid || c.id }));
+      sessionState.create('flashcards', id, sessionItems).catch((e) => {
+        clientLog.error('session_state.create_failed', { error: e?.message });
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cardsData.length]);
+  }, [cardsData.length, sessionCheckDone, showResumeModal]);
 
   const handleFlip = useCallback(() => {
     setShouldAnimate(true);
@@ -236,8 +302,44 @@ export default function SetFlashcards() {
 
   const handleNext = useCallback(() => {
     if (currentIndex < cardsData.length - 1) {
-      slideCard('left', currentIndex + 1);
+      const nextIndex = currentIndex + 1;
+      slideCard('left', nextIndex);
+      // Persist progress (debounced)
+      const card = cardsData[currentIndex];
+      if (card) {
+        sessionState.save(
+          { currentIndex: nextIndex, itemsCompleted: nextIndex },
+          [{ itemId: card.uuid || String(card.id), correct: true }]
+        );
+      }
+      // Check for chunk boundary — read from ref (always current, immune to stale closures)
+      const cb = chunkBoundaryRef.current;
+      if (
+        cb.chunkEnd !== Infinity &&
+        nextIndex >= cb.chunkEnd &&
+        cb.chunkIdx < cb.totalChunks - 1
+      ) {
+        // Compute per-chunk stats from card confidence ref (immune to stale closure)
+        const conf = cardConfidenceRef.current;
+        const chunkStart = cb.chunkIdx * cb.chunkSize;
+        let chunkCorrect = 0,
+          chunkIncorrect = 0;
+        for (let i = chunkStart; i < cb.chunkEnd; i++) {
+          if (conf[i] === 'known') chunkCorrect++;
+          else if (conf[i] === 'unknown') chunkIncorrect++;
+        }
+        const chunkTotal = chunkCorrect + chunkIncorrect;
+        setChunkStats({
+          correct: chunkCorrect,
+          incorrect: chunkIncorrect,
+          totalAttempts: cb.chunkSize,
+          accuracy:
+            chunkTotal > 0 ? Math.round((chunkCorrect / chunkTotal) * 100) : 0,
+        });
+        setShowChunkComplete(true);
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, cardsData.length, slideCard]);
 
   const handlePrevious = useCallback(() => {
@@ -310,7 +412,6 @@ export default function SetFlashcards() {
   }, []);
 
   const handleExit = useCallback(() => {
-    abortAnalyticsSession();
     router.push(`/learn/academy/sets/study/${id}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, id]);
@@ -318,9 +419,114 @@ export default function SetFlashcards() {
   const handleFinishSession = useCallback(() => {
     finishAnalyticsSession(currentIndexRef.current + 1);
     markSetStudied(id);
+    sessionState.abandon(); // close session so resume modal won't reappear
     router.push(`/learn/academy/sets/study/${id}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, id]);
+
+  // ============ SESSION PERSISTENCE HANDLERS ============
+
+  const handleResume = async () => {
+    setResumeLoadingAction('resume');
+    try {
+      const full = await sessionState.fetchFullState();
+      if (!full) {
+        setResumeLoadingAction(null);
+        return;
+      }
+      const { state } = full;
+      const restoredIndex = parseInt(state.current_index) || 0;
+      setCurrentIndex(restoredIndex);
+
+      if (state.analytics_session_id) {
+        try {
+          await fetch(
+            `/api/analytics/user/sessions/${state.analytics_session_id}/reinitiate`,
+            { method: 'POST', headers: { 'Content-Type': 'application/json' } }
+          );
+        } catch {
+          /* ignore */
+        }
+      }
+      startAnalyticsSession();
+
+      // Check if user was at a chunk completion boundary
+      const ci = sessionState.chunkInfo;
+      if (ci?.isChunked) {
+        const chunkEnd = (ci.currentChunkIndex + 1) * ci.chunkSize;
+        if (
+          restoredIndex >= chunkEnd &&
+          ci.currentChunkIndex < ci.totalChunks - 1
+        ) {
+          setChunkStats({
+            correct: 0,
+            incorrect: 0,
+            totalAttempts: ci.chunkSize,
+            accuracy: 0,
+          });
+          setShowChunkComplete(true);
+        }
+      }
+
+      // Mark init ref so the init effect doesn't re-fire after resume closes modal
+      sessionInitRef.current = true;
+
+      setShowResumeModal(false);
+    } catch (e) {
+      clientLog.error('session_state.resume_failed', { error: e?.message });
+    }
+    setResumeLoadingAction(null);
+  };
+
+  const handleStartFresh = async () => {
+    setResumeLoadingAction('startFresh');
+    sessionInitRef.current = false; // reset so init effect fires after modal closes
+    await sessionState.abandon();
+    setShowResumeModal(false);
+    setResumeLoadingAction(null);
+  };
+
+  const handleSaveAndExit = async () => {
+    setIsChunkActionLoading(true);
+    await sessionState.saveNow({ currentIndex, itemsCompleted: currentIndex });
+    router.push(`/learn/academy/sets/study/${id}`);
+  };
+
+  // Ref for current chunk boundary — always up to date, immune to stale closures in useCallback
+  const chunkBoundaryRef = useRef({
+    chunkEnd: Infinity,
+    chunkIdx: 0,
+    totalChunks: 1,
+    chunkSize: 25,
+  });
+
+  const handleContinueChunk = async () => {
+    setIsChunkActionLoading(true);
+
+    // Capture values BEFORE async operations (chunkInfo will be stale after advanceChunk)
+    const chunkSize = parseInt(sessionState.activeSession?.chunk_size) || 25;
+    const currentChunkIndex =
+      parseInt(sessionState.activeSession?.current_chunk_index) || 0;
+    const totalChunks = parseInt(sessionState.activeSession?.total_chunks) || 1;
+    const newChunkIndex = currentChunkIndex + 1;
+
+    // Update boundary ref IMMEDIATELY so handleNext reads correct values
+    chunkBoundaryRef.current = {
+      chunkEnd: (newChunkIndex + 1) * chunkSize,
+      chunkIdx: newChunkIndex,
+      totalChunks,
+      chunkSize,
+    };
+
+    finishAnalyticsSession(chunkStats.totalAttempts, chunkStats.correct);
+    startAnalyticsSession();
+    await sessionState.advanceChunk(null);
+    setShowChunkComplete(false);
+    setIsChunkActionLoading(false);
+    setChunkStats({ correct: 0, incorrect: 0, totalAttempts: 0, accuracy: 0 });
+    setCurrentIndex(newChunkIndex * chunkSize);
+    setIsFront(true);
+  };
 
   const markCard = useCallback(
     (confidence) => {
@@ -445,6 +651,9 @@ export default function SetFlashcards() {
 
   const handleKeyPress = useCallback(
     (e) => {
+      // Disable keyboard shortcuts when chunk completion or resume modal is showing
+      if (showChunkComplete || showResumeModal) return;
+
       if (e.key === ' ') {
         e.preventDefault();
         handleFlip();
@@ -466,6 +675,8 @@ export default function SetFlashcards() {
       handleIntervalResponse,
       studyMode,
       isFront,
+      showChunkComplete,
+      showResumeModal,
     ]
   );
 
@@ -477,6 +688,11 @@ export default function SetFlashcards() {
   const progress =
     cardsData.length > 0 ? (currentIndex / cardsData.length) * 100 : 0;
   const isLastCard = currentIndex === cardsData.length - 1;
+  const isLastCardInChunk = (() => {
+    const cb = chunkBoundaryRef.current;
+    if (cb.chunkEnd === Infinity) return false;
+    return currentIndex + 1 >= cb.chunkEnd && cb.chunkIdx < cb.totalChunks - 1;
+  })();
 
   const container3DStyles = {
     perspective: '1000px',
@@ -533,7 +749,7 @@ export default function SetFlashcards() {
   if (error) {
     return (
       <AuthenticatedLayout
-        sidebar="academy"
+        sidebar={false}
         title="Error Loading Flashcards"
         variant="fixed"
         mainClassName="px-4 sm:px-6 py-4 flex items-center justify-center"
@@ -556,11 +772,24 @@ export default function SetFlashcards() {
 
   return (
     <AuthenticatedLayout
-      sidebar="academy"
+      sidebar={false}
       title={`Flashcards • ${setInfo?.title || 'Study Set'}`}
       variant="gradient"
       mainClassName="p-6 overflow-x-hidden sm:mt-10"
     >
+      {/* Resume Session Modal */}
+      <ResumeSessionModal
+        isOpen={showResumeModal}
+        sessionState={sessionState.activeSession}
+        loadingAction={resumeLoadingAction}
+        onResume={handleResume}
+        onStartFresh={handleStartFresh}
+        onCancel={() => {
+          setShowResumeModal(false);
+          router.push(`/learn/academy/sets/study/${id}`);
+        }}
+      />
+
       {/* Header */}
       <div className="w-full max-w-5xl mx-auto mb-6 sm:mb-0">
         <div className="flex items-center justify-between">
@@ -616,25 +845,85 @@ export default function SetFlashcards() {
           </div>
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress Bar — wait for session state before choosing chunked vs non-chunked.
+            Without this guard, the non-chunked bar flashes briefly while create() is in-flight. */}
         <div className="mt-4">
-          <div className="flex items-center justify-between text-sm text-gray-600 dark:text-white/70 mb-2">
-            <span>
-              Card {currentIndex + 1} of {cardsData.length}
-            </span>
-            <span>{Math.round(progress)}% Complete</span>
-          </div>
-          <div className="w-full bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-brand-pink to-brand-pink-hover transition-all duration-500 ease-out rounded-full"
-              style={{ width: `${progress}%` }}
+          {!sessionState.activeSession ? (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="h-4 w-32 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse" />
+                <div
+                  className="h-4 w-24 rounded bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                  style={{ animationDelay: '50ms' }}
+                />
+              </div>
+              <div
+                className="w-full h-2 rounded-full bg-black/[0.04] dark:bg-white/[0.04] animate-pulse"
+                style={{ animationDelay: '100ms' }}
+              />
+            </div>
+          ) : sessionState.chunkInfo?.isChunked ? (
+            <ChunkedProgressBar
+              totalChunks={sessionState.chunkInfo.totalChunks}
+              currentChunkIndex={sessionState.chunkInfo.currentChunkIndex}
+              chunkProgress={
+                showChunkComplete
+                  ? 100
+                  : cardsData.length > 0
+                    ? ((currentIndex %
+                        (sessionState.chunkInfo.chunkSize || 25)) /
+                        (sessionState.chunkInfo.chunkSize || 25)) *
+                      100
+                    : 0
+              }
+              totalItems={sessionState.chunkInfo.totalItems}
+              itemsCompleted={currentIndex}
+              chunkSize={sessionState.chunkInfo.chunkSize}
+              currentItemInChunk={
+                currentIndex % (sessionState.chunkInfo.chunkSize || 25)
+              }
+              color="bg-brand-pink"
             />
-          </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-white/70 mb-2">
+                <span>
+                  Card {currentIndex} of {cardsData.length}
+                </span>
+                <span>{Math.round(progress)}% Complete</span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-brand-pink to-brand-pink-hover transition-all duration-500 ease-out rounded-full"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      {/* Main Card Area */}
-      {isLoading ? (
+      {/* Chunk Completion (in-between phase) */}
+      {showChunkComplete ? (
+        <ChunkCompletionView
+          chunkNumber={(sessionState.chunkInfo?.currentChunkIndex || 0) + 1}
+          totalChunks={sessionState.chunkInfo?.totalChunks || 1}
+          chunkStats={chunkStats}
+          overallStats={{
+            correct: chunkStats.correct,
+            incorrect: chunkStats.incorrect,
+            totalAttempts: chunkStats.totalAttempts,
+            accuracy: chunkStats.accuracy,
+            itemsCompleted: currentIndex,
+            totalItems: cardsData.length,
+          }}
+          variant="flashcards"
+          onContinue={handleContinueChunk}
+          onSaveAndExit={handleSaveAndExit}
+          isLoading={isChunkActionLoading}
+        />
+      ) : /* Main Card Area */
+      isLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center sm:mb-10">
           <div className="w-full max-w-3xl space-y-6">
             {/* Stats bar skeleton */}
@@ -936,7 +1225,14 @@ export default function SetFlashcards() {
                 )}
               </div>
 
-              {!isLastCard ? (
+              {isLastCardInChunk ? (
+                <button
+                  onClick={handleNext}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-all active:scale-95"
+                >
+                  Complete Chunk <FaCheckCircle />
+                </button>
+              ) : !isLastCard ? (
                 <button
                   onClick={handleNext}
                   className="flex items-center gap-2 px-4 py-2 bg-brand-pink hover:bg-brand-pink-hover text-white rounded-lg font-medium transition-all active:scale-95"

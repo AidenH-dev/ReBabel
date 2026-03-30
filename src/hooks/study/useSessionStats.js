@@ -54,6 +54,21 @@ export default function useSessionStats() {
     setTimeout(() => setAnimateAccuracy(true), 100);
   }, []);
 
+  // Bulk-restore stats on session resume (bypass recordAnswer which is for live answers)
+  const restoreStats = useCallback(
+    ({ correct, incorrect, answeredItems: restored }) => {
+      const total = correct + incorrect;
+      setSessionStats({
+        correct,
+        incorrect,
+        totalAttempts: total,
+        accuracy: total > 0 ? Math.round((correct / total) * 100) : 0,
+      });
+      if (restored) setAnsweredItems(restored);
+    },
+    []
+  );
+
   return {
     sessionStats,
     sessionStatsRef,
@@ -62,5 +77,6 @@ export default function useSessionStats() {
     recordAnswer,
     retractLastAnswer,
     triggerAccuracyAnimation,
+    restoreStats,
   };
 }

@@ -2,6 +2,7 @@ import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { TbX } from 'react-icons/tb';
 import { MdQuiz } from 'react-icons/md';
 import { BsCheckCircleFill } from 'react-icons/bs';
+import ChunkedProgressBar from '@/components/Set/Features/Field-Card-Session/shared/views/ChunkedProgressBar';
 
 /**
  * SessionStatHeaderView - Shared presentational component for quiz/session headers
@@ -49,6 +50,8 @@ export default function SessionStatHeaderView({
   completedCount,
   totalUniqueItems,
   displayMode = 'question-count',
+  chunkInfo = null,
+  itemsCompleted = 0,
   onExit,
 }) {
   // Get phase status helper
@@ -150,42 +153,82 @@ export default function SessionStatHeaderView({
                     </div>
                   );
                 })}
-                <span className="text-gray-300 dark:text-white/20">|</span>
               </div>
             )}
 
-            {/* Current Question Info */}
-            <span className="flex items-center gap-2">
-              {CurrentPhaseIcon && (
-                <>
-                  <CurrentPhaseIcon className="text-sm sm:hidden" />
-                  <span className="sm:hidden">{currentPhaseConfig?.name}:</span>
-                </>
-              )}
-              <span>
-                {displayMode === 'completion-count' && currentPhase !== 'review'
-                  ? `${completedCount} completed out of ${totalUniqueItems} total`
-                  : `Question ${currentIndex + 1} of ${totalQuestions}`}
+            {/* Current Question Info — chunked: phase icon on mobile only; non-chunked: full question info */}
+            {chunkInfo?.isChunked ? (
+              <span className="flex items-center gap-2 sm:hidden">
+                {CurrentPhaseIcon && <CurrentPhaseIcon className="text-sm" />}
+                <span>{currentPhaseConfig?.name}</span>
               </span>
-            </span>
+            ) : (
+              <span className="flex items-center gap-2">
+                {CurrentPhaseIcon && (
+                  <>
+                    <CurrentPhaseIcon className="text-sm sm:hidden" />
+                    <span className="sm:hidden">
+                      {currentPhaseConfig?.name}:
+                    </span>
+                  </>
+                )}
+                <span>
+                  {displayMode === 'completion-count' &&
+                  currentPhase !== 'review'
+                    ? `${completedCount} completed out of ${totalUniqueItems} total`
+                    : `Question ${currentIndex + 1} of ${totalQuestions}`}
+                </span>
+              </span>
+            )}
           </div>
 
-          <span>{Math.round(progressInPhase)}% Complete</span>
+          {/* Right side: chunk/card for chunked, percentage for non-chunked */}
+          {chunkInfo?.isChunked ? (
+            <span>
+              Chunk {chunkInfo.currentChunkIndex + 1}/{chunkInfo.totalChunks}{' '}
+              &middot; Card {Math.min(currentIndex, totalQuestions)}/
+              {totalQuestions}
+            </span>
+          ) : (
+            <span>{Math.round(progressInPhase)}% Complete</span>
+          )}
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Progress Bar */}
-          <div className="flex-1 bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
-            <div
-              className={`h-full transition-all duration-500 ease-out rounded-full ${
-                currentPhaseConfig ? currentPhaseConfig.color : 'bg-gray-400'
-              }`}
-              style={{ width: `${progressInPhase}%` }}
-            />
-          </div>
+          {/* Progress Bar — chunked or single */}
+          {chunkInfo?.isChunked ? (
+            <div className="flex-1">
+              <ChunkedProgressBar
+                totalChunks={chunkInfo.totalChunks}
+                currentChunkIndex={chunkInfo.currentChunkIndex}
+                chunkProgress={progressInPhase}
+                totalItems={chunkInfo.totalItems}
+                itemsCompleted={itemsCompleted}
+                chunkSize={chunkInfo.chunkSize}
+                currentItemInChunk={currentIndex + 1}
+                totalQuestionsInPhase={totalQuestions}
+                color={
+                  currentPhaseConfig
+                    ? currentPhaseConfig.color
+                    : 'bg-brand-pink'
+                }
+                hideLabels
+              />
+            </div>
+          ) : (
+            <div className="flex-1 bg-gray-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
+              <div
+                className={`h-full transition-all duration-500 ease-out rounded-full ${
+                  currentPhaseConfig ? currentPhaseConfig.color : 'bg-gray-400'
+                }`}
+                style={{ width: `${progressInPhase}%` }}
+              />
+            </div>
+          )}
 
-          {/* Mobile: Next Phase Indicator */}
-          {phases &&
+          {/* Mobile: Next Phase Indicator (hidden when chunked -- ChunkedProgressBar label shows phase) */}
+          {!chunkInfo?.isChunked &&
+            phases &&
             phases.length > 1 &&
             currentPhaseIndex < phases.length - 1 && (
               <div className="sm:hidden flex items-center gap-1.5">

@@ -33,6 +33,8 @@ import {
   mergeIntoQuestionItem,
 } from '@/lib/study/itemEditing';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
+import useSessionState from '@/hooks/useSessionState';
+import ResumeSessionModal from '@/components/Set/Features/Field-Card-Session/shared/views/ResumeSessionModal';
 import { clientLog } from '@/lib/clientLogger';
 import { markSetStudied } from '@/lib/setActions';
 
@@ -95,6 +97,7 @@ export default function LearnNew() {
     recordAnswer,
     retractLastAnswer,
     triggerAccuracyAnimation,
+    restoreStats,
   } = useSessionStats();
 
   const {
@@ -125,6 +128,25 @@ export default function LearnNew() {
     finish: finishAnalyticsSession,
     abort: abortAnalyticsSession,
   } = useAnalyticsSession('srs_learn_new');
+
+  // ============ SESSION PERSISTENCE (no chunking for SRS) ============
+  const sessionState = useSessionState();
+  const [showResumeModal, setShowResumeModal] = useState(false);
+  const [resumeLoadingAction, setResumeLoadingAction] = useState(null);
+  const [sessionCheckDone, setSessionCheckDone] = useState(false);
+
+  useEffect(() => {
+    if (!id) return;
+    sessionState.checkForActive('srs_learn_new', id).then((active) => {
+      if (active && parseInt(active.items_completed) > 0) {
+        setShowResumeModal(true);
+      } else if (active) {
+        sessionState.abandon();
+      }
+      setSessionCheckDone(true);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   // Fetch set data from API
   useEffect(() => {
@@ -256,11 +278,24 @@ export default function LearnNew() {
     fetchSetData();
   }, [id, router.query.limit]);
 
-  // Initialize active arrays when data is loaded (once only)
+  // Initialize active arrays when data is loaded AND session check is done (once only).
+  // Must wait for sessionCheckDone so we don't create a new session / start analytics
+  // while a resumable session is being detected.
   useEffect(() => {
-    if (itemData.length > 0 && !sessionInitializedRef.current) {
+    if (
+      itemData.length > 0 &&
+      sessionCheckDone &&
+      !showResumeModal &&
+      !sessionInitializedRef.current
+    ) {
       sessionInitializedRef.current = true;
       startAnalyticsSession();
+
+      // Create session state for persistence (no chunking for SRS)
+      const sessionItems = itemData.map((i) => ({ itemId: i.uuid }));
+      sessionState.create('srs_learn_new', id, sessionItems).catch((e) => {
+        clientLog.error('session_state.create_failed', { error: e?.message });
+      });
       setActiveReviewArray([...reviewArray]);
       setActiveMCArray([...multipleChoiceArray]);
       setActiveTranslationArray([...translationArray]);
@@ -290,7 +325,15 @@ export default function LearnNew() {
 
       setPhaseProgress(phaseProgressObj);
     }
-  }, [itemData, reviewArray, multipleChoiceArray, translationArray, setType]);
+  }, [
+    itemData,
+    reviewArray,
+    multipleChoiceArray,
+    translationArray,
+    setType,
+    sessionCheckDone,
+    showResumeModal,
+  ]);
 
   // ============ HELPER FUNCTIONS ============
 
@@ -346,6 +389,35 @@ export default function LearnNew() {
     // Store correctness for UI feedback
     setIsCorrect(answerData.isCorrect);
     setShowResult(true);
+
+    // Persist progress (debounced)
+    const currentItem = getCurrentArray()[currentIndex];
+    const kbUuid = currentItem?.uuid || currentItem?.originalId;
+    if (kbUuid) {
+      const mistakes =
+        mistakesPerItemRef.current[currentItem.originalId || currentItem.id] ||
+        0;
+      const newAttempts = sessionStatsRef.current.totalAttempts + 1;
+      sessionState.save(
+        {
+          currentIndex: currentIndex + 1,
+          statsCorrect:
+            sessionStatsRef.current.correct + (answerData.isCorrect ? 1 : 0),
+          statsIncorrect:
+            sessionStatsRef.current.incorrect + (answerData.isCorrect ? 0 : 1),
+          statsAttempts: newAttempts,
+          itemsCompleted: newAttempts,
+          currentPhase,
+        },
+        [
+          {
+            itemId: kbUuid,
+            correct: answerData.isCorrect,
+            mistakes: String(mistakes),
+          },
+        ]
+      );
+    }
   };
 
   // Handle next navigation for MC and Translation
@@ -366,46 +438,50 @@ export default function LearnNew() {
     }
   };
 
-  // Handle phase completion and transition
+  // Handle phase completion and transition.
+  // Persists the new phase immediately so closing the tab between phases
+  // doesn't leave stale state.
   const handlePhaseComplete = async () => {
-    // Reset index for next phase
     setCurrentIndex(0);
 
-    // Transition to next phase
     if (currentPhase === 'review') {
       setCurrentPhase('multiple-choice');
+      sessionState.saveNow({
+        currentPhase: 'multiple-choice',
+        currentIndex: 0,
+      });
     } else if (currentPhase === 'multiple-choice') {
-      // For grammar sets, skip translation and go directly to complete
       if (setType === 'grammar') {
-        // Save all items to SRS before showing summary
         const success = await saveAllItemsToSRS();
-
         if (success) {
           srsLevelChangesRef.current = computeSrsLevelChanges();
           setCurrentPhase('complete');
           triggerAccuracyAnimation();
         }
-        // If save fails, stay on multiple-choice phase and show error popup
       } else {
-        // For vocab sets, transition to translation
         setCurrentPhase('translation');
+        sessionState.saveNow({ currentPhase: 'translation', currentIndex: 0 });
       }
     } else if (currentPhase === 'translation') {
-      // Save all items to SRS before showing summary
       const success = await saveAllItemsToSRS();
-
       if (success) {
         srsLevelChangesRef.current = computeSrsLevelChanges();
         setCurrentPhase('complete');
         triggerAccuracyAnimation();
       }
-      // If save fails, stay on translation phase and show error popup
     }
   };
 
   // ============ REVIEW PHASE HANDLERS ============
 
   const handleReviewNext = () => {
+    // Persist review progress (debounced)
+    sessionState.save({
+      currentIndex: currentIndex + 1,
+      itemsCompleted: currentIndex + 1,
+      currentPhase: 'review',
+    });
+
     if (currentIndex < activeReviewArray.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
@@ -529,8 +605,123 @@ export default function LearnNew() {
   // ============ GENERAL HANDLERS ============
 
   const handleExit = () => {
-    abortAnalyticsSession();
     router.push(`/learn/academy/sets/study/${id}`);
+  };
+
+  // ============ SESSION PERSISTENCE HANDLERS ============
+
+  const handleResume = async () => {
+    setResumeLoadingAction('resume');
+    try {
+      const full = await sessionState.fetchFullState();
+      if (!full) {
+        setResumeLoadingAction(null);
+        return;
+      }
+      const { state, items } = full;
+
+      const restoredPhase = state.current_phase || 'review';
+
+      // Build set of completed KB UUIDs from session items
+      const completedUuids = new Set(
+        items.filter((i) => i.completed === 'true').map((i) => i.item_id)
+      );
+
+      // Filter completed items from active arrays and reset index to 0
+      // Use template arrays (not prev state) since init effect hasn't run yet.
+      // Arrays are reshuffled on page load so saved index is meaningless -- reset to 0.
+      if (completedUuids.size > 0) {
+        setActiveReviewArray(
+          reviewArray.filter((c) => !completedUuids.has(c.uuid))
+        );
+        setActiveMCArray(
+          multipleChoiceArray.filter(
+            (q) => !completedUuids.has(q.uuid || q.originalId)
+          )
+        );
+        setActiveTranslationArray(
+          translationArray.filter(
+            (q) => !completedUuids.has(q.uuid || q.originalId)
+          )
+        );
+      } else {
+        setActiveReviewArray([...reviewArray]);
+        setActiveMCArray([...multipleChoiceArray]);
+        setActiveTranslationArray([...translationArray]);
+      }
+      setCurrentIndex(0);
+      setCurrentPhase(restoredPhase);
+
+      // Restore aggregate stats from DB
+      const correct = parseInt(state.stats_correct) || 0;
+      const incorrect = parseInt(state.stats_incorrect) || 0;
+      const answeredFromDB = items
+        .filter((i) => i.completed === 'true')
+        .map((i) => ({ itemId: i.item_id, isCorrect: i.correct === 'true' }));
+      restoreStats({ correct, incorrect, answeredItems: answeredFromDB });
+
+      // Rebuild mistakes from session items
+      const restoredMistakes = {};
+      items.forEach((i) => {
+        if (i.mistakes) restoredMistakes[i.item_id] = parseInt(i.mistakes) || 0;
+      });
+      mistakesPerItemRef.current = {
+        ...mistakesPerItemRef.current,
+        ...restoredMistakes,
+      };
+
+      // Initialize per-item mistake tracking for any items not in restoredMistakes
+      itemData.forEach((item) => {
+        if (!(item.id in mistakesPerItemRef.current)) {
+          mistakesPerItemRef.current[item.id] = 0;
+        }
+      });
+
+      // Initialize phase progress with proper totals from template arrays
+      // (init effect won't run since we set sessionInitializedRef below)
+      const completedItemIds = new Set(
+        items.filter((i) => i.completed === 'true').map((i) => i.item_id)
+      );
+      const phaseProgressObj = {
+        'multiple-choice': {
+          completedItems:
+            restoredPhase !== 'review' ? completedItemIds : new Set(),
+          totalUniqueItems: multipleChoiceArray.length,
+        },
+      };
+      if (setType !== 'grammar') {
+        phaseProgressObj['translation'] = {
+          completedItems: new Set(),
+          totalUniqueItems: translationArray.length,
+        };
+      }
+      setPhaseProgress(phaseProgressObj);
+
+      // Mark the init ref so the init effect doesn't fire after resume closes modal
+      sessionInitializedRef.current = true;
+
+      if (state.analytics_session_id) {
+        try {
+          await fetch(
+            `/api/analytics/user/sessions/${state.analytics_session_id}/reinitiate`,
+            { method: 'POST', headers: { 'Content-Type': 'application/json' } }
+          );
+        } catch {}
+      }
+      startAnalyticsSession();
+      setShowResumeModal(false);
+    } catch (e) {
+      clientLog.error('session_state.resume_failed', { error: e?.message });
+    }
+    setResumeLoadingAction(null);
+  };
+
+  const handleStartFresh = async () => {
+    setResumeLoadingAction('startFresh');
+    sessionInitializedRef.current = false; // reset so init effect fires after modal closes
+    await sessionState.abandon();
+    setShowResumeModal(false);
+    setResumeLoadingAction(null);
   };
 
   // ============ SRS SAVE FUNCTION ============
@@ -654,12 +845,13 @@ export default function LearnNew() {
     return total > 0 ? (completed / total) * 100 : 0;
   };
 
-  // Finish analytics session when study session completes
+  // Finish analytics + close session state when study session completes
   useEffect(() => {
     if (currentPhase === 'complete') {
       const stats = sessionStatsRef.current;
       finishAnalyticsSession(reviewArray.length);
       markSetStudied(id);
+      sessionState.abandon(); // close session so resume modal won't reappear
     }
   }, [currentPhase, finishAnalyticsSession, id]);
 
@@ -681,7 +873,7 @@ export default function LearnNew() {
   // Show error state
   if (error) {
     return (
-      <AuthenticatedLayout sidebar="academy" title="Learn New" variant="fixed">
+      <AuthenticatedLayout sidebar={false} title="Learn New" variant="fixed">
         <div className="flex-1 flex items-center justify-center px-4 sm:px-6">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
@@ -702,13 +894,26 @@ export default function LearnNew() {
 
   return (
     <AuthenticatedLayout
-      sidebar="academy"
+      sidebar={false}
       title={`Learn New - ${setInfo?.title || 'Study Set'}`}
       variant="gradient"
       mainClassName="p-3 sm:p-6 sm:mt-10"
     >
+      {/* Resume Session Modal */}
+      <ResumeSessionModal
+        isOpen={showResumeModal}
+        sessionState={sessionState.activeSession}
+        loadingAction={resumeLoadingAction}
+        onResume={handleResume}
+        onStartFresh={handleStartFresh}
+        onCancel={() => {
+          setShowResumeModal(false);
+          router.push(`/learn/academy/sets/study/${id}`);
+        }}
+      />
+
       {/* Loading State */}
-      {isLoading ? (
+      {isLoading || !sessionCheckDone ? (
         <div className="flex-1 flex flex-col items-center justify-center">
           <div className="w-full max-w-2xl space-y-6 px-4">
             {/* Session header skeleton */}

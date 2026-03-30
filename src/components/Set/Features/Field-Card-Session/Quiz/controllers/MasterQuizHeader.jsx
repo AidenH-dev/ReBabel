@@ -95,6 +95,8 @@ export default function MasterQuizHeader({
   quizType,
   completedPhases,
   completedCount = 0,
+  chunkInfo = null,
+  itemsCompleted = 0,
   onExit,
 }) {
   // Select appropriate phase configs based on set type
@@ -125,6 +127,8 @@ export default function MasterQuizHeader({
       CurrentPhaseIcon={CurrentPhaseIcon}
       progressInPhase={progressInPhase}
       displayMode="question-count"
+      chunkInfo={chunkInfo}
+      itemsCompleted={itemsCompleted}
       onExit={onExit}
     />
   );

@@ -78,6 +78,7 @@ async function handler(req: AuthedRequest, res: NextApiResponse<ApiResponse>) {
         p_items_reviewed: itemsReviewed ?? null,
         p_items_correct: itemsCorrect ?? null,
         p_rolling_update: rollingUpdate ?? false,
+        p_owner: req.userId,
       });
 
     if (error) {
