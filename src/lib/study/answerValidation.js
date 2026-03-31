@@ -100,24 +100,41 @@ export function parseMultipleDefinitions(answerString, answerType) {
 }
 
 /**
+ * Checks if a Japanese answer is a near-miss (exactly 1 edit distance away).
+ * Only triggers for answers where the correct answer is at least 3 characters long,
+ * to avoid false positives on short words like する, くる, ある where distance=1
+ * means a completely different word.
+ *
+ * @param {string} normalizedUser - Normalized user answer
+ * @param {string} normalizedCorrect - Normalized correct answer
+ * @returns {boolean} True if the answer is a near-miss
+ */
+export function checkJapaneseNearMiss(normalizedUser, normalizedCorrect) {
+  if (!normalizedUser || !normalizedCorrect) return false;
+  if (normalizedCorrect.length < 3) return false;
+  return levenshteinDistance(normalizedUser, normalizedCorrect) === 1;
+}
+
+/**
  * Validates a typed/translation response answer.
  *
  * Supports multi-definition answers separated by semicolons for English-like answer types.
  * User answer is considered correct if it matches ANY of the definitions (with fuzzy matching).
  *
+ * For Japanese answers, returns a near-miss when the answer is exactly 1 edit distance away
+ * from the correct answer (e.g., missing vowel extension, one kana off). Near-miss is treated
+ * as correct for SRS purposes but displayed differently in the UI.
+ *
  * @param {string} userAnswer - The user's submitted answer
  * @param {string} correctAnswer - The correct answer (may contain multiple definitions separated by ';')
  * @param {string} answerType - Type of answer (e.g., "English", "Kana", "Kanji")
- * @returns {boolean} True if the answer is correct, false otherwise
+ * @returns {{ isCorrect: boolean, isNearMiss: boolean }} Validation result
  *
  * @example
- * validateTypedAnswer("to eat", "to eat", "English") // true
- * validateTypedAnswer("toeat", "to eat", "English") // true (whitespace removed)
- * validateTypedAnswer("To Eat", "to eat", "English") // true (case insensitive)
- * validateTypedAnswer("to go back", "to go back; to return", "English") // true
- * validateTypedAnswer("to return", "to go back; to return", "English") // true
- * validateTypedAnswer("to retrun", "to go back; to return", "English") // true (fuzzy match)
- * validateTypedAnswer("たべる", "食べる", "Kanji") // false (different characters)
+ * validateTypedAnswer("to eat", "to eat", "English") // { isCorrect: true, isNearMiss: false }
+ * validateTypedAnswer("たべる", "たべる", "Kana") // { isCorrect: true, isNearMiss: false }
+ * validateTypedAnswer("たべろ", "たべる", "Kana") // { isCorrect: true, isNearMiss: true }
+ * validateTypedAnswer("abc", "たべる", "Kana") // { isCorrect: false, isNearMiss: false }
  */
 export function validateTypedAnswer(userAnswer, correctAnswer, answerType) {
   const normalizedUserAnswer = normalizeAnswer(userAnswer, answerType);
@@ -129,24 +146,39 @@ export function validateTypedAnswer(userAnswer, correctAnswer, answerType) {
     answerType === 'Grammar Pattern';
 
   if (isEnglishLike && correctAnswer.includes(';')) {
-    // Multi-definition answer: parse into array of definitions
     const definitions = parseMultipleDefinitions(correctAnswer, answerType);
-
-    // User answer is correct if it matches ANY definition (with fuzzy matching)
-    return definitions.some((definition) =>
+    const isCorrect = definitions.some((definition) =>
       fuzzyLevenshteinMatch(definition, normalizedUserAnswer)
     );
+    return { isCorrect, isNearMiss: false };
   }
 
-  // Single-definition answer: use existing logic
   const normalizedCorrectAnswer = normalizeAnswer(correctAnswer, answerType);
 
-  // Implement fuzzyLevenshteinMatch for English answers to allow minor typos
+  // English: fuzzy Levenshtein match (no near-miss, already has its own tolerance)
   if (answerType === 'English') {
-    return fuzzyLevenshteinMatch(normalizedCorrectAnswer, normalizedUserAnswer);
+    return {
+      isCorrect: fuzzyLevenshteinMatch(
+        normalizedCorrectAnswer,
+        normalizedUserAnswer
+      ),
+      isNearMiss: false,
+    };
   }
 
-  return normalizedUserAnswer === normalizedCorrectAnswer;
+  // Japanese (Kana/Kanji): exact match, then near-miss check
+  if (normalizedUserAnswer === normalizedCorrectAnswer) {
+    return { isCorrect: true, isNearMiss: false };
+  }
+
+  if (
+    isJapaneseAnswerType(answerType) &&
+    checkJapaneseNearMiss(normalizedUserAnswer, normalizedCorrectAnswer)
+  ) {
+    return { isCorrect: true, isNearMiss: true };
+  }
+
+  return { isCorrect: false, isNearMiss: false };
 }
 
 /**
@@ -293,6 +325,7 @@ export function validateAnswer({
   validationType = 'typed',
 }) {
   let isCorrect = false;
+  let isNearMiss = false;
   let normalizedUserAnswer = '';
   let normalizedCorrectAnswer = '';
 
@@ -304,11 +337,14 @@ export function validateAnswer({
     // Default to typed validation
     normalizedUserAnswer = normalizeAnswer(userAnswer, answerType);
     normalizedCorrectAnswer = normalizeAnswer(correctAnswer, answerType);
-    isCorrect = validateTypedAnswer(userAnswer, correctAnswer, answerType);
+    const result = validateTypedAnswer(userAnswer, correctAnswer, answerType);
+    isCorrect = result.isCorrect;
+    isNearMiss = result.isNearMiss;
   }
 
   return {
     isCorrect,
+    isNearMiss,
     userAnswer,
     correctAnswer,
     normalizedUserAnswer,

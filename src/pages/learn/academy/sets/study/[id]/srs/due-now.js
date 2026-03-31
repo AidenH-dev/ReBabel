@@ -73,6 +73,8 @@ export default function DueNow() {
     setShowResult,
     isCorrect,
     setIsCorrect,
+    isNearMiss,
+    setIsNearMiss,
     userAnswer,
     setUserAnswer,
     selectedOption,
@@ -405,6 +407,7 @@ export default function DueNow() {
 
     // Store correctness for UI feedback
     setIsCorrect(answerData.isCorrect);
+    setIsNearMiss(answerData.isNearMiss || false);
     setShowResult(true);
   };
 
@@ -486,7 +489,7 @@ export default function DueNow() {
     const currentItem = activeTranslationArray[currentIndex];
 
     // Use shared validation utility
-    const correct = validateTypedAnswer(
+    const { isCorrect: correct, isNearMiss: nearMiss } = validateTypedAnswer(
       userAnswer,
       currentItem.answer,
       currentItem.answerType
@@ -494,6 +497,7 @@ export default function DueNow() {
 
     handleAnswerSubmitted({
       isCorrect: correct,
+      isNearMiss: nearMiss,
       userAnswer,
       correctAnswer: currentItem.answer,
       questionId: currentItem.id,
@@ -615,7 +619,7 @@ export default function DueNow() {
   // Show error state
   if (error) {
     return (
-      <AuthenticatedLayout sidebar="academy" title="Due Now" variant="fixed">
+      <AuthenticatedLayout sidebar={false} title="Due Now" variant="fixed">
         <div className="flex-1 flex items-center justify-center px-4 sm:px-6">
           <div className="text-center">
             <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-2">
@@ -636,7 +640,7 @@ export default function DueNow() {
 
   return (
     <AuthenticatedLayout
-      sidebar="academy"
+      sidebar={false}
       title={`Due Now - ${setInfo?.title || 'Study Set'}`}
       variant="gradient"
       mainClassName="p-3 sm:p-6 sm:mt-10"
@@ -760,6 +764,7 @@ export default function DueNow() {
                     userAnswer={userAnswer}
                     showResult={showResult}
                     isCorrect={isCorrect}
+                    isNearMiss={isNearMiss}
                     showHint={false}
                     isLastQuestion={
                       currentIndex === activeTranslationArray.length - 1

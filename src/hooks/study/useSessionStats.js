@@ -4,6 +4,7 @@ export default function useSessionStats() {
   const [sessionStats, setSessionStats] = useState({
     correct: 0,
     incorrect: 0,
+    nearMiss: 0,
     totalAttempts: 0,
     accuracy: 0,
   });
@@ -19,11 +20,13 @@ export default function useSessionStats() {
     setSessionStats((prev) => {
       const newCorrect = prev.correct + (result.isCorrect ? 1 : 0);
       const newIncorrect = prev.incorrect + (result.isCorrect ? 0 : 1);
+      const newNearMiss = prev.nearMiss + (result.isNearMiss ? 1 : 0);
       const newTotal = prev.totalAttempts + 1;
 
       return {
         correct: newCorrect,
         incorrect: newIncorrect,
+        nearMiss: newNearMiss,
         totalAttempts: newTotal,
         accuracy: Math.round((newCorrect / newTotal) * 100),
       };
@@ -56,11 +59,12 @@ export default function useSessionStats() {
 
   // Bulk-restore stats on session resume (bypass recordAnswer which is for live answers)
   const restoreStats = useCallback(
-    ({ correct, incorrect, answeredItems: restored }) => {
+    ({ correct, incorrect, nearMiss = 0, answeredItems: restored }) => {
       const total = correct + incorrect;
       setSessionStats({
         correct,
         incorrect,
+        nearMiss,
         totalAttempts: total,
         accuracy: total > 0 ? Math.round((correct / total) * 100) : 0,
       });

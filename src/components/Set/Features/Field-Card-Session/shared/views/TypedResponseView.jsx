@@ -7,9 +7,116 @@ import {
   FaRedo,
   FaCheck,
 } from 'react-icons/fa';
+import { TbAlertCircle } from 'react-icons/tb';
 import { FiEdit2 } from 'react-icons/fi';
 import { toKana } from 'wanakana';
 import KeyboardShortcutHint from './KeyboardShortcutHint';
+
+/**
+ * Renders a string with the differing character(s) highlighted.
+ * Compares user answer against correct answer to find the edit position.
+ */
+function HighlightedSpelling({ userAnswer, correctAnswer }) {
+  if (!userAnswer || !correctAnswer) {
+    return <span className="font-medium">{correctAnswer}</span>;
+  }
+
+  const user = userAnswer.trim();
+  const correct = correctAnswer.trim();
+
+  // Find first divergence from the start
+  let prefixLen = 0;
+  while (
+    prefixLen < user.length &&
+    prefixLen < correct.length &&
+    user[prefixLen] === correct[prefixLen]
+  ) {
+    prefixLen++;
+  }
+
+  // Find first divergence from the end
+  let suffixLen = 0;
+  while (
+    suffixLen < user.length - prefixLen &&
+    suffixLen < correct.length - prefixLen &&
+    user[user.length - 1 - suffixLen] ===
+      correct[correct.length - 1 - suffixLen]
+  ) {
+    suffixLen++;
+  }
+
+  const diffStart = prefixLen;
+  const diffEnd = correct.length - suffixLen;
+
+  // If no diff found (shouldn't happen for near-miss), show plain
+  if (diffStart >= diffEnd) {
+    return <span className="font-medium">{correct}</span>;
+  }
+
+  return (
+    <span className="font-medium">
+      {correct.slice(0, diffStart)}
+      <span className="bg-yellow-200 dark:bg-yellow-500/30 text-yellow-800 dark:text-yellow-200 rounded px-0.5">
+        {correct.slice(diffStart, diffEnd)}
+      </span>
+      {correct.slice(diffEnd)}
+    </span>
+  );
+}
+
+/**
+ * Renders the user's answer with the incorrect character(s) highlighted in yellow.
+ * Used as an overlay on the input box for near-miss answers.
+ */
+function HighlightedUserInput({ userAnswer, correctAnswer }) {
+  if (!userAnswer || !correctAnswer) {
+    return <span>{userAnswer}</span>;
+  }
+
+  const user = userAnswer.trim();
+  const correct = correctAnswer.trim();
+
+  let prefixLen = 0;
+  while (
+    prefixLen < user.length &&
+    prefixLen < correct.length &&
+    user[prefixLen] === correct[prefixLen]
+  ) {
+    prefixLen++;
+  }
+
+  let suffixLen = 0;
+  while (
+    suffixLen < user.length - prefixLen &&
+    suffixLen < correct.length - prefixLen &&
+    user[user.length - 1 - suffixLen] ===
+      correct[correct.length - 1 - suffixLen]
+  ) {
+    suffixLen++;
+  }
+
+  const diffStart = prefixLen;
+  const diffEnd = user.length - suffixLen;
+
+  if (diffStart >= diffEnd && user.length < correct.length) {
+    // Deletion: user is missing a character -- nothing to highlight in their text
+    return <span>{user}</span>;
+  }
+
+  if (diffStart >= diffEnd) {
+    return <span>{user}</span>;
+  }
+
+  return (
+    <span>
+      {user.slice(0, diffStart)}
+      <span className="bg-yellow-200 dark:bg-yellow-500/30 text-yellow-800 dark:text-yellow-200 rounded px-0.5">
+        {user.slice(diffStart, diffEnd)}
+      </span>
+      {user.slice(diffEnd)}
+    </span>
+  );
+}
 
 /**
  * TypedResponseView - Shared presentational component for typed response questions
@@ -42,6 +149,7 @@ export default function TypedResponseView({
   userAnswer,
   showResult,
   isCorrect,
+  isNearMiss = false,
   showHint,
   isLastQuestion,
   inputRef,
@@ -83,6 +191,15 @@ export default function TypedResponseView({
   }, [showResult, userAnswer, onCheckAnswer, onNext, disableKeyboardShortcuts]);
 
   if (!currentItem) return null;
+
+  // Tri-state result for consistent branching across all visual elements
+  const resultState = !showResult
+    ? 'pending'
+    : isNearMiss
+      ? 'near-miss'
+      : isCorrect
+        ? 'correct'
+        : 'incorrect';
 
   // Helper: does this question expect Kana?
   const expectsKana = (item) => item?.answerType === 'Kana';
@@ -161,28 +278,45 @@ export default function TypedResponseView({
               autoCapitalize="off"
               className={`w-full px-3 sm:px-4 py-3 sm:py-4 text-base sm:text-lg rounded-lg border-2 transition-all
                 ${
-                  showResult
-                    ? isCorrect
+                  resultState === 'near-miss'
+                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                    : resultState === 'correct'
                       ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                      : 'border-red-500 bg-red-50 dark:bg-red-900/20'
-                    : 'border-gray-300 dark:border-white/20 bg-white dark:bg-white/5'
+                      : resultState === 'incorrect'
+                        ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                        : 'border-gray-300 dark:border-white/20 bg-white dark:bg-white/5'
                 }
-                text-gray-900 dark:text-white
+                ${resultState === 'near-miss' ? 'text-transparent' : 'text-gray-900 dark:text-white'}
                 placeholder-gray-400 dark:placeholder-white/40
                 focus:outline-none focus:ring-2 focus:ring-brand-pink focus:border-transparent
                 disabled:opacity-75`}
             />
 
+            {/* Near-miss: overlay with highlighted diff character on top of transparent input text */}
+            {resultState === 'near-miss' && (
+              <div
+                className="absolute inset-0 flex items-center px-3 sm:px-4 text-base sm:text-lg pointer-events-none text-gray-900 dark:text-white border-2 border-transparent"
+                aria-hidden="true"
+              >
+                <HighlightedUserInput
+                  userAnswer={userAnswer}
+                  correctAnswer={currentItem.answer}
+                />
+              </div>
+            )}
+
             {showResult && (
               <div
                 className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
-                  isCorrect ? 'text-green-500' : 'text-red-500'
+                  resultState === 'incorrect'
+                    ? 'text-red-500'
+                    : 'text-green-500'
                 }`}
               >
-                {isCorrect ? (
-                  <FaCheckCircle size={20} className="sm:w-6 sm:h-6" />
-                ) : (
+                {resultState === 'incorrect' ? (
                   <FaTimesCircle size={20} className="sm:w-6 sm:h-6" />
+                ) : (
+                  <FaCheckCircle size={20} className="sm:w-6 sm:h-6" />
                 )}
               </div>
             )}
@@ -224,20 +358,29 @@ export default function TypedResponseView({
             {/* Visible feedback positioned on top */}
             <div
               className={`absolute top-0 left-0 right-0 p-3 sm:p-4 rounded-lg text-sm sm:text-base ${
-                !showResult
+                resultState === 'pending'
                   ? 'opacity-0'
-                  : isCorrect
-                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
-                    : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+                  : resultState === 'incorrect'
+                    ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+                    : 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
               }`}
             >
-              {isCorrect ? (
+              {resultState === 'near-miss' || resultState === 'correct' ? (
                 <div>
                   <div className="flex items-center gap-2">
                     <FaCheck />
                     <span className="font-semibold">Correct!</span>
                   </div>
-                  {/* Item detail on correct */}
+                  {resultState === 'near-miss' && (
+                    <div className="flex items-center gap-1.5 mt-2 px-2 py-1 rounded bg-yellow-100/80 dark:bg-yellow-800/20 text-yellow-700 dark:text-yellow-300 text-xs sm:text-sm">
+                      <TbAlertCircle className="flex-shrink-0" />
+                      <span>Spelling:</span>
+                      <HighlightedSpelling
+                        userAnswer={userAnswer}
+                        correctAnswer={currentItem.answer}
+                      />
+                    </div>
+                  )}
                   {currentItem.type === 'vocabulary' && (
                     <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 pt-2 mt-2 border-t border-green-200 dark:border-green-700/50 text-xs sm:text-sm text-green-700 dark:text-green-300/80">
                       <span className="font-bold">
@@ -271,7 +414,6 @@ export default function TypedResponseView({
                     The correct answer is:{' '}
                     <span className="font-bold">{currentItem.answer}</span>
                   </div>
-                  {/* Item detail on incorrect */}
                   {currentItem.type === 'vocabulary' && (
                     <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 pt-2 mt-2 border-t border-red-200 dark:border-red-700/50 text-xs sm:text-sm text-red-700 dark:text-red-300/80">
                       <span className="font-bold">
@@ -369,7 +511,7 @@ export default function TypedResponseView({
                 <button
                   onClick={onNext}
                   className={`w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all active:scale-95 text-sm sm:text-base ${
-                    isCorrect
+                    resultState !== 'incorrect'
                       ? 'bg-brand-pink hover:bg-brand-pink-hover text-white'
                       : 'bg-gray-600 hover:bg-gray-700 text-white'
                   }`}

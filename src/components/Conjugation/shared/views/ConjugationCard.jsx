@@ -1,5 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import TypedResponseView from '@/components/Set/Features/Field-Card-Session/shared/views/TypedResponseView';
+import {
+  checkJapaneseNearMiss,
+  normalizeAnswer,
+} from '@/lib/study/answerValidation';
 import { FiEdit2 } from 'react-icons/fi';
 import { FaTimes } from 'react-icons/fa';
 
@@ -20,28 +24,48 @@ export default function ConjugationCard({
   const [userAnswer, setUserAnswer] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isNearMiss, setIsNearMiss] = useState(false);
 
   // Reset state when question changes
   useEffect(() => {
     setUserAnswer('');
     setShowResult(false);
     setIsCorrect(false);
+    setIsNearMiss(false);
   }, [currentIndex]);
 
-  // Check answer: exact kana match against acceptableAnswers
+  // Check answer: exact kana match against acceptableAnswers, then near-miss
   const handleCheckAnswer = useCallback(() => {
     if (!userAnswer.trim()) return;
 
     const trimmed = userAnswer.trim();
-    const correct = question.acceptableAnswers.some(
+
+    // Two-pass: exact match first, then near-miss
+    const exactMatch = question.acceptableAnswers.some(
       (acceptable) => trimmed === acceptable
     );
 
+    let correct = exactMatch;
+    let nearMiss = false;
+
+    if (!exactMatch) {
+      const normalizedUser = normalizeAnswer(trimmed, 'Kana');
+      nearMiss = question.acceptableAnswers.some((acceptable) =>
+        checkJapaneseNearMiss(
+          normalizedUser,
+          normalizeAnswer(acceptable, 'Kana')
+        )
+      );
+      correct = nearMiss;
+    }
+
     setIsCorrect(correct);
+    setIsNearMiss(nearMiss);
     setShowResult(true);
 
     onAnswerSubmitted({
       isCorrect: correct,
+      isNearMiss: nearMiss,
       question: question.word.kanji || question.word.kana,
       userAnswer: trimmed,
       correctAnswer: question.expectedAnswer,
@@ -66,6 +90,7 @@ export default function ConjugationCard({
     setUserAnswer('');
     setShowResult(false);
     setIsCorrect(false);
+    setIsNearMiss(false);
   };
 
   const handleInputChange = (e) => {
@@ -130,6 +155,7 @@ export default function ConjugationCard({
       userAnswer={userAnswer}
       showResult={showResult}
       isCorrect={isCorrect}
+      isNearMiss={isNearMiss}
       showHint={false}
       isLastQuestion={isLastQuestion}
       inputRef={inputRef}

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { FaCheckCircle, FaTimesCircle, FaRedo } from 'react-icons/fa';
+import { TbAlertCircle } from 'react-icons/tb';
 import { FiCheckCircle } from 'react-icons/fi';
 import {
   TbTrendingUp,
@@ -7,43 +8,7 @@ import {
   TbArrowBigUpFilled,
   TbArrowBigDownFilled,
 } from 'react-icons/tb';
-
-// ── Animated count-up hook ──────────────────────────────────────────────────
-
-function useCountUp(target, duration = 1200, delay = 300, animate = true) {
-  const [value, setValue] = useState(0);
-  const rafRef = useRef(null);
-  const timeoutRef = useRef(null);
-
-  useEffect(() => {
-    setValue(0);
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-    if (!animate || target === 0) return;
-
-    let start = null;
-    timeoutRef.current = setTimeout(() => {
-      const step = (ts) => {
-        if (!start) start = ts;
-        const progress = Math.min((ts - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        setValue(Math.round(eased * target));
-        if (progress < 1) {
-          rafRef.current = requestAnimationFrame(step);
-        }
-      };
-      rafRef.current = requestAnimationFrame(step);
-    }, delay);
-
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [target, duration, delay, animate]);
-
-  return value;
-}
+import useCountUp from '@/hooks/useCountUp';
 
 // ── Mastery stage colors ────────────────────────────────────────────────────
 
@@ -113,6 +78,13 @@ export default function SummaryView({
     srsLevelChanges?.levelsDown || 0,
     800,
     500,
+    animateAccuracy
+  );
+  const hasNearMiss = (sessionStats.nearMiss || 0) > 0;
+  const animNearMiss = useCountUp(
+    sessionStats.nearMiss || 0,
+    800,
+    400,
     animateAccuracy
   );
 
@@ -248,7 +220,15 @@ export default function SummaryView({
 
               {/* Stats Grid */}
               <div
-                className={`grid gap-2 mb-4 ${isSrsSession ? 'grid-cols-3' : 'grid-cols-2'}`}
+                className={`grid gap-2 mb-4 ${
+                  isSrsSession
+                    ? hasNearMiss
+                      ? 'grid-cols-2 sm:grid-cols-4'
+                      : 'grid-cols-3'
+                    : hasNearMiss
+                      ? 'grid-cols-3'
+                      : 'grid-cols-2'
+                }`}
               >
                 <div className="bg-gray-50 dark:bg-white/5 rounded-lg px-3 py-2.5">
                   <div className="flex items-center justify-between">
@@ -286,6 +266,22 @@ export default function SummaryView({
                     )}
                   </div>
                 </div>
+                {hasNearMiss && (
+                  <div className="bg-gray-50 dark:bg-white/5 rounded-lg px-3 py-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium">
+                        Near Miss
+                      </span>
+                      <TbAlertCircle
+                        className="text-yellow-500"
+                        style={{ fontSize: 10 }}
+                      />
+                    </div>
+                    <div className="text-xl font-bold text-gray-900 dark:text-white tabular-nums mt-0.5">
+                      {animNearMiss}
+                    </div>
+                  </div>
+                )}
                 {/* SRS: show accuracy as a third stat instead of hero */}
                 {isSrsSession && (
                   <div className="bg-gray-50 dark:bg-white/5 rounded-lg px-3 py-2.5">
@@ -386,13 +382,20 @@ export default function SummaryView({
               <div
                 key={index}
                 className={`rounded-md border px-2.5 py-2 text-xs transition-colors ${
-                  item.isCorrect
-                    ? 'border-green-300/70 dark:border-green-500/20 bg-green-50/60 dark:bg-green-500/5'
-                    : 'border-red-300/70 dark:border-red-400/20 bg-red-50/60 dark:bg-red-400/5'
+                  item.isNearMiss
+                    ? 'border-yellow-300/70 dark:border-yellow-500/20 bg-yellow-50/60 dark:bg-yellow-400/5'
+                    : item.isCorrect
+                      ? 'border-green-300/70 dark:border-green-500/20 bg-green-50/60 dark:bg-green-500/5'
+                      : 'border-red-300/70 dark:border-red-400/20 bg-red-50/60 dark:bg-red-400/5'
                 }`}
               >
                 <div className="flex items-center gap-1 mb-0.5">
-                  {item.isCorrect ? (
+                  {item.isNearMiss ? (
+                    <TbAlertCircle
+                      className="text-yellow-500 flex-shrink-0"
+                      style={{ fontSize: 9 }}
+                    />
+                  ) : item.isCorrect ? (
                     <FaCheckCircle
                       className="text-green-500 flex-shrink-0"
                       style={{ fontSize: 9 }}
@@ -416,6 +419,16 @@ export default function SummaryView({
                   </span>
                 </div>
                 <div className="space-y-0.5">
+                  {item.isNearMiss && (
+                    <div>
+                      <span className="text-[10px] text-gray-500 dark:text-gray-400">
+                        You:{' '}
+                      </span>
+                      <span className="text-[11px] text-yellow-600 dark:text-yellow-400">
+                        {item.userAnswer}
+                      </span>
+                    </div>
+                  )}
                   {!item.isCorrect && (
                     <div>
                       <span className="text-[10px] text-gray-500 dark:text-gray-400">
@@ -428,16 +441,26 @@ export default function SummaryView({
                   )}
                   <div>
                     <span className="text-[10px] text-gray-500 dark:text-gray-400">
-                      {item.isCorrect ? 'You: ' : 'Answer: '}
+                      {item.isNearMiss
+                        ? 'Correct: '
+                        : item.isCorrect
+                          ? 'You: '
+                          : 'Answer: '}
                     </span>
                     <span
                       className={`font-medium text-[11px] ${
-                        item.isCorrect
-                          ? 'text-green-600 dark:text-green-400'
-                          : 'text-gray-900 dark:text-white'
+                        item.isNearMiss
+                          ? 'text-yellow-700 dark:text-yellow-300'
+                          : item.isCorrect
+                            ? 'text-green-600 dark:text-green-400'
+                            : 'text-gray-900 dark:text-white'
                       }`}
                     >
-                      {item.isCorrect ? item.userAnswer : item.correctAnswer}
+                      {item.isNearMiss
+                        ? item.correctAnswer
+                        : item.isCorrect
+                          ? item.userAnswer
+                          : item.correctAnswer}
                     </span>
                   </div>
                 </div>

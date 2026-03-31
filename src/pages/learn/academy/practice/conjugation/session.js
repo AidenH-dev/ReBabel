@@ -9,6 +9,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import useAnalyticsSession from '@/hooks/useAnalyticsSession';
+import useSessionState from '@/hooks/useSessionState';
+import ResumeSessionModal from '@/components/Set/Features/Field-Card-Session/shared/views/ResumeSessionModal';
+import ChunkCompletionView from '@/components/Set/Features/Field-Card-Session/shared/views/ChunkCompletionView';
 import { clientLog } from '@/lib/clientLogger';
 import { TbLanguageHiragana } from 'react-icons/tb';
 
@@ -37,6 +40,7 @@ export default function ConjugationPracticeSession() {
   const [sessionStats, setSessionStats] = useState({
     correct: 0,
     incorrect: 0,
+    nearMiss: 0,
     totalAttempts: 0,
     accuracy: 0,
   });
@@ -53,6 +57,32 @@ export default function ConjugationPracticeSession() {
     finish: finishAnalyticsSession,
     abort: abortAnalyticsSession,
   } = useAnalyticsSession('conjugation');
+
+  // ============ SESSION PERSISTENCE ============
+  const sessionState = useSessionState();
+  const [showResumeModal, setShowResumeModal] = useState(false);
+  const [resumeLoadingAction, setResumeLoadingAction] = useState(null);
+  const [showChunkComplete, setShowChunkComplete] = useState(false);
+  const [chunkStats, setChunkStats] = useState({
+    correct: 0,
+    incorrect: 0,
+    totalAttempts: 0,
+    accuracy: 0,
+  });
+  const [sessionCheckDone, setSessionCheckDone] = useState(false);
+
+  // Check for active conjugation session on mount
+  useEffect(() => {
+    sessionState.checkForActive('conjugation', null).then((active) => {
+      if (active && parseInt(active.items_completed) > 0) {
+        setShowResumeModal(true);
+      } else if (active) {
+        sessionState.abandon();
+      }
+      setSessionCheckDone(true);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Load config from sessionStorage
   useEffect(() => {
@@ -123,6 +153,32 @@ export default function ConjugationPracticeSession() {
 
         setQuestions(generated);
         await startAnalyticsSession();
+
+        // Create session state with questions for persistence
+        try {
+          const sessionItems = generated.map((q, i) => ({
+            itemId: `${q.word?.kana || 'unknown'}_${q.form?.key || i}`,
+          }));
+          await sessionState.create('conjugation', null, sessionItems, {
+            config_count: String(config.count || 10),
+            config_random_mode: String(config.randomMode || false),
+            verb_forms: config.selectedVerbForms || {},
+            adj_forms: config.selectedAdjForms || {},
+            questions: generated.map((q, i) => ({
+              order: String(i),
+              source_item_id: q.word?.kana || '',
+              word_kana: q.word?.kana || '',
+              word_kanji: q.word?.kanji || '',
+              word_english: q.word?.english || '',
+              verb_group: q.verbGroup || '',
+              form_id: q.form?.key || '',
+              form_label: q.form?.label || '',
+              answer: q.expectedAnswer || '',
+            })),
+          });
+        } catch (e) {
+          clientLog.error('session_state.create_failed', { error: e?.message });
+        }
       } catch (err) {
         clientLog.error('conjugation.generate_questions_failed', {
           error: err?.message || String(err),
@@ -168,14 +224,36 @@ export default function ConjugationPracticeSession() {
     setSessionStats((prev) => {
       const newCorrect = prev.correct + (result.isCorrect ? 1 : 0);
       const newIncorrect = prev.incorrect + (result.isCorrect ? 0 : 1);
+      const newNearMiss = prev.nearMiss + (result.isNearMiss ? 1 : 0);
       const newTotal = prev.totalAttempts + 1;
       return {
         correct: newCorrect,
         incorrect: newIncorrect,
+        nearMiss: newNearMiss,
         totalAttempts: newTotal,
         accuracy: newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0,
       };
     });
+
+    // Persist progress (debounced)
+    const q = questions[currentIndex];
+    if (q) {
+      sessionState.save(
+        {
+          currentIndex: currentIndex + 1,
+          statsCorrect: sessionStats.correct + (result.isCorrect ? 1 : 0),
+          statsIncorrect: sessionStats.incorrect + (result.isCorrect ? 0 : 1),
+          statsAttempts: sessionStats.totalAttempts + 1,
+          itemsCompleted: answeredItems.length + 1,
+        },
+        [
+          {
+            itemId: `${q.word?.kana || 'unknown'}_${q.form?.key || currentIndex}`,
+            correct: result.isCorrect,
+          },
+        ]
+      );
+    }
   };
 
   // Base form alert: user chose to skip the matching questions
@@ -214,8 +292,67 @@ export default function ConjugationPracticeSession() {
   };
 
   const handleExit = () => {
-    abortAnalyticsSession();
     router.push('/learn/academy/practice');
+  };
+
+  const handleResumeSession = async () => {
+    setResumeLoadingAction('resume');
+    try {
+      const full = await sessionState.fetchFullState();
+      if (!full) {
+        setResumeLoadingAction(null);
+        return;
+      }
+      const { state, items, questions: savedQuestions } = full;
+
+      // Restore from saved questions (don't re-generate)
+      if (savedQuestions && savedQuestions.length > 0) {
+        const restored = savedQuestions.map((sq) => ({
+          word: {
+            kana: sq.word_kana,
+            kanji: sq.word_kanji,
+            english: sq.word_english,
+          },
+          form: { key: sq.form_id, label: sq.form_label },
+          verbGroup: sq.verb_group,
+          expectedAnswer: sq.answer,
+        }));
+        setQuestions(restored);
+      }
+
+      setCurrentIndex(parseInt(state.current_index) || 0);
+      const correct = parseInt(state.stats_correct) || 0;
+      const incorrect = parseInt(state.stats_incorrect) || 0;
+      const total = correct + incorrect;
+      setSessionStats({
+        correct,
+        incorrect,
+        totalAttempts: total,
+        accuracy: total > 0 ? Math.round((correct / total) * 100) : 0,
+      });
+
+      if (state.analytics_session_id) {
+        try {
+          await fetch(
+            `/api/analytics/user/sessions/${state.analytics_session_id}/reinitiate`,
+            { method: 'POST', headers: { 'Content-Type': 'application/json' } }
+          );
+        } catch {}
+      }
+      startAnalyticsSession();
+      setIsLoading(false);
+      setShowResumeModal(false);
+    } catch (e) {
+      clientLog.error('session_state.resume_failed', { error: e?.message });
+    }
+    setResumeLoadingAction(null);
+  };
+
+  const handleStartFreshSession = async () => {
+    setResumeLoadingAction('startFresh');
+    await sessionState.abandon();
+    setShowResumeModal(false);
+    setResumeLoadingAction(null);
   };
 
   // Skip item: open edit modal in skip mode so user can choose what to do
@@ -316,7 +453,7 @@ export default function ConjugationPracticeSession() {
   if (isLoading || isGenerating) {
     return (
       <AuthenticatedLayout
-        sidebar="academy"
+        sidebar={false}
         title="Conjugation Practice"
         variant="gradient"
         mainClassName="p-3 sm:p-6 sm:pt-10 items-center justify-center"
@@ -335,7 +472,7 @@ export default function ConjugationPracticeSession() {
   if (error) {
     return (
       <AuthenticatedLayout
-        sidebar="academy"
+        sidebar={false}
         title="Conjugation Practice"
         variant="gradient"
         mainClassName="p-3 sm:p-6 sm:pt-10 items-center justify-center"
@@ -365,7 +502,7 @@ export default function ConjugationPracticeSession() {
   if (sessionComplete) {
     return (
       <AuthenticatedLayout
-        sidebar="academy"
+        sidebar={false}
         title="Conjugation Complete"
         variant="gradient"
         mainClassName="p-3 sm:p-6 sm:pt-10 overflow-y-auto"
@@ -389,11 +526,23 @@ export default function ConjugationPracticeSession() {
 
   return (
     <AuthenticatedLayout
-      sidebar="academy"
+      sidebar={false}
       title="Conjugation Practice"
       variant="gradient"
       mainClassName="p-3 sm:p-6 sm:pt-10 w-full overflow-y-auto"
     >
+      <ResumeSessionModal
+        isOpen={showResumeModal}
+        sessionState={sessionState.activeSession}
+        loadingAction={resumeLoadingAction}
+        onResume={handleResumeSession}
+        onStartFresh={handleStartFreshSession}
+        onCancel={() => {
+          setShowResumeModal(false);
+          router.push('/learn/academy/practice');
+        }}
+      />
+
       <SessionStatHeaderView
         setTitle="Conjugation Practice"
         sessionStats={sessionStats}

@@ -71,6 +71,8 @@ export default function FastReview() {
     setShowResult,
     isCorrect,
     setIsCorrect,
+    isNearMiss,
+    setIsNearMiss,
     userAnswer,
     setUserAnswer,
     selectedOption,
@@ -371,6 +373,7 @@ export default function FastReview() {
     }
 
     setIsCorrect(answerData.isCorrect);
+    setIsNearMiss(answerData.isNearMiss || false);
     setShowResult(true);
   };
 
@@ -446,7 +449,7 @@ export default function FastReview() {
   const handleTranslationCheck = () => {
     const currentItem = activeTranslationArray[currentIndex];
 
-    const correct = validateTypedAnswer(
+    const { isCorrect: correct, isNearMiss: nearMiss } = validateTypedAnswer(
       userAnswer,
       currentItem.answer,
       currentItem.answerType
@@ -454,6 +457,7 @@ export default function FastReview() {
 
     handleAnswerSubmitted({
       isCorrect: correct,
+      isNearMiss: nearMiss,
       userAnswer,
       correctAnswer: currentItem.answer,
       questionId: currentItem.id,
@@ -678,6 +682,7 @@ export default function FastReview() {
                     userAnswer={userAnswer}
                     showResult={showResult}
                     isCorrect={isCorrect}
+                    isNearMiss={isNearMiss}
                     showHint={false}
                     isLastQuestion={
                       currentIndex === activeTranslationArray.length - 1

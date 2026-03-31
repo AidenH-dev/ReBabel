@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 export default function useQuestionState() {
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isNearMiss, setIsNearMiss] = useState(false);
   const [userAnswer, setUserAnswer] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentShuffledOptions, setCurrentShuffledOptions] = useState([]);
@@ -10,6 +11,7 @@ export default function useQuestionState() {
   const resetQuestion = useCallback(() => {
     setShowResult(false);
     setIsCorrect(false);
+    setIsNearMiss(false);
     setUserAnswer('');
     setSelectedOption(null);
     setCurrentShuffledOptions([]);
@@ -20,6 +22,8 @@ export default function useQuestionState() {
     setShowResult,
     isCorrect,
     setIsCorrect,
+    isNearMiss,
+    setIsNearMiss,
     userAnswer,
     setUserAnswer,
     selectedOption,

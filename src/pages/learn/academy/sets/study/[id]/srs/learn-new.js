@@ -80,6 +80,8 @@ export default function LearnNew() {
     setShowResult,
     isCorrect,
     setIsCorrect,
+    isNearMiss,
+    setIsNearMiss,
     userAnswer,
     setUserAnswer,
     selectedOption,
@@ -388,6 +390,7 @@ export default function LearnNew() {
 
     // Store correctness for UI feedback
     setIsCorrect(answerData.isCorrect);
+    setIsNearMiss(answerData.isNearMiss || false);
     setShowResult(true);
 
     // Persist progress (debounced)
@@ -521,7 +524,7 @@ export default function LearnNew() {
     const currentItem = activeTranslationArray[currentIndex];
 
     // Use shared validation utility
-    const correct = validateTypedAnswer(
+    const { isCorrect: correct, isNearMiss: nearMiss } = validateTypedAnswer(
       userAnswer,
       currentItem.answer,
       currentItem.answerType
@@ -529,6 +532,7 @@ export default function LearnNew() {
 
     handleAnswerSubmitted({
       isCorrect: correct,
+      isNearMiss: nearMiss,
       userAnswer,
       correctAnswer: currentItem.answer,
       questionId: currentItem.id,
@@ -1036,6 +1040,7 @@ export default function LearnNew() {
                       userAnswer={userAnswer}
                       showResult={showResult}
                       isCorrect={isCorrect}
+                      isNearMiss={isNearMiss}
                       showHint={false}
                       isLastQuestion={
                         currentIndex === activeTranslationArray.length - 1

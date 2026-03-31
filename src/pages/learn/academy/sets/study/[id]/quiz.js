@@ -114,6 +114,8 @@ export default function SetQuiz() {
     incorrect: 0,
     totalAttempts: 0,
   });
+  // Index into answeredItems where the current chunk started
+  const chunkStartAnswerIndexRef = useRef(0);
   // Number of items already completed before resume (offsets progress bar on resume)
   const [resumeCompletedOffset, setResumeCompletedOffset] = useState(0);
 
@@ -417,6 +419,7 @@ export default function SetQuiz() {
         ...prev,
         correct: answerData.isCorrect ? prev.correct + 1 : prev.correct,
         incorrect: answerData.isCorrect ? prev.incorrect : prev.incorrect + 1,
+        nearMiss: (prev.nearMiss || 0) + (answerData.isNearMiss ? 1 : 0),
         totalAttempts: prev.totalAttempts + 1,
         accuracy: Math.round(
           ((answerData.isCorrect ? prev.correct + 1 : prev.correct) /
@@ -838,6 +841,8 @@ export default function SetQuiz() {
       incorrect: sessionStats.incorrect,
       totalAttempts: sessionStats.totalAttempts,
     };
+    // Snapshot answeredItems length so we slice from the right place for the next chunk
+    chunkStartAnswerIndexRef.current = answeredItems.length;
 
     // Reset local state for new chunk
     setShowChunkComplete(false);
@@ -995,12 +1000,14 @@ export default function SetQuiz() {
                 totalItems: cardsData.length,
               }}
               chunkAnsweredItems={answeredItems
-                .slice(-(sessionState.chunkInfo?.chunkSize || 25))
+                .slice(chunkStartAnswerIndexRef.current)
                 .map((a) => ({
                   question:
                     a.question || a.english || a.kana || a.itemId || 'Item',
                   answer: a.answer || a.correctAnswer || '',
+                  userAnswer: a.userAnswer || '',
                   isCorrect: a.isCorrect,
+                  isNearMiss: a.isNearMiss || false,
                 }))}
               onContinue={handleContinueChunk}
               onSaveAndExit={handleSaveAndExit}

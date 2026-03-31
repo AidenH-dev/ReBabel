@@ -66,6 +66,7 @@ export default function ConjugationPracticeLevelPage({
   const [sessionStats, setSessionStats] = useState({
     correct: 0,
     incorrect: 0,
+    nearMiss: 0,
     totalAttempts: 0,
     accuracy: 0,
   });
@@ -156,10 +157,12 @@ export default function ConjugationPracticeLevelPage({
     setSessionStats((prev) => {
       const nc = prev.correct + (result.isCorrect ? 1 : 0);
       const ni = prev.incorrect + (result.isCorrect ? 0 : 1);
+      const nm = prev.nearMiss + (result.isNearMiss ? 1 : 0);
       const nt = prev.totalAttempts + 1;
       return {
         correct: nc,
         incorrect: ni,
+        nearMiss: nm,
         totalAttempts: nt,
         accuracy: nt > 0 ? Math.round((nc / nt) * 100) : 0,
       };

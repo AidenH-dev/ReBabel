@@ -186,7 +186,7 @@ export default function SessionStatHeaderView({
           {chunkInfo?.isChunked ? (
             <span>
               Chunk {chunkInfo.currentChunkIndex + 1}/{chunkInfo.totalChunks}{' '}
-              &middot; Card {Math.min(currentIndex, totalQuestions)}/
+              &middot; Card {Math.min(currentIndex + 1, totalQuestions)}/
               {totalQuestions}
             </span>
           ) : (

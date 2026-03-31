@@ -22,6 +22,7 @@ export default function MasterQuestionCard({
   const [userAnswer, setUserAnswer] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isNearMiss, setIsNearMiss] = useState(false);
   const [showHint, setShowHint] = useState(false);
 
   // Focus input when question changes
@@ -36,6 +37,7 @@ export default function MasterQuestionCard({
     setUserAnswer('');
     setShowResult(false);
     setIsCorrect(false);
+    setIsNearMiss(false);
     setShowHint(false);
   }, [currentIndex]);
 
@@ -46,13 +48,14 @@ export default function MasterQuestionCard({
     const processedAnswer = userAnswer.trim();
 
     // Use shared validation utility
-    const correct = validateTypedAnswer(
+    const { isCorrect: correct, isNearMiss: nearMiss } = validateTypedAnswer(
       processedAnswer,
       currentItem.answer,
       currentItem.answerType
     );
 
     setIsCorrect(correct);
+    setIsNearMiss(nearMiss);
     setShowResult(true);
 
     // Single callback with all answer data
@@ -62,6 +65,7 @@ export default function MasterQuestionCard({
       userAnswer: processedAnswer,
       correctAnswer: currentItem.answer,
       isCorrect: correct,
+      isNearMiss: nearMiss,
       questionType: currentItem.questionType,
       answerType: currentItem.answerType,
     });
@@ -88,6 +92,7 @@ export default function MasterQuestionCard({
     setUserAnswer('');
     setShowResult(false);
     setIsCorrect(false);
+    setIsNearMiss(false);
   };
 
   // Input change handler
@@ -102,6 +107,7 @@ export default function MasterQuestionCard({
       userAnswer={userAnswer}
       showResult={showResult}
       isCorrect={isCorrect}
+      isNearMiss={isNearMiss}
       showHint={showHint}
       isLastQuestion={isLastQuestion}
       inputRef={inputRef}

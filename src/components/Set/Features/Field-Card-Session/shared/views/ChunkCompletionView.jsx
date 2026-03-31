@@ -2,7 +2,35 @@ import Button from '@/components/ui/Button';
 import useCountUp from '@/hooks/useCountUp';
 import { FiCheckCircle } from 'react-icons/fi';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { TbAlertCircle } from 'react-icons/tb';
 import { TbLoader3 } from 'react-icons/tb';
+
+function SpellingDiff({ userAnswer, correctAnswer }) {
+  const user = (userAnswer || '').trim();
+  const correct = (correctAnswer || '').trim();
+  if (!user || !correct) return <span className="text-[10px]">{user}</span>;
+  let p = 0;
+  while (p < user.length && p < correct.length && user[p] === correct[p]) p++;
+  let s = 0;
+  while (
+    s < user.length - p &&
+    s < correct.length - p &&
+    user[user.length - 1 - s] === correct[correct.length - 1 - s]
+  )
+    s++;
+  const dS = p,
+    dE = user.length - s;
+  if (dS >= dE) return <span className="text-[10px]">{user}</span>;
+  return (
+    <span className="text-[10px]">
+      {user.slice(0, dS)}
+      <span className="bg-yellow-200 dark:bg-yellow-500/30 text-yellow-800 dark:text-yellow-200 rounded px-px">
+        {user.slice(dS, dE)}
+      </span>
+      {user.slice(dE)}
+    </span>
+  );
+}
 
 /**
  * ChunkCompletionView -- shown between chunks with stats, mini review, and continue/exit options.
@@ -174,6 +202,18 @@ export default function ChunkCompletionView({
                   <span className="truncate text-gray-700 dark:text-gray-200">
                     {item.question}
                   </span>
+                  {item.isNearMiss && (
+                    <span
+                      className="flex items-center gap-0.5 text-yellow-600 dark:text-yellow-400 flex-shrink-0"
+                      title={`You wrote: ${item.userAnswer}`}
+                    >
+                      <TbAlertCircle style={{ fontSize: 10 }} />
+                      <SpellingDiff
+                        userAnswer={item.userAnswer}
+                        correctAnswer={item.answer}
+                      />
+                    </span>
+                  )}
                   {item.answer && (
                     <span className="ml-auto text-gray-500 dark:text-gray-400 flex-shrink-0">
                       {item.answer}

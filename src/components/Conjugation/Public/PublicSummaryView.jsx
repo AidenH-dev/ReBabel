@@ -1,4 +1,5 @@
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { TbAlertCircle } from 'react-icons/tb';
 import { FiCheckCircle } from 'react-icons/fi';
 import SignupCTA from '@/components/Conjugation/Public/SignupCTA';
 
@@ -107,13 +108,20 @@ export default function PublicSummaryView({
               <div
                 key={i}
                 className={`rounded-md border px-2.5 py-2 text-xs transition-colors ${
-                  item.isCorrect
-                    ? 'border-green-300/70 dark:border-green-500/20 bg-green-50/60 dark:bg-green-500/5'
-                    : 'border-red-300/70 dark:border-red-400/20 bg-red-50/60 dark:bg-red-400/5'
+                  item.isNearMiss
+                    ? 'border-yellow-300/70 dark:border-yellow-500/20 bg-yellow-50/60 dark:bg-yellow-400/5'
+                    : item.isCorrect
+                      ? 'border-green-300/70 dark:border-green-500/20 bg-green-50/60 dark:bg-green-500/5'
+                      : 'border-red-300/70 dark:border-red-400/20 bg-red-50/60 dark:bg-red-400/5'
                 }`}
               >
                 <div className="flex items-center gap-1 mb-0.5">
-                  {item.isCorrect ? (
+                  {item.isNearMiss ? (
+                    <TbAlertCircle
+                      className="text-yellow-500"
+                      style={{ fontSize: 9 }}
+                    />
+                  ) : item.isCorrect ? (
                     <FaCheckCircle
                       className="text-green-500"
                       style={{ fontSize: 9 }}
@@ -136,6 +144,16 @@ export default function PublicSummaryView({
                     {item.question}
                   </span>
                 </div>
+                {item.isNearMiss && (
+                  <div className="text-[11px] mt-0.5">
+                    <span className="text-[10px] text-gray-500 dark:text-gray-400">
+                      You:{' '}
+                    </span>
+                    <span className="text-yellow-600 dark:text-yellow-400">
+                      {item.userAnswer}
+                    </span>
+                  </div>
+                )}
                 {!item.isCorrect && (
                   <div className="text-[11px] mt-0.5">
                     <span className="text-[10px] text-gray-500 dark:text-gray-400">
@@ -148,16 +166,26 @@ export default function PublicSummaryView({
                 )}
                 <div className="text-[11px] mt-0.5">
                   <span className="text-[10px] text-gray-500 dark:text-gray-400">
-                    {item.isCorrect ? 'You: ' : 'Answer: '}
+                    {item.isNearMiss
+                      ? 'Correct: '
+                      : item.isCorrect
+                        ? 'You: '
+                        : 'Answer: '}
                   </span>
                   <span
                     className={`font-medium ${
-                      item.isCorrect
-                        ? 'text-green-600 dark:text-green-400'
-                        : 'text-gray-900 dark:text-white'
+                      item.isNearMiss
+                        ? 'text-yellow-700 dark:text-yellow-300'
+                        : item.isCorrect
+                          ? 'text-green-600 dark:text-green-400'
+                          : 'text-gray-900 dark:text-white'
                     }`}
                   >
-                    {item.isCorrect ? item.userAnswer : item.correctAnswer}
+                    {item.isNearMiss
+                      ? item.correctAnswer
+                      : item.isCorrect
+                        ? item.userAnswer
+                        : item.correctAnswer}
                   </span>
                 </div>
               </div>
