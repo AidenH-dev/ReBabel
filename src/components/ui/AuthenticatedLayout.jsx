@@ -41,12 +41,12 @@ export default function AuthenticatedLayout({
   wrapperClassName = '',
   children,
 }) {
-  const Sidebar = SIDEBARS[sidebar] || SIDEBARS.main;
+  const Sidebar = sidebar ? SIDEBARS[sidebar] || SIDEBARS.main : null;
   const wrapperClasses = WRAPPER_VARIANTS[variant] || WRAPPER_VARIANTS.default;
 
   return (
     <div className={`${wrapperClasses} ${wrapperClassName}`}>
-      <Sidebar {...sidebarProps} />
+      {Sidebar && <Sidebar {...sidebarProps} />}
       <main
         className={`ml-auto flex-1 flex flex-col overflow-x-hidden ${
           variant === 'fixed' ? 'overflow-y-auto' : ''
